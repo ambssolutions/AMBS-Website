@@ -665,6 +665,18 @@ async function buildPdf(d){
     return f.widthOfTextAtSize(clean, size);
   };
   // Copy icon (two overlapping squares) linking to the online payment page, where copy buttons work
+  // Clickable text link (e.g. "View this invoice online")
+  const linkText = (txt, x, yy, url, o={}) => {
+    const size = o.size || 9.5, f = o.bold ? B : R, col = o.color || rgb(0.05,0.36,0.72);
+    const w = T(txt, x, yy, {size, bold:o.bold, color:col});
+    page.drawLine({start:{x, y:H - yy - size - 1.5}, end:{x:x + w, y:H - yy - size - 1.5}, thickness:0.6, color:col});
+    try{
+      const annot = doc.context.obj({Type:"Annot", Subtype:"Link", Rect:[x - 2, H - yy - size - 4, x + w + 2, H - yy + 2], Border:[0,0,0],
+        A:{Type:"Action", S:"URI", URI:L.PDFString.of(url)}});
+      page.raw.node.addAnnot(doc.context.register(annot));
+    }catch(e){}
+    return w;
+  };
   const copyIcon = (x, yy, url, scale=1) => {
     const sz = 7*scale, off = 2.6*scale, col = rgb(0.35,0.35,0.35);
     page.drawRectangle({x:x + off, y:H - yy - sz, width:sz, height:sz, borderColor:col, borderWidth:0.9, color:rgb(1,1,1)});
@@ -832,6 +844,14 @@ async function buildPdf(d){
     }
   } else {
     para(`This quote is valid until ${fdate(d.dueDate)}. All amounts are in NZD. GST at 15% is shown separately.`, M, RIGHT - M);
+  }
+  if(CURRENT_LINK){
+    needSpace(20); y += 4;
+    const lead = (isInv && !paid) ? "View and pay online: " : "View online: ";
+    const lw = T(lead, M, y, {bold:true});
+    let shown = CURRENT_LINK.split("#")[0].replace(/^https?:\/\//, "");
+    linkText(isInv ? `Open invoice ${num} online (${shown})` : `Open quote ${num} online (${shown})`, M + lw, y, CURRENT_LINK);
+    y += 15;
   }
   if(d.notes){ y += 4; para(d.notes, M, RIGHT - M); }
   const contact = [s.phone, s.email].filter(Boolean).join(" or ");
