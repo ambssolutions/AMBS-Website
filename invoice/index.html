@@ -659,6 +659,7 @@ async function buildPdf(d){
       drawText(txt, o){ ops.push(["text", txt, Object.assign({}, o, {bold:o.font===B})]); p.drawText(txt, o); },
       drawLine(o){ ops.push(["line", o]); p.drawLine(o); },
       drawRectangle(o){ ops.push(["rect", o]); p.drawRectangle(o); },
+      drawSvgPath(path, o){ ops.push(["svg", path, o]); p.drawSvgPath(path, o); },
       drawImage(img, o){ ops.push(["image", s.logo, o]); p.drawImage(img, o); },
       previewText(txt, o){ ops.push(["text", txt, Object.assign({}, o, {bold:o.font===B})]); },
       raw: p
@@ -669,7 +670,9 @@ async function buildPdf(d){
     const f = o.bold ? B : R, size = o.size || 9.5, txt = pdfSafe(f, str);
     let xx = x; const w = f.widthOfTextAtSize(txt, size);
     if(o.align==="right") xx = x - w; else if(o.align==="center") xx = x - w/2;
-    page.drawText(txt, {x:xx, y:H - yy - size, size, font:f, color:o.color || INK});
+    const opts = {x:xx, y:H - yy - size, size, font:f, color:o.color || INK};
+    if(o.opacity !== undefined) opts.opacity = o.opacity;
+    page.drawText(txt, opts);
     return w;
   };
   // Copyable field: a borderless form text box, so readers can tap it, select all and copy the value
@@ -699,6 +702,38 @@ async function buildPdf(d){
       page.raw.node.addAnnot(doc.context.register(annot));
     }catch(e){}
     return w;
+  };
+  // Button-style link: coloured box with white text, all of it clickable
+  // Embossed button: soft drop shadow, raised face, glossy top highlight, darker lower edge and pressed-in text
+  const shade = (c, k) => rgb(Math.max(0, Math.min(1, c.red*k)), Math.max(0, Math.min(1, c.green*k)), Math.max(0, Math.min(1, c.blue*k)));
+  const mix = (c, t) => rgb(c.red + (1 - c.red)*t, c.green + (1 - c.green)*t, c.blue + (1 - c.blue)*t);
+  const rr = (w, h, r) => `M ${r} 0 H ${w - r} Q ${w} 0 ${w} ${r} V ${h - r} Q ${w} ${h} ${w - r} ${h} H ${r} Q 0 ${h} 0 ${h - r} V ${r} Q 0 0 ${r} 0 Z`;
+  const linkButton = (txt, x, yy, url) => {
+    const size = 10.5, pad = 14, h = 26, r = 7, w = B.widthOfTextAtSize(pdfSafe(B, txt), size) + pad*2;
+    const face = BRAND, top = mix(face, 0.28), edge = shade(face, 0.55);
+    // drop shadow
+    page.drawSvgPath(rr(w, h, r), {x:x + 1.2, y:H - yy - 2.2, color:rgb(0,0,0), opacity:0.22});
+    page.drawSvgPath(rr(w, h, r), {x:x + 0.4, y:H - yy - 1.2, color:rgb(0,0,0), opacity:0.18});
+    // lower edge (gives the raised look)
+    page.drawSvgPath(rr(w, h, r), {x, y:H - yy, color:edge});
+    // main face, slightly shorter so the darker edge shows at the bottom
+    page.drawSvgPath(rr(w, h - 2.2, r), {x, y:H - yy, color:face});
+    // glossy highlight on the top half
+    page.drawSvgPath(rr(w - 2, (h - 2.2)/2, r - 1.5), {x:x + 1, y:H - yy - 1, color:top, opacity:0.55});
+    // thin light line along the top edge
+    page.drawSvgPath(`M ${r} 0.6 H ${w - r}`, {x, y:H - yy, borderColor:rgb(1,1,1), borderWidth:0.7, borderOpacity:0.55});
+    // outline
+    page.drawSvgPath(rr(w, h, r), {x, y:H - yy, borderColor:edge, borderWidth:0.8});
+    // pressed-in text: dark shadow then white text
+    const ty = yy + (h - 2.2 - size)/2 - 0.3;
+    T(txt, x + pad + 0.5, ty + 0.8, {bold:true, size, color:rgb(0,0,0), opacity:0.35});
+    T(txt, x + pad, ty, {bold:true, size, color:rgb(1,1,1)});
+    try{
+      const annot = doc.context.obj({Type:"Annot", Subtype:"Link", Rect:[x, H - yy - h, x + w, H - yy], Border:[0,0,0],
+        A:{Type:"Action", S:"URI", URI:L.PDFString.of(url)}});
+      page.raw.node.addAnnot(doc.context.register(annot));
+    }catch(e){}
+    return {w, h};
   };
   const copyIcon = (x, yy, url, scale=1) => {
     const sz = 7*scale, off = 2.6*scale, col = rgb(0.35,0.35,0.35);
@@ -815,7 +850,7 @@ async function buildPdf(d){
       const refLines = wrap(`Please use reference ${num}${c.name?" / "+c.name:""} when making payment.`, RIGHT - M - 20, {size:8.5});
       const cw = [0.19, 0.19, 0.22, 0.40].map(f=>f*(RIGHT-M));
       const LBLW = 62, valW = cw[3] - 18 - LBLW;
-      const link = payLink(d);
+      const link = ""; // copy icons removed: the "View it online" button above the table does this job
       const iconRow = lbl => !!link && (lbl === "Account number" || lbl === "Account name");
       const payRows = (s.bankAccount
         ? acctRows(s)
@@ -824,8 +859,12 @@ async function buildPdf(d){
       const payH = payRows.reduce((a,r)=>a + r.lines.length*11 + 2, 0) + (link ? 11 : 0);
       const topH = Math.max(18 + 14 + 10 + 8, 18 + payH + 6);
       const boxH = topH + refLines.length*11 + 10;
-      needSpace(boxH + 30);
+      needSpace(boxH + 30 + (CURRENT_LINK ? 30 : 0));
       y += 4;
+      if(CURRENT_LINK){
+        const bt = linkButton("View it online", M, y, CURRENT_LINK);
+        y += bt.h + 8;
+      }
       const bx = M, by = y;
       page.drawRectangle({x:bx, y:H - by - boxH, width:RIGHT-M, height:boxH, borderColor:INK, borderWidth:1.1});
       page.drawRectangle({x:bx, y:H - by - 4, width:RIGHT-M, height:4, color:BRAND});
@@ -868,7 +907,7 @@ async function buildPdf(d){
   } else {
     para(`This quote is valid until ${fdate(d.dueDate)}. All amounts are in NZD. GST at 15% is shown separately.`, M, RIGHT - M);
   }
-  if(CURRENT_LINK){
+  if(CURRENT_LINK && !(isInv && !paid)){
     needSpace(20); y += 4;
     const lead = (isInv && !paid) ? "View and pay online: " : "View online: ";
     const lw = T(lead, M, y, {bold:true});
@@ -948,7 +987,11 @@ async function drawPdfPage(canvas, ops, W, H, cssW){
   const ctx = canvas.getContext("2d"); ctx.setTransform(dpr*sc, 0, 0, dpr*sc, 0, 0);
   ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
   for(const op of ops){
-    if(op[0]==="text"){ const [, txt, o] = op; ctx.font = `${o.bold?"700 ":""}${o.size}px Helvetica, Arial, "Liberation Sans", sans-serif`; ctx.fillStyle = pcol(o.color) || "#1a1a1a"; ctx.textBaseline = "alphabetic"; ctx.fillText(txt, o.x, H - o.y); }
+    if(op[0]==="text"){ const [, txt, o] = op; ctx.save(); ctx.globalAlpha = o.opacity ?? 1; ctx.font = `${o.bold?"700 ":""}${o.size}px Helvetica, Arial, "Liberation Sans", sans-serif`; ctx.fillStyle = pcol(o.color) || "#1a1a1a"; ctx.textBaseline = "alphabetic"; ctx.fillText(txt, o.x, H - o.y); ctx.restore(); }
+    else if(op[0]==="svg"){ const [, path, o] = op; ctx.save(); ctx.translate(o.x, H - o.y); const p2 = new Path2D(path);
+      if(o.color){ ctx.globalAlpha = o.opacity ?? 1; ctx.fillStyle = pcol(o.color); ctx.fill(p2); }
+      if(o.borderColor && o.borderWidth){ ctx.globalAlpha = o.borderOpacity ?? 1; ctx.strokeStyle = pcol(o.borderColor); ctx.lineWidth = o.borderWidth; ctx.stroke(p2); }
+      ctx.restore(); }
     else if(op[0]==="line"){ const o = op[1]; ctx.save(); ctx.strokeStyle = pcol(o.color) || "#000"; ctx.lineWidth = o.thickness || 1; if(o.dashArray) ctx.setLineDash(o.dashArray); ctx.beginPath(); ctx.moveTo(o.start.x, H - o.start.y); ctx.lineTo(o.end.x, H - o.end.y); ctx.stroke(); ctx.restore(); }
     else if(op[0]==="rect"){ const o = op[1]; const x=o.x, yy=H - o.y - o.height; ctx.save();
       if(o.color){ ctx.globalAlpha = o.opacity ?? 1; ctx.fillStyle = pcol(o.color); ctx.fillRect(x, yy, o.width, o.height); ctx.globalAlpha = 1; }
@@ -1079,28 +1122,33 @@ async function showEmailSheet(d){
     <div class="field"><label for="emSubj">Subject</label><input type="text" id="emSubj" value="${esc(tpl.subject)}"></div>
     <div class="field"><label for="emBody">Message</label><textarea id="emBody" rows="12" style="font-size:13px">${esc(tpl.body)}</textarea></div>
     <div class="sheet-actions">
-      <button class="btn primary" id="emMail">Open in my email app</button>
+      <button class="btn primary" id="emCopy">Copy message (link shows as ${esc(linkLabel(d))})</button>
+      <a class="btn" id="emGmail" href="#" target="_blank" rel="noopener">Open in Gmail</a>
+      <a class="btn" id="emMail" href="#" target="_blank" rel="noopener">Open in my email app</a>
       <button class="btn hidden" id="emShare">Share with PDF attached</button>
-      <button class="btn" id="emCopy">Copy message</button>
       <button class="btn" id="emPdf">Download PDF to attach</button>
       <button class="btn ghost" id="emClose">Close</button>
     </div>
-    <p class="pnote">"Open in my email app" fills in the email with the online invoice link. To attach the PDF itself, use Share (on phones) or download it and attach it.</p>
+    <p class="pnote"><b>Most reliable:</b> Copy message, then paste it into a new email in any email app (Zoho Mail, Gmail, Outlook). The subject is above. "Open in my email app" may not work inside the Claude app; if nothing happens, use Copy message or Open in Gmail.</p>
   </div>`;
   document.body.appendChild(el);
   const val = id => $(id).value;
   el.addEventListener("click", ev=>{ if(ev.target===el) closePdfSheet(); });
   $("#emClose").addEventListener("click", closePdfSheet);
-  $("#emMail").addEventListener("click", async ()=>{
-    const to = val("#emTo").trim();
-    const href = `mailto:${encodeURIComponent(to).replace(/%40/g,"@")}?subject=${encodeURIComponent(val("#emSubj"))}&body=${encodeURIComponent(val("#emBody"))}`;
-    const a = document.createElement("a"); a.href = href; a.target = "_blank"; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
-    await markEmailed(d, to); toast("Opening your email app…");
-  });
+  // Real links (tapped directly) so browsers and the Claude app let them open
+  const setHrefs = ()=>{
+    const to = val("#emTo").trim(), su = val("#emSubj"), body = val("#emBody");
+    $("#emMail").href = `mailto:${encodeURIComponent(to).replace(/%40/g,"@")}?subject=${encodeURIComponent(su)}&body=${encodeURIComponent(body)}`;
+    $("#emGmail").href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(su)}&body=${encodeURIComponent(body)}`;
+  };
+  setHrefs();
+  ["#emTo","#emSubj","#emBody"].forEach(id=>$(id).addEventListener("input", setHrefs));
+  $("#emMail").addEventListener("click", ()=>{ setHrefs(); markEmailed(d, val("#emTo").trim()); });
+  $("#emGmail").addEventListener("click", ()=>{ setHrefs(); markEmailed(d, val("#emTo").trim()); });
   $("#emCopy").addEventListener("click", async ()=>{
     const body = val("#emBody");
     const ok = link ? await copyRich(textToHTML(body, link, d), body) : await copyText(body);
-    toast(ok ? `Message copied. Paste it into your email: the link shows as "${linkLabel(d)}".` : "Couldn't copy on this device");
+    toast(ok ? `Message copied. Paste it into a new email; the link shows as "${linkLabel(d)}".` : "Couldn't copy. Select the message text and copy it.");
     if(ok) await markEmailed(d, val("#emTo").trim());
   });
   $("#emPdf").addEventListener("click", ()=>downloadPDF(d));
