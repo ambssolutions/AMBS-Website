@@ -489,6 +489,29 @@ function payText(d){
   ];
   return lines.filter((l,i)=>l!=="" || i===3).join("\n");
 }
+// Copy as a clickable link: pasted into Gmail, Outlook or Apple Mail it shows as the invoice number
+async function copyRich(html, plain){
+  try{
+    if(navigator.clipboard && window.ClipboardItem){
+      await navigator.clipboard.write([new ClipboardItem({"text/html": new Blob([html], {type:"text/html"}), "text/plain": new Blob([plain], {type:"text/plain"})})]);
+      return true;
+    }
+  }catch(e){}
+  try{
+    const div = document.createElement("div"); div.contentEditable = "true"; div.innerHTML = html;
+    div.style.cssText = "position:fixed;left:-9999px;top:0;white-space:pre-wrap"; document.body.appendChild(div);
+    const range = document.createRange(); range.selectNodeContents(div);
+    const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    const ok = document.execCommand("copy"); sel.removeAllRanges(); div.remove();
+    if(ok) return true;
+  }catch(e){}
+  return copyText(plain);
+}
+function linkLabel(d){ return `${d.type==="quote" ? "Quote" : "Invoice"} ${d.number}`; }
+function linkHTML(url, d){ return `<a href="${esc(url)}">${esc(linkLabel(d))}</a>`; }
+function textToHTML(text, url, d){
+  return esc(text).split(esc(url)).join(linkHTML(url, d)).replace(/\n/g, "<br>");
+}
 async function copyText(text){
   try{ await navigator.clipboard.writeText(text); return true; }
   catch(e){
@@ -850,7 +873,7 @@ async function buildPdf(d){
     const lead = (isInv && !paid) ? "View and pay online: " : "View online: ";
     const lw = T(lead, M, y, {bold:true});
     let shown = CURRENT_LINK.split("#")[0].replace(/^https?:\/\//, "");
-    linkText(isInv ? `Open invoice ${num} online (${shown})` : `Open quote ${num} online (${shown})`, M + lw, y, CURRENT_LINK);
+    linkText(`${isInv ? "Invoice" : "Quote"} ${num}`, M + lw, y, CURRENT_LINK, {bold:true});
     y += 15;
   }
   if(d.notes){ y += 4; para(d.notes, M, RIGHT - M); }
@@ -1016,6 +1039,87 @@ function showPdfSheet(blob, name){
   (sh || el.querySelector("a")).focus();
 }
 
+/* ---------- Email an invoice or quote ---------- */
+function emailTemplate(d, link){
+  const s = S.settings, c = d.client || {}, isInv = d.type === "invoice", t = totals(d.items);
+  const who = c.contact || c.name || "there";
+  const subject = `${isInv ? "Invoice" : "Quote"} ${d.number} from ${s.businessName}`;
+  const lines = [`Hi ${who},`, ""];
+  if(isInv && d.status === "paid") lines.push(`Here is invoice ${d.number} for your records. It has been paid in full, thank you.`);
+  else if(isInv) lines.push(`Please find invoice ${d.number} for $${money(balance(d))} (NZD, incl. GST), due ${fdate(d.dueDate)}.`);
+  else lines.push(`Please find quote ${d.number} for $${money(t.total)} (NZD, incl. GST), valid until ${fdate(d.dueDate)}.`);
+  if(link){ lines.push("", isInv && d.status !== "paid" ? "View, download and pay online:" : "View and download online:", link); }
+  if(isInv && d.status !== "paid" && s.bankAccount){
+    lines.push("", "Payment details", `Account name: ${s.bankName || s.businessName}`, `Account number: ${s.bankAccount}`);
+    if(s.bank) lines.push(`Bank: ${s.bank}`);
+    lines.push(`Reference: ${d.number}${c.name ? " / " + c.name : ""}`);
+  }
+  if(!isInv) lines.push("", "If you're happy to go ahead, just reply to this email.");
+  lines.push("", s.thankYouText || "Thank you for your business!", "", s.businessName);
+  const contact = [s.phone, s.email, s.website].filter(Boolean).join(" | ");
+  if(contact) lines.push(contact);
+  return {subject, body: lines.join("\n")};
+}
+async function markEmailed(d, to){
+  if(!d.id) return;
+  const cur = S.docs.find(x=>x.id===d.id); if(!cur) return;
+  const rec = clone(cur); rec.emailedAt = nowISO(); rec.emailedTo = to || "";
+  await commitDoc(rec);
+  if(S.draft && S.draft.id === rec.id){ S.draft.emailedAt = rec.emailedAt; S.draft.emailedTo = rec.emailedTo; }
+  if(S.view === "list"){ const keep = $("#pdfSheet"); if(keep) keep.remove(); render(); if(keep) document.body.appendChild(keep); }
+}
+async function showEmailSheet(d){
+  closePdfSheet();
+  const link = await shareLink(d);
+  const tpl = emailTemplate(d, link);
+  const el = document.createElement("div"); el.id = "pdfSheet"; el.className = "sheet-back";
+  el.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="emTitle" style="max-height:92vh;overflow:auto">
+    <h2 id="emTitle">Email ${d.type==="quote"?"quote":"invoice"} ${esc(d.number)}</h2>
+    <div class="field"><label for="emTo">To</label><input type="email" id="emTo" value="${esc((d.client && d.client.email) || "")}" placeholder="client@example.com"></div>
+    <div class="field"><label for="emSubj">Subject</label><input type="text" id="emSubj" value="${esc(tpl.subject)}"></div>
+    <div class="field"><label for="emBody">Message</label><textarea id="emBody" rows="12" style="font-size:13px">${esc(tpl.body)}</textarea></div>
+    <div class="sheet-actions">
+      <button class="btn primary" id="emMail">Open in my email app</button>
+      <button class="btn hidden" id="emShare">Share with PDF attached</button>
+      <button class="btn" id="emCopy">Copy message</button>
+      <button class="btn" id="emPdf">Download PDF to attach</button>
+      <button class="btn ghost" id="emClose">Close</button>
+    </div>
+    <p class="pnote">"Open in my email app" fills in the email with the online invoice link. To attach the PDF itself, use Share (on phones) or download it and attach it.</p>
+  </div>`;
+  document.body.appendChild(el);
+  const val = id => $(id).value;
+  el.addEventListener("click", ev=>{ if(ev.target===el) closePdfSheet(); });
+  $("#emClose").addEventListener("click", closePdfSheet);
+  $("#emMail").addEventListener("click", async ()=>{
+    const to = val("#emTo").trim();
+    const href = `mailto:${encodeURIComponent(to).replace(/%40/g,"@")}?subject=${encodeURIComponent(val("#emSubj"))}&body=${encodeURIComponent(val("#emBody"))}`;
+    const a = document.createElement("a"); a.href = href; a.target = "_blank"; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
+    await markEmailed(d, to); toast("Opening your email app…");
+  });
+  $("#emCopy").addEventListener("click", async ()=>{
+    const body = val("#emBody");
+    const ok = link ? await copyRich(textToHTML(body, link, d), body) : await copyText(body);
+    toast(ok ? `Message copied. Paste it into your email: the link shows as "${linkLabel(d)}".` : "Couldn't copy on this device");
+    if(ok) await markEmailed(d, val("#emTo").trim());
+  });
+  $("#emPdf").addEventListener("click", ()=>downloadPDF(d));
+  // Share with the PDF attached (phones)
+  try{
+    if(window.PDFLib && navigator.canShare){
+      CURRENT_LINK = link; const r = await buildPdf(d); CURRENT_LINK = "";
+      const file = new File([new Blob([r.bytes], {type:"application/pdf"})], pdfName(d), {type:"application/pdf"});
+      if(navigator.canShare({files:[file]})){
+        const b = $("#emShare"); if(b){ b.classList.remove("hidden");
+          b.addEventListener("click", async ()=>{
+            try{ await navigator.share({files:[file], title:val("#emSubj"), text:val("#emBody")}); await markEmailed(d, val("#emTo").trim()); }
+            catch(err){ if(err && err.name !== "AbortError") toast("Sharing isn't available here."); }
+          }); }
+      }
+    }
+  }catch(e){ CURRENT_LINK = ""; }
+  $("#emTo").focus();
+}
 function showLinkSheet(url, d){
   closePdfSheet();
   const el = document.createElement("div"); el.id = "pdfSheet"; el.className = "sheet-back";
@@ -1024,14 +1128,16 @@ function showLinkSheet(url, d){
     <p class="doc-meta">Anyone with this link can view this ${d.type==="quote"?"quote":"invoice"}, download the PDF and copy the payment details. If you change it later, send a new link.</p>
     <textarea readonly rows="3" style="font-size:12px" id="lkText">${esc(url)}</textarea>
     <div class="sheet-actions">
-      <button class="btn primary" id="lkCopy">Copy link</button>
+      <button class="btn primary" id="lkCopy">Copy link (shows as ${esc(linkLabel(d))})</button>
+      <button class="btn" id="lkCopyRaw">Copy full web address</button>
       <a class="btn" href="${esc(url)}" target="_blank" rel="noopener">Open link</a>
       <button class="btn ghost" id="lkClose">Close</button>
     </div></div>`;
   document.body.appendChild(el);
   el.addEventListener("click", ev=>{ if(ev.target===el) closePdfSheet(); });
   $("#lkClose").addEventListener("click", closePdfSheet);
-  $("#lkCopy").addEventListener("click", async ()=>{ toast(await copyText(url) ? "Link copied" : "Couldn't copy. Select the link and copy it."); });
+  $("#lkCopy").addEventListener("click", async ()=>{ toast(await copyRich(linkHTML(url, d), url) ? `Copied. Paste into your email and it shows as "${linkLabel(d)}".` : "Couldn't copy. Select the link and copy it."); });
+  $("#lkCopyRaw").addEventListener("click", async ()=>{ toast(await copyText(url) ? "Web address copied" : "Couldn't copy on this device"); });
   $("#lkCopy").focus();
 }
 
@@ -1113,7 +1219,7 @@ function createView(){
       <button class="btn primary" data-act="save">${saved?"Save changes":"Save "+(isInv?"invoice":"quote")}</button>
       <button class="btn" data-act="pdf">View PDF</button>
       ${isInv ? `<button class="btn" data-act="copyPay">Copy payment details</button>` : ""}
-      ${saved ? `<button class="btn" data-act="shareLink">Share link</button>` : ""}
+      ${saved ? `<button class="btn" data-act="emailDoc">Email</button><button class="btn" data-act="shareLink">Share link</button>` : ""}
       ${saved && isInv ? `<button class="btn" data-act="togglePaid">${d.status==="paid"?"Mark as unpaid":"Mark as paid"}</button>` : ""}
       ${saved && !isInv ? `<button class="btn" data-act="convert">Convert to invoice</button>` : ""}
       ${saved ? `<button class="btn ghost" data-act="new">Start a new one</button>` : ""}
@@ -1290,7 +1396,7 @@ function listView(){
     const [l,c] = docStatus(d), t = totals(d.items);
     return `<div class="row">
       <div><div class="t">${esc(d.number)}<span class="badge ${c}">${l}</span></div>
-      <div class="s">${esc(d.client.name||"No client")} · ${esc(fdate(d.issueDate))}${d.type==="invoice"&&d.status!=="paid"?" · due "+esc(fdate(d.dueDate)):""}</div></div>
+      <div class="s">${esc(d.client.name||"No client")} · ${esc(fdate(d.issueDate))}${d.type==="invoice"&&d.status!=="paid"?" · due "+esc(fdate(d.dueDate)):""}${d.emailedAt?" · emailed "+esc(fdate(d.emailedAt.slice(0,10))):""}</div></div>
       <div class="amt">$${money(t.total)}${d.type==="invoice"&&d.status!=="paid"&&Number(d.amountPaid)>0?`<div class="s">$${money(balance(d))} due</div>`:""}</div>
       <div class="actions">
         <button class="btn" data-act="open" data-id="${esc(d.id)}">Open</button>
@@ -1298,6 +1404,7 @@ function listView(){
         ${d.type==="invoice" ? `<button class="btn" data-act="paidId" data-id="${esc(d.id)}">${d.status==="paid"?"Mark unpaid":"Mark paid"}</button>`
           : `<button class="btn" data-act="convertId" data-id="${esc(d.id)}">To invoice</button>
              ${d.status==="open"?`<button class="btn" data-act="declineId" data-id="${esc(d.id)}">Declined</button>`:""}`}
+        <button class="btn" data-act="emailDoc" data-id="${esc(d.id)}">Email</button>
         <button class="btn" data-act="shareLink" data-id="${esc(d.id)}">Share link</button>
         ${d.type==="invoice" ? `<button class="btn" data-act="copyPay" data-id="${esc(d.id)}">Copy payment details</button>` : ""}
         <button class="btn" data-act="dupId" data-id="${esc(d.id)}">Duplicate</button>
@@ -1558,6 +1665,11 @@ document.addEventListener("click", async e=>{
     case "paidId": { const d=S.docs.find(x=>x.id===id); if(d){ await setPaid(id, d.status!=="paid"); render(); } break; }
     case "convertId": await convertQuote(id); break;
     case "declineId": { const cur=S.docs.find(x=>x.id===id); if(cur){ const d=clone(cur); d.status="declined"; await commitDoc(d, `${d.number} marked as declined`); render(); } break; }
+    case "emailDoc": {
+      const d = id ? S.docs.find(x=>x.id===id) : S.draft; if(!d) break;
+      if(!d.number){ toast("Save it first"); break; }
+      await showEmailSheet(d); break;
+    }
     case "shareLink": {
       const d = id ? S.docs.find(x=>x.id===id) : S.draft; if(!d) break;
       if(!d.number){ toast("Save it first to get a link"); break; }
