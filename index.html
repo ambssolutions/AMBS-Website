@@ -331,6 +331,10 @@ section{padding:clamp(3.4rem,8vw,6.2rem) 0}
 }
 .field input::placeholder,.field textarea::placeholder{color:rgba(248,250,247,.45)}
 .field select option{color:#101F26}
+.phone-row{display:grid;grid-template-columns:auto 1fr;gap:8px}
+.phone-row select{width:auto;max-width:130px}
+.phone-row select{min-width:0;text-overflow:ellipsis}
+.phone-row + .field-err, .phone-row ~ .field-err{grid-column:1/-1}
 .field textarea{min-height:112px;resize:vertical}
 .form .btn{justify-self:start;margin-top:.4rem}
 .form-note{font-family:var(--mono);font-size:.73rem;color:rgba(248,250,247,.66);margin-top:.9rem}
@@ -3398,8 +3402,9 @@ with easy-to-use AI.</h1>
         <div class="field"><label for="f-name" data-i18n="form.name">Your name</label><input id="f-name" type="text" autocomplete="name"></div>
         <div class="field"><label for="f-biz" data-i18n="form.biz">Business name</label><input id="f-biz" type="text" autocomplete="organization"></div>
         <div class="field"><label for="f-email" data-i18n="form.email">Email</label><input id="f-email" type="email" autocomplete="email"></div>
-        <div class="field"><label for="f-phone" data-i18n="form.phone">Phone</label><input id="f-phone" type="tel" autocomplete="tel"></div>
+        <div class="field"><label for="f-phone" data-i18n="form.phone">Phone</label><div class="phone-row"><select id="f-cc" aria-label="Country code" autocomplete="tel-country-code"></select><input id="f-phone" type="tel" autocomplete="tel-national" inputmode="tel"></div></div>
         <div class="field field--full"><label for="f-msg" data-i18n="form.msg">What eats your time?</label><textarea id="f-msg"></textarea></div>
+        <input id="f-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0">
         <div class="field--full">
           <button class="btn btn--sun" type="button" id="sendbtn" data-i18n="form.send">Send request</button>
           <p class="form-note" data-i18n="form.note">We reply within one working day. Or call +64 22 099 9578.</p>
@@ -3538,6 +3543,7 @@ en:{
  "foot.loc":"Auckland, New Zealand",
  "err.name":"Please enter your name","err.email":"That email address does not look right",
  "err.phone":"Please enter a New Zealand number, like 021 234 5678 or +64 21 234 5678",
+ "err.phoneintl":"Please check the phone number, for example 412 345 678",
  "err.phonereq":"Please enter a phone number so we can call you back",
  "form.okname":"Thank you {name} \u2014 we\u2019ll be in touch shortly",
  "how.eyebrow":"Three steps, in order","how.title":"How it works",
@@ -3614,6 +3620,7 @@ zh:{
  "foot.loc":"新西兰 奥克兰",
  "err.name":"请填写你的姓名","err.email":"这个邮箱地址看起来不正确",
  "err.phone":"请填写新西兰号码，例如 021 234 5678 或 +64 21 234 5678",
+ "err.phoneintl":"请检查电话号码，例如 412 345 678",
  "err.phonereq":"请留一个电话号码，方便我们回电",
  "form.okname":"谢谢你，{name}——我们会尽快联系你",
  "how.eyebrow":"三个步骤，依次进行","how.title":"合作流程",
@@ -3690,6 +3697,7 @@ hi:{
  "foot.loc":"ऑकलैंड, न्यूज़ीलैंड",
  "err.name":"कृपया अपना नाम भरें","err.email":"यह ईमेल पता सही नहीं लगता",
  "err.phone":"कृपया न्यूज़ीलैंड का नंबर भरें, जैसे 021 234 5678 या +64 21 234 5678",
+ "err.phoneintl":"कृपया फ़ोन नंबर जाँचें, जैसे 412 345 678",
  "err.phonereq":"कृपया फ़ोन नंबर भरें ताकि हम कॉल कर सकें",
  "form.okname":"धन्यवाद {name} — हम शीघ्र संपर्क करेंगे",
  "how.eyebrow":"तीन चरण, इसी क्रम में","how.title":"काम कैसे होता है",
@@ -3766,6 +3774,7 @@ mi:{
  "foot.loc":"Tāmaki Makaurau, Aotearoa",
  "err.name":"Tēnā koa tuhia tō ingoa","err.email":"Kāore te wāhitau īmēra e tika ana",
  "err.phone":"Tēnā koa whakaurua he nama Aotearoa, pēnei i te 021 234 5678, +64 21 234 5678 rānei",
+ "err.phoneintl":"Tēnā koa tirohia te nama waea, pēnei i te 412 345 678",
  "err.phonereq":"Tēnā koa tukuna he nama waea kia taea te waea atu",
  "form.okname":"Ngā mihi {name} — ka whakapā wawe atu mātou",
  "how.eyebrow":"E toru ngā waahanga","how.title":"Te huarahi",
@@ -3842,6 +3851,7 @@ pa:{
  "foot.loc":"ਆਕਲੈਂਡ, ਨਿਊਜ਼ੀਲੈਂਡ",
  "err.name":"ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਨਾਮ ਭਰੋ","err.email":"ਇਹ ਈਮੇਲ ਪਤਾ ਠੀਕ ਨਹੀਂ ਲੱਗਦਾ",
  "err.phone":"ਕਿਰਪਾ ਕਰਕੇ ਨਿਊਜ਼ੀਲੈਂਡ ਦਾ ਨੰਬਰ ਭਰੋ, ਜਿਵੇਂ 021 234 5678 ਜਾਂ +64 21 234 5678",
+ "err.phoneintl":"ਕਿਰਪਾ ਕਰਕੇ ਫ਼ੋਨ ਨੰਬਰ ਜਾਂਚੋ, ਜਿਵੇਂ 412 345 678",
  "err.phonereq":"ਕਿਰਪਾ ਕਰਕੇ ਫ਼ੋਨ ਨੰਬਰ ਭਰੋ ਤਾਂ ਜੋ ਅਸੀਂ ਕਾਲ ਕਰ ਸਕੀਏ",
  "form.okname":"ਧੰਨਵਾਦ {name} — ਅਸੀਂ ਜਲਦੀ ਸੰਪਰਕ ਕਰਾਂਗੇ",
  "how.eyebrow":"ਤਿੰਨ ਕਦਮ, ਇਸੇ ਤਰਤੀਬ ਵਿੱਚ","how.title":"ਕੰਮ ਕਿਵੇਂ ਹੁੰਦਾ ਹੈ",
@@ -4031,6 +4041,29 @@ document.querySelectorAll("#faqlist .q").forEach(q=>{
       the visitor's own email app (mailto). */
 const FORM_KEY="b26ce370-6383-473e-926e-ceb49a91e7fd";
 
+/* ==== PORTAL LEADS ====
+   Every request is also saved as a lead in the AMBS portal (portal.ambs.co.nz → Leads).
+   It runs alongside the email above, so nothing changes for the visitor. */
+const PORTAL_LEAD_URL="https://portal.ambs.co.nz/api/app?action=lead";
+let lastPortalLead="";
+function sendPortalLead(){
+  try{
+    const v=id=>((document.getElementById(id)||{}).value||"").trim();
+    const data={
+      name:v("f-name"), company:v("f-biz"), email:v("f-email"), phone:prettyPhone(v("f-phone")),
+      service:"Free session request", message:v("f-msg"),
+      page:location.href.split("#")[0],
+      extra:{language:document.documentElement.lang||""},
+      hp:v("f-website")
+    };
+    const body=JSON.stringify(data);
+    if(body===lastPortalLead)return;          /* don't save the same request twice */
+    lastPortalLead=body;
+    if(navigator.sendBeacon&&navigator.sendBeacon(PORTAL_LEAD_URL,new Blob([body],{type:"text/plain"})))return;
+    fetch(PORTAL_LEAD_URL,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain"},body:body});
+  }catch(e){}
+}
+
 /* ---- validation: a name, a real email, and an NZ phone number ---- */
 function fieldError(id,msg){
   const el=document.getElementById(id);if(!el)return;
@@ -4054,6 +4087,55 @@ function nzPhone(raw){
   if(!/^0(2[0-9]|3|4|6|7|9|800|508)/.test(d))return null;
   return d;
 }
+/* ---- country code picker: New Zealand first, popular countries, then A to Z ---- */
+const COUNTRIES="AF|Afghanistan|93;AL|Albania|355;DZ|Algeria|213;AS|American Samoa|1684;AD|Andorra|376;AO|Angola|244;AI|Anguilla|1264;AG|Antigua and Barbuda|1268;AR|Argentina|54;AM|Armenia|374;AW|Aruba|297;AU|Australia|61;AT|Austria|43;AZ|Azerbaijan|994;BS|Bahamas|1242;BH|Bahrain|973;BD|Bangladesh|880;BB|Barbados|1246;BY|Belarus|375;BE|Belgium|32;BZ|Belize|501;BJ|Benin|229;BM|Bermuda|1441;BT|Bhutan|975;BO|Bolivia|591;BA|Bosnia and Herzegovina|387;BW|Botswana|267;BR|Brazil|55;BN|Brunei|673;BG|Bulgaria|359;BF|Burkina Faso|226;BI|Burundi|257;KH|Cambodia|855;CM|Cameroon|237;CA|Canada|1;CV|Cape Verde|238;KY|Cayman Islands|1345;CF|Central African Republic|236;TD|Chad|235;CL|Chile|56;CN|China|86;CO|Colombia|57;KM|Comoros|269;CG|Congo|242;CD|Congo (DRC)|243;CK|Cook Islands|682;CR|Costa Rica|506;CI|Côte d'Ivoire|225;HR|Croatia|385;CU|Cuba|53;CY|Cyprus|357;CZ|Czechia|420;DK|Denmark|45;DJ|Djibouti|253;DM|Dominica|1767;DO|Dominican Republic|1809;EC|Ecuador|593;EG|Egypt|20;SV|El Salvador|503;GQ|Equatorial Guinea|240;ER|Eritrea|291;EE|Estonia|372;SZ|Eswatini|268;ET|Ethiopia|251;FK|Falkland Islands|500;FO|Faroe Islands|298;FJ|Fiji|679;FI|Finland|358;FR|France|33;GF|French Guiana|594;PF|French Polynesia|689;GA|Gabon|241;GM|Gambia|220;GE|Georgia|995;DE|Germany|49;GH|Ghana|233;GI|Gibraltar|350;GR|Greece|30;GL|Greenland|299;GD|Grenada|1473;GP|Guadeloupe|590;GU|Guam|1671;GT|Guatemala|502;GN|Guinea|224;GW|Guinea-Bissau|245;GY|Guyana|592;HT|Haiti|509;HN|Honduras|504;HK|Hong Kong|852;HU|Hungary|36;IS|Iceland|354;IN|India|91;ID|Indonesia|62;IR|Iran|98;IQ|Iraq|964;IE|Ireland|353;IL|Israel|972;IT|Italy|39;JM|Jamaica|1876;JP|Japan|81;JO|Jordan|962;KZ|Kazakhstan|7;KE|Kenya|254;KI|Kiribati|686;KW|Kuwait|965;KG|Kyrgyzstan|996;LA|Laos|856;LV|Latvia|371;LB|Lebanon|961;LS|Lesotho|266;LR|Liberia|231;LY|Libya|218;LI|Liechtenstein|423;LT|Lithuania|370;LU|Luxembourg|352;MO|Macau|853;MG|Madagascar|261;MW|Malawi|265;MY|Malaysia|60;MV|Maldives|960;ML|Mali|223;MT|Malta|356;MH|Marshall Islands|692;MQ|Martinique|596;MR|Mauritania|222;MU|Mauritius|230;MX|Mexico|52;FM|Micronesia|691;MD|Moldova|373;MC|Monaco|377;MN|Mongolia|976;ME|Montenegro|382;MA|Morocco|212;MZ|Mozambique|258;MM|Myanmar|95;NA|Namibia|264;NR|Nauru|674;NP|Nepal|977;NL|Netherlands|31;NC|New Caledonia|687;NZ|New Zealand|64;NI|Nicaragua|505;NE|Niger|227;NG|Nigeria|234;NU|Niue|683;NF|Norfolk Island|672;KP|North Korea|850;MK|North Macedonia|389;MP|Northern Mariana Islands|1670;NO|Norway|47;OM|Oman|968;PK|Pakistan|92;PW|Palau|680;PS|Palestine|970;PA|Panama|507;PG|Papua New Guinea|675;PY|Paraguay|595;PE|Peru|51;PH|Philippines|63;PL|Poland|48;PT|Portugal|351;PR|Puerto Rico|1787;QA|Qatar|974;RE|Réunion|262;RO|Romania|40;RU|Russia|7;RW|Rwanda|250;KN|Saint Kitts and Nevis|1869;LC|Saint Lucia|1758;VC|Saint Vincent and the Grenadines|1784;WS|Samoa|685;SM|San Marino|378;ST|São Tomé and Príncipe|239;SA|Saudi Arabia|966;SN|Senegal|221;RS|Serbia|381;SC|Seychelles|248;SL|Sierra Leone|232;SG|Singapore|65;SK|Slovakia|421;SI|Slovenia|386;SB|Solomon Islands|677;SO|Somalia|252;ZA|South Africa|27;KR|South Korea|82;SS|South Sudan|211;ES|Spain|34;LK|Sri Lanka|94;SD|Sudan|249;SR|Suriname|597;SE|Sweden|46;CH|Switzerland|41;SY|Syria|963;TW|Taiwan|886;TJ|Tajikistan|992;TZ|Tanzania|255;TH|Thailand|66;TL|Timor-Leste|670;TG|Togo|228;TK|Tokelau|690;TO|Tonga|676;TT|Trinidad and Tobago|1868;TN|Tunisia|216;TR|Türkiye|90;TM|Turkmenistan|993;TC|Turks and Caicos Islands|1649;TV|Tuvalu|688;UG|Uganda|256;UA|Ukraine|380;AE|United Arab Emirates|971;GB|United Kingdom|44;US|United States|1;UY|Uruguay|598;UZ|Uzbekistan|998;VU|Vanuatu|678;VA|Vatican City|39;VE|Venezuela|58;VN|Vietnam|84;VG|Virgin Islands (UK)|1284;VI|Virgin Islands (US)|1340;WF|Wallis and Futuna|681;YE|Yemen|967;ZM|Zambia|260;ZW|Zimbabwe|263".split(";").map(x=>{const p=x.split("|");return {iso:p[0],name:p[1],dial:p[2]};});
+const POPULAR=["NZ","AU","CA","CN","IN","US","GB"];
+function flag(iso){return iso.replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt(0)));}
+(function fillCountries(){
+  const sel=document.getElementById("f-cc");if(!sel)return;
+  const opt=c=>`<option value="${c.iso}" data-dial="${c.dial}">${flag(c.iso)} ${c.name} (+${c.dial})</option>`;
+  const pop=POPULAR.map(i=>COUNTRIES.find(c=>c.iso===i)).filter(Boolean);
+  const rest=COUNTRIES.slice().sort((a,b)=>a.name.localeCompare(b.name,"en"));
+  sel.innerHTML=`<optgroup label="Popular">${pop.map(opt).join("")}</optgroup><optgroup label="All countries (A to Z)">${rest.map(opt).join("")}</optgroup>`;
+  sel.value="NZ";
+  /* closed: show just the flag and code (🇳🇿 +64); open: show full country names */
+  const full=()=>{for(const o of sel.options){if(o.dataset.full)o.textContent=o.dataset.full;}};
+  const short=()=>{full();const o=sel.options[sel.selectedIndex];if(!o)return;o.dataset.full=o.dataset.full||o.textContent;o.textContent=flag(o.value)+" +"+o.getAttribute("data-dial");};
+  for(const o of sel.options)o.dataset.full=o.textContent;
+  short();
+  ["mousedown","touchstart","focus","keydown"].forEach(ev=>sel.addEventListener(ev,full,{passive:true}));
+  sel.addEventListener("blur",short);
+  sel.addEventListener("change",()=>{short();clearField("f-phone");const ph=document.getElementById("f-phone");if(ph&&ph.value.trim())checkField("f-phone");});
+})();
+function ccDial(){const s=document.getElementById("f-cc");if(!s)return "64";const o=s.options[s.selectedIndex];return o?o.getAttribute("data-dial"):"64";}
+/* international number check: returns {cc, nat} or null */
+function intlPhone(raw){
+  let d=String(raw||"").replace(/[\s()\-\.]/g,"");
+  if(!d)return null;
+  if(d.startsWith("00"))d="+"+d.slice(2);
+  if(d.startsWith("+")){                       /* typed their own country code */
+    const digits=d.slice(1);
+    if(!/^[0-9]{7,15}$/.test(digits))return null;
+    if(digits.startsWith("64")){const nz=nzPhone("+"+digits);return nz?{cc:"64",nat:nz.slice(1)}:null;}
+    return {cc:"",nat:digits};
+  }
+  const cc=ccDial();
+  if(cc==="64"){const nz=nzPhone(d);return nz?{cc:"64",nat:nz.slice(1)}:null;}
+  if(!/^[0-9]+$/.test(d))return null;
+  if(d.startsWith(cc)&&d.length>cc.length+6)d=d.slice(cc.length);    /* country code typed again */
+  if(cc!=="39"&&d.startsWith("0"))d=d.slice(1);                      /* drop the national 0 (not for Italy) */
+  if(d.length<5||d.length+cc.length>15)return null;
+  return {cc:cc,nat:d};
+}
+function phoneOK(raw){return !!intlPhone(raw);}
+function prettyPhone(raw){
+  const p=intlPhone(raw);if(!p)return String(raw||"").trim();
+  if(p.cc==="64")return prettyNZ("0"+p.nat);
+  if(!p.cc)return "+"+p.nat;
+  return "+"+p.cc+" "+p.nat.replace(/(\d{3})(?=\d{3,})/g,"$1 ");
+}
+function telLink(raw){const p=intlPhone(raw);return p?"tel:+"+(p.cc||"")+p.nat:"";}
+function phoneErr(){return ccDial()==="64"?t("err.phone"):(t("err.phoneintl")||t("err.phone"));}
 function prettyNZ(raw){
   /* 02112343333 -> +64 21 1234 3333 · 091234567 -> +64 9 123 4567 */
   const d=nzPhone(raw);
@@ -4074,7 +4156,7 @@ function validateForm(){
   const email=v("f-email");
   if(!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(email)){fieldError("f-email",t("err.email"));first=first||"f-email";}
   const phone=v("f-phone");
-  if(phone&&!nzPhone(phone)){fieldError("f-phone",t("err.phone"));first=first||"f-phone";}
+  if(phone&&!phoneOK(phone)){fieldError("f-phone",phoneErr());first=first||"f-phone";}
   if(!phone){fieldError("f-phone",t("err.phonereq"));first=first||"f-phone";}
   if(first){
     const el=document.getElementById(first);
@@ -4097,7 +4179,7 @@ function checkField(id){
   if(!val)return true;                       /* silence while still empty */
   if(id==="f-name"&&val.length<2){fieldError(id,t("err.name"));return false;}
   if(id==="f-email"&&!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(val)){fieldError(id,t("err.email"));return false;}
-  if(id==="f-phone"&&!nzPhone(val)){fieldError(id,t("err.phone"));return false;}
+  if(id==="f-phone"&&!phoneOK(val)){fieldError(id,phoneErr());return false;}
   return true;
 }
 ["f-name","f-email","f-phone"].forEach(id=>{
@@ -4118,13 +4200,14 @@ function checkField(id){
 
 document.getElementById("sendbtn").addEventListener("click",async()=>{
   if(!validateForm())return;
+  sendPortalLead();
   const v=id=>document.getElementById(id).value.trim();
   const subject="Free session request — "+(v("f-biz")||v("f-name")||"website");
   const body=[
     `${t("form.name")}: ${v("f-name")}`,
     `${t("form.biz")}: ${v("f-biz")}`,
     `${t("form.email")}: ${v("f-email")}`,
-    `${t("form.phone")}: ${prettyNZ(v("f-phone"))}`,
+    `${t("form.phone")}: ${prettyPhone(v("f-phone"))}`,
     `Language: ${document.documentElement.lang}`,
     "",
     `${t("form.msg")}`,
@@ -4134,9 +4217,9 @@ document.getElementById("sendbtn").addEventListener("click",async()=>{
   if(FORM_KEY){
     btn.disabled=true;const orig=btn.textContent;btn.textContent="…";
     try{
-      const local=nzPhone(v("f-phone"));
-      const phoneOut=local
-        ? prettyNZ(v("f-phone"))+"   (typed: "+v("f-phone")+")   tap: tel:+64"+local.slice(1)
+      const tl=telLink(v("f-phone"));
+      const phoneOut=tl
+        ? prettyPhone(v("f-phone"))+"   (typed: "+v("f-phone")+")   tap: "+tl
         : v("f-phone");
       const r=await fetch("https://api.web3forms.com/submit",{
         method:"POST",
