@@ -3544,6 +3544,7 @@ en:{
  "err.name":"Please enter your name","err.email":"That email address does not look right",
  "err.phone":"Please enter a New Zealand number, like 021 234 5678 or +64 21 234 5678",
  "err.phoneintl":"Please check the phone number, for example 412 345 678",
+ "err.phonecc":"That doesn't look like a {country} number. Check the number, or choose your country code first.",
  "err.phonereq":"Please enter a phone number so we can call you back",
  "form.okname":"Thank you {name} \u2014 we\u2019ll be in touch shortly",
  "how.eyebrow":"Three steps, in order","how.title":"How it works",
@@ -3621,6 +3622,7 @@ zh:{
  "err.name":"请填写你的姓名","err.email":"这个邮箱地址看起来不正确",
  "err.phone":"请填写新西兰号码，例如 021 234 5678 或 +64 21 234 5678",
  "err.phoneintl":"请检查电话号码，例如 412 345 678",
+ "err.phonecc":"这看起来不是{country}的号码。请检查号码，或先选择您的国家区号。",
  "err.phonereq":"请留一个电话号码，方便我们回电",
  "form.okname":"谢谢你，{name}——我们会尽快联系你",
  "how.eyebrow":"三个步骤，依次进行","how.title":"合作流程",
@@ -3698,6 +3700,7 @@ hi:{
  "err.name":"कृपया अपना नाम भरें","err.email":"यह ईमेल पता सही नहीं लगता",
  "err.phone":"कृपया न्यूज़ीलैंड का नंबर भरें, जैसे 021 234 5678 या +64 21 234 5678",
  "err.phoneintl":"कृपया फ़ोन नंबर जाँचें, जैसे 412 345 678",
+ "err.phonecc":"यह {country} का नंबर नहीं लगता। नंबर जाँचें, या पहले अपना देश कोड चुनें।",
  "err.phonereq":"कृपया फ़ोन नंबर भरें ताकि हम कॉल कर सकें",
  "form.okname":"धन्यवाद {name} — हम शीघ्र संपर्क करेंगे",
  "how.eyebrow":"तीन चरण, इसी क्रम में","how.title":"काम कैसे होता है",
@@ -3775,6 +3778,7 @@ mi:{
  "err.name":"Tēnā koa tuhia tō ingoa","err.email":"Kāore te wāhitau īmēra e tika ana",
  "err.phone":"Tēnā koa whakaurua he nama Aotearoa, pēnei i te 021 234 5678, +64 21 234 5678 rānei",
  "err.phoneintl":"Tēnā koa tirohia te nama waea, pēnei i te 412 345 678",
+ "err.phonecc":"Kāore e rite ana ki te nama o {country}. Tirohia te nama, kōwhiria rānei tō waehere whenua i te tuatahi.",
  "err.phonereq":"Tēnā koa tukuna he nama waea kia taea te waea atu",
  "form.okname":"Ngā mihi {name} — ka whakapā wawe atu mātou",
  "how.eyebrow":"E toru ngā waahanga","how.title":"Te huarahi",
@@ -3852,6 +3856,7 @@ pa:{
  "err.name":"ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਨਾਮ ਭਰੋ","err.email":"ਇਹ ਈਮੇਲ ਪਤਾ ਠੀਕ ਨਹੀਂ ਲੱਗਦਾ",
  "err.phone":"ਕਿਰਪਾ ਕਰਕੇ ਨਿਊਜ਼ੀਲੈਂਡ ਦਾ ਨੰਬਰ ਭਰੋ, ਜਿਵੇਂ 021 234 5678 ਜਾਂ +64 21 234 5678",
  "err.phoneintl":"ਕਿਰਪਾ ਕਰਕੇ ਫ਼ੋਨ ਨੰਬਰ ਜਾਂਚੋ, ਜਿਵੇਂ 412 345 678",
+ "err.phonecc":"ਇਹ {country} ਦਾ ਨੰਬਰ ਨਹੀਂ ਲੱਗਦਾ। ਨੰਬਰ ਜਾਂਚੋ, ਜਾਂ ਪਹਿਲਾਂ ਆਪਣਾ ਦੇਸ਼ ਕੋਡ ਚੁਣੋ।",
  "err.phonereq":"ਕਿਰਪਾ ਕਰਕੇ ਫ਼ੋਨ ਨੰਬਰ ਭਰੋ ਤਾਂ ਜੋ ਅਸੀਂ ਕਾਲ ਕਰ ਸਕੀਏ",
  "form.okname":"ਧੰਨਵਾਦ {name} — ਅਸੀਂ ਜਲਦੀ ਸੰਪਰਕ ਕਰਾਂਗੇ",
  "how.eyebrow":"ਤਿੰਨ ਕਦਮ, ਇਸੇ ਤਰਤੀਬ ਵਿੱਚ","how.title":"ਕੰਮ ਕਿਵੇਂ ਹੁੰਦਾ ਹੈ",
@@ -4082,9 +4087,14 @@ function nzPhone(raw){
   if(d.startsWith("+64"))d="0"+d.slice(3);
   else if(d.startsWith("0064"))d="0"+d.slice(4);
   else if(d.startsWith("64")&&d.length>=10)d="0"+d.slice(2);
+  else if(/^[2-9]/.test(d))d="0"+d;            /* typed without the leading 0, e.g. 21 234 5678 */
   if(!/^0[0-9]{7,10}$/.test(d))return null;   /* 8 to 11 digits in 0-prefixed form */
   /* mobile prefixes and landline area codes actually issued in NZ */
   if(!/^0(2[0-9]|3|4|6|7|9|800|508)/.test(d))return null;
+  /* right length for the type: landlines 03/04/06/07/09 are 9 digits, mobiles 02x 9 to 11, 0800/0508 10 or 11 */
+  if(/^0[34679]/.test(d)&&d.length!==9)return null;
+  if(/^02/.test(d)&&(d.length<9||d.length>11))return null;
+  if(/^0(800|508)/.test(d)&&(d.length<10||d.length>11))return null;
   return d;
 }
 /* ---- country code picker: New Zealand first, popular countries, then A to Z ---- */
@@ -4096,7 +4106,7 @@ function flag(iso){return iso.replace(/./g,c=>String.fromCodePoint(127397+c.char
   const opt=c=>`<option value="${c.iso}" data-dial="${c.dial}">${flag(c.iso)} ${c.name} (+${c.dial})</option>`;
   const pop=POPULAR.map(i=>COUNTRIES.find(c=>c.iso===i)).filter(Boolean);
   const rest=COUNTRIES.slice().sort((a,b)=>a.name.localeCompare(b.name,"en"));
-  sel.innerHTML=`<optgroup label="Popular">${pop.map(opt).join("")}</optgroup><optgroup label="All countries (A to Z)">${rest.map(opt).join("")}</optgroup>`;
+  sel.innerHTML=`<optgroup label="Frequent">${pop.map(opt).join("")}</optgroup><optgroup label="All countries (A to Z)">${rest.map(opt).join("")}</optgroup>`;
   sel.value="NZ";
   /* closed: show just the flag and code (🇳🇿 +64); open: show full country names */
   const full=()=>{for(const o of sel.options){if(o.dataset.full)o.textContent=o.dataset.full;}};
@@ -4105,7 +4115,10 @@ function flag(iso){return iso.replace(/./g,c=>String.fromCodePoint(127397+c.char
   short();
   ["mousedown","touchstart","focus","keydown"].forEach(ev=>sel.addEventListener(ev,full,{passive:true}));
   sel.addEventListener("blur",short);
-  sel.addEventListener("change",()=>{short();clearField("f-phone");const ph=document.getElementById("f-phone");if(ph&&ph.value.trim())checkField("f-phone");});
+  const EX={NZ:"021 234 5678",AU:"0412 345 678",CA:"416 555 0123",US:"415 555 0123",GB:"07700 900123",IN:"98765 43210",CN:"138 0013 8000"};
+  const hint=()=>{const ph=document.getElementById("f-phone");if(ph)ph.placeholder=EX[sel.value]||"";};
+  hint();
+  sel.addEventListener("change",()=>{short();hint();clearField("f-phone");const ph=document.getElementById("f-phone");if(ph&&ph.value.trim())checkField("f-phone");});
 })();
 function ccDial(){const s=document.getElementById("f-cc");if(!s)return "64";const o=s.options[s.selectedIndex];return o?o.getAttribute("data-dial"):"64";}
 /* international number check: returns {cc, nat} or null */
@@ -4117,7 +4130,9 @@ function intlPhone(raw){
     const digits=d.slice(1);
     if(!/^[0-9]{7,15}$/.test(digits))return null;
     if(digits.startsWith("64")){const nz=nzPhone("+"+digits);return nz?{cc:"64",nat:nz.slice(1)}:null;}
-    return {cc:"",nat:digits};
+    const dials=[...new Set(COUNTRIES.map(c=>c.dial))].sort((x,y)=>y.length-x.length);
+    const cc=dials.find(dl=>digits.startsWith(dl)&&digits.length-dl.length>=5);
+    return cc?{cc:cc,nat:digits.slice(cc.length)}:{cc:"",nat:digits};
   }
   const cc=ccDial();
   if(cc==="64"){const nz=nzPhone(d);return nz?{cc:"64",nat:nz.slice(1)}:null;}
@@ -4135,7 +4150,8 @@ function prettyPhone(raw){
   return "+"+p.cc+" "+p.nat.replace(/(\d{3})(?=\d{3,})/g,"$1 ");
 }
 function telLink(raw){const p=intlPhone(raw);return p?"tel:+"+(p.cc||"")+p.nat:"";}
-function phoneErr(){return ccDial()==="64"?t("err.phone"):(t("err.phoneintl")||t("err.phone"));}
+function ccName(){const s=document.getElementById("f-cc");const o=s&&s.options[s.selectedIndex];const c=o&&COUNTRIES.find(x=>x.iso===o.value);return c?c.name:"";}
+function phoneErr(){const tpl=t("err.phonecc");return tpl&&tpl!=="err.phonecc"?tpl.replace("{country}",ccName()):t("err.phoneintl");}
 function prettyNZ(raw){
   /* 02112343333 -> +64 21 1234 3333 · 091234567 -> +64 9 123 4567 */
   const d=nzPhone(raw);
