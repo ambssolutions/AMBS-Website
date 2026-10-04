@@ -3832,13 +3832,13 @@ body:has(.updatebar.on) .totop{opacity:0;visibility:hidden}
 .wd--list .wd-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1)}
 .wd--list .wd-panel.open .wd-body{grid-template-rows:1fr}
 .wd--list .wd-in{display:block;min-height:0;overflow:hidden}
-.wd--list .wd-stage{height:auto!important;aspect-ratio:16/10;container-type:size;border-top:1px solid var(--rd-line);margin:0 .7rem;border-radius:14px;border:1px solid var(--rd-line)}
-.wd--list .mk{font-size:min(3.2cqw,5cqh)}
+.wd--list .wd-stage{height:auto!important;aspect-ratio:4/3;container-type:size;border-top:1px solid var(--rd-line);margin:0 .7rem;border-radius:14px;border:1px solid var(--rd-line)}
+.wd--list .mk{font-size:min(3.1cqw,4.1cqh,14px)}
 .wd--list .wd-copy{padding:.9rem 1.1rem 1.1rem}
 .wd--list .wd-copy h3{display:none}
 .wd--list .wd-copy p{margin:0 0 .7rem}
-@media(max-height:520px){.wd--list .wd-stage{aspect-ratio:16/7}}
-@media(min-width:700px){.wd--list .wd-panels{max-width:640px;margin-inline:auto}}
+@media(max-height:520px){.wd--list .wd-stage{aspect-ratio:16/8}.wd--list .mk{font-size:min(2.6cqw,4.1cqh)}}
+@media(min-width:700px){.wd--list .wd-panels{max-width:640px;margin-inline:auto}.wd--list .wd-stage{aspect-ratio:16/10}}
 @media(prefers-reduced-motion:reduce){.wd--list .wd-body,.wd-chev{transition:none}}
 
 /* knowledge hub, slimmed down: one short block with links to the guides, industries and services */
@@ -3846,6 +3846,61 @@ body:has(.updatebar.on) .totop{opacity:0;visibility:hidden}
 .knowledge--slim .sec-head{margin:0}
 .knowledge--slim .kh-links{display:flex;flex-wrap:wrap;gap:.6rem}
 @media(min-width:900px){.knowledge--slim .kh-slim{grid-template-columns:1.4fr 1fr}.knowledge--slim .kh-links{justify-content:flex-end}}
+
+/* reminder card: drawn icons instead of text symbols, so they look the same on every phone */
+.m3-btns b{width:2em;height:2em;font-size:.85em}
+.m3-btns b svg{width:62%;height:62%;fill:none;stroke:#fff;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.m3-bell svg{width:60%;height:60%;stroke-width:2.2}
+.updatebar--done{padding:12px 18px}
+.updatebar--done span{color:#C9E9AE;font-weight:600;white-space:nowrap}
+
+/* phones: the sky only sits behind the hero itself; the "pick your business" card below it is on the plain page */
+.hero-cut{display:none}
+.hero.is-stacked .hero-cut{display:block;position:absolute;left:0;right:0;bottom:0;top:calc(var(--cut,100%) - 18px);z-index:1;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--pagebg,#EFF3F9) 26px);transition:background 1.2s ease}
+html[data-theme="dark"] .hero.is-stacked .hero-cut{background:linear-gradient(to bottom,transparent,#0F1428 26px)}
+.hero.is-stacked{filter:none!important}
+
+/* ---- service icons: they draw themselves in when the service becomes active, then each keeps a small motion of its own ---- */
+.wd-ico .ic-line{stroke-dasharray:1 0}
+.wd-ico .ic-a,.wd-ico .ic-b{transform-box:fill-box;transform-origin:center}
+.wd-tab[aria-selected="true"] .wd-ico,.wd--list .wd-panel.open .wd-acc .wd-ico{--on:1}
+.wd-tab[aria-selected="true"] .ic-line,.wd--list .wd-panel.open .wd-acc .ic-line{stroke-dasharray:1 1;animation:ic-draw .9s cubic-bezier(.4,0,.2,1) both}
+.wd-tab[aria-selected="true"] .ic-line:nth-of-type(2),.wd--list .wd-panel.open .wd-acc .ic-line:nth-of-type(2){animation-delay:.12s}
+.wd-tab[aria-selected="true"] .ic-line:nth-of-type(3),.wd--list .wd-panel.open .wd-acc .ic-line:nth-of-type(3){animation-delay:.22s}
+.wd-tab[aria-selected="true"] .ic-line:nth-of-type(n+4),.wd--list .wd-panel.open .wd-acc .ic-line:nth-of-type(n+4){animation-delay:.32s}
+.wd-tab[aria-selected="true"] .ic-fill,.wd--list .wd-panel.open .wd-acc .ic-fill{animation:ic-fill .8s ease .2s both}
+@keyframes ic-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes ic-fill{from{opacity:0}}
+/* each icon's own motion, after it has drawn in */
+#wd-t1 .ic-a,#wd-p1 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-coin 3.2s 1.3s ease-in-out infinite}
+@keyframes ic-coin{0%,70%,100%{transform:scaleX(1)}80%{transform:scaleX(-1)}90%{transform:scaleX(1)}}
+#wd-t2 .ic-a,#wd-p2 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-spin 3s 1.3s ease-in-out infinite}
+@keyframes ic-spin{0%,75%{transform:rotate(0)}100%{transform:rotate(180deg)}}
+#wd-t2 .ic-b,#wd-p2 .wd-acc .ic-b{transform-origin:left center;animation:ic-draw .9s .2s both,ic-type 3s 1.3s ease-in-out infinite}
+#wd-t2 .ic-b:last-of-type,#wd-p2 .wd-acc .ic-b:last-of-type{animation-delay:.2s,1.5s}
+@keyframes ic-type{0%,100%{transform:scaleX(1)}35%{transform:scaleX(.25)}60%{transform:scaleX(1)}}
+#wd-t3 .ic-a,#wd-p3 .wd-acc .ic-a{transform-origin:50% 0;animation:ic-draw .9s .3s both,ic-ring 2.8s 1.3s ease-in-out infinite}
+@keyframes ic-ring{0%,60%,100%{transform:rotate(0)}66%{transform:rotate(16deg)}72%{transform:rotate(-14deg)}78%{transform:rotate(10deg)}84%{transform:rotate(-6deg)}90%{transform:rotate(0)}}
+#wd-t4 .ic-a,#wd-p4 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-down 2.4s 1.3s ease-in-out infinite}
+#wd-t4 .ic-b,#wd-p4 .wd-acc .ic-b{animation:ic-draw .9s .3s both,ic-up 2.4s 2.5s ease-in-out infinite}
+@keyframes ic-down{0%,100%{transform:translateY(0)}50%{transform:translateY(1.6px)}}
+@keyframes ic-up{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.6px)}}
+#wd-t5 .ic-a,#wd-p5 .wd-acc .ic-a{animation:ic-redraw 3.4s .2s ease-in-out infinite}
+@keyframes ic-redraw{0%{stroke-dashoffset:1}35%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+#wd-t6 .ic-a,#wd-p6 .wd-acc .ic-a{animation:ic-redraw 3.2s .4s ease-in-out infinite}
+#wd-t6 .ic-b,#wd-p6 .wd-acc .ic-b{animation:ic-draw .9s both,ic-pulse 3.2s 1.2s ease-in-out infinite}
+@keyframes ic-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+#wd-t7 .ic-a,#wd-p7 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-globe 2.6s 1.3s linear infinite}
+@keyframes ic-globe{0%{transform:scaleX(1)}25%{transform:scaleX(.15)}50%{transform:scaleX(-1)}75%{transform:scaleX(.15)}100%{transform:scaleX(1)}}
+#wd-t8 .ic-a,#wd-p8 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-bob 2.6s 1.3s ease-in-out infinite}
+@keyframes ic-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.2px)}}
+#wd-t9 .ic-a,#wd-p9 .wd-acc .ic-a{transform-box:view-box;transform-origin:12px 16px;animation:ic-draw .9s .3s both,ic-needle 3s 1.3s cubic-bezier(.5,0,.3,1.3) infinite}
+@keyframes ic-needle{0%,100%{transform:rotate(-95deg)}45%,70%{transform:rotate(0)}}
+/* only the visible services move on phones */
+.wd--list .wd-panel:not(.run) .wd-acc .ic-line{animation-play-state:paused!important}
+.wd--list .wd-panel:not(.open) .wd-acc .ic-line,.wd--list .wd-panel:not(.open) .wd-acc .ic-fill{animation:none!important}
+.wd-tab:not([aria-selected="true"]) .ic-line,.wd-tab:not([aria-selected="true"]) .ic-fill{animation:none!important}
+@media(prefers-reduced-motion:reduce){.wd-ico .ic-line,.wd-ico .ic-fill{animation:none!important}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -3982,16 +4037,16 @@ with easy-to-use AI.</h1>
       <div class="wd" id="wdShow">
         <div class="wd-tabs" role="tablist" aria-label="What we do">
         <p class="wd-grp" data-i18n="off.g1">AI automation: work that runs in the background</p>
-        <button type="button" role="tab" class="wd-tab" id="wd-t1" aria-controls="wd-p1" aria-selected="true" tabindex="0"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M6 3h8l4 4v14H6z"/></g><path class="ic-line" pathLength="1" d="M6 3h8l4 4v14H6z"/><path class="ic-line" pathLength="1" d="M14 3v4h4"/><path class="ic-line" pathLength="1" d="M12 10v7.5"/><path class="ic-line" pathLength="1" d="M14.2 11.6c-.4-.6-1.2-1-2.2-1-1.2 0-2.1.6-2.1 1.5 0 2 4.4 1 4.4 3.1 0 .9-1 1.5-2.2 1.5-1 0-1.9-.4-2.3-1.1"/></svg></span><span class="wd-tt" data-i18n="auto.c1t">Quotes and invoices</span><span class="wd-timer"></span></button>
-        <button type="button" role="tab" class="wd-tab" id="wd-t2" aria-controls="wd-p2" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h9A2.5 2.5 0 0 1 18 6.5v6a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V15A2 2 0 0 1 4 13z"/></g><path class="ic-line" pathLength="1" d="M4 6.5A2.5 2.5 0 0 1 6.5 4h9A2.5 2.5 0 0 1 18 6.5v6a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V15A2 2 0 0 1 4 13z"/><path class="ic-line" pathLength="1" d="M8 8.6h6"/><path class="ic-line" pathLength="1" d="M8 11.4h3.5"/><path class="ic-line" pathLength="1" d="M20 15v4M18 17h4"/></svg></span><span class="wd-tt" data-i18n="auto.c2t">Customer replies</span><span class="wd-timer"></span></button>
-        <button type="button" role="tab" class="wd-tab" id="wd-t3" aria-controls="wd-p3" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/></g><rect class="ic-line" pathLength="1" x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path class="ic-line" pathLength="1" d="M8 3v4M16 3v4"/><path class="ic-line" pathLength="1" d="M3.5 10h17"/><path class="ic-line" pathLength="1" d="M9 15.2l2 2 4-4"/></svg></span><span class="wd-tt" data-i18n="auto.c3t">Bookings and reminders</span><span class="wd-timer"></span></button>
-        <button type="button" role="tab" class="wd-tab" id="wd-t4" aria-controls="wd-p4" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></g><rect class="ic-line" pathLength="1" x="3" y="3" width="7" height="7" rx="2"/><rect class="ic-line" pathLength="1" x="14" y="14" width="7" height="7" rx="2"/><path class="ic-line" pathLength="1" d="M10 6.5h5.5a2 2 0 0 1 2 2V14"/><path class="ic-line" pathLength="1" d="M15.5 12l2 2 2-2"/><path class="ic-line" pathLength="1" d="M14 17.5H8.5a2 2 0 0 1-2-2V10"/><path class="ic-line" pathLength="1" d="M8.5 12l-2-2-2 2"/></svg></span><span class="wd-tt" data-i18n="auto.c4t">Moving data between apps</span><span class="wd-timer"></span></button>
-        <button type="button" role="tab" class="wd-tab" id="wd-t5" aria-controls="wd-p5" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 20v-6l4-3 4 2 7-6v13z"/></g><path class="ic-line" pathLength="1" d="M4 4v16h16"/><path class="ic-line" pathLength="1" d="M4 14l4-3 4 2 7-6"/><path class="ic-line" pathLength="1" d="M15 7h4v4"/></svg></span><span class="wd-tt" data-i18n="auto.c5t">The numbers, weekly</span><span class="wd-timer"></span></button>
-        <button type="button" role="tab" class="wd-tab" id="wd-t6" aria-controls="wd-p6" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/></g><path class="ic-line" pathLength="1" d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path class="ic-line" pathLength="1" d="M9 12l2 2 4-4"/></svg></span><span class="wd-tt" data-i18n="auto.c6t">Records you can show</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t1" aria-controls="wd-p1" aria-selected="true" tabindex="0"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M6 3h8l4 4v14H6z"/></g><path class="ic-line" pathLength="1" d="M6 3h8l4 4v14H6z"/><path class="ic-line" pathLength="1" d="M14 3v4h4"/><path class="ic-line ic-a" pathLength="1" d="M12 10v7.5"/><path class="ic-line ic-a" pathLength="1" d="M14.2 11.6c-.4-.6-1.2-1-2.2-1-1.2 0-2.1.6-2.1 1.5 0 2 4.4 1 4.4 3.1 0 .9-1 1.5-2.2 1.5-1 0-1.9-.4-2.3-1.1"/></svg></span><span class="wd-tt" data-i18n="auto.c1t">Quotes and invoices</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t2" aria-controls="wd-p2" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h9A2.5 2.5 0 0 1 18 6.5v6a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V15A2 2 0 0 1 4 13z"/></g><path class="ic-line" pathLength="1" d="M4 6.5A2.5 2.5 0 0 1 6.5 4h9A2.5 2.5 0 0 1 18 6.5v6a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V15A2 2 0 0 1 4 13z"/><path class="ic-line ic-b" pathLength="1" d="M8 8.6h6"/><path class="ic-line ic-b" pathLength="1" d="M8 11.4h3.5"/><path class="ic-line ic-a" pathLength="1" d="M20 15v4M18 17h4"/></svg></span><span class="wd-tt" data-i18n="auto.c2t">Customer replies</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t3" aria-controls="wd-p3" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g transform="translate(-.3 -.7)"><g class="ic-fill"><path d="M5.5 5h8a2.5 2.5 0 0 1 2.5 2.5V10.6A4.6 4.6 0 0 0 11.6 15.2V19H5.5A2.5 2.5 0 0 1 3 16.5V7.5A2.5 2.5 0 0 1 5.5 5z"/></g><path class="ic-line" pathLength="1" d="M9.6 19H5.5A2.5 2.5 0 0 1 3 16.5V7.5A2.5 2.5 0 0 1 5.5 5h8A2.5 2.5 0 0 1 16 7.5v1.6"/><path class="ic-line" pathLength="1" d="M7 3v3.5M12 3v3.5M3 10h13"/><path class="ic-line ic-a" pathLength="1" d="M12.2 19.6h9.3l-1.3-1.8v-3a3.35 3.35 0 0 0-6.7 0v3z"/><path class="ic-line ic-a" pathLength="1" d="M15.4 21.8a1.5 1.5 0 0 0 2.9 0"/></g></svg></span><span class="wd-tt" data-i18n="auto.c3t">Bookings and reminders</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t4" aria-controls="wd-p4" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></g><rect class="ic-line" pathLength="1" x="3" y="3" width="7" height="7" rx="2"/><rect class="ic-line" pathLength="1" x="14" y="14" width="7" height="7" rx="2"/><path class="ic-line" pathLength="1" d="M10 6.5h5.5a2 2 0 0 1 2 2V14"/><path class="ic-line ic-a" pathLength="1" d="M15.5 12l2 2 2-2"/><path class="ic-line" pathLength="1" d="M14 17.5H8.5a2 2 0 0 1-2-2V10"/><path class="ic-line ic-b" pathLength="1" d="M8.5 12l-2-2-2 2"/></svg></span><span class="wd-tt" data-i18n="auto.c4t">Moving data between apps</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t5" aria-controls="wd-p5" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 20v-6l4-3 4 2 7-6v13z"/></g><path class="ic-line" pathLength="1" d="M4 4v16h16"/><path class="ic-line ic-a" pathLength="1" d="M4 14l4-3 4 2 7-6"/><path class="ic-line ic-a" pathLength="1" d="M15 7h4v4"/></svg></span><span class="wd-tt" data-i18n="auto.c5t">The numbers, weekly</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t6" aria-controls="wd-p6" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/></g><path class="ic-line ic-b" pathLength="1" d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path class="ic-line ic-a" pathLength="1" d="M9 12l2 2 4-4"/></svg></span><span class="wd-tt" data-i18n="auto.c6t">Records you can show</span><span class="wd-timer"></span></button>
         <p class="wd-grp wd-grp--g" data-i18n="off.g2">Digital solutions built for your business</p>
-        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t7" aria-controls="wd-p7" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="3" y="4" width="18" height="16" rx="2.5"/></g><rect class="ic-line" pathLength="1" x="3" y="4" width="18" height="16" rx="2.5"/><path class="ic-line" pathLength="1" d="M3 8.5h18"/><circle class="ic-line" pathLength="1" cx="12" cy="14.3" r="3.6"/><path class="ic-line" pathLength="1" d="M8.4 14.3h7.2"/><path class="ic-line" pathLength="1" d="M12 10.7c1.3 1.1 1.3 6.1 0 7.2M12 10.7c-1.3 1.1-1.3 6.1 0 7.2"/></svg></span><span class="wd-tt" data-i18n="auto.c7t">Websites that win trust</span><span class="wd-timer"></span></button>
-        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t8" aria-controls="wd-p8" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/></g><rect class="ic-line" pathLength="1" x="6.5" y="2.5" width="11" height="19" rx="2.5"/><circle class="ic-line" pathLength="1" cx="12" cy="9.8" r="2.2"/><path class="ic-line" pathLength="1" d="M8.8 15.6c.6-1.5 1.8-2.3 3.2-2.3s2.6.8 3.2 2.3"/><path class="ic-line" pathLength="1" d="M10.5 18.6h3"/></svg></span><span class="wd-tt" data-i18n="auto.c8t">Staff and customer portals</span><span class="wd-timer"></span></button>
-        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t9" aria-controls="wd-p9" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 16a8 8 0 0 1 16 0z"/></g><path class="ic-line" pathLength="1" d="M4 16a8 8 0 0 1 16 0"/><path class="ic-line" pathLength="1" d="M12 16l3.6-4.6"/><path class="ic-line" pathLength="1" d="M4 20h16"/><path class="ic-line" pathLength="1" d="M7 12.4l1 .6M12 8.4v1.2M17 12.4l-1 .6"/></svg></span><span class="wd-tt" data-i18n="auto.c9t">Live dashboards</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t7" aria-controls="wd-p7" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="3" y="4" width="18" height="16" rx="2.5"/></g><rect class="ic-line" pathLength="1" x="3" y="4" width="18" height="16" rx="2.5"/><path class="ic-line" pathLength="1" d="M3 8.5h18"/><circle class="ic-line" pathLength="1" cx="12" cy="14.3" r="3.6"/><path class="ic-line" pathLength="1" d="M8.4 14.3h7.2"/><path class="ic-line ic-a" pathLength="1" d="M12 10.7c1.3 1.1 1.3 6.1 0 7.2M12 10.7c-1.3 1.1-1.3 6.1 0 7.2"/></svg></span><span class="wd-tt" data-i18n="auto.c7t">Websites that win trust</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t8" aria-controls="wd-p8" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/></g><rect class="ic-line" pathLength="1" x="6.5" y="2.5" width="11" height="19" rx="2.5"/><circle class="ic-line ic-a" pathLength="1" cx="12" cy="9.8" r="2.2"/><path class="ic-line ic-a" pathLength="1" d="M8.8 15.6c.6-1.5 1.8-2.3 3.2-2.3s2.6.8 3.2 2.3"/><path class="ic-line" pathLength="1" d="M10.5 18.6h3"/></svg></span><span class="wd-tt" data-i18n="auto.c8t">Staff and customer portals</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t9" aria-controls="wd-p9" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 16a8 8 0 0 1 16 0z"/></g><path class="ic-line" pathLength="1" d="M4 16a8 8 0 0 1 16 0"/><path class="ic-line ic-a" pathLength="1" d="M12 16l3.6-4.6"/><path class="ic-line" pathLength="1" d="M4 20h16"/><path class="ic-line" pathLength="1" d="M7 12.4l1 .6M12 8.4v1.2M17 12.4l-1 .6"/></svg></span><span class="wd-tt" data-i18n="auto.c9t">Live dashboards</span><span class="wd-timer"></span></button>
         </div>
         <p class="wd-hint" data-i18n="wd.swipe">Swipe to see more</p>
         <div class="wd-panels">
@@ -4020,7 +4075,7 @@ with easy-to-use AI.</h1>
         <div class="wd-panel" role="tabpanel" id="wd-p3" aria-labelledby="wd-t3" inert>
           <div class="wd-stage" aria-hidden="true"><div class="mk mk3">
   <div class="mk-card m3-cal"><div class="m3-col"><span class="m3-day">12</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">13</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-free"></span></div><div class="m3-col"><span class="m3-day">14</span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-ap m3-gap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">15</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">16</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span></div></div>
-  <div class="mk-card m3-sms"><span class="m3-bell"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><div class="m3-txt"><i class="mk-bar" style="width:90%"></i><i class="mk-bar" style="width:64%"></i></div><div class="m3-btns"><b>&#10003;</b><b>&#8635;</b></div></div>
+  <div class="mk-card m3-sms"><span class="m3-bell"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><div class="m3-txt"><i class="mk-bar" style="width:90%"></i><i class="mk-bar" style="width:64%"></i></div><div class="m3-btns"><b><svg viewBox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2 8.8-9.2"/></svg></b><b><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95"/><path d="M19.2 4.5v4h-4"/></svg></b></div></div>
 </div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c3t">Bookings and reminders</h3><p data-i18n="auto.c3d">Confirmations, reminders and rebooking texts that cut down no-shows without anyone chasing.</p><a class="wd-more" href="/guides/reduce-no-shows-with-booking-reminders"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
@@ -5597,7 +5652,21 @@ if("IntersectionObserver" in window && !reduced){
   }
 
   /* first read on load, then whenever the app is reopened, then hourly-ish */
-  readVersion().then(function(b){ if(b) loadedBuild=b; });
+  readVersion().then(function(b){
+    if(!b) return;
+    loadedBuild=b;
+    /* in the installed app, say so once when it opens on a newer version than last time */
+    var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+    var seen=null;try{seen=localStorage.getItem("ambs:build");localStorage.setItem("ambs:build",b);}catch(e){}
+    if(app&&seen&&seen!==b) updatedNote();
+  });
+  function updatedNote(){
+    var n=document.createElement("div");n.className="updatebar updatebar--done";n.setAttribute("role","status");
+    n.innerHTML='<span>&#10003;&nbsp; Updated to the latest version.</span>';
+    document.body.appendChild(n);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){n.classList.add("on");});});
+    setTimeout(function(){n.classList.remove("on");setTimeout(function(){n.remove();},400);},4000);
+  }
   document.addEventListener("visibilitychange",function(){
     if(document.visibilityState==="visible"){
       if(reg) reg.update().catch(function(){});
@@ -5954,7 +6023,7 @@ if("IntersectionObserver" in window && !reduced){
 
 <script>
 /* what we do: on laptops the section holds still while you scroll and each service takes over in turn;
-   on phones and tablets the services are a simple list, and tapping one opens it */
+   on phones and tablets the services are a simple list that opens one by one as you scroll */
 (function(){
   var track=document.getElementById("wdTrack"),wd=document.getElementById("wdShow");if(!track||!wd)return;
   var tabRow=wd.querySelector(".wd-tabs"),box=wd.querySelector(".wd-panels");
@@ -5979,18 +6048,25 @@ if("IntersectionObserver" in window && !reduced){
   });
   panels.forEach(function(p,k){var g=null;if(k===0)g=grps[0];else if(p.classList.contains("wd-panel--g")&&!panels[k-1].classList.contains("wd-panel--g"))g=grps[1];
     if(g){var c=g.cloneNode(true);c.classList.add("wd-lgrp");c.setAttribute("aria-hidden","true");box.insertBefore(c,p);}});
-  var openK=0;
-  function setOpen(){panels.forEach(function(p,k){var on=mode==="list"&&k===openK;p.classList.toggle("open",on);accs[k].setAttribute("aria-expanded",String(on));
-    var b=p.querySelector(".wd-body");if(mode==="list"&&!on)b.setAttribute("inert","");else b.removeAttribute("inert");});}
-  function toggle(k){
-    openK=openK===k?-1:k;setOpen();
-    if(openK<0){cur=-1;run();return;}
-    show(openK);
-    /* once the old panel has folded away, make sure the new one starts on screen */
-    setTimeout(function(){var h=document.querySelector("header"),hh=h?h.getBoundingClientRect().height:60,r=accs[k].getBoundingClientRect();
-      if(r.top<hh+8||r.top>innerHeight*.6)scrollTo({top:r.top+scrollY-hh-12,behavior:calm?"auto":"smooth"});},calm?0:520);
-  }
-  function run(){panels.forEach(function(p,k){p.classList.toggle("run",visible&&k===cur);});}
+  /* phones and tablets: each service opens by itself as it scrolls up into view and stays open.
+     Only services entering from below open on their own, so the page never jumps while you read;
+     tapping a heading opens or closes it by hand, and one you close stays closed. */
+  var isOpen=panels.map(function(){return false;}),closedByHand=panels.map(function(){return false;}),inView=panels.map(function(){return false;});
+  function setOpen(){panels.forEach(function(p,k){var on=mode==="list"&&isOpen[k];p.classList.toggle("open",on);accs[k].setAttribute("aria-expanded",String(on));
+    var b=p.querySelector(".wd-body");if(mode==="list"&&!on)b.setAttribute("inert","");else b.removeAttribute("inert");});run();}
+  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;setOpen();if(isOpen[k])show(k);}
+  if("IntersectionObserver" in window){
+    var opener=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(mode!=="list"||!e.isIntersecting||e.boundingClientRect.top<innerHeight*.3)return;
+      var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
+      isOpen[k]=true;setOpen();show(k);
+    });},{rootMargin:"0px 0px -22% 0px"});
+    accs.forEach(function(a){opener.observe(a);});
+    var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
+    panels.forEach(function(p){seen.observe(p);});
+  }else{isOpen=isOpen.map(function(){return true;});}
+  /* animations run only where they can be seen: the current service on laptops, every open one in view on phones */
+  function run(){panels.forEach(function(p,k){p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]):(visible&&k===cur));});}
   function show(i,fromSwipe){
     if(i===cur)return;cur=i;
     tabs.forEach(function(t,k){var on=k===i;t.setAttribute("aria-selected",String(on));t.tabIndex=on?0:-1;});
@@ -6011,7 +6087,7 @@ if("IntersectionObserver" in window && !reduced){
       track.style.setProperty("--wd-stage-h",Math.round(Math.max(170,Math.min(540,avail)))+"px");
     }
     var c=cur;cur=-1;
-    if(mode==="list"){if(openK>=0)show(openK);else run();}else show(Math.max(0,c));
+    if(mode==="list")run();else show(Math.max(0,c));
     update();
   }
   /* laptop: scroll position picks the service */
@@ -6080,6 +6156,25 @@ if("IntersectionObserver" in window && !reduced){
     scrollTo({top:0,behavior:calm?"auto":"smooth"});
     var m=document.querySelector("header .mark");if(m)m.focus({preventScroll:true});
   });
+})();
+</script>
+<script>
+/* keep the hero's sky to the hero on phones */
+(function(){
+  var hero=document.querySelector(".hero");if(!hero)return;
+  var wrap=hero.querySelector(".wrap"),copy=hero.querySelector(".hero-copy"),dock=hero.querySelector(".docket");if(!wrap||!copy||!dock)return;
+  var cut=document.createElement("div");cut.className="hero-cut";cut.setAttribute("aria-hidden","true");hero.insertBefore(cut,wrap);
+  function fit(){
+    var h=hero.getBoundingClientRect(),c=copy.getBoundingClientRect(),d=dock.getBoundingClientRect();
+    var stacked=d.top>=c.bottom-2;
+    hero.classList.toggle("is-stacked",stacked);
+    if(stacked)hero.style.setProperty("--cut",Math.round(c.bottom-h.top+(d.top-c.bottom)/2)+"px");
+  }
+  var t;function later(){clearTimeout(t);t=setTimeout(fit,120);}
+  addEventListener("resize",later);addEventListener("load",fit);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+  if("ResizeObserver" in window)new ResizeObserver(later).observe(copy);
+  fit();
 })();
 </script>
 </body>

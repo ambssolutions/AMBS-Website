@@ -275,3 +275,10 @@ html[data-theme="dark"] .sh-menu{border-color:rgba(233,237,249,.22);color:#EDEFF
 .sh-dim{position:fixed;inset:0;z-index:45;background:rgba(10,14,30,.28);opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s linear .5s}
 .sh-dim.on{opacity:1;visibility:visible;transition:opacity .5s ease,visibility 0s}
 @media(prefers-reduced-motion:reduce){.sh-drawer,.sh-drawer>*,.sh-dim,.sh-menu span,.sh-menu span::before,.sh-menu span::after{transition:none!important}}
+
+/* privacy and terms on the same template as the guides */
+.prose.legal .callout{display:block;margin:1.2rem 0;padding:1rem 1.2rem;border-radius:16px;background:var(--ico-bg);border:1px solid var(--line)}
+.prose.legal .callout strong{display:block;margin-bottom:.3rem}
+button,input,select,textarea{font:inherit}
+/* breadcrumbs: every item the same height, so the link and the current page line up */
+.crumbs li{display:inline-flex;align-items:center;min-height:32px}
