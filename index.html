@@ -3807,6 +3807,45 @@ html[data-theme="dark"] .totop{background:rgba(20,23,43,.92);color:#E9EDF9;borde
 body:has(.updatebar.on) .totop{opacity:0;visibility:hidden}
 @media(prefers-reduced-motion:reduce){.totop,.navlinks a::after{transition:none}}
 .fc-social[hidden]{display:none!important}
+
+/* ---- what we do on phones and tablets: one simple list, tap a service to open it ---- */
+.wd-acc,.wd-lgrp{display:none}
+.wd-body,.wd-in{display:contents}
+.wd-track.wd--list{height:auto}
+.wd--list .wd{position:static;margin-top:1.4rem}
+.wd--list .wd-tabs,.wd--list .wd-hint,.wd--list .wd-dots,.wd--list .wd-rail{display:none!important}
+.wd--list .wd-panels{display:flex;flex-direction:column;gap:10px}
+.wd--list .wd-lgrp{display:flex;margin:.9rem 0 .1rem}
+.wd--list .wd-lgrp:first-child{margin-top:0}
+.wd--list .wd-panel{grid-area:auto;opacity:1;visibility:visible;transition:box-shadow .4s ease;border-radius:20px;box-shadow:0 10px 26px -22px rgba(20,23,43,.6)}
+.wd--list .wd-panel.open{box-shadow:0 24px 50px -34px rgba(20,23,43,.7)}
+.wd--list .wd-acc{display:flex;align-items:center;gap:.8rem;width:100%;min-height:64px;padding:.7rem .9rem;border:0;background:none;text-align:left;cursor:pointer;
+  color:var(--rd-ink);font:650 1.02rem/1.25 var(--body);-webkit-tap-highlight-color:transparent}
+.wd--list .wd-acc .wd-ico{width:40px;height:40px;border-radius:12px}
+.wd--list .wd-acc .wd-tt{flex:1}
+.wd-chev{flex:0 0 auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--rd-ico-bg);transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.wd-chev svg{width:14px;height:14px}
+.wd--list .wd-panel.open .wd-chev{transform:rotate(180deg)}
+.wd--list .wd-panel.open .wd-acc .wd-ico{background:var(--rd-feature)}
+.wd--list .wd-panel--g.open .wd-acc .wd-ico{background:linear-gradient(150deg,#163F14,#2E8F1C 70%,#5CC13A)}
+.wd--list .wd-panel.open .wd-acc .ic-line{stroke:#fff}.wd--list .wd-panel.open .wd-acc .ic-fill{fill:#fff;opacity:.25}
+.wd--list .wd-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1)}
+.wd--list .wd-panel.open .wd-body{grid-template-rows:1fr}
+.wd--list .wd-in{display:block;min-height:0;overflow:hidden}
+.wd--list .wd-stage{height:auto!important;aspect-ratio:16/10;container-type:size;border-top:1px solid var(--rd-line);margin:0 .7rem;border-radius:14px;border:1px solid var(--rd-line)}
+.wd--list .mk{font-size:min(3.2cqw,5cqh)}
+.wd--list .wd-copy{padding:.9rem 1.1rem 1.1rem}
+.wd--list .wd-copy h3{display:none}
+.wd--list .wd-copy p{margin:0 0 .7rem}
+@media(max-height:520px){.wd--list .wd-stage{aspect-ratio:16/7}}
+@media(min-width:700px){.wd--list .wd-panels{max-width:640px;margin-inline:auto}}
+@media(prefers-reduced-motion:reduce){.wd--list .wd-body,.wd-chev{transition:none}}
+
+/* knowledge hub, slimmed down: one short block with links to the guides, industries and services */
+.knowledge--slim .kh-slim{display:grid;gap:1.4rem;align-items:end}
+.knowledge--slim .sec-head{margin:0}
+.knowledge--slim .kh-links{display:flex;flex-wrap:wrap;gap:.6rem}
+@media(min-width:900px){.knowledge--slim .kh-slim{grid-template-columns:1.4fr 1fr}.knowledge--slim .kh-links{justify-content:flex-end}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4226,24 +4265,15 @@ with easy-to-use AI.</h1>
   </section>
 
   <!-- FAQ -->
-  <section id="knowledge" class="knowledge">
+  <section id="knowledge" class="knowledge knowledge--slim">
     <div class="wrap">
-      <div class="sec-head rv">
-        <p class="eyebrow" data-i18n="kh.eyebrow">Knowledge hub</p>
-        <h2 data-i18n="kh.title">Learn before you automate</h2>
-        <p class="lead" data-i18n="kh.lead">Practical, plain-English guides for New Zealand businesses: what to automate first, how it works and what to watch for.</p>
-      </div>
-      <div class="kh-grid">
-        <a class="kh-card" href="/guides/how-to-choose-what-to-automate-first"><span class="kh-tag" lang="en">Getting started</span><b lang="en">How to choose what to automate first</b><span class="kh-desc" lang="en">A simple way to find the task that will give you the most hours back, fastest.</span><span class="kh-go" data-i18n="kh.read">Read the guide</span></a>
-        <a class="kh-card" href="/guides/automate-quotes-and-invoices"><span class="kh-tag" lang="en">Automation</span><b lang="en">Automate quotes and invoices</b><span class="kh-desc" lang="en">From site notes to a priced quote, and from an approved job to an invoice in your accounts.</span><span class="kh-go" data-i18n="kh.read">Read the guide</span></a>
-        <a class="kh-card" href="/guides/reduce-no-shows-with-booking-reminders"><span class="kh-tag" lang="en">Automation</span><b lang="en">Reduce no-shows with booking reminders</b><span class="kh-desc" lang="en">Confirmations, reminders and rebooking messages that run without anyone chasing.</span><span class="kh-go" data-i18n="kh.read">Read the guide</span></a>
-        <a class="kh-card" href="/guides/connect-your-business-apps"><span class="kh-tag" lang="en">Automation</span><b lang="en">Connect your business apps</b><span class="kh-desc" lang="en">Stop retyping the same job into three systems.</span><span class="kh-go" data-i18n="kh.read">Read the guide</span></a>
-        <a class="kh-card" href="/guides/weekly-business-numbers-dashboard"><span class="kh-tag" lang="en">Digital tools</span><b lang="en">Your business numbers, every week</b><span class="kh-desc" lang="en">What to track and how to get it on your phone every Monday.</span><span class="kh-go" data-i18n="kh.read">Read the guide</span></a>
-        <a class="kh-card" href="/guides/privacy-act-2020-and-automation"><span class="kh-tag" lang="en">Compliance</span><b lang="en">The Privacy Act 2020 and automation</b><span class="kh-desc" lang="en">What to check before automating anything that touches personal information.</span><span class="kh-go" data-i18n="kh.read">Read the guide</span></a>
-      </div>
-      <div class="kh-foot">
-        <div class="kh-ind"><p class="kh-ind-h" data-i18n="kh.ind">Automation for your industry</p><div class="kh-chips"><a class="kh-chip" href="/industries/cafes-and-takeaways" data-i18n="biz.cafe">Café or takeaway</a><a class="kh-chip" href="/industries/trades-and-building" data-i18n="biz.trades">Trades and building</a><a class="kh-chip" href="/industries/clinics-and-salons" data-i18n="biz.clinic">Clinic or salon</a><a class="kh-chip" href="/industries/shops-and-dairies" data-i18n="biz.retail">Shop or dairy</a><a class="kh-chip" href="/industries/advisers-and-accountants" data-i18n="biz.adviser">Adviser or accountant</a><a class="kh-chip" href="/industries/transport-and-delivery" data-i18n="biz.transport">Transport and delivery</a></div></div>
-        <div class="kh-links"><a class="kh-btn" href="/guides" data-i18n="kh.all">Browse all guides</a><a class="kh-btn kh-btn--ghost" href="/services" data-i18n="foot.services">Services</a></div>
+      <div class="kh-slim rv">
+        <div class="sec-head rv">
+          <p class="eyebrow" data-i18n="kh.eyebrow">Knowledge hub</p>
+          <h2 data-i18n="kh.title">Learn before you automate</h2>
+          <p class="lead" data-i18n="kh.lead">Practical, plain-English guides for New Zealand businesses: what to automate first, how it works and what to watch for.</p>
+        </div>
+        <div class="kh-links"><a class="kh-btn" href="/guides" data-i18n="kh.all">Browse all guides</a><a class="kh-btn kh-btn--ghost" href="/industries" data-i18n="kh.ind">Automation for your industry</a><a class="kh-btn kh-btn--ghost" href="/services" data-i18n="foot.services">Services</a></div>
       </div>
     </div>
   </section>
@@ -5924,7 +5954,7 @@ if("IntersectionObserver" in window && !reduced){
 
 <script>
 /* what we do: on laptops the section holds still while you scroll and each service takes over in turn;
-   on phones and tablets the services are cards you swipe through */
+   on phones and tablets the services are a simple list, and tapping one opens it */
 (function(){
   var track=document.getElementById("wdTrack"),wd=document.getElementById("wdShow");if(!track||!wd)return;
   var tabRow=wd.querySelector(".wd-tabs"),box=wd.querySelector(".wd-panels");
@@ -5934,6 +5964,32 @@ if("IntersectionObserver" in window && !reduced){
   var rail=document.createElement("span");rail.className="wd-rail";rail.innerHTML="<i></i>";tabRow.appendChild(rail);var railI=rail.firstChild;
   var dots=document.createElement("div");dots.className="wd-dots";dots.setAttribute("aria-hidden","true");dots.innerHTML=new Array(n+1).join("<i></i>");box.after(dots);
   var dotEls=[].slice.call(dots.children);
+  /* phones and tablets: each panel gets its own heading button, and the panel body folds open */
+  var chev='<span class="wd-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>';
+  var grps=[].slice.call(wd.querySelectorAll(".wd-grp"));
+  var accs=panels.map(function(p,k){
+    var t=tabs[k],a=document.createElement("button");a.type="button";a.className="wd-acc";
+    a.setAttribute("aria-expanded","false");a.setAttribute("aria-controls",p.id+"-b");
+    a.appendChild(t.querySelector(".wd-ico").cloneNode(true));a.appendChild(t.querySelector(".wd-tt").cloneNode(true));a.insertAdjacentHTML("beforeend",chev);
+    var body=document.createElement("div");body.className="wd-body";body.id=p.id+"-b";var inn=document.createElement("div");inn.className="wd-in";body.appendChild(inn);
+    while(p.firstChild)inn.appendChild(p.firstChild);
+    p.appendChild(a);p.appendChild(body);
+    a.addEventListener("click",function(){toggle(k);});
+    return a;
+  });
+  panels.forEach(function(p,k){var g=null;if(k===0)g=grps[0];else if(p.classList.contains("wd-panel--g")&&!panels[k-1].classList.contains("wd-panel--g"))g=grps[1];
+    if(g){var c=g.cloneNode(true);c.classList.add("wd-lgrp");c.setAttribute("aria-hidden","true");box.insertBefore(c,p);}});
+  var openK=0;
+  function setOpen(){panels.forEach(function(p,k){var on=mode==="list"&&k===openK;p.classList.toggle("open",on);accs[k].setAttribute("aria-expanded",String(on));
+    var b=p.querySelector(".wd-body");if(mode==="list"&&!on)b.setAttribute("inert","");else b.removeAttribute("inert");});}
+  function toggle(k){
+    openK=openK===k?-1:k;setOpen();
+    if(openK<0){cur=-1;run();return;}
+    show(openK);
+    /* once the old panel has folded away, make sure the new one starts on screen */
+    setTimeout(function(){var h=document.querySelector("header"),hh=h?h.getBoundingClientRect().height:60,r=accs[k].getBoundingClientRect();
+      if(r.top<hh+8||r.top>innerHeight*.6)scrollTo({top:r.top+scrollY-hh-12,behavior:calm?"auto":"smooth"});},calm?0:520);
+  }
   function run(){panels.forEach(function(p,k){p.classList.toggle("run",visible&&k===cur);});}
   function show(i,fromSwipe){
     if(i===cur)return;cur=i;
@@ -5941,20 +5997,21 @@ if("IntersectionObserver" in window && !reduced){
     panels.forEach(function(p,k){var on=k===i||mode!=="scroll";p.classList.toggle("on",on);if(on)p.removeAttribute("inert");else p.setAttribute("inert","");});
     dotEls.forEach(function(d,k){d.classList.toggle("on",k===i);});
     run();
-    if(mode!=="scroll"||window.innerWidth<1000){var t=tabs[i];tabRow.scrollTo({left:t.offsetLeft-tabRow.clientWidth/2+t.offsetWidth/2,behavior:calm?"auto":"smooth"});}
+    if(mode==="stack"){var t=tabs[i];tabRow.scrollTo({left:t.offsetLeft-tabRow.clientWidth/2+t.offsetWidth/2,behavior:calm?"auto":"smooth"});}
   }
   function layout(){
     var hdr=document.querySelector("header"),h=hdr?hdr.getBoundingClientRect().height:70;
     track.style.setProperty("--wd-top",Math.round(h+12)+"px");
-    mode=window.innerWidth<1000?"swipe":(window.innerHeight<560?"stack":"scroll");
-    track.classList.toggle("wd--swipe",mode==="swipe");track.classList.toggle("wd--stack",mode==="stack");
+    mode=window.innerWidth<1000?"list":(window.innerHeight<560?"stack":"scroll");
+    track.classList.toggle("wd--list",mode==="list");track.classList.toggle("wd--stack",mode==="stack");
+    setOpen();
     if(mode==="scroll"){
       var maxCopy=0;panels.forEach(function(p){maxCopy=Math.max(maxCopy,p.querySelector(".wd-copy").offsetHeight);});
       var avail=window.innerHeight-(h+12)-maxCopy-28;
       track.style.setProperty("--wd-stage-h",Math.round(Math.max(170,Math.min(540,avail)))+"px");
     }
-    var c=cur;cur=-1;show(Math.max(0,c));
-    if(mode==="swipe")goTo(Math.max(0,c),true);
+    var c=cur;cur=-1;
+    if(mode==="list"){if(openK>=0)show(openK);else run();}else show(Math.max(0,c));
     update();
   }
   /* laptop: scroll position picks the service */
