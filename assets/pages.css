@@ -5,8 +5,8 @@
   --ico-bg:rgba(24,119,224,.10);
   --feature:#16204A;
   --rainbow:linear-gradient(90deg,#E5352B,#F58220,#FFC21A,#3FAE29,#1877E0,#7B2FBE);
-  --display:"Bricolage Grotesque","Noto Sans SC",Arial,sans-serif;
-  --body:"Instrument Sans","Noto Sans SC",Arial,sans-serif;
+  --display:"Bricolage Grotesque",Arial,"Noto Sans SC",sans-serif;
+  --body:"Instrument Sans",Arial,"Noto Sans SC",sans-serif;
   --wrap:1180px;--hdr:72px;
 }
 html[data-theme="dark"]{
