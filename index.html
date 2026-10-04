@@ -51,7 +51,7 @@
     "@type": "Country",
     "name": "New Zealand"
   },
-  "availableLanguage": ["en"],
+  "availableLanguage": ["en", "hi", "pa"],
   "sameAs": [],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
@@ -86,7 +86,7 @@
     { "@type": "Question", "name": "I'm not technical. Is that a problem?",
       "acceptedAnswer": { "@type": "Answer", "text": "Not at all. If you can show us how the job gets done today, that is everything we need. We handle the rest and explain it in plain words." } },
     { "@type": "Question", "name": "What happens when it breaks?",
-      "acceptedAnswer": { "@type": "Answer", "text": "We set up monitoring where the tools allow, so most problems are caught early. What support is included after launch is agreed in writing before we start." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "We set up monitoring where the tools allow, so most problems are caught early. For the first 30 days after launch, fixes and tweaks are free. After that, support is a monthly plan or pay as you go, whichever suits you." } },
     { "@type": "Question", "name": "Do you work outside Auckland?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference." } },
     { "@type": "Question", "name": "How small is too small?",
@@ -3806,6 +3806,7 @@ html[data-theme="dark"] header .drawer>a.is-here{color:#8CC4FF!important;box-sha
 html[data-theme="dark"] .totop{background:rgba(20,23,43,.92);color:#E9EDF9;border-color:rgba(233,237,249,.16)}
 body:has(.updatebar.on) .totop{opacity:0;visibility:hidden}
 @media(prefers-reduced-motion:reduce){.totop,.navlinks a::after{transition:none}}
+.fc-social[hidden]{display:none!important}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -3975,7 +3976,7 @@ with easy-to-use AI.</h1>
   </div>
   <div class="mk-phone m2-phone"><div class="m2-chat"><div class="m2-b m2-in"><i class="mk-bar" style="width:86%"></i><i class="mk-bar" style="width:52%"></i></div><div class="m2-typing"><i></i><i></i><i></i></div><div class="m2-b m2-out"><i class="mk-bar" style="width:88%"></i><i class="mk-bar" style="width:64%"></i></div></div></div>
 </div></div>
-          <div class="wd-copy"><h3 data-i18n="auto.c2t">Customer replies</h3><p data-i18n="auto.c2d">Opening hours, pricing and directions answered quickly on your website, email and Facebook messages, with replies to Google reviews drafted for you to approve.</p><a class="wd-more" href="/guides/ai-customer-replies-for-small-business"><span data-i18n="kh.read">Read the guide</span></a></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c2t">Customer replies</h3><p data-i18n="auto.c2d">Opening hours, pricing and directions answered quickly on your website and by email, with replies to Google reviews drafted for you to approve.</p><a class="wd-more" href="/guides/ai-customer-replies-for-small-business"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
         <div class="wd-panel" role="tabpanel" id="wd-p3" aria-labelledby="wd-t3" inert>
           <div class="wd-stage" aria-hidden="true"><div class="mk mk3">
@@ -4182,14 +4183,14 @@ with easy-to-use AI.</h1>
           <div class="step-n">2</div>
           <div>
             <h3 data-i18n="how.s2t">We build one automation first</h3>
-            <p data-i18n="how.s2d">Usually two to three weeks, depending on the job. You see it run on your real jobs, checked alongside the way you do it now, before it goes live.</p>
+            <p data-i18n="how.s2d">Usually one to two weeks, depending on the job. You see it run on your real jobs, checked alongside the way you do it now, before it goes live.</p>
           </div>
         </div>
         <div class="step">
           <div class="step-n">3</div>
           <div>
             <h3 data-i18n="how.s3t">You own it</h3>
-            <p data-i18n="how.s3d">We hand over the logins, train your team and stay available for support. If you stop working with us, the automation stays in your accounts.</p>
+            <p data-i18n="how.s3d">We hand over the logins, train your team, and fix or tweak anything free for the first 30 days. If you stop working with us, the automation stays in your accounts.</p>
           </div>
         </div>
       </div>
@@ -4205,16 +4206,16 @@ with easy-to-use AI.</h1>
         <p class="lead" data-i18n="trust.lead">Most of the time you will not need new software. We start with what is already on your desk and your phone.</p>
       </div>
       <div class="tools rv">
-        <span class="tool">Xero</span><span class="tool">MYOB</span><span class="tool">Zoho</span>
-        <span class="tool">Shopify</span><span class="tool">Gmail</span><span class="tool">Microsoft 365</span>
-        <span class="tool">Lightspeed</span><span class="tool">WhatsApp</span><span class="tool">Excel</span>
-        <span class="tool">Google Sheets</span><span class="tool">Hubdoc</span><span class="tool">Squarespace</span>
+        <span class="tool">Xero</span><span class="tool">Microsoft 365</span><span class="tool">Google Workspace</span>
+        <span class="tool">Outlook</span><span class="tool">Excel</span><span class="tool">Teams</span>
+        <span class="tool">OneDrive</span><span class="tool">Gmail</span><span class="tool">Google Sheets</span>
+        <span class="tool">Google Calendar</span><span class="tool">Google Drive</span><span class="tool">SharePoint</span>
       </div>
       <p class="tools-tm" data-i18n="trust.tm">Product names belong to their owners. We are not affiliated with them.</p>
       <div class="trust-grid rv">
         <div class="tcell">
           <h3 data-i18n="trust.u1t">Your data stays yours</h3>
-          <p data-i18n="trust.u1d">Handled under the Privacy Act 2020. What we store for you is kept in New Zealand or Australia where we can, and we tell you first if a tool keeps data overseas.</p>
+          <p data-i18n="trust.u1d">Handled under the Privacy Act 2020. What we store for you is kept in New Zealand or Australia where we can, and we tell you first if a tool keeps data overseas. Only our own team works on your data, and AI tools run on business plans that don't train on it.</p>
         </div>
         <div class="tcell">
           <h3 data-i18n="trust.u2t">A person answers</h3>
@@ -4259,7 +4260,7 @@ with easy-to-use AI.</h1>
         <div class="q"><button type="button"><span data-i18n="faq.q2">I'm not technical. Is that a problem?</span></button>
           <div class="a" data-i18n="faq.a2">Not at all. If you can show us how the job gets done today, that is everything we need. We handle the rest and explain it in plain words.</div></div>
         <div class="q"><button type="button"><span data-i18n="faq.q3">What happens when it breaks?</span></button>
-          <div class="a" data-i18n="faq.a3">We set up monitoring where the tools allow, so most problems are caught early. What support is included after launch is agreed in writing before we start.</div></div>
+          <div class="a" data-i18n="faq.a3">We set up monitoring where the tools allow, so most problems are caught early. For the first 30 days after launch, fixes and tweaks are free. After that, support is a monthly plan or pay as you go, whichever suits you.</div></div>
         <div class="q"><button type="button"><span data-i18n="faq.q4">Do you work outside Auckland?</span></button>
           <div class="a" data-i18n="faq.a4">Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference.</div></div>
         <div class="q"><button type="button"><span data-i18n="faq.q5">How small is too small?</span></button>
@@ -4285,7 +4286,7 @@ with easy-to-use AI.</h1>
         <input id="f-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0">
         <div class="field--full">
           <button class="btn btn--sun" type="button" id="sendbtn" data-i18n="form.send">Send request</button>
-          <p class="form-note" data-i18n="form.note">We aim to reply within one working day. Or call +64 22 099 9578.</p>
+          <p class="form-note" data-i18n="form.note">We aim to reply within one working day, in English, Hindi or Punjabi. Or call +64 22 099 9578.</p>
         </div>
       </div>
     </div>
@@ -4308,7 +4309,8 @@ with easy-to-use AI.</h1>
         <a href="mailto:hello@ambs.co.nz"><span class="fc-ico" aria-hidden="true">&#9993;</span>hello@ambs.co.nz</a>
         <p class="fc-loc"><span class="fc-ico" aria-hidden="true">&#9906;</span><span data-i18n="foot.loc">Auckland, New Zealand</span></p>
         <!-- Placeholders only: no links until the accounts exist. Swap each <span class="fc-soc"> for <a href="..." target="_blank" rel="noopener"> when ready. -->
-        <div class="fc-social">
+        <!-- Hidden until the accounts exist: remove the hidden attribute and add the links to show them again. -->
+        <div class="fc-social" hidden>
           <span class="fc-soc" role="img" aria-label="Facebook (coming soon)">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0866FF" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></span>
           <span class="fc-soc" role="img" aria-label="Instagram (coming soon)">
@@ -4340,7 +4342,7 @@ with easy-to-use AI.</h1>
     <div>
       <details class="privbox" id="privacy-panel">
         <summary data-i18n="priv.t">Privacy</summary>
-        <p data-i18n="priv.b">This site keeps your language and theme choice on your device until you close the browser. Details you send through the contact form reach us through a form service and are saved in our client system so we can reply. We don't sell them or use them for marketing without your agreement. Questions: call +64 22 099 9578.</p>
+        <p data-i18n="priv.b">This site keeps your language and theme choice on your device until you close the browser. Details you send through the contact form reach us through a form service and are saved in our client system so we can reply. We don't sell them or use them for marketing without your agreement. If we don't end up working together, they are deleted after 12 months. Questions: call +64 22 099 9578.</p>
         <p><a href="/privacy" data-i18n="priv.full">Read the full Privacy Policy</a></p>
       </details>
       <details class="privbox" id="terms-panel">
@@ -4384,7 +4386,7 @@ en:{
  "card.pick":"Pick your business","card.handled":"What we'd take off you first","card.hoursback":"estimated hours back a week",
  "card.month":"Roughly {n} hours a month (estimate).","card.note":"Estimates from typical New Zealand jobs. We measure yours in the walkthrough.",
  "biz.cafe":"Café or takeaway","biz.trades":"Trades and building","biz.clinic":"Clinic or salon","biz.retail":"Shop or dairy","biz.adviser":"Adviser or accountant","biz.transport":"Transport and delivery",
- "t.cafe1":"Rosters and shift swap messages","t.cafe2":"Supplier orders and invoice entry","t.cafe3":"Google review and Facebook message replies",
+ "t.cafe1":"Rosters and shift swap messages","t.cafe2":"Supplier orders and invoice entry","t.cafe3":"Google review and email replies",
  "t.trades1":"Quotes written up from site notes","t.trades2":"Job invoices into your accounts","t.trades3":"Chasing late payments",
  "t.clinic1":"Booking reminders and rebooking","t.clinic2":"New client forms and files","t.clinic3":"Missed call follow-ups",
  "t.retail1":"Stock counts and reorders","t.retail2":"Price and listing updates","t.retail3":"Daily sales summary",
@@ -4392,7 +4394,7 @@ en:{
  "t.transport1":"Run sheets and driver messages","t.transport2":"Filing proof of delivery","t.transport3":"Fuel and mileage logs",
  "auto.eyebrow":"The work","auto.title":"What we do","auto.lead":"Two ways we help: automations that clear the repetitive work, and digital tools built around your business.",
  "auto.c1t":"Quotes and invoices","auto.c1d":"Site notes or a voice memo become a draft quote. Approved jobs become an invoice ready to check and send.",
- "auto.c2t":"Customer replies","auto.c2d":"Opening hours, pricing and directions answered quickly on your website, email and Facebook messages, with replies to Google reviews drafted for you to approve.",
+ "auto.c2t":"Customer replies","auto.c2d":"Opening hours, pricing and directions answered quickly on your website and by email, with replies to Google reviews drafted for you to approve.",
  "auto.c3t":"Bookings and reminders","auto.c3d":"Confirmations, reminders and rebooking texts that cut down no-shows without anyone chasing.",
  "auto.c4t":"Moving data between apps","auto.c4d":"No more retyping the same job into three systems. Where your apps allow it, information passes from one to the next automatically.",
  "auto.c5t":"The numbers, weekly","auto.c5d":"Sales, stock, unpaid invoices and hours in one short summary on your phone every Monday.",
@@ -4416,7 +4418,7 @@ en:{
  "wd.more":"Learn more",
  "nav.guides":"Guides","kh.eyebrow":"Knowledge hub","kh.title":"Learn before you automate","kh.lead":"Practical, plain-English guides for New Zealand businesses: what to automate first, how it works and what to watch for.","kh.all":"Browse all guides","kh.ind":"Automation for your industry","kh.read":"Read the guide","foot.services":"Services","foot.industries":"Industries","ticker.label":"What we automate",
  "tf.eyebrow":"Before and after","tf.title":"See your business transformed","tf.lead":"Drag the handle to swap paper piles and late nights for systems that do most of the work for you. Tap any dot to see what changes.","tf.before":"Before","tf.after":"With Ambs","tf.hint":"Tap a dot to see what changes.","tf.drag":"Drag to compare",
- "priv.t":"Privacy","priv.b":"This site keeps your language and theme choice on your device until you close the browser. Details you send through the contact form reach us through a form service and are saved in our client system so we can reply. We don't sell them or use them for marketing without your agreement. Questions: call +64 22 099 9578.",
+ "priv.t":"Privacy","priv.b":"This site keeps your language and theme choice on your device until you close the browser. Details you send through the contact form reach us through a form service and are saved in our client system so we can reply. We don't sell them or use them for marketing without your agreement. If we don't end up working together, they are deleted after 12 months. Questions: call +64 22 099 9578.",
  "wx.sun":"Sunny","wx.cloud":"Cloudy","wx.rain":"Raining","wx.storm":"Stormy",
  "wx.live":"live now",
  "why.t":"Why partner with us","why.s":"Here is what you can expect when you work with us.",
@@ -4438,22 +4440,22 @@ en:{
  "form.okname":"Thank you {name}, we’ll be in touch shortly.",
  "how.eyebrow":"Three steps, in order","how.title":"How it works",
  "how.s1t":"We watch the work","how.s1d":"We sit with whoever actually does the job. We leave with a written plan and an hours estimate. It is yours to keep, even if you don't hire us.",
- "how.s2t":"We build one automation first","how.s2d":"Usually two to three weeks, depending on the job. You see it run on your real jobs, checked alongside the way you do it now, before it goes live.",
- "how.s3t":"You own it","how.s3d":"We hand over the logins, train your team and stay available for support. If you stop working with us, the automation stays in your accounts.",
+ "how.s2t":"We build one automation first","how.s2d":"Usually one to two weeks, depending on the job. You see it run on your real jobs, checked alongside the way you do it now, before it goes live.",
+ "how.s3t":"You own it","how.s3d":"We hand over the logins, train your team, and fix or tweak anything free for the first 30 days. If you stop working with us, the automation stays in your accounts.",
  "trust.eyebrow":"No rip and replace","trust.title":"Built around the tools you already have",
  "trust.lead":"Most of the time you will not need new software. We start with what is already on your desk and your phone.",
- "trust.u1t":"Your data stays yours","trust.u1d":"Handled under the Privacy Act 2020. What we store for you is kept in New Zealand or Australia where we can, and we tell you first if a tool keeps data overseas.",
+ "trust.u1t":"Your data stays yours","trust.u1d":"Handled under the Privacy Act 2020. What we store for you is kept in New Zealand or Australia where we can, and we tell you first if a tool keeps data overseas. Only our own team works on your data, and AI tools run on business plans that don't train on it.",
  "trust.u2t":"A person answers","trust.u2d":"One named contact who knows your business, reachable in New Zealand hours. No ticket queue.",
  "faq.eyebrow":"Straight answers","faq.title":"Questions we get asked",
  "faq.q1":"Will this replace my staff?","faq.a1":"No. It clears the repetitive work so your people can do the parts that need judgement, hands or a friendly face. The aim is to free up hours for more work, not to cut staff.",
  "faq.q2":"I'm not technical. Is that a problem?","faq.a2":"Not at all. If you can show us how the job gets done today, that is everything we need. We handle the rest and explain it in plain words.",
- "faq.q3":"What happens when it breaks?","faq.a3":"We set up monitoring where the tools allow, so most problems are caught early. What support is included after launch is agreed in writing before we start.",
+ "faq.q3":"What happens when it breaks?","faq.a3":"We set up monitoring where the tools allow, so most problems are caught early. For the first 30 days after launch, fixes and tweaks are free. After that, support is a monthly plan or pay as you go, whichever suits you.",
  "faq.q4":"Do you work outside Auckland?","faq.a4":"Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference.",
  "faq.q5":"How small is too small?","faq.a5":"If you spend more than three hours a week on the same task, it is usually worth a look, whether you have one van or forty staff.",
  "form.eyebrow":"Free session","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
  "form.name":"Your name","form.biz":"Business name","form.email":"Email","form.phone":"Phone",
  "form.msg":"What eats your time?","form.send":"Send request",
- "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.",
+ "form.note":"We aim to reply within one working day, in English, Hindi or Punjabi. Or call +64 22 099 9578.",
  "foot.tag":"Built in Auckland. Working nationwide.",
  "foot.fine":"Translations are provided to help and may contain errors. If there is any difference, the English version applies."
 },
@@ -4467,7 +4469,7 @@ zh:{
  "card.pick":"选择你的行业","card.handled":"我们会先帮你接手这些","card.hoursback":"每周估计可省下的时间",
  "card.month":"估计每月约 {n} 小时。","card.note":"以新西兰同类生意的常见情况估算。咨询时我们会测算你的实际数字。",
  "biz.cafe":"咖啡店或外卖店","biz.trades":"装修与建筑","biz.clinic":"诊所或美容店","biz.retail":"零售店或便利店","biz.adviser":"顾问或会计","biz.transport":"运输与配送",
- "t.cafe1":"排班和换班沟通","t.cafe2":"供货订单和发票录入","t.cafe3":"谷歌评价和脸书消息的回复",
+ "t.cafe1":"排班和换班沟通","t.cafe2":"供货订单和发票录入","t.cafe3":"谷歌评价和邮件回复",
  "t.trades1":"根据现场记录整理报价","t.trades2":"把工单发票录入账务系统","t.trades3":"催收逾期款项",
  "t.clinic1":"预约提醒和二次预约","t.clinic2":"新客户表格和档案","t.clinic3":"未接来电的回访",
  "t.retail1":"盘点和补货","t.retail2":"更新价格和商品信息","t.retail3":"每日销售汇总",
@@ -4475,7 +4477,7 @@ zh:{
  "t.transport1":"行车单和司机通知","t.transport2":"归档签收凭证","t.transport3":"油耗和里程记录",
  "auto.eyebrow":"具体工作","auto.title":"我们做什么","auto.lead":"我们从两方面帮你：清掉重复劳动的自动化，以及围绕你的生意打造的数字工具。",
  "auto.c1t":"报价与发票","auto.c1d":"现场笔记或一段语音变成报价草稿。客户确认后，生成待你核对发送的发票。",
- "auto.c2t":"客户回复","auto.c2d":"在网站、邮件和脸书消息中快速回答营业时间、价格和路线等问题，并为谷歌评价起草回复，由你确认。",
+ "auto.c2t":"客户回复","auto.c2d":"在网站和邮件中快速回答营业时间、价格和路线等问题，并为谷歌评价起草回复，由你确认。",
  "auto.c3t":"预约与提醒","auto.c3d":"确认、提醒和再次预约的短信自动发出，不用有人一个个去催。",
  "auto.c4t":"数据在系统间流转","auto.c4d":"同一单生意不用在三个系统里重复输入。只要软件支持，数据就能自动从一个传到下一个。",
  "auto.c5t":"每周数字一览","auto.c5d":"销售、库存、未收款和工时，每周一早上手机上收到一份简短汇总。",
@@ -4499,7 +4501,7 @@ zh:{
  "wd.more":"了解更多",
  "nav.guides":"指南","kh.eyebrow":"知识中心","kh.title":"先了解，再自动化","kh.lead":"为新西兰企业准备的实用指南：先自动化什么、如何运作、需要注意什么。（指南为英文）","kh.all":"查看全部指南","kh.ind":"按行业了解自动化","kh.read":"阅读指南","foot.services":"服务","foot.industries":"行业","ticker.label":"我们自动化的工作",
  "tf.eyebrow":"改变前后","tf.title":"看看你的业务如何焕然一新","tf.lead":"拖动滑块，把成堆的文件和加班换成替你完成大部分工作的系统。点任意圆点，看看有什么变化。","tf.before":"之前","tf.after":"有了 Ambs","tf.hint":"点一个圆点，看看有什么变化。","tf.drag":"拖动对比",
- "priv.t":"隐私","priv.b":"本网站只在你的设备上保存语言和显示模式偏好，关闭浏览器后即清除。通过联系表单发送的信息经由表单服务送达我们，并保存在我们的客户系统中，用于回复你。未经你同意，我们不会出售这些信息或用于营销。如有疑问，请致电 +64 22 099 9578。",
+ "priv.t":"隐私","priv.b":"本网站只在你的设备上保存语言和显示模式偏好，关闭浏览器后即清除。通过联系表单发送的信息经由表单服务送达我们，并保存在我们的客户系统中，用于回复你。未经你同意，我们不会出售这些信息或用于营销。如果最终没有合作，这些信息会在 12 个月后删除。如有疑问，请致电 +64 22 099 9578。",
  "wx.sun":"晴","wx.cloud":"多云","wx.rain":"下雨","wx.storm":"雷雨",
  "wx.live":"实时",
  "why.t":"为什么选择我们","why.s":"和我们合作，你可以期待这些。",
@@ -4521,22 +4523,22 @@ zh:{
  "form.okname":"谢谢你，{name}，我们会尽快联系你",
  "how.eyebrow":"三个步骤，依次进行","how.title":"合作流程",
  "how.s1t":"我们先看你怎么做","how.s1d":"和真正做这件事的人聊一聊。结束时给你一份书面方案和省时估算。就算最后不合作，方案也归你。",
- "how.s2t":"先只做一个自动化","how.s2d":"通常两到三周，视具体工作而定。正式上线前，它会在你真实的业务上运行，并与你现在的做法对照检查。",
- "how.s3t":"最后归你所有","how.s3d":"我们移交账号、培训你的团队，并持续提供支持。即使不再合作，自动化流程也留在你的账户里。",
+ "how.s2t":"先只做一个自动化","how.s2d":"通常一到两周，视具体工作而定。正式上线前，它会在你真实的业务上运行，并与你现在的做法对照检查。",
+ "how.s3t":"最后归你所有","how.s3d":"我们移交账号、培训你的团队，上线后前 30 天免费修复和调整。即使不再合作，自动化流程也留在你的账户里。",
  "trust.eyebrow":"不用换掉现有系统","trust.title":"围绕你现在用的工具来搭建",
  "trust.lead":"大多数情况下不需要买新软件。我们从你桌上和手机里已有的工具开始。",
- "trust.u1t":"数据始终属于你","trust.u1d":"依据《2020 年隐私法》处理。我们为你保存的数据尽量存放在新西兰或澳洲；如有工具会把数据存到海外，我们会事先告诉你。",
+ "trust.u1t":"数据始终属于你","trust.u1d":"依据《2020 年隐私法》处理。我们为你保存的数据尽量存放在新西兰或澳洲；如有工具会把数据存到海外，我们会事先告诉你。只有我们自己的团队接触你的数据，AI 工具使用不会用你的数据训练模型的商业版。",
  "trust.u2t":"有人真的接电话","trust.u2d":"一位了解你生意的固定联系人，新西兰工作时间随时联系，不用排队等工单。",
  "faq.eyebrow":"直接回答","faq.title":"常见问题",
  "faq.q1":"这会取代我的员工吗？","faq.a1":"不会。它只是把重复的活清掉，让员工去做需要判断力、动手或面对客人的部分。目的是腾出时间做更多生意，而不是裁人。",
  "faq.q2":"我不懂技术，可以吗？","faq.a2":"完全可以。你只要能演示这件事现在是怎么做的，就够了。剩下的我们负责，并且用大白话讲给你听。",
- "faq.q3":"出问题了怎么办？","faq.a3":"在工具允许的地方我们会设置监控，大多数问题能尽早发现。上线后包含哪些支持，会在开始前以书面形式约定。",
+ "faq.q3":"出问题了怎么办？","faq.a3":"在工具允许的地方我们会设置监控，大多数问题能尽早发现。上线后前 30 天，修复和调整免费。之后可选择按月支持计划或按次付费，看哪种适合你。",
  "faq.q4":"奥克兰以外接单吗？","faq.a4":"全国都接。大部分工作远程完成，第一次实地考察确有必要时我们会过去。",
  "faq.q5":"生意太小会不会不值得？","faq.a5":"如果同一件事每周花掉你三小时以上，通常就值得看一看，不管你是一台车还是四十名员工。",
  "form.eyebrow":"免费咨询","form.title":"预约你的免费咨询","form.lead":"告诉我们你的时间都花在哪里，我们会给出方案和省时估算。",
  "form.name":"你的姓名","form.biz":"店铺／公司名称","form.email":"电子邮箱","form.phone":"电话",
  "form.msg":"哪些事最花你的时间？","form.send":"提交申请",
- "form.note":"我们争取在一个工作日内回复。也可致电 +64 22 099 9578。",
+ "form.note":"我们争取在一个工作日内回复（使用英语、印地语或旁遮普语）。也可致电 +64 22 099 9578。",
  "foot.tag":"立足奥克兰，服务全新西兰。",
  "foot.fine":"译文仅供参考，可能有误。如有不一致，以英文版为准。"
 },
@@ -4550,7 +4552,7 @@ hi:{
  "card.pick":"अपना काम चुनिए","card.handled":"पहले हम यह आपके सिर से हटाएँगे","card.hoursback":"अनुमानित घंटे हर हफ़्ते वापस",
  "card.month":"महीने में लगभग {n} घंटे (अनुमान)।","card.note":"न्यूज़ीलैंड के आम कामों के अनुमान। आपका सही आँकड़ा वॉकथ्रू में निकालेंगे।",
  "biz.cafe":"कैफ़े या टेकअवे","biz.trades":"ट्रेड्स और बिल्डिंग","biz.clinic":"क्लिनिक या सैलून","biz.retail":"दुकान या डेयरी","biz.adviser":"एडवाइज़र या अकाउंटेंट","biz.transport":"ट्रांसपोर्ट और डिलिवरी",
- "t.cafe1":"रोस्टर और शिफ़्ट बदलने के मैसेज","t.cafe2":"सप्लायर ऑर्डर और इनवॉइस एंट्री","t.cafe3":"गूगल रिव्यू और फ़ेसबुक मैसेज के जवाब",
+ "t.cafe1":"रोस्टर और शिफ़्ट बदलने के मैसेज","t.cafe2":"सप्लायर ऑर्डर और इनवॉइस एंट्री","t.cafe3":"गूगल रिव्यू और ईमेल के जवाब",
  "t.trades1":"साइट नोट्स से कोटेशन बनाना","t.trades2":"जॉब इनवॉइस अकाउंट्स में डालना","t.trades3":"देर से आने वाले पेमेंट का पीछा करना",
  "t.clinic1":"बुकिंग रिमाइंडर और दोबारा बुकिंग","t.clinic2":"नए ग्राहक के फ़ॉर्म और फ़ाइलें","t.clinic3":"छूटी कॉल पर फ़ॉलो-अप",
  "t.retail1":"स्टॉक गिनती और दोबारा ऑर्डर","t.retail2":"कीमत और लिस्टिंग अपडेट","t.retail3":"रोज़ की सेल्स रिपोर्ट",
@@ -4558,7 +4560,7 @@ hi:{
  "t.transport1":"रन शीट और ड्राइवर को मैसेज","t.transport2":"डिलिवरी के सबूत फ़ाइल करना","t.transport3":"फ़्यूल और माइलेज लॉग",
  "auto.eyebrow":"असली काम","auto.title":"हम क्या करते हैं","auto.lead":"हम दो तरह से मदद करते हैं: दोहराव हटाने वाले ऑटोमेशन, और आपके व्यवसाय के इर्द-गिर्द बने डिजिटल टूल।",
  "auto.c1t":"कोटेशन और इनवॉइस","auto.c1d":"साइट के नोट या वॉइस मैसेज से कोटेशन का ड्राफ़्ट बनता है। मंज़ूर काम का बिल तैयार हो जाता है, जाँचकर भेजने के लिए।",
- "auto.c2t":"ग्राहकों के जवाब","auto.c2d":"वेबसाइट, ईमेल और फ़ेसबुक मैसेज पर खुलने का समय, कीमत और रास्ते जैसे सवालों के जल्दी जवाब, और गूगल रिव्यू के जवाब आपकी मंज़ूरी के लिए तैयार।",
+ "auto.c2t":"ग्राहकों के जवाब","auto.c2d":"वेबसाइट और ईमेल पर खुलने का समय, कीमत और रास्ते जैसे सवालों के जल्दी जवाब, और गूगल रिव्यू के जवाब आपकी मंज़ूरी के लिए तैयार।",
  "auto.c3t":"बुकिंग और रिमाइंडर","auto.c3d":"कन्फ़र्मेशन, रिमाइंडर और दोबारा बुकिंग के मैसेज ख़ुद जाते हैं, किसी को फ़ोन नहीं करना पड़ता।",
  "auto.c4t":"ऐप्स के बीच डेटा भेजना","auto.c4d":"एक ही काम तीन जगह टाइप करने की ज़रूरत नहीं। जहाँ आपके ऐप अनुमति दें, जानकारी अपने-आप एक से दूसरे में पहुँचती है।",
  "auto.c5t":"हफ़्ते के आँकड़े","auto.c5d":"सेल्स, स्टॉक, बाक़ी पेमेंट और घंटे, हर सोमवार फ़ोन पर एक छोटी सी रिपोर्ट।",
@@ -4582,7 +4584,7 @@ hi:{
  "wd.more":"और जानें",
  "nav.guides":"गाइड","kh.eyebrow":"ज्ञान केंद्र","kh.title":"ऑटोमेट करने से पहले समझिए","kh.lead":"न्यूज़ीलैंड के कारोबारों के लिए आसान गाइड: पहले क्या ऑटोमेट करें, यह कैसे काम करता है और किन बातों का ध्यान रखें। (गाइड अंग्रेज़ी में हैं)","kh.all":"सभी गाइड देखें","kh.ind":"आपके उद्योग के लिए ऑटोमेशन","kh.read":"गाइड पढ़ें","foot.services":"सेवाएँ","foot.industries":"उद्योग","ticker.label":"हम क्या ऑटोमेट करते हैं",
  "tf.eyebrow":"पहले और बाद","tf.title":"देखिए आपका कारोबार कैसे बदलता है","tf.lead":"हैंडल खींचें और काग़ज़ों के ढेर व देर रात के काम को ऐसे सिस्टम से बदलें जो ज़्यादातर काम आपके लिए कर दें। कोई भी बिंदु टैप करके बदलाव देखें।","tf.before":"पहले","tf.after":"Ambs के साथ","tf.hint":"बदलाव देखने के लिए कोई बिंदु टैप करें।","tf.drag":"तुलना के लिए खींचें",
- "priv.t":"गोपनीयता","priv.b":"यह साइट आपकी भाषा और थीम की पसंद ब्राउज़र बंद करने तक आपके डिवाइस पर रखती है। संपर्क फ़ॉर्म से भेजी जानकारी एक फ़ॉर्म सेवा के ज़रिए हम तक पहुँचती है और जवाब देने के लिए हमारे क्लाइंट सिस्टम में सहेजी जाती है। आपकी सहमति के बिना हम इसे न बेचते हैं, न मार्केटिंग में इस्तेमाल करते हैं। सवाल हों तो कॉल करें: +64 22 099 9578।",
+ "priv.t":"गोपनीयता","priv.b":"यह साइट आपकी भाषा और थीम की पसंद ब्राउज़र बंद करने तक आपके डिवाइस पर रखती है। संपर्क फ़ॉर्म से भेजी जानकारी एक फ़ॉर्म सेवा के ज़रिए हम तक पहुँचती है और जवाब देने के लिए हमारे क्लाइंट सिस्टम में सहेजी जाती है। आपकी सहमति के बिना हम इसे न बेचते हैं, न मार्केटिंग में इस्तेमाल करते हैं। अगर हम साथ काम नहीं करते, तो यह 12 महीने बाद मिटा दी जाती है। सवाल हों तो कॉल करें: +64 22 099 9578।",
  "wx.sun":"धूप","wx.cloud":"बादल","wx.rain":"बारिश","wx.storm":"तूफ़ान",
  "wx.live":"अभी लाइव",
  "why.t":"हमारे साथ क्यों","why.s":"हमारे साथ काम करने पर आप यह उम्मीद कर सकते हैं।",
@@ -4604,22 +4606,22 @@ hi:{
  "form.okname":"धन्यवाद {name}, हम शीघ्र संपर्क करेंगे",
  "how.eyebrow":"तीन चरण, इसी क्रम में","how.title":"काम कैसे होता है",
  "how.s1t":"पहले हम काम देखते हैं","how.s1d":"जो असल में यह काम करता है, उसके साथ बैठते हैं। जाते समय आपको लिखित प्लान और घंटों का अनुमान मिलता है। काम न दें तो भी वह आपका है।",
- "how.s2t":"पहले सिर्फ़ एक ऑटोमेशन बनाते हैं","how.s2d":"आम तौर पर दो से तीन हफ़्ते, काम पर निर्भर। लाइव होने से पहले आप इसे अपने असली कामों पर चलता देखते हैं, मौजूदा तरीके के साथ मिलाकर जाँचते हुए।",
- "how.s3t":"फिर वह आपका है","how.s3d":"हम लॉगिन सौंपते हैं, आपकी टीम को सिखाते हैं और मदद के लिए उपलब्ध रहते हैं। अगर आप हमारे साथ काम बंद करें, तो ऑटोमेशन आपके खातों में ही रहता है।",
+ "how.s2t":"पहले सिर्फ़ एक ऑटोमेशन बनाते हैं","how.s2d":"आम तौर पर एक से दो हफ़्ते, काम पर निर्भर। लाइव होने से पहले आप इसे अपने असली कामों पर चलता देखते हैं, मौजूदा तरीके के साथ मिलाकर जाँचते हुए।",
+ "how.s3t":"फिर वह आपका है","how.s3d":"हम लॉगिन सौंपते हैं, आपकी टीम को सिखाते हैं और पहले 30 दिन तक सुधार और बदलाव मुफ़्त करते हैं। अगर आप हमारे साथ काम बंद करें, तो ऑटोमेशन आपके खातों में ही रहता है।",
  "trust.eyebrow":"सब कुछ बदलने की ज़रूरत नहीं","trust.title":"आपके मौजूदा टूल के आसपास ही बनता है",
  "trust.lead":"ज़्यादातर मामलों में नया सॉफ़्टवेयर नहीं चाहिए। हम उसी से शुरू करते हैं जो आपके डेस्क और फ़ोन में पहले से है।",
- "trust.u1t":"डेटा आपका ही रहता है","trust.u1d":"प्राइवेसी एक्ट 2020 के तहत। आपके लिए हम जो डेटा रखते हैं, वह जहाँ तक हो सके न्यूज़ीलैंड या ऑस्ट्रेलिया में रहता है, और अगर कोई टूल डेटा विदेश में रखता है तो हम पहले बताते हैं।",
+ "trust.u1t":"डेटा आपका ही रहता है","trust.u1d":"प्राइवेसी एक्ट 2020 के तहत। आपके लिए हम जो डेटा रखते हैं, वह जहाँ तक हो सके न्यूज़ीलैंड या ऑस्ट्रेलिया में रहता है, और अगर कोई टूल डेटा विदेश में रखता है तो हम पहले बताते हैं। आपके डेटा पर सिर्फ़ हमारी अपनी टीम काम करती है, और AI टूल ऐसे बिज़नेस प्लान पर चलते हैं जो आपके डेटा से ट्रेनिंग नहीं करते।",
  "trust.u2t":"फ़ोन इंसान उठाता है","trust.u2d":"एक तय व्यक्ति जो आपका काम समझता है, न्यूज़ीलैंड के समय पर उपलब्ध। टिकट की लाइन नहीं।",
  "faq.eyebrow":"सीधे जवाब","faq.title":"अक्सर पूछे जाने वाले सवाल",
  "faq.q1":"क्या इससे मेरा स्टाफ़ हट जाएगा?","faq.a1":"नहीं। यह दोहराए जाने वाले काम हटाता है ताकि आपके लोग वह करें जिसमें समझ, हाथ या मुस्कान चाहिए। मकसद और काम के लिए समय निकालना है, स्टाफ़ घटाना नहीं।",
  "faq.q2":"मुझे टेक्नोलॉजी की समझ नहीं है।","faq.a2":"कोई दिक़्क़त नहीं। आप बस दिखा दें कि आज यह काम कैसे होता है — बाक़ी हम सँभालते हैं और आसान शब्दों में समझाते हैं।",
- "faq.q3":"कुछ बिगड़ जाए तो?","faq.a3":"जहाँ टूल अनुमति दें, हम निगरानी लगाते हैं ताकि ज़्यादातर दिक्कतें जल्दी पकड़ में आएँ। शुरू होने के बाद कौन-सी सहायता शामिल है, यह काम शुरू करने से पहले लिखित में तय होता है।",
+ "faq.q3":"कुछ बिगड़ जाए तो?","faq.a3":"जहाँ टूल अनुमति दें, हम निगरानी लगाते हैं ताकि ज़्यादातर दिक्कतें जल्दी पकड़ में आएँ। लॉन्च के बाद पहले 30 दिन सुधार और बदलाव मुफ़्त हैं। उसके बाद मासिक सपोर्ट प्लान या ज़रूरत के हिसाब से भुगतान, जो आपको ठीक लगे।",
  "faq.q4":"क्या ऑकलैंड के बाहर भी काम करते हैं?","faq.a4":"हाँ, पूरे देश में। ज़्यादातर काम रिमोट होता है, और पहली वॉकथ्रू के लिए ज़रूरत हो तो हम आते हैं।",
  "faq.q5":"मेरा काम बहुत छोटा है?","faq.a5":"अगर एक ही काम पर हफ़्ते में तीन घंटे से ज़्यादा जाते हैं, तो आम तौर पर उसे देखना फ़ायदेमंद होता है, चाहे एक वैन हो या चालीस लोग।",
  "form.eyebrow":"मुफ़्त सेशन","form.title":"अपना फ़्री सेशन बुक करें","form.lead":"बताइए आपका हफ़्ता कहाँ जाता है। हम प्लान और घंटों का अनुमान लेकर लौटेंगे।",
  "form.name":"आपका नाम","form.biz":"व्यवसाय का नाम","form.email":"ईमेल","form.phone":"फ़ोन",
  "form.msg":"आपका समय किस काम में जाता है?","form.send":"अनुरोध भेजें",
- "form.note":"हम एक कार्यदिवस में जवाब देने की कोशिश करते हैं। या +64 22 099 9578 पर कॉल करें।",
+ "form.note":"हम एक कार्यदिवस में अंग्रेज़ी, हिंदी या पंजाबी में जवाब देने की कोशिश करते हैं। या +64 22 099 9578 पर कॉल करें।",
  "foot.tag":"ऑकलैंड में बना, पूरे न्यूज़ीलैंड में काम।",
  "foot.fine":"अनुवाद सुविधा के लिए हैं और इनमें गलतियाँ हो सकती हैं। किसी अंतर की स्थिति में अंग्रेज़ी संस्करण मान्य होगा।"
 },
@@ -4633,7 +4635,7 @@ mi:{
  "card.pick":"Kōwhiria tō pakihi","card.handled":"Ko ēnei ka tangohia e mātou i te tuatahi","card.hoursback":"hāora e matapaetia ana ka hoki mai ia wiki",
  "card.month":"Tata ki te {n} hāora ia marama (he matapae).","card.note":"He whakatau tata mai i ngā mahi noa o Aotearoa. Ka inea āu i te uiui.",
  "biz.cafe":"Kāwhe, kai mauhoki","biz.trades":"Ngā mahi hanga","biz.clinic":"Whare hauora, whare mākuru","biz.retail":"Toa, toa kāinga","biz.adviser":"Kaitohutohu, kaikaute","biz.transport":"Kawe waka, tuku taonga",
- "t.cafe1":"Ngā rārangi mahi me ngā karere hurihuri","t.cafe2":"Ngā ota kaiwhakarato me ngā nama","t.cafe3":"Ngā whakautu ki ngā arotake Google me ngā karere Facebook",
+ "t.cafe1":"Ngā rārangi mahi me ngā karere hurihuri","t.cafe2":"Ngā ota kaiwhakarato me ngā nama","t.cafe3":"Ngā whakautu ki ngā arotake Google me ngā īmēra",
  "t.trades1":"Ngā whakatau utu mai i ngā tuhipoka o te papa","t.trades2":"Ngā nama mahi ki ō pukapuka kaute","t.trades3":"Te whai i ngā utu tōmuri",
  "t.clinic1":"Ngā whakamahara tohu wā me te tohu anō","t.clinic2":"Ngā puka me ngā kōnae kiritaki hou","t.clinic3":"Te whai i ngā waea kua ngaro",
  "t.retail1":"Te tatau taonga me te ota anō","t.retail2":"Te whakahou i ngā utu me ngā rārangi","t.retail3":"Te whakarāpopoto hokohoko ia rā",
@@ -4641,7 +4643,7 @@ mi:{
  "t.transport1":"Ngā rārangi haere me ngā karere kaitaraiwa","t.transport2":"Te whakarite tohu tuku taonga","t.transport3":"Ngā rekoata hinu me te mahara",
  "auto.eyebrow":"Ngā mahi","auto.title":"Ā mātou mahi","auto.lead":"E rua ā mātou āwhina: ko ngā whakaaunoa hei tango i ngā mahi tāruarua, me ngā taputapu matihiko i hangaia mō tō pakihi.",
  "auto.c1t":"Whakatau utu me ngā nama","auto.c1d":"Ka huri ngā tuhipoka, te karere reo hoki hei tauira whakatau utu. Ka huri ngā mahi kua whakaaetia hei nama, kua rite kia tirohia, kia tukuna.",
- "auto.c2t":"Whakautu kiritaki","auto.c2d":"Ka tere te whakautu i ngā pātai mō ngā hāora tuwhera, ngā utu me te huarahi i tō paetukutuku, īmēra me ngā karere Facebook, ā, ka tuhia he whakautu ki ngā arotake Google kia whakaaetia e koe.",
+ "auto.c2t":"Whakautu kiritaki","auto.c2d":"Ka tere te whakautu i ngā pātai mō ngā hāora tuwhera, ngā utu me te huarahi i tō paetukutuku me tō īmēra, ā, ka tuhia he whakautu ki ngā arotake Google kia whakaaetia e koe.",
  "auto.c3t":"Tohu wā me ngā whakamahara","auto.c3d":"Ka tukuna ake ngā whakaū me ngā whakamahara, kāore he tangata hei whai.",
  "auto.c4t":"Te neke raraunga i waenga pūmanawa","auto.c4d":"Kaua e tuhi anō i te mahi kotahi ki ngā pūnaha e toru. Ina whakaaetia e ō pūmanawa, ka tukua aunoatia ngā mōhiohio mai i tētahi ki tētahi.",
  "auto.c5t":"Ngā tau ia wiki","auto.c5d":"Hokohoko, taonga, nama kāore anō kia utua, hāora hoki, kotahi te whakarāpopoto ki tō waea ia Rāhina.",
@@ -4665,7 +4667,7 @@ mi:{
  "wd.more":"Pānui atu",
  "nav.guides":"Ngā aratohu","kh.eyebrow":"Te pokapū mōhiotanga","kh.title":"Ako i mua i te whakaaunoa","kh.lead":"He aratohu mārama mō ngā pakihi o Aotearoa: he aha hei whakaaunoa tuatahi, me pēhea e mahi ai, me ngā mea hei tūpato. (Kei te reo Pākehā ngā aratohu)","kh.all":"Tirohia ngā aratohu katoa","kh.ind":"Te whakaaunoa mō tō ahumahi","kh.read":"Pānuitia te aratohu","foot.services":"Ratonga","foot.industries":"Ahumahi","ticker.label":"Ngā mahi ka aunoatia e mātou",
  "tf.eyebrow":"I mua, i muri","tf.title":"Tirohia te panoni o tō pakihi","tf.lead":"Tōia te kakau kia whakakapia ngā puranga pepa me ngā pō roa ki ngā pūnaha e mahi ana i te nuinga o te mahi mōu. Pāwhiria tētahi ira kia kite i te panoni.","tf.before":"I mua","tf.after":"Me Ambs","tf.hint":"Pāwhiria tētahi ira kia kite i te panoni.","tf.drag":"Tōia hei whakatairite",
- "priv.t":"Tūmataitinga","priv.b":"Ka penapena tēnei paetukutuku i tō reo me tō whiringa tae ki tō pūrere kia kati rā anō te pūtirotiro. Ko ngā kōrero ka tukuna mā te puka whakapā, ka tae mai mā tētahi ratonga puka, ā, ka penapenatia ki tā mātou pūnaha kiritaki kia taea ai te whakautu. Kāore mātou e hoko, e whakamahi rānei mō te whakatairanga ki te kore tō whakaae. He pātai? Waea mai ki +64 22 099 9578.",
+ "priv.t":"Tūmataitinga","priv.b":"Ka penapena tēnei paetukutuku i tō reo me tō whiringa tae ki tō pūrere kia kati rā anō te pūtirotiro. Ko ngā kōrero ka tukuna mā te puka whakapā, ka tae mai mā tētahi ratonga puka, ā, ka penapenatia ki tā mātou pūnaha kiritaki kia taea ai te whakautu. Kāore mātou e hoko, e whakamahi rānei mō te whakatairanga ki te kore tō whakaae. Mēnā kāore tātou e mahi tahi, ka mukua ā te 12 marama. He pātai? Waea mai ki +64 22 099 9578.",
  "wx.sun":"Paki","wx.cloud":"Kāpua","wx.rain":"He ua","wx.storm":"He tūpuhi",
  "wx.live":"mataora",
  "why.t":"He aha ai mātou","why.s":"Anei ngā mea ka taea e koe te tūmanako ina mahi tahi tātou.",
@@ -4687,22 +4689,22 @@ mi:{
  "form.okname":"Ngā mihi {name}, ka whakapā wawe atu mātou",
  "how.eyebrow":"E toru ngā waahanga","how.title":"Te huarahi",
  "how.s1t":"Ka mātakitaki mātou i te mahi","how.s1d":"Ka noho mātou me te tangata e mahi ana i te mahi. Ka waiho e mātou he mahere tuhituhi me te whakatau hāora. Nāu tonu, ahakoa kāore koe e utu i a mātou.",
- "how.s2t":"Ka hangaia kotahi te whakaaunoa i te tuatahi","how.s2d":"I te nuinga o te wā, e rua ki te toru wiki, ka whai i te āhua o te mahi. Ka kite koe i te mahi ki ō mahi tūturu, ka whakatairitea ki tō tikanga o nāianei, i mua i te tīmatanga.",
- "how.s3t":"Nāu te mana","how.s3d":"Ka hoatu e mātou ngā kupu whakauru, ka whakangungu i tō tīma, ka noho wātea hei tautoko. Mēnā ka mutu tā tātou mahi tahi, ka noho tonu te whakaaunoa ki ō pūkete.",
+ "how.s2t":"Ka hangaia kotahi te whakaaunoa i te tuatahi","how.s2d":"I te nuinga o te wā, kotahi ki te rua wiki, ka whai i te āhua o te mahi. Ka kite koe i te mahi ki ō mahi tūturu, ka whakatairitea ki tō tikanga o nāianei, i mua i te tīmatanga.",
+ "how.s3t":"Nāu te mana","how.s3d":"Ka hoatu e mātou ngā kupu whakauru, ka whakangungu i tō tīma, ā, mō ngā rā 30 tuatahi ka whakatika, ka whakapai mātou i ngā mea katoa me te kore utu. Mēnā ka mutu tā tātou mahi tahi, ka noho tonu te whakaaunoa ki ō pūkete.",
  "trust.eyebrow":"Kāore he panoni nui","trust.title":"He hanga i runga i ō taputapu o nāianei",
  "trust.lead":"I te nuinga o te wā, kāore koe e hiahia pūmanawa hou. Ka tīmata mātou ki ngā mea kei tō tēpu me tō waea kē.",
- "trust.u1t":"Nāu tonu ō raraunga","trust.u1d":"E whakahaerea ana i raro i te Privacy Act 2020. Ko ngā raraunga ka pupuri mātou mōu, ka pupurihia ki Aotearoa, ki Ahitereiria rānei ina taea, ā, ka kōrero mātou ki a koe i te tuatahi mēnā ka pupuri tētahi taputapu i ngā raraunga ki tāwāhi.",
+ "trust.u1t":"Nāu tonu ō raraunga","trust.u1d":"E whakahaerea ana i raro i te Privacy Act 2020. Ko ngā raraunga ka pupuri mātou mōu, ka pupurihia ki Aotearoa, ki Ahitereiria rānei ina taea, ā, ka kōrero mātou ki a koe i te tuatahi mēnā ka pupuri tētahi taputapu i ngā raraunga ki tāwāhi. Ko tā mātou tīma anake e mahi ana ki ō raraunga, ā, ka whakamahia ngā taputapu AI i runga i ngā mahere pakihi kāore e whakangungu i ō raraunga.",
  "trust.u2t":"Ka whakautu he tangata","trust.u2d":"Kotahi te tangata e mōhio ana ki tō pakihi, wātea i ngā hāora o Aotearoa. Kāore he rārangi tiaki.",
  "faq.eyebrow":"Ngā whakautu tōtika","faq.title":"Ngā pātai ka pātaia mai",
  "faq.q1":"Ka whakakapi tēnei i aku kaimahi?","faq.a1":"Kāore. Ka tangohia ngā mahi tāruarua kia taea e ō tāngata ngā mahi e hiahia ana i te whakaaro, te ringa, te kanohi ora. Ko te whāinga he whakawātea hāora mō ētahi atu mahi, kaua hei whakaiti kaimahi.",
  "faq.q2":"Kāore au i te mōhio ki te hangarau.","faq.a2":"Kei te pai. Mēnā ka taea e koe te whakaatu me pēhea te mahi i tēnei rā, kua tau. Mā mātou ērā atu, ka whakamārama i te reo māmā.",
- "faq.q3":"Ka aha ina pakaru?","faq.a3":"Ka whakaritea e mātou he mātakitaki ina whakaaetia e ngā taputapu, kia kitea wawetia te nuinga o ngā raru. Ko te tautoko ka whakaurua i muri i te tīmatanga, ka whakaaetia ā-tuhi i mua i tā tātou tīmata.",
+ "faq.q3":"Ka aha ina pakaru?","faq.a3":"Ka whakaritea e mātou he mātakitaki ina whakaaetia e ngā taputapu, kia kitea wawetia te nuinga o ngā raru. Mō ngā rā 30 tuatahi i muri i te whakarewanga, he kore utu ngā whakatika me ngā whakapai. I muri i tērā, he mahere ā-marama, he utu ā-mahi rānei, ko tēhea e pai ana ki a koe.",
  "faq.q4":"Ka mahi koe i waho o Tāmaki Makaurau?","faq.a4":"Āe, puta noa i te motu. Ka mahia te nuinga i tawhiti, ā, ka haere mātou mō te uiui tuatahi ina tika.",
  "faq.q5":"He iti rawa tōku pakihi?","faq.a5":"Mēnā e neke atu i te toru hāora ia wiki ki te mahi kotahi, he pai te titiro, ahakoa kotahi tō waka, ahakoa e whā tekau ō kaimahi.",
  "form.eyebrow":"He wā kore utu","form.title":"Tohua tō wā koreutu","form.lead":"Kōrero mai he aha kei te kai i tō wiki. Ka hoki mai mātou me te mahere me te whakatau hāora.",
  "form.name":"Tō ingoa","form.biz":"Ingoa pakihi","form.email":"Īmēra","form.phone":"Waea",
  "form.msg":"He aha kei te kai i tō wā?","form.send":"Tukuna te tono",
- "form.note":"Ka whai mātou kia whakautu i roto i te rā mahi kotahi. Waea rānei ki +64 22 099 9578.",
+ "form.note":"Ka whai mātou kia whakautu i roto i te rā mahi kotahi, i te reo Pākehā, i te reo Hindi, i te reo Punjabi rānei. Waea rānei ki +64 22 099 9578.",
  "foot.tag":"I hangaia ki Tāmaki Makaurau. E mahi ana puta noa i te motu.",
  "foot.fine":"He whakamāoritanga hei āwhina, tērā pea he hapa. Mēnā he rerekētanga, ko te putanga reo Pākehā te mana."
 },
@@ -4716,7 +4718,7 @@ pa:{
  "card.pick":"ਆਪਣਾ ਕਾਰੋਬਾਰ ਚੁਣੋ","card.handled":"ਪਹਿਲਾਂ ਅਸੀਂ ਇਹ ਤੁਹਾਡੇ ਸਿਰੋਂ ਲਾਹਵਾਂਗੇ","card.hoursback":"ਅੰਦਾਜ਼ਨ ਘੰਟੇ ਹਰ ਹਫ਼ਤੇ ਵਾਪਸ",
  "card.month":"ਮਹੀਨੇ ਵਿੱਚ ਲਗਭਗ {n} ਘੰਟੇ (ਅੰਦਾਜ਼ਾ)।","card.note":"ਨਿਊਜ਼ੀਲੈਂਡ ਦੇ ਆਮ ਕੰਮਾਂ ਦੇ ਅੰਦਾਜ਼ੇ। ਤੁਹਾਡਾ ਸਹੀ ਹਿਸਾਬ ਵਾਕਥਰੂ ਵਿੱਚ ਕੱਢਾਂਗੇ।",
  "biz.cafe":"ਕੈਫ਼ੇ ਜਾਂ ਟੇਕਅਵੇ","biz.trades":"ਟਰੇਡਜ਼ ਤੇ ਬਿਲਡਿੰਗ","biz.clinic":"ਕਲੀਨਿਕ ਜਾਂ ਸੈਲੂਨ","biz.retail":"ਦੁਕਾਨ ਜਾਂ ਡੇਅਰੀ","biz.adviser":"ਐਡਵਾਈਜ਼ਰ ਜਾਂ ਅਕਾਊਂਟੈਂਟ","biz.transport":"ਟਰਾਂਸਪੋਰਟ ਤੇ ਡਿਲਿਵਰੀ",
- "t.cafe1":"ਰੋਸਟਰ ਤੇ ਸ਼ਿਫ਼ਟ ਬਦਲਣ ਦੇ ਮੈਸੇਜ","t.cafe2":"ਸਪਲਾਇਰ ਆਰਡਰ ਤੇ ਬਿੱਲ ਚੜ੍ਹਾਉਣੇ","t.cafe3":"ਗੂਗਲ ਰਿਵਿਊ ਤੇ ਫ਼ੇਸਬੁੱਕ ਮੈਸੇਜਾਂ ਦੇ ਜਵਾਬ",
+ "t.cafe1":"ਰੋਸਟਰ ਤੇ ਸ਼ਿਫ਼ਟ ਬਦਲਣ ਦੇ ਮੈਸੇਜ","t.cafe2":"ਸਪਲਾਇਰ ਆਰਡਰ ਤੇ ਬਿੱਲ ਚੜ੍ਹਾਉਣੇ","t.cafe3":"ਗੂਗਲ ਰਿਵਿਊ ਤੇ ਈਮੇਲਾਂ ਦੇ ਜਵਾਬ",
  "t.trades1":"ਸਾਈਟ ਦੇ ਨੋਟਾਂ ਤੋਂ ਕੋਟੇਸ਼ਨ ਬਣਾਉਣੀ","t.trades2":"ਜੌਬ ਦੇ ਬਿੱਲ ਖਾਤਿਆਂ ਵਿੱਚ ਪਾਉਣੇ","t.trades3":"ਲੇਟ ਪੇਮੈਂਟ ਦੇ ਮਗਰ ਲੱਗਣਾ",
  "t.clinic1":"ਬੁਕਿੰਗ ਰਿਮਾਈਂਡਰ ਤੇ ਦੁਬਾਰਾ ਬੁਕਿੰਗ","t.clinic2":"ਨਵੇਂ ਗਾਹਕ ਦੇ ਫ਼ਾਰਮ ਤੇ ਫ਼ਾਈਲਾਂ","t.clinic3":"ਖੁੰਝੀਆਂ ਕਾਲਾਂ ਦਾ ਫ਼ਾਲੋ-ਅੱਪ",
  "t.retail1":"ਸਟਾਕ ਗਿਣਤੀ ਤੇ ਦੁਬਾਰਾ ਆਰਡਰ","t.retail2":"ਕੀਮਤਾਂ ਤੇ ਲਿਸਟਿੰਗ ਅੱਪਡੇਟ","t.retail3":"ਰੋਜ਼ ਦੀ ਵਿਕਰੀ ਦਾ ਹਿਸਾਬ",
@@ -4724,7 +4726,7 @@ pa:{
  "t.transport1":"ਰਨ ਸ਼ੀਟਾਂ ਤੇ ਡਰਾਈਵਰਾਂ ਨੂੰ ਮੈਸੇਜ","t.transport2":"ਡਿਲਿਵਰੀ ਦੇ ਸਬੂਤ ਫ਼ਾਈਲ ਕਰਨੇ","t.transport3":"ਤੇਲ ਤੇ ਮਾਈਲੇਜ ਦਾ ਹਿਸਾਬ",
  "auto.eyebrow":"ਅਸਲ ਕੰਮ","auto.title":"ਅਸੀਂ ਕੀ ਕਰਦੇ ਹਾਂ","auto.lead":"ਅਸੀਂ ਦੋ ਤਰੀਕਿਆਂ ਨਾਲ ਮਦਦ ਕਰਦੇ ਹਾਂ: ਵਾਰ-ਵਾਰ ਦਾ ਕੰਮ ਹਟਾਉਣ ਵਾਲੇ ਆਟੋਮੇਸ਼ਨ, ਤੇ ਤੁਹਾਡੇ ਕਾਰੋਬਾਰ ਦੁਆਲੇ ਬਣੇ ਡਿਜੀਟਲ ਟੂਲ।",
  "auto.c1t":"ਕੋਟੇਸ਼ਨ ਤੇ ਬਿੱਲ","auto.c1d":"ਸਾਈਟ ਦੇ ਨੋਟ ਜਾਂ ਵੌਇਸ ਮੈਸੇਜ ਤੋਂ ਕੋਟੇਸ਼ਨ ਦਾ ਖਰੜਾ ਬਣਦਾ ਹੈ। ਮਨਜ਼ੂਰ ਕੰਮ ਦਾ ਬਿੱਲ ਤਿਆਰ ਹੋ ਜਾਂਦਾ ਹੈ, ਜਾਂਚ ਕੇ ਭੇਜਣ ਲਈ।",
- "auto.c2t":"ਗਾਹਕਾਂ ਦੇ ਜਵਾਬ","auto.c2d":"ਵੈੱਬਸਾਈਟ, ਈਮੇਲ ਤੇ ਫ਼ੇਸਬੁੱਕ ਮੈਸੇਜਾਂ 'ਤੇ ਖੁੱਲ੍ਹਣ ਦੇ ਵੇਲੇ, ਕੀਮਤ ਤੇ ਰਸਤੇ ਵਰਗੇ ਸਵਾਲਾਂ ਦੇ ਜਲਦੀ ਜਵਾਬ, ਤੇ ਗੂਗਲ ਰਿਵਿਊਆਂ ਦੇ ਜਵਾਬ ਤੁਹਾਡੀ ਮਨਜ਼ੂਰੀ ਲਈ ਤਿਆਰ।",
+ "auto.c2t":"ਗਾਹਕਾਂ ਦੇ ਜਵਾਬ","auto.c2d":"ਵੈੱਬਸਾਈਟ ਤੇ ਈਮੇਲ 'ਤੇ ਖੁੱਲ੍ਹਣ ਦੇ ਵੇਲੇ, ਕੀਮਤ ਤੇ ਰਸਤੇ ਵਰਗੇ ਸਵਾਲਾਂ ਦੇ ਜਲਦੀ ਜਵਾਬ, ਤੇ ਗੂਗਲ ਰਿਵਿਊਆਂ ਦੇ ਜਵਾਬ ਤੁਹਾਡੀ ਮਨਜ਼ੂਰੀ ਲਈ ਤਿਆਰ।",
  "auto.c3t":"ਬੁਕਿੰਗ ਤੇ ਰਿਮਾਈਂਡਰ","auto.c3d":"ਕਨਫ਼ਰਮੇਸ਼ਨ, ਰਿਮਾਈਂਡਰ ਤੇ ਦੁਬਾਰਾ ਬੁਕਿੰਗ ਦੇ ਮੈਸੇਜ ਆਪੇ ਜਾਂਦੇ ਹਨ।",
  "auto.c4t":"ਐਪਾਂ ਵਿਚਾਲੇ ਡਾਟਾ ਭੇਜਣਾ","auto.c4d":"ਇੱਕੋ ਕੰਮ ਤਿੰਨ ਥਾਵਾਂ 'ਤੇ ਟਾਈਪ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ। ਜਿੱਥੇ ਤੁਹਾਡੀਆਂ ਐਪਾਂ ਇਜਾਜ਼ਤ ਦੇਣ, ਜਾਣਕਾਰੀ ਆਪੇ ਇੱਕ ਤੋਂ ਦੂਜੀ ਤੱਕ ਪਹੁੰਚਦੀ ਹੈ।",
  "auto.c5t":"ਹਫ਼ਤੇ ਦੇ ਅੰਕੜੇ","auto.c5d":"ਵਿਕਰੀ, ਸਟਾਕ, ਬਾਕੀ ਪੇਮੈਂਟ ਤੇ ਘੰਟੇ, ਹਰ ਸੋਮਵਾਰ ਫ਼ੋਨ 'ਤੇ ਇੱਕ ਛੋਟੀ ਰਿਪੋਰਟ।",
@@ -4748,7 +4750,7 @@ pa:{
  "wd.more":"ਹੋਰ ਜਾਣੋ",
  "nav.guides":"ਗਾਈਡ","kh.eyebrow":"ਗਿਆਨ ਕੇਂਦਰ","kh.title":"ਆਟੋਮੇਟ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਸਮਝੋ","kh.lead":"ਨਿਊਜ਼ੀਲੈਂਡ ਦੇ ਕਾਰੋਬਾਰਾਂ ਲਈ ਸੌਖੀਆਂ ਗਾਈਡਾਂ: ਪਹਿਲਾਂ ਕੀ ਆਟੋਮੇਟ ਕਰਨਾ ਹੈ, ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ ਤੇ ਕਿਸ ਗੱਲ ਦਾ ਧਿਆਨ ਰੱਖਣਾ ਹੈ। (ਗਾਈਡਾਂ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਹਨ)","kh.all":"ਸਾਰੀਆਂ ਗਾਈਡਾਂ ਵੇਖੋ","kh.ind":"ਤੁਹਾਡੇ ਉਦਯੋਗ ਲਈ ਆਟੋਮੇਸ਼ਨ","kh.read":"ਗਾਈਡ ਪੜ੍ਹੋ","foot.services":"ਸੇਵਾਵਾਂ","foot.industries":"ਉਦਯੋਗ","ticker.label":"ਅਸੀਂ ਕੀ ਆਟੋਮੇਟ ਕਰਦੇ ਹਾਂ",
  "tf.eyebrow":"ਪਹਿਲਾਂ ਤੇ ਬਾਅਦ","tf.title":"ਦੇਖੋ ਤੁਹਾਡਾ ਕਾਰੋਬਾਰ ਕਿਵੇਂ ਬਦਲਦਾ ਹੈ","tf.lead":"ਹੈਂਡਲ ਖਿੱਚੋ ਤੇ ਕਾਗ਼ਜ਼ਾਂ ਦੇ ਢੇਰ ਤੇ ਦੇਰ ਰਾਤ ਦੇ ਕੰਮ ਨੂੰ ਅਜਿਹੇ ਸਿਸਟਮਾਂ ਨਾਲ ਬਦਲੋ ਜੋ ਬਹੁਤਾ ਕੰਮ ਤੁਹਾਡੇ ਲਈ ਕਰ ਦੇਣ। ਕੋਈ ਵੀ ਬਿੰਦੂ ਦਬਾ ਕੇ ਬਦਲਾਅ ਵੇਖੋ।","tf.before":"ਪਹਿਲਾਂ","tf.after":"Ambs ਨਾਲ","tf.hint":"ਬਦਲਾਅ ਵੇਖਣ ਲਈ ਕੋਈ ਬਿੰਦੂ ਦਬਾਓ।","tf.drag":"ਤੁਲਨਾ ਲਈ ਖਿੱਚੋ",
- "priv.t":"ਪਰਦੇਦਾਰੀ","priv.b":"ਇਹ ਸਾਈਟ ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਤੇ ਥੀਮ ਦੀ ਪਸੰਦ ਬ੍ਰਾਊਜ਼ਰ ਬੰਦ ਕਰਨ ਤੱਕ ਤੁਹਾਡੇ ਡਿਵਾਈਸ 'ਤੇ ਰੱਖਦੀ ਹੈ। ਸੰਪਰਕ ਫਾਰਮ ਰਾਹੀਂ ਭੇਜੀ ਜਾਣਕਾਰੀ ਇੱਕ ਫਾਰਮ ਸੇਵਾ ਰਾਹੀਂ ਸਾਡੇ ਤੱਕ ਪਹੁੰਚਦੀ ਹੈ ਤੇ ਜਵਾਬ ਦੇਣ ਲਈ ਸਾਡੇ ਕਲਾਇੰਟ ਸਿਸਟਮ ਵਿੱਚ ਸੰਭਾਲੀ ਜਾਂਦੀ ਹੈ। ਤੁਹਾਡੀ ਸਹਿਮਤੀ ਤੋਂ ਬਿਨਾਂ ਅਸੀਂ ਇਸ ਨੂੰ ਨਾ ਵੇਚਦੇ ਹਾਂ, ਨਾ ਮਾਰਕੀਟਿੰਗ ਲਈ ਵਰਤਦੇ ਹਾਂ। ਸਵਾਲ ਹੋਣ ਤਾਂ ਕਾਲ ਕਰੋ: +64 22 099 9578।",
+ "priv.t":"ਪਰਦੇਦਾਰੀ","priv.b":"ਇਹ ਸਾਈਟ ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਤੇ ਥੀਮ ਦੀ ਪਸੰਦ ਬ੍ਰਾਊਜ਼ਰ ਬੰਦ ਕਰਨ ਤੱਕ ਤੁਹਾਡੇ ਡਿਵਾਈਸ 'ਤੇ ਰੱਖਦੀ ਹੈ। ਸੰਪਰਕ ਫਾਰਮ ਰਾਹੀਂ ਭੇਜੀ ਜਾਣਕਾਰੀ ਇੱਕ ਫਾਰਮ ਸੇਵਾ ਰਾਹੀਂ ਸਾਡੇ ਤੱਕ ਪਹੁੰਚਦੀ ਹੈ ਤੇ ਜਵਾਬ ਦੇਣ ਲਈ ਸਾਡੇ ਕਲਾਇੰਟ ਸਿਸਟਮ ਵਿੱਚ ਸੰਭਾਲੀ ਜਾਂਦੀ ਹੈ। ਤੁਹਾਡੀ ਸਹਿਮਤੀ ਤੋਂ ਬਿਨਾਂ ਅਸੀਂ ਇਸ ਨੂੰ ਨਾ ਵੇਚਦੇ ਹਾਂ, ਨਾ ਮਾਰਕੀਟਿੰਗ ਲਈ ਵਰਤਦੇ ਹਾਂ। ਜੇ ਅਸੀਂ ਇਕੱਠੇ ਕੰਮ ਨਹੀਂ ਕਰਦੇ, ਤਾਂ ਇਹ 12 ਮਹੀਨਿਆਂ ਬਾਅਦ ਮਿਟਾ ਦਿੱਤੀ ਜਾਂਦੀ ਹੈ। ਸਵਾਲ ਹੋਣ ਤਾਂ ਕਾਲ ਕਰੋ: +64 22 099 9578।",
  "wx.sun":"ਧੁੱਪ","wx.cloud":"ਬੱਦਲ","wx.rain":"ਮੀਂਹ","wx.storm":"ਤੂਫ਼ਾਨ",
  "wx.live":"ਹੁਣ ਲਾਈਵ",
  "why.t":"ਸਾਡੇ ਨਾਲ ਕਿਉਂ","why.s":"ਸਾਡੇ ਨਾਲ ਕੰਮ ਕਰਨ 'ਤੇ ਤੁਸੀਂ ਇਹ ਉਮੀਦ ਕਰ ਸਕਦੇ ਹੋ।",
@@ -4770,22 +4772,22 @@ pa:{
  "form.okname":"ਧੰਨਵਾਦ {name}, ਅਸੀਂ ਜਲਦੀ ਸੰਪਰਕ ਕਰਾਂਗੇ",
  "how.eyebrow":"ਤਿੰਨ ਕਦਮ, ਇਸੇ ਤਰਤੀਬ ਵਿੱਚ","how.title":"ਕੰਮ ਕਿਵੇਂ ਹੁੰਦਾ ਹੈ",
  "how.s1t":"ਪਹਿਲਾਂ ਅਸੀਂ ਕੰਮ ਦੇਖਦੇ ਹਾਂ","how.s1d":"ਜਿਹੜਾ ਅਸਲ ਵਿੱਚ ਇਹ ਕੰਮ ਕਰਦਾ ਹੈ, ਉਸ ਨਾਲ ਬੈਠਦੇ ਹਾਂ। ਜਾਂਦੇ ਵੇਲੇ ਤੁਹਾਨੂੰ ਲਿਖਤੀ ਪਲਾਨ ਤੇ ਘੰਟਿਆਂ ਦਾ ਅੰਦਾਜ਼ਾ ਮਿਲਦਾ ਹੈ। ਕੰਮ ਨਾ ਦਿਓ ਤਾਂ ਵੀ ਉਹ ਤੁਹਾਡਾ ਹੈ।",
- "how.s2t":"ਪਹਿਲਾਂ ਸਿਰਫ਼ ਇੱਕ ਆਟੋਮੇਸ਼ਨ ਬਣਾਉਂਦੇ ਹਾਂ","how.s2d":"ਆਮ ਤੌਰ 'ਤੇ ਦੋ ਤੋਂ ਤਿੰਨ ਹਫ਼ਤੇ, ਕੰਮ 'ਤੇ ਨਿਰਭਰ। ਲਾਈਵ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਸੀਂ ਇਸ ਨੂੰ ਆਪਣੇ ਅਸਲੀ ਕੰਮਾਂ 'ਤੇ ਚੱਲਦਾ ਦੇਖਦੇ ਹੋ, ਮੌਜੂਦਾ ਤਰੀਕੇ ਨਾਲ ਮਿਲਾ ਕੇ ਜਾਂਚਦੇ ਹੋਏ।",
- "how.s3t":"ਫਿਰ ਇਹ ਤੁਹਾਡਾ ਹੈ","how.s3d":"ਅਸੀਂ ਲੌਗਇਨ ਸੌਂਪਦੇ ਹਾਂ, ਤੁਹਾਡੀ ਟੀਮ ਨੂੰ ਸਿਖਾਉਂਦੇ ਹਾਂ ਤੇ ਮਦਦ ਲਈ ਉਪਲਬਧ ਰਹਿੰਦੇ ਹਾਂ। ਜੇ ਤੁਸੀਂ ਸਾਡੇ ਨਾਲ ਕੰਮ ਬੰਦ ਕਰੋ, ਤਾਂ ਆਟੋਮੇਸ਼ਨ ਤੁਹਾਡੇ ਖਾਤਿਆਂ ਵਿੱਚ ਹੀ ਰਹਿੰਦਾ ਹੈ।",
+ "how.s2t":"ਪਹਿਲਾਂ ਸਿਰਫ਼ ਇੱਕ ਆਟੋਮੇਸ਼ਨ ਬਣਾਉਂਦੇ ਹਾਂ","how.s2d":"ਆਮ ਤੌਰ 'ਤੇ ਇੱਕ ਤੋਂ ਦੋ ਹਫ਼ਤੇ, ਕੰਮ 'ਤੇ ਨਿਰਭਰ। ਲਾਈਵ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਤੁਸੀਂ ਇਸ ਨੂੰ ਆਪਣੇ ਅਸਲੀ ਕੰਮਾਂ 'ਤੇ ਚੱਲਦਾ ਦੇਖਦੇ ਹੋ, ਮੌਜੂਦਾ ਤਰੀਕੇ ਨਾਲ ਮਿਲਾ ਕੇ ਜਾਂਚਦੇ ਹੋਏ।",
+ "how.s3t":"ਫਿਰ ਇਹ ਤੁਹਾਡਾ ਹੈ","how.s3d":"ਅਸੀਂ ਲੌਗਇਨ ਸੌਂਪਦੇ ਹਾਂ, ਤੁਹਾਡੀ ਟੀਮ ਨੂੰ ਸਿਖਾਉਂਦੇ ਹਾਂ ਤੇ ਪਹਿਲੇ 30 ਦਿਨ ਸੁਧਾਰ ਤੇ ਬਦਲਾਅ ਮੁਫ਼ਤ ਕਰਦੇ ਹਾਂ। ਜੇ ਤੁਸੀਂ ਸਾਡੇ ਨਾਲ ਕੰਮ ਬੰਦ ਕਰੋ, ਤਾਂ ਆਟੋਮੇਸ਼ਨ ਤੁਹਾਡੇ ਖਾਤਿਆਂ ਵਿੱਚ ਹੀ ਰਹਿੰਦਾ ਹੈ।",
  "trust.eyebrow":"ਸਭ ਕੁਝ ਬਦਲਣ ਦੀ ਲੋੜ ਨਹੀਂ","trust.title":"ਤੁਹਾਡੇ ਮੌਜੂਦਾ ਟੂਲਾਂ ਦੇ ਆਲੇ-ਦੁਆਲੇ ਹੀ ਬਣਦਾ ਹੈ",
  "trust.lead":"ਬਹੁਤੀ ਵਾਰ ਨਵੇਂ ਸੌਫ਼ਟਵੇਅਰ ਦੀ ਲੋੜ ਨਹੀਂ ਪੈਂਦੀ। ਅਸੀਂ ਉਸੇ ਤੋਂ ਸ਼ੁਰੂ ਕਰਦੇ ਹਾਂ ਜੋ ਪਹਿਲਾਂ ਹੀ ਤੁਹਾਡੇ ਮੇਜ਼ ਤੇ ਫ਼ੋਨ ਵਿੱਚ ਹੈ।",
- "trust.u1t":"ਡਾਟਾ ਤੁਹਾਡਾ ਹੀ ਰਹਿੰਦਾ ਹੈ","trust.u1d":"ਪ੍ਰਾਈਵੇਸੀ ਐਕਟ 2020 ਹੇਠ। ਤੁਹਾਡੇ ਲਈ ਜੋ ਡਾਟਾ ਅਸੀਂ ਰੱਖਦੇ ਹਾਂ, ਉਹ ਜਿੱਥੋਂ ਤੱਕ ਹੋ ਸਕੇ ਨਿਊਜ਼ੀਲੈਂਡ ਜਾਂ ਆਸਟ੍ਰੇਲੀਆ ਵਿੱਚ ਰਹਿੰਦਾ ਹੈ, ਤੇ ਜੇ ਕੋਈ ਟੂਲ ਡਾਟਾ ਵਿਦੇਸ਼ ਵਿੱਚ ਰੱਖਦਾ ਹੈ ਤਾਂ ਅਸੀਂ ਪਹਿਲਾਂ ਦੱਸਦੇ ਹਾਂ।",
+ "trust.u1t":"ਡਾਟਾ ਤੁਹਾਡਾ ਹੀ ਰਹਿੰਦਾ ਹੈ","trust.u1d":"ਪ੍ਰਾਈਵੇਸੀ ਐਕਟ 2020 ਹੇਠ। ਤੁਹਾਡੇ ਲਈ ਜੋ ਡਾਟਾ ਅਸੀਂ ਰੱਖਦੇ ਹਾਂ, ਉਹ ਜਿੱਥੋਂ ਤੱਕ ਹੋ ਸਕੇ ਨਿਊਜ਼ੀਲੈਂਡ ਜਾਂ ਆਸਟ੍ਰੇਲੀਆ ਵਿੱਚ ਰਹਿੰਦਾ ਹੈ, ਤੇ ਜੇ ਕੋਈ ਟੂਲ ਡਾਟਾ ਵਿਦੇਸ਼ ਵਿੱਚ ਰੱਖਦਾ ਹੈ ਤਾਂ ਅਸੀਂ ਪਹਿਲਾਂ ਦੱਸਦੇ ਹਾਂ। ਤੁਹਾਡੇ ਡਾਟਾ 'ਤੇ ਸਿਰਫ਼ ਸਾਡੀ ਆਪਣੀ ਟੀਮ ਕੰਮ ਕਰਦੀ ਹੈ, ਤੇ AI ਟੂਲ ਅਜਿਹੇ ਬਿਜ਼ਨਸ ਪਲਾਨਾਂ 'ਤੇ ਚੱਲਦੇ ਹਨ ਜੋ ਤੁਹਾਡੇ ਡਾਟਾ ਨਾਲ ਟ੍ਰੇਨਿੰਗ ਨਹੀਂ ਕਰਦੇ।",
  "trust.u2t":"ਫ਼ੋਨ ਬੰਦਾ ਚੁੱਕਦਾ ਹੈ","trust.u2d":"ਇੱਕ ਪੱਕਾ ਬੰਦਾ ਜੋ ਤੁਹਾਡਾ ਕਾਰੋਬਾਰ ਸਮਝਦਾ ਹੈ, ਨਿਊਜ਼ੀਲੈਂਡ ਦੇ ਵੇਲੇ ਉਪਲਬਧ। ਟਿਕਟ ਦੀ ਲਾਈਨ ਨਹੀਂ।",
  "faq.eyebrow":"ਸਿੱਧੇ ਜਵਾਬ","faq.title":"ਆਮ ਪੁੱਛੇ ਜਾਂਦੇ ਸਵਾਲ",
  "faq.q1":"ਕੀ ਇਸ ਨਾਲ ਮੇਰਾ ਸਟਾਫ਼ ਹਟ ਜਾਵੇਗਾ?","faq.a1":"ਨਹੀਂ। ਇਹ ਵਾਰ-ਵਾਰ ਹੋਣ ਵਾਲਾ ਕੰਮ ਹਟਾਉਂਦਾ ਹੈ ਤਾਂ ਜੋ ਤੁਹਾਡੇ ਬੰਦੇ ਉਹ ਕੰਮ ਕਰਨ ਜਿਸ ਵਿੱਚ ਸਮਝ, ਹੱਥ ਜਾਂ ਮੁਸਕਰਾਹਟ ਚਾਹੀਦੀ ਹੈ। ਮਕਸਦ ਹੋਰ ਕੰਮ ਲਈ ਸਮਾਂ ਕੱਢਣਾ ਹੈ, ਸਟਾਫ਼ ਘਟਾਉਣਾ ਨਹੀਂ।",
  "faq.q2":"ਮੈਨੂੰ ਤਕਨੀਕ ਦੀ ਸਮਝ ਨਹੀਂ।","faq.a2":"ਕੋਈ ਗੱਲ ਨਹੀਂ। ਤੁਸੀਂ ਸਿਰਫ਼ ਦਿਖਾ ਦਿਓ ਕਿ ਅੱਜ ਇਹ ਕੰਮ ਕਿਵੇਂ ਹੁੰਦਾ ਹੈ — ਬਾਕੀ ਅਸੀਂ ਸਾਂਭਦੇ ਹਾਂ ਤੇ ਸੌਖੇ ਸ਼ਬਦਾਂ ਵਿੱਚ ਸਮਝਾਉਂਦੇ ਹਾਂ।",
- "faq.q3":"ਜੇ ਕੁਝ ਵਿਗੜ ਜਾਵੇ?","faq.a3":"ਜਿੱਥੇ ਟੂਲ ਇਜਾਜ਼ਤ ਦੇਣ, ਅਸੀਂ ਨਿਗਰਾਨੀ ਲਗਾਉਂਦੇ ਹਾਂ ਤਾਂ ਜੋ ਬਹੁਤੀਆਂ ਸਮੱਸਿਆਵਾਂ ਛੇਤੀ ਫੜੀਆਂ ਜਾਣ। ਸ਼ੁਰੂ ਹੋਣ ਤੋਂ ਬਾਅਦ ਕਿਹੜੀ ਮਦਦ ਸ਼ਾਮਲ ਹੈ, ਇਹ ਕੰਮ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਲਿਖਤੀ ਤੈਅ ਹੁੰਦਾ ਹੈ।",
+ "faq.q3":"ਜੇ ਕੁਝ ਵਿਗੜ ਜਾਵੇ?","faq.a3":"ਜਿੱਥੇ ਟੂਲ ਇਜਾਜ਼ਤ ਦੇਣ, ਅਸੀਂ ਨਿਗਰਾਨੀ ਲਗਾਉਂਦੇ ਹਾਂ ਤਾਂ ਜੋ ਬਹੁਤੀਆਂ ਸਮੱਸਿਆਵਾਂ ਛੇਤੀ ਫੜੀਆਂ ਜਾਣ। ਲਾਂਚ ਤੋਂ ਬਾਅਦ ਪਹਿਲੇ 30 ਦਿਨ ਸੁਧਾਰ ਤੇ ਬਦਲਾਅ ਮੁਫ਼ਤ ਹਨ। ਉਸ ਤੋਂ ਬਾਅਦ ਮਹੀਨਾਵਾਰ ਸਪੋਰਟ ਪਲਾਨ ਜਾਂ ਲੋੜ ਮੁਤਾਬਕ ਭੁਗਤਾਨ, ਜੋ ਤੁਹਾਨੂੰ ਠੀਕ ਲੱਗੇ।",
  "faq.q4":"ਆਕਲੈਂਡ ਤੋਂ ਬਾਹਰ ਵੀ ਕੰਮ ਕਰਦੇ ਹੋ?","faq.a4":"ਹਾਂ, ਪੂਰੇ ਦੇਸ਼ ਵਿੱਚ। ਬਹੁਤਾ ਕੰਮ ਰਿਮੋਟ ਹੁੰਦਾ ਹੈ, ਤੇ ਪਹਿਲੀ ਵਾਕਥਰੂ ਲਈ ਲੋੜ ਪਵੇ ਤਾਂ ਅਸੀਂ ਆਉਂਦੇ ਹਾਂ।",
  "faq.q5":"ਮੇਰਾ ਕਾਰੋਬਾਰ ਬਹੁਤ ਛੋਟਾ ਹੈ?","faq.a5":"ਜੇ ਇੱਕੋ ਕੰਮ 'ਤੇ ਹਫ਼ਤੇ ਵਿੱਚ ਤਿੰਨ ਘੰਟੇ ਤੋਂ ਵੱਧ ਲੱਗਦੇ ਹਨ, ਤਾਂ ਆਮ ਤੌਰ 'ਤੇ ਇਸ ਨੂੰ ਦੇਖਣਾ ਫ਼ਾਇਦੇਮੰਦ ਹੁੰਦਾ ਹੈ, ਭਾਵੇਂ ਇੱਕ ਵੈਨ ਹੋਵੇ ਜਾਂ ਚਾਲੀ ਬੰਦੇ।",
  "form.eyebrow":"ਮੁਫ਼ਤ ਸੈਸ਼ਨ","form.title":"ਆਪਣਾ ਫ਼ਰੀ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ","form.lead":"ਸਾਨੂੰ ਦੱਸੋ ਤੁਹਾਡਾ ਹਫ਼ਤਾ ਕਿੱਥੇ ਜਾਂਦਾ ਹੈ। ਅਸੀਂ ਪਲਾਨ ਤੇ ਘੰਟਿਆਂ ਦਾ ਅੰਦਾਜ਼ਾ ਲੈ ਕੇ ਮੁੜਾਂਗੇ।",
  "form.name":"ਤੁਹਾਡਾ ਨਾਂ","form.biz":"ਕਾਰੋਬਾਰ ਦਾ ਨਾਂ","form.email":"ਈਮੇਲ","form.phone":"ਫ਼ੋਨ",
  "form.msg":"ਤੁਹਾਡਾ ਸਮਾਂ ਕਿਸ ਕੰਮ ਵਿੱਚ ਜਾਂਦਾ ਹੈ?","form.send":"ਬੇਨਤੀ ਭੇਜੋ",
- "form.note":"ਅਸੀਂ ਇੱਕ ਕੰਮ-ਵਾਲੇ ਦਿਨ ਵਿੱਚ ਜਵਾਬ ਦੇਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦੇ ਹਾਂ। ਜਾਂ +64 22 099 9578 'ਤੇ ਕਾਲ ਕਰੋ।",
+ "form.note":"ਅਸੀਂ ਇੱਕ ਕੰਮ-ਵਾਲੇ ਦਿਨ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ, ਹਿੰਦੀ ਜਾਂ ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਦੇਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦੇ ਹਾਂ। ਜਾਂ +64 22 099 9578 'ਤੇ ਕਾਲ ਕਰੋ।",
  "foot.tag":"ਆਕਲੈਂਡ ਵਿੱਚ ਬਣਿਆ। ਪੂਰੇ ਨਿਊਜ਼ੀਲੈਂਡ ਵਿੱਚ ਕੰਮ।",
  "foot.fine":"ਅਨੁਵਾਦ ਸਹੂਲਤ ਲਈ ਹਨ ਤੇ ਇਹਨਾਂ ਵਿੱਚ ਗਲਤੀਆਂ ਹੋ ਸਕਦੀਆਂ ਹਨ। ਕਿਸੇ ਫ਼ਰਕ ਦੀ ਸੂਰਤ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ ਰੂਪ ਮੰਨਿਆ ਜਾਵੇਗਾ।"
 }

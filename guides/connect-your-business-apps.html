@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Connect your business apps: stop retyping in NZ | Ambs Solutions</title>
-<meta name="description" content="A practical guide for NZ small businesses to connecting apps like Xero, Shopify and Gmail: triggers, actions, data flow, errors and one source of truth.">
+<meta name="description" content="How NZ small businesses can connect Xero, Microsoft 365 and Google Workspace: triggers, actions, data flow, errors and one source of truth.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://ambs.co.nz/guides/connect-your-business-apps">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Ambs Solutions">
 <meta property="og:url" content="https://ambs.co.nz/guides/connect-your-business-apps">
 <meta property="og:title" content="Connect your business apps: stop retyping in NZ | Ambs Solutions">
-<meta property="og:description" content="A practical guide for NZ small businesses to connecting apps like Xero, Shopify and Gmail: triggers, actions, data flow, errors and one source of truth.">
+<meta property="og:description" content="How NZ small businesses can connect Xero, Microsoft 365 and Google Workspace: triggers, actions, data flow, errors and one source of truth.">
 <meta property="og:image" content="https://ambs.co.nz/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -28,20 +28,27 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/pages.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "How to connect your business apps", "item": "https://ambs.co.nz/guides/connect-your-business-apps"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "How to connect your business apps", "description": "A practical guide for NZ small businesses to connecting apps like Xero, Shopify and Gmail: triggers, actions, data flow, errors and one source of truth.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1477, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/connect-your-business-apps", "image": "https://ambs.co.nz/logo.png", "articleSection": "Automation"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to replace my software to connect my apps?", "acceptedAnswer": {"@type": "Answer", "text": "Usually not. Most popular business tools, including Xero, MYOB, Shopify, Gmail, Outlook 365 and Google Sheets, can share information with other apps. The work is in connecting them sensibly, not replacing them."}}, {"@type": "Question", "name": "What happens if a connection stops working?", "acceptedAnswer": {"@type": "Answer", "text": "A well-built connection notices the failure, keeps the information that did not go through and alerts a named person, so it can be fixed and retried. The worst outcome is a connection that fails quietly, so error alerts should be part of the setup from day one."}}, {"@type": "Question", "name": "Is it safe to connect apps that hold customer information?", "acceptedAnswer": {"@type": "Answer", "text": "It can be, as long as you know what information is being shared, where it is stored and who can access each app. Only pass across the details the other app actually needs, and review access when staff leave."}}, {"@type": "Question", "name": "Can I connect apps myself?", "acceptedAnswer": {"@type": "Answer", "text": "Simple connections between two popular apps are often manageable for a confident owner. The difficulty usually comes with matching records, handling errors and keeping things running as your apps update, which is where help can save time."}}]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "How to connect your business apps", "item": "https://ambs.co.nz/guides/connect-your-business-apps"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "How to connect your business apps", "description": "How NZ small businesses can connect Xero, Microsoft 365 and Google Workspace: triggers, actions, data flow, errors and one source of truth.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1566, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/connect-your-business-apps", "image": "https://ambs.co.nz/logo.png", "articleSection": "Automation"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to replace my software to connect my apps?", "acceptedAnswer": {"@type": "Answer", "text": "Usually not. We connect Microsoft 365 (Outlook, Excel, Teams, OneDrive and SharePoint), Google Workspace (Gmail, Google Calendar, Google Sheets and Google Drive) and Xero. If you also use a point-of-sale, booking or other system, we do not connect to it directly, but where it can export to Excel or Google Sheets, or sends you emails, we work from what it already produces. The work is in connecting things sensibly, not replacing them."}}, {"@type": "Question", "name": "What happens if a connection stops working?", "acceptedAnswer": {"@type": "Answer", "text": "A well-built connection notices the failure, keeps the information that did not go through and alerts a named person, so it can be fixed and retried. The worst outcome is a connection that fails quietly, so error alerts should be part of the setup from day one."}}, {"@type": "Question", "name": "Is it safe to connect apps that hold customer information?", "acceptedAnswer": {"@type": "Answer", "text": "It can be, as long as you know what information is being shared, where it is stored and who can access each app. Only pass across the details the other app actually needs, and review access when staff leave."}}, {"@type": "Question", "name": "Can I connect apps myself?", "acceptedAnswer": {"@type": "Answer", "text": "Simple connections between two popular apps are often manageable for a confident owner. The difficulty usually comes with matching records, handling errors and keeping things running as your apps update, which is where help can save time."}}]}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="progress" aria-hidden="true"></div>
-<header class="hdr"><div class="wrap">
-  <a class="hdr-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo.webp" type="image/webp"><img src="/logo.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
-  <nav class="hdr-nav" id="siteNav" aria-label="Main">
-    <a href="/services">Services</a><a href="/#about">About</a><a href="/#how">How it works</a><a href="/industries">Industries</a><a href="/guides" aria-current="page">Guides</a>
-    <a class="btn btn--go nav-book" href="/#book">Book a free session</a>
+<header class="hdr"><div class="sh-bar">
+  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo.webp" type="image/webp"><img src="/logo.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
+  <div class="sh-right">
+    <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
+    <nav class="sh-nav" aria-label="Main"><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#how">How it works</a><a href="/guides" aria-current="page">Guides</a><a href="/#faq">Questions</a></nav>
+    <a class="sh-btn sh-book" href="/#book">Book a call</a>
+    <a class="sh-btn sh-contact" href="/#contact">Contact us</a>
+    <a class="sh-ico sh-sm" href="mailto:hello@ambs.co.nz" aria-label="Email us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="17" rx="2.6"/><path d="M3 5.2L12 12.8l9-7.6"/></svg></a>
+    <a class="sh-ico sh-sm" href="tel:+64220999578" aria-label="Call us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+    <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
+  </div>
+  <nav class="sh-drawer" id="siteNav" aria-label="Menu">
+    <a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a><a href="/guides" aria-current="page">Guides</a><a href="/#faq">Questions</a>
+    <div class="sh-more"><a href="/services">Services</a><a href="/industries">Industries</a><a href="/guides">Browse all guides</a></div>
+    <a class="sh-btn sh-contact sh-wide" href="/#contact">Contact us</a>
   </nav>
-  <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
-  <a class="btn btn--go" href="/#book">Book a free session</a>
-  <button class="icon-btn menu-toggle" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div></header>
 <main id="main">
 <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/guides">Guides</a></li><li aria-current="page">How to connect your business apps</li></ol></nav></div>
@@ -56,7 +63,7 @@
 <div class="takeaways"><b>In short</b><ul><li>Most app connections follow one pattern: when something happens in one app, do something in another.</li><li>Map how information moves through your business before connecting anything.</li><li>Decide which app is the source of truth for each type of information, and only edit it there.</li><li>Every connection needs a named person who is alerted when it fails.</li><li>A well-kept spreadsheet is fine for small volumes. Connect apps when the retyping becomes a weekly cost.</li></ul></div>
 <h2>Why the same job gets typed three times</h2>
 <p>Most small businesses did not choose their software all at once. The accounting software came first, then an online store, then a booking app, then a spreadsheet someone set up to track jobs. Each tool does its own job well. The trouble is that none of them knows what the others are doing.</p>
-<p>So people fill the gaps. An order arrives in Shopify and someone types it into a spreadsheet for packing. A job is booked by email and someone creates the customer in Xero. A supplier invoice lands in Outlook and someone keys it into MYOB. Each step only takes a little while, but they happen all day, and every retype is a chance for a typo, a missed order or an invoice that never goes out.</p>
+<p>So people fill the gaps. An order arrives in your online store and someone types it into a spreadsheet for packing. A job is booked by email and someone creates the customer in Xero. A supplier invoice lands in Outlook and someone keys it into the accounting software. Each step only takes a little while, but they happen all day, and every retype is a chance for a typo, a missed order or an invoice that never goes out.</p>
 <p>On our home page we describe this as "no more retyping the same job into three systems." Copying details between two systems turns up in almost every industry.</p>
 
 <h2>How app connections work</h2>
@@ -81,15 +88,15 @@
 <p>This map is also useful for deciding <a href="/guides/how-to-choose-what-to-automate-first">what to automate first</a>, because it shows where the effort really goes.</p>
 
 <h2>Examples of useful connections</h2>
-<p>These are common connections between tools many New Zealand businesses already use. Each one replaces a manual copy with an automatic one.</p>
+<p>These are common connections between tools many New Zealand businesses already use. Each one replaces a manual copy with an automatic one. The tools we connect are Microsoft 365, Google Workspace and Xero. Where another system is involved, such as an online store or point-of-sale, we work from the emails or Excel and Google Sheets exports it already produces rather than connecting to it directly.</p>
 <table>
   <thead><tr><th>When this happens</th><th>This happens automatically</th></tr></thead>
   <tbody>
-    <tr><td>An order is paid in Shopify</td><td>The sale is recorded in Xero or MYOB, and a packing row is added to Google Sheets</td></tr>
-    <tr><td>A supplier invoice arrives in Gmail or Outlook 365</td><td>It is passed to a receipt tool such as Hubdoc, and the details go into your accounting software as a bill for checking</td></tr>
+    <tr><td>An order confirmation email arrives from your online store</td><td>A packing row is added to Google Sheets, and the sale is recorded in Xero</td></tr>
+    <tr><td>A supplier invoice arrives in Gmail or Outlook</td><td>The details go into Xero as a draft bill for checking</td></tr>
     <tr><td>A customer accepts a quote</td><td>A draft invoice is created in Xero with the approved line items</td></tr>
-    <tr><td>A website enquiry is submitted on Squarespace</td><td>The contact is added to Zoho and the right person is alerted by email or WhatsApp</td></tr>
-    <tr><td>The day's sales close in Lightspeed</td><td>A summary is added to an Excel or Google Sheets file and sent to the owner's phone</td></tr>
+    <tr><td>A website enquiry form is submitted</td><td>The contact is added to your customer list in Excel or Google Sheets and the right person is alerted by email or in Teams</td></tr>
+    <tr><td>Your point-of-sale system emails its end-of-day sales report</td><td>A summary is added to an Excel or Google Sheets file and sent to the owner's phone</td></tr>
   </tbody>
 </table>
 <p>Our guide to <a href="/guides/automate-quotes-and-invoices">automating quotes and invoices</a> shows how one of these works end to end, and the <a href="/guides/weekly-business-numbers-dashboard">weekly business numbers guide</a> shows how connected apps can feed a single summary.</p>
@@ -98,7 +105,7 @@
 <p>When apps are connected, the same information can appear in several places. That is fine, as long as everyone knows which app is in charge of it. This is called the source of truth.</p>
 <p>For example, you might decide that:</p>
 <ul>
-  <li>Customer contact details live in your customer list, such as Zoho.</li>
+  <li>Customer contact details live in your customer list, such as an Excel or Google Sheets file.</li>
   <li>Invoices and payments live in your accounting software.</li>
   <li>Stock levels live in your point-of-sale or online store.</li>
   <li>Bookings live in your booking app.</li>
@@ -131,7 +138,7 @@
   <li>You spend more than a few hours a week keeping it up to date.</li>
 </ul>
 <p>Even then, the spreadsheet can stay. Often the best first step is simply to fill it automatically, so it keeps doing its job without anyone typing into it. That is a small, low-risk change, and a good way to see what connected apps can do for your business.</p>
-<h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need to replace my software to connect my apps?</summary><p>Usually not. Most popular business tools, including Xero, MYOB, Shopify, Gmail, Outlook 365 and Google Sheets, can share information with other apps. The work is in connecting them sensibly, not replacing them.</p></details><details><summary>What happens if a connection stops working?</summary><p>A well-built connection notices the failure, keeps the information that did not go through and alerts a named person, so it can be fixed and retried. The worst outcome is a connection that fails quietly, so error alerts should be part of the setup from day one.</p></details><details><summary>Is it safe to connect apps that hold customer information?</summary><p>It can be, as long as you know what information is being shared, where it is stored and who can access each app. Only pass across the details the other app actually needs, and review access when staff leave.</p></details><details><summary>Can I connect apps myself?</summary><p>Simple connections between two popular apps are often manageable for a confident owner. The difficulty usually comes with matching records, handling errors and keeping things running as your apps update, which is where help can save time.</p></details></div>
+<h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need to replace my software to connect my apps?</summary><p>Usually not. We connect Microsoft 365 (Outlook, Excel, Teams, OneDrive and SharePoint), Google Workspace (Gmail, Google Calendar, Google Sheets and Google Drive) and Xero. If you also use a point-of-sale, booking or other system, we do not connect to it directly, but where it can export to Excel or Google Sheets, or sends you emails, we work from what it already produces. The work is in connecting things sensibly, not replacing them.</p></details><details><summary>What happens if a connection stops working?</summary><p>A well-built connection notices the failure, keeps the information that did not go through and alerts a named person, so it can be fixed and retried. The worst outcome is a connection that fails quietly, so error alerts should be part of the setup from day one.</p></details><details><summary>Is it safe to connect apps that hold customer information?</summary><p>It can be, as long as you know what information is being shared, where it is stored and who can access each app. Only pass across the details the other app actually needs, and review access when staff leave.</p></details><details><summary>Can I connect apps myself?</summary><p>Simple connections between two popular apps are often manageable for a confident owner. The difficulty usually comes with matching records, handling errors and keeping things running as your apps update, which is where help can save time.</p></details></div>
   </article>
   <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
 </div>
