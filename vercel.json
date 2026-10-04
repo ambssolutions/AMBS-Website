@@ -1,18 +1,5 @@
 {
   "cleanUrls": true,
-  "redirects": [
-    {
-      "source": "/:path((?!invoice).*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.ambs.co.nz"
-        }
-      ],
-      "destination": "https://ambs.co.nz/:path*",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
