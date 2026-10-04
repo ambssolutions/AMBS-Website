@@ -3947,6 +3947,31 @@ html:not([data-theme="dark"]).sky-night #automate .wd-grp--g,html:not([data-them
 .hero h1{opacity:1!important}
 .hero h1 .tx-w{opacity:.35}
 .hero h1.tx-in .tx-w,.hero .tx-in .tx-w{opacity:1}
+
+/* people who ask their device for less motion still get the text fading in as they scroll, with nothing sliding or rising */
+@media(prefers-reduced-motion:reduce){
+  html .tx-w,html .tx-fade,html .tx-up{transform:none!important;transition:opacity .7s ease!important}
+  html .tx-w{opacity:0!important;transition-delay:calc(var(--wi,0) * 40ms)!important}
+  html .tx-in .tx-w,html .hero h1 .tx-w{opacity:1!important}
+  html .tx-fade:not(.tx-in),html .tx-up:not(.tx-in){opacity:0!important}
+  html .tx-fade.tx-in,html .tx-up.tx-in{opacity:1!important}
+  html .tx-up{transition-delay:var(--td,0ms)!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  /* reduced motion: cards still fade their contents in when they open (no sliding) */
+  .wd--list .wd-in>*{transform:none!important;transition:opacity .6s ease!important}
+  .wd--list .wd-panel:not(.open) .wd-in>*{opacity:0!important}
+  .wd--list .wd-panel.open .wd-in>*{opacity:1!important}
+}
+
+/* ---- text that animates whenever something opens or changes (answers, cards, captions) ---- */
+.ow{display:inline-block;white-space:pre-wrap}
+.ow-go .ow{animation:ow-in .6s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(min(var(--wi,0),40) * 16ms)}
+.ow-fade{animation:ow-in .6s cubic-bezier(.16,1,.3,1) both}
+@keyframes ow-in{from{opacity:0;transform:translateY(.45em)}}
+@keyframes ow-fade-only{from{opacity:0}}
+@media(prefers-reduced-motion:reduce){.ow-go .ow,.ow-fade{animation-name:ow-fade-only}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -5989,7 +6014,7 @@ if("IntersectionObserver" in window && !reduced){
    Runs again after a language change, because switching language rewrites the text. */
 (function(){
   var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var io=(!calm&&"IntersectionObserver" in window)?new IntersectionObserver(function(es){
+  var io=("IntersectionObserver" in window)?new IntersectionObserver(function(es){
     es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("tx-in");io.unobserve(e.target);}});
   },{threshold:.2,rootMargin:"0px 0px -6% 0px"}):null;
   function esc(x){return x.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
@@ -6008,7 +6033,7 @@ if("IntersectionObserver" in window && !reduced){
     el.innerHTML=html;
   }
   function watch(el){
-    if(calm||!io){el.classList.add("tx-in");return;}
+    if(!io){el.classList.add("tx-in");return;}
     if(!el.dataset.txSeen){el.dataset.txSeen="1";io.observe(el);}
   }
   window.splitText=function(){
@@ -6026,7 +6051,7 @@ if("IntersectionObserver" in window && !reduced){
   var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   var sel="main h3[data-i18n],main p[data-i18n]:not(.lead):not(.eyebrow):not(.grp),main li[data-i18n],main label[data-i18n],main summary[data-i18n],main .grp,main .tool,main .chip,main .tf-cap,main .fr-meter,main .kh-card,main .kh-foot";
   var els=[].slice.call(document.querySelectorAll(sel)).filter(function(el){return !el.closest(".hero .docket .tickets,.tools-track [aria-hidden],header,.wd");});
-  if(calm||!("IntersectionObserver" in window))return;
+  if(!("IntersectionObserver" in window))return;
   var io=new IntersectionObserver(function(es){
     var vis=es.filter(function(e){return e.isIntersecting;});
     vis.forEach(function(e,i){e.target.style.setProperty("--td",Math.min(i,8)*90+"ms");e.target.classList.add("tx-in");io.unobserve(e.target);});
@@ -6153,12 +6178,12 @@ if("IntersectionObserver" in window && !reduced){
     f.t=setTimeout(function(){if(flipping===f){flipping=null;f.done();}},FLIP_MS+30);
     flipping=f;
   }
-  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);flip(k,isOpen[k]);if(isOpen[k])show(k);}
+  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);flip(k,isOpen[k]);if(isOpen[k]){show(k);copyIn(k,260);}}
   if("IntersectionObserver" in window){
     var opener=new IntersectionObserver(function(es){es.forEach(function(e){
       if(mode!=="list"||!e.isIntersecting||e.boundingClientRect.top<innerHeight*.3)return;
       var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
-      isOpen[k]=true;settle(k);flip(k,true);show(k);
+      isOpen[k]=true;settle(k);flip(k,true);show(k);copyIn(k,260);
     });},{rootMargin:"0px 0px -22% 0px"});
     accs.forEach(function(a){opener.observe(a);});
     var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
@@ -6169,8 +6194,11 @@ if("IntersectionObserver" in window && !reduced){
   function run(){panels.forEach(function(p,k){p.classList.toggle("vis",mode==="list"&&inView[k]);p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]&&(settled[k]||!("IntersectionObserver" in window))):(visible&&k===cur));});}
   /* a panel counts as settled a moment after it opens, once its height has finished easing */
   function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:950);}
+  function copyIn(k,delay){var c=panels[k]&&panels[k].querySelector(".wd-copy");if(!c||!window.textOpen)return;
+    if(mode!=="list")window.textOpen(c.querySelector("h3"),delay||0);
+    window.textOpen(c.querySelector("p"),(delay||0)+(mode==="list"?0:120));}
   function show(i,fromSwipe){
-    if(i===cur)return;cur=i;
+    if(i===cur)return;cur=i;if(mode!=="list")copyIn(i,60);
     tabs.forEach(function(t,k){var on=k===i;t.setAttribute("aria-selected",String(on));t.tabIndex=on?0:-1;});
     panels.forEach(function(p,k){var on=k===i||mode!=="scroll";p.classList.toggle("on",on);if(on)p.removeAttribute("inert");else p.setAttribute("inert","");});
     dotEls.forEach(function(d,k){d.classList.toggle("on",k===i);});
@@ -6282,6 +6310,46 @@ if("IntersectionObserver" in window && !reduced){
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
   if("ResizeObserver" in window)new ResizeObserver(later).observe(copy);
   fit();
+})();
+</script>
+<script>
+/* words rise in one after another whenever a piece of text opens or changes.
+   Plain text is split into words; anything with links or formatting fades up as a whole. */
+(function(){
+  var busy=false;
+  function animate(el,delay){
+    if(!el||!el.textContent.trim())return;
+    var run=function(){
+      busy=true;
+      if(el.childElementCount===0||el.querySelector(".ow")){
+        if(!el.querySelector(".ow")){
+          var words=el.textContent.split(/(\s+)/),html="",n=0;
+          words.forEach(function(w){if(!w)return;if(/^\s+$/.test(w))html+=" ";else html+='<span class="ow" style="--wi:'+(n++)+'">'+w.replace(/&/g,"&amp;").replace(/</g,"&lt;")+"</span>";});
+          el.innerHTML=html;
+        }
+        el.classList.remove("ow-go");void el.offsetWidth;el.classList.add("ow-go");
+      }else{
+        el.classList.remove("ow-fade");void el.offsetWidth;el.classList.add("ow-fade");
+      }
+      busy=false;
+    };
+    delay?setTimeout(run,delay):run();
+  }
+  window.textOpen=animate;
+  /* questions */
+  document.querySelectorAll("#faqlist .q button").forEach(function(btn){
+    btn.addEventListener("click",function(){var q=btn.closest(".q");if(q.classList.contains("open"))animate(q.querySelector(".a"));});
+  });
+  /* privacy and terms boxes in the footer */
+  document.querySelectorAll("details").forEach(function(d){
+    d.addEventListener("toggle",function(){if(d.open)[].forEach.call(d.querySelectorAll(":scope > :not(summary)"),function(x,i){animate(x,i*90);});});
+  });
+  /* before / after caption */
+  var capT=document.getElementById("tfCapT"),capD=document.getElementById("tfCapD");
+  if(capT&&"MutationObserver" in window){
+    var mo=new MutationObserver(function(){if(busy)return;animate(capT);animate(capD,120);});
+    mo.observe(capT,{childList:true,characterData:true,subtree:true});
+  }
 })();
 </script>
 </body>
