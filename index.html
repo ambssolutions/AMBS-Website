@@ -112,6 +112,7 @@
 <meta name="twitter:image" content="https://ambs.co.nz/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+Gurmukhi:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ============ tokens ============ */
@@ -3113,6 +3114,160 @@ html[data-theme="dark"]:root .foot-logo.is-lit{animation:ambs-power-on-foot 2.2s
   html[data-theme="dark"]:root .mark img,html[data-theme="dark"]:root .foot-logo.is-lit{animation:none}
   html[data-theme="dark"]:root .foot-logo.pre-light{filter:brightness(1) saturate(1) drop-shadow(0 0 1px rgba(255,255,255,.35)) drop-shadow(0 0 4px rgba(255,255,255,0.1)) drop-shadow(0 0 12px rgba(210,222,255,0.05)) drop-shadow(0 8px 18px rgba(0,0,0,.4))}
 }
+
+/* ===== 2026 refresh: modern type, calmer headings, small layout fixes =====
+   Kept as one block at the end so it is easy to adjust or remove. */
+:root{
+  --display:"Bricolage Grotesque","Noto Sans SC","Noto Sans Devanagari","Noto Sans Gurmukhi",Arial,sans-serif;
+  --body:"Instrument Sans","Noto Sans SC","Noto Sans Devanagari","Noto Sans Gurmukhi",Arial,sans-serif;
+  --mono:"Instrument Sans","Noto Sans SC","Noto Sans Devanagari","Noto Sans Gurmukhi",Arial,sans-serif;
+}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-optical-sizing:auto}
+h1,h2{letter-spacing:-.035em;font-weight:750;text-wrap:balance}
+h3{letter-spacing:-.015em;font-weight:650;text-wrap:balance}
+p,li,dd{text-wrap:pretty}
+.eyebrow{letter-spacing:.14em;font-weight:600}
+/* the three steps: keep each heading at the top of its card, even when its text is shorter */
+.step{align-content:start}
+/* footer: Privacy and Terms open with a small + instead of the old browser triangle */
+.privbox summary{list-style:none;display:inline-flex;align-items:center;gap:.45em}
+.privbox summary::-webkit-details-marker{display:none}
+.privbox summary::before{content:"+";font-weight:400;font-size:1.15em;line-height:1;transition:transform .2s ease}
+.privbox[open] summary::before{transform:rotate(45deg)}
+/* clear keyboard focus everywhere, in the brand blue */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:2px solid var(--pounamu-lift,#2E8DF5);outline-offset:3px;border-radius:6px}
+
+/* ===== 2026 redesign: What we do (bento), Why us (versus), How it works (timeline), tools (marquee) =====
+   Section-scoped and last in the stylesheet, so it overrides the older layers above it. */
+:root{
+  --rd-card:linear-gradient(180deg,#FFFFFF 0%,#F4F7FC 100%);
+  --rd-line:rgba(30,45,80,.11);
+  --rd-ink:#14172B;--rd-muted:#5B6479;
+  --rd-ico-bg:rgba(24,119,224,.10);--rd-ico:#1877E0;
+  --rd-ring:#F7F9FC;
+  --rd-feature:linear-gradient(150deg,#14172B 0%,#1A2C66 58%,#1877E0 135%);
+  --rd-rainbow:linear-gradient(90deg,#E5352B,#F58220,#FFC21A,#3FAE29,#1877E0,#7B2FBE);
+}
+html[data-theme="dark"]{
+  --rd-card:linear-gradient(180deg,#1A2142 0%,#141A31 100%);
+  --rd-line:rgba(233,237,249,.10);
+  --rd-ink:#EDEFF8;--rd-muted:#A9B2CC;
+  --rd-ico-bg:rgba(79,168,255,.15);--rd-ico:#8CC4FF;
+  --rd-ring:#141A31;
+  --rd-feature:linear-gradient(150deg,#1A2C66 0%,#1D4FA8 60%,#2E8DF5 140%);
+}
+
+/* --- What we do: bento grid --- */
+html body #automate .grid{gap:1rem!important}
+html body #automate .cell{
+  position:relative;overflow:hidden;border-radius:24px!important;padding:1.6rem 1.5rem 1.7rem!important;
+  background:var(--rd-card)!important;border:1px solid var(--rd-line)!important;
+  box-shadow:0 18px 40px -30px rgba(20,23,43,.55)!important;
+  transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s ease,border-color .28s ease!important}
+html body #automate .cell::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+  background:radial-gradient(120% 80% at 100% 0%,rgba(24,119,224,.12),transparent 60%);transition:opacity .28s ease}
+html body #automate .cell:hover{transform:translateY(-4px)!important;border-color:rgba(24,119,224,.38)!important;
+  box-shadow:0 28px 50px -30px rgba(24,119,224,.55)!important}
+html body #automate .cell:hover::after{opacity:1}
+html body #automate .cell h3{color:var(--rd-ink);font-size:1.12rem;margin-bottom:.45rem}
+html body #automate .cell p{color:var(--rd-muted)!important;font-size:.95rem;line-height:1.55}
+html body #automate .cell-ico{width:46px;height:46px;border-radius:14px;margin-bottom:1.1rem;
+  background:var(--rd-ico-bg)!important;color:var(--rd-ico)!important;box-shadow:none!important}
+/* the first automation card is the feature tile */
+html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(1){
+  background:var(--rd-feature)!important;border-color:transparent!important;display:flex;flex-direction:column;justify-content:flex-end;min-height:15rem}
+html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(1)::before{content:"";position:absolute;right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 40px rgba(255,255,255,.035),0 0 0 80px rgba(255,255,255,.025);pointer-events:none}
+html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(1) .cell-ico{background:rgba(255,255,255,.14)!important;color:#fff!important;margin-bottom:auto}
+html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(1) h3{color:#fff!important;font-size:clamp(1.5rem,2.3vw,2rem);margin:1.6rem 0 .6rem}
+html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(1) p{color:rgba(255,255,255,.8)!important;font-size:1.05rem;max-width:30ch}
+/* the last automation card runs wide, icon beside the text */
+/* digital solutions: green accent to set them apart from the automations */
+html body #automate .grp[data-i18n="off.g2"] + .grid .cell-ico{background:rgba(63,174,41,.12)!important;color:#2E8F1C!important}
+html[data-theme="dark"] body #automate .grp[data-i18n="off.g2"] + .grid .cell-ico{background:rgba(143,226,74,.14)!important;color:#A8E77F!important}
+html body #automate .grp{display:flex;align-items:center;gap:.8rem}
+html body #automate .grp::after{content:"";flex:1;height:1px;background:var(--rd-line)}
+@media(min-width:640px){
+  html body #automate .grp[data-i18n="off.g1"] + .grid{grid-template-columns:repeat(2,1fr)!important}
+  html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(1),
+  html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(6){grid-column:span 2;display:grid;grid-template-columns:auto 1fr;column-gap:1.2rem;align-items:center}
+  html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(6) .cell-ico{grid-row:span 2;margin:0}
+  html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(6) h3{margin-bottom:.25rem}
+}
+@media(min-width:1000px){
+  html body #automate .grp[data-i18n="off.g1"] + .grid{grid-template-columns:repeat(4,1fr)!important}
+  html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(1){grid-column:span 2;grid-row:span 2}
+  html body #automate .grp[data-i18n="off.g1"] + .grid .cell:nth-child(6){grid-column:span 4}
+}
+
+/* --- Why us: the usual way vs. us --- */
+html body #why .why-grid{position:relative;gap:1.4rem!important;align-items:stretch}
+html body #why .why-col{border-radius:24px!important;padding:1.9rem 1.8rem 2rem!important}
+html body #why .why-col h3{font-size:1.2rem;margin-bottom:1.2rem}
+html body #why .why-col ul{gap:1rem}
+html body #why .why-col li{font-size:1rem;padding-left:2.2rem}
+html body #why .why-old{background:transparent!important;border:1.5px dashed var(--rd-line)!important;box-shadow:none!important}
+html[data-theme="dark"] body #why .why-old{border-color:rgba(233,237,249,.18)!important}
+html body #why .why-old h3{color:var(--rd-muted)!important}
+html body #why .why-old li{color:var(--rd-muted)!important;opacity:.85}
+html body #why .why-new{position:relative;color:#fff;background:var(--rd-feature)!important;border:0!important;
+  box-shadow:0 34px 70px -36px rgba(24,119,224,.75)!important}
+html body #why .why-new::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:var(--rd-rainbow);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+html body #why .why-new h3{color:#fff!important}
+html body #why .why-new li{color:rgba(255,255,255,.92)!important}
+html body #why .why-new li::before{background:#8FE24A!important;color:#14301A!important;font-weight:800}
+@media(min-width:800px){
+  html body #why .why-grid{grid-template-columns:1fr 1.12fr!important;gap:2.8rem!important}
+  html body #why .why-grid::after{content:"vs";position:absolute;top:50%;left:calc((100% - 2.8rem) / 2.12 + 1.4rem);transform:translate(-50%,-50%);
+    width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font:800 .85rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;
+    color:var(--rd-ink);background:var(--rd-ring);border:1px solid var(--rd-line);box-shadow:0 10px 24px -12px rgba(20,23,43,.5);z-index:1}
+}
+
+/* --- How it works: stacking cards ---
+   Each step pins under the header and the next one slides up over it; the cards
+   behind shrink and dim a little (--depth is set by the small script at the end). */
+html body main section#how{overflow:visible!important}
+html body #how .steps{display:grid!important;grid-template-columns:1fr!important;gap:1.4rem!important;margin-top:2.4rem;padding-bottom:12vh;--stack-top:96px}
+html body #how .step{
+  position:sticky;top:calc(var(--stack-top) + var(--i,0) * 1.4rem);
+  display:grid!important;grid-template-columns:1fr!important;gap:1rem!important;align-items:center;align-content:center;
+  min-height:clamp(250px,34vh,330px);padding:clamp(1.7rem,4vw,3rem)!important;border-radius:28px!important;
+  border:1px solid var(--rd-line)!important;background:var(--rd-card)!important;
+  box-shadow:0 -10px 40px -24px rgba(20,23,43,.35),0 30px 60px -40px rgba(20,23,43,.55)!important;
+  transform:scale(calc(1 - var(--depth,0) * .05))!important;transform-origin:50% 0;
+  filter:brightness(calc(1 - var(--depth,0) * .07));will-change:transform}
+html body #how .step:nth-child(1){--i:0}
+html body #how .step:nth-child(2){--i:1}
+html body #how .step:nth-child(3){--i:2}
+/* one blue family, a shade deeper on each card */
+html body #how .step:nth-child(1){background:linear-gradient(180deg,#FFFFFF 0%,#F4F7FC 100%)!important}
+html body #how .step:nth-child(2){background:linear-gradient(180deg,#F3F7FE 0%,#E7EFFB 100%)!important}
+html body #how .step:nth-child(3){background:linear-gradient(180deg,#E8F0FD 0%,#DAE6F8 100%)!important}
+html[data-theme="dark"] body #how .step:nth-child(1){background:linear-gradient(180deg,#1A2142 0%,#151B35 100%)!important}
+html[data-theme="dark"] body #how .step:nth-child(2){background:linear-gradient(180deg,#1D274F 0%,#18203F 100%)!important}
+html[data-theme="dark"] body #how .step:nth-child(3){background:linear-gradient(180deg,#212D5C 0%,#1B254A 100%)!important}
+html body #how .step-n{width:auto!important;height:auto!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;
+  display:block!important;font:800 clamp(4rem,8vw,6.8rem)/.85 var(--display)!important;letter-spacing:-.05em;
+  color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;
+  background-image:linear-gradient(160deg,#4FA8FF,#1877E0)!important}
+html body #how .step-n::before{content:"0"}
+html body #how .step h3{color:var(--rd-ink);font-size:clamp(1.45rem,2.6vw,2.1rem);line-height:1.12;margin:0 0 .6rem}
+html body #how .step p{color:var(--rd-muted)!important;font-size:clamp(1rem,1.3vw,1.12rem);line-height:1.6;max-width:52ch}
+html body #how .step:hover{transform:scale(calc(1 - var(--depth,0) * .05))!important}
+@media(min-width:760px){
+  html body #how .step{grid-template-columns:minmax(9rem,auto) 1fr!important;gap:clamp(1.5rem,4vw,3.5rem)!important}
+}
+@media(max-width:759px){html body #how .steps{--stack-top:76px}}
+
+/* --- Tools you already use: a slow scrolling strip --- */
+html body .trust .tool{font-size:.95rem!important;padding:.72em 1.3em!important;border-radius:999px!important;font-weight:600}
+html body .trust .tools.is-marquee{display:block!important;overflow:hidden;margin:2.2rem 0 2.6rem;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tools-track{display:flex;width:max-content;padding:.4rem 0;animation:ambs-marquee 40s linear infinite}
+.tools.is-marquee:hover .tools-track{animation-play-state:paused}
+.tools-track .tool{flex:0 0 auto;margin-right:.7rem}
+@keyframes ambs-marquee{to{transform:translateX(-50%)}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -3507,8 +3662,8 @@ with easy-to-use AI.</h1>
         <a href="#top" data-i18n="legal.back">Back to top</a>
       </nav>
     </div>
-    <p class="foot-fine foot-note" data-i18n="foot.fine">© 2026 Ambs Solutions. All rights reserved. Translations are provided for accessibility and should be confirmed with a native speaker before publication — te reo Māori content in particular should be reviewed by a qualified translator.</p>
-    <!-- build 255 -->
+    <p class="foot-fine foot-note" data-i18n="foot.fine">Translations are provided for accessibility and should be confirmed with a native speaker before publication — te reo Māori content in particular should be reviewed by a qualified translator.</p>
+    <!-- build 256 -->
   </div>
 </footer>
 
@@ -3591,7 +3746,7 @@ en:{
  "form.msg":"What eats your time?","form.send":"Send request",
  "form.note":"We reply within one working day. Or call +64 22 099 9578.",
  "foot.tag":"Built in Auckland. Working nationwide.",
- "foot.fine":"© 2026 Ambs Solutions. All rights reserved.Translations are provided for accessibility and should be confirmed with a native speaker before publication — te reo Māori content in particular should be reviewed by a qualified translator."
+ "foot.fine":"Translations are provided for accessibility and should be confirmed with a native speaker before publication — te reo Māori content in particular should be reviewed by a qualified translator."
 },
 zh:{
  "nav.automate":"我们做什么","nav.how":"合作流程","nav.about":"关于我们","nav.faq":"常见问题","nav.book":"预约免费咨询",
@@ -3669,7 +3824,7 @@ zh:{
  "form.msg":"哪些事最花你的时间？","form.send":"提交申请",
  "form.note":"我们在一个工作日内回复。也可致电 +64 22 099 9578。",
  "foot.tag":"立足奥克兰，服务全新西兰。",
- "foot.fine":"© 2026 Ambs Solutions。译文用于方便阅读，正式发布前请由母语人士确认——毛利语内容尤其应交由合格译者审阅。"
+ "foot.fine":"译文用于方便阅读，正式发布前请由母语人士确认——毛利语内容尤其应交由合格译者审阅。"
 },
 hi:{
  "nav.automate":"हम क्या करते हैं","nav.how":"काम कैसे होता है","nav.about":"हमारे बारे में","nav.faq":"सवाल","nav.book":"फ़्री सेशन बुक करें",
@@ -3747,7 +3902,7 @@ hi:{
  "form.msg":"आपका समय किस काम में जाता है?","form.send":"अनुरोध भेजें",
  "form.note":"हम एक कार्यदिवस में जवाब देते हैं। या +64 22 099 9578 पर कॉल करें।",
  "foot.tag":"ऑकलैंड में बना, पूरे न्यूज़ीलैंड में काम।",
- "foot.fine":"© 2026 Ambs Solutions. All rights reserved. कीमतें न्यूज़ीलैंड डॉलर में, जीएसटी अलग। अनुवाद सुविधा के लिए हैं; प्रकाशन से पहले किसी मूल वक्ता से पुष्टि कराएँ — ते रेओ माओरी सामग्री की जाँच योग्य अनुवादक से कराई जानी चाहिए।"
+ "foot.fine":"कीमतें न्यूज़ीलैंड डॉलर में, जीएसटी अलग। अनुवाद सुविधा के लिए हैं; प्रकाशन से पहले किसी मूल वक्ता से पुष्टि कराएँ — ते रेओ माओरी सामग्री की जाँच योग्य अनुवादक से कराई जानी चाहिए।"
 },
 mi:{
  "nav.automate":"Ā mātou mahi","nav.how":"Te huarahi","nav.about":"Mō mātou","nav.faq":"Ngā pātai","nav.book":"Tohua he wā koreutu",
@@ -3825,7 +3980,7 @@ mi:{
  "form.msg":"He aha kei te kai i tō wā?","form.send":"Tukuna te tono",
  "form.note":"Ka whakautu mātou i roto i te rā mahi kotahi. Waea rānei ki +64 22 099 9578.",
  "foot.tag":"I hangaia ki Tāmaki Makaurau. E mahi ana puta noa i te motu.",
- "foot.fine":"© 2026 Ambs Solutions. All rights reserved.He whakamāoritanga hei āwhina; me whakaū e te kaikōrero taketake i mua i te whakaputanga — me arotake te reo Māori e te kaiwhakamāori kua tohua."
+ "foot.fine":"He whakamāoritanga hei āwhina; me whakaū e te kaikōrero taketake i mua i te whakaputanga — me arotake te reo Māori e te kaiwhakamāori kua tohua."
 },
 pa:{
  "nav.automate":"ਅਸੀਂ ਕੀ ਕਰਦੇ ਹਾਂ","nav.how":"ਕੰਮ ਕਿਵੇਂ ਹੁੰਦਾ ਹੈ","nav.about":"ਸਾਡੇ ਬਾਰੇ","nav.faq":"ਸਵਾਲ","nav.book":"ਫ਼ਰੀ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ",
@@ -3903,7 +4058,7 @@ pa:{
  "form.msg":"ਤੁਹਾਡਾ ਸਮਾਂ ਕਿਸ ਕੰਮ ਵਿੱਚ ਜਾਂਦਾ ਹੈ?","form.send":"ਬੇਨਤੀ ਭੇਜੋ",
  "form.note":"ਅਸੀਂ ਇੱਕ ਕੰਮ-ਵਾਲੇ ਦਿਨ ਵਿੱਚ ਜਵਾਬ ਦਿੰਦੇ ਹਾਂ। ਜਾਂ +64 22 099 9578 'ਤੇ ਕਾਲ ਕਰੋ।",
  "foot.tag":"ਆਕਲੈਂਡ ਵਿੱਚ ਬਣਿਆ। ਪੂਰੇ ਨਿਊਜ਼ੀਲੈਂਡ ਵਿੱਚ ਕੰਮ।",
- "foot.fine":"© 2026 Ambs Solutions. All rights reserved. ਕੀਮਤਾਂ ਨਿਊਜ਼ੀਲੈਂਡ ਡਾਲਰ ਵਿੱਚ, ਜੀਐਸਟੀ ਵੱਖ। ਅਨੁਵਾਦ ਸਹੂਲਤ ਲਈ ਹਨ; ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਮੂਲ ਬੁਲਾਰੇ ਤੋਂ ਪੁਸ਼ਟੀ ਕਰਵਾਓ — ਤੇ ਰੇਓ ਮਾਓਰੀ ਸਮੱਗਰੀ ਦੀ ਜਾਂਚ ਯੋਗ ਅਨੁਵਾਦਕ ਤੋਂ ਕਰਵਾਈ ਜਾਵੇ।"
+ "foot.fine":"ਕੀਮਤਾਂ ਨਿਊਜ਼ੀਲੈਂਡ ਡਾਲਰ ਵਿੱਚ, ਜੀਐਸਟੀ ਵੱਖ। ਅਨੁਵਾਦ ਸਹੂਲਤ ਲਈ ਹਨ; ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਮੂਲ ਬੁਲਾਰੇ ਤੋਂ ਪੁਸ਼ਟੀ ਕਰਵਾਓ — ਤੇ ਰੇਓ ਮਾਓਰੀ ਸਮੱਗਰੀ ਦੀ ਜਾਂਚ ਯੋਗ ਅਨੁਵਾਦਕ ਤੋਂ ਕਰਵਾਈ ਜਾਵੇ।"
 }
 };
 
@@ -4881,6 +5036,45 @@ if("IntersectionObserver" in window && !reduced){
       if(e.isIntersecting){f.classList.remove("pre-light");f.classList.add("is-lit");o.disconnect();}
     });
   },{threshold:.5}).observe(f);
+})();
+</script>
+
+<script>
+/* tools strip: scrolls slowly in a loop (left still if the visitor prefers less motion) */
+(function(){
+  var t=document.querySelector(".trust .tools");
+  if(!t||(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches))return;
+  var track=document.createElement("div");track.className="tools-track";
+  while(t.firstChild)track.appendChild(t.firstChild);
+  Array.prototype.slice.call(track.children).forEach(function(c){var k=c.cloneNode(true);k.setAttribute("aria-hidden","true");track.appendChild(k);});
+  t.appendChild(track);t.classList.add("is-marquee");
+})();
+</script>
+
+<script>
+/* how it works: as each step card slides over the one before, the cards behind shrink and dim a little */
+(function(){
+  var cards=[].slice.call(document.querySelectorAll("#how .step"));
+  if(cards.length<2||(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches))return;
+  var ticking=false;
+  function update(){
+    ticking=false;
+    var cover=cards.map(function(c,k){
+      if(!k)return 0;
+      var prev=cards[k-1].getBoundingClientRect().height||1;
+      var stick=parseFloat(getComputedStyle(c).top)||0;
+      var p=1-(c.getBoundingClientRect().top-stick)/prev;
+      return Math.max(0,Math.min(1,p));
+    });
+    cards.forEach(function(c,i){
+      var d=0;for(var k=i+1;k<cards.length;k++)d+=cover[k];
+      c.style.setProperty("--depth",d.toFixed(3));
+    });
+  }
+  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(update);}}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",onScroll);
+  update();
 })();
 </script>
 
