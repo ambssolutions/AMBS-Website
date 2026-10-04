@@ -73,10 +73,11 @@ self.addEventListener('fetch', (e) => {
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('/', copy)).catch(() => {});
+          /* keep each page under its own address, so the home page copy is never replaced by a guide */
+          caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
           return res;
         })
-        .catch(() => caches.match('/').then((r) => r || caches.match(req)))
+        .catch(() => caches.match(req).then((r) => r || caches.match('/')))
     );
     return;
   }
