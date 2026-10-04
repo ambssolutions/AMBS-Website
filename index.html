@@ -3952,7 +3952,7 @@ html:not([data-theme="dark"]).sky-night #automate .wd-grp--g,html:not([data-them
 @media(prefers-reduced-motion:reduce){
   html .tx-w,html .tx-fade,html .tx-up{transform:none!important;transition:opacity .7s ease!important}
   html .tx-w{opacity:0!important;transition-delay:calc(var(--wi,0) * 40ms)!important}
-  html .tx-in .tx-w,html .hero h1 .tx-w{opacity:1!important}
+  html .tx-in .tx-w{opacity:1!important}
   html .tx-fade:not(.tx-in),html .tx-up:not(.tx-in){opacity:0!important}
   html .tx-fade.tx-in,html .tx-up.tx-in{opacity:1!important}
   html .tx-up{transition-delay:var(--td,0ms)!important}
@@ -3972,6 +3972,143 @@ html:not([data-theme="dark"]).sky-night #automate .wd-grp--g,html:not([data-them
 @keyframes ow-in{from{opacity:0;transform:translateY(.45em)}}
 @keyframes ow-fade-only{from{opacity:0}}
 @media(prefers-reduced-motion:reduce){.ow-go .ow,.ow-fade{animation-name:ow-fade-only}}
+
+/* slimmer footer: brand · contact · three links */
+@media(min-width:900px){
+  .foot-grid{grid-template-columns:auto 1fr auto!important}
+  .foot-grid>div:nth-child(3){justify-self:end}
+}
+.foot-links{display:flex!important;flex-direction:column;gap:.2rem!important}
+.foot-links a{font-weight:700;font-size:1rem}
+@media(max-width:899px){.foot-links{flex-direction:row!important;flex-wrap:wrap;gap:.2rem 1.6rem!important}}
+
+/* footer menu: the same options as the menu bar, in two columns */
+html body .foot-links{display:grid!important;grid-template-columns:repeat(2,max-content);gap:.1rem 2.4rem!important}
+.foot-links a{font-weight:650}
+@media(max-width:899px){html body .foot-links{grid-template-columns:repeat(2,1fr);gap:0 1.2rem!important}}
+
+/* footer menu, sorted into two labelled groups */
+.foot-menu{display:grid;grid-template-columns:repeat(2,max-content);gap:0 3.2rem}
+.foot-col{display:flex;flex-direction:column;align-items:flex-start}
+.foot-col .foot-h{margin:0 0 .5rem;font-size:max(.74rem,12px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.foot-col a{display:inline-flex;align-items:center;min-height:36px;font-weight:600;font-size:.95rem;color:inherit;text-decoration:none}
+.foot-col a:hover{color:#1877E0}
+html[data-theme="dark"] .foot-col a:hover,html:not([data-theme="dark"]).sky-night .foot-col a:hover{color:#8FE24A}
+html:not([data-theme="dark"]).sky-night .foot-col a,html:not([data-theme="dark"]).sky-night .foot-col .foot-h{color:#EDEFF8}
+@media(max-width:899px){.foot-menu{grid-template-columns:1fr 1fr;gap:0 1.2rem}}
+
+/* six menu items: a little tighter so everything fits beside the logo */
+@media(min-width:1121px){
+  html body .bar-right .navlinks{gap:.9rem!important;padding:0 .9rem!important;margin-left:1rem!important}
+  html body .bar-right .navlinks a{font-size:.86rem!important}
+  html body .langwrap{width:112px!important;min-width:0!important}
+  html body .langwrap .langselect{width:100%!important}
+}
+@media(min-width:1121px) and (max-width:1199px){html body .bar-right .nav-book{display:none!important}}
+
+/* ---- footer: clean columns, small uppercase headings, plain lists ---- */
+footer.f2{padding:3.4rem 0 1.6rem;border-top:1px solid rgba(20,23,43,.10);color:#2B3047;font-size:.93rem}
+footer.f2 .f2-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:2.4rem 2rem;align-items:start}
+footer.f2 .f2-logo img{display:block;width:150px;height:auto}
+footer.f2 .f2-brand p{margin:.9rem 0 0;color:#5B6479;font-size:.9rem;max-width:26ch}
+footer.f2 .f2-col{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem}
+footer.f2 .f2-h{margin:0 0 .7rem;font-size:max(.72rem,12px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#14172B}
+footer.f2 .f2-col a,footer.f2 .f2-col span{display:inline-flex;align-items:center;min-height:32px;color:#4A5068;text-decoration:none;font-weight:500}
+footer.f2 .f2-col a:hover,footer.f2 .f2-legal a:hover{color:#1877E0}
+footer.f2 .f2-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem 1.6rem;margin-top:2.6rem;padding-top:1.3rem;border-top:1px solid rgba(20,23,43,.10)}
+footer.f2 .f2-copy{margin:0;color:#5B6479;font-size:.86rem}
+footer.f2 .f2-legal{display:flex;flex-wrap:wrap;gap:.2rem 1.4rem}
+footer.f2 .f2-legal a{display:inline-flex;align-items:center;min-height:32px;color:#4A5068;text-decoration:none;font-size:.86rem;font-weight:600}
+footer.f2 .f2-fine{margin:.8rem 0 0;color:#7A8199;font-size:max(.76rem,12px);line-height:1.6;max-width:70ch}
+footer.f2 .f2-fine#appver{margin-top:.3rem}
+/* dark theme, and the dark page at night */
+html[data-theme="dark"] footer.f2,html:not([data-theme="dark"]).sky-night footer.f2{color:#D8DDEE;border-top-color:rgba(233,237,249,.12)}
+html[data-theme="dark"] footer.f2 .f2-h,html:not([data-theme="dark"]).sky-night footer.f2 .f2-h{color:#F2F4FA}
+html[data-theme="dark"] footer.f2 .f2-col a,html[data-theme="dark"] footer.f2 .f2-col span,html[data-theme="dark"] footer.f2 .f2-legal a,
+html:not([data-theme="dark"]).sky-night footer.f2 .f2-col a,html:not([data-theme="dark"]).sky-night footer.f2 .f2-col span,html:not([data-theme="dark"]).sky-night footer.f2 .f2-legal a{color:#B9C0D6!important}
+html[data-theme="dark"] footer.f2 .f2-col a:hover,html:not([data-theme="dark"]).sky-night footer.f2 .f2-col a:hover{color:#8FE24A!important}
+html[data-theme="dark"] footer.f2 .f2-brand p,html[data-theme="dark"] footer.f2 .f2-copy,html:not([data-theme="dark"]).sky-night footer.f2 .f2-brand p,html:not([data-theme="dark"]).sky-night footer.f2 .f2-copy{color:#9AA2BC}
+html[data-theme="dark"] footer.f2 .f2-bottom,html:not([data-theme="dark"]).sky-night footer.f2 .f2-bottom{border-top-color:rgba(233,237,249,.12)}
+html[data-theme="dark"] footer.f2 .f2-fine,html:not([data-theme="dark"]).sky-night footer.f2 .f2-fine{color:#7E87A3}
+@media(max-width:899px){
+  footer.f2 .f2-grid{grid-template-columns:1fr 1fr;gap:2rem 1.2rem}
+  footer.f2 .f2-brand{grid-column:1/-1}
+  footer.f2 .f2-bottom{flex-direction:column;align-items:flex-start}
+}
+
+/* the scrolling "what we automate" strip stays inside the page's content column */
+.as-viewport{margin-right:calc((100vw - var(--col)) / 2)}
+@media(max-width:640px){.as-viewport{margin-left:calc((100vw - var(--col)) / 2)}}
+
+/* ---- opening headline: each word rises and sharpens into place, then the blue line catches the light ----
+   (words start almost invisible rather than fully hidden, so the page still counts as loaded straight away) */
+.hero h1 .tx-w{opacity:.01;transform:translateY(.75em) rotate(3deg);transform-origin:0 100%;
+  transition:opacity .8s ease,transform 1.15s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--wi,0) * 75ms + 150ms)}
+.hero h1.tx-in .tx-w,.hero .tx-in .tx-w{opacity:1;transform:none}
+.hero h1.tx-in .tx-accent{background:linear-gradient(100deg,#1A64C8 0%,#1A64C8 42%,#79BDFF 50%,#1A64C8 58%,#1A64C8 100%) 100% 0/260% 100% no-repeat;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:hero-sheen 1.8s cubic-bezier(.4,0,.2,1) 1.5s both}
+html[data-theme="dark"] .hero h1.tx-in .tx-accent,html.sky-night .hero h1.tx-in .tx-accent{background-image:linear-gradient(100deg,#8CC4FF 0%,#8CC4FF 42%,#FFFFFF 50%,#8CC4FF 58%,#8CC4FF 100%)}
+@keyframes hero-sheen{from{background-position:100% 0}to{background-position:0 0}}
+@media(prefers-reduced-motion:reduce){
+  html .hero h1 .tx-w{transform:none!important;transition:opacity .7s ease!important;transition-delay:calc(var(--wi,0) * 60ms)!important}
+  html .hero h1:not(.tx-in) .tx-w{opacity:.01!important}
+  .hero h1.tx-in .tx-accent{animation:none}
+}
+
+/* ---- what we do: the service list cascades in as the section arrives ---- */
+.wd-cascade .wd-grp,.wd-cascade .wd-tab{opacity:0;transform:translateX(-18px);transition:opacity .6s ease,transform .8s cubic-bezier(.16,1,.3,1),background .25s,border-color .25s,box-shadow .25s;transition-delay:calc(var(--ti,0) * 70ms)}
+.wd-cascade.wd-shown .wd-grp,.wd-cascade.wd-shown .wd-tab{opacity:1;transform:none}
+/* phones: each card's icon pops and its name glides in as the card reaches the screen */
+.wd--list .wd-panel:not(.seen) .wd-acc .wd-ico{opacity:0;transform:scale(.55) rotate(-12deg)}
+.wd--list .wd-panel:not(.seen) .wd-acc .wd-tt{opacity:0;transform:translateX(-16px)}
+.wd--list .wd-panel:not(.seen) .wd-acc .wd-chev{opacity:0}
+.wd--list .wd-acc .wd-ico,.wd--list .wd-acc .wd-tt,.wd--list .wd-acc .wd-chev{transition:opacity .55s ease,transform .75s cubic-bezier(.34,1.4,.64,1)}
+.wd--list .wd-acc .wd-tt{transition-delay:.08s}.wd--list .wd-acc .wd-chev{transition-delay:.18s}
+.wd--list .wd-lgrp{transition:opacity .6s ease,transform .7s cubic-bezier(.16,1,.3,1)}
+.wd--list .wd-lgrp:not(.seen){opacity:0;transform:translateY(10px)}
+@media(prefers-reduced-motion:reduce){
+  .wd-cascade .wd-grp,.wd-cascade .wd-tab,.wd--list .wd-acc .wd-ico,.wd--list .wd-acc .wd-tt,.wd--list .wd-lgrp{transform:none!important;transition:opacity .6s ease!important}
+}
+
+/* ---- laptop: switching services is slow and soft ---- */
+.wd-track:not(.wd--list):not(.wd--stack) .wd-panel{transform:translateY(16px) scale(.985);
+  transition:opacity .9s cubic-bezier(.4,0,.2,1),transform 1.1s cubic-bezier(.16,1,.3,1),visibility 0s linear .9s}
+.wd-track:not(.wd--list):not(.wd--stack) .wd-panel.on{transform:none;transition:opacity .9s cubic-bezier(.4,0,.2,1) .08s,transform 1.1s cubic-bezier(.16,1,.3,1) .08s,visibility 0s}
+.wd-track:not(.wd--list):not(.wd--stack) .wd-panel.on .wd-stage .mk{animation:wd-stage-in 1.2s cubic-bezier(.16,1,.3,1) both}
+@keyframes wd-stage-in{from{opacity:0;transform:scale(.94)}}
+/* a soft highlight glides down the list to the current service */
+.wd-tabs{position:relative}
+.wd-glider{position:absolute;left:0;right:0;top:0;height:var(--gh,56px);border-radius:16px;background:var(--rd-card);border:1px solid var(--rd-line);box-shadow:0 14px 30px -22px rgba(20,23,43,.6);
+  transform:translateY(var(--gy,0));transition:transform .75s cubic-bezier(.22,1,.36,1),height .5s ease;pointer-events:none;z-index:0}
+.wd-track:not(.wd--list) .wd-tabs .wd-tab{position:relative;z-index:1}
+.wd-track:not(.wd--list) .wd-tabs.has-glider .wd-tab[aria-selected="true"]{background:transparent;border-color:transparent;box-shadow:none}
+.wd--list .wd-glider,.wd--stack .wd-glider{display:none}
+@media(prefers-reduced-motion:reduce){.wd-glider{transition:none}.wd-track .wd-panel{transform:none!important}.wd-panel.on .wd-stage .mk{animation:none!important}}
+
+/* What we do: numbered steps under each picture, each lighting up the part it describes */
+.wd-steps{position:absolute;left:0;right:0;bottom:.7rem;z-index:5;display:flex;justify-content:center;gap:.4rem;padding:0 .7rem;pointer-events:none}
+.wd-st{pointer-events:auto;cursor:default;display:inline-flex;align-items:center;gap:.4em;padding:.32em .75em .32em .34em;border-radius:999px;font:600 .74rem/1.15 var(--body);color:var(--mk-ink);background:color-mix(in srgb,var(--mk-card) 82%,transparent);border:1px solid var(--mk-soft);box-shadow:0 4px 14px -8px rgba(20,23,43,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);white-space:nowrap;position:relative;overflow:hidden;opacity:.72;transition:opacity .5s ease,background-color .5s ease,color .5s ease,transform .5s cubic-bezier(.16,1,.3,1)}
+.wd-st b{display:grid;place-items:center;width:1.55em;height:1.55em;border-radius:50%;font-size:.86em;background:var(--mk-soft);transition:background-color .5s ease,color .5s ease}
+.wd-st em{font-style:normal}
+.wd-steps{counter-reset:st}.wd-st{counter-increment:st}.wd-st[hidden]{display:none}.wd-st b::before{content:counter(st)}
+.wd-st::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--red);transform:scaleX(0);transform-origin:left}
+.wd-st.now{opacity:1;transform:translateY(-2px)}
+.wd-st.now b{background:var(--red);color:#fff}
+.wd-st.now::after{animation:wd-st-bar var(--st-ms,2800ms) linear both}
+.wd-steps.held .wd-st.now::after{animation:none;transform:scaleX(1)}
+@keyframes wd-st-bar{to{transform:scaleX(1)}}
+.wd-stage .mk>*{transition:filter .6s ease}
+.wd-stage.spotting .mk>*:not(.spot):not(:has(.spot)){filter:saturate(.6) opacity(.55)}
+.wd-stage .spot{outline:2px solid transparent;outline-offset:.4em;animation:wd-spot 2.4s ease-in-out infinite}
+@keyframes wd-spot{0%,100%{outline-color:rgba(229,53,43,.85)}50%{outline-color:rgba(229,53,43,.25)}}
+.wd-stage .mk{padding-bottom:2.3rem;box-sizing:border-box}
+/* pictures lean slightly toward the pointer on laptops */
+@media (hover:hover) and (pointer:fine){.wd-stage .mk>*{translate:calc(var(--mx,0) * var(--dz,7px)) calc(var(--my,0) * var(--dz,7px));transition:filter .6s ease,translate .9s cubic-bezier(.16,1,.3,1)}.wd-stage .mk>*:nth-child(even){--dz:-5px}}
+.wd--list .wd-steps{bottom:.5rem;gap:.3rem}
+.wd--list .wd-st{font-size:.66rem;padding:.28em .6em .28em .28em}
+@media (max-width:420px){.wd-st em{display:none}.wd-st{padding:.28em}.wd-st.now em{display:inline}.wd-st.now{padding-right:.6em}}
+@media (prefers-reduced-motion:reduce){.wd-stage .spot{animation:none;outline-color:rgba(229,53,43,.7)}.wd-st,.wd-st b{transition:none}.wd-st.now{transform:none}.wd-stage .mk>*{translate:none!important}}
+html.dark .wd-st,.sky-night .wd-st{box-shadow:0 4px 14px -8px rgba(0,0,0,.6)}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4014,7 +4151,8 @@ html:not([data-theme="dark"]).sky-night #automate .wd-grp--g,html:not([data-them
       <a href="#automate" data-i18n="nav.automate">What we do</a>
       <a href="#about" data-i18n="nav.about">About us</a>
       <a href="#how" data-i18n="nav.how">How it works</a>
-      <a href="#knowledge" data-i18n="nav.guides">Guides</a>
+      <a href="/services" data-i18n="foot.services">Services</a>
+      <a href="/guides" data-i18n="nav.guides">Guides</a>
       <a href="#faq" data-i18n="nav.faq">Questions</a>
     </nav>
       <a class="btn btn--sm nav-book" href="#book" data-i18n="nav.bookcall">Book a call</a>
@@ -4032,9 +4170,10 @@ html:not([data-theme="dark"]).sky-night #automate .wd-grp--g,html:not([data-them
     <a href="#about" data-i18n="nav.about">About us</a>
     <a href="#why" data-i18n="nav.why">Why us</a>
     <a href="#how" data-i18n="nav.how">How it works</a>
-    <a href="#knowledge" data-i18n="nav.guides">Guides</a>
+    <a href="/services" data-i18n="foot.services">Services</a>
+    <a href="/guides" data-i18n="nav.guides">Guides</a>
     <a href="#faq" data-i18n="nav.faq">Questions</a>
-    <div class="dr-more"><a href="/services" data-i18n="foot.services">Services</a><a href="/industries" data-i18n="foot.industries">Industries</a><a href="/guides" data-i18n="kh.all">All guides</a></div>
+    <div class="dr-more"><a href="/industries" data-i18n="foot.industries">Industries</a></div>
     <a class="btn btn--fill nav-contact" href="#contact" data-i18n="nav.contact">Contact us</a>
     <button type="button" class="installbtn" id="installbtn" hidden>
       <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5M4 20h16"/></svg>
@@ -4130,7 +4269,7 @@ with easy-to-use AI.</h1>
     <div class="m1-tot"><i class="mk-bar" style="width:30%"></i><b>$1,240.00</b></div></div>
   <span class="mk-flow"><i></i></span>
   <div class="m1-paid"><b>&#10003;</b><span>$1,240.00</span><i class="mk-bar" style="width:70%"></i></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m1-memo" style="--si:0"><b></b><em data-i18n="wd.s1a">Voice memo</em></span><span class="wd-st" data-t=".m1-quote" style="--si:1"><b></b><em data-i18n="wd.s1b">Quote drafted</em></span><span class="wd-st" data-t=".m1-paid" style="--si:2"><b></b><em data-i18n="wd.s1c">Invoice paid</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c1t">Quotes and invoices</h3><p data-i18n="auto.c1d">Site notes or a voice memo become a draft quote. Approved jobs become an invoice ready to check and send.</p><a class="wd-more" href="/guides/automate-quotes-and-invoices"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
         <div class="wd-panel" role="tabpanel" id="wd-p2" aria-labelledby="wd-t2" inert>
@@ -4140,21 +4279,21 @@ with easy-to-use AI.</h1>
     <div class="mk-card m2-reply"><div class="m2-who"><span class="m2-av m2-av--biz"></span><i class="mk-bar" style="width:36%"></i><em class="m2-ai">AI</em></div><div class="m2-dots"><i></i><i></i><i></i></div><div class="m2-text"><i class="mk-bar" style="width:88%"></i><i class="mk-bar" style="width:62%"></i></div><span class="m2-ok">&#10003;</span></div>
   </div>
   <div class="mk-phone m2-phone"><div class="m2-chat"><div class="m2-b m2-in"><i class="mk-bar" style="width:86%"></i><i class="mk-bar" style="width:52%"></i></div><div class="m2-typing"><i></i><i></i><i></i></div><div class="m2-b m2-out"><i class="mk-bar" style="width:88%"></i><i class="mk-bar" style="width:64%"></i></div></div></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m2-review" style="--si:0"><b></b><em data-i18n="wd.s2a">Review comes in</em></span><span class="wd-st" data-t=".m2-reply" style="--si:1"><b></b><em data-i18n="wd.s2b">Reply drafted</em></span><span class="wd-st" data-t=".m2-phone" style="--si:2"><b></b><em data-i18n="wd.s2c">Questions answered</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c2t">Customer replies</h3><p data-i18n="auto.c2d">Opening hours, pricing and directions answered quickly on your website and by email, with replies to Google reviews drafted for you to approve.</p><a class="wd-more" href="/guides/ai-customer-replies-for-small-business"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
         <div class="wd-panel" role="tabpanel" id="wd-p3" aria-labelledby="wd-t3" inert>
           <div class="wd-stage" aria-hidden="true"><div class="mk mk3">
   <div class="mk-card m3-cal"><div class="m3-col"><span class="m3-day">12</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">13</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-free"></span></div><div class="m3-col"><span class="m3-day">14</span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-ap m3-gap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">15</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">16</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span></div></div>
   <div class="mk-card m3-sms"><span class="m3-bell"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><div class="m3-txt"><i class="mk-bar" style="width:90%"></i><i class="mk-bar" style="width:64%"></i></div><div class="m3-btns"><b><svg viewBox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2 8.8-9.2"/></svg></b><b><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95"/><path d="M19.2 4.5v4h-4"/></svg></b></div></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m3-cal" style="--si:0"><b></b><em data-i18n="wd.s3a">Job booked</em></span><span class="wd-st" data-t=".m3-sms" style="--si:1"><b></b><em data-i18n="wd.s3b">Reminder sent</em></span><span class="wd-st" data-t=".m3-gap" style="--si:2"><b></b><em data-i18n="wd.s3c">Gap filled</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c3t">Bookings and reminders</h3><p data-i18n="auto.c3d">Confirmations, reminders and rebooking texts that cut down no-shows without anyone chasing.</p><a class="wd-more" href="/guides/reduce-no-shows-with-booking-reminders"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
         <div class="wd-panel" role="tabpanel" id="wd-p4" aria-labelledby="wd-t4" inert>
           <div class="wd-stage" aria-hidden="true"><div class="mk mk4">
   <div class="mk-card m4-app m4-a"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div><span class="mk-flow m4-f"><i></i></span><div class="mk-card m4-app m4-b"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div><span class="mk-flow m4-f"><i></i></span><div class="mk-card m4-app m4-c"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div>
   <div class="mk-card m4-rec"><span class="m4-dot"></span><i class="mk-bar" style="width:70%"></i><b>$860</b></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m4-a" style="--si:0"><b></b><em data-i18n="wd.s4a">Typed once</em></span><span class="wd-st" data-t=".m4-b,.m4-c" style="--si:1"><b></b><em data-i18n="wd.s4b">Copied across</em></span><span class="wd-st" data-t=".m4-rec" style="--si:2"><b></b><em data-i18n="wd.s4c">Record ready</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c4t">Moving data between apps</h3><p data-i18n="auto.c4d">No more retyping the same job into three systems. Where your apps allow it, information passes from one to the next automatically.</p><a class="wd-more" href="/guides/connect-your-business-apps"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
         <div class="wd-panel" role="tabpanel" id="wd-p5" aria-labelledby="wd-t5" inert>
@@ -4164,14 +4303,14 @@ with easy-to-use AI.</h1>
       <div class="m5-kpi"><span class="m5-c1"></span><i class="mk-bar" style="width:48%"></i><b>$12,480</b></div><div class="m5-kpi"><span class="m5-c2"></span><i class="mk-bar" style="width:40%"></i><b>$3,150</b></div>
       <div class="m5-kpi"><span class="m5-c3"></span><i class="mk-bar" style="width:44%"></i><b>46</b></div><div class="m5-kpi"><span class="m5-c4"></span><i class="mk-bar" style="width:36%"></i><b>12</b></div></div></div>
   <div class="mk-card m5-chart"><div class="m5-bars"><i style="--h:42%;--d:0"></i><i style="--h:58%;--d:1"></i><i style="--h:50%;--d:2"></i><i style="--h:72%;--d:3"></i><i style="--h:64%;--d:4"></i><i style="--h:80%;--d:5"></i><i style="--h:94%;--d:6"></i></div><svg viewBox="0 0 100 30" preserveAspectRatio="none"><polyline pathLength="1" points="0,26 16,21 33,23 50,14 66,16 83,8 100,3"/></svg></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m5-chart" style="--si:0"><b></b><em data-i18n="wd.s5a">Numbers gathered</em></span><span class="wd-st" data-t=".m5-note" style="--si:1"><b></b><em data-i18n="wd.s5b">Summary written</em></span><span class="wd-st" data-t=".m5-time" style="--si:2"><b></b><em data-i18n="wd.s5c">On your phone</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c5t">The numbers, weekly</h3><p data-i18n="auto.c5d">Sales, stock, unpaid invoices and hours in one short summary on your phone every Monday.</p><a class="wd-more" href="/guides/weekly-business-numbers-dashboard"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
         <div class="wd-panel" role="tabpanel" id="wd-p6" aria-labelledby="wd-t6" inert>
           <div class="wd-stage" aria-hidden="true"><div class="mk mk6">
   <div class="mk-card m6-log"><div class="m6-row" style="--r:0"><span class="m6-t">09:14</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:70%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:1"><span class="m6-t">11:02</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:56%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:2"><span class="m6-t">14:37</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:64%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:3"><span class="m6-t">16:20</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:48%"></i><b>&#10003;</b></div></div>
   <div class="m6-vault"><span class="m6-paper m6-p1"></span><span class="m6-paper m6-p2"></span><span class="m6-folder"><span class="m6-tab"></span></span><span class="m6-shield"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m6-log" style="--si:0"><b></b><em data-i18n="wd.s6a">Work logged</em></span><span class="wd-st" data-t=".m6-folder,.m6-paper" style="--si:1"><b></b><em data-i18n="wd.s6b">Filed away</em></span><span class="wd-st" data-t=".m6-shield" style="--si:2"><b></b><em data-i18n="wd.s6c">Ready to show</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c6t">Records you can show</h3><p data-i18n="auto.c6d">File notes, consents and receipts filed as the work happens, ready when someone asks for them.</p><a class="wd-more" href="/services/ai-automation"><span data-i18n="wd.more">Learn more</span></a></div>
         </div>
         <div class="wd-panel wd-panel--g" role="tabpanel" id="wd-p7" aria-labelledby="wd-t7" inert>
@@ -4181,7 +4320,7 @@ with easy-to-use AI.</h1>
     <div class="m7-langs"><span style="--l:0">EN</span><span style="--l:1">中文</span><span style="--l:2">हिन्दी</span><span style="--l:3">MI</span><span style="--l:4">ਪੰਜਾਬੀ</span></div>
     <div class="m7-grid"><i></i><i></i><i></i></div></div>
   <div class="mk-phone m7-phone"><div class="m7-ph-hero"></div><i class="mk-bar" style="width:80%"></i><i class="mk-bar" style="width:55%"></i><span class="m7-call"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m7-browser" style="--si:0"><b></b><em data-i18n="wd.s7a">Fast website</em></span><span class="wd-st" data-t=".m7-langs" style="--si:1"><b></b><em data-i18n="wd.s7b">Their language</em></span><span class="wd-st" data-t=".m7-call" style="--si:2"><b></b><em data-i18n="wd.s7c">They call you</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c7t">Websites that win trust</h3><p data-i18n="auto.c7d">Fast, multilingual websites like this one, built to turn visitors into calls.</p><a class="wd-more" href="/guides/websites-that-turn-visitors-into-calls"><span data-i18n="kh.read">Read the guide</span></a></div>
         </div>
         <div class="wd-panel wd-panel--g" role="tabpanel" id="wd-p8" aria-labelledby="wd-t8" inert>
@@ -4191,7 +4330,7 @@ with easy-to-use AI.</h1>
     <div class="m8-row" style="--r:0"><b>&#10003;</b><i class="mk-bar" style="width:70%"></i></div><div class="m8-row" style="--r:1"><b>&#10003;</b><i class="mk-bar" style="width:58%"></i></div><div class="m8-row" style="--r:2"><b>&#10003;</b><i class="mk-bar" style="width:64%"></i></div>
     <span class="m8-approve">&#10003;</span></div>
   <div class="mk-card m8-notif"><span class="m3-bell"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><div class="m3-txt"><i class="mk-bar" style="width:86%"></i><i class="mk-bar" style="width:58%"></i></div><b class="m8-ok">&#10003;</b></div>
-</div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m8-photos" style="--si:0"><b></b><em data-i18n="wd.s8a">Photos from site</em></span><span class="wd-st" data-t=".m8-row" style="--si:1"><b></b><em data-i18n="wd.s8b">Checklist done</em></span><span class="wd-st" data-t=".m8-notif" style="--si:2"><b></b><em data-i18n="wd.s8c">Approved</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c8t">Staff and customer portals</h3><p data-i18n="auto.c8d">Job tracking, photos, invoices and approvals in your own app on every phone.</p><a class="wd-more" href="/services/websites-and-portals"><span data-i18n="wd.more">Learn more</span></a></div>
         </div>
         <div class="wd-panel wd-panel--g" role="tabpanel" id="wd-p9" aria-labelledby="wd-t9" inert>
@@ -4200,7 +4339,7 @@ with easy-to-use AI.</h1>
   <div class="m9-row"><div class="m9-line"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path class="m9-area" d="M0,34 L14,28 L28,30 L42,20 L57,23 L71,12 L85,14 L100,5 L100,40 L0,40 Z"/><polyline pathLength="1" points="0,34 14,28 28,30 42,20 57,23 71,12 85,14 100,5"/></svg></div>
   <div class="m9-donut"><svg viewBox="0 0 64 64"><circle class="m9-bg" cx="32" cy="32" r="24"/><circle class="m9-ring" cx="32" cy="32" r="24" pathLength="100"/></svg><b>68%</b></div>
   <div class="m9-bars"><i style="--h:55%;--d:0"></i><i style="--h:70%;--d:1"></i><i style="--h:48%;--d:2"></i><i style="--h:86%;--d:3"></i><i style="--h:66%;--d:4"></i></div></div>
-</div></div></div>
+</div></div><div class="wd-steps"><span class="wd-st" data-t=".m9-kpis" style="--si:0"><b></b><em data-i18n="wd.s9a">Sales and cash</em></span><span class="wd-st" data-t=".m9-line" style="--si:1"><b></b><em data-i18n="wd.s9b">The trend</em></span><span class="wd-st" data-t=".m9-donut,.m9-bars" style="--si:2"><b></b><em data-i18n="wd.s9c">Jobs on track</em></span></div></div>
           <div class="wd-copy"><h3 data-i18n="auto.c9t">Live dashboards</h3><p data-i18n="auto.c9d">Sales, jobs and cash in one view that updates itself, wherever you are.</p><a class="wd-more" href="/services/websites-and-portals"><span data-i18n="wd.more">Learn more</span></a></div>
         </div>
         </div>
@@ -4449,85 +4588,46 @@ with easy-to-use AI.</h1>
   </section>
 </main>
 
-<footer>
-  <div class="wrap foot-grid">
-    <div>
-      <a class="foot-brand" href="#top" aria-label="AMBS Solutions — back to top">
-        <picture><source srcset="/logo.webp" type="image/webp"><img class="foot-logo" src="/logo.png" width="613" height="224" alt="AMBS Solutions" loading="lazy" decoding="async"></picture>
-        <span class="lg-word" aria-hidden="true"><i>S</i><i>O</i><i>L</i><i>U</i><i>T</i><i>I</i><i>O</i><i>N</i><i>S</i></span>
-      </a>
-      <p data-i18n="foot.tag">Built in Auckland. Working nationwide.</p>
-    </div>
-    <div>
-      <div class="foot-contact" id="contact">
-        <p class="foot-contact-h" data-i18n="nav.contact">Contact us</p>
-        <a href="tel:+64220999578"><span class="fc-ico" aria-hidden="true">&#9742;</span>+64 22 099 9578</a>
-        <a href="mailto:hello@ambs.co.nz"><span class="fc-ico" aria-hidden="true">&#9993;</span>hello@ambs.co.nz</a>
-        <p class="fc-loc"><span class="fc-ico" aria-hidden="true">&#9906;</span><span data-i18n="foot.loc">Auckland, New Zealand</span></p>
-        <!-- Placeholders only: no links until the accounts exist. Swap each <span class="fc-soc"> for <a href="..." target="_blank" rel="noopener"> when ready. -->
-        <!-- Hidden until the accounts exist: remove the hidden attribute and add the links to show them again. -->
-        <div class="fc-social" hidden>
-          <span class="fc-soc" role="img" aria-label="Facebook (coming soon)">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0866FF" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></span>
-          <span class="fc-soc" role="img" aria-label="Instagram (coming soon)">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <defs><linearGradient id="iggrad" x1="4%" y1="96%" x2="96%" y2="4%">
-                <stop offset="0" stop-color="#FFD776"/><stop offset=".22" stop-color="#F3A03B"/>
-                <stop offset=".46" stop-color="#E8483C"/><stop offset=".72" stop-color="#C6249A"/>
-                <stop offset="1" stop-color="#6A34C4"/></linearGradient></defs>
-              <path fill="url(#iggrad)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></span>
-          <span class="fc-soc" role="img" aria-label="TikTok (coming soon)">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="#25F4EE" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" transform="translate(-1.1 -0.9)"/>
-              <path fill="#FE2C55" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" transform="translate(1.1 0.9)"/>
-              <path fill="#010101" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span>
-        </div>
+<footer class="f2">
+  <div class="wrap">
+    <div class="f2-grid">
+      <div class="f2-brand">
+        <a class="f2-logo" href="#top" aria-label="AMBS Solutions, back to top"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="AMBS Solutions" loading="lazy" decoding="async"></picture></a>
+        <p data-i18n="foot.tag">Built in Auckland. Working nationwide.</p>
       </div>
-    </div>
-    <div>
-      <div class="foot-links">
+      <nav class="f2-col" aria-label="Menu">
+        <p class="f2-h" data-i18n="foot.menu">Menu</p>
         <a href="#automate" data-i18n="nav.automate">What we do</a>
         <a href="#about" data-i18n="nav.about">About us</a>
         <a href="#why" data-i18n="nav.why">Why us</a>
         <a href="#how" data-i18n="nav.how">How it works</a>
-        <a href="#knowledge" data-i18n="nav.guides">Guides</a>
         <a href="#faq" data-i18n="nav.faq">Questions</a>
+      </nav>
+      <nav class="f2-col" aria-label="Explore">
+        <p class="f2-h" data-i18n="foot.explore">Explore</p>
+        <a href="/services" data-i18n="foot.services">Services</a>
+        <a href="/industries" data-i18n="foot.industries">Industries</a>
+        <a href="/guides" data-i18n="nav.guides">Guides</a>
         <a href="#book" data-i18n="nav.bookcall">Book a call</a>
+      </nav>
+      <div class="f2-col" id="contact">
+        <p class="f2-h" data-i18n="nav.contact">Contact us</p>
+        <a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a>
+        <a href="tel:+64220999578">+64 22 099 9578</a>
+        <span data-i18n="foot.loc">Auckland, New Zealand</span>
       </div>
     </div>
-    <div>
-      <details class="privbox" id="privacy-panel">
-        <summary data-i18n="priv.t">Privacy</summary>
-        <p data-i18n="priv.b">This site keeps your language and theme choice on your device until you close the browser. Details you send through the contact form reach us through a form service and are saved in our client system so we can reply. We don't sell them or use them for marketing without your agreement. If we don't end up working together, they are deleted after 12 months. Questions: call +64 22 099 9578.</p>
-        <p><a href="/privacy" data-i18n="priv.full">Read the full Privacy Policy</a></p>
-      </details>
-      <details class="privbox" id="terms-panel">
-        <summary data-i18n="terms.t">Terms of use</summary>
-        <p data-i18n="terms.b">This website gives general information about our services. Content may change without notice and is not a quote, offer or contract. Any work we do together is set out in a separate written agreement signed by both of us. Examples and timeframes shown are indicative. We take care with what we publish but cannot guarantee it is free of error, and to the extent the law allows, accept no liability for loss arising from reliance on it. New Zealand law applies.</p>
-        <p><a href="/terms" data-i18n="terms.full">Read the full Terms of Use</a></p>
-      </details>
-    </div>
-  </div>
-  <div class="wrap">
-    <div class="foot-explore">
-      <div><p class="fe-h" data-i18n="foot.services">Services</p><a href="/services/ai-automation" lang="en">AI automation</a><a href="/services/websites-and-portals" lang="en">Websites, portals and dashboards</a></div>
-      <div><p class="fe-h" data-i18n="foot.industries">Industries</p><a href="/industries/cafes-and-takeaways" data-i18n="biz.cafe">Café or takeaway</a><a href="/industries/trades-and-building" data-i18n="biz.trades">Trades and building</a><a href="/industries/clinics-and-salons" data-i18n="biz.clinic">Clinic or salon</a><a href="/industries/shops-and-dairies" data-i18n="biz.retail">Shop or dairy</a><a href="/industries/advisers-and-accountants" data-i18n="biz.adviser">Adviser or accountant</a><a href="/industries/transport-and-delivery" data-i18n="biz.transport">Transport and delivery</a></div>
-      <div><p class="fe-h" data-i18n="nav.guides">Guides</p><a href="/guides/how-to-choose-what-to-automate-first" lang="en">How to choose what to automate first</a><a href="/guides/automate-quotes-and-invoices" lang="en">Automate quotes and invoices</a><a href="/guides/reduce-no-shows-with-booking-reminders" lang="en">Reduce no-shows with booking reminders</a><a href="/guides/connect-your-business-apps" lang="en">Connect your business apps</a><a href="/guides/weekly-business-numbers-dashboard" lang="en">Your business numbers, every week</a><a href="/guides" data-i18n="kh.all">Browse all guides</a></div>
-    </div>
-    <div class="foot-legal">
-      <p class="foot-copy" data-i18n="legal.copy">© 2026 Ambs Solutions. All rights reserved.</p>
-      <nav class="foot-legal-links">
+    <div class="f2-bottom">
+      <p class="f2-copy" data-i18n="legal.copy">© 2026 Ambs Solutions. All rights reserved.</p>
+      <nav class="f2-legal" aria-label="Legal">
         <a href="/privacy" data-i18n="priv.t">Privacy</a>
-        <span aria-hidden="true">·</span>
         <a href="/terms" data-i18n="terms.t">Terms of use</a>
-        <span aria-hidden="true">·</span>
         <a href="#top" data-i18n="legal.back">Back to top</a>
       </nav>
     </div>
-    <p class="foot-fine foot-note" data-i18n="foot.fine">Translations are provided to help and may contain errors. If there is any difference, the English version applies.</p>
-    <!-- build 257 -->
-    <p class="foot-ver" id="appver" aria-label="Website version"></p>
-    </div>
+    <p class="f2-fine" data-i18n="foot.fine">Translations are provided to help and may contain errors. If there is any difference, the English version applies.</p>
+    <p class="f2-fine" id="appver" aria-label="Website version"></p>
+  </div>
 </footer>
 
 <script>
@@ -4582,7 +4682,8 @@ en:{
  "why.old":"What often goes wrong","why.new":"With Ambs Solutions",
  "why.o1":"Weeks of silence, then a status email","why.o2":"The same template with your logo dropped in","why.o3":"A big project that shows nothing for months","why.o4":"A vague quote that grows after you sign","why.o5":"Handed to someone you never speak to",
  "why.n1":"You deal directly with the person who builds it","why.n2":"Built around how your business already works","why.n3":"One automation first. See it working, then decide.","why.n4":"Scope and price agreed in writing before we start","why.n5":"Systems set up in your own accounts, so you keep them if you stop working with us",
- "nav.why":"Why us",
+ "wd.s1a":"Voice memo","wd.s1b":"Quote drafted","wd.s1c":"Invoice paid","wd.s2a":"Review comes in","wd.s2b":"Reply drafted","wd.s2c":"Questions answered","wd.s3a":"Job booked","wd.s3b":"Reminder sent","wd.s3c":"Gap filled","wd.s4a":"Typed once","wd.s4b":"Copied across","wd.s4c":"Record ready","wd.s5a":"Numbers gathered","wd.s5b":"Summary written","wd.s5c":"On your phone","wd.s6a":"Work logged","wd.s6b":"Filed away","wd.s6c":"Ready to show","wd.s7a":"Fast website","wd.s7b":"Their language","wd.s7c":"They call you","wd.s8a":"Photos from site","wd.s8b":"Checklist done","wd.s8c":"Approved","wd.s9a":"Sales and cash","wd.s9b":"The trend","wd.s9c":"Jobs on track",
+ "nav.why":"Why us","foot.menu":"Menu","foot.explore":"Explore",
  "terms.t":"Terms of use","terms.b":"This website gives general information about our services. Content may change without notice and is not a quote, offer or contract. Any work we do together is set out in a separate written agreement signed by both of us. Examples and timeframes shown are indicative. We take care with what we publish but cannot guarantee it is free of error, and to the extent the law allows, accept no liability for loss arising from reliance on it. New Zealand law applies.",
  "legal.copy":"© 2026 Ambs Solutions. All rights reserved.","legal.back":"Back to top",
  "priv.full":"Read the full Privacy Policy","terms.full":"Read the full Terms of Use",
@@ -4665,7 +4766,8 @@ zh:{
  "why.old":"常见的问题","why.new":"与 Ambs Solutions 合作",
  "why.o1":"几周没消息，然后来一封进度邮件","why.o2":"同一套模板，换上你的标志","why.o3":"大项目做几个月，什么都看不到","why.o4":"报价含糊，签约后不断加价","why.o5":"转手给一个你从未联系过的人",
  "why.n1":"直接对接真正动手做的人","why.n2":"围绕你现有的做事方式来打造","why.n3":"先做一个自动化，看到效果，再决定","why.n4":"动工前，范围和价格白纸黑字写清楚","why.n5":"系统建在你自己的账户里，即使不再合作也归你保留",
- "nav.why":"为什么选我们",
+ "wd.s1a":"语音备忘","wd.s1b":"生成报价","wd.s1c":"发票已付","wd.s2a":"收到评价","wd.s2b":"回复已起草","wd.s2c":"问题已回答","wd.s3a":"已预约","wd.s3b":"提醒已发送","wd.s3c":"空档已补上","wd.s4a":"只输入一次","wd.s4b":"自动同步","wd.s4c":"记录完成","wd.s5a":"收集数据","wd.s5b":"生成摘要","wd.s5c":"发到手机","wd.s6a":"记录工作","wd.s6b":"归档保存","wd.s6c":"随时出示","wd.s7a":"快速网站","wd.s7b":"客户的语言","wd.s7c":"客户来电","wd.s8a":"现场照片","wd.s8b":"清单完成","wd.s8c":"已批准","wd.s9a":"销售与现金","wd.s9b":"趋势","wd.s9c":"工作进度",
+ "nav.why":"为什么选我们","foot.menu":"菜单","foot.explore":"浏览",
  "terms.t":"使用条款","terms.b":"本网站提供有关我们服务的一般信息。内容可能随时更改，不构成报价、要约或合同，双方的具体合作以另行签署的书面协议为准。所示示例与时间仅供参考。我们尽力确保信息准确，但不保证毫无差错，在法律允许的范围内，亦不对因依赖本网站信息造成的损失承担责任。适用新西兰法律。",
  "legal.copy":"© 2026 Ambs Solutions。保留所有权利。","legal.back":"回到顶部",
  "priv.full":"阅读完整隐私政策","terms.full":"阅读完整使用条款",
@@ -4748,7 +4850,8 @@ hi:{
  "why.old":"अक्सर क्या गड़बड़ होता है","why.new":"Ambs Solutions के साथ",
  "why.o1":"हफ़्तों चुप्पी, फिर एक स्टेटस ईमेल","why.o2":"वही टेम्पलेट, बस आपका लोगो लगा दिया","why.o3":"बड़ा प्रोजेक्ट, महीनों तक कुछ दिखता नहीं","why.o4":"धुँधला कोटेशन, साइन करने के बाद बढ़ता जाता है","why.o5":"किसी और को सौंप दिया, जिससे आप कभी बात नहीं करते",
  "why.n1":"जो बनाता है, सीधे उसी से बात","why.n2":"आपका काम जैसे चलता है, उसी के हिसाब से बना","why.n3":"पहले एक ऑटोमेशन, चलता देखिए, फिर तय कीजिए","why.n4":"शुरू करने से पहले काम और क़ीमत लिखित में तय","why.n5":"सिस्टम आपके अपने खातों में बनते हैं, साथ काम बंद करने पर भी आपके पास रहते हैं",
- "nav.why":"क्यों हम",
+ "wd.s1a":"वॉइस मेमो","wd.s1b":"कोटेशन तैयार","wd.s1c":"बिल का भुगतान","wd.s2a":"रिव्यू आया","wd.s2b":"जवाब तैयार","wd.s2c":"सवालों के जवाब","wd.s3a":"बुकिंग हुई","wd.s3b":"रिमाइंडर भेजा","wd.s3c":"खाली समय भरा","wd.s4a":"एक बार लिखें","wd.s4b":"अपने आप कॉपी","wd.s4c":"रिकॉर्ड तैयार","wd.s5a":"आंकड़े जुटाए","wd.s5b":"सारांश तैयार","wd.s5c":"आपके फ़ोन पर","wd.s6a":"काम दर्ज","wd.s6b":"फ़ाइल में रखा","wd.s6c":"दिखाने को तैयार","wd.s7a":"तेज़ वेबसाइट","wd.s7b":"उनकी भाषा","wd.s7c":"वे कॉल करते हैं","wd.s8a":"साइट की फ़ोटो","wd.s8b":"चेकलिस्ट पूरी","wd.s8c":"मंज़ूर","wd.s9a":"बिक्री और नकद","wd.s9b":"रुझान","wd.s9c":"काम सही राह पर",
+ "nav.why":"क्यों हम","foot.menu":"मेन्यू","foot.explore":"और देखें",
  "terms.t":"उपयोग की शर्तें","terms.b":"यह वेबसाइट हमारी सेवाओं की सामान्य जानकारी देती है। सामग्री बिना सूचना बदल सकती है और यह कोई कोटेशन, प्रस्ताव या अनुबंध नहीं है, हमारे बीच का काम अलग लिखित समझौते से तय होता है। दिए गए उदाहरण और समय अनुमानित हैं। हम जानकारी का ध्यान रखते हैं, पर त्रुटिरहित होने की गारंटी नहीं देते, और इस पर भरोसे से हुए नुक़सान की ज़िम्मेदारी नहीं लेते। न्यूज़ीलैंड का क़ानून लागू होता है।",
  "legal.copy":"© 2026 Ambs Solutions। सर्वाधिकार सुरक्षित।","legal.back":"ऊपर जाएँ",
  "priv.full":"पूरी प्राइवेसी पॉलिसी पढ़ें","terms.full":"पूरी उपयोग शर्तें पढ़ें",
@@ -4831,7 +4934,8 @@ mi:{
  "why.old":"Ngā mea ka hē i te nuinga o te wā","why.new":"Me Ambs Solutions",
  "why.o1":"He wiki te wahangū, kātahi ka tae mai he īmēra","why.o2":"Ko taua papa tauira anō, me tō moko kau","why.o3":"He kaupapa nui, kāore he mea e kitea mō ngā marama","why.o4":"He whakatau utu pōrangi, ka piki i muri i tō haina","why.o5":"Ka hoatu ki tētahi kāore koe e kōrero",
  "why.n1":"Ka kōrero tōtika koe ki te tangata e hanga ana","why.n2":"I hangaia mō te āhua o āu mahi ināianei","why.n3":"Kotahi te whakaaunoa i te tuatahi, kia kite, kātahi ka whiriwhiri","why.n4":"Ka whakaaetia te whānui me te utu ki te tuhinga i mua i te tīmatanga","why.n5":"Ka whakaritea ngā pūnaha ki ō ake pūkete, kia mau tonu ki a koe ahakoa ka mutu tā tātou mahi tahi",
- "nav.why":"He aha ai",
+ "wd.s1a":"Kōrero rekoata","wd.s1b":"Kua tuhia te utu","wd.s1c":"Kua utua","wd.s2a":"He arotake hou","wd.s2b":"Kua tuhia he whakautu","wd.s2c":"Kua whakautua","wd.s3a":"Kua tāpuitia","wd.s3b":"Kua tukuna he whakamaumahara","wd.s3c":"Kua whakakīia te wāhi","wd.s4a":"Kotahi te tuhi","wd.s4b":"Ka tāruatia","wd.s4c":"Kua rite te rekoata","wd.s5a":"Kua kohia ngā tau","wd.s5b":"Kua tuhia he whakarāpopoto","wd.s5c":"Ki tō waea","wd.s6a":"Kua rekoatatia","wd.s6b":"Kua kōnaetia","wd.s6c":"Kua rite hei whakaatu","wd.s7a":"Paetukutuku tere","wd.s7b":"Tō rātou reo","wd.s7c":"Ka waea mai","wd.s8a":"Whakaahua","wd.s8b":"Kua oti te rārangi","wd.s8c":"Kua whakaaetia","wd.s9a":"Hoko me te moni","wd.s9b":"Te ia","wd.s9c":"Kei te tika ngā mahi",
+ "nav.why":"He aha ai","foot.menu":"Tahua","foot.explore":"Tūhura",
  "terms.t":"Ngā ture whakamahi","terms.b":"He kōrero whānui tēnei paetukutuku mō ā mātou ratonga. Ka taea te whakarerekē te ihirangi me te kore pānui, ehara i te whakatau utu, i te tuku, i te kirimana rānei, ka tuhia ā tāua mahi ki tētahi whakaaetanga tuhituhi motuhake. He tauira noa ngā wā me ngā tauira e whakaaturia ana. Ahakoa tā mātou tiaki, kāore e taea te kī kāore he hapa, ā, kāore mātou e whai kawenga mō te mate i puta i te whakawhirinaki ki ēnei kōrero. Ka whai mana te ture o Aotearoa.",
  "legal.copy":"© 2026 Ambs Solutions. Kua rāhuitia ngā mōtika katoa.","legal.back":"Hoki ki runga",
  "priv.full":"Pānuitia te kaupapa here tūmataiti katoa","terms.full":"Pānuitia ngā ture whakamahi katoa",
@@ -4914,7 +5018,8 @@ pa:{
  "why.old":"ਅਕਸਰ ਕੀ ਗੜਬੜ ਹੁੰਦਾ ਹੈ","why.new":"Ambs Solutions ਨਾਲ",
  "why.o1":"ਹਫ਼ਤੇ ਚੁੱਪ, ਫਿਰ ਇੱਕ ਸਟੇਟਸ ਈਮੇਲ","why.o2":"ਓਹੀ ਟੈਂਪਲੇਟ, ਬੱਸ ਤੁਹਾਡਾ ਲੋਗੋ ਲਾ ਦਿੱਤਾ","why.o3":"ਵੱਡਾ ਪ੍ਰੋਜੈਕਟ, ਮਹੀਨਿਆਂ ਤੱਕ ਕੁਝ ਨਹੀਂ ਦਿਖਦਾ","why.o4":"ਧੁੰਦਲਾ ਕੋਟੇਸ਼ਨ, ਸਾਈਨ ਕਰਨ ਮਗਰੋਂ ਵਧਦਾ ਜਾਂਦਾ","why.o5":"ਕਿਸੇ ਹੋਰ ਨੂੰ ਸੌਂਪ ਦਿੱਤਾ, ਜਿਸ ਨਾਲ ਤੁਸੀਂ ਕਦੇ ਗੱਲ ਨਹੀਂ ਕਰਦੇ",
  "why.n1":"ਜੋ ਬਣਾਉਂਦਾ ਹੈ, ਸਿੱਧਾ ਉਸੇ ਨਾਲ ਗੱਲ","why.n2":"ਤੁਹਾਡਾ ਕੰਮ ਜਿਵੇਂ ਚੱਲਦਾ ਹੈ, ਉਸੇ ਮੁਤਾਬਕ ਬਣਿਆ","why.n3":"ਪਹਿਲਾਂ ਇੱਕ ਆਟੋਮੇਸ਼ਨ, ਚੱਲਦਾ ਵੇਖੋ, ਫਿਰ ਫ਼ੈਸਲਾ ਕਰੋ","why.n4":"ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਕੰਮ ਤੇ ਕੀਮਤ ਲਿਖਤੀ ਤੈਅ","why.n5":"ਸਿਸਟਮ ਤੁਹਾਡੇ ਆਪਣੇ ਖਾਤਿਆਂ ਵਿੱਚ ਬਣਦੇ ਹਨ, ਸਾਡੇ ਨਾਲ ਕੰਮ ਬੰਦ ਕਰਨ 'ਤੇ ਵੀ ਤੁਹਾਡੇ ਕੋਲ ਰਹਿੰਦੇ ਹਨ",
- "nav.why":"ਕਿਉਂ ਅਸੀਂ",
+ "wd.s1a":"ਵੌਇਸ ਮੈਮੋ","wd.s1b":"ਕੋਟੇਸ਼ਨ ਤਿਆਰ","wd.s1c":"ਬਿੱਲ ਦਾ ਭੁਗਤਾਨ","wd.s2a":"ਰਿਵਿਊ ਆਇਆ","wd.s2b":"ਜਵਾਬ ਤਿਆਰ","wd.s2c":"ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ","wd.s3a":"ਬੁਕਿੰਗ ਹੋਈ","wd.s3b":"ਰਿਮਾਈਂਡਰ ਭੇਜਿਆ","wd.s3c":"ਖਾਲੀ ਸਮਾਂ ਭਰਿਆ","wd.s4a":"ਇੱਕ ਵਾਰ ਲਿਖੋ","wd.s4b":"ਆਪਣੇ ਆਪ ਕਾਪੀ","wd.s4c":"ਰਿਕਾਰਡ ਤਿਆਰ","wd.s5a":"ਅੰਕੜੇ ਇਕੱਠੇ","wd.s5b":"ਸਾਰ ਤਿਆਰ","wd.s5c":"ਤੁਹਾਡੇ ਫ਼ੋਨ ਤੇ","wd.s6a":"ਕੰਮ ਦਰਜ","wd.s6b":"ਫ਼ਾਈਲ ਵਿੱਚ ਰੱਖਿਆ","wd.s6c":"ਦਿਖਾਉਣ ਲਈ ਤਿਆਰ","wd.s7a":"ਤੇਜ਼ ਵੈੱਬਸਾਈਟ","wd.s7b":"ਉਹਨਾਂ ਦੀ ਭਾਸ਼ਾ","wd.s7c":"ਉਹ ਕਾਲ ਕਰਦੇ ਹਨ","wd.s8a":"ਸਾਈਟ ਦੀਆਂ ਫ਼ੋਟੋਆਂ","wd.s8b":"ਚੈੱਕਲਿਸਟ ਪੂਰੀ","wd.s8c":"ਮਨਜ਼ੂਰ","wd.s9a":"ਵਿਕਰੀ ਅਤੇ ਨਕਦ","wd.s9b":"ਰੁਝਾਨ","wd.s9c":"ਕੰਮ ਸਹੀ ਰਾਹ ਤੇ",
+ "nav.why":"ਕਿਉਂ ਅਸੀਂ","foot.menu":"ਮੀਨੂ","foot.explore":"ਹੋਰ ਵੇਖੋ",
  "terms.t":"ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ","terms.b":"ਇਹ ਵੈੱਬਸਾਈਟ ਸਾਡੀਆਂ ਸੇਵਾਵਾਂ ਬਾਰੇ ਆਮ ਜਾਣਕਾਰੀ ਦਿੰਦੀ ਹੈ। ਸਮੱਗਰੀ ਬਿਨਾਂ ਸੂਚਨਾ ਬਦਲ ਸਕਦੀ ਹੈ ਅਤੇ ਇਹ ਕੋਈ ਕੋਟੇਸ਼ਨ, ਪੇਸ਼ਕਸ਼ ਜਾਂ ਇਕਰਾਰਨਾਮਾ ਨਹੀਂ, ਸਾਡਾ ਆਪਸੀ ਕੰਮ ਵੱਖਰੇ ਲਿਖਤੀ ਸਮਝੌਤੇ ਨਾਲ ਤੈਅ ਹੁੰਦਾ ਹੈ। ਵਿਖਾਏ ਉਦਾਹਰਣ ਤੇ ਸਮਾਂ ਅੰਦਾਜ਼ਨ ਹਨ। ਅਸੀਂ ਧਿਆਨ ਰੱਖਦੇ ਹਾਂ ਪਰ ਗ਼ਲਤੀ-ਰਹਿਤ ਹੋਣ ਦੀ ਗਰੰਟੀ ਨਹੀਂ ਦਿੰਦੇ, ਤੇ ਇਸ ਉੱਤੇ ਭਰੋਸੇ ਨਾਲ ਹੋਏ ਨੁਕਸਾਨ ਦੀ ਜ਼ਿੰਮੇਵਾਰੀ ਨਹੀਂ ਲੈਂਦੇ। ਨਿਊਜ਼ੀਲੈਂਡ ਦਾ ਕਾਨੂੰਨ ਲਾਗੂ ਹੁੰਦਾ ਹੈ।",
  "legal.copy":"© 2026 Ambs Solutions। ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ।","legal.back":"ਉੱਤੇ ਜਾਓ",
  "priv.full":"ਪੂਰੀ ਪਰਦੇਦਾਰੀ ਨੀਤੀ ਪੜ੍ਹੋ","terms.full":"ਪੂਰੀਆਂ ਵਰਤੋਂ ਸ਼ਰਤਾਂ ਪੜ੍ਹੋ",
@@ -5063,10 +5168,27 @@ function headerOffset(){
   const h=document.querySelector("header");
   return (h?h.getBoundingClientRect().height:64)+14;
 }
+/* a slow, eased glide to any point on the page (menu links, What we do list). Any wheel, touch or key
+   press from the visitor stops it at once, so it never fights them. */
+window.ambsGlide=(function(){
+  let raf=0;
+  const calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const stop=()=>{if(raf){cancelAnimationFrame(raf);raf=0;}};
+  ["wheel","touchstart","keydown","mousedown"].forEach(t=>addEventListener(t,stop,{passive:true}));
+  return function(target){
+    stop();target=Math.max(0,Math.min(target,document.documentElement.scrollHeight-innerHeight));
+    const start=window.pageYOffset,dist=target-start;
+    if(calm||Math.abs(dist)<2){window.scrollTo({top:target,behavior:"auto"});return;}
+    const dur=Math.max(750,Math.min(1600,600+Math.abs(dist)*.16)),t0=performance.now();
+    const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    const step=now=>{const k=Math.min(1,(now-t0)/dur);window.scrollTo({top:start+dist*ease(k),behavior:"instant"});raf=k<1?requestAnimationFrame(step):0;};
+    raf=requestAnimationFrame(step);
+  };
+})();
 function scrollToId(id){
   const el=document.getElementById(id);if(!el)return;
   const y=el.getBoundingClientRect().top+window.pageYOffset-headerOffset();
-  window.scrollTo({top:Math.max(0,y),behavior:"smooth"});
+  window.ambsGlide(Math.max(0,y));
 }
 dr.querySelectorAll("a").forEach(a=>a.addEventListener("click",e=>{
   const href=a.getAttribute("href")||"";
@@ -6194,11 +6316,13 @@ if("IntersectionObserver" in window && !reduced){
   function run(){panels.forEach(function(p,k){p.classList.toggle("vis",mode==="list"&&inView[k]);p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]&&(settled[k]||!("IntersectionObserver" in window))):(visible&&k===cur));});}
   /* a panel counts as settled a moment after it opens, once its height has finished easing */
   function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:950);}
+  var glider=document.createElement("span");glider.className="wd-glider";glider.setAttribute("aria-hidden","true");tabRow.insertBefore(glider,tabRow.firstChild);tabRow.classList.add("has-glider");
+  function glide(i){var t=tabs[i];if(!t)return;glider.style.setProperty("--gy",t.offsetTop+"px");glider.style.setProperty("--gh",t.offsetHeight+"px");}
   function copyIn(k,delay){var c=panels[k]&&panels[k].querySelector(".wd-copy");if(!c||!window.textOpen)return;
     if(mode!=="list")window.textOpen(c.querySelector("h3"),delay||0);
     window.textOpen(c.querySelector("p"),(delay||0)+(mode==="list"?0:120));}
   function show(i,fromSwipe){
-    if(i===cur)return;cur=i;if(mode!=="list")copyIn(i,60);
+    if(i===cur)return;cur=i;if(mode!=="list"){copyIn(i,60);glide(i);}
     tabs.forEach(function(t,k){var on=k===i;t.setAttribute("aria-selected",String(on));t.tabIndex=on?0:-1;});
     panels.forEach(function(p,k){var on=k===i||mode!=="scroll";p.classList.toggle("on",on);if(on)p.removeAttribute("inert");else p.setAttribute("inert","");});
     dotEls.forEach(function(d,k){d.classList.toggle("on",k===i);});
@@ -6232,7 +6356,7 @@ if("IntersectionObserver" in window && !reduced){
     var p=progress();show(Math.min(n-1,Math.floor(p*n*0.9999)));
     railI.style.transform="scaleY("+p.toFixed(4)+")";
   }
-  function jump(i){var top=track.getBoundingClientRect().top+scrollY,runL=track.offsetHeight-innerHeight;scrollTo({top:top+runL*((i+.5)/n),behavior:calm?"auto":"smooth"});}
+  function jump(i){var top=track.getBoundingClientRect().top+scrollY,runL=track.offsetHeight-innerHeight,y=top+runL*((i+.5)/n);if(window.ambsGlide)window.ambsGlide(y);else scrollTo({top:y,behavior:calm?"auto":"smooth"});}
   /* phones and tablets: swiping picks the service */
   function goTo(i,instant){var pad=parseFloat(getComputedStyle(box).paddingLeft)||0;box.scrollTo({left:panels[i].offsetLeft-pad,behavior:(instant||calm)?"auto":"smooth"});}
   var swipeTick=false;
@@ -6350,6 +6474,70 @@ if("IntersectionObserver" in window && !reduced){
     var mo=new MutationObserver(function(){if(busy)return;animate(capT);animate(capD,120);});
     mo.observe(capT,{childList:true,characterData:true,subtree:true});
   }
+})();
+</script>
+<script>
+/* what we do: list cascade on laptops, card-by-card entrance on phones */
+(function(){
+  var wd=document.getElementById("wdShow");if(!wd||!("IntersectionObserver" in window))return;
+  var rows=[].slice.call(wd.querySelectorAll(".wd-tabs .wd-grp,.wd-tabs .wd-tab"));
+  rows.forEach(function(r,i){r.style.setProperty("--ti",i);});
+  wd.classList.add("wd-cascade");
+  new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){wd.classList.add("wd-shown");o.disconnect();}});},{threshold:.15}).observe(wd.querySelector(".wd-tabs"));
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("seen");io.unobserve(e.target);}});},{rootMargin:"0px 0px -8% 0px"});
+  wd.querySelectorAll(".wd-panel,.wd-lgrp").forEach(function(p){io.observe(p);});
+})();
+</script>
+<script>
+/* What we do: walk through each picture step by step; hover or tap a step to hold it */
+(function(){
+  var ST=2800,reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var stages=[].slice.call(document.querySelectorAll(".wd-stage")).filter(function(g){return g.querySelector(".wd-steps");});
+  if(!stages.length)return;
+  var state=stages.map(function(){return{i:-1,held:false,t:null};});
+  function targets(g,sel){var mk=g.querySelector(".mk");return mk?[].slice.call(mk.querySelectorAll(sel)):[];}
+  function set(k,i){var g=stages[k],st=state[k],chips=g.querySelectorAll(".wd-st");
+    g.querySelectorAll(".spot").forEach(function(e){e.classList.remove("spot");});
+    chips.forEach(function(c,x){c.classList.toggle("now",x===i);});
+    st.i=i;
+    if(i<0){g.classList.remove("spotting");return;}
+    targets(g,chips[i].dataset.t).forEach(function(e){e.classList.add("spot");});
+    g.classList.add("spotting");}
+  /* a step whose part of the picture is hidden on this screen size is left out */
+  function avail(){stages.forEach(function(g){g.querySelectorAll(".wd-st").forEach(function(c){
+    c.hidden=!targets(g,c.dataset.t).some(function(e){return e.getClientRects().length>0;});});});}
+  function tick(k){var st=state[k];clearTimeout(st.t);if(st.held)return;
+    var chips=stages[k].querySelectorAll(".wd-st"),n=chips.length,i=st.i;
+    for(var x=0;x<n;x++){i=(i+1)%n;if(!chips[i].hidden)break;}
+    set(k,i);
+    st.t=setTimeout(function(){tick(k);},ST);}
+  function running(k){var p=stages[k].closest(".wd-panel");return p&&p.classList.contains("run")&&!document.hidden;}
+  function sync(){stages.forEach(function(g,k){var st=state[k];
+    if(running(k)){if(!st.t&&!st.held){st.i=-1;tick(k);}}
+    else{clearTimeout(st.t);st.t=null;st.held=false;g.querySelector(".wd-steps").classList.remove("held");set(k,-1);}});}
+  stages.forEach(function(g,k){
+    g.style.setProperty("--st-ms",ST+"ms");
+    var row=g.querySelector(".wd-steps");
+    row.querySelectorAll(".wd-st").forEach(function(c,x){
+      function hold(){var st=state[k];clearTimeout(st.t);st.t=null;st.held=true;row.classList.add("held");set(k,x);}
+      c.addEventListener("mouseenter",hold);
+      c.addEventListener("click",function(e){e.stopPropagation();hold();});
+    });
+    row.addEventListener("mouseleave",function(){var st=state[k];if(!st.held)return;st.held=false;row.classList.remove("held");st.t=setTimeout(function(){tick(k);},ST);});
+    /* tapping the picture itself steps forward */
+    g.addEventListener("click",function(e){if(e.target.closest(".wd-st"))return;var st=state[k];if(!running(k))return;st.held=false;row.classList.remove("held");tick(k);});
+    if(!reduce&&matchMedia("(hover:hover) and (pointer:fine)").matches){
+      var raf=0,mx=0,my=0;
+      g.addEventListener("pointermove",function(e){var r=g.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-.5)*2;my=((e.clientY-r.top)/r.height-.5)*2;
+        if(!raf)raf=requestAnimationFrame(function(){raf=0;g.style.setProperty("--mx",mx.toFixed(3));g.style.setProperty("--my",my.toFixed(3));});});
+      g.addEventListener("pointerleave",function(){g.style.setProperty("--mx",0);g.style.setProperty("--my",0);});
+    }
+  });
+  var mo=new MutationObserver(sync);
+  stages.forEach(function(g){mo.observe(g.closest(".wd-panel"),{attributes:true,attributeFilter:["class"]});});
+  document.addEventListener("visibilitychange",sync);
+  var rz;addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(avail,200);});
+  avail();sync();
 })();
 </script>
 </body>

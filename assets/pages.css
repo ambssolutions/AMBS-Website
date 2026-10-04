@@ -290,3 +290,33 @@ button,input,select,textarea{font:inherit}
 @keyframes ow-in{from{opacity:0;transform:translateY(.45em)}}
 @keyframes ow-fade-only{from{opacity:0}}
 @media(prefers-reduced-motion:reduce){.ow-go .ow,.ow-fade{animation-name:ow-fade-only}}
+
+/* slim footer: brand · contact · three links */
+.ftr-grid.ftr-slim{grid-template-columns:1.4fr 1fr auto}
+.ftr-main{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.2rem}
+.ftr-main a{font-weight:700}
+.ftr-fine a{color:inherit}
+@media(max-width:899px){.ftr-grid.ftr-slim{grid-template-columns:1fr}.ftr-main{flex-direction:row;flex-wrap:wrap;gap:.2rem 1.6rem}}
+
+.ftr-main{display:grid!important;grid-template-columns:repeat(2,max-content);gap:.15rem 2.4rem!important}
+@media(max-width:899px){.ftr-main{grid-template-columns:repeat(2,1fr)}}
+
+.ftr-menu{display:grid;grid-template-columns:repeat(2,max-content);gap:0 3rem}
+.ftr-menu ul{list-style:none;margin:.5rem 0 0;padding:0}
+.ftr-menu a{display:inline-block;padding:.32em 0;font-weight:600}
+@media(max-width:899px){.ftr-menu{grid-template-columns:1fr 1fr;gap:0 1.2rem}}
+
+/* footer: same clean columns as the home page */
+footer.f2{padding:3.4rem 0 1.8rem;border-top:1px solid var(--line);font-size:.93rem;background:transparent}
+footer.f2 .f2-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:2.4rem 2rem;align-items:start}
+footer.f2 .f2-logo img{display:block;width:150px;height:auto}
+footer.f2 .f2-brand p{margin:.9rem 0 0;color:var(--muted);font-size:.9rem;max-width:30ch}
+footer.f2 .f2-col{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem}
+footer.f2 .f2-h{margin:0 0 .7rem;font-size:max(.72rem,12px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+footer.f2 .f2-col a,footer.f2 .f2-col span{display:inline-flex;align-items:center;min-height:32px;color:var(--muted);text-decoration:none;font-weight:500}
+footer.f2 a:hover{color:var(--blue)}
+footer.f2 .f2-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.6rem 1.6rem;margin-top:2.6rem;padding-top:1.3rem;border-top:1px solid var(--line)}
+footer.f2 .f2-copy{margin:0;color:var(--muted);font-size:.86rem}
+footer.f2 .f2-legal{display:flex;gap:.2rem 1.4rem}
+footer.f2 .f2-legal a{display:inline-flex;align-items:center;min-height:32px;color:var(--muted);text-decoration:none;font-size:.86rem;font-weight:600}
+@media(max-width:899px){footer.f2 .f2-grid{grid-template-columns:1fr 1fr;gap:2rem 1.2rem}footer.f2 .f2-brand{grid-column:1/-1}footer.f2 .f2-bottom{flex-direction:column;align-items:flex-start}}
