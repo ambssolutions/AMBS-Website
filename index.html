@@ -15,7 +15,7 @@
      the app is added and never look again, so a dark variant only decided
      which one you were stuck with. The tab icon below does follow the theme,
      because browsers re-evaluate that on every load. -->
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v2.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="application-name" content="Ambs Solutions">
 <!-- The site has its own language picker, so the browser must not translate
@@ -37,7 +37,7 @@
   "@id": "https://ambs.co.nz/#business",
   "name": "Ambs Solutions",
   "url": "https://ambs.co.nz/",
-  "logo": "https://ambs.co.nz/icon-192.png",
+  "logo": "https://ambs.co.nz/icon-192-v2.png",
   "image": "https://ambs.co.nz/logo.png",
   "description": "AI automation and digital solutions for New Zealand businesses. Auckland based, working nationwide.",
   "email": "hello@ambs.co.nz",
@@ -3901,6 +3901,7 @@ html[data-theme="dark"] .hero.is-stacked .hero-cut{background:linear-gradient(to
 .wd--list .wd-panel:not(.open) .wd-acc .ic-line,.wd--list .wd-panel:not(.open) .wd-acc .ic-fill{animation:none!important}
 .wd-tab:not([aria-selected="true"]) .ic-line,.wd-tab:not([aria-selected="true"]) .ic-fill{animation:none!important}
 @media(prefers-reduced-motion:reduce){.wd-ico .ic-line,.wd-ico .ic-fill{animation:none!important}}
+.foot-ver{flex-basis:100%;width:100%;margin:.6rem 0 0;font-size:max(.72rem,12px);opacity:.55}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4455,7 +4456,8 @@ with easy-to-use AI.</h1>
     </div>
     <p class="foot-fine foot-note" data-i18n="foot.fine">Translations are provided to help and may contain errors. If there is any difference, the English version applies.</p>
     <!-- build 257 -->
-  </div>
+    <p class="foot-ver" id="appver" aria-label="Website version"></p>
+    </div>
 </footer>
 
 <script>
@@ -5652,13 +5654,17 @@ if("IntersectionObserver" in window && !reduced){
   }
 
   /* first read on load, then whenever the app is reopened, then hourly-ish */
+  var hadWorker=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
   readVersion().then(function(b){
     if(!b) return;
     loadedBuild=b;
     /* in the installed app, say so once when it opens on a newer version than last time */
     var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
     var seen=null;try{seen=localStorage.getItem("ambs:build");localStorage.setItem("ambs:build",b);}catch(e){}
-    if(app&&seen&&seen!==b) updatedNote();
+    /* no saved version but the app has run before (its offline worker was already in charge): it was installed before
+       versions were saved, so this is an update too */
+    if(app&&((seen&&seen!==b)||(!seen&&hadWorker))) updatedNote();
+    var vl=document.getElementById("appver");if(vl)vl.textContent="Version "+b;
   });
   function updatedNote(){
     var n=document.createElement("div");n.className="updatebar updatebar--done";n.setAttribute("role","status");
