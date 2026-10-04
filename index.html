@@ -15,7 +15,7 @@
      the app is added and never look again, so a dark variant only decided
      which one you were stuck with. The tab icon below does follow the theme,
      because browsers re-evaluate that on every load. -->
-<link rel="apple-touch-icon" href="/apple-touch-icon-v3.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="application-name" content="Ambs Solutions">
 <!-- The site has its own language picker, so the browser must not translate
@@ -37,7 +37,7 @@
   "@id": "https://ambs.co.nz/#business",
   "name": "Ambs Solutions",
   "url": "https://ambs.co.nz/",
-  "logo": "https://ambs.co.nz/icon-192-v3.png",
+  "logo": "https://ambs.co.nz/icon-192-v4.png",
   "image": "https://ambs.co.nz/logo.png",
   "description": "AI automation and digital solutions for New Zealand businesses. Auckland based, working nationwide.",
   "email": "hello@ambs.co.nz",
@@ -3457,8 +3457,8 @@ html[data-theme="dark"] .wd-more{color:#8CC4FF}
 @keyframes mk-move{to{left:calc(100% - .65em)}}
 .mk b,.mk em{font-style:normal}
 /* animations only run on the visible preview while the section is on screen */
-.wd-panel *{animation-play-state:paused}
-.wd-panel.run *{animation-play-state:running}
+.wd-panel .wd-stage *{animation-play-state:paused}
+.wd-panel.run .wd-stage *{animation-play-state:running}
 
 /* 1. quotes: voice memo -> priced quote -> paid */
 .m1-memo{display:flex;align-items:center;gap:.7em;width:12.5em;padding:.9em}
@@ -3860,57 +3860,64 @@ body:has(.updatebar.on) .totop{opacity:0;visibility:hidden}
 html[data-theme="dark"] .hero.is-stacked .hero-cut{background:linear-gradient(to bottom,transparent,#0F1428 26px)}
 .hero.is-stacked{filter:none!important}
 
-/* ---- service icons: they draw themselves in when the service becomes active, then each keeps a small motion of its own ---- */
+/* ---- service icons: always alive where you can see them ----
+   laptop: the current service's icon draws itself in, then moves.
+   phone: every icon on screen moves, open or closed, and gives a small pop when its card opens. */
 .wd-ico .ic-line{stroke-dasharray:1 0}
 .wd-ico .ic-a,.wd-ico .ic-b{transform-box:fill-box;transform-origin:center}
-.wd-tab[aria-selected="true"] .wd-ico,.wd--list .wd-panel.open .wd-acc .wd-ico{--on:1}
-.wd-tab[aria-selected="true"] .ic-line,.wd--list .wd-panel.open .wd-acc .ic-line{stroke-dasharray:1 1;animation:ic-draw .9s cubic-bezier(.4,0,.2,1) both}
-.wd-tab[aria-selected="true"] .ic-line:nth-of-type(2),.wd--list .wd-panel.open .wd-acc .ic-line:nth-of-type(2){animation-delay:.12s}
-.wd-tab[aria-selected="true"] .ic-line:nth-of-type(3),.wd--list .wd-panel.open .wd-acc .ic-line:nth-of-type(3){animation-delay:.22s}
-.wd-tab[aria-selected="true"] .ic-line:nth-of-type(n+4),.wd--list .wd-panel.open .wd-acc .ic-line:nth-of-type(n+4){animation-delay:.32s}
-.wd-tab[aria-selected="true"] .ic-fill,.wd--list .wd-panel.open .wd-acc .ic-fill{animation:ic-fill .8s ease .2s both}
+.wd-tab[aria-selected="true"] .ic-line{stroke-dasharray:1 1;animation:ic-draw .9s cubic-bezier(.4,0,.2,1) both}
+.wd-tab[aria-selected="true"] .ic-line:nth-of-type(2){animation-delay:.12s}
+.wd-tab[aria-selected="true"] .ic-line:nth-of-type(3){animation-delay:.22s}
+.wd-tab[aria-selected="true"] .ic-line:nth-of-type(n+4){animation-delay:.32s}
+.wd-tab[aria-selected="true"] .ic-fill{animation:ic-fill .8s ease .2s both}
 @keyframes ic-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes ic-fill{from{opacity:0}}
-/* each icon's own motion, after it has drawn in */
-#wd-t1 .ic-a,#wd-p1 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-coin 3.2s 1.3s ease-in-out infinite}
-@keyframes ic-coin{0%,70%,100%{transform:scaleX(1)}80%{transform:scaleX(-1)}90%{transform:scaleX(1)}}
-#wd-t2 .ic-a,#wd-p2 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-spin 3s 1.3s ease-in-out infinite}
-@keyframes ic-spin{0%,75%{transform:rotate(0)}100%{transform:rotate(180deg)}}
-#wd-t2 .ic-b,#wd-p2 .wd-acc .ic-b{transform-origin:left center;animation:ic-draw .9s .2s both,ic-type 3s 1.3s ease-in-out infinite}
-#wd-t2 .ic-b:last-of-type,#wd-p2 .wd-acc .ic-b:last-of-type{animation-delay:.2s,1.5s}
-@keyframes ic-type{0%,100%{transform:scaleX(1)}35%{transform:scaleX(.25)}60%{transform:scaleX(1)}}
-#wd-t3 .ic-a,#wd-p3 .wd-acc .ic-a{transform-origin:50% 0;animation:ic-draw .9s .3s both,ic-ring 2.8s 1.3s ease-in-out infinite}
-@keyframes ic-ring{0%,60%,100%{transform:rotate(0)}66%{transform:rotate(16deg)}72%{transform:rotate(-14deg)}78%{transform:rotate(10deg)}84%{transform:rotate(-6deg)}90%{transform:rotate(0)}}
-#wd-t4 .ic-a,#wd-p4 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-down 2.4s 1.3s ease-in-out infinite}
-#wd-t4 .ic-b,#wd-p4 .wd-acc .ic-b{animation:ic-draw .9s .3s both,ic-up 2.4s 2.5s ease-in-out infinite}
-@keyframes ic-down{0%,100%{transform:translateY(0)}50%{transform:translateY(1.6px)}}
-@keyframes ic-up{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.6px)}}
-#wd-t5 .ic-a,#wd-p5 .wd-acc .ic-a{animation:ic-redraw 3.4s .2s ease-in-out infinite}
-@keyframes ic-redraw{0%{stroke-dashoffset:1}35%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
-#wd-t6 .ic-a,#wd-p6 .wd-acc .ic-a{animation:ic-redraw 3.2s .4s ease-in-out infinite}
-#wd-t6 .ic-b,#wd-p6 .wd-acc .ic-b{animation:ic-draw .9s both,ic-pulse 3.2s 1.2s ease-in-out infinite}
-@keyframes ic-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
-#wd-t7 .ic-a,#wd-p7 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-globe 2.6s 1.3s linear infinite}
-@keyframes ic-globe{0%{transform:scaleX(1)}25%{transform:scaleX(.15)}50%{transform:scaleX(-1)}75%{transform:scaleX(.15)}100%{transform:scaleX(1)}}
-#wd-t8 .ic-a,#wd-p8 .wd-acc .ic-a{animation:ic-draw .9s .3s both,ic-bob 2.6s 1.3s ease-in-out infinite}
-@keyframes ic-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.2px)}}
-#wd-t9 .ic-a,#wd-p9 .wd-acc .ic-a{transform-box:view-box;transform-origin:12px 16px;animation:ic-draw .9s .3s both,ic-needle 3s 1.3s cubic-bezier(.5,0,.3,1.3) infinite}
-@keyframes ic-needle{0%,100%{transform:rotate(-95deg)}45%,70%{transform:rotate(0)}}
-/* only the visible services move on phones */
-.wd--list .wd-panel:not(.run) .wd-acc .ic-line{animation-play-state:paused!important}
-.wd--list .wd-panel:not(.open) .wd-acc .ic-line,.wd--list .wd-panel:not(.open) .wd-acc .ic-fill{animation:none!important}
+@keyframes ic-pop{0%{transform:scale(1)}35%{transform:scale(1.18) rotate(-4deg)}65%{transform:scale(.96)}100%{transform:scale(1)}}
+.wd--list .wd-panel.open .wd-acc .wd-ico{animation:ic-pop .7s cubic-bezier(.34,1.56,.64,1) .15s both}
+/* each icon's own motion (A = laptop current tab, P = phone card on screen) */
+.wd-tab[aria-selected="true"] .ic-a,.wd-tab[aria-selected="true"] .ic-b{animation-delay:1s}
+#wd-t1[aria-selected="true"] .ic-a,.wd--list #wd-p1.vis .wd-acc .ic-a{animation:ic-coin 2.8s ease-in-out infinite}
+@keyframes ic-coin{0%,55%,100%{transform:scaleX(1)}70%{transform:scaleX(-1)}85%{transform:scaleX(1)}}
+#wd-t2[aria-selected="true"] .ic-a,.wd--list #wd-p2.vis .wd-acc .ic-a{animation:ic-spin 2.4s cubic-bezier(.5,0,.2,1) infinite}
+@keyframes ic-spin{0%,50%{transform:rotate(0) scale(1)}75%{transform:rotate(90deg) scale(1.25)}100%{transform:rotate(180deg) scale(1)}}
+#wd-t2[aria-selected="true"] .ic-b,.wd--list #wd-p2.vis .wd-acc .ic-b{transform-origin:left center;animation:ic-type 2.4s ease-in-out infinite}
+#wd-t2[aria-selected="true"] .ic-b:last-of-type,.wd--list #wd-p2.vis .wd-acc .ic-b:last-of-type{animation-delay:.25s}
+@keyframes ic-type{0%,100%{transform:scaleX(1)}35%{transform:scaleX(.15)}65%{transform:scaleX(1)}}
+#wd-t3[aria-selected="true"] .ic-a,.wd--list #wd-p3.vis .wd-acc .ic-a{transform-origin:50% 0;animation:ic-ring 2.2s ease-in-out infinite}
+@keyframes ic-ring{0%,50%,100%{transform:rotate(0)}58%{transform:rotate(24deg)}66%{transform:rotate(-20deg)}74%{transform:rotate(14deg)}82%{transform:rotate(-8deg)}90%{transform:rotate(0)}}
+#wd-t4[aria-selected="true"] .ic-a,.wd--list #wd-p4.vis .wd-acc .ic-a{animation:ic-down 1.8s ease-in-out infinite}
+#wd-t4[aria-selected="true"] .ic-b,.wd--list #wd-p4.vis .wd-acc .ic-b{animation:ic-up 1.8s ease-in-out .9s infinite}
+@keyframes ic-down{0%,100%{transform:translateY(-1px)}50%{transform:translateY(3px)}}
+@keyframes ic-up{0%,100%{transform:translateY(1px)}50%{transform:translateY(-3px)}}
+#wd-t5[aria-selected="true"] .ic-a,.wd--list #wd-p5.vis .wd-acc .ic-a{stroke-dasharray:1 1;animation:ic-redraw 2.6s ease-in-out infinite}
+@keyframes ic-redraw{0%{stroke-dashoffset:1}40%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+#wd-t6[aria-selected="true"] .ic-a,.wd--list #wd-p6.vis .wd-acc .ic-a{stroke-dasharray:1 1;animation:ic-redraw 2.4s ease-in-out infinite}
+#wd-t6[aria-selected="true"] .ic-b,.wd--list #wd-p6.vis .wd-acc .ic-b{animation:ic-pulse 2.4s ease-in-out infinite}
+@keyframes ic-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+#wd-t7[aria-selected="true"] .ic-a,.wd--list #wd-p7.vis .wd-acc .ic-a{animation:ic-globe 2.2s linear infinite}
+@keyframes ic-globe{0%{transform:scaleX(1)}25%{transform:scaleX(.1)}50%{transform:scaleX(-1)}75%{transform:scaleX(.1)}100%{transform:scaleX(1)}}
+#wd-t8[aria-selected="true"] .ic-a,.wd--list #wd-p8.vis .wd-acc .ic-a{animation:ic-bob 1.8s ease-in-out infinite}
+@keyframes ic-bob{0%,100%{transform:translateY(1px)}50%{transform:translateY(-2.5px)}}
+#wd-t9[aria-selected="true"] .ic-a,.wd--list #wd-p9.vis .wd-acc .ic-a{transform-box:view-box;transform-origin:12px 16px;animation:ic-needle 2.4s cubic-bezier(.5,0,.3,1.4) infinite}
+@keyframes ic-needle{0%,100%{transform:rotate(-100deg)}45%,70%{transform:rotate(0)}}
 .wd-tab:not([aria-selected="true"]) .ic-line,.wd-tab:not([aria-selected="true"]) .ic-fill{animation:none!important}
-@media(prefers-reduced-motion:reduce){.wd-ico .ic-line,.wd-ico .ic-fill{animation:none!important}}
+.wd--list .wd-panel:not(.vis) .wd-acc .ic-line,.wd--list .wd-panel:not(.vis) .wd-acc .wd-ico{animation:none!important}
+@media(prefers-reduced-motion:reduce){.wd-ico,.wd-ico .ic-line,.wd-ico .ic-fill{animation:none!important}}
 .foot-ver{flex-basis:100%;width:100%;margin:.6rem 0 0;font-size:max(.72rem,12px);opacity:.55}
 
 /* smoother opening on phones: the height eases open, the contents fade and rise in on the graphics chip,
    and the picture only starts moving once the card has finished opening */
 .wd--list .wd-body{transition:grid-template-rows .6s cubic-bezier(.32,.72,0,1)}
 .wd--list .wd-in>*{opacity:0;transform:translateY(-10px) scale(.985);transition:opacity .35s ease,transform .5s cubic-bezier(.22,1,.36,1)}
-.wd--list .wd-panel.open .wd-in>*{opacity:1;transform:none;transition:opacity .45s ease .12s,transform .6s cubic-bezier(.22,1,.36,1) .08s}
-.wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.2s,.16s}
+.wd--list .wd-panel.open .wd-in>*{opacity:1;transform:none;transition:opacity .7s ease .18s,transform .9s cubic-bezier(.22,1,.36,1) .12s}
+.wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.34s,.26s}
 .wd--list .wd-panel{contain:layout paint}
 @media(prefers-reduced-motion:reduce){.wd--list .wd-in>*{transition:none;transform:none}}
+
+/* the card's height switches in one step (the glide is done with transforms in the script) */
+.wd--list .wd-body{transition:none!important}
+/* while a card opens, everything else that animates holds still for that half second */
+.wd-flipping .wd-stage *{animation-play-state:paused!important}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -6069,12 +6076,49 @@ if("IntersectionObserver" in window && !reduced){
   var isOpen=panels.map(function(){return false;}),closedByHand=panels.map(function(){return false;}),inView=panels.map(function(){return false;});
   function setOpen(){panels.forEach(function(p,k){var on=mode==="list"&&isOpen[k];p.classList.toggle("open",on);accs[k].setAttribute("aria-expanded",String(on));
     var b=p.querySelector(".wd-body");if(mode==="list"&&!on)b.setAttribute("inert","");else b.removeAttribute("inert");});run();}
-  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);setOpen();if(isOpen[k])show(k);}
+  /* Opening and closing without animating height. The card switches to its new height in one step,
+     then everything below it glides from where it was to where it now belongs, and the card is
+     revealed from the top. Only transform and clip move, so the phone never re-lays-out the page
+     mid-animation. Anything else that is animating pauses for that half second. */
+  var flipping=null,FLIP_MS=900,EASE="cubic-bezier(.25,.8,.25,1)";
+  function laterThan(el){var out=[],n=el;while(n&&n!==document.body){for(var x=n.nextElementSibling;x;x=x.nextElementSibling){
+      if(x.tagName!=="SCRIPT"&&getComputedStyle(x).position!=="fixed")out.push(x);}n=n.parentElement;}return out;}
+  function endFlip(){if(flipping){clearTimeout(flipping.t);flipping.done();flipping=null;}}
+  function flip(k,opening){
+    endFlip();
+    var p=panels[k];
+    if(calm||mode!=="list"){setOpen();return;}
+    var below=laterThan(p),h0=p.offsetHeight;
+    box.classList.add("wd-flipping");
+    if(opening){setOpen();}
+    var h1=opening?p.offsetHeight:h0,hClosed;
+    if(!opening){p.classList.remove("open");hClosed=p.offsetHeight;p.classList.add("open");}
+    var delta=opening?(h1-h0):(h0-hClosed);
+    if(delta<2){if(!opening)setOpen();box.classList.remove("wd-flipping");return;}
+    var from=opening?-delta:0,to=opening?0:-delta,cFrom=opening?delta:0,cTo=opening?0:delta;
+    /* only what is on screen before or after the move needs to glide; the rest simply lands in place unseen */
+    var vh=innerHeight;below=below.filter(function(x){var r=x.getBoundingClientRect();return r.height>0&&r.top-delta<vh&&r.bottom>-delta;});
+    below.forEach(function(x){x.style.transition="none";x.style.transform="translate3d(0,"+from+"px,0)";});
+    p.style.transition="none";p.style.clipPath="inset(0 0 "+cFrom+"px 0 round 20px)";
+    void p.offsetHeight;
+    var tr="transform "+FLIP_MS+"ms "+EASE;
+    below.forEach(function(x){x.style.transition=tr;x.style.transform="translate3d(0,"+to+"px,0)";});
+    p.style.transition="clip-path "+FLIP_MS+"ms "+EASE;p.style.clipPath="inset(0 0 "+cTo+"px 0 round 20px)";
+    var f={done:function(){
+      if(!opening)setOpen();
+      below.forEach(function(x){x.style.transition="";x.style.transform="";});
+      p.style.transition="";p.style.clipPath="";
+      box.classList.remove("wd-flipping");
+    }};
+    f.t=setTimeout(function(){if(flipping===f){flipping=null;f.done();}},FLIP_MS+30);
+    flipping=f;
+  }
+  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);flip(k,isOpen[k]);if(isOpen[k])show(k);}
   if("IntersectionObserver" in window){
     var opener=new IntersectionObserver(function(es){es.forEach(function(e){
       if(mode!=="list"||!e.isIntersecting||e.boundingClientRect.top<innerHeight*.3)return;
       var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
-      isOpen[k]=true;settle(k);setOpen();show(k);
+      isOpen[k]=true;settle(k);flip(k,true);show(k);
     });},{rootMargin:"0px 0px -22% 0px"});
     accs.forEach(function(a){opener.observe(a);});
     var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
@@ -6082,9 +6126,9 @@ if("IntersectionObserver" in window && !reduced){
   }else{isOpen=isOpen.map(function(){return true;});}
   /* animations run only where they can be seen: the current service on laptops, every open one in view on phones */
   var settled=panels.map(function(){return false;}),settleT=[];
-  function run(){panels.forEach(function(p,k){p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]&&(settled[k]||!("IntersectionObserver" in window))):(visible&&k===cur));});}
+  function run(){panels.forEach(function(p,k){p.classList.toggle("vis",mode==="list"&&inView[k]);p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]&&(settled[k]||!("IntersectionObserver" in window))):(visible&&k===cur));});}
   /* a panel counts as settled a moment after it opens, once its height has finished easing */
-  function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:620);}
+  function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:950);}
   function show(i,fromSwipe){
     if(i===cur)return;cur=i;
     tabs.forEach(function(t,k){var on=k===i;t.setAttribute("aria-selected",String(on));t.tabIndex=on?0:-1;});

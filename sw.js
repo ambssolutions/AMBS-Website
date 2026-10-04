@@ -21,8 +21,8 @@ async function currentBuild() {
 
 const SHELL = [
   '/',
-  '/icon-192-v3.png',
-  '/apple-touch-icon-v3.png'
+  '/icon-192-v4.png',
+  '/apple-touch-icon-v4.png'
 ];
 
 self.addEventListener('install', (e) => {
