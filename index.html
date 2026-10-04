@@ -15,7 +15,7 @@
      the app is added and never look again, so a dark variant only decided
      which one you were stuck with. The tab icon below does follow the theme,
      because browsers re-evaluate that on every load. -->
-<link rel="apple-touch-icon" href="/apple-touch-icon-v2.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v3.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="application-name" content="Ambs Solutions">
 <!-- The site has its own language picker, so the browser must not translate
@@ -37,7 +37,7 @@
   "@id": "https://ambs.co.nz/#business",
   "name": "Ambs Solutions",
   "url": "https://ambs.co.nz/",
-  "logo": "https://ambs.co.nz/icon-192-v2.png",
+  "logo": "https://ambs.co.nz/icon-192-v3.png",
   "image": "https://ambs.co.nz/logo.png",
   "description": "AI automation and digital solutions for New Zealand businesses. Auckland based, working nationwide.",
   "email": "hello@ambs.co.nz",
@@ -3902,6 +3902,15 @@ html[data-theme="dark"] .hero.is-stacked .hero-cut{background:linear-gradient(to
 .wd-tab:not([aria-selected="true"]) .ic-line,.wd-tab:not([aria-selected="true"]) .ic-fill{animation:none!important}
 @media(prefers-reduced-motion:reduce){.wd-ico .ic-line,.wd-ico .ic-fill{animation:none!important}}
 .foot-ver{flex-basis:100%;width:100%;margin:.6rem 0 0;font-size:max(.72rem,12px);opacity:.55}
+
+/* smoother opening on phones: the height eases open, the contents fade and rise in on the graphics chip,
+   and the picture only starts moving once the card has finished opening */
+.wd--list .wd-body{transition:grid-template-rows .6s cubic-bezier(.32,.72,0,1)}
+.wd--list .wd-in>*{opacity:0;transform:translateY(-10px) scale(.985);transition:opacity .35s ease,transform .5s cubic-bezier(.22,1,.36,1)}
+.wd--list .wd-panel.open .wd-in>*{opacity:1;transform:none;transition:opacity .45s ease .12s,transform .6s cubic-bezier(.22,1,.36,1) .08s}
+.wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.2s,.16s}
+.wd--list .wd-panel{contain:layout paint}
+@media(prefers-reduced-motion:reduce){.wd--list .wd-in>*{transition:none;transform:none}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -6060,19 +6069,22 @@ if("IntersectionObserver" in window && !reduced){
   var isOpen=panels.map(function(){return false;}),closedByHand=panels.map(function(){return false;}),inView=panels.map(function(){return false;});
   function setOpen(){panels.forEach(function(p,k){var on=mode==="list"&&isOpen[k];p.classList.toggle("open",on);accs[k].setAttribute("aria-expanded",String(on));
     var b=p.querySelector(".wd-body");if(mode==="list"&&!on)b.setAttribute("inert","");else b.removeAttribute("inert");});run();}
-  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;setOpen();if(isOpen[k])show(k);}
+  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);setOpen();if(isOpen[k])show(k);}
   if("IntersectionObserver" in window){
     var opener=new IntersectionObserver(function(es){es.forEach(function(e){
       if(mode!=="list"||!e.isIntersecting||e.boundingClientRect.top<innerHeight*.3)return;
       var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
-      isOpen[k]=true;setOpen();show(k);
+      isOpen[k]=true;settle(k);setOpen();show(k);
     });},{rootMargin:"0px 0px -22% 0px"});
     accs.forEach(function(a){opener.observe(a);});
     var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
     panels.forEach(function(p){seen.observe(p);});
   }else{isOpen=isOpen.map(function(){return true;});}
   /* animations run only where they can be seen: the current service on laptops, every open one in view on phones */
-  function run(){panels.forEach(function(p,k){p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]):(visible&&k===cur));});}
+  var settled=panels.map(function(){return false;}),settleT=[];
+  function run(){panels.forEach(function(p,k){p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]&&(settled[k]||!("IntersectionObserver" in window))):(visible&&k===cur));});}
+  /* a panel counts as settled a moment after it opens, once its height has finished easing */
+  function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:620);}
   function show(i,fromSwipe){
     if(i===cur)return;cur=i;
     tabs.forEach(function(t,k){var on=k===i;t.setAttribute("aria-selected",String(on));t.tabIndex=on?0:-1;});
