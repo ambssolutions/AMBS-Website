@@ -3425,6 +3425,7 @@ with easy-to-use AI.</h1>
         <div class="field"><label for="f-email" data-i18n="form.email">Email</label><input id="f-email" type="email" autocomplete="email"></div>
         <div class="field"><label for="f-phone" data-i18n="form.phone">Phone</label><input id="f-phone" type="tel" autocomplete="tel"></div>
         <div class="field field--full"><label for="f-msg" data-i18n="form.msg">What eats your time?</label><textarea id="f-msg"></textarea></div>
+        <input id="f-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0">
         <div class="field--full">
           <button class="btn btn--sun" type="button" id="sendbtn" data-i18n="form.send">Send request</button>
           <p class="form-note" data-i18n="form.note">We reply within one working day. Or call +64 22 099 9578.</p>
@@ -4056,6 +4057,29 @@ document.querySelectorAll("#faqlist .q").forEach(q=>{
       the visitor's own email app (mailto). */
 const FORM_KEY="b26ce370-6383-473e-926e-ceb49a91e7fd";
 
+/* ==== PORTAL LEADS ====
+   Every request is also saved as a lead in the AMBS portal (portal.ambs.co.nz → Leads).
+   It runs alongside the email above, so nothing changes for the visitor. */
+const PORTAL_LEAD_URL="https://portal.ambs.co.nz/api/app?action=lead";
+let lastPortalLead="";
+function sendPortalLead(){
+  try{
+    const v=id=>((document.getElementById(id)||{}).value||"").trim();
+    const data={
+      name:v("f-name"), company:v("f-biz"), email:v("f-email"), phone:prettyNZ(v("f-phone")),
+      service:"Free session request", message:v("f-msg"),
+      page:location.href.split("#")[0],
+      extra:{language:document.documentElement.lang||""},
+      hp:v("f-website")
+    };
+    const body=JSON.stringify(data);
+    if(body===lastPortalLead)return;          /* don't save the same request twice */
+    lastPortalLead=body;
+    if(navigator.sendBeacon&&navigator.sendBeacon(PORTAL_LEAD_URL,new Blob([body],{type:"text/plain"})))return;
+    fetch(PORTAL_LEAD_URL,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain"},body:body});
+  }catch(e){}
+}
+
 /* ---- validation: a name, a real email, and an NZ phone number ---- */
 function fieldError(id,msg){
   const el=document.getElementById(id);if(!el)return;
@@ -4143,6 +4167,7 @@ function checkField(id){
 
 document.getElementById("sendbtn").addEventListener("click",async()=>{
   if(!validateForm())return;
+  sendPortalLead();
   const v=id=>document.getElementById(id).value.trim();
   const subject="Free session request — "+(v("f-biz")||v("f-name")||"website");
   const body=[
