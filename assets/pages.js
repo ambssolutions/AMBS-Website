@@ -58,3 +58,18 @@
     els.forEach(function(el){el.classList.add("reveal");io.observe(el);});
   }
 })();
+
+/* answers: words rise in one after another each time a question is opened */
+(function(){
+  function animate(el){
+    if(!el||!el.textContent.trim())return;
+    if(el.childElementCount===0&&!el.querySelector(".ow")){
+      var n=0;el.innerHTML=el.textContent.split(/(\s+)/).map(function(w){return !w?"":/^\s+$/.test(w)?" ":'<span class="ow" style="--wi:'+(n++)+'">'+w.replace(/&/g,"&amp;").replace(/</g,"&lt;")+"</span>";}).join("");
+    }
+    var cls=el.querySelector(".ow")?"ow-go":"ow-fade";
+    el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);
+  }
+  document.querySelectorAll("details").forEach(function(d){
+    d.addEventListener("toggle",function(){if(d.open)[].forEach.call(d.querySelectorAll(":scope > :not(summary)"),function(x){animate(x);});});
+  });
+})();
