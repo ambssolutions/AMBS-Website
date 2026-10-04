@@ -4101,7 +4101,12 @@ html[data-theme="dark"] .hero h1.tx-in .tx-accent,html.sky-night .hero h1.tx-in 
 .wd-stage.spotting .mk>*:not(.spot):not(:has(.spot)){filter:saturate(.6) opacity(.55)}
 .wd-stage .spot{outline:2px solid transparent;outline-offset:.4em;animation:wd-spot 2.4s ease-in-out infinite}
 @keyframes wd-spot{0%,100%{outline-color:rgba(229,53,43,.85)}50%{outline-color:rgba(229,53,43,.25)}}
-.wd-stage .mk{padding-bottom:2.3rem;box-sizing:border-box}
+.wd-track .wd-stage{--stb:2.9rem}
+.wd-track.wd--list .wd-stage{--stb:2.5rem}
+.wd-track .wd-stage .mk{inset:0 0 var(--stb) 0}
+.wd-track:not(.wd--list) .wd-stage .mk{font-size:min(2cqw,calc((100cqh - var(--stb)) * .029),1.05rem)}
+@container (max-width:520px){.wd-track:not(.wd--list) .wd-stage .mk{font-size:min(3cqw,calc((100cqh - var(--stb)) * .034))}}
+.wd-track.wd--list .wd-stage .mk{font-size:min(2.6cqw,calc((100cqh - var(--stb)) * .041))}
 /* pictures lean slightly toward the pointer on laptops */
 @media (hover:hover) and (pointer:fine){.wd-stage .mk>*{translate:calc(var(--mx,0) * var(--dz,7px)) calc(var(--my,0) * var(--dz,7px));transition:filter .6s ease,translate .9s cubic-bezier(.16,1,.3,1)}.wd-stage .mk>*:nth-child(even){--dz:-5px}}
 .wd--list .wd-steps{bottom:.5rem;gap:.3rem}
@@ -4109,6 +4114,50 @@ html[data-theme="dark"] .hero h1.tx-in .tx-accent,html.sky-night .hero h1.tx-in 
 @media (max-width:420px){.wd-st em{display:none}.wd-st{padding:.28em}.wd-st.now em{display:inline}.wd-st.now{padding-right:.6em}}
 @media (prefers-reduced-motion:reduce){.wd-stage .spot{animation:none;outline-color:rgba(229,53,43,.7)}.wd-st,.wd-st b{transition:none}.wd-st.now{transform:none}.wd-stage .mk>*{translate:none!important}}
 html.dark .wd-st,.sky-night .wd-st{box-shadow:0 4px 14px -8px rgba(0,0,0,.6)}
+
+/* Knowledge hub: a stack of popular guides that shuffles itself and fans out on hover */
+.knowledge--slim .kh-slim{align-items:center}
+.kh-left{display:grid;gap:1.5rem}
+.knowledge--slim .kh-links{justify-content:flex-start!important;align-items:center;gap:.4rem 1.3rem}
+.kh-tlink{font:700 .92rem/1.2 var(--body);color:var(--rd-ink);text-decoration:none;display:inline-flex;gap:.35em;align-items:center;padding:.5em 0;background:linear-gradient(currentColor,currentColor) 0 100%/0 2px no-repeat;transition:background-size .4s cubic-bezier(.16,1,.3,1)}
+.kh-tlink:hover{background-size:100% 2px}
+.kh-tlink span[aria-hidden]{transition:transform .4s cubic-bezier(.16,1,.3,1)}.kh-tlink:hover span[aria-hidden]{transform:translateX(4px)}
+.kh-deck{position:relative;height:300px;width:min(360px,100%);justify-self:center;perspective:1200px;--mx:0;--my:0}
+.kh-deck::before{content:"";position:absolute;inset:8% -10% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(24,119,224,.28),rgba(122,77,255,.12) 60%,transparent);filter:blur(10px);animation:kh-glow 7s ease-in-out infinite alternate;pointer-events:none}
+@keyframes kh-glow{to{transform:translate(6%,-4%) scale(1.08)}}
+.kh-gc{position:absolute;left:0;right:0;top:18px;height:236px;display:flex;flex-direction:column;gap:.75rem;padding:1.15rem 1.2rem;border-radius:22px;text-decoration:none;color:var(--rd-ink);background:var(--rd-card,#fff);border:1px solid var(--rd-line);box-shadow:0 22px 40px -24px rgba(10,16,40,.55);overflow:hidden;
+ z-index:calc(10 - var(--p));transform-origin:50% 120%;
+ transform:translate3d(calc(var(--p) * 16px),calc(var(--p) * -11px),0) rotate(calc(var(--p) * 3deg)) scale(calc(1 - var(--p) * .045)) rotateY(calc(var(--mx) * 6deg * (1 - min(var(--p),1)))) rotateX(calc(var(--my) * -5deg * (1 - min(var(--p),1))));
+ opacity:calc(1 - max(var(--p) - 2, 0));
+ transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .6s ease,box-shadow .5s ease}
+.kh-gc::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--c1),var(--c2))}
+.kh-gc::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--c2) 26%,transparent),transparent);pointer-events:none}
+.kh-ctop{display:flex;align-items:center;gap:.65rem}
+.kh-cico{display:grid;place-items:center;width:2.6rem;height:2.6rem;border-radius:14px;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 8px 18px -10px var(--c1)}
+.kh-cico svg{width:1.35rem;height:1.35rem;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.kh-ctag{font:700 .7rem/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--rd-muted)}
+.kh-ct{font:700 1.22rem/1.25 var(--display,var(--body));letter-spacing:-.01em}
+.kh-cl{display:grid;gap:.45rem;margin-top:auto}
+.kh-cl i{height:7px;border-radius:9px;background:var(--rd-line);width:92%}.kh-cl i:nth-child(2){width:74%}.kh-cl i:nth-child(3){width:52%}
+.kh-cgo{font:700 .88rem/1 var(--body);color:var(--c1);display:flex;gap:.35em;align-items:center}
+.kh-gc[data-front] .kh-cl i{background:linear-gradient(90deg,var(--rd-line) 40%,color-mix(in srgb,var(--c2) 35%,var(--rd-line)) 50%,var(--rd-line) 60%) 0 0/300% 100%;animation:kh-read 2.4s linear infinite}
+.kh-gc[data-front] .kh-cl i:nth-child(2){animation-delay:.25s}.kh-gc[data-front] .kh-cl i:nth-child(3){animation-delay:.5s}
+@keyframes kh-read{from{background-position:100% 0}to{background-position:0 0}}
+.kh-gc.kh-leave{transform:translate3d(-75%,30px,0) rotate(-14deg) scale(.92)!important;opacity:0!important;transition:transform .5s cubic-bezier(.5,0,.75,0),opacity .45s ease}
+.kh-gc.kh-snap{transition:none!important}
+/* hovering fans the stack out so every guide can be picked */
+@media (hover:hover) and (pointer:fine){
+ .kh-deck:hover .kh-gc{transform:translate3d(calc(var(--p) * 30px),calc(var(--p) * -6px),0) rotate(calc(var(--p) * 7deg)) scale(calc(1 - var(--p) * .03)) rotateY(calc(var(--mx) * 6deg * (1 - min(var(--p),1)))) rotateX(calc(var(--my) * -5deg * (1 - min(var(--p),1))));opacity:calc(1 - max(var(--p) - 3, 0))}
+ .kh-deck:hover .kh-gc:not([data-front]):hover{transform:translate3d(calc(var(--p) * 30px + 10px),calc(var(--p) * -6px - 16px),0) rotate(calc(var(--p) * 7deg)) scale(calc(1 - var(--p) * .03))}
+ .kh-gc[data-front]:hover{box-shadow:0 30px 50px -24px rgba(10,16,40,.6)}
+}
+.kh-dctl{position:absolute;left:0;right:0;bottom:-8px;display:flex;align-items:center;justify-content:center;gap:.8rem;z-index:12}
+.kh-next{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--rd-line);background:var(--rd-card,#fff);color:var(--rd-ink);cursor:pointer;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.kh-next:hover{transform:translateX(3px)}.kh-next svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kh-dots{display:flex;gap:.35rem}.kh-dots i{width:7px;height:7px;border-radius:9px;background:var(--rd-line);transition:width .5s cubic-bezier(.16,1,.3,1),background-color .5s}
+.kh-dots i.on{width:22px;background:var(--rd-feature,#1877E0)}
+@media(max-width:899px){.kh-deck{margin-top:.6rem;height:290px;width:min(330px,calc(100% - 50px))}}
+@media (prefers-reduced-motion:reduce){.kh-gc{transition:opacity .4s ease}.kh-gc.kh-leave{transform:none!important;transition:opacity .3s ease}.kh-deck::before,.kh-gc[data-front] .kh-cl i{animation:none}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4532,13 +4581,13 @@ with easy-to-use AI.</h1>
   <!-- FAQ -->
   <section id="knowledge" class="knowledge knowledge--slim">
     <div class="wrap">
-      <div class="kh-slim rv">
+      <div class="kh-slim rv"><div class="kh-left">
         <div class="sec-head rv">
           <p class="eyebrow" data-i18n="kh.eyebrow">Knowledge hub</p>
           <h2 data-i18n="kh.title">Learn before you automate</h2>
           <p class="lead" data-i18n="kh.lead">Practical, plain-English guides for New Zealand businesses: what to automate first, how it works and what to watch for.</p>
         </div>
-        <div class="kh-links"><a class="kh-btn" href="/guides" data-i18n="kh.all">Browse all guides</a><a class="kh-btn kh-btn--ghost" href="/industries" data-i18n="kh.ind">Automation for your industry</a><a class="kh-btn kh-btn--ghost" href="/services" data-i18n="foot.services">Services</a></div>
+        <div class="kh-links"><a class="kh-btn" href="/guides" data-i18n="kh.all">Browse all guides</a><a class="kh-tlink" href="/industries"><span data-i18n="kh.ind">Automation for your industry</span> <span aria-hidden="true">&#8594;</span></a><a class="kh-tlink" href="/services"><span data-i18n="foot.services">Services</span> <span aria-hidden="true">&#8594;</span></a></div></div><div class="kh-deck" aria-label="Popular guides"><a class="kh-gc" href="/guides/how-to-choose-what-to-automate-first" style="--p:0;--c1:#1877E0;--c2:#6A5CFF"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span><span class="kh-ctag">Start here · 5 min read</span></span><b class="kh-ct">How to choose what to automate first</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/automate-quotes-and-invoices" style="--p:1;--c1:#E5352B;--c2:#FF8A3D"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></svg></span><span class="kh-ctag">Money · 8 min read</span></span><b class="kh-ct">How to automate quotes and invoices</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/reduce-no-shows-with-booking-reminders" style="--p:2;--c1:#7B4DFF;--c2:#C04DFF"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4"/></svg></span><span class="kh-ctag">Bookings · 7 min read</span></span><b class="kh-ct">How to reduce no-shows with booking reminders</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/ai-customer-replies-for-small-business" style="--p:3;--c1:#0F9D58;--c2:#36C27A"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/></svg></span><span class="kh-ctag">Customers · 8 min read</span></span><b class="kh-ct">AI customer replies for small business</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/weekly-business-numbers-dashboard" style="--p:4;--c1:#0E8FB5;--c2:#1877E0"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></svg></span><span class="kh-ctag">Numbers · 8 min read</span></span><b class="kh-ct">Your business numbers, every week</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><div class="kh-dctl"><button type="button" class="kh-next" aria-label="Next guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="kh-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div></div>
       </div>
     </div>
   </section>
@@ -4595,8 +4644,8 @@ with easy-to-use AI.</h1>
         <a class="f2-logo" href="#top" aria-label="AMBS Solutions, back to top"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="AMBS Solutions" loading="lazy" decoding="async"></picture></a>
         <p data-i18n="foot.tag">Built in Auckland. Working nationwide.</p>
       </div>
-      <nav class="f2-col" aria-label="Menu">
-        <p class="f2-h" data-i18n="foot.menu">Menu</p>
+      <nav class="f2-col" aria-label="Company">
+        <p class="f2-h" data-i18n="foot.menu">Company</p>
         <a href="#automate" data-i18n="nav.automate">What we do</a>
         <a href="#about" data-i18n="nav.about">About us</a>
         <a href="#why" data-i18n="nav.why">Why us</a>
@@ -4683,7 +4732,7 @@ en:{
  "why.o1":"Weeks of silence, then a status email","why.o2":"The same template with your logo dropped in","why.o3":"A big project that shows nothing for months","why.o4":"A vague quote that grows after you sign","why.o5":"Handed to someone you never speak to",
  "why.n1":"You deal directly with the person who builds it","why.n2":"Built around how your business already works","why.n3":"One automation first. See it working, then decide.","why.n4":"Scope and price agreed in writing before we start","why.n5":"Systems set up in your own accounts, so you keep them if you stop working with us",
  "wd.s1a":"Voice memo","wd.s1b":"Quote drafted","wd.s1c":"Invoice paid","wd.s2a":"Review comes in","wd.s2b":"Reply drafted","wd.s2c":"Questions answered","wd.s3a":"Job booked","wd.s3b":"Reminder sent","wd.s3c":"Gap filled","wd.s4a":"Typed once","wd.s4b":"Copied across","wd.s4c":"Record ready","wd.s5a":"Numbers gathered","wd.s5b":"Summary written","wd.s5c":"On your phone","wd.s6a":"Work logged","wd.s6b":"Filed away","wd.s6c":"Ready to show","wd.s7a":"Fast website","wd.s7b":"Their language","wd.s7c":"They call you","wd.s8a":"Photos from site","wd.s8b":"Checklist done","wd.s8c":"Approved","wd.s9a":"Sales and cash","wd.s9b":"The trend","wd.s9c":"Jobs on track",
- "nav.why":"Why us","foot.menu":"Menu","foot.explore":"Explore",
+ "nav.why":"Why us","foot.menu":"Company","foot.explore":"Explore",
  "terms.t":"Terms of use","terms.b":"This website gives general information about our services. Content may change without notice and is not a quote, offer or contract. Any work we do together is set out in a separate written agreement signed by both of us. Examples and timeframes shown are indicative. We take care with what we publish but cannot guarantee it is free of error, and to the extent the law allows, accept no liability for loss arising from reliance on it. New Zealand law applies.",
  "legal.copy":"© 2026 Ambs Solutions. All rights reserved.","legal.back":"Back to top",
  "priv.full":"Read the full Privacy Policy","terms.full":"Read the full Terms of Use",
@@ -4767,7 +4816,7 @@ zh:{
  "why.o1":"几周没消息，然后来一封进度邮件","why.o2":"同一套模板，换上你的标志","why.o3":"大项目做几个月，什么都看不到","why.o4":"报价含糊，签约后不断加价","why.o5":"转手给一个你从未联系过的人",
  "why.n1":"直接对接真正动手做的人","why.n2":"围绕你现有的做事方式来打造","why.n3":"先做一个自动化，看到效果，再决定","why.n4":"动工前，范围和价格白纸黑字写清楚","why.n5":"系统建在你自己的账户里，即使不再合作也归你保留",
  "wd.s1a":"语音备忘","wd.s1b":"生成报价","wd.s1c":"发票已付","wd.s2a":"收到评价","wd.s2b":"回复已起草","wd.s2c":"问题已回答","wd.s3a":"已预约","wd.s3b":"提醒已发送","wd.s3c":"空档已补上","wd.s4a":"只输入一次","wd.s4b":"自动同步","wd.s4c":"记录完成","wd.s5a":"收集数据","wd.s5b":"生成摘要","wd.s5c":"发到手机","wd.s6a":"记录工作","wd.s6b":"归档保存","wd.s6c":"随时出示","wd.s7a":"快速网站","wd.s7b":"客户的语言","wd.s7c":"客户来电","wd.s8a":"现场照片","wd.s8b":"清单完成","wd.s8c":"已批准","wd.s9a":"销售与现金","wd.s9b":"趋势","wd.s9c":"工作进度",
- "nav.why":"为什么选我们","foot.menu":"菜单","foot.explore":"浏览",
+ "nav.why":"为什么选我们","foot.menu":"公司","foot.explore":"浏览",
  "terms.t":"使用条款","terms.b":"本网站提供有关我们服务的一般信息。内容可能随时更改，不构成报价、要约或合同，双方的具体合作以另行签署的书面协议为准。所示示例与时间仅供参考。我们尽力确保信息准确，但不保证毫无差错，在法律允许的范围内，亦不对因依赖本网站信息造成的损失承担责任。适用新西兰法律。",
  "legal.copy":"© 2026 Ambs Solutions。保留所有权利。","legal.back":"回到顶部",
  "priv.full":"阅读完整隐私政策","terms.full":"阅读完整使用条款",
@@ -4851,7 +4900,7 @@ hi:{
  "why.o1":"हफ़्तों चुप्पी, फिर एक स्टेटस ईमेल","why.o2":"वही टेम्पलेट, बस आपका लोगो लगा दिया","why.o3":"बड़ा प्रोजेक्ट, महीनों तक कुछ दिखता नहीं","why.o4":"धुँधला कोटेशन, साइन करने के बाद बढ़ता जाता है","why.o5":"किसी और को सौंप दिया, जिससे आप कभी बात नहीं करते",
  "why.n1":"जो बनाता है, सीधे उसी से बात","why.n2":"आपका काम जैसे चलता है, उसी के हिसाब से बना","why.n3":"पहले एक ऑटोमेशन, चलता देखिए, फिर तय कीजिए","why.n4":"शुरू करने से पहले काम और क़ीमत लिखित में तय","why.n5":"सिस्टम आपके अपने खातों में बनते हैं, साथ काम बंद करने पर भी आपके पास रहते हैं",
  "wd.s1a":"वॉइस मेमो","wd.s1b":"कोटेशन तैयार","wd.s1c":"बिल का भुगतान","wd.s2a":"रिव्यू आया","wd.s2b":"जवाब तैयार","wd.s2c":"सवालों के जवाब","wd.s3a":"बुकिंग हुई","wd.s3b":"रिमाइंडर भेजा","wd.s3c":"खाली समय भरा","wd.s4a":"एक बार लिखें","wd.s4b":"अपने आप कॉपी","wd.s4c":"रिकॉर्ड तैयार","wd.s5a":"आंकड़े जुटाए","wd.s5b":"सारांश तैयार","wd.s5c":"आपके फ़ोन पर","wd.s6a":"काम दर्ज","wd.s6b":"फ़ाइल में रखा","wd.s6c":"दिखाने को तैयार","wd.s7a":"तेज़ वेबसाइट","wd.s7b":"उनकी भाषा","wd.s7c":"वे कॉल करते हैं","wd.s8a":"साइट की फ़ोटो","wd.s8b":"चेकलिस्ट पूरी","wd.s8c":"मंज़ूर","wd.s9a":"बिक्री और नकद","wd.s9b":"रुझान","wd.s9c":"काम सही राह पर",
- "nav.why":"क्यों हम","foot.menu":"मेन्यू","foot.explore":"और देखें",
+ "nav.why":"क्यों हम","foot.menu":"कंपनी","foot.explore":"और देखें",
  "terms.t":"उपयोग की शर्तें","terms.b":"यह वेबसाइट हमारी सेवाओं की सामान्य जानकारी देती है। सामग्री बिना सूचना बदल सकती है और यह कोई कोटेशन, प्रस्ताव या अनुबंध नहीं है, हमारे बीच का काम अलग लिखित समझौते से तय होता है। दिए गए उदाहरण और समय अनुमानित हैं। हम जानकारी का ध्यान रखते हैं, पर त्रुटिरहित होने की गारंटी नहीं देते, और इस पर भरोसे से हुए नुक़सान की ज़िम्मेदारी नहीं लेते। न्यूज़ीलैंड का क़ानून लागू होता है।",
  "legal.copy":"© 2026 Ambs Solutions। सर्वाधिकार सुरक्षित।","legal.back":"ऊपर जाएँ",
  "priv.full":"पूरी प्राइवेसी पॉलिसी पढ़ें","terms.full":"पूरी उपयोग शर्तें पढ़ें",
@@ -4935,7 +4984,7 @@ mi:{
  "why.o1":"He wiki te wahangū, kātahi ka tae mai he īmēra","why.o2":"Ko taua papa tauira anō, me tō moko kau","why.o3":"He kaupapa nui, kāore he mea e kitea mō ngā marama","why.o4":"He whakatau utu pōrangi, ka piki i muri i tō haina","why.o5":"Ka hoatu ki tētahi kāore koe e kōrero",
  "why.n1":"Ka kōrero tōtika koe ki te tangata e hanga ana","why.n2":"I hangaia mō te āhua o āu mahi ināianei","why.n3":"Kotahi te whakaaunoa i te tuatahi, kia kite, kātahi ka whiriwhiri","why.n4":"Ka whakaaetia te whānui me te utu ki te tuhinga i mua i te tīmatanga","why.n5":"Ka whakaritea ngā pūnaha ki ō ake pūkete, kia mau tonu ki a koe ahakoa ka mutu tā tātou mahi tahi",
  "wd.s1a":"Kōrero rekoata","wd.s1b":"Kua tuhia te utu","wd.s1c":"Kua utua","wd.s2a":"He arotake hou","wd.s2b":"Kua tuhia he whakautu","wd.s2c":"Kua whakautua","wd.s3a":"Kua tāpuitia","wd.s3b":"Kua tukuna he whakamaumahara","wd.s3c":"Kua whakakīia te wāhi","wd.s4a":"Kotahi te tuhi","wd.s4b":"Ka tāruatia","wd.s4c":"Kua rite te rekoata","wd.s5a":"Kua kohia ngā tau","wd.s5b":"Kua tuhia he whakarāpopoto","wd.s5c":"Ki tō waea","wd.s6a":"Kua rekoatatia","wd.s6b":"Kua kōnaetia","wd.s6c":"Kua rite hei whakaatu","wd.s7a":"Paetukutuku tere","wd.s7b":"Tō rātou reo","wd.s7c":"Ka waea mai","wd.s8a":"Whakaahua","wd.s8b":"Kua oti te rārangi","wd.s8c":"Kua whakaaetia","wd.s9a":"Hoko me te moni","wd.s9b":"Te ia","wd.s9c":"Kei te tika ngā mahi",
- "nav.why":"He aha ai","foot.menu":"Tahua","foot.explore":"Tūhura",
+ "nav.why":"He aha ai","foot.menu":"Kamupene","foot.explore":"Tūhura",
  "terms.t":"Ngā ture whakamahi","terms.b":"He kōrero whānui tēnei paetukutuku mō ā mātou ratonga. Ka taea te whakarerekē te ihirangi me te kore pānui, ehara i te whakatau utu, i te tuku, i te kirimana rānei, ka tuhia ā tāua mahi ki tētahi whakaaetanga tuhituhi motuhake. He tauira noa ngā wā me ngā tauira e whakaaturia ana. Ahakoa tā mātou tiaki, kāore e taea te kī kāore he hapa, ā, kāore mātou e whai kawenga mō te mate i puta i te whakawhirinaki ki ēnei kōrero. Ka whai mana te ture o Aotearoa.",
  "legal.copy":"© 2026 Ambs Solutions. Kua rāhuitia ngā mōtika katoa.","legal.back":"Hoki ki runga",
  "priv.full":"Pānuitia te kaupapa here tūmataiti katoa","terms.full":"Pānuitia ngā ture whakamahi katoa",
@@ -5019,7 +5068,7 @@ pa:{
  "why.o1":"ਹਫ਼ਤੇ ਚੁੱਪ, ਫਿਰ ਇੱਕ ਸਟੇਟਸ ਈਮੇਲ","why.o2":"ਓਹੀ ਟੈਂਪਲੇਟ, ਬੱਸ ਤੁਹਾਡਾ ਲੋਗੋ ਲਾ ਦਿੱਤਾ","why.o3":"ਵੱਡਾ ਪ੍ਰੋਜੈਕਟ, ਮਹੀਨਿਆਂ ਤੱਕ ਕੁਝ ਨਹੀਂ ਦਿਖਦਾ","why.o4":"ਧੁੰਦਲਾ ਕੋਟੇਸ਼ਨ, ਸਾਈਨ ਕਰਨ ਮਗਰੋਂ ਵਧਦਾ ਜਾਂਦਾ","why.o5":"ਕਿਸੇ ਹੋਰ ਨੂੰ ਸੌਂਪ ਦਿੱਤਾ, ਜਿਸ ਨਾਲ ਤੁਸੀਂ ਕਦੇ ਗੱਲ ਨਹੀਂ ਕਰਦੇ",
  "why.n1":"ਜੋ ਬਣਾਉਂਦਾ ਹੈ, ਸਿੱਧਾ ਉਸੇ ਨਾਲ ਗੱਲ","why.n2":"ਤੁਹਾਡਾ ਕੰਮ ਜਿਵੇਂ ਚੱਲਦਾ ਹੈ, ਉਸੇ ਮੁਤਾਬਕ ਬਣਿਆ","why.n3":"ਪਹਿਲਾਂ ਇੱਕ ਆਟੋਮੇਸ਼ਨ, ਚੱਲਦਾ ਵੇਖੋ, ਫਿਰ ਫ਼ੈਸਲਾ ਕਰੋ","why.n4":"ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਕੰਮ ਤੇ ਕੀਮਤ ਲਿਖਤੀ ਤੈਅ","why.n5":"ਸਿਸਟਮ ਤੁਹਾਡੇ ਆਪਣੇ ਖਾਤਿਆਂ ਵਿੱਚ ਬਣਦੇ ਹਨ, ਸਾਡੇ ਨਾਲ ਕੰਮ ਬੰਦ ਕਰਨ 'ਤੇ ਵੀ ਤੁਹਾਡੇ ਕੋਲ ਰਹਿੰਦੇ ਹਨ",
  "wd.s1a":"ਵੌਇਸ ਮੈਮੋ","wd.s1b":"ਕੋਟੇਸ਼ਨ ਤਿਆਰ","wd.s1c":"ਬਿੱਲ ਦਾ ਭੁਗਤਾਨ","wd.s2a":"ਰਿਵਿਊ ਆਇਆ","wd.s2b":"ਜਵਾਬ ਤਿਆਰ","wd.s2c":"ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ","wd.s3a":"ਬੁਕਿੰਗ ਹੋਈ","wd.s3b":"ਰਿਮਾਈਂਡਰ ਭੇਜਿਆ","wd.s3c":"ਖਾਲੀ ਸਮਾਂ ਭਰਿਆ","wd.s4a":"ਇੱਕ ਵਾਰ ਲਿਖੋ","wd.s4b":"ਆਪਣੇ ਆਪ ਕਾਪੀ","wd.s4c":"ਰਿਕਾਰਡ ਤਿਆਰ","wd.s5a":"ਅੰਕੜੇ ਇਕੱਠੇ","wd.s5b":"ਸਾਰ ਤਿਆਰ","wd.s5c":"ਤੁਹਾਡੇ ਫ਼ੋਨ ਤੇ","wd.s6a":"ਕੰਮ ਦਰਜ","wd.s6b":"ਫ਼ਾਈਲ ਵਿੱਚ ਰੱਖਿਆ","wd.s6c":"ਦਿਖਾਉਣ ਲਈ ਤਿਆਰ","wd.s7a":"ਤੇਜ਼ ਵੈੱਬਸਾਈਟ","wd.s7b":"ਉਹਨਾਂ ਦੀ ਭਾਸ਼ਾ","wd.s7c":"ਉਹ ਕਾਲ ਕਰਦੇ ਹਨ","wd.s8a":"ਸਾਈਟ ਦੀਆਂ ਫ਼ੋਟੋਆਂ","wd.s8b":"ਚੈੱਕਲਿਸਟ ਪੂਰੀ","wd.s8c":"ਮਨਜ਼ੂਰ","wd.s9a":"ਵਿਕਰੀ ਅਤੇ ਨਕਦ","wd.s9b":"ਰੁਝਾਨ","wd.s9c":"ਕੰਮ ਸਹੀ ਰਾਹ ਤੇ",
- "nav.why":"ਕਿਉਂ ਅਸੀਂ","foot.menu":"ਮੀਨੂ","foot.explore":"ਹੋਰ ਵੇਖੋ",
+ "nav.why":"ਕਿਉਂ ਅਸੀਂ","foot.menu":"ਕੰਪਨੀ","foot.explore":"ਹੋਰ ਵੇਖੋ",
  "terms.t":"ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ","terms.b":"ਇਹ ਵੈੱਬਸਾਈਟ ਸਾਡੀਆਂ ਸੇਵਾਵਾਂ ਬਾਰੇ ਆਮ ਜਾਣਕਾਰੀ ਦਿੰਦੀ ਹੈ। ਸਮੱਗਰੀ ਬਿਨਾਂ ਸੂਚਨਾ ਬਦਲ ਸਕਦੀ ਹੈ ਅਤੇ ਇਹ ਕੋਈ ਕੋਟੇਸ਼ਨ, ਪੇਸ਼ਕਸ਼ ਜਾਂ ਇਕਰਾਰਨਾਮਾ ਨਹੀਂ, ਸਾਡਾ ਆਪਸੀ ਕੰਮ ਵੱਖਰੇ ਲਿਖਤੀ ਸਮਝੌਤੇ ਨਾਲ ਤੈਅ ਹੁੰਦਾ ਹੈ। ਵਿਖਾਏ ਉਦਾਹਰਣ ਤੇ ਸਮਾਂ ਅੰਦਾਜ਼ਨ ਹਨ। ਅਸੀਂ ਧਿਆਨ ਰੱਖਦੇ ਹਾਂ ਪਰ ਗ਼ਲਤੀ-ਰਹਿਤ ਹੋਣ ਦੀ ਗਰੰਟੀ ਨਹੀਂ ਦਿੰਦੇ, ਤੇ ਇਸ ਉੱਤੇ ਭਰੋਸੇ ਨਾਲ ਹੋਏ ਨੁਕਸਾਨ ਦੀ ਜ਼ਿੰਮੇਵਾਰੀ ਨਹੀਂ ਲੈਂਦੇ। ਨਿਊਜ਼ੀਲੈਂਡ ਦਾ ਕਾਨੂੰਨ ਲਾਗੂ ਹੁੰਦਾ ਹੈ।",
  "legal.copy":"© 2026 Ambs Solutions। ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ।","legal.back":"ਉੱਤੇ ਜਾਓ",
  "priv.full":"ਪੂਰੀ ਪਰਦੇਦਾਰੀ ਨੀਤੀ ਪੜ੍ਹੋ","terms.full":"ਪੂਰੀਆਂ ਵਰਤੋਂ ਸ਼ਰਤਾਂ ਪੜ੍ਹੋ",
@@ -6538,6 +6587,39 @@ if("IntersectionObserver" in window && !reduced){
   document.addEventListener("visibilitychange",sync);
   var rz;addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(avail,200);});
   avail();sync();
+})();
+</script>
+<script>
+/* Knowledge hub: popular guides deck. Shuffles every few seconds, pauses on hover or focus, tap the arrow or a back card to bring it forward */
+(function(){
+  var deck=document.querySelector(".kh-deck");if(!deck)return;
+  var cards=[].slice.call(deck.querySelectorAll(".kh-gc")),dots=[].slice.call(deck.querySelectorAll(".kh-dots i")),n=cards.length;
+  var order=cards.map(function(_,k){return k;}),reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,timer=null,paused=false,inView=false,busy=false;
+  function paint(){order.forEach(function(c,p){var el=cards[c];el.style.setProperty("--p",p);if(p===0){el.setAttribute("data-front","");el.tabIndex=0;}else{el.removeAttribute("data-front");el.tabIndex=-1;}});
+    dots.forEach(function(d,k){d.classList.toggle("on",k===order[0]);});}
+  function bringToFront(c){if(busy||order[0]===c)return;
+    // cards in front of it go to the back, in order
+    while(order[0]!==c)order.push(order.shift());paint();}
+  function next(){if(busy)return;var front=cards[order[0]];
+    if(reduce){order.push(order.shift());paint();return;}
+    busy=true;front.classList.add("kh-leave");
+    setTimeout(function(){front.classList.add("kh-snap");front.classList.remove("kh-leave");order.push(order.shift());paint();
+      front.getBoundingClientRect();front.classList.remove("kh-snap");busy=false;},480);}
+  function loop(){clearTimeout(timer);if(paused||!inView||document.hidden||reduce)return;timer=setTimeout(function(){next();loop();},3600);}
+  cards.forEach(function(el,c){el.addEventListener("click",function(e){if(order[0]!==c){e.preventDefault();bringToFront(c);}});});
+  deck.querySelector(".kh-next").addEventListener("click",function(){next();loop();});
+  deck.addEventListener("mouseenter",function(){paused=true;loop();});
+  deck.addEventListener("mouseleave",function(){paused=false;deck.style.setProperty("--mx",0);deck.style.setProperty("--my",0);loop();});
+  deck.addEventListener("focusin",function(){paused=true;loop();});deck.addEventListener("focusout",function(){paused=false;loop();});
+  if(!reduce&&matchMedia("(hover:hover) and (pointer:fine)").matches){var raf=0,mx=0,my=0;
+    deck.addEventListener("pointermove",function(e){var r=deck.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-.5)*2;my=((e.clientY-r.top)/r.height-.5)*2;
+      if(!raf)raf=requestAnimationFrame(function(){raf=0;deck.style.setProperty("--mx",mx.toFixed(3));deck.style.setProperty("--my",my.toFixed(3));});});}
+  /* swipe on phones */
+  var sx=null;deck.addEventListener("touchstart",function(e){sx=e.touches[0].clientX;},{passive:true});
+  deck.addEventListener("touchend",function(e){if(sx==null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>40){next();loop();}},{passive:true});
+  if("IntersectionObserver" in window)new IntersectionObserver(function(es){inView=es[0].isIntersecting;loop();},{threshold:.4}).observe(deck);else{inView=true;}
+  document.addEventListener("visibilitychange",loop);
+  paint();loop();
 })();
 </script>
 </body>
