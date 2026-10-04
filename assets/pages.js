@@ -25,7 +25,7 @@
     var hs=[].slice.call(prose.querySelectorAll("h2"));
     hs.forEach(function(h){
       if(!h.id)h.id=h.textContent.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-      var li=document.createElement("li"),a=document.createElement("a");a.href="#"+h.id;a.textContent=h.textContent;li.appendChild(a);toc.appendChild(li);
+      var li=document.createElement("li"),a=document.createElement("a");a.href="#"+h.id;a.textContent=h.textContent.replace(/^\d+\.\s*/,"");li.appendChild(a);toc.appendChild(li);
     });
     if(!hs.length){var box=document.querySelector(".toc");if(box)box.remove();}
     if("IntersectionObserver" in window){
