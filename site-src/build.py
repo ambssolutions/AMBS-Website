@@ -137,7 +137,7 @@ def header(active):
     <nav class="sh-nav" aria-label="Main">{''.join(a(*m) for m in main)}</nav>
     <a class="sh-btn sh-book" href="/#book">Book a call</a>
     <a class="sh-btn sh-contact" href="/#book">Contact us</a>
-    <a class="sh-ico sh-sm" href="tel:+64220999578" aria-label="Call us">{ico_call}</a>
+    <a class="sh-ico sh-sm sh-call" href="tel:+64220999578" aria-label="Call us">{ico_call}</a>
     <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
   </div>
   <nav class="sh-drawer" id="siteNav" aria-label="Menu">
@@ -149,7 +149,8 @@ def header(active):
 '''
 def footer():
     col=lambda sec:''.join(f'<li><a href="{url(p[0],p[1])}">{e(p[2])}</a></li>' for p in PAGES if p[0]==sec)
-    return f'''<footer class="ftr f2"><div class="wrap">
+    return f'''<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
+<footer class="ftr f2"><div class="wrap">
   <div class="f2-grid">
     <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
       <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p></div>

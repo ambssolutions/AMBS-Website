@@ -4198,6 +4198,27 @@ footer.f2 .f2-legal{justify-content:center}
 footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
 @media(max-width:640px){footer.f2 .f2-grid{grid-template-columns:1fr 1fr!important}footer.f2 .f2-grid>.f2-col:last-child{grid-column:1/-1}}
 html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,249,.12)}
+
+/* quick bar: Call and Book floating at the bottom on phones and tablets */
+.qbar{display:none}
+@media(max-width:1120px){
+  .qbar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));z-index:45;transform:translateX(-50%);display:flex;gap:4px;padding:5px;border-radius:999px;
+    background:color-mix(in srgb,#fff 92%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+    border:1px solid rgba(20,23,43,.08);box-shadow:0 14px 34px -14px rgba(20,23,43,.45);transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .4s ease}
+  .qbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:104px;height:56px;padding:0 1.1rem;border-radius:999px;
+    text-decoration:none;color:#14172B;font:700 .8rem/1 var(--body,inherit);-webkit-tap-highlight-color:transparent;transition:background-color .3s ease,transform .3s cubic-bezier(.16,1,.3,1)}
+  .qbar a svg{width:22px;height:22px}
+  .qbar .qb-call{background:linear-gradient(180deg,#D3F2B9,#A6DE82);color:#14301A}
+  .qbar a:active{transform:scale(.95)}
+  .qbar .qb-book:hover,.qbar .qb-book:focus-visible{background:rgba(20,23,43,.06)}
+  html[data-theme="dark"] .qbar,.sky-night .qbar{background:color-mix(in srgb,#171E3A 92%,transparent);border-color:rgba(233,237,249,.12);box-shadow:0 14px 34px -14px rgba(0,0,0,.7)}
+  html[data-theme="dark"] .qbar a,.sky-night .qbar a{color:#EDEFF8}
+  html[data-theme="dark"] .qbar .qb-call,.sky-night .qbar .qb-call{color:#14301A}
+  body{padding-bottom:84px}
+  body:has(.updatebar.on) .qbar,body:has(.sh-drawer.open) .qbar,body:has(.drawer.open) .qbar{opacity:0;pointer-events:none;transform:translate(-50%,20px)}
+  html body header a.hdr-call,html body header a.hdr-ico[href^="tel"],html body header .hdr-tel,.sh-call{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.qbar,.qbar a{transition:none}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4770,6 +4791,7 @@ en:{
  "why.o1":"Weeks of silence, then a status email","why.o2":"The same template with your logo dropped in","why.o3":"A big project that shows nothing for months","why.o4":"A vague quote that grows after you sign","why.o5":"Handed to someone you never speak to",
  "why.n1":"You deal directly with the person who builds it","why.n2":"Built around how your business already works","why.n3":"One automation first. See it working, then decide.","why.n4":"Scope and price agreed in writing before we start","why.n5":"Systems set up in your own accounts, so you keep them if you stop working with us",
  "wd.s1a":"Voice memo","wd.s1b":"Quote drafted","wd.s1c":"Invoice paid","wd.s2a":"Review comes in","wd.s2b":"Reply drafted","wd.s2c":"Questions answered","wd.s3a":"Job booked","wd.s3b":"Reminder sent","wd.s3c":"Gap filled","wd.s4a":"Typed once","wd.s4b":"Copied across","wd.s4c":"Record ready","wd.s5a":"Numbers gathered","wd.s5b":"Summary written","wd.s5c":"On your phone","wd.s6a":"Work logged","wd.s6b":"Filed away","wd.s6c":"Ready to show","wd.s7a":"Fast website","wd.s7b":"Their language","wd.s7c":"They call you","wd.s8a":"Photos from site","wd.s8b":"Checklist done","wd.s8c":"Approved","wd.s9a":"Sales and cash","wd.s9b":"The trend","wd.s9c":"Jobs on track",
+ "bar.call":"Call","bar.book":"Book",
  "nav.why":"Why us","foot.menu":"Company","foot.explore":"Explore",
  "terms.t":"Terms of use","terms.b":"This website gives general information about our services. Content may change without notice and is not a quote, offer or contract. Any work we do together is set out in a separate written agreement signed by both of us. Examples and timeframes shown are indicative. We take care with what we publish but cannot guarantee it is free of error, and to the extent the law allows, accept no liability for loss arising from reliance on it. New Zealand law applies.",
  "legal.copy":"© 2026 Ambs Solutions. All rights reserved.","legal.back":"Back to top",
@@ -4854,6 +4876,7 @@ zh:{
  "why.o1":"几周没消息，然后来一封进度邮件","why.o2":"同一套模板，换上你的标志","why.o3":"大项目做几个月，什么都看不到","why.o4":"报价含糊，签约后不断加价","why.o5":"转手给一个你从未联系过的人",
  "why.n1":"直接对接真正动手做的人","why.n2":"围绕你现有的做事方式来打造","why.n3":"先做一个自动化，看到效果，再决定","why.n4":"动工前，范围和价格白纸黑字写清楚","why.n5":"系统建在你自己的账户里，即使不再合作也归你保留",
  "wd.s1a":"语音备忘","wd.s1b":"生成报价","wd.s1c":"发票已付","wd.s2a":"收到评价","wd.s2b":"回复已起草","wd.s2c":"问题已回答","wd.s3a":"已预约","wd.s3b":"提醒已发送","wd.s3c":"空档已补上","wd.s4a":"只输入一次","wd.s4b":"自动同步","wd.s4c":"记录完成","wd.s5a":"收集数据","wd.s5b":"生成摘要","wd.s5c":"发到手机","wd.s6a":"记录工作","wd.s6b":"归档保存","wd.s6c":"随时出示","wd.s7a":"快速网站","wd.s7b":"客户的语言","wd.s7c":"客户来电","wd.s8a":"现场照片","wd.s8b":"清单完成","wd.s8c":"已批准","wd.s9a":"销售与现金","wd.s9b":"趋势","wd.s9c":"工作进度",
+ "bar.call":"致电","bar.book":"预约",
  "nav.why":"为什么选我们","foot.menu":"公司","foot.explore":"浏览",
  "terms.t":"使用条款","terms.b":"本网站提供有关我们服务的一般信息。内容可能随时更改，不构成报价、要约或合同，双方的具体合作以另行签署的书面协议为准。所示示例与时间仅供参考。我们尽力确保信息准确，但不保证毫无差错，在法律允许的范围内，亦不对因依赖本网站信息造成的损失承担责任。适用新西兰法律。",
  "legal.copy":"© 2026 Ambs Solutions。保留所有权利。","legal.back":"回到顶部",
@@ -4938,6 +4961,7 @@ hi:{
  "why.o1":"हफ़्तों चुप्पी, फिर एक स्टेटस ईमेल","why.o2":"वही टेम्पलेट, बस आपका लोगो लगा दिया","why.o3":"बड़ा प्रोजेक्ट, महीनों तक कुछ दिखता नहीं","why.o4":"धुँधला कोटेशन, साइन करने के बाद बढ़ता जाता है","why.o5":"किसी और को सौंप दिया, जिससे आप कभी बात नहीं करते",
  "why.n1":"जो बनाता है, सीधे उसी से बात","why.n2":"आपका काम जैसे चलता है, उसी के हिसाब से बना","why.n3":"पहले एक ऑटोमेशन, चलता देखिए, फिर तय कीजिए","why.n4":"शुरू करने से पहले काम और क़ीमत लिखित में तय","why.n5":"सिस्टम आपके अपने खातों में बनते हैं, साथ काम बंद करने पर भी आपके पास रहते हैं",
  "wd.s1a":"वॉइस मेमो","wd.s1b":"कोटेशन तैयार","wd.s1c":"बिल का भुगतान","wd.s2a":"रिव्यू आया","wd.s2b":"जवाब तैयार","wd.s2c":"सवालों के जवाब","wd.s3a":"बुकिंग हुई","wd.s3b":"रिमाइंडर भेजा","wd.s3c":"खाली समय भरा","wd.s4a":"एक बार लिखें","wd.s4b":"अपने आप कॉपी","wd.s4c":"रिकॉर्ड तैयार","wd.s5a":"आंकड़े जुटाए","wd.s5b":"सारांश तैयार","wd.s5c":"आपके फ़ोन पर","wd.s6a":"काम दर्ज","wd.s6b":"फ़ाइल में रखा","wd.s6c":"दिखाने को तैयार","wd.s7a":"तेज़ वेबसाइट","wd.s7b":"उनकी भाषा","wd.s7c":"वे कॉल करते हैं","wd.s8a":"साइट की फ़ोटो","wd.s8b":"चेकलिस्ट पूरी","wd.s8c":"मंज़ूर","wd.s9a":"बिक्री और नकद","wd.s9b":"रुझान","wd.s9c":"काम सही राह पर",
+ "bar.call":"कॉल करें","bar.book":"बुक करें",
  "nav.why":"क्यों हम","foot.menu":"कंपनी","foot.explore":"और देखें",
  "terms.t":"उपयोग की शर्तें","terms.b":"यह वेबसाइट हमारी सेवाओं की सामान्य जानकारी देती है। सामग्री बिना सूचना बदल सकती है और यह कोई कोटेशन, प्रस्ताव या अनुबंध नहीं है, हमारे बीच का काम अलग लिखित समझौते से तय होता है। दिए गए उदाहरण और समय अनुमानित हैं। हम जानकारी का ध्यान रखते हैं, पर त्रुटिरहित होने की गारंटी नहीं देते, और इस पर भरोसे से हुए नुक़सान की ज़िम्मेदारी नहीं लेते। न्यूज़ीलैंड का क़ानून लागू होता है।",
  "legal.copy":"© 2026 Ambs Solutions। सर्वाधिकार सुरक्षित।","legal.back":"ऊपर जाएँ",
@@ -5022,6 +5046,7 @@ mi:{
  "why.o1":"He wiki te wahangū, kātahi ka tae mai he īmēra","why.o2":"Ko taua papa tauira anō, me tō moko kau","why.o3":"He kaupapa nui, kāore he mea e kitea mō ngā marama","why.o4":"He whakatau utu pōrangi, ka piki i muri i tō haina","why.o5":"Ka hoatu ki tētahi kāore koe e kōrero",
  "why.n1":"Ka kōrero tōtika koe ki te tangata e hanga ana","why.n2":"I hangaia mō te āhua o āu mahi ināianei","why.n3":"Kotahi te whakaaunoa i te tuatahi, kia kite, kātahi ka whiriwhiri","why.n4":"Ka whakaaetia te whānui me te utu ki te tuhinga i mua i te tīmatanga","why.n5":"Ka whakaritea ngā pūnaha ki ō ake pūkete, kia mau tonu ki a koe ahakoa ka mutu tā tātou mahi tahi",
  "wd.s1a":"Kōrero rekoata","wd.s1b":"Kua tuhia te utu","wd.s1c":"Kua utua","wd.s2a":"He arotake hou","wd.s2b":"Kua tuhia he whakautu","wd.s2c":"Kua whakautua","wd.s3a":"Kua tāpuitia","wd.s3b":"Kua tukuna he whakamaumahara","wd.s3c":"Kua whakakīia te wāhi","wd.s4a":"Kotahi te tuhi","wd.s4b":"Ka tāruatia","wd.s4c":"Kua rite te rekoata","wd.s5a":"Kua kohia ngā tau","wd.s5b":"Kua tuhia he whakarāpopoto","wd.s5c":"Ki tō waea","wd.s6a":"Kua rekoatatia","wd.s6b":"Kua kōnaetia","wd.s6c":"Kua rite hei whakaatu","wd.s7a":"Paetukutuku tere","wd.s7b":"Tō rātou reo","wd.s7c":"Ka waea mai","wd.s8a":"Whakaahua","wd.s8b":"Kua oti te rārangi","wd.s8c":"Kua whakaaetia","wd.s9a":"Hoko me te moni","wd.s9b":"Te ia","wd.s9c":"Kei te tika ngā mahi",
+ "bar.call":"Waea","bar.book":"Tāpui",
  "nav.why":"He aha ai","foot.menu":"Kamupene","foot.explore":"Tūhura",
  "terms.t":"Ngā ture whakamahi","terms.b":"He kōrero whānui tēnei paetukutuku mō ā mātou ratonga. Ka taea te whakarerekē te ihirangi me te kore pānui, ehara i te whakatau utu, i te tuku, i te kirimana rānei, ka tuhia ā tāua mahi ki tētahi whakaaetanga tuhituhi motuhake. He tauira noa ngā wā me ngā tauira e whakaaturia ana. Ahakoa tā mātou tiaki, kāore e taea te kī kāore he hapa, ā, kāore mātou e whai kawenga mō te mate i puta i te whakawhirinaki ki ēnei kōrero. Ka whai mana te ture o Aotearoa.",
  "legal.copy":"© 2026 Ambs Solutions. Kua rāhuitia ngā mōtika katoa.","legal.back":"Hoki ki runga",
@@ -5106,6 +5131,7 @@ pa:{
  "why.o1":"ਹਫ਼ਤੇ ਚੁੱਪ, ਫਿਰ ਇੱਕ ਸਟੇਟਸ ਈਮੇਲ","why.o2":"ਓਹੀ ਟੈਂਪਲੇਟ, ਬੱਸ ਤੁਹਾਡਾ ਲੋਗੋ ਲਾ ਦਿੱਤਾ","why.o3":"ਵੱਡਾ ਪ੍ਰੋਜੈਕਟ, ਮਹੀਨਿਆਂ ਤੱਕ ਕੁਝ ਨਹੀਂ ਦਿਖਦਾ","why.o4":"ਧੁੰਦਲਾ ਕੋਟੇਸ਼ਨ, ਸਾਈਨ ਕਰਨ ਮਗਰੋਂ ਵਧਦਾ ਜਾਂਦਾ","why.o5":"ਕਿਸੇ ਹੋਰ ਨੂੰ ਸੌਂਪ ਦਿੱਤਾ, ਜਿਸ ਨਾਲ ਤੁਸੀਂ ਕਦੇ ਗੱਲ ਨਹੀਂ ਕਰਦੇ",
  "why.n1":"ਜੋ ਬਣਾਉਂਦਾ ਹੈ, ਸਿੱਧਾ ਉਸੇ ਨਾਲ ਗੱਲ","why.n2":"ਤੁਹਾਡਾ ਕੰਮ ਜਿਵੇਂ ਚੱਲਦਾ ਹੈ, ਉਸੇ ਮੁਤਾਬਕ ਬਣਿਆ","why.n3":"ਪਹਿਲਾਂ ਇੱਕ ਆਟੋਮੇਸ਼ਨ, ਚੱਲਦਾ ਵੇਖੋ, ਫਿਰ ਫ਼ੈਸਲਾ ਕਰੋ","why.n4":"ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਕੰਮ ਤੇ ਕੀਮਤ ਲਿਖਤੀ ਤੈਅ","why.n5":"ਸਿਸਟਮ ਤੁਹਾਡੇ ਆਪਣੇ ਖਾਤਿਆਂ ਵਿੱਚ ਬਣਦੇ ਹਨ, ਸਾਡੇ ਨਾਲ ਕੰਮ ਬੰਦ ਕਰਨ 'ਤੇ ਵੀ ਤੁਹਾਡੇ ਕੋਲ ਰਹਿੰਦੇ ਹਨ",
  "wd.s1a":"ਵੌਇਸ ਮੈਮੋ","wd.s1b":"ਕੋਟੇਸ਼ਨ ਤਿਆਰ","wd.s1c":"ਬਿੱਲ ਦਾ ਭੁਗਤਾਨ","wd.s2a":"ਰਿਵਿਊ ਆਇਆ","wd.s2b":"ਜਵਾਬ ਤਿਆਰ","wd.s2c":"ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ","wd.s3a":"ਬੁਕਿੰਗ ਹੋਈ","wd.s3b":"ਰਿਮਾਈਂਡਰ ਭੇਜਿਆ","wd.s3c":"ਖਾਲੀ ਸਮਾਂ ਭਰਿਆ","wd.s4a":"ਇੱਕ ਵਾਰ ਲਿਖੋ","wd.s4b":"ਆਪਣੇ ਆਪ ਕਾਪੀ","wd.s4c":"ਰਿਕਾਰਡ ਤਿਆਰ","wd.s5a":"ਅੰਕੜੇ ਇਕੱਠੇ","wd.s5b":"ਸਾਰ ਤਿਆਰ","wd.s5c":"ਤੁਹਾਡੇ ਫ਼ੋਨ ਤੇ","wd.s6a":"ਕੰਮ ਦਰਜ","wd.s6b":"ਫ਼ਾਈਲ ਵਿੱਚ ਰੱਖਿਆ","wd.s6c":"ਦਿਖਾਉਣ ਲਈ ਤਿਆਰ","wd.s7a":"ਤੇਜ਼ ਵੈੱਬਸਾਈਟ","wd.s7b":"ਉਹਨਾਂ ਦੀ ਭਾਸ਼ਾ","wd.s7c":"ਉਹ ਕਾਲ ਕਰਦੇ ਹਨ","wd.s8a":"ਸਾਈਟ ਦੀਆਂ ਫ਼ੋਟੋਆਂ","wd.s8b":"ਚੈੱਕਲਿਸਟ ਪੂਰੀ","wd.s8c":"ਮਨਜ਼ੂਰ","wd.s9a":"ਵਿਕਰੀ ਅਤੇ ਨਕਦ","wd.s9b":"ਰੁਝਾਨ","wd.s9c":"ਕੰਮ ਸਹੀ ਰਾਹ ਤੇ",
+ "bar.call":"ਕਾਲ ਕਰੋ","bar.book":"ਬੁੱਕ ਕਰੋ",
  "nav.why":"ਕਿਉਂ ਅਸੀਂ","foot.menu":"ਕੰਪਨੀ","foot.explore":"ਹੋਰ ਵੇਖੋ",
  "terms.t":"ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ","terms.b":"ਇਹ ਵੈੱਬਸਾਈਟ ਸਾਡੀਆਂ ਸੇਵਾਵਾਂ ਬਾਰੇ ਆਮ ਜਾਣਕਾਰੀ ਦਿੰਦੀ ਹੈ। ਸਮੱਗਰੀ ਬਿਨਾਂ ਸੂਚਨਾ ਬਦਲ ਸਕਦੀ ਹੈ ਅਤੇ ਇਹ ਕੋਈ ਕੋਟੇਸ਼ਨ, ਪੇਸ਼ਕਸ਼ ਜਾਂ ਇਕਰਾਰਨਾਮਾ ਨਹੀਂ, ਸਾਡਾ ਆਪਸੀ ਕੰਮ ਵੱਖਰੇ ਲਿਖਤੀ ਸਮਝੌਤੇ ਨਾਲ ਤੈਅ ਹੁੰਦਾ ਹੈ। ਵਿਖਾਏ ਉਦਾਹਰਣ ਤੇ ਸਮਾਂ ਅੰਦਾਜ਼ਨ ਹਨ। ਅਸੀਂ ਧਿਆਨ ਰੱਖਦੇ ਹਾਂ ਪਰ ਗ਼ਲਤੀ-ਰਹਿਤ ਹੋਣ ਦੀ ਗਰੰਟੀ ਨਹੀਂ ਦਿੰਦੇ, ਤੇ ਇਸ ਉੱਤੇ ਭਰੋਸੇ ਨਾਲ ਹੋਏ ਨੁਕਸਾਨ ਦੀ ਜ਼ਿੰਮੇਵਾਰੀ ਨਹੀਂ ਲੈਂਦੇ। ਨਿਊਜ਼ੀਲੈਂਡ ਦਾ ਕਾਨੂੰਨ ਲਾਗੂ ਹੁੰਦਾ ਹੈ।",
  "legal.copy":"© 2026 Ambs Solutions। ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ।","legal.back":"ਉੱਤੇ ਜਾਓ",
@@ -5276,6 +5302,18 @@ function scrollToId(id){
   const el=document.getElementById(id);if(!el)return;
   const y=el.getBoundingClientRect().top+window.pageYOffset-headerOffset();
   window.ambsGlide(Math.max(0,y));
+  settleOn(id);
+}
+/* sections above can open up while the page glides past them (What we do on phones), so check on arrival and glide the last stretch */
+let settleT=0;
+function settleOn(id){
+  clearTimeout(settleT);let stop=false,n=0,last=-1,ok=0;
+  const quit=()=>{stop=true;};["wheel","touchstart","keydown"].forEach(ev=>addEventListener(ev,quit,{once:true,passive:true}));
+  const tick=()=>{if(stop||n++>24)return;const el=document.getElementById(id);if(!el)return;
+    const want=Math.max(0,Math.round(el.getBoundingClientRect().top+pageYOffset-headerOffset()));
+    if(Math.abs(pageYOffset-last)<1){if(Math.abs(pageYOffset-want)>6){ok=0;window.ambsGlide(want);}else if(++ok>=2)return;}
+    last=pageYOffset;settleT=setTimeout(tick,300);};
+  settleT=setTimeout(tick,300);
 }
 dr.querySelectorAll("a").forEach(a=>a.addEventListener("click",e=>{
   const href=a.getAttribute("href")||"";
@@ -5301,7 +5339,7 @@ dr.addEventListener("click",function(e){
 });
 
 /* header links and buttons use the same offset-aware scroll */
-document.querySelectorAll('.bar a[href^="#"], .hero a[href^="#"], footer a[href^="#"]').forEach(a=>{
+document.querySelectorAll('.bar a[href^="#"], .hero a[href^="#"], footer a[href^="#"], .qbar a[href^="#"]').forEach(a=>{
   a.addEventListener("click",e=>{
     const href=a.getAttribute("href")||"";
     if(href.length<2)return;
@@ -6462,6 +6500,8 @@ if("IntersectionObserver" in window && !reduced){
 })();
 </script>
 
+<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span data-i18n="bar.call">Call</span></a><a class="qb-book" href="#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span data-i18n="bar.book">Book</span></a></nav>
+<script>document.querySelectorAll(".qbar a[href^='#']").forEach(function(a){a.addEventListener("click",function(e){var id=a.getAttribute("href").slice(1);if(!document.getElementById(id)||typeof scrollToId!=="function")return;e.preventDefault();scrollToId(id);});});</script>
 <button class="totop" id="totop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
 <script>
 /* scrollspy: the menu shows which part of the page you are reading.

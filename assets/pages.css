@@ -719,3 +719,24 @@ footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
 .g-edge-bg{stroke:var(--line)}
 .g-edge-on{stroke:#1877E0;stroke-dasharray:calc(var(--pc,0) * 1px) 200px;transition:stroke-dasharray .35s ease}
 html[data-theme="dark"] .g-edge-on{stroke:#4FA8FF}
+
+/* quick bar: Call and Book floating at the bottom on phones and tablets */
+.qbar{display:none}
+@media(max-width:1120px){
+  .qbar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));z-index:45;transform:translateX(-50%);display:flex;gap:4px;padding:5px;border-radius:999px;
+    background:color-mix(in srgb,#fff 92%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+    border:1px solid rgba(20,23,43,.08);box-shadow:0 14px 34px -14px rgba(20,23,43,.45);transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .4s ease}
+  .qbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:104px;height:56px;padding:0 1.1rem;border-radius:999px;
+    text-decoration:none;color:#14172B;font:700 .8rem/1 var(--body,inherit);-webkit-tap-highlight-color:transparent;transition:background-color .3s ease,transform .3s cubic-bezier(.16,1,.3,1)}
+  .qbar a svg{width:22px;height:22px}
+  .qbar .qb-call{background:linear-gradient(180deg,#D3F2B9,#A6DE82);color:#14301A}
+  .qbar a:active{transform:scale(.95)}
+  .qbar .qb-book:hover,.qbar .qb-book:focus-visible{background:rgba(20,23,43,.06)}
+  html[data-theme="dark"] .qbar{background:color-mix(in srgb,#171E3A 92%,transparent);border-color:rgba(233,237,249,.12);box-shadow:0 14px 34px -14px rgba(0,0,0,.7)}
+  html[data-theme="dark"] .qbar a{color:#EDEFF8}
+  html[data-theme="dark"] .qbar .qb-call{color:#14301A}
+  body{padding-bottom:84px}
+  body:has(.updatebar.on) .qbar,body:has(.sh-drawer.open) .qbar,body:has(.drawer.open) .qbar{opacity:0;pointer-events:none;transform:translate(-50%,20px)}
+  .hdr-call,.sh-call{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.qbar,.qbar a{transition:none}}
