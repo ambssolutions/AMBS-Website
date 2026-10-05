@@ -137,7 +137,6 @@ def header(active):
     <nav class="sh-nav" aria-label="Main">{''.join(a(*m) for m in main)}</nav>
     <a class="sh-btn sh-book" href="/#book">Book a call</a>
     <a class="sh-btn sh-contact" href="/#book">Contact us</a>
-    <a class="sh-ico sh-sm" href="mailto:hello@ambs.co.nz" aria-label="Email us">{ico_mail}</a>
     <a class="sh-ico sh-sm" href="tel:+64220999578" aria-label="Call us">{ico_call}</a>
     <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
   </div>
