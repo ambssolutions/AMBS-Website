@@ -4343,6 +4343,17 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 .kh-tlink{align-items:baseline!important}
 .kh-tlink span[aria-hidden]{width:.85em!important;height:.7em!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat!important}
 @media(max-width:767px){.wd-copy .wd-more{margin-top:1.4rem!important;margin-bottom:-.7rem!important}}
+/* phone footer: one column on the left line, ordered Contact us, Company, Explore */
+@media(max-width:640px){
+  footer.f2 .f2-grid{grid-template-columns:1fr!important;justify-items:start!important;gap:1.8rem!important}
+  footer.f2 .f2-grid>.f2-brand{order:0}
+  footer.f2 .f2-grid>.f2-col{grid-column:1/-1!important;justify-self:start!important;align-items:flex-start!important;text-align:left!important}
+  footer.f2 .f2-grid>.f2-col:last-child{order:1;display:flex!important;flex-direction:column;justify-self:start!important;margin:0!important}
+  footer.f2 .f2-grid>.f2-col:nth-child(2){order:2}
+  footer.f2 .f2-grid>.f2-col:nth-child(3){order:3}
+  footer.f2 .f2-grid>.f2-col:last-child>.f2-h{text-align:left;justify-self:auto}
+  footer.f2 .f2-grid>.f2-col:last-child>a,footer.f2 .f2-grid>.f2-col:last-child>span{width:auto}
+}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
