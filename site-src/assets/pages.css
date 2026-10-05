@@ -673,3 +673,14 @@ html[data-theme="dark"] .msgs{background:linear-gradient(160deg,#1C2550,#161D3D)
 .msgs.in .msg{opacity:1;transform:none}
 .msgs.in .msg:nth-child(2){transition-delay:.5s}.msgs.in .msg:nth-child(3){transition-delay:1s}
 @media(prefers-reduced-motion:reduce){.msgs .msg{opacity:1;transform:none;transition:none}}
+
+/* footer: everything on the centre line */
+footer.f2 .f2-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;justify-items:center;text-align:center;max-width:780px;margin:0 auto;gap:2rem 1.5rem}
+footer.f2 .f2-brand{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;padding-bottom:1.8rem;border-bottom:1px solid var(--line)}
+footer.f2 .f2-logo img{margin:0 auto}
+footer.f2 .f2-brand p{margin-left:auto;margin-right:auto;max-width:52ch}
+footer.f2 .f2-col{align-items:center}
+footer.f2 .f2-bottom{flex-direction:column!important;align-items:center!important;justify-content:center;text-align:center}
+footer.f2 .f2-legal{justify-content:center}
+footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
+@media(max-width:640px){footer.f2 .f2-grid{grid-template-columns:1fr 1fr!important}footer.f2 .f2-grid>.f2-col:last-child{grid-column:1/-1}}
