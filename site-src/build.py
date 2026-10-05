@@ -349,9 +349,30 @@ def build_sitemap():
     x='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url>\n    <loc>{BASE}{u if u!="/" else "/"}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{f}</changefreq>\n    <priority>{pr}</priority>\n  </url>\n' for u,pr,f in rows)+'</urlset>\n'
     open(os.path.join(OUT,'sitemap.xml'),'w').write(x)
 
+def stamp_home():
+    """The home page keeps its styles, scripts and extra languages in site-src/assets (home.css, home.js, i18n/*.json).
+       Copy them to the site and stamp index.html with content hashes so browsers and the offline worker fetch new copies after a change."""
+    names=['home.css','home.js']
+    i18n_dir=os.path.join(SRC,'assets','i18n')
+    langs=sorted(f for f in os.listdir(i18n_dir) if f.endswith('.json')) if os.path.isdir(i18n_dir) else []
+    for f in names: open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
+    if langs:
+        os.makedirs(os.path.join(OUT,'assets','i18n'),exist_ok=True)
+        for f in langs: open(os.path.join(OUT,'assets','i18n',f),'w',encoding='utf8').write(open(os.path.join(i18n_dir,f),encoding='utf8').read())
+    idx=os.path.join(OUT,'index.html')
+    if not os.path.exists(idx): return
+    h=open(idx,encoding='utf8').read()
+    h=re.sub(r'home\.css\?v=[A-Za-z0-9]+','home.css?v='+_v('home.css'),h)
+    h=re.sub(r'home\.js\?v=[A-Za-z0-9]+','home.js?v='+_v('home.js'),h)
+    if langs:
+        lv=hashlib.md5(b''.join(open(os.path.join(i18n_dir,f),'rb').read() for f in langs)).hexdigest()[:8]
+        h=re.sub(r'data-i18nv="[A-Za-z0-9]*"','data-i18nv="'+lv+'"',h)
+    open(idx,'w',encoding='utf8').write(h)
+
 if __name__=='__main__':
     os.makedirs(os.path.join(OUT,'assets'),exist_ok=True)
     for f in ('pages.css','pages.js'): open(os.path.join(OUT,'assets',f),'w').write(open(os.path.join(SRC,'assets',f)).read())
+    stamp_home()
     only=sys.argv[1:]
     total=0
     for p in PAGES:
