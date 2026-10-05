@@ -719,3 +719,78 @@ footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
 .g-edge-bg{stroke:var(--line)}
 .g-edge-on{stroke:#1877E0;stroke-dasharray:calc(var(--pc,0) * 1px) 200px;transition:stroke-dasharray .35s ease}
 html[data-theme="dark"] .g-edge-on{stroke:#4FA8FF}
+
+/* quick bar: Call and Book floating at the bottom on phones and tablets */
+.qbar{display:none}
+@media(max-width:1120px){
+  .qbar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));z-index:45;transform:translateX(-50%);display:flex;gap:4px;padding:5px;border-radius:999px;
+    background:color-mix(in srgb,#fff 92%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+    border:1px solid rgba(20,23,43,.08);box-shadow:0 14px 34px -14px rgba(20,23,43,.45);transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .4s ease}
+  .qbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:104px;height:56px;padding:0 1.1rem;border-radius:999px;
+    text-decoration:none;color:#14172B;font:700 .8rem/1 var(--body,inherit);-webkit-tap-highlight-color:transparent;transition:background-color .3s ease,transform .3s cubic-bezier(.16,1,.3,1)}
+  .qbar a svg{width:22px;height:22px}
+  .qbar .qb-call{background:linear-gradient(180deg,#D3F2B9,#A6DE82);color:#14301A}
+  .qbar a:active{transform:scale(.95)}
+  .qbar .qb-book:hover,.qbar .qb-book:focus-visible{background:rgba(20,23,43,.06)}
+  html[data-theme="dark"] .qbar{background:color-mix(in srgb,#171E3A 92%,transparent);border-color:rgba(233,237,249,.12);box-shadow:0 14px 34px -14px rgba(0,0,0,.7)}
+  html[data-theme="dark"] .qbar a{color:#EDEFF8}
+  html[data-theme="dark"] .qbar .qb-call{color:#14301A}
+  body{padding-bottom:84px}
+  body:has(.updatebar.on) .qbar,body:has(.sh-drawer.open) .qbar,body:has(.drawer.open) .qbar{opacity:0;pointer-events:none;transform:translate(-50%,20px)}
+  .hdr-call,.sh-call{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.qbar,.qbar a{transition:none}}
+
+/* language picker in the header, styled like the home page */
+.langwrap{position:relative;display:inline-flex;align-items:center;flex:0 0 auto;width:112px}
+.langselect{-webkit-appearance:none;appearance:none;width:100%;height:36px;padding:0 2.2em 0 .8em;border-radius:999px;border:1px solid rgba(70,179,31,.45);
+  background:linear-gradient(#fff,#EEF5E4);color:#274F16;font:700 .84rem/1 var(--body);box-shadow:0 5px 12px -8px rgba(39,79,22,.35);cursor:pointer}
+.langcaret{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);width:12px;height:8px;color:#2A5418;pointer-events:none;display:grid}
+.langcaret svg{width:12px;height:8px}
+html[data-theme="dark"] .langselect{background:transparent;color:#C9E9AE;border-color:rgba(143,226,74,.35)}
+html[data-theme="dark"] .langcaret{color:#C9E9AE}
+@media(max-width:1120px){
+  .langwrap{width:107px;margin-left:auto}
+  .langselect{height:32px;font-size:.72rem;padding:0 1.9em 0 .5em}
+  .langcaret{right:.6rem}
+  /* minutes left sits in the space between the logo and the language picker */
+  .g-left.in-hdr{position:relative!important;left:auto!important;top:auto!important;transform:none!important;margin:0 auto!important}
+  .g-left.in-hdr+.langwrap{margin-left:0}
+}
+@media(max-width:380px){.langwrap{width:96px}}
+@media(min-width:1121px) and (max-width:1279px){.sh-book{display:none!important}}
+
+/* laptops: guide pages carry the minutes-left pill too, so "Book a call" gives way ("Contact us" opens the same form) */
+@media(min-width:1121px){.sh-right:has(.g-left) .sh-book{display:none!important}}
+@media(min-width:1121px) and (max-width:1279px){.sh-right:has(.g-left) .sh-nav a{padding-left:.55em;padding-right:.55em;font-size:.9rem}}
+@media(min-width:1121px) and (max-width:1279px){.sh-bar:has(.g-left) .langwrap,.sh-bar:has(.g-left) .sh-theme{display:none!important}.sh-bar:has(.g-left) .sh-mark img{height:auto;width:150px}}
+
+/* quick bar: liquid glass, with a green blob that flows to whichever button you touch */
+@media(max-width:1120px){
+  .qbar{position:fixed;isolation:isolate;overflow:visible;
+    background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.28))!important;
+    -webkit-backdrop-filter:blur(18px) saturate(1.9)!important;backdrop-filter:blur(18px) saturate(1.9)!important;
+    border:1px solid rgba(255,255,255,.7)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(20,23,43,.06),0 18px 40px -16px rgba(20,23,43,.45),0 2px 6px -2px rgba(20,23,43,.12)!important}
+  .qbar::before{content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;z-index:2;
+    background:linear-gradient(115deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 32%,rgba(255,255,255,0) 68%,rgba(255,255,255,.25) 100%);mix-blend-mode:soft-light}
+  .qbar a{position:relative;z-index:1;background:transparent!important}
+  .qbar .qb-call{color:#14301A}
+  .qb-blob{position:absolute;z-index:0;top:5px;bottom:5px;left:0;width:var(--bw,104px);border-radius:999px;transform:translateX(var(--bx,5px));
+    background:linear-gradient(180deg,rgba(211,242,185,.95),rgba(150,214,110,.92));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85),inset 0 -2px 6px rgba(46,143,28,.25),0 6px 14px -6px rgba(46,143,28,.55);
+    transition:transform .55s cubic-bezier(.34,1.56,.64,1),width .55s cubic-bezier(.34,1.56,.64,1)}
+  .qb-blob.flow{animation:qb-flow .55s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes qb-flow{0%{scale:1 1}35%{scale:1.22 .82}70%{scale:.94 1.06}100%{scale:1 1}}
+  .qbar a.on{color:#14301A!important}
+  html[data-theme="dark"] .qbar{background:linear-gradient(180deg,rgba(40,48,90,.55),rgba(20,26,56,.4))!important;border-color:rgba(255,255,255,.16)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(0,0,0,.25),0 18px 40px -16px rgba(0,0,0,.75)!important}
+  html[data-theme="dark"] .qbar::before{opacity:.35}
+}
+@media(prefers-reduced-motion:reduce){.qb-blob{transition:none}.qb-blob.flow{animation:none}}
+@media(max-width:1120px){.qbar a:not(.on){color:#14172B!important}html[data-theme="dark"] .qbar a:not(.on){color:#EDEFF8!important}}
+/* minutes left: same size as the language picker beside it */
+.g-left.in-hdr{box-sizing:border-box;width:112px;height:36px;padding:0 .6rem;justify-content:center;font:700 .84rem/1 var(--body)}
+@media(max-width:1120px){.g-left.in-hdr{width:107px;height:32px;font-size:.72rem}}
+@media(max-width:380px){.g-left.in-hdr{width:96px}}
+@media(max-width:380px){.g-left.in-hdr,.sh-bar:has(.g-left) .langwrap{width:88px}.g-left.in-hdr{font-size:.68rem}}
