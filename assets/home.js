@@ -1328,7 +1328,7 @@ try{
      then everything below it glides from where it was to where it now belongs, and the card is
      revealed from the top. Only transform and clip move, so the phone never re-lays-out the page
      mid-animation. Anything else that is animating pauses for that half second. */
-  var flipping=null,FLIP_MS=900,EASE="cubic-bezier(.25,.8,.25,1)";
+  var flipping=null,FLIP_MS=1400,EASE="cubic-bezier(.33,.86,.32,1)";
   function laterThan(el){var out=[],n=el;while(n&&n!==document.body){for(var x=n.nextElementSibling;x;x=x.nextElementSibling){
       if(x.tagName!=="SCRIPT"&&getComputedStyle(x).position!=="fixed")out.push(x);}n=n.parentElement;}return out;}
   function endFlip(){if(flipping){clearTimeout(flipping.t);flipping.done();flipping=null;}}
@@ -1346,7 +1346,7 @@ try{
     var from=opening?-delta:0,to=opening?0:-delta,cFrom=opening?delta:0,cTo=opening?0:delta;
     /* only what is on screen before or after the move needs to glide; the rest simply lands in place unseen */
     var vh=innerHeight;below=below.filter(function(x){var r=x.getBoundingClientRect();return r.height>0&&r.top-delta<vh&&r.bottom>-delta;});
-    below.forEach(function(x){x.style.transition="none";x.style.transform="translate3d(0,"+from+"px,0)";});
+    below.forEach(function(x){x.style.transition="none";x.style.willChange="transform";x.style.transform="translate3d(0,"+from+"px,0)";});
     p.style.transition="none";p.style.clipPath="inset(0 0 "+cFrom+"px 0 round 20px)";
     void p.offsetHeight;
     var tr="transform "+FLIP_MS+"ms "+EASE;
@@ -1354,7 +1354,7 @@ try{
     p.style.transition="clip-path "+FLIP_MS+"ms "+EASE;p.style.clipPath="inset(0 0 "+cTo+"px 0 round 20px)";
     var f={done:function(){
       if(!opening)setOpen();
-      below.forEach(function(x){x.style.transition="";x.style.transform="";});
+      below.forEach(function(x){x.style.transition="";x.style.transform="";x.style.willChange="";});
       p.style.transition="";p.style.clipPath="";
       box.classList.remove("wd-flipping");
     }};
@@ -1376,7 +1376,7 @@ try{
   var settled=panels.map(function(){return false;}),settleT=[];
   function run(){panels.forEach(function(p,k){p.classList.toggle("vis",mode==="list"&&inView[k]);p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]&&(settled[k]||!("IntersectionObserver" in window))):(visible&&k===cur));});}
   /* a panel counts as settled a moment after it opens, once its height has finished easing */
-  function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:950);}
+  function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:1450);}
   var glider=document.createElement("span");glider.className="wd-glider";glider.setAttribute("aria-hidden","true");tabRow.insertBefore(glider,tabRow.firstChild);tabRow.classList.add("has-glider");
   function glide(i){var t=tabs[i];if(!t)return;glider.style.setProperty("--gy",t.offsetTop+"px");glider.style.setProperty("--gh",t.offsetHeight+"px");}
   function copyIn(k,delay){var c=panels[k]&&panels[k].querySelector(".wd-copy");if(!c||!window.textOpen)return;
