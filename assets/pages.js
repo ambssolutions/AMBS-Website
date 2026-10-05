@@ -162,3 +162,18 @@
   var io=new IntersectionObserver(function(es){es.forEach(function(e){var t=e.target,hit=t.matches(".phero")?(e.isIntersecting&&e.intersectionRatio>0.25):e.isIntersecting;if(hit)on.add(t);else on.delete(t);});bar.classList.toggle("away",on.size>0);},{threshold:[0,0.25,0.5,1]});
   document.querySelectorAll('.hero-cta,.phero,#book,footer.f2,main .btns,main a[href*="#book"]:not(.kh-gc),main a[href^="tel:"]').forEach(function(el){io.observe(el);});
 })();
+
+/* Call | Book shimmer: a short burst every few seconds, skipped while scrolling */
+(function(){var bar=document.querySelector(".qbar");if(!bar||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var lastScroll=0;addEventListener("scroll",function(){lastScroll=Date.now();},{passive:true});
+  function shine(){if(document.hidden||bar.classList.contains("away")||Date.now()-lastScroll<500||getComputedStyle(bar).display==="none")return;
+    bar.classList.remove("shine");void bar.offsetWidth;bar.classList.add("shine");setTimeout(function(){bar.classList.remove("shine");},2200);}
+  setInterval(shine,6000);setTimeout(shine,1500);
+})();
+
+/* pause animations in sections that are off screen */
+(function(){if(!("IntersectionObserver" in window))return;
+  var secs=[].slice.call(document.querySelectorAll("main > section, main > div, .hero, #docket, .auto-strip, .wd-panel, .wd-stage, .kh-deck, .g-art, footer, body > section"));
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle("anim-off",!e.isIntersecting);});},{rootMargin:"120px 0px 120px 0px"});
+  secs.forEach(function(s){io.observe(s);});
+})();
