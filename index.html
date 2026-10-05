@@ -4379,6 +4379,37 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 .kh-cgo{align-items:baseline!important}.kh-cgo span[aria-hidden]{display:inline-block;width:.85em;height:.7em;text-indent:-99em;overflow:hidden;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat}
 /* link arrows: centred on the middle of the words (between lowercase and capital height) */
 .wd-more::after,.kh-go::after,.kh-tlink span[aria-hidden],.kh-cgo span[aria-hidden]{height:.62em!important;width:.78em!important}
+/* booking form: Send request button centred */
+#sendbtn{display:flex!important;margin-left:auto!important;margin-right:auto!important}
+/* first screen shows only the hero; "Pick your business" follows below on every screen size */
+.hero .wrap{grid-template-columns:minmax(0,1fr)!important;align-items:start!important}
+.hero-copy{min-height:calc(var(--vh,calc(var(--vh,1svh) * 1)) * 100 - var(--hc-top,120px));display:flex!important;flex-direction:column;justify-content:center;box-sizing:border-box;padding-bottom:1.2rem}
+@media(min-width:900px){.hero-copy{max-width:880px}}
+.hero #docket{width:100%;max-width:640px;margin:1.6rem auto 0!important;justify-self:center;height:auto!important;min-height:0!important;align-self:start!important}
+.hero #docket .tickets{flex:0 0 auto!important;min-height:0!important}
+/* hero spacing and type scale with the screen height */
+.hero{padding-top:clamp(8px,calc(var(--vh,1svh) * 2.2),40px)!important}
+.hero .hero-copy{padding-top:clamp(6px,calc(var(--vh,1svh) * 1.5),18px)!important}
+.hero .hero-copy .greet{margin-bottom:clamp(.3rem,calc(var(--vh,1svh) * 1.4),1.1rem)!important}
+.hero .hero-copy h1{font-size:clamp(1.85rem,min(10vw,calc(var(--vh,1svh) * 6.8)),5rem)!important;margin-bottom:clamp(.6rem,calc(var(--vh,1svh) * 2.8),2.1rem)!important}
+.hero .hero-copy .hero-sub{font-size:clamp(.92rem,min(4.3vw,calc(var(--vh,1svh) * 2.3)),1.4rem)!important}
+.hero .hero-copy .hero-cta{margin-top:clamp(1rem,calc(var(--vh,1svh) * 4.6),3.4rem)!important}
+.hero .hero-copy .hero-note{margin-top:clamp(.7rem,calc(var(--vh,1svh) * 2.8),2rem)!important}
+@media(max-height:700px) and (max-width:767px){.hero .hero-cta .btn{min-height:44px!important;padding-top:.7em!important;padding-bottom:.7em!important}.hero .hero-cta{gap:.6rem!important}}
+.hero .hero-copy{padding-bottom:clamp(1rem,calc(var(--vh,1svh) * 5),4rem)!important}
+/* wide screens: hero and "Pick your business" side by side, both on the first screen */
+@media(min-width:1024px){
+  .hero .wrap{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)!important;align-items:center!important;column-gap:clamp(1.5rem,3vw,3.5rem)!important}
+  .hero .hero-copy{max-width:none!important}
+  .hero #docket{margin:0!important;justify-self:end;max-width:560px;align-self:center!important}
+  .hero .hero-copy h1{font-size:clamp(1.85rem,min(4.6vw,calc(var(--vh,1svh) * 6.6)),4.6rem)!important}
+}
+/* wide screens: hero and "Pick your business" boxes the same height, centred on the first screen */
+@media(min-width:1024px){
+  .hero .wrap{min-height:calc(var(--vh,1svh) * 100 - var(--hc-top,120px));align-items:stretch!important;align-content:center!important}
+  .hero .hero-copy{min-height:0!important}
+  .hero #docket{align-self:stretch!important;height:auto!important;display:flex!important;flex-direction:column;justify-content:center}
+}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4851,7 +4882,7 @@ with easy-to-use AI.</h1>
         <input id="f-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0">
         <div class="field--full">
           <button class="btn btn--sun" type="button" id="sendbtn" data-i18n="form.send">Send request</button>
-          <p class="form-note" data-i18n="form.note">We aim to reply within one working day, in English, Hindi or Punjabi. Or call +64 22 099 9578.</p>
+          <p class="form-note" data-i18n="form.note">We aim to reply within one working day. Or call +64 22 099 9578.</p>
         </div>
       </div>
     </div>
@@ -4984,7 +5015,7 @@ en:{
  "form.eyebrow":"Free session","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
  "form.name":"Your name","form.biz":"Business name","form.email":"Email","form.phone":"Phone",
  "form.msg":"What eats your time?","form.send":"Send request",
- "form.note":"We aim to reply within one working day, in English, Hindi or Punjabi. Or call +64 22 099 9578.",
+ "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.",
  "foot.tag":"Built in Auckland. Working nationwide.",
  "foot.fine":"Translations are provided to help and may contain errors. If there is any difference, the English version applies."
 },
@@ -5069,7 +5100,7 @@ zh:{
  "form.eyebrow":"免费咨询","form.title":"预约你的免费咨询","form.lead":"告诉我们你的时间都花在哪里，我们会给出方案和省时估算。",
  "form.name":"你的姓名","form.biz":"店铺／公司名称","form.email":"电子邮箱","form.phone":"电话",
  "form.msg":"哪些事最花你的时间？","form.send":"提交申请",
- "form.note":"我们争取在一个工作日内回复（使用英语、印地语或旁遮普语）。也可致电 +64 22 099 9578。",
+ "form.note":"我们争取在一个工作日内回复。也可致电 +64 22 099 9578。",
  "foot.tag":"立足奥克兰，服务全新西兰。",
  "foot.fine":"译文仅供参考，可能有误。如有不一致，以英文版为准。"
 },
@@ -5154,7 +5185,7 @@ hi:{
  "form.eyebrow":"मुफ़्त सेशन","form.title":"अपना फ़्री सेशन बुक करें","form.lead":"बताइए आपका हफ़्ता कहाँ जाता है। हम प्लान और घंटों का अनुमान लेकर लौटेंगे।",
  "form.name":"आपका नाम","form.biz":"व्यवसाय का नाम","form.email":"ईमेल","form.phone":"फ़ोन",
  "form.msg":"आपका समय किस काम में जाता है?","form.send":"अनुरोध भेजें",
- "form.note":"हम एक कार्यदिवस में अंग्रेज़ी, हिंदी या पंजाबी में जवाब देने की कोशिश करते हैं। या +64 22 099 9578 पर कॉल करें।",
+ "form.note":"हम एक कार्यदिवस में जवाब देने की कोशिश करते हैं। या +64 22 099 9578 पर कॉल करें।",
  "foot.tag":"ऑकलैंड में बना, पूरे न्यूज़ीलैंड में काम।",
  "foot.fine":"अनुवाद सुविधा के लिए हैं और इनमें गलतियाँ हो सकती हैं। किसी अंतर की स्थिति में अंग्रेज़ी संस्करण मान्य होगा।"
 },
@@ -5239,7 +5270,7 @@ mi:{
  "form.eyebrow":"He wā kore utu","form.title":"Tohua tō wā koreutu","form.lead":"Kōrero mai he aha kei te kai i tō wiki. Ka hoki mai mātou me te mahere me te whakatau hāora.",
  "form.name":"Tō ingoa","form.biz":"Ingoa pakihi","form.email":"Īmēra","form.phone":"Waea",
  "form.msg":"He aha kei te kai i tō wā?","form.send":"Tukuna te tono",
- "form.note":"Ka whai mātou kia whakautu i roto i te rā mahi kotahi, i te reo Pākehā, i te reo Hindi, i te reo Punjabi rānei. Waea rānei ki +64 22 099 9578.",
+ "form.note":"Ka whai mātou kia whakautu i roto i te rā mahi kotahi. Waea rānei ki +64 22 099 9578.",
  "foot.tag":"I hangaia ki Tāmaki Makaurau. E mahi ana puta noa i te motu.",
  "foot.fine":"He whakamāoritanga hei āwhina, tērā pea he hapa. Mēnā he rerekētanga, ko te putanga reo Pākehā te mana."
 },
@@ -5324,7 +5355,7 @@ pa:{
  "form.eyebrow":"ਮੁਫ਼ਤ ਸੈਸ਼ਨ","form.title":"ਆਪਣਾ ਫ਼ਰੀ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ","form.lead":"ਸਾਨੂੰ ਦੱਸੋ ਤੁਹਾਡਾ ਹਫ਼ਤਾ ਕਿੱਥੇ ਜਾਂਦਾ ਹੈ। ਅਸੀਂ ਪਲਾਨ ਤੇ ਘੰਟਿਆਂ ਦਾ ਅੰਦਾਜ਼ਾ ਲੈ ਕੇ ਮੁੜਾਂਗੇ।",
  "form.name":"ਤੁਹਾਡਾ ਨਾਂ","form.biz":"ਕਾਰੋਬਾਰ ਦਾ ਨਾਂ","form.email":"ਈਮੇਲ","form.phone":"ਫ਼ੋਨ",
  "form.msg":"ਤੁਹਾਡਾ ਸਮਾਂ ਕਿਸ ਕੰਮ ਵਿੱਚ ਜਾਂਦਾ ਹੈ?","form.send":"ਬੇਨਤੀ ਭੇਜੋ",
- "form.note":"ਅਸੀਂ ਇੱਕ ਕੰਮ-ਵਾਲੇ ਦਿਨ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ, ਹਿੰਦੀ ਜਾਂ ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਦੇਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦੇ ਹਾਂ। ਜਾਂ +64 22 099 9578 'ਤੇ ਕਾਲ ਕਰੋ।",
+ "form.note":"ਅਸੀਂ ਇੱਕ ਕੰਮ-ਵਾਲੇ ਦਿਨ ਵਿੱਚ ਜਵਾਬ ਦੇਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦੇ ਹਾਂ। ਜਾਂ +64 22 099 9578 'ਤੇ ਕਾਲ ਕਰੋ।",
  "foot.tag":"ਆਕਲੈਂਡ ਵਿੱਚ ਬਣਿਆ। ਪੂਰੇ ਨਿਊਜ਼ੀਲੈਂਡ ਵਿੱਚ ਕੰਮ।",
  "foot.fine":"ਅਨੁਵਾਦ ਸਹੂਲਤ ਲਈ ਹਨ ਤੇ ਇਹਨਾਂ ਵਿੱਚ ਗਲਤੀਆਂ ਹੋ ਸਕਦੀਆਂ ਹਨ। ਕਿਸੇ ਫ਼ਰਕ ਦੀ ਸੂਰਤ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ ਰੂਪ ਮੰਨਿਆ ਜਾਵੇਗਾ।"
 }
@@ -5818,10 +5849,7 @@ if("IntersectionObserver" in window && !reduced){
   function apply(){
     applying=true;
     copy.style.minHeight="";dock.style.minHeight="";
-    if(window.innerWidth<940){
-      var h=Math.max(copy.offsetHeight,dock.offsetHeight);
-      if(h>0){copy.style.minHeight=h+"px";dock.style.minHeight=h+"px";}
-    }
+    /* hero and docket are no longer side by side, so no height matching */
     applying=false;
   }
   apply();
@@ -6895,5 +6923,6 @@ if("IntersectionObserver" in window && !reduced){
   document.querySelectorAll('.hero-cta,.phero,#book,footer.f2,main .btns,main a[href*="#book"]:not(.kh-gc),main a[href^="tel:"]').forEach(function(el){io.observe(el);});
 })();
 </script>
+<script>(function(){var hc=document.querySelector(".hero-copy");if(!hc)return;var w=0;function set(){if(innerWidth===w)return;w=innerWidth;hc.style.minHeight="";var t=hc.getBoundingClientRect().top+scrollY;var de=document.documentElement;de.style.setProperty("--vh",(innerHeight/100)+"px");de.style.setProperty("--hc-top",Math.round(t)+"px");}set();addEventListener("resize",set);addEventListener("load",function(){w=0;set();});})();</script>
 </body>
 </html>
