@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang="en" translate="no" data-i18nv="8d011b40">
 <head>
 <meta charset="utf-8">
 <script>
@@ -157,6 +157,11 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap"></noscript>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+Gurmukhi:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+Gurmukhi:wght@400;500;700&display=swap"></noscript>
+<script>/* a saved non-English choice: start fetching it now and hold the page briefly so English does not flash first */
+(function(){try{var l=sessionStorage.getItem("ambs:lang");if(!/^(zh|hi|mi|pa)$/.test(l||""))return;var d=document.documentElement;d.classList.add("i18n-wait");
+var k=document.createElement("link");k.rel="preload";k.as="fetch";k.crossOrigin="anonymous";k.href="/assets/i18n/"+l+".json?v="+(d.getAttribute("data-i18nv")||"");document.head.appendChild(k);
+setTimeout(function(){d.classList.remove("i18n-wait");},2500);}catch(e){}})();</script>
+<style>html.i18n-wait body{visibility:hidden}</style>
 <link rel="stylesheet" href="/assets/home.css?v=49c0ecc3">
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -679,6 +684,6 @@ with easy-to-use AI.</h1>
 </footer>
 
 <button class="totop" id="totop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
-<script src="/assets/home.js?v=174fac9c"></script>
+<script src="/assets/home.js?v=adc917a1"></script>
 </body>
 </html>
