@@ -4306,6 +4306,8 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 }
 @keyframes qb-wave{to{background-position:140px 100%,-90px 100%}}
 @media(prefers-reduced-motion:reduce){.qbar::after{animation:none}}
+/* What we do: "Read the guide" link centred on phones */
+@media(max-width:767px){.wd-copy .wd-more{display:flex;width:fit-content;margin-left:auto;margin-right:auto}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
