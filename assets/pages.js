@@ -94,7 +94,10 @@
     ["rTimes","rMins","rShare"].forEach(function(id){f(id).addEventListener("input",calc);});calc();
   }
   var prose=document.querySelector(".prose");if(!prose||!document.querySelector(".g-art"))return;
-  var pill=document.createElement("div");pill.className="g-left";pill.setAttribute("aria-hidden","true");pill.innerHTML='<i></i><span></span>';document.body.appendChild(pill);
+  var pill=document.createElement("div");pill.className="g-left";pill.setAttribute("aria-hidden","true");pill.innerHTML='<i></i><span></span>';
+  /* sits in the header bar, beside the light/dark button */
+  var tb=document.getElementById("themeBtn");
+  if(tb&&tb.parentNode){pill.classList.add("in-hdr");tb.parentNode.insertBefore(pill,tb.nextSibling);}else document.body.appendChild(pill);
   var words=(prose.textContent||"").split(/\s+/).length,txt=pill.querySelector("span"),ring=pill.querySelector("i"),tick=false;
   function upd(){tick=false;var r=prose.getBoundingClientRect(),total=r.height-innerHeight*.5,done=Math.min(1,Math.max(0,(innerHeight*.5-r.top)/Math.max(1,total)));
     var left=Math.ceil(words*(1-done)/220);

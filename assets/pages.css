@@ -688,3 +688,9 @@ footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
 /* minutes-left pill sits in the bottom-left corner, clear of the browser's own centred scroll buttons */
 .g-left{left:max(14px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));transform:translateY(20px)}
 .g-left.on{transform:none}
+
+/* minutes-left pill inside the header bar */
+.g-left.in-hdr{position:static;left:auto;bottom:auto;transform:none;flex:0 0 auto;margin-right:auto;padding:.38rem .7rem .38rem .4rem;font-size:.78rem;box-shadow:none;background:var(--card);border:1px solid var(--line);-webkit-backdrop-filter:none;backdrop-filter:none;transition:opacity .5s ease}
+.g-left.in-hdr.on{transform:none}
+.g-left.in-hdr i{width:18px;height:18px;-webkit-mask:radial-gradient(circle,transparent 5px,#000 5.5px);mask:radial-gradient(circle,transparent 5px,#000 5.5px)}
+@media(max-width:380px){.g-left.in-hdr{font-size:.72rem;padding:.32rem .55rem .32rem .35rem}}
