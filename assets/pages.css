@@ -694,3 +694,16 @@ footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
 .g-left.in-hdr.on{transform:none}
 .g-left.in-hdr i{width:18px;height:18px;-webkit-mask:radial-gradient(circle,transparent 5px,#000 5.5px);mask:radial-gradient(circle,transparent 5px,#000 5.5px)}
 @media(max-width:380px){.g-left.in-hdr{font-size:.72rem;padding:.32rem .55rem .32rem .35rem}}
+
+/* light / dark switch inside the menu on phones and tablets; the header button is laptop-only, like the home page */
+.sh-pair{display:none}
+@media(max-width:1120px){
+  .sh-theme{display:none!important}
+  .sh-pair{display:flex;gap:4px;margin-top:.9rem;padding:4px;border-radius:999px;border:1px solid rgba(20,23,43,.14);background:rgba(20,23,43,.04)}
+  .sh-pair button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;border:0;border-radius:999px;background:transparent;font:700 .95rem/1 var(--body);color:rgba(16,19,33,.62);cursor:pointer}
+  .sh-pair button[aria-pressed="true"]{background:#14172B;color:#fff}
+  html[data-theme="dark"] .sh-pair{border-color:rgba(233,237,249,.18);background:rgba(233,237,249,.06)}
+  html[data-theme="dark"] .sh-pair button{color:rgba(233,237,249,.7)}
+  html[data-theme="dark"] .sh-pair button[aria-pressed="true"]{background:#EDEFF8;color:#14172B}
+  .g-left.in-hdr{margin-left:.5rem}
+}

@@ -7,8 +7,13 @@
   function icon(){if(tb)tb.innerHTML=root.dataset.theme==="dark"
     ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
     :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>';}
+  var pair=[].slice.call(document.querySelectorAll(".sh-pair [data-settheme]"));
+  function setTheme(t){root.dataset.theme=t;try{sessionStorage.setItem("ambs:theme",t)}catch(e){}icon();}
+  var _icon=icon;icon=function(){_icon();pair.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.settheme===(root.dataset.theme==="dark"?"dark":"light")));});};
   icon();
-  if(tb)tb.addEventListener("click",function(){var t=root.dataset.theme==="dark"?"light":"dark";root.dataset.theme=t;try{sessionStorage.setItem("ambs:theme",t)}catch(e){}icon();});
+  if(tb)tb.addEventListener("click",function(){setTheme(root.dataset.theme==="dark"?"light":"dark");});
+  /* phones and tablets: the light / dark switch lives in the menu, like the home page */
+  pair.forEach(function(b){b.addEventListener("click",function(){setTheme(b.dataset.settheme);});});
   /* mobile menu */
   var mt=document.getElementById("menuBtn"),nav=document.getElementById("siteNav");
   if(mt&&nav){
