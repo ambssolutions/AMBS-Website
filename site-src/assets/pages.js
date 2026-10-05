@@ -177,3 +177,35 @@
   var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle("anim-off",!e.isIntersecting);});},{rootMargin:"120px 0px 120px 0px"});
   secs.forEach(function(s){io.observe(s);});
 })();
+
+/* keep the site up to date on every page, the same way as the home page:
+   in the installed app, say "Updated" once when it opens on a newer version, and offer a one-tap refresh
+   when a new version goes live while the app is open; in a browser tab, switch quietly */
+(function(){
+  var isApp=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  var loaded=null,reg=null,reloading=false;
+  function read(){return fetch("/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){return String(d.build||"");}).catch(function(){return "";});}
+  function note(){var n=document.createElement("div");n.className="updatebar updatebar--done";n.setAttribute("role","status");
+    n.innerHTML='<span>&#10003;&nbsp; Updated to the latest version.</span>';document.body.appendChild(n);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){n.classList.add("on");});});
+    function hide(){n.classList.remove("on");setTimeout(function(){n.remove();},400);}n.addEventListener("click",hide);setTimeout(hide,8000);}
+  function offer(){
+    if(reloading)return;
+    if(!isApp){var w=reg&&(reg.waiting||reg.installing);if(w)w.postMessage("SKIP_WAITING");return;}
+    if(document.getElementById("updatebar"))return document.getElementById("updatebar").classList.add("on");
+    var b=document.createElement("div");b.id="updatebar";b.className="updatebar";
+    b.innerHTML='<span>New version ready</span><button type="button" id="updatego">Refresh</button><button type="button" id="updatelater" aria-label="Not now">&times;</button>';
+    document.body.appendChild(b);
+    b.querySelector("#updatego").addEventListener("click",function(){reloading=true;var w=reg&&(reg.waiting||reg.installing);if(w)w.postMessage("SKIP_WAITING");setTimeout(function(){location.reload();},600);});
+    b.querySelector("#updatelater").addEventListener("click",function(){b.remove();});
+    requestAnimationFrame(function(){b.classList.add("on");});
+  }
+  function check(){read().then(function(v){if(!v)return;if(loaded===null){loaded=v;return;}if(v!==loaded){if(reg)reg.update().catch(function(){});offer();}});}
+  var hadWorker=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+  if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).then(function(r){reg=r;}).catch(function(){});});}
+  read().then(function(v){if(!v)return;loaded=v;
+    var key=isApp?"ambs:appbuild":"ambs:build",seen=null;try{seen=localStorage.getItem(key);if(isApp&&!seen)seen=localStorage.getItem("ambs:build");localStorage.setItem(key,v);}catch(e){}
+    if(isApp&&((seen&&seen!==v)||(!seen&&hadWorker)))note();});
+  document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){if(reg)reg.update().catch(function(){});check();}});
+  setInterval(check,30*60*1000);
+})();
