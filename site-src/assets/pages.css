@@ -830,3 +830,6 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
 
 /* Call | Book bar stays out of the way while the top (hero) section is on screen */
 .qbar.away{opacity:0!important;pointer-events:none!important;transform:translate(-50%,24px)!important}
+
+/* Call | Book bar sits a little lower */
+@media(max-width:767px){.qbar{bottom:max(5px,calc(env(safe-area-inset-bottom) - 12px))!important}body{padding-bottom:70px!important}}
