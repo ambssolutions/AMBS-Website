@@ -4297,15 +4297,6 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{justify-self:center;align-items:flex-start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:flex-start}}
 /* header logo the same height as the header buttons on phones and tablets */
 @media(max-width:1120px){html body header .mark img,html body header .sh-mark img{height:40px!important;width:auto!important;max-width:none!important;margin:-3px 0 -5px!important}}
-/* Call | Book bar: gentle water wave inside the buttons */
-@media(max-width:767px){
-  .qbar::after{content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;z-index:0;
-    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40' preserveAspectRatio='none'%3E%3Cpath d='M0 14 C20 4 40 4 60 14 S100 24 120 14 V40 H0Z' fill='%231877E0' fill-opacity='0.22'/%3E%3C/svg%3E") 0 100%/70px 58% repeat-x,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40' preserveAspectRatio='none'%3E%3Cpath d='M0 14 C20 4 40 4 60 14 S100 24 120 14 V40 H0Z' fill='%2346B31F' fill-opacity='0.16'/%3E%3C/svg%3E") 35px 100%/90px 46% repeat-x;
-    animation:qb-wave 6s linear infinite}
-  html[data-theme="dark"] .qbar::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40' preserveAspectRatio='none'%3E%3Cpath d='M0 14 C20 4 40 4 60 14 S100 24 120 14 V40 H0Z' fill='%234FA8FF' fill-opacity='0.3'/%3E%3C/svg%3E") 0 100%/70px 58% repeat-x,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40' preserveAspectRatio='none'%3E%3Cpath d='M0 14 C20 4 40 4 60 14 S100 24 120 14 V40 H0Z' fill='%238FE24A' fill-opacity='0.18'/%3E%3C/svg%3E") 35px 100%/90px 46% repeat-x}
-}
-@keyframes qb-wave{to{background-position:140px 100%,-90px 100%}}
-@media(prefers-reduced-motion:reduce){.qbar::after{animation:none}}
 /* What we do: "Read the guide" link centred on phones */
 @media(max-width:767px){.wd-copy .wd-more{display:flex;width:fit-content;margin-left:auto;margin-right:auto}}
 /* hero "Book a free session": light sweep like MiKia (every few seconds, and on hover) */
@@ -4329,6 +4320,8 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 @keyframes qb-shine-ico{0%,6%,34%,100%{color:inherit}18%{color:var(--qb-ico,#1877E0)}}
 html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 @media(prefers-reduced-motion:reduce){.qbar a span,.qbar a svg{animation:none!important;-webkit-text-fill-color:currentColor;background:none}}
+/* phone footer: Contact us heading on the middle line, its lines left-aligned under it */
+@media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{display:grid!important;justify-self:center!important;justify-items:start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child>.f2-h{justify-self:center;text-align:center}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
