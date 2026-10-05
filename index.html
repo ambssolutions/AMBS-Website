@@ -12,14 +12,19 @@
   if("scrollRestoration" in history)history.scrollRestoration="manual";
   history.replaceState(null,"",location.pathname+location.search);
   window.__ambsArrive=id;
+  var root=document.documentElement,calm=matchMedia("(prefers-reduced-motion: reduce)").matches,shown=false;
+  if(!calm)root.classList.add("arriving");
+  function show(){if(shown)return;shown=true;requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.add("arrived");root.classList.remove("arriving");});});}
+  setTimeout(show,1600);
   var stop=false,t0=0,still=0,last=null;
   function off(){var hd=document.querySelector("header");return (hd?hd.getBoundingClientRect().height:70)+12;}
   function want(){var el=document.getElementById(id);return el?Math.max(0,Math.round(el.getBoundingClientRect().top+pageYOffset-off())):null;}
-  function quit(){stop=true;}
+  function quit(){stop=true;show();}
   ["wheel","touchstart","keydown","mousedown"].forEach(function(ev){addEventListener(ev,quit,{passive:true,once:true});});
   function step(){if(stop)return;var y=want();if(y===null)return;
     if(Math.abs(pageYOffset-y)>2)scrollTo({top:y,behavior:"instant"});
     still=(last===y)?still+1:0;last=y;
+    if(still>=3||performance.now()-t0>1200)show();
     if(performance.now()-t0<4000&&still<8)setTimeout(step,120);
     else history.replaceState(null,"",location.pathname+location.search+"#"+id);}
   function start(){t0=performance.now();step();}
@@ -4168,6 +4173,11 @@ html[data-theme="dark"] .wd-stage .spot{animation-name:wd-spot-d}
 .kh-dots i:nth-child(1).on{background:#E5352B}.kh-dots i:nth-child(2).on{background:#F5B800}.kh-dots i:nth-child(3).on{background:#3FAE29}.kh-dots i:nth-child(4).on{background:#1877E0}.kh-dots i:nth-child(5).on{background:#7B2FBE}
 .kh-cgo{color:var(--ct,var(--c1))}
 html[data-theme="dark"] .kh-gc{--ct:var(--c2)}
+
+/* arriving on a section from another page: settle out of sight, then fade in */
+html.arriving body{opacity:0}
+html.arrived body{animation:arrive-in .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes arrive-in{from{opacity:0}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4215,7 +4225,7 @@ html[data-theme="dark"] .kh-gc{--ct:var(--c2)}
       <a href="#faq" data-i18n="nav.faq">Questions</a>
     </nav>
       <a class="btn btn--sm nav-book" href="#book" data-i18n="nav.bookcall">Book a call</a>
-      <a class="btn btn--fill btn--sm nav-contact" href="#contact" data-i18n="nav.contact">Contact us</a>
+      <a class="btn btn--fill btn--sm nav-contact" href="#book" data-i18n="nav.contact">Contact us</a>
       <a class="hdr-tel" href="tel:+64220999578">+64 22 099 9578</a>
       <a class="hdr-ico" href="mailto:hello@ambs.co.nz" aria-label="Email us">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="17" rx="2.6"/><path d="M3 5.2L12 12.8l9-7.6"/></svg></a>
@@ -4233,7 +4243,7 @@ html[data-theme="dark"] .kh-gc{--ct:var(--c2)}
     <a href="/guides" data-i18n="nav.guides">Guides</a>
     <a href="#faq" data-i18n="nav.faq">Questions</a>
     <div class="dr-more"><a href="/industries" data-i18n="foot.industries">Industries</a></div>
-    <a class="btn btn--fill nav-contact" href="#contact" data-i18n="nav.contact">Contact us</a>
+    <a class="btn btn--fill nav-contact" href="#book" data-i18n="nav.contact">Contact us</a>
     <button type="button" class="installbtn" id="installbtn" hidden>
       <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5M4 20h16"/></svg>
       <span>Add to home screen</span>

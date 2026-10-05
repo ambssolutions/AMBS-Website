@@ -657,3 +657,7 @@ html[data-theme="dark"] .g-art{--mk-card:#232C58;--mk-soft:rgba(233,237,249,.16)
 .g-left i{width:22px;height:22px;border-radius:50%;background:conic-gradient(#1877E0 calc(var(--pc,0) * 1%),var(--line) 0);display:block;-webkit-mask:radial-gradient(circle,transparent 6px,#000 6.5px);mask:radial-gradient(circle,transparent 6px,#000 6.5px)}
 @media(prefers-reduced-motion:reduce){.mkc-row,.mkc-pick,.mkc-pick em,.mkg-t{animation:none!important}.g-left{transition:none}}
 .prose .g-calc-sub,.prose .g-calc-note{margin-left:auto;margin-right:auto;max-width:52ch}
+
+/* leaving for a section of the home page: a short fade so the hand-over feels smooth */
+body.leaving{opacity:0;transform:translateY(-6px);transition:opacity .28s ease,transform .3s ease}
+@media(prefers-reduced-motion:reduce){body.leaving{transition:none}}
