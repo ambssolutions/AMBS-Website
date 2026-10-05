@@ -853,3 +853,4 @@ html[data-theme="dark"] .g-left.in-hdr{color:#CFE6FF!important}
 @media(max-width:440px){.sh-bar:has(.g-left){width:calc(100% - 32px)}}
 @media(max-width:380px){.sh-bar:has(.g-left){width:calc(100% - 24px)}}
 @media(max-width:1120px){.sh-bar .sh-menu{width:32px;height:32px}}
+.g-left.in-hdr{border:0!important}
