@@ -707,3 +707,5 @@ footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
   html[data-theme="dark"] .sh-pair button[aria-pressed="true"]{background:#EDEFF8;color:#14172B}
   .g-left.in-hdr{margin-left:.5rem}
 }
+/* phones and tablets: minutes left sits in the middle of the header bar */
+@media(max-width:1120px){.g-left.in-hdr{position:absolute;left:50%;top:50%;margin:0;transform:translate(-50%,-50%)}.g-left.in-hdr.on{transform:translate(-50%,-50%)}}
