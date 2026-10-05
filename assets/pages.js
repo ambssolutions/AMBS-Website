@@ -155,3 +155,9 @@
   addEventListener("pageshow",function(){blob.classList.remove("show");});
   blob.classList.remove("show");links.forEach(function(l){l.classList.remove("on");});
 });})();
+
+/* hide the Call | Book bar while the top section is in view */
+(function(){var bar=document.querySelector(".qbar"),hero=document.querySelector(".hero,.phero");if(!bar||!hero||!("IntersectionObserver" in window))return;
+  bar.classList.add("away");
+  new IntersectionObserver(function(es){var e=es[0];bar.classList.toggle("away",e.isIntersecting&&e.intersectionRatio>0.25);},{threshold:[0,0.25,0.5,1]}).observe(hero);
+})();
