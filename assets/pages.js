@@ -139,8 +139,19 @@
   function go(i){var a=links[i];if(!a)return;bar.style.setProperty("--bx",a.offsetLeft+"px");bar.style.setProperty("--bw",a.offsetWidth+"px");
     links.forEach(function(l,k){l.classList.toggle("on",k===i);});
     if(cur!==-1&&cur!==i){blob.classList.remove("flow");void blob.offsetWidth;blob.classList.add("flow");}cur=i;}
-  links.forEach(function(a,i){a.addEventListener("pointerenter",function(){go(i);});a.addEventListener("touchstart",function(){go(i);},{passive:true});a.addEventListener("focus",function(){go(i);});});
-  bar.addEventListener("pointerleave",function(e){if(e.pointerType==="mouse")go(0);});
-  function home(){cur=-1;go(0);}home();addEventListener("resize",home);
+
   bar.style.setProperty("--bx",links[0].offsetLeft+"px");
+});})();
+
+/* quick bar v2: no resting highlight; the glass drop appears where you press, then fades */
+(function(){document.querySelectorAll(".qbar").forEach(function(bar){
+  var blob=bar.querySelector(".qb-blob");if(!blob)return;var links=[].slice.call(bar.querySelectorAll("a")),hideT;
+  function show(i){var a=links[i];clearTimeout(hideT);blob.style.transition="none";bar.style.setProperty("--bx",a.offsetLeft+"px");bar.style.setProperty("--bw",a.offsetWidth+"px");
+    void blob.offsetWidth;blob.style.transition="";links.forEach(function(l){l.classList.remove("on");});
+    blob.classList.add("show");blob.classList.remove("press");void blob.offsetWidth;blob.classList.add("press");}
+  function hide(){clearTimeout(hideT);hideT=setTimeout(function(){blob.classList.remove("show");},260);}
+  links.forEach(function(a,i){a.addEventListener("pointerdown",function(){show(i);});});
+  ["pointerup","pointercancel","pointerleave"].forEach(function(ev){bar.addEventListener(ev,hide);});
+  addEventListener("pageshow",function(){blob.classList.remove("show");});
+  blob.classList.remove("show");links.forEach(function(l){l.classList.remove("on");});
 });})();

@@ -794,3 +794,36 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
 @media(max-width:1120px){.g-left.in-hdr{width:107px;height:32px;font-size:.72rem}}
 @media(max-width:380px){.g-left.in-hdr{width:96px}}
 @media(max-width:380px){.g-left.in-hdr,.sh-bar:has(.g-left) .langwrap{width:88px}.g-left.in-hdr{font-size:.68rem}}
+
+/* the Call / Book bar is for phones only; tablets and laptops keep "Book a call" in the header */
+@media(min-width:768px){.qbar{display:none!important}}
+@media(min-width:768px) and (max-width:1120px){body{padding-bottom:0!important}}
+@media(min-width:768px) and (max-width:1120px){.sh-right>.sh-book{display:inline-flex!important;height:32px;padding:0 .9rem;font-size:.8rem}}
+@media(min-width:1121px) and (max-width:1279px){.sh-bar:has(.g-left) .sh-mark img{width:128px}}
+@media(min-width:1121px){.sh-bar:has(.g-left) .sh-right{gap:.45rem}}
+
+/* quick bar: both buttons plain glass; a liquid glass drop appears only while you press */
+@media(max-width:767px){
+  .qbar a,.qbar a.on,.qbar a:not(.on){color:#14172B!important}
+  html[data-theme="dark"] .qbar a,html[data-theme="dark"] .qbar a.on,html[data-theme="dark"] .qbar a:not(.on){color:#EDEFF8!important}
+  .qbar a+a::before{content:"";position:absolute;left:-2px;top:22%;bottom:22%;width:1px;background:rgba(20,23,43,.12)}
+  html[data-theme="dark"] .qbar a+a::before{background:rgba(233,237,249,.16)}
+  .qb-blob{opacity:0;background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.35))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -2px 6px rgba(20,23,43,.08),0 6px 16px -8px rgba(20,23,43,.35)!important;
+    transition:opacity .35s ease,transform .45s cubic-bezier(.34,1.56,.64,1),width .45s cubic-bezier(.34,1.56,.64,1)!important}
+  html[data-theme="dark"] .qb-blob{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px -8px rgba(0,0,0,.6)!important}
+  .qb-blob.show{opacity:1;transition:opacity .12s ease,transform .45s cubic-bezier(.34,1.56,.64,1),width .45s cubic-bezier(.34,1.56,.64,1)!important}
+  .qb-blob.press{animation:qb-press .5s cubic-bezier(.34,1.56,.64,1)!important}
+  @keyframes qb-press{0%{scale:.6 .6}40%{scale:1.12 .9}70%{scale:.97 1.04}100%{scale:1 1}}
+  .qbar a:active svg{transform:scale(.9)}
+  .qbar a svg{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+}
+
+
+/* quick bar: one joined glass pill, two plain buttons; the pressed half dips softly */
+@media(max-width:767px){
+  .qb-blob{display:none!important}
+  .qbar a{transition:background-color .2s ease,transform .3s cubic-bezier(.34,1.56,.64,1)!important}
+  .qbar a:active{background:transparent!important}
+  .qbar a:active svg{transform:scale(.88)}
+}
