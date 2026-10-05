@@ -872,3 +872,5 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{display:grid!important;justify-self:center!important;justify-items:start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child>.f2-h{justify-self:center;text-align:center}}
 /* phone footer: Contact us lines start where the CONTACT US heading starts */
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{display:flex!important;flex-direction:column;align-items:flex-start!important;justify-self:center!important}footer.f2 .f2-grid>.f2-col:last-child>.f2-h{text-align:left}footer.f2 .f2-grid>.f2-col:last-child>a,footer.f2 .f2-grid>.f2-col:last-child>span{width:0;white-space:nowrap;overflow:visible}}
+/* phone footer: Explore column pushed to the right end of the divider line */
+@media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(3){justify-self:end}}
