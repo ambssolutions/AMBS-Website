@@ -4397,6 +4397,13 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 .hero .hero-copy .hero-note{margin-top:clamp(.7rem,calc(var(--vh,1svh) * 2.8),2rem)!important}
 @media(max-height:700px) and (max-width:767px){.hero .hero-cta .btn{min-height:44px!important;padding-top:.7em!important;padding-bottom:.7em!important}.hero .hero-cta{gap:.6rem!important}}
 .hero .hero-copy{padding-bottom:clamp(1rem,calc(var(--vh,1svh) * 5),4rem)!important}
+/* wide screens: hero and "Pick your business" side by side, both on the first screen */
+@media(min-width:1024px){
+  .hero .wrap{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)!important;align-items:center!important;column-gap:clamp(1.5rem,3vw,3.5rem)!important}
+  .hero .hero-copy{max-width:none!important}
+  .hero #docket{margin:0!important;justify-self:end;max-width:560px;align-self:center!important}
+  .hero .hero-copy h1{font-size:clamp(1.85rem,min(4.6vw,calc(var(--vh,1svh) * 6.6)),4.6rem)!important}
+}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
