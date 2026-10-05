@@ -848,3 +848,8 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
 .g-edge-bg{stroke:rgba(24,119,224,.35)}
 html[data-theme="dark"] .g-edge-bg{stroke:rgba(79,168,255,.35)}
 html[data-theme="dark"] .g-left.in-hdr{color:#CFE6FF!important}
+/* header logo the same height as the header buttons on phones and tablets */
+@media(max-width:1120px){html body header .mark img,html body header .sh-mark img{height:32px!important;width:auto!important;max-width:none!important}}
+@media(max-width:440px){.sh-bar:has(.g-left){width:calc(100% - 32px)}}
+@media(max-width:380px){.sh-bar:has(.g-left){width:calc(100% - 24px)}}
+@media(max-width:1120px){.sh-bar .sh-menu{width:32px;height:32px}}
