@@ -2215,3 +2215,8 @@ footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!i
 .qbar.shine .qb-book span,.qbar.shine .qb-book svg{animation-delay:.45s}}
 .anim-off,.anim-off *,.anim-off ::after,.anim-off ::before{animation-play-state:paused!important}
 .wd-panel:not(.run):not(.vis) *,.wd-panel:not(.run):not(.vis) ::after,.wd-panel:not(.run):not(.vis) ::before{animation-play-state:paused!important}
+/* What we do cards open more slowly and softly, so the reveal is easy to see */
+.wd--list .wd-in>*{transition:opacity .45s ease,transform .6s cubic-bezier(.22,1,.36,1)}
+.wd--list .wd-panel.open .wd-in>*{transition:opacity 1s ease .3s,transform 1.3s cubic-bezier(.22,1,.36,1) .2s}
+.wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.55s,.45s}
+@media (prefers-reduced-motion:reduce){.wd--list .wd-in>*,.wd--list .wd-panel.open .wd-in>*{transition:none}}
