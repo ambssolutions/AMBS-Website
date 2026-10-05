@@ -794,3 +794,10 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
 @media(max-width:1120px){.g-left.in-hdr{width:107px;height:32px;font-size:.72rem}}
 @media(max-width:380px){.g-left.in-hdr{width:96px}}
 @media(max-width:380px){.g-left.in-hdr,.sh-bar:has(.g-left) .langwrap{width:88px}.g-left.in-hdr{font-size:.68rem}}
+
+/* the Call / Book bar is for phones only; tablets and laptops keep "Book a call" in the header */
+@media(min-width:768px){.qbar{display:none!important}}
+@media(min-width:768px) and (max-width:1120px){body{padding-bottom:0!important}}
+@media(min-width:768px) and (max-width:1120px){.sh-right>.sh-book{display:inline-flex!important;height:32px;padding:0 .9rem;font-size:.8rem}}
+@media(min-width:1121px) and (max-width:1279px){.sh-bar:has(.g-left) .sh-mark img{width:128px}}
+@media(min-width:1121px){.sh-bar:has(.g-left) .sh-right{gap:.45rem}}
