@@ -98,7 +98,7 @@
       var y=f("cYear");if(String(yr)!==last){y.textContent=yr.toLocaleString("en-NZ");y.classList.remove("g-pop");void y.offsetWidth;y.classList.add("g-pop");last=String(yr);}}
     ["rTimes","rMins","rShare"].forEach(function(id){f(id).addEventListener("input",calc);});calc();
   }
-  var prose=document.querySelector(".prose");if(!prose||!document.querySelector(".g-art"))return;
+  var prose=document.querySelector(".prose");if(!prose||(prose.textContent||"").split(/\s+/).length<250)return;
   var pill=document.createElement("div");pill.className="g-left";pill.setAttribute("aria-hidden","true");pill.innerHTML='<svg class="g-edge" aria-hidden="true"><path class="g-edge-bg" pathLength="100"/><path class="g-edge-on" pathLength="100"/></svg><span></span>';
   /* sits in the header bar, beside the light/dark button */
   var tb=document.getElementById("themeBtn");
