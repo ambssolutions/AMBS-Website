@@ -611,7 +611,7 @@ html[data-theme="dark"] .g-art{--mk-card:#232C58;--mk-soft:rgba(233,237,249,.16)
 .prose>h2{position:relative;padding-top:2.6rem;margin-top:3rem}
 .prose>h2::before{counter-increment:gh;content:counter(gh,decimal-leading-zero);position:absolute;left:0;top:0;font:800 .8rem/1 var(--body);letter-spacing:.06em;color:var(--gt,#fff);background:var(--gc,#1877E0);padding:.5em .75em;border-radius:99px;box-shadow:0 8px 16px -10px var(--gc,#1877E0)}
 .prose>h2::after{content:"";position:absolute;left:3.4rem;right:0;top:.85rem;height:2px;background:linear-gradient(90deg,var(--gc,#1877E0),transparent 70%);opacity:.35}
-.prose>h2:nth-of-type(5n+1){--gc:#E5352B}.prose>h2:nth-of-type(5n+2){--gc:#F5B800;--gt:#3A2E00}.prose>h2:nth-of-type(5n+3){--gc:#3FAE29}.prose>h2:nth-of-type(5n+4){--gc:#1877E0}.prose>h2:nth-of-type(5n+5){--gc:#7B2FBE}
+.prose>h2:nth-of-type(7n+1){--gc:#E5352B}.prose>h2:nth-of-type(7n+2){--gc:#F58220}.prose>h2:nth-of-type(7n+3){--gc:#F5B800;--gt:#3A2E00}.prose>h2:nth-of-type(7n+4){--gc:#3FAE29}.prose>h2:nth-of-type(7n+5){--gc:#1877E0}.prose>h2:nth-of-type(7n+6){--gc:#4338CA}.prose>h2:nth-of-type(7n+7){--gc:#8E3FD8}
 .prose>h2.g-calc-h::before,.prose>h2.g-calc-h::after{content:none}
 /* first paragraph of each section reads a little larger */
 .prose>h2+p{font-size:1.1rem;color:var(--ink)}
