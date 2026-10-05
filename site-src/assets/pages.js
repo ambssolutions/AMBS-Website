@@ -99,15 +99,20 @@
     ["rTimes","rMins","rShare"].forEach(function(id){f(id).addEventListener("input",calc);});calc();
   }
   var prose=document.querySelector(".prose");if(!prose||!document.querySelector(".g-art"))return;
-  var pill=document.createElement("div");pill.className="g-left";pill.setAttribute("aria-hidden","true");pill.innerHTML='<i></i><span></span>';
+  var pill=document.createElement("div");pill.className="g-left";pill.setAttribute("aria-hidden","true");pill.innerHTML='<svg class="g-edge" aria-hidden="true"><path class="g-edge-bg" pathLength="100"/><path class="g-edge-on" pathLength="100"/></svg><span></span>';
   /* sits in the header bar, beside the light/dark button */
   var tb=document.getElementById("themeBtn");
   if(tb&&tb.parentNode){pill.classList.add("in-hdr");tb.parentNode.insertBefore(pill,tb.nextSibling);}else document.body.appendChild(pill);
   var words=(prose.textContent||"").split(/\s+/).length,txt=pill.querySelector("span"),ring=pill.querySelector("i"),tick=false;
+  /* the progress runs around the pill's own border, starting at the top centre */
+  var lastW=0;
+  function edge(){var w=pill.offsetWidth,h=pill.offsetHeight;if(!w||w===lastW)return;lastW=w;var s=1.25,r=h/2-s,t=s,b=h-s;
+    var d="M"+(w/2)+" "+t+"H"+(w-h/2)+"A"+r+" "+r+" 0 0 1 "+(w-h/2)+" "+b+"H"+(h/2)+"A"+r+" "+r+" 0 0 1 "+(h/2)+" "+t+"Z";
+    var svg=pill.querySelector("svg");svg.setAttribute("viewBox","0 0 "+w+" "+h);svg.querySelectorAll("path").forEach(function(pt){pt.setAttribute("d",d);});}
   function upd(){tick=false;var r=prose.getBoundingClientRect(),total=r.height-innerHeight*.5,done=Math.min(1,Math.max(0,(innerHeight*.5-r.top)/Math.max(1,total)));
     var left=Math.ceil(words*(1-done)/220);
     pill.style.setProperty("--pc",Math.round(done*100));
-    txt.textContent=left<=0?"Finished":left+" min left";
+    txt.textContent=left<=0?"Finished":left+" min left";edge();
     pill.classList.toggle("on",r.top<innerHeight*.3&&done<.985);}
   addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(upd);}},{passive:true});upd();
 })();
