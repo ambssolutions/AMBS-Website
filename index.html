@@ -4383,10 +4383,20 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 #sendbtn{display:flex!important;margin-left:auto!important;margin-right:auto!important}
 /* first screen shows only the hero; "Pick your business" follows below on every screen size */
 .hero .wrap{grid-template-columns:minmax(0,1fr)!important;align-items:start!important}
-.hero-copy{min-height:calc(100svh - var(--hc-top,120px));display:flex!important;flex-direction:column;justify-content:center;box-sizing:border-box;padding-bottom:1.2rem}
-@media(min-width:900px){.hero-copy{max-width:780px}}
+.hero-copy{min-height:calc(var(--vh,calc(var(--vh,1svh) * 1)) * 100 - var(--hc-top,120px));display:flex!important;flex-direction:column;justify-content:center;box-sizing:border-box;padding-bottom:1.2rem}
+@media(min-width:900px){.hero-copy{max-width:880px}}
 .hero #docket{width:100%;max-width:640px;margin:1.6rem auto 0!important;justify-self:center;height:auto!important;min-height:0!important;align-self:start!important}
 .hero #docket .tickets{flex:0 0 auto!important;min-height:0!important}
+/* hero spacing and type scale with the screen height */
+.hero{padding-top:clamp(8px,calc(var(--vh,1svh) * 2.2),40px)!important}
+.hero .hero-copy{padding-top:clamp(6px,calc(var(--vh,1svh) * 1.5),18px)!important}
+.hero .hero-copy .greet{margin-bottom:clamp(.3rem,calc(var(--vh,1svh) * 1.4),1.1rem)!important}
+.hero .hero-copy h1{font-size:clamp(1.85rem,min(10vw,calc(var(--vh,1svh) * 6.8)),5rem)!important;margin-bottom:clamp(.6rem,calc(var(--vh,1svh) * 2.8),2.1rem)!important}
+.hero .hero-copy .hero-sub{font-size:clamp(.92rem,min(4.3vw,calc(var(--vh,1svh) * 2.3)),1.4rem)!important}
+.hero .hero-copy .hero-cta{margin-top:clamp(1rem,calc(var(--vh,1svh) * 4.6),3.4rem)!important}
+.hero .hero-copy .hero-note{margin-top:clamp(.7rem,calc(var(--vh,1svh) * 2.8),2rem)!important}
+@media(max-height:700px) and (max-width:767px){.hero .hero-cta .btn{min-height:44px!important;padding-top:.7em!important;padding-bottom:.7em!important}.hero .hero-cta{gap:.6rem!important}}
+.hero .hero-copy{padding-bottom:clamp(1rem,calc(var(--vh,1svh) * 5),4rem)!important}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -5826,10 +5836,7 @@ if("IntersectionObserver" in window && !reduced){
   function apply(){
     applying=true;
     copy.style.minHeight="";dock.style.minHeight="";
-    if(window.innerWidth<940){
-      var h=Math.max(copy.offsetHeight,dock.offsetHeight);
-      if(h>0){copy.style.minHeight=h+"px";dock.style.minHeight=h+"px";}
-    }
+    /* hero and docket are no longer side by side, so no height matching */
     applying=false;
   }
   apply();
@@ -6903,6 +6910,6 @@ if("IntersectionObserver" in window && !reduced){
   document.querySelectorAll('.hero-cta,.phero,#book,footer.f2,main .btns,main a[href*="#book"]:not(.kh-gc),main a[href^="tel:"]').forEach(function(el){io.observe(el);});
 })();
 </script>
-<script>(function(){var hc=document.querySelector(".hero-copy");if(!hc)return;var w=0;function set(){if(innerWidth===w)return;w=innerWidth;hc.style.minHeight="";var t=hc.getBoundingClientRect().top+scrollY;document.documentElement.style.setProperty("--hc-top",Math.round(t)+"px");}set();addEventListener("resize",set);addEventListener("load",function(){w=0;set();});})();</script>
+<script>(function(){var hc=document.querySelector(".hero-copy");if(!hc)return;var w=0;function set(){if(innerWidth===w)return;w=innerWidth;hc.style.minHeight="";var t=hc.getBoundingClientRect().top+scrollY;var de=document.documentElement;de.style.setProperty("--vh",(innerHeight/100)+"px");de.style.setProperty("--hc-top",Math.round(t)+"px");}set();addEventListener("resize",set);addEventListener("load",function(){w=0;set();});})();</script>
 </body>
 </html>
