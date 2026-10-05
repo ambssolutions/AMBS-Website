@@ -156,8 +156,9 @@
   blob.classList.remove("show");links.forEach(function(l){l.classList.remove("on");});
 });})();
 
-/* hide the Call | Book bar while the top section is in view */
-(function(){var bar=document.querySelector(".qbar"),hero=document.querySelector(".hero,.phero");if(!bar||!hero||!("IntersectionObserver" in window))return;
-  bar.classList.add("away");
-  new IntersectionObserver(function(es){var e=es[0];bar.classList.toggle("away",e.isIntersecting&&e.intersectionRatio>0.25);},{threshold:[0,0.25,0.5,1]}).observe(hero);
+/* hide the Call | Book bar while the hero buttons or another Book/Call button is in view */
+(function(){var bar=document.querySelector(".qbar");if(!bar||!("IntersectionObserver" in window))return;
+  var on=new Set();bar.classList.add("away");
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){var t=e.target,hit=t.matches(".phero")?(e.isIntersecting&&e.intersectionRatio>0.25):e.isIntersecting;if(hit)on.add(t);else on.delete(t);});bar.classList.toggle("away",on.size>0);},{threshold:[0,0.25,0.5,1]});
+  document.querySelectorAll('.hero-cta,.phero,#book,footer.f2,main .btns,main a[href*="#book"]:not(.kh-gc),main a[href^="tel:"]').forEach(function(el){io.observe(el);});
 })();
