@@ -4311,6 +4311,15 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 /* phone footer: Contact us in the right column, lined up under Explore */
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(3){justify-self:start}footer.f2 .f2-grid>.f2-col:last-child{grid-column:2!important;justify-self:start!important;align-items:flex-start!important;text-align:left!important}}
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{white-space:nowrap}}
+/* hero "Book a free session": light sweep like MiKia (every few seconds, and on hover) */
+.hero-cta .btn--sun{position:relative;overflow:hidden;isolation:isolate}
+.hero-cta .btn--sun::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(100deg,transparent 18%,rgba(255,255,255,.12) 34%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.12) 66%,transparent 82%);
+  transform:translate3d(-100%,0,0);animation:hero-sweep 3.6s cubic-bezier(.37,0,.63,1) 1.2s infinite}
+.hero-cta .btn--sun:hover::before,.hero-cta .btn--sun:focus-visible::before{animation:hero-sweep-once 1.6s cubic-bezier(.37,0,.63,1) 1}
+@keyframes hero-sweep{0%{transform:translate3d(-100%,0,0)}70%,100%{transform:translate3d(100%,0,0)}}
+@keyframes hero-sweep-once{0%{transform:translate3d(-100%,0,0)}100%{transform:translate3d(100%,0,0)}}
+@media(prefers-reduced-motion:reduce){.hero-cta .btn--sun::before{animation:none;display:none}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
