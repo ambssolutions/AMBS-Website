@@ -4278,6 +4278,9 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
   .qbar a:active{background:transparent!important}
   .qbar a:active svg{transform:scale(.88)}
 }
+
+/* Call | Book bar stays out of the way while the top (hero) section is on screen */
+.qbar.away{opacity:0!important;pointer-events:none!important;transform:translate(-50%,24px)!important}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -6785,6 +6788,13 @@ if("IntersectionObserver" in window && !reduced){
   addEventListener("pageshow",function(){blob.classList.remove("show");});
   blob.classList.remove("show");links.forEach(function(l){l.classList.remove("on");});
 });})();
+</script>
+<script>
+/* hide the Call | Book bar while the top section is in view */
+(function(){var bar=document.querySelector(".qbar"),hero=document.querySelector(".hero,.phero");if(!bar||!hero||!("IntersectionObserver" in window))return;
+  bar.classList.add("away");
+  new IntersectionObserver(function(es){var e=es[0];bar.classList.toggle("away",e.isIntersecting&&e.intersectionRatio>0.25);},{threshold:[0,0.25,0.5,1]}).observe(hero);
+})();
 </script>
 </body>
 </html>

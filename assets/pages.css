@@ -827,3 +827,6 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
   .qbar a:active{background:transparent!important}
   .qbar a:active svg{transform:scale(.88)}
 }
+
+/* Call | Book bar stays out of the way while the top (hero) section is on screen */
+.qbar.away{opacity:0!important;pointer-events:none!important;transform:translate(-50%,24px)!important}
