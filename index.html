@@ -4295,6 +4295,8 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(2){justify-self:start}footer.f2 .f2-grid>.f2-col:last-child{align-items:center!important;text-align:center!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:center}}
 /* phone footer: Contact us block centred, lines on one straight left edge */
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{justify-self:center;align-items:flex-start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:flex-start}}
+/* header logo the same height as the header buttons on phones and tablets */
+@media(max-width:1120px){html body header .mark img,html body header .sh-mark img{height:40px!important;width:auto!important;max-width:none!important;margin:-3px 0 -5px!important}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -6805,9 +6807,10 @@ if("IntersectionObserver" in window && !reduced){
 </script>
 <script>
 /* hide the Call | Book bar while the top section is in view */
-(function(){var bar=document.querySelector(".qbar"),hero=document.querySelector(".hero,.phero");if(!bar||!hero||!("IntersectionObserver" in window))return;
-  bar.classList.add("away");
-  new IntersectionObserver(function(es){var e=es[0];bar.classList.toggle("away",e.isIntersecting&&e.intersectionRatio>0.25);},{threshold:[0,0.25,0.5,1]}).observe(hero);
+(function(){var bar=document.querySelector(".qbar");if(!bar||!("IntersectionObserver" in window))return;
+  var on=new Set();bar.classList.add("away");
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){var t=e.target,hit=t.matches(".phero")?(e.isIntersecting&&e.intersectionRatio>0.25):e.isIntersecting;if(hit)on.add(t);else on.delete(t);});bar.classList.toggle("away",on.size>0);},{threshold:[0,0.25,0.5,1]});
+  document.querySelectorAll('.hero-cta,.phero,#book,footer.f2,main .btns,main a[href*="#book"]:not(.kh-gc),main a[href^="tel:"]').forEach(function(el){io.observe(el);});
 })();
 </script>
 </body>

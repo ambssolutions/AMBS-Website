@@ -843,3 +843,16 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(2){justify-self:start}footer.f2 .f2-grid>.f2-col:last-child{align-items:center!important;text-align:center!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:center}}
 /* phone footer: Contact us block centred, lines on one straight left edge */
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{justify-self:center;align-items:flex-start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:flex-start}}
+/* minutes left: same visual weight as the language button (full outline, clear text) */
+.g-left.in-hdr{background:transparent!important;color:var(--ink)!important}
+.g-edge-bg{stroke:rgba(24,119,224,.35)}
+html[data-theme="dark"] .g-edge-bg{stroke:rgba(79,168,255,.35)}
+html[data-theme="dark"] .g-left.in-hdr{color:#CFE6FF!important}
+/* header logo the same height as the header buttons on phones and tablets */
+@media(max-width:1120px){html body header .mark img,html body header .sh-mark img{height:40px!important;width:auto!important;max-width:none!important;margin:-3px 0 -5px!important}}
+@media(max-width:440px){.sh-bar:has(.g-left){width:calc(100% - 32px)}}
+@media(max-width:380px){.sh-bar:has(.g-left){width:calc(100% - 24px)}}
+@media(max-width:1120px){.sh-bar .sh-menu{width:32px;height:32px}}
+.g-left.in-hdr{border:0!important}
+@media(max-width:440px){.sh-bar:has(.g-left) .g-left.in-hdr,.sh-bar:has(.g-left) .langwrap{width:96px}}
+@media(max-width:380px){.sh-bar:has(.g-left) .g-left.in-hdr,.sh-bar:has(.g-left) .langwrap{width:88px}}
