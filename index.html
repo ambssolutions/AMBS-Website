@@ -4337,6 +4337,11 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 .knowledge--slim .kh-btn,.kh-btn{box-shadow:0 4px 10px -6px rgba(24,119,224,.45)!important}
 .knowledge--slim .kh-btn:hover,.kh-btn:hover{box-shadow:0 6px 14px -8px rgba(24,119,224,.55)!important}
 @media(max-width:767px){.wd-copy .wd-more{display:flex!important;width:fit-content;margin-left:auto!important;margin-right:auto!important}}
+/* link arrows: sit on the baseline and reach cap height, so they are centred on the words in any font */
+.wd-more,.kh-go{align-items:baseline!important}
+.wd-more::after,.kh-go::after{width:.85em!important;height:.7em!important;margin-left:.35em!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat!important}
+.kh-tlink{align-items:baseline!important}
+.kh-tlink span[aria-hidden]{width:.85em!important;height:.7em!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat!important}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
