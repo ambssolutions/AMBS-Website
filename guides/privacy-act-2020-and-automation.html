@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Privacy Act 2020 and automation: a guide for NZ businesses | Ambs Solutions</title>
 <meta name="description" content="What New Zealand businesses should check under the Privacy Act 2020 before automating anything that touches personal information, with a simple checklist.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "The Privacy Act 2020 and automation", "item": "https://ambs.co.nz/guides/privacy-act-2020-and-automation"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "The Privacy Act 2020 and automation", "description": "What New Zealand businesses should check under the Privacy Act 2020 before automating anything that touches personal information, with a simple checklist.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1831, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/privacy-act-2020-and-automation", "image": "https://ambs.co.nz/logo.png", "articleSection": "Compliance"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does the Privacy Act 2020 apply to my small business?", "acceptedAnswer": {"@type": "Answer", "text": "Generally, yes. The Act applies to businesses and organisations of all sizes in New Zealand, including sole traders, when they collect and use personal information. If you are unsure how it applies to you, check the Privacy Commissioner's guidance or talk to a lawyer."}}, {"@type": "Question", "name": "Can I use AI tools with customer information?", "acceptedAnswer": {"@type": "Answer", "text": "You can, but check first how the tool stores the information, where it is hosted, who can see it and whether it is used to train the provider's AI model. Many business plans offer settings that keep your data out of training, and you should confirm this in writing before sending personal information."}}, {"@type": "Question", "name": "Is it a problem if my data is stored overseas?", "acceptedAnswer": {"@type": "Answer", "text": "Not automatically. Many cloud tools store data overseas. You stay responsible for the information, so check where it is held and how the provider protects it. The Privacy Commissioner's guidance covers sending information overseas in more detail, and choosing tools that host in New Zealand or Australia can make these questions simpler."}}, {"@type": "Question", "name": "What should I do if an automation sends personal information to the wrong person?", "acceptedAnswer": {"@type": "Answer", "text": "Act quickly to contain it, such as asking the recipient to delete it and fixing the cause. Then assess whether it could cause serious harm. If it has or is likely to, you must notify the Privacy Commissioner and the affected people as soon as practicable. Keep a record of what happened either way."}}]}]}</script>
 </head>
 <body>
@@ -57,6 +70,10 @@
   <h1>The Privacy Act 2020 and automation</h1>
   <p class="plead">Automation moves information around faster and further than a person with a spreadsheet. That is the point, but it also means privacy needs a few minutes of thought before you build, not after. This guide covers what to check.</p>
   <div class="pmeta"><span>Compliance</span><span>8 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mk6">
+  <div class="mk-card m6-log"><div class="m6-row" style="--r:0"><span class="m6-t">09:14</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:70%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:1"><span class="m6-t">11:02</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:56%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:2"><span class="m6-t">14:37</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:64%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:3"><span class="m6-t">16:20</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:48%"></i><b>&#10003;</b></div></div>
+  <div class="m6-vault"><span class="m6-paper m6-p1"></span><span class="m6-paper m6-p2"></span><span class="m6-folder"><span class="m6-tab"></span></span><span class="m6-shield"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
+</div></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose">
@@ -157,6 +174,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>

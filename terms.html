@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Terms of Use | Ambs Solutions</title>
 <meta name="description" content="The terms for using the Ambs Solutions website: general information only, no quotes or offers, how we handle links and content, and New Zealand law.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Terms of Use", "item": "https://ambs.co.nz/terms"}]}, {"@type": "WebPage", "name": "Terms of Use", "url": "https://ambs.co.nz/terms", "inLanguage": "en-NZ", "publisher": {"@id": "https://ambs.co.nz/#business"}}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}]}</script>
 </head>
 <body>
@@ -112,6 +125,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>

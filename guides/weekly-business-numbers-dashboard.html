@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Weekly business numbers dashboard for NZ small business | Ambs Solutions</title>
 <meta name="description" content="Which numbers a New Zealand small business should watch each week, where they come from, and how to get them in one short Monday summary or live dashboard.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "Your business numbers, every week", "item": "https://ambs.co.nz/guides/weekly-business-numbers-dashboard"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "Your business numbers, every week", "description": "Which numbers a New Zealand small business should watch each week, where they come from, and how to get them in one short Monday summary or live dashboard.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1660, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/weekly-business-numbers-dashboard", "image": "https://ambs.co.nz/logo.png", "articleSection": "Digital tools"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need new software to get a weekly numbers summary?", "acceptedAnswer": {"@type": "Answer", "text": "Usually not. The figures already live in Xero, your spreadsheets, and the reports your point of sale or booking system produces. A summary reads from Xero and from Excel or Google Sheets on a schedule, works from any export or emailed report your point of sale or booking system already produces, and puts the results in one message or screen."}}, {"@type": "Question", "name": "What is the difference between a weekly summary and a live dashboard?", "acceptedAnswer": {"@type": "Answer", "text": "A weekly summary is a short message, often sent on Monday morning, that shows last week's numbers. A live dashboard is a screen you can open at any time that updates itself as new sales, jobs or payments come in. Many small businesses only need the summary."}}, {"@type": "Question", "name": "Can my staff see the dashboard without seeing the financials?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A well set up dashboard can show different views to different people, so a team leader might see jobs and hours while only the owner sees cash and unpaid invoices."}}, {"@type": "Question", "name": "How accurate will the numbers be?", "acceptedAnswer": {"@type": "Answer", "text": "They are only as accurate as the systems they come from. If invoices are entered late or stock counts are out of date, the summary will reflect that, which is often useful in itself because it shows where the records need tidying."}}]}]}</script>
 </head>
 <body>
@@ -57,6 +70,13 @@
   <h1>Your business numbers, every week</h1>
   <p class="plead">Most owners know roughly how the business is going, but the actual figures sit in several different apps. A short weekly summary puts the handful of numbers that matter in one place, so you can spot a problem while it is still small.</p>
   <div class="pmeta"><span>Digital tools</span><span>8 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mk5">
+  <div class="mk-phone m5-phone"><span class="m5-time">8:00</span><i class="mk-bar" style="width:40%"></i>
+    <div class="m5-note"><div class="m5-nh"><span class="m5-app"></span><i class="mk-bar" style="width:38%"></i></div>
+      <div class="m5-kpi"><span class="m5-c1"></span><i class="mk-bar" style="width:48%"></i><b>$12,480</b></div><div class="m5-kpi"><span class="m5-c2"></span><i class="mk-bar" style="width:40%"></i><b>$3,150</b></div>
+      <div class="m5-kpi"><span class="m5-c3"></span><i class="mk-bar" style="width:44%"></i><b>46</b></div><div class="m5-kpi"><span class="m5-c4"></span><i class="mk-bar" style="width:36%"></i><b>12</b></div></div></div>
+  <div class="mk-card m5-chart"><div class="m5-bars"><i style="--h:42%;--d:0"></i><i style="--h:58%;--d:1"></i><i style="--h:50%;--d:2"></i><i style="--h:72%;--d:3"></i><i style="--h:64%;--d:4"></i><i style="--h:80%;--d:5"></i><i style="--h:94%;--d:6"></i></div><svg viewBox="0 0 100 30" preserveAspectRatio="none"><polyline pathLength="1" points="0,26 16,21 33,23 50,14 66,16 83,8 100,3"/></svg></div>
+</div></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose">
@@ -141,7 +161,16 @@
 </ul>
 <p>Your accountant can help you pick the few financial measures that matter most for your type of business, and check that the summary agrees with what your accounts show.</p>
 <p>If you would like help working out which numbers to track and where they live, our free session is a good place to start. We look at your current tools and leave you with a written plan you keep. You can <a href="/#book">book a free session here</a>.</p>
-<h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need new software to get a weekly numbers summary?</summary><p>Usually not. The figures already live in Xero, your spreadsheets, and the reports your point of sale or booking system produces. A summary reads from Xero and from Excel or Google Sheets on a schedule, works from any export or emailed report your point of sale or booking system already produces, and puts the results in one message or screen.</p></details><details><summary>What is the difference between a weekly summary and a live dashboard?</summary><p>A weekly summary is a short message, often sent on Monday morning, that shows last week&#x27;s numbers. A live dashboard is a screen you can open at any time that updates itself as new sales, jobs or payments come in. Many small businesses only need the summary.</p></details><details><summary>Can my staff see the dashboard without seeing the financials?</summary><p>Yes. A well set up dashboard can show different views to different people, so a team leader might see jobs and hours while only the owner sees cash and unpaid invoices.</p></details><details><summary>How accurate will the numbers be?</summary><p>They are only as accurate as the systems they come from. If invoices are entered late or stock counts are out of date, the summary will reflect that, which is often useful in itself because it shows where the records need tidying.</p></details></div>
+<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
+<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+<div class="g-calc-in">
+<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+</div>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
+<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session &#8594;</a></p>
+</section><h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need new software to get a weekly numbers summary?</summary><p>Usually not. The figures already live in Xero, your spreadsheets, and the reports your point of sale or booking system produces. A summary reads from Xero and from Excel or Google Sheets on a schedule, works from any export or emailed report your point of sale or booking system already produces, and puts the results in one message or screen.</p></details><details><summary>What is the difference between a weekly summary and a live dashboard?</summary><p>A weekly summary is a short message, often sent on Monday morning, that shows last week&#x27;s numbers. A live dashboard is a screen you can open at any time that updates itself as new sales, jobs or payments come in. Many small businesses only need the summary.</p></details><details><summary>Can my staff see the dashboard without seeing the financials?</summary><p>Yes. A well set up dashboard can show different views to different people, so a team leader might see jobs and hours while only the owner sees cash and unpaid invoices.</p></details><details><summary>How accurate will the numbers be?</summary><p>They are only as accurate as the systems they come from. If invoices are entered late or stock counts are out of date, the summary will reflect that, which is often useful in itself because it shows where the records need tidying.</p></details></div>
   </article>
   <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
 </div>
@@ -158,6 +187,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>

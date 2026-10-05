@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Reduce no-shows with booking reminders: NZ guide | Ambs Solutions</title>
 <meta name="description" content="How NZ clinics, salons and service businesses can use automatic confirmations, reminders, two-way replies and waitlists to help cut no-shows and fill gaps.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "How to reduce no-shows with booking reminders", "item": "https://ambs.co.nz/guides/reduce-no-shows-with-booking-reminders"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "How to reduce no-shows with booking reminders", "description": "How NZ clinics, salons and service businesses can use automatic confirmations, reminders, two-way replies and waitlists to help cut no-shows and fill gaps.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1542, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/reduce-no-shows-with-booking-reminders", "image": "https://ambs.co.nz/logo.png", "articleSection": "Automation"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How far ahead should I send appointment reminders?", "acceptedAnswer": {"@type": "Answer", "text": "Many businesses send one reminder a day or two before and, for longer or higher-value appointments, a second one a few hours before. The right timing depends on how far ahead your customers book and how much notice you need to fill a gap, so test it for a few weeks and adjust."}}, {"@type": "Question", "name": "Should reminders be sent by text or email?", "acceptedAnswer": {"@type": "Answer", "text": "Text messages are often read sooner, which makes them a good fit for reminders close to the appointment. Email works well for confirmations that include details like address, parking or preparation instructions. Many businesses use both."}}, {"@type": "Question", "name": "Do I need permission to send booking reminders?", "acceptedAnswer": {"@type": "Answer", "text": "Messages about a booking the customer has made are generally expected, but you should still tell customers how you will contact them, collect their details with that purpose in mind and make it easy to opt out. Marketing messages are a separate matter with stricter expectations, so check with your adviser if you plan to send promotions. This is general information, not legal advice."}}, {"@type": "Question", "name": "What should happen when a customer replies to cancel?", "acceptedAnswer": {"@type": "Answer", "text": "The booking should be marked as cancelled, or flagged for whoever updates your booking system, the customer should get a short reply offering to rebook, and the freed slot should be offered to people on your waitlist. A person should see anything the system cannot understand."}}]}]}</script>
 </head>
 <body>
@@ -57,6 +70,10 @@
   <h1>How to reduce no-shows with booking reminders</h1>
   <p class="plead">A missed appointment is time you cannot sell twice. Well-timed confirmations and reminders, with an easy way to reply or rebook, can often do more to reduce no-shows than a cancellation policy on its own.</p>
   <div class="pmeta"><span>Automation</span><span>7 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mk3">
+  <div class="mk-card m3-cal"><div class="m3-col"><span class="m3-day">12</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">13</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-free"></span></div><div class="m3-col"><span class="m3-day">14</span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-ap m3-gap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">15</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">16</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span></div></div>
+  <div class="mk-card m3-sms"><span class="m3-bell"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><div class="m3-txt"><i class="mk-bar" style="width:90%"></i><i class="mk-bar" style="width:64%"></i></div><div class="m3-btns"><b><svg viewBox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2 8.8-9.2"/></svg></b><b><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95"/><path d="M19.2 4.5v4h-4"/></svg></b></div></div>
+</div></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose">
@@ -127,7 +144,16 @@
 </ul>
 <p>Most booking systems can give you these figures, or you can tally them in a spreadsheet. Then compare the same numbers after reminders have been running for a few weeks. If you want these figures on your phone every Monday without pulling a report, our guide to <a href="/guides/weekly-business-numbers-dashboard">your weekly business numbers</a> shows how.</p>
 <p>Reminders are often a good first automation because they are easy to check and their effect is easy to measure. If you would like a hand working out the right setup for your booking system, our free session leaves you with a written plan and an hours estimate, whether or not you go ahead.</p>
-<h2 id="questions">Common questions</h2><div class="faq"><details><summary>How far ahead should I send appointment reminders?</summary><p>Many businesses send one reminder a day or two before and, for longer or higher-value appointments, a second one a few hours before. The right timing depends on how far ahead your customers book and how much notice you need to fill a gap, so test it for a few weeks and adjust.</p></details><details><summary>Should reminders be sent by text or email?</summary><p>Text messages are often read sooner, which makes them a good fit for reminders close to the appointment. Email works well for confirmations that include details like address, parking or preparation instructions. Many businesses use both.</p></details><details><summary>Do I need permission to send booking reminders?</summary><p>Messages about a booking the customer has made are generally expected, but you should still tell customers how you will contact them, collect their details with that purpose in mind and make it easy to opt out. Marketing messages are a separate matter with stricter expectations, so check with your adviser if you plan to send promotions. This is general information, not legal advice.</p></details><details><summary>What should happen when a customer replies to cancel?</summary><p>The booking should be marked as cancelled, or flagged for whoever updates your booking system, the customer should get a short reply offering to rebook, and the freed slot should be offered to people on your waitlist. A person should see anything the system cannot understand.</p></details></div>
+<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
+<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+<div class="g-calc-in">
+<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+</div>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
+<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session &#8594;</a></p>
+</section><h2 id="questions">Common questions</h2><div class="faq"><details><summary>How far ahead should I send appointment reminders?</summary><p>Many businesses send one reminder a day or two before and, for longer or higher-value appointments, a second one a few hours before. The right timing depends on how far ahead your customers book and how much notice you need to fill a gap, so test it for a few weeks and adjust.</p></details><details><summary>Should reminders be sent by text or email?</summary><p>Text messages are often read sooner, which makes them a good fit for reminders close to the appointment. Email works well for confirmations that include details like address, parking or preparation instructions. Many businesses use both.</p></details><details><summary>Do I need permission to send booking reminders?</summary><p>Messages about a booking the customer has made are generally expected, but you should still tell customers how you will contact them, collect their details with that purpose in mind and make it easy to opt out. Marketing messages are a separate matter with stricter expectations, so check with your adviser if you plan to send promotions. This is general information, not legal advice.</p></details><details><summary>What should happen when a customer replies to cancel?</summary><p>The booking should be marked as cancelled, or flagged for whoever updates your booking system, the customer should get a short reply offering to rebook, and the freed slot should be offered to people on your waitlist. A person should see anything the system cannot understand.</p></details></div>
   </article>
   <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
 </div>
@@ -144,6 +170,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>

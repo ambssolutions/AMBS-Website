@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Small business websites that turn visitors into calls in NZ | Ambs Solutions</title>
 <meta name="description" content="What makes a New Zealand small business website earn enquiries: speed, mobile, tap-to-call, forms that reach you, local SEO, languages and honest trust signals.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "Websites that turn visitors into calls", "item": "https://ambs.co.nz/guides/websites-that-turn-visitors-into-calls"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "Websites that turn visitors into calls", "description": "What makes a New Zealand small business website earn enquiries: speed, mobile, tap-to-call, forms that reach you, local SEO, languages and honest trust signals.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1660, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/websites-that-turn-visitors-into-calls", "image": "https://ambs.co.nz/logo.png", "articleSection": "Digital tools"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast should a small business website be?", "acceptedAnswer": {"@type": "Answer", "text": "As fast as you can reasonably make it, especially on a phone with a weak signal. Free tools such as Google's PageSpeed Insights will test your pages and point out what is slowing them down, which is often large images or too many add-ons."}}, {"@type": "Question", "name": "Do I need my website in more than one language?", "acceptedAnswer": {"@type": "Answer", "text": "Not always, but if many of your customers are more comfortable in another language, a few translated pages covering your services, prices and contact details can make it much easier for them to get in touch. Have translations checked by a fluent speaker rather than relying on automatic translation alone."}}, {"@type": "Question", "name": "Is it all right to put reviews on my website?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, as long as they are genuine reviews from real customers, shown as they were written, with permission where needed. Never write or buy reviews. Linking to your Google reviews is a simple, honest option."}}, {"@type": "Question", "name": "How do I know if my website is bringing in enquiries?", "acceptedAnswer": {"@type": "Answer", "text": "Count them. Track how many people tap your phone number and submit your contact form each week, and ask new customers how they found you. Website visits alone do not tell you much."}}]}]}</script>
 </head>
 <body>
@@ -57,6 +70,13 @@
   <h1>Websites that turn visitors into calls</h1>
   <p class="plead">A small business website has one main job: help the right people get in touch. Most of what makes that happen is not clever design but a short list of basics done properly, from load speed to a contact form that actually reaches you.</p>
   <div class="pmeta"><span>Digital tools</span><span>8 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mk7">
+  <div class="mk-card m7-browser"><div class="m7-top"><b></b><b></b><b></b><span><i class="mk-bar" style="width:60%"></i></span></div>
+    <div class="m7-hero"><div class="m7-lines"><i class="mk-bar" style="width:80%"></i><i class="mk-bar" style="width:56%"></i></div><span class="m7-cta"></span></div>
+    <div class="m7-langs"><span style="--l:0">EN</span><span style="--l:1">中文</span><span style="--l:2">हिन्दी</span><span style="--l:3">MI</span><span style="--l:4">ਪੰਜਾਬੀ</span></div>
+    <div class="m7-grid"><i></i><i></i><i></i></div></div>
+  <div class="mk-phone m7-phone"><div class="m7-ph-hero"></div><i class="mk-bar" style="width:80%"></i><i class="mk-bar" style="width:55%"></i><span class="m7-call"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span></div>
+</div></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose">
@@ -154,7 +174,16 @@
   <li>How new customers say they found you, asked on the first call</li>
 </ul>
 <p>Put these on your weekly summary next to sales and jobs, and you can start to see whether website changes are making a difference. Our guide to <a href="/guides/weekly-business-numbers-dashboard">your business numbers every week</a> explains how to set that up. If you would like a website built around these basics, see our <a href="/services/websites-and-portals">websites, portals and dashboards service</a>.</p>
-<h2 id="questions">Common questions</h2><div class="faq"><details><summary>How fast should a small business website be?</summary><p>As fast as you can reasonably make it, especially on a phone with a weak signal. Free tools such as Google&#x27;s PageSpeed Insights will test your pages and point out what is slowing them down, which is often large images or too many add-ons.</p></details><details><summary>Do I need my website in more than one language?</summary><p>Not always, but if many of your customers are more comfortable in another language, a few translated pages covering your services, prices and contact details can make it much easier for them to get in touch. Have translations checked by a fluent speaker rather than relying on automatic translation alone.</p></details><details><summary>Is it all right to put reviews on my website?</summary><p>Yes, as long as they are genuine reviews from real customers, shown as they were written, with permission where needed. Never write or buy reviews. Linking to your Google reviews is a simple, honest option.</p></details><details><summary>How do I know if my website is bringing in enquiries?</summary><p>Count them. Track how many people tap your phone number and submit your contact form each week, and ask new customers how they found you. Website visits alone do not tell you much.</p></details></div>
+<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
+<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+<div class="g-calc-in">
+<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+</div>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
+<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session &#8594;</a></p>
+</section><h2 id="questions">Common questions</h2><div class="faq"><details><summary>How fast should a small business website be?</summary><p>As fast as you can reasonably make it, especially on a phone with a weak signal. Free tools such as Google&#x27;s PageSpeed Insights will test your pages and point out what is slowing them down, which is often large images or too many add-ons.</p></details><details><summary>Do I need my website in more than one language?</summary><p>Not always, but if many of your customers are more comfortable in another language, a few translated pages covering your services, prices and contact details can make it much easier for them to get in touch. Have translations checked by a fluent speaker rather than relying on automatic translation alone.</p></details><details><summary>Is it all right to put reviews on my website?</summary><p>Yes, as long as they are genuine reviews from real customers, shown as they were written, with permission where needed. Never write or buy reviews. Linking to your Google reviews is a simple, honest option.</p></details><details><summary>How do I know if my website is bringing in enquiries?</summary><p>Count them. Track how many people tap your phone number and submit your contact form each week, and ask new customers how they found you. Website visits alone do not tell you much.</p></details></div>
   </article>
   <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
 </div>
@@ -171,6 +200,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>

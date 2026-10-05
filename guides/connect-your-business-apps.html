@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Connect your business apps: stop retyping in NZ | Ambs Solutions</title>
 <meta name="description" content="How NZ small businesses can connect Xero, Microsoft 365 and Google Workspace: triggers, actions, data flow, errors and one source of truth.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "How to connect your business apps", "item": "https://ambs.co.nz/guides/connect-your-business-apps"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "How to connect your business apps", "description": "How NZ small businesses can connect Xero, Microsoft 365 and Google Workspace: triggers, actions, data flow, errors and one source of truth.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1566, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/connect-your-business-apps", "image": "https://ambs.co.nz/logo.png", "articleSection": "Automation"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to replace my software to connect my apps?", "acceptedAnswer": {"@type": "Answer", "text": "Usually not. We connect Microsoft 365 (Outlook, Excel, Teams, OneDrive and SharePoint), Google Workspace (Gmail, Google Calendar, Google Sheets and Google Drive) and Xero. If you also use a point-of-sale, booking or other system, we do not connect to it directly, but where it can export to Excel or Google Sheets, or sends you emails, we work from what it already produces. The work is in connecting things sensibly, not replacing them."}}, {"@type": "Question", "name": "What happens if a connection stops working?", "acceptedAnswer": {"@type": "Answer", "text": "A well-built connection notices the failure, keeps the information that did not go through and alerts a named person, so it can be fixed and retried. The worst outcome is a connection that fails quietly, so error alerts should be part of the setup from day one."}}, {"@type": "Question", "name": "Is it safe to connect apps that hold customer information?", "acceptedAnswer": {"@type": "Answer", "text": "It can be, as long as you know what information is being shared, where it is stored and who can access each app. Only pass across the details the other app actually needs, and review access when staff leave."}}, {"@type": "Question", "name": "Can I connect apps myself?", "acceptedAnswer": {"@type": "Answer", "text": "Simple connections between two popular apps are often manageable for a confident owner. The difficulty usually comes with matching records, handling errors and keeping things running as your apps update, which is where help can save time."}}]}]}</script>
 </head>
 <body>
@@ -57,6 +70,10 @@
   <h1>How to connect your business apps</h1>
   <p class="plead">If the same customer, job or order gets typed into two or three systems, your apps are not talking to each other. Connecting them is often simpler than people expect, and it can be a dependable way to win back time.</p>
   <div class="pmeta"><span>Automation</span><span>7 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mk4">
+  <div class="mk-card m4-app m4-a"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div><span class="mk-flow m4-f"><i></i></span><div class="mk-card m4-app m4-b"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div><span class="mk-flow m4-f"><i></i></span><div class="mk-card m4-app m4-c"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div>
+  <div class="mk-card m4-rec"><span class="m4-dot"></span><i class="mk-bar" style="width:70%"></i><b>$860</b></div>
+</div></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose">
@@ -138,7 +155,16 @@
   <li>You spend more than a few hours a week keeping it up to date.</li>
 </ul>
 <p>Even then, the spreadsheet can stay. Often the best first step is simply to fill it automatically, so it keeps doing its job without anyone typing into it. That is a small, low-risk change, and a good way to see what connected apps can do for your business.</p>
-<h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need to replace my software to connect my apps?</summary><p>Usually not. We connect Microsoft 365 (Outlook, Excel, Teams, OneDrive and SharePoint), Google Workspace (Gmail, Google Calendar, Google Sheets and Google Drive) and Xero. If you also use a point-of-sale, booking or other system, we do not connect to it directly, but where it can export to Excel or Google Sheets, or sends you emails, we work from what it already produces. The work is in connecting things sensibly, not replacing them.</p></details><details><summary>What happens if a connection stops working?</summary><p>A well-built connection notices the failure, keeps the information that did not go through and alerts a named person, so it can be fixed and retried. The worst outcome is a connection that fails quietly, so error alerts should be part of the setup from day one.</p></details><details><summary>Is it safe to connect apps that hold customer information?</summary><p>It can be, as long as you know what information is being shared, where it is stored and who can access each app. Only pass across the details the other app actually needs, and review access when staff leave.</p></details><details><summary>Can I connect apps myself?</summary><p>Simple connections between two popular apps are often manageable for a confident owner. The difficulty usually comes with matching records, handling errors and keeping things running as your apps update, which is where help can save time.</p></details></div>
+<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
+<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+<div class="g-calc-in">
+<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+</div>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
+<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session &#8594;</a></p>
+</section><h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need to replace my software to connect my apps?</summary><p>Usually not. We connect Microsoft 365 (Outlook, Excel, Teams, OneDrive and SharePoint), Google Workspace (Gmail, Google Calendar, Google Sheets and Google Drive) and Xero. If you also use a point-of-sale, booking or other system, we do not connect to it directly, but where it can export to Excel or Google Sheets, or sends you emails, we work from what it already produces. The work is in connecting things sensibly, not replacing them.</p></details><details><summary>What happens if a connection stops working?</summary><p>A well-built connection notices the failure, keeps the information that did not go through and alerts a named person, so it can be fixed and retried. The worst outcome is a connection that fails quietly, so error alerts should be part of the setup from day one.</p></details><details><summary>Is it safe to connect apps that hold customer information?</summary><p>It can be, as long as you know what information is being shared, where it is stored and who can access each app. Only pass across the details the other app actually needs, and review access when staff leave.</p></details><details><summary>Can I connect apps myself?</summary><p>Simple connections between two popular apps are often manageable for a confident owner. The difficulty usually comes with matching records, handling errors and keeping things running as your apps update, which is where help can save time.</p></details></div>
   </article>
   <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
 </div>
@@ -155,6 +181,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>

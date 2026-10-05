@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI customer replies for small business in NZ | Ambs Solutions</title>
 <meta name="description" content="What AI customer replies can and cannot do for New Zealand small businesses, how to build an answer library, hand over to a person and keep replies accurate.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "AI customer replies for small business", "item": "https://ambs.co.nz/guides/ai-customer-replies-for-small-business"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "AI customer replies for small business", "description": "What AI customer replies can and cannot do for New Zealand small businesses, how to build an answer library, hand over to a person and keep replies accurate.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1700, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/ai-customer-replies-for-small-business", "image": "https://ambs.co.nz/logo.png", "articleSection": "Automation"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will customers know they are talking to AI?", "acceptedAnswer": {"@type": "Answer", "text": "They should. Being upfront builds trust, and many customers are comfortable with an automated answer to a simple question as long as it is accurate and a person is easy to reach. A short line such as \"I'm the automated assistant, a team member can help with anything else\" is usually enough."}}, {"@type": "Question", "name": "Can AI reply to customers in other languages?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Modern AI can usually understand a message in one language and reply in the same language, drawing on an answer library written in English. For important wording such as prices, policies or health information, have a fluent speaker check the replies before you rely on them."}}, {"@type": "Question", "name": "What happens when the AI does not know the answer?", "acceptedAnswer": {"@type": "Answer", "text": "It should say it will pass the question to the team, collect any details needed, and alert a person. It should never guess, especially about prices, availability or anything that could be taken as a promise."}}, {"@type": "Question", "name": "Is it safe to put customer messages through AI?", "acceptedAnswer": {"@type": "Answer", "text": "It can be, if you choose tools carefully. Check where messages are stored, who can access them, how long they are kept and whether the provider uses them to train its models. Ambs Solutions hosts the data it stores for clients in New Zealand or Australia and never uses it to train anyone's AI model. Only Ambs works on client projects and sees client data, and the AI tools we use run on business plans that do not train on that data. AI services may process messages in other countries, so ask where processing happens as well as where data is stored."}}]}]}</script>
 </head>
 <body>
@@ -57,6 +70,13 @@
   <h1>AI customer replies for small business</h1>
   <p class="plead">Most customer messages ask the same handful of questions. AI can answer those quickly, in your customer&#x27;s language, as long as it works from your real answers and knows when to hand over to a person.</p>
   <div class="pmeta"><span>Automation</span><span>8 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mk2">
+  <div class="m2-col">
+    <div class="mk-card m2-review"><div class="m2-who"><span class="m2-av"></span><i class="mk-bar" style="width:42%"></i></div><div class="m2-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><i class="mk-bar" style="width:92%"></i><i class="mk-bar" style="width:70%"></i></div>
+    <div class="mk-card m2-reply"><div class="m2-who"><span class="m2-av m2-av--biz"></span><i class="mk-bar" style="width:36%"></i><em class="m2-ai">AI</em></div><div class="m2-dots"><i></i><i></i><i></i></div><div class="m2-text"><i class="mk-bar" style="width:88%"></i><i class="mk-bar" style="width:62%"></i></div><span class="m2-ok">&#10003;</span></div>
+  </div>
+  <div class="mk-phone m2-phone"><div class="m2-chat"><div class="m2-b m2-in"><i class="mk-bar" style="width:86%"></i><i class="mk-bar" style="width:52%"></i></div><div class="m2-typing"><i></i><i></i><i></i></div><div class="m2-b m2-out"><i class="mk-bar" style="width:88%"></i><i class="mk-bar" style="width:64%"></i></div></div></div>
+</div></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose">
@@ -130,7 +150,16 @@
 </ul>
 <p>Customer messages often contain names, phone numbers and sometimes sensitive details, so they are personal information under the Privacy Act 2020. Know where messages are stored, who can see them, how long they are kept and whether the tool provider uses them to train its models. When we set up replies as part of our <a href="/services/ai-automation">AI automation service</a>, the data we store is hosted in New Zealand or Australia and never used to train anyone's AI model. Only Ambs works on your project and sees your data, and the AI tools we use run on business plans that do not train on it. It is still worth asking where each connected tool, including any AI service, processes messages. Our guide to <a href="/guides/privacy-act-2020-and-automation">the Privacy Act 2020 and automation</a> lists what to check with any provider.</p>
 <p>If you are not sure where to start, list your ten most common questions this week. That list is the beginning of your answer library, and it soon shows whether AI replies are likely to save you real time.</p>
-<h2 id="questions">Common questions</h2><div class="faq"><details><summary>Will customers know they are talking to AI?</summary><p>They should. Being upfront builds trust, and many customers are comfortable with an automated answer to a simple question as long as it is accurate and a person is easy to reach. A short line such as &quot;I&#x27;m the automated assistant, a team member can help with anything else&quot; is usually enough.</p></details><details><summary>Can AI reply to customers in other languages?</summary><p>Yes. Modern AI can usually understand a message in one language and reply in the same language, drawing on an answer library written in English. For important wording such as prices, policies or health information, have a fluent speaker check the replies before you rely on them.</p></details><details><summary>What happens when the AI does not know the answer?</summary><p>It should say it will pass the question to the team, collect any details needed, and alert a person. It should never guess, especially about prices, availability or anything that could be taken as a promise.</p></details><details><summary>Is it safe to put customer messages through AI?</summary><p>It can be, if you choose tools carefully. Check where messages are stored, who can access them, how long they are kept and whether the provider uses them to train its models. Ambs Solutions hosts the data it stores for clients in New Zealand or Australia and never uses it to train anyone&#x27;s AI model. Only Ambs works on client projects and sees client data, and the AI tools we use run on business plans that do not train on that data. AI services may process messages in other countries, so ask where processing happens as well as where data is stored.</p></details></div>
+<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
+<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+<div class="g-calc-in">
+<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+</div>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
+<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session &#8594;</a></p>
+</section><h2 id="questions">Common questions</h2><div class="faq"><details><summary>Will customers know they are talking to AI?</summary><p>They should. Being upfront builds trust, and many customers are comfortable with an automated answer to a simple question as long as it is accurate and a person is easy to reach. A short line such as &quot;I&#x27;m the automated assistant, a team member can help with anything else&quot; is usually enough.</p></details><details><summary>Can AI reply to customers in other languages?</summary><p>Yes. Modern AI can usually understand a message in one language and reply in the same language, drawing on an answer library written in English. For important wording such as prices, policies or health information, have a fluent speaker check the replies before you rely on them.</p></details><details><summary>What happens when the AI does not know the answer?</summary><p>It should say it will pass the question to the team, collect any details needed, and alert a person. It should never guess, especially about prices, availability or anything that could be taken as a promise.</p></details><details><summary>Is it safe to put customer messages through AI?</summary><p>It can be, if you choose tools carefully. Check where messages are stored, who can access them, how long they are kept and whether the provider uses them to train its models. Ambs Solutions hosts the data it stores for clients in New Zealand or Australia and never uses it to train anyone&#x27;s AI model. Only Ambs works on client projects and sees client data, and the AI tools we use run on business plans that do not train on that data. AI services may process messages in other countries, so ask where processing happens as well as where data is stored.</p></details></div>
   </article>
   <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
 </div>
@@ -147,6 +176,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>
