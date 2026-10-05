@@ -131,3 +131,16 @@
     document.body.classList.add("leaving");setTimeout(function(){location.href="/";},calmMs());});
   function calmMs(){return matchMedia("(prefers-reduced-motion: reduce)").matches?0:260;}
 })();
+
+/* quick bar: the green blob flows to the button you touch or hover, then back to Call */
+(function(){document.querySelectorAll(".qbar").forEach(function(bar){
+  var blob=document.createElement("span");blob.className="qb-blob";blob.setAttribute("aria-hidden","true");bar.insertBefore(blob,bar.firstChild);
+  var links=[].slice.call(bar.querySelectorAll("a")),cur=-1;
+  function go(i){var a=links[i];if(!a)return;bar.style.setProperty("--bx",a.offsetLeft+"px");bar.style.setProperty("--bw",a.offsetWidth+"px");
+    links.forEach(function(l,k){l.classList.toggle("on",k===i);});
+    if(cur!==-1&&cur!==i){blob.classList.remove("flow");void blob.offsetWidth;blob.classList.add("flow");}cur=i;}
+  links.forEach(function(a,i){a.addEventListener("pointerenter",function(){go(i);});a.addEventListener("touchstart",function(){go(i);},{passive:true});a.addEventListener("focus",function(){go(i);});});
+  bar.addEventListener("pointerleave",function(e){if(e.pointerType==="mouse")go(0);});
+  function home(){cur=-1;go(0);}home();addEventListener("resize",home);
+  bar.style.setProperty("--bx",links[0].offsetLeft+"px");
+});})();
