@@ -80,13 +80,12 @@ def head(title,desc,canon,ld,ogtype='website'):
 <head>
 <meta charset="utf-8">
 <script>
-/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+/* a refresh always starts fresh: top of the same page, with no leftover #section */
 (function(){{try{{
   var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
   var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
   if(!reload)return;
   var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
-  if(app&&location.pathname!=="/"){{location.replace("/");return;}}
   if("scrollRestoration" in history)history.scrollRestoration="manual";
   if(location.hash||location.search)history.replaceState(null,"",location.pathname);
   window.scrollTo({{top:0,behavior:"instant"}});addEventListener("load",function(){{window.scrollTo({{top:0,behavior:"instant"}});}});
