@@ -170,3 +170,10 @@
     bar.classList.remove("shine");void bar.offsetWidth;bar.classList.add("shine");setTimeout(function(){bar.classList.remove("shine");},2200);}
   setInterval(shine,6000);setTimeout(shine,1500);
 })();
+
+/* pause animations in sections that are off screen */
+(function(){if(!("IntersectionObserver" in window))return;
+  var secs=[].slice.call(document.querySelectorAll("main > section, main > div, .hero, #docket, .auto-strip, .wd-panel, .wd-stage, .kh-deck, .g-art, footer, body > section"));
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle("anim-off",!e.isIntersecting);});},{rootMargin:"120px 0px 120px 0px"});
+  secs.forEach(function(s){io.observe(s);});
+})();
