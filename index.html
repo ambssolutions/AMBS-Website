@@ -4381,13 +4381,6 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 .wd-more::after,.kh-go::after,.kh-tlink span[aria-hidden],.kh-cgo span[aria-hidden]{height:.62em!important;width:.78em!important}
 /* booking form: Send request button centred */
 #sendbtn{display:flex!important;margin-left:auto!important;margin-right:auto!important}
-/* Zoho appointment booking in the Book section */
-.zbook{max-width:560px;margin:0 auto 1.6rem;text-align:center}
-.zbook-h{font:700 1rem/1.3 var(--body);margin:0 0 .8rem;color:inherit}
-.zbook-frame{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px -16px rgba(0,0,0,.45);border:1px solid rgba(20,23,43,.10)}
-.zbook-frame iframe{display:block;width:100%;height:520px;border:0}
-.zbook-or{margin:1.2rem 0 0;font-size:.92rem;opacity:.8}
-@media(max-width:480px){.zbook-frame iframe{height:560px}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -4851,11 +4844,6 @@ with easy-to-use AI.</h1>
         <h2 data-i18n="form.title">Book your free session</h2>
         <p class="lead" data-i18n="form.lead">Tell us what is taking up your week. We will come back with a plan and an hours estimate.</p>
       </div>
-      <div class="zbook rv" id="pick-time">
-        <p class="zbook-h" data-i18n="form.pick">Pick a time that suits you</p>
-        <div class="zbook-frame"><iframe src="https://calendar.zoho.com.au/eventreqForm/080112491fae7f637212a74ee11f523f0000656ebc87ce4ce5eea168fd355abe9536df27ec3d85fc99f1cb7e34128a26858ec35b70192b5cfd1b3e57c0cfa997defc7902787763ba2f3628ef04?theme=0&amp;l=en&amp;tz=Pacific%2FAuckland" title="Book a free session with AMBS" loading="lazy" frameborder="0" scrolling="auto" allowtransparency="true"></iframe></div>
-        <p class="zbook-or" data-i18n="form.or">Or tell us what is taking up your week and we will get back to you.</p>
-      </div>
       <div class="form rv">
         <div class="field"><label for="f-name" data-i18n="form.name">Your name</label><input id="f-name" type="text" autocomplete="name"></div>
         <div class="field"><label for="f-biz" data-i18n="form.biz">Business name</label><input id="f-biz" type="text" autocomplete="organization"></div>
@@ -4995,7 +4983,7 @@ en:{
  "faq.q3":"What happens when it breaks?","faq.a3":"We set up monitoring where the tools allow, so most problems are caught early. For the first 30 days after launch, fixes and tweaks are free. After that, support is a monthly plan or pay as you go, whichever suits you.",
  "faq.q4":"Do you work outside Auckland?","faq.a4":"Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference.",
  "faq.q5":"How small is too small?","faq.a5":"If you spend more than three hours a week on the same task, it is usually worth a look, whether you have one van or forty staff.",
- "form.eyebrow":"Free session","form.title":"Book your free session","form.pick":"Pick a time that suits you","form.or":"Or tell us what is taking up your week and we will get back to you.","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
+ "form.eyebrow":"Free session","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
  "form.name":"Your name","form.biz":"Business name","form.email":"Email","form.phone":"Phone",
  "form.msg":"What eats your time?","form.send":"Send request",
  "form.note":"We aim to reply within one working day, in English, Hindi or Punjabi. Or call +64 22 099 9578.",
@@ -5080,7 +5068,7 @@ zh:{
  "faq.q3":"出问题了怎么办？","faq.a3":"在工具允许的地方我们会设置监控，大多数问题能尽早发现。上线后前 30 天，修复和调整免费。之后可选择按月支持计划或按次付费，看哪种适合你。",
  "faq.q4":"奥克兰以外接单吗？","faq.a4":"全国都接。大部分工作远程完成，第一次实地考察确有必要时我们会过去。",
  "faq.q5":"生意太小会不会不值得？","faq.a5":"如果同一件事每周花掉你三小时以上，通常就值得看一看，不管你是一台车还是四十名员工。",
- "form.eyebrow":"免费咨询","form.title":"预约你的免费咨询","form.pick":"选择适合你的时间","form.or":"或者告诉我们是什么占用了你的时间，我们会尽快回复你。","form.lead":"告诉我们你的时间都花在哪里，我们会给出方案和省时估算。",
+ "form.eyebrow":"免费咨询","form.title":"预约你的免费咨询","form.lead":"告诉我们你的时间都花在哪里，我们会给出方案和省时估算。",
  "form.name":"你的姓名","form.biz":"店铺／公司名称","form.email":"电子邮箱","form.phone":"电话",
  "form.msg":"哪些事最花你的时间？","form.send":"提交申请",
  "form.note":"我们争取在一个工作日内回复（使用英语、印地语或旁遮普语）。也可致电 +64 22 099 9578。",
@@ -5165,7 +5153,7 @@ hi:{
  "faq.q3":"कुछ बिगड़ जाए तो?","faq.a3":"जहाँ टूल अनुमति दें, हम निगरानी लगाते हैं ताकि ज़्यादातर दिक्कतें जल्दी पकड़ में आएँ। लॉन्च के बाद पहले 30 दिन सुधार और बदलाव मुफ़्त हैं। उसके बाद मासिक सपोर्ट प्लान या ज़रूरत के हिसाब से भुगतान, जो आपको ठीक लगे।",
  "faq.q4":"क्या ऑकलैंड के बाहर भी काम करते हैं?","faq.a4":"हाँ, पूरे देश में। ज़्यादातर काम रिमोट होता है, और पहली वॉकथ्रू के लिए ज़रूरत हो तो हम आते हैं।",
  "faq.q5":"मेरा काम बहुत छोटा है?","faq.a5":"अगर एक ही काम पर हफ़्ते में तीन घंटे से ज़्यादा जाते हैं, तो आम तौर पर उसे देखना फ़ायदेमंद होता है, चाहे एक वैन हो या चालीस लोग।",
- "form.eyebrow":"मुफ़्त सेशन","form.title":"अपना फ़्री सेशन बुक करें","form.pick":"अपनी सुविधा का समय चुनें","form.or":"या हमें बताएं कि आपका हफ़्ता किसमें निकल जाता है, हम आपसे संपर्क करेंगे।","form.lead":"बताइए आपका हफ़्ता कहाँ जाता है। हम प्लान और घंटों का अनुमान लेकर लौटेंगे।",
+ "form.eyebrow":"मुफ़्त सेशन","form.title":"अपना फ़्री सेशन बुक करें","form.lead":"बताइए आपका हफ़्ता कहाँ जाता है। हम प्लान और घंटों का अनुमान लेकर लौटेंगे।",
  "form.name":"आपका नाम","form.biz":"व्यवसाय का नाम","form.email":"ईमेल","form.phone":"फ़ोन",
  "form.msg":"आपका समय किस काम में जाता है?","form.send":"अनुरोध भेजें",
  "form.note":"हम एक कार्यदिवस में अंग्रेज़ी, हिंदी या पंजाबी में जवाब देने की कोशिश करते हैं। या +64 22 099 9578 पर कॉल करें।",
@@ -5250,7 +5238,7 @@ mi:{
  "faq.q3":"Ka aha ina pakaru?","faq.a3":"Ka whakaritea e mātou he mātakitaki ina whakaaetia e ngā taputapu, kia kitea wawetia te nuinga o ngā raru. Mō ngā rā 30 tuatahi i muri i te whakarewanga, he kore utu ngā whakatika me ngā whakapai. I muri i tērā, he mahere ā-marama, he utu ā-mahi rānei, ko tēhea e pai ana ki a koe.",
  "faq.q4":"Ka mahi koe i waho o Tāmaki Makaurau?","faq.a4":"Āe, puta noa i te motu. Ka mahia te nuinga i tawhiti, ā, ka haere mātou mō te uiui tuatahi ina tika.",
  "faq.q5":"He iti rawa tōku pakihi?","faq.a5":"Mēnā e neke atu i te toru hāora ia wiki ki te mahi kotahi, he pai te titiro, ahakoa kotahi tō waka, ahakoa e whā tekau ō kaimahi.",
- "form.eyebrow":"He wā kore utu","form.title":"Tohua tō wā koreutu","form.pick":"Kōwhiria he wā e pai ana ki a koe","form.or":"Me kōrero mai rānei he aha e pau ai tō wiki, ā, ka whakapā atu mātou.","form.lead":"Kōrero mai he aha kei te kai i tō wiki. Ka hoki mai mātou me te mahere me te whakatau hāora.",
+ "form.eyebrow":"He wā kore utu","form.title":"Tohua tō wā koreutu","form.lead":"Kōrero mai he aha kei te kai i tō wiki. Ka hoki mai mātou me te mahere me te whakatau hāora.",
  "form.name":"Tō ingoa","form.biz":"Ingoa pakihi","form.email":"Īmēra","form.phone":"Waea",
  "form.msg":"He aha kei te kai i tō wā?","form.send":"Tukuna te tono",
  "form.note":"Ka whai mātou kia whakautu i roto i te rā mahi kotahi, i te reo Pākehā, i te reo Hindi, i te reo Punjabi rānei. Waea rānei ki +64 22 099 9578.",
@@ -5335,7 +5323,7 @@ pa:{
  "faq.q3":"ਜੇ ਕੁਝ ਵਿਗੜ ਜਾਵੇ?","faq.a3":"ਜਿੱਥੇ ਟੂਲ ਇਜਾਜ਼ਤ ਦੇਣ, ਅਸੀਂ ਨਿਗਰਾਨੀ ਲਗਾਉਂਦੇ ਹਾਂ ਤਾਂ ਜੋ ਬਹੁਤੀਆਂ ਸਮੱਸਿਆਵਾਂ ਛੇਤੀ ਫੜੀਆਂ ਜਾਣ। ਲਾਂਚ ਤੋਂ ਬਾਅਦ ਪਹਿਲੇ 30 ਦਿਨ ਸੁਧਾਰ ਤੇ ਬਦਲਾਅ ਮੁਫ਼ਤ ਹਨ। ਉਸ ਤੋਂ ਬਾਅਦ ਮਹੀਨਾਵਾਰ ਸਪੋਰਟ ਪਲਾਨ ਜਾਂ ਲੋੜ ਮੁਤਾਬਕ ਭੁਗਤਾਨ, ਜੋ ਤੁਹਾਨੂੰ ਠੀਕ ਲੱਗੇ।",
  "faq.q4":"ਆਕਲੈਂਡ ਤੋਂ ਬਾਹਰ ਵੀ ਕੰਮ ਕਰਦੇ ਹੋ?","faq.a4":"ਹਾਂ, ਪੂਰੇ ਦੇਸ਼ ਵਿੱਚ। ਬਹੁਤਾ ਕੰਮ ਰਿਮੋਟ ਹੁੰਦਾ ਹੈ, ਤੇ ਪਹਿਲੀ ਵਾਕਥਰੂ ਲਈ ਲੋੜ ਪਵੇ ਤਾਂ ਅਸੀਂ ਆਉਂਦੇ ਹਾਂ।",
  "faq.q5":"ਮੇਰਾ ਕਾਰੋਬਾਰ ਬਹੁਤ ਛੋਟਾ ਹੈ?","faq.a5":"ਜੇ ਇੱਕੋ ਕੰਮ 'ਤੇ ਹਫ਼ਤੇ ਵਿੱਚ ਤਿੰਨ ਘੰਟੇ ਤੋਂ ਵੱਧ ਲੱਗਦੇ ਹਨ, ਤਾਂ ਆਮ ਤੌਰ 'ਤੇ ਇਸ ਨੂੰ ਦੇਖਣਾ ਫ਼ਾਇਦੇਮੰਦ ਹੁੰਦਾ ਹੈ, ਭਾਵੇਂ ਇੱਕ ਵੈਨ ਹੋਵੇ ਜਾਂ ਚਾਲੀ ਬੰਦੇ।",
- "form.eyebrow":"ਮੁਫ਼ਤ ਸੈਸ਼ਨ","form.title":"ਆਪਣਾ ਫ਼ਰੀ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ","form.pick":"ਆਪਣੀ ਸਹੂਲਤ ਦਾ ਸਮਾਂ ਚੁਣੋ","form.or":"ਜਾਂ ਸਾਨੂੰ ਦੱਸੋ ਕਿ ਤੁਹਾਡਾ ਹਫ਼ਤਾ ਕਿਸ ਵਿੱਚ ਲੰਘ ਜਾਂਦਾ ਹੈ, ਅਸੀਂ ਤੁਹਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰਾਂਗੇ।","form.lead":"ਸਾਨੂੰ ਦੱਸੋ ਤੁਹਾਡਾ ਹਫ਼ਤਾ ਕਿੱਥੇ ਜਾਂਦਾ ਹੈ। ਅਸੀਂ ਪਲਾਨ ਤੇ ਘੰਟਿਆਂ ਦਾ ਅੰਦਾਜ਼ਾ ਲੈ ਕੇ ਮੁੜਾਂਗੇ।",
+ "form.eyebrow":"ਮੁਫ਼ਤ ਸੈਸ਼ਨ","form.title":"ਆਪਣਾ ਫ਼ਰੀ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ","form.lead":"ਸਾਨੂੰ ਦੱਸੋ ਤੁਹਾਡਾ ਹਫ਼ਤਾ ਕਿੱਥੇ ਜਾਂਦਾ ਹੈ। ਅਸੀਂ ਪਲਾਨ ਤੇ ਘੰਟਿਆਂ ਦਾ ਅੰਦਾਜ਼ਾ ਲੈ ਕੇ ਮੁੜਾਂਗੇ।",
  "form.name":"ਤੁਹਾਡਾ ਨਾਂ","form.biz":"ਕਾਰੋਬਾਰ ਦਾ ਨਾਂ","form.email":"ਈਮੇਲ","form.phone":"ਫ਼ੋਨ",
  "form.msg":"ਤੁਹਾਡਾ ਸਮਾਂ ਕਿਸ ਕੰਮ ਵਿੱਚ ਜਾਂਦਾ ਹੈ?","form.send":"ਬੇਨਤੀ ਭੇਜੋ",
  "form.note":"ਅਸੀਂ ਇੱਕ ਕੰਮ-ਵਾਲੇ ਦਿਨ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ, ਹਿੰਦੀ ਜਾਂ ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਦੇਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦੇ ਹਾਂ। ਜਾਂ +64 22 099 9578 'ਤੇ ਕਾਲ ਕਰੋ।",
