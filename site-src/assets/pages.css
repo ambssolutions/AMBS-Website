@@ -661,3 +661,15 @@ html[data-theme="dark"] .g-art{--mk-card:#232C58;--mk-soft:rgba(233,237,249,.16)
 /* leaving for a section of the home page: a short fade so the hand-over feels smooth */
 body.leaving{opacity:0;transform:translateY(-6px);transition:opacity .28s ease,transform .3s ease}
 @media(prefers-reduced-motion:reduce){body.leaving{transition:none}}
+
+/* example text messages inside guides, shown as phone chat bubbles */
+.msgs{display:flex;flex-direction:column;gap:.55rem;margin:1.4rem 0 1.6rem;padding:1.1rem;border-radius:22px;background:linear-gradient(160deg,#EEF4FD,#E3ECF9);border:1px solid var(--line)}
+html[data-theme="dark"] .msgs{background:linear-gradient(160deg,#1C2550,#161D3D)}
+.prose .msg{margin:0;max-width:min(88%,30rem);padding:.7rem .95rem;font-size:.97rem;line-height:1.5;border-radius:18px;box-shadow:0 6px 16px -12px rgba(20,23,43,.5)}
+.msg--out{align-self:flex-start;background:var(--card);color:var(--ink);border-bottom-left-radius:6px}
+.msg--in{align-self:flex-end;background:linear-gradient(140deg,#1877E0,#4FA8FF);color:#fff;border-bottom-right-radius:6px}
+.msg b{font-weight:700}
+.msgs .msg{opacity:0;transform:translateY(10px) scale(.98);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.9,.3,1.2)}
+.msgs.in .msg{opacity:1;transform:none}
+.msgs.in .msg:nth-child(2){transition-delay:.5s}.msgs.in .msg:nth-child(3){transition-delay:1s}
+@media(prefers-reduced-motion:reduce){.msgs .msg{opacity:1;transform:none;transition:none}}
