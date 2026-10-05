@@ -874,3 +874,6 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{display:flex!important;flex-direction:column;align-items:flex-start!important;justify-self:center!important}footer.f2 .f2-grid>.f2-col:last-child>.f2-h{text-align:left}footer.f2 .f2-grid>.f2-col:last-child>a,footer.f2 .f2-grid>.f2-col:last-child>span{width:0;white-space:nowrap;overflow:visible}}
 /* phone footer: Explore column pushed to the right end of the divider line */
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(3){justify-self:end}}
+/* Call | Book shimmer: stronger, darker colour so it is easy to see */
+@media(max-width:767px){.qbar a span{--qb-hi:#0B4FB8;background-image:linear-gradient(90deg,var(--qb-base) 0 25%,var(--qb-hi) 40% 60%,var(--qb-base) 75% 100%)}html[data-theme="dark"] .qbar a span{--qb-hi:#3D9BFF}.qbar a svg{--qb-ico:#0B4FB8}html[data-theme="dark"] .qbar a svg{--qb-ico:#3D9BFF}}
+@keyframes qb-shine-ico{0%,4%,38%,100%{color:inherit}12%,28%{color:var(--qb-ico,#0B4FB8)}}
