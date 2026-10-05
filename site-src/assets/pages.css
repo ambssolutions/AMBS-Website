@@ -865,6 +865,3 @@ html[data-theme="dark"] .g-left.in-hdr{color:#CFE6FF!important}
 }
 @keyframes qb-wave{to{background-position:140px 100%,-90px 100%}}
 @media(prefers-reduced-motion:reduce){.qbar::after{animation:none}}
-/* phone footer: Contact us in the right column, lined up under Explore */
-@media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(3){justify-self:start}footer.f2 .f2-grid>.f2-col:last-child{grid-column:2!important;justify-self:start!important;align-items:flex-start!important;text-align:left!important}}
-@media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{white-space:nowrap}}
