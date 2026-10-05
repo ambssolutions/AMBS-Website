@@ -4381,6 +4381,12 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 .wd-more::after,.kh-go::after,.kh-tlink span[aria-hidden],.kh-cgo span[aria-hidden]{height:.62em!important;width:.78em!important}
 /* booking form: Send request button centred */
 #sendbtn{display:flex!important;margin-left:auto!important;margin-right:auto!important}
+/* first screen shows only the hero; "Pick your business" follows below on every screen size */
+.hero .wrap{grid-template-columns:minmax(0,1fr)!important;align-items:start!important}
+.hero-copy{min-height:calc(100svh - var(--hc-top,120px));display:flex!important;flex-direction:column;justify-content:center;box-sizing:border-box;padding-bottom:1.2rem}
+@media(min-width:900px){.hero-copy{max-width:780px}}
+.hero #docket{width:100%;max-width:640px;margin:1.6rem auto 0!important;justify-self:center;height:auto!important;min-height:0!important;align-self:start!important}
+.hero #docket .tickets{flex:0 0 auto!important;min-height:0!important}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -6897,5 +6903,6 @@ if("IntersectionObserver" in window && !reduced){
   document.querySelectorAll('.hero-cta,.phero,#book,footer.f2,main .btns,main a[href*="#book"]:not(.kh-gc),main a[href^="tel:"]').forEach(function(el){io.observe(el);});
 })();
 </script>
+<script>(function(){var hc=document.querySelector(".hero-copy");if(!hc)return;var w=0;function set(){if(innerWidth===w)return;w=innerWidth;hc.style.minHeight="";var t=hc.getBoundingClientRect().top+scrollY;document.documentElement.style.setProperty("--hc-top",Math.round(t)+"px");}set();addEventListener("resize",set);addEventListener("load",function(){w=0;set();});})();</script>
 </body>
 </html>
