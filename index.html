@@ -4297,6 +4297,38 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{justify-self:center;align-items:flex-start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:flex-start}}
 /* header logo the same height as the header buttons on phones and tablets */
 @media(max-width:1120px){html body header .mark img,html body header .sh-mark img{height:40px!important;width:auto!important;max-width:none!important;margin:-3px 0 -5px!important}}
+/* What we do: "Read the guide" link centred on phones */
+@media(max-width:767px){.wd-copy .wd-more{display:flex;width:fit-content;margin-left:auto;margin-right:auto}}
+/* hero "Book a free session": light sweep like MiKia (every few seconds, and on hover) */
+.hero-cta .btn--sun{position:relative;overflow:hidden;isolation:isolate}
+.hero-cta .btn--sun::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(100deg,transparent 18%,rgba(255,255,255,.12) 34%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.12) 66%,transparent 82%);
+  transform:translate3d(-100%,0,0);animation:hero-sweep 3.6s cubic-bezier(.37,0,.63,1) 1.2s infinite}
+.hero-cta .btn--sun:hover::before,.hero-cta .btn--sun:focus-visible::before{animation:hero-sweep-once 1.6s cubic-bezier(.37,0,.63,1) 1}
+@keyframes hero-sweep{0%{transform:translate3d(-100%,0,0)}70%,100%{transform:translate3d(100%,0,0)}}
+@keyframes hero-sweep-once{0%{transform:translate3d(-100%,0,0)}100%{transform:translate3d(100%,0,0)}}
+@media(prefers-reduced-motion:reduce){.hero-cta .btn--sun::before{animation:none;display:none}}
+/* Call | Book: colour shimmer sweeping through the labels (like MiKia's hero button) */
+@media(max-width:767px){
+  .qbar a span{--qb-base:#14172B;--qb-hi:#1877E0;background:linear-gradient(90deg,var(--qb-base) 0 30%,var(--qb-hi) 45% 55%,var(--qb-base) 70% 100%);background-size:300% 100%;background-position:100% 0;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important;animation:qb-shine 3.6s ease-in-out 1s infinite}
+  html[data-theme="dark"] .qbar a span{--qb-base:#EDEFF8;--qb-hi:#8CC4FF}
+  .qbar a svg{animation:qb-shine-ico 3.6s ease-in-out 1s infinite}
+  .qbar .qb-book span,.qbar .qb-book svg{animation-delay:1.45s}
+}
+@keyframes qb-shine{0%{background-position:100% 0}40%,100%{background-position:0 0}}
+@keyframes qb-shine-ico{0%,6%,34%,100%{color:inherit}18%{color:var(--qb-ico,#1877E0)}}
+html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
+@media(prefers-reduced-motion:reduce){.qbar a span,.qbar a svg{animation:none!important;-webkit-text-fill-color:currentColor;background:none}}
+/* phone footer: Contact us heading on the middle line, its lines left-aligned under it */
+@media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{display:grid!important;justify-self:center!important;justify-items:start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child>.f2-h{justify-self:center;text-align:center}}
+/* phone footer: Contact us lines start where the CONTACT US heading starts */
+@media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{display:flex!important;flex-direction:column;align-items:flex-start!important;justify-self:center!important}footer.f2 .f2-grid>.f2-col:last-child>.f2-h{text-align:left}footer.f2 .f2-grid>.f2-col:last-child>a,footer.f2 .f2-grid>.f2-col:last-child>span{width:0;white-space:nowrap;overflow:visible}}
+/* phone footer: Explore column pushed to the right end of the divider line */
+@media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(3){justify-self:end}}
+/* Call | Book shimmer: stronger, darker colour so it is easy to see */
+@media(max-width:767px){.qbar a span{--qb-hi:#0B4FB8;background-image:linear-gradient(90deg,var(--qb-base) 0 25%,var(--qb-hi) 40% 60%,var(--qb-base) 75% 100%)}html[data-theme="dark"] .qbar a span{--qb-hi:#3D9BFF}.qbar a svg{--qb-ico:#0B4FB8}html[data-theme="dark"] .qbar a svg{--qb-ico:#3D9BFF}}
+@keyframes qb-shine-ico{0%,4%,38%,100%{color:inherit}12%,28%{color:var(--qb-ico,#0B4FB8)}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
