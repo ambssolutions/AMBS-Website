@@ -137,13 +137,13 @@ def header(active):
     <nav class="sh-nav" aria-label="Main">{''.join(a(*m) for m in main)}</nav>
     <a class="sh-btn sh-book" href="/#book">Book a call</a>
     <a class="sh-btn sh-contact" href="/#book">Contact us</a>
-    <a class="sh-ico sh-sm" href="mailto:hello@ambs.co.nz" aria-label="Email us">{ico_mail}</a>
     <a class="sh-ico sh-sm" href="tel:+64220999578" aria-label="Call us">{ico_call}</a>
     <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
   </div>
   <nav class="sh-drawer" id="siteNav" aria-label="Menu">
     {''.join(a(*m) for m in drawer)}
     <a class="sh-btn sh-contact sh-wide" href="/#book">Contact us</a>
+    <div class="sh-pair" role="group" aria-label="Light or dark mode"><button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button><button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button></div>
   </nav>
 </div></header>
 '''
