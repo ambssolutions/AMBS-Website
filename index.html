@@ -4404,6 +4404,12 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
   .hero #docket{margin:0!important;justify-self:end;max-width:560px;align-self:center!important}
   .hero .hero-copy h1{font-size:clamp(1.85rem,min(4.6vw,calc(var(--vh,1svh) * 6.6)),4.6rem)!important}
 }
+/* wide screens: hero and "Pick your business" boxes the same height, centred on the first screen */
+@media(min-width:1024px){
+  .hero .wrap{min-height:calc(var(--vh,1svh) * 100 - var(--hc-top,120px));align-items:stretch!important;align-content:center!important}
+  .hero .hero-copy{min-height:0!important}
+  .hero #docket{align-self:stretch!important;height:auto!important;display:flex!important;flex-direction:column;justify-content:center}
+}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
