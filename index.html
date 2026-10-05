@@ -4311,9 +4311,9 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 /* Call | Book: colour shimmer sweeping through the labels (like MiKia's hero button) */
 @media(max-width:767px){
   .qbar a span{--qb-base:#14172B;--qb-hi:#1877E0;background:linear-gradient(90deg,var(--qb-base) 0 30%,var(--qb-hi) 45% 55%,var(--qb-base) 70% 100%);background-size:300% 100%;background-position:100% 0;
-    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important;animation:qb-shine 3.6s ease-in-out 1s infinite}
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important;}
   html[data-theme="dark"] .qbar a span{--qb-base:#EDEFF8;--qb-hi:#8CC4FF}
-  .qbar a svg{animation:qb-shine-ico 3.6s ease-in-out 1s infinite}
+
   .qbar .qb-book span,.qbar .qb-book svg{animation-delay:1.45s}
 }
 @keyframes qb-shine{0%{background-position:100% 0}40%,100%{background-position:0 0}}
@@ -4410,6 +4410,10 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
   .hero .hero-copy{min-height:0!important}
   .hero #docket{align-self:stretch!important;height:auto!important;display:flex!important;flex-direction:column;justify-content:center}
 }
+/* Call | Book shimmer runs in short bursts (class .shine), never while scrolling, so the frosted bar is not repainted every frame */
+@media(max-width:767px){.qbar.shine a span{animation:qb-shine 1.5s ease-in-out 1 both}.qbar.shine a svg{animation:qb-shine-ico 1.5s ease-in-out 1 both}.qbar.shine .qb-book span,.qbar.shine .qb-book svg{animation-delay:.45s}}
+@keyframes qb-shine{0%{background-position:100% 0}100%{background-position:0 0}}
+@keyframes qb-shine-ico{0%,15%,85%,100%{color:inherit}45%{color:var(--qb-ico,#0B4FB8)}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
@@ -6925,5 +6929,12 @@ if("IntersectionObserver" in window && !reduced){
 })();
 </script>
 <script>(function(){var hc=document.querySelector(".hero-copy");if(!hc)return;var w=0;function set(){if(innerWidth===w)return;w=innerWidth;hc.style.minHeight="";var t=hc.getBoundingClientRect().top+scrollY;var de=document.documentElement;de.style.setProperty("--vh",(innerHeight/100)+"px");de.style.setProperty("--hc-top",Math.round(t)+"px");}set();addEventListener("resize",set);addEventListener("load",function(){w=0;set();});})();</script>
+<script>/* Call | Book shimmer: a short burst every few seconds, skipped while scrolling */
+(function(){var bar=document.querySelector(".qbar");if(!bar||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var lastScroll=0;addEventListener("scroll",function(){lastScroll=Date.now();},{passive:true});
+  function shine(){if(document.hidden||bar.classList.contains("away")||Date.now()-lastScroll<500||getComputedStyle(bar).display==="none")return;
+    bar.classList.remove("shine");void bar.offsetWidth;bar.classList.add("shine");setTimeout(function(){bar.classList.remove("shine");},2200);}
+  setInterval(shine,6000);setTimeout(shine,1500);
+})();</script>
 </body>
 </html>

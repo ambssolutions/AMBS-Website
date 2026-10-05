@@ -859,9 +859,9 @@ html[data-theme="dark"] .g-left.in-hdr{color:#CFE6FF!important}
 /* Call | Book: colour shimmer sweeping through the labels (like MiKia's hero button) */
 @media(max-width:767px){
   .qbar a span{--qb-base:#14172B;--qb-hi:#1877E0;background:linear-gradient(90deg,var(--qb-base) 0 30%,var(--qb-hi) 45% 55%,var(--qb-base) 70% 100%);background-size:300% 100%;background-position:100% 0;
-    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important;animation:qb-shine 3.6s ease-in-out 1s infinite}
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important;}
   html[data-theme="dark"] .qbar a span{--qb-base:#EDEFF8;--qb-hi:#8CC4FF}
-  .qbar a svg{animation:qb-shine-ico 3.6s ease-in-out 1s infinite}
+
   .qbar .qb-book span,.qbar .qb-book svg{animation-delay:1.45s}
 }
 @keyframes qb-shine{0%{background-position:100% 0}40%,100%{background-position:0 0}}
@@ -915,3 +915,7 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 .card{align-items:center;text-align:center}
 .card .card-ico,.card .tag,.card .go{align-self:center}
 .card .go::after{height:.62em!important;width:.78em!important}
+/* Call | Book shimmer runs in short bursts (class .shine), never while scrolling, so the frosted bar is not repainted every frame */
+@media(max-width:767px){.qbar.shine a span{animation:qb-shine 1.5s ease-in-out 1 both}.qbar.shine a svg{animation:qb-shine-ico 1.5s ease-in-out 1 both}.qbar.shine .qb-book span,.qbar.shine .qb-book svg{animation-delay:.45s}}
+@keyframes qb-shine{0%{background-position:100% 0}100%{background-position:0 0}}
+@keyframes qb-shine-ico{0%,15%,85%,100%{color:inherit}45%{color:var(--qb-ico,#0B4FB8)}}
