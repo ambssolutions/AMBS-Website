@@ -6178,7 +6178,8 @@ if("IntersectionObserver" in window && !reduced){
     loadedBuild=b;
     /* in the installed app, say so once when it opens on a newer version than last time */
     var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
-    var seen=null;try{seen=localStorage.getItem("ambs:build");localStorage.setItem("ambs:build",b);}catch(e){}
+    /* the browser and the home-screen app share storage, so the app keeps its own record of the last version it showed */
+    var key=app?"ambs:appbuild":"ambs:build";var seen=null;try{seen=localStorage.getItem(key);if(app&&!seen)seen=localStorage.getItem("ambs:build");localStorage.setItem(key,b);}catch(e){}
     /* no saved version but the app has run before (its offline worker was already in charge): it was installed before
        versions were saved, so this is an update too */
     if(app&&((seen&&seen!==b)||(!seen&&hadWorker))) updatedNote();
@@ -6189,7 +6190,7 @@ if("IntersectionObserver" in window && !reduced){
     n.innerHTML='<span>&#10003;&nbsp; Updated to the latest version.</span>';
     document.body.appendChild(n);
     requestAnimationFrame(function(){requestAnimationFrame(function(){n.classList.add("on");});});
-    setTimeout(function(){n.classList.remove("on");setTimeout(function(){n.remove();},400);},4000);
+    function hide(){n.classList.remove("on");setTimeout(function(){n.remove();},400);}n.addEventListener("click",hide);setTimeout(hide,8000);
   }
   document.addEventListener("visibilitychange",function(){
     if(document.visibilityState==="visible"){
