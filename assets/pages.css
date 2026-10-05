@@ -830,3 +830,12 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
 
 /* Call | Book bar stays out of the way while the top (hero) section is on screen */
 .qbar.away{opacity:0!important;pointer-events:none!important;transform:translate(-50%,24px)!important}
+
+/* Call | Book bar sits a little lower */
+@media(max-width:767px){.qbar{bottom:max(5px,calc(env(safe-area-inset-bottom) - 12px))!important}body{padding-bottom:70px!important}}
+
+/* Call | Book bar: smaller buttons */
+@media(max-width:767px){.qbar{padding:4px!important}.qbar a{height:46px!important;min-width:86px!important;padding:0 .9rem!important;font-size:.72rem!important;gap:1px!important}.qbar a svg{width:18px!important;height:18px!important}body{padding-bottom:60px!important}}
+
+/* Call | Book bar: smaller still */
+@media(max-width:767px){.qbar{padding:3px!important}.qbar a{height:38px!important;min-width:70px!important;padding:0 .7rem!important;font-size:.66rem!important;gap:0!important}.qbar a svg{width:15px!important;height:15px!important}body{padding-bottom:52px!important}}
