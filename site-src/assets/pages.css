@@ -740,3 +740,27 @@ html[data-theme="dark"] .g-edge-on{stroke:#4FA8FF}
   .hdr-call,.sh-call{display:none!important}
 }
 @media(prefers-reduced-motion:reduce){.qbar,.qbar a{transition:none}}
+
+/* language picker in the header, styled like the home page */
+.langwrap{position:relative;display:inline-flex;align-items:center;flex:0 0 auto;width:112px}
+.langselect{-webkit-appearance:none;appearance:none;width:100%;height:36px;padding:0 2.2em 0 .8em;border-radius:999px;border:1px solid rgba(70,179,31,.45);
+  background:linear-gradient(#fff,#EEF5E4);color:#274F16;font:700 .84rem/1 var(--body);box-shadow:0 5px 12px -8px rgba(39,79,22,.35);cursor:pointer}
+.langcaret{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);width:12px;height:8px;color:#2A5418;pointer-events:none;display:grid}
+.langcaret svg{width:12px;height:8px}
+html[data-theme="dark"] .langselect{background:transparent;color:#C9E9AE;border-color:rgba(143,226,74,.35)}
+html[data-theme="dark"] .langcaret{color:#C9E9AE}
+@media(max-width:1120px){
+  .langwrap{width:107px;margin-left:auto}
+  .langselect{height:32px;font-size:.72rem;padding:0 1.9em 0 .5em}
+  .langcaret{right:.6rem}
+  /* minutes left sits in the space between the logo and the language picker */
+  .g-left.in-hdr{position:relative!important;left:auto!important;top:auto!important;transform:none!important;margin:0 auto!important}
+  .g-left.in-hdr+.langwrap{margin-left:0}
+}
+@media(max-width:380px){.langwrap{width:96px}}
+@media(min-width:1121px) and (max-width:1279px){.sh-book{display:none!important}}
+
+/* laptops: guide pages carry the minutes-left pill too, so "Book a call" gives way ("Contact us" opens the same form) */
+@media(min-width:1121px){.sh-right:has(.g-left) .sh-book{display:none!important}}
+@media(min-width:1121px) and (max-width:1279px){.sh-right:has(.g-left) .sh-nav a{padding-left:.55em;padding-right:.55em;font-size:.9rem}}
+@media(min-width:1121px) and (max-width:1279px){.sh-bar:has(.g-left) .langwrap,.sh-bar:has(.g-left) .sh-theme{display:none!important}.sh-bar:has(.g-left) .sh-mark img{height:auto;width:150px}}

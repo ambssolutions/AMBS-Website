@@ -124,3 +124,10 @@
     e.preventDefault();document.body.classList.add("leaving");setTimeout(function(){location.href=h;},260);});
   addEventListener("pageshow",function(e){if(e.persisted)document.body.classList.remove("leaving");});
 })();
+
+/* language picker: these pages are in English, so another language opens the home page in that language */
+(function(){var s=document.getElementById("langselect");if(!s)return;s.value="en";
+  s.addEventListener("change",function(){var v=s.value;if(v==="en")return;try{sessionStorage.setItem("ambs:lang",v);}catch(e){}
+    document.body.classList.add("leaving");setTimeout(function(){location.href="/";},calmMs());});
+  function calmMs(){return matchMedia("(prefers-reduced-motion: reduce)").matches?0:260;}
+})();
