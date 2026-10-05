@@ -684,3 +684,7 @@ footer.f2 .f2-bottom{flex-direction:column!important;align-items:center!importan
 footer.f2 .f2-legal{justify-content:center}
 footer.f2 .f2-fine{margin-left:auto;margin-right:auto;text-align:center}
 @media(max-width:640px){footer.f2 .f2-grid{grid-template-columns:1fr 1fr!important}footer.f2 .f2-grid>.f2-col:last-child{grid-column:1/-1}}
+
+/* minutes-left pill sits in the bottom-left corner, clear of the browser's own centred scroll buttons */
+.g-left{left:max(14px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));transform:translateY(20px)}
+.g-left.on{transform:none}
