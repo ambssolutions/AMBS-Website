@@ -877,3 +877,6 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 /* Call | Book shimmer: stronger, darker colour so it is easy to see */
 @media(max-width:767px){.qbar a span{--qb-hi:#0B4FB8;background-image:linear-gradient(90deg,var(--qb-base) 0 25%,var(--qb-hi) 40% 60%,var(--qb-base) 75% 100%)}html[data-theme="dark"] .qbar a span{--qb-hi:#3D9BFF}.qbar a svg{--qb-ico:#0B4FB8}html[data-theme="dark"] .qbar a svg{--qb-ico:#3D9BFF}}
 @keyframes qb-shine-ico{0%,4%,38%,100%{color:inherit}12%,28%{color:var(--qb-ico,#0B4FB8)}}
+/* link arrows: drawn arrow centred on the text line */
+.card .go{display:inline-flex!important;align-items:center}
+.card .go::after{content:""!important;width:1em;height:1em;margin-left:.3em;flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat}
