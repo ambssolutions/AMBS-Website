@@ -914,3 +914,4 @@ html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
 /* guide and topic cards: centre-aligned */
 .card{align-items:center;text-align:center}
 .card .card-ico,.card .tag,.card .go{align-self:center}
+.card .go::after{height:.62em!important;width:.78em!important}
