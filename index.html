@@ -4308,6 +4308,9 @@ html[data-theme="dark"] footer.f2,.sky-night footer.f2{--f2-line:rgba(233,237,24
 @media(prefers-reduced-motion:reduce){.qbar::after{animation:none}}
 /* What we do: "Read the guide" link centred on phones */
 @media(max-width:767px){.wd-copy .wd-more{display:flex;width:fit-content;margin-left:auto;margin-right:auto}}
+/* phone footer: Contact us in the right column, lined up under Explore */
+@media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(3){justify-self:start}footer.f2 .f2-grid>.f2-col:last-child{grid-column:2!important;justify-self:start!important;align-items:flex-start!important;text-align:left!important}}
+@media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{white-space:nowrap}}
 </style>
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
