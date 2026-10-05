@@ -865,3 +865,15 @@ html[data-theme="dark"] .g-left.in-hdr{color:#CFE6FF!important}
 }
 @keyframes qb-wave{to{background-position:140px 100%,-90px 100%}}
 @media(prefers-reduced-motion:reduce){.qbar::after{animation:none}}
+/* Call | Book: colour shimmer sweeping through the labels (like MiKia's hero button) */
+@media(max-width:767px){
+  .qbar a span{--qb-base:#14172B;--qb-hi:#1877E0;background:linear-gradient(90deg,var(--qb-base) 0 30%,var(--qb-hi) 45% 55%,var(--qb-base) 70% 100%);background-size:300% 100%;background-position:100% 0;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important;animation:qb-shine 3.6s ease-in-out 1s infinite}
+  html[data-theme="dark"] .qbar a span{--qb-base:#EDEFF8;--qb-hi:#8CC4FF}
+  .qbar a svg{animation:qb-shine-ico 3.6s ease-in-out 1s infinite}
+  .qbar .qb-book span,.qbar .qb-book svg{animation-delay:1.45s}
+}
+@keyframes qb-shine{0%{background-position:100% 0}40%,100%{background-position:0 0}}
+@keyframes qb-shine-ico{0%,6%,34%,100%{color:inherit}18%{color:var(--qb-ico,#1877E0)}}
+html[data-theme="dark"] .qbar a svg{--qb-ico:#8CC4FF}
+@media(prefers-reduced-motion:reduce){.qbar a span,.qbar a svg{animation:none!important;-webkit-text-fill-color:currentColor;background:none}}
