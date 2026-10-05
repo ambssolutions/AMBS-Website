@@ -843,3 +843,8 @@ html[data-theme="dark"] .langcaret{color:#C9E9AE}
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:nth-child(2){justify-self:start}footer.f2 .f2-grid>.f2-col:last-child{align-items:center!important;text-align:center!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:center}}
 /* phone footer: Contact us block centred, lines on one straight left edge */
 @media(max-width:640px){footer.f2 .f2-grid>.f2-col:last-child{justify-self:center;align-items:flex-start!important;text-align:left!important}footer.f2 .f2-grid>.f2-col:last-child a,footer.f2 .f2-grid>.f2-col:last-child span{justify-content:flex-start}}
+/* minutes left: same visual weight as the language button (full outline, clear text) */
+.g-left.in-hdr{background:transparent!important;color:var(--ink)!important}
+.g-edge-bg{stroke:rgba(24,119,224,.35)}
+html[data-theme="dark"] .g-edge-bg{stroke:rgba(79,168,255,.35)}
+html[data-theme="dark"] .g-left.in-hdr{color:#CFE6FF!important}
