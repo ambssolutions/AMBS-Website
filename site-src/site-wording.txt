@@ -1,0 +1,125 @@
+hero.h1: We solve your operational headaches\nwith easy-to-use AI.
+hero.sub: You bring the business problems, we bring the solutions. We handle the admin automation, source the right software and build a simplified system.
+hero.cta1: Book a free session
+hero.cta2: See what we automate
+hero.note: No cost, no jargon. Based in Auckland, working nationwide.
+card.pick: Pick your business
+card.handled: What we'd take off you first
+card.hoursback: hours back every week
+card.month: About {n} hours a month.
+card.note: Estimates from typical New Zealand jobs. We measure yours in the walkthrough.
+biz.cafe: Café or takeaway
+biz.trades: Trades and building
+biz.clinic: Clinic or salon
+biz.retail: Shop or dairy
+biz.adviser: Adviser or accountant
+biz.transport: Transport and delivery
+t.cafe1: Rosters and shift swap messages
+t.cafe2: Supplier orders and invoice entry
+t.cafe3: Google and Facebook replies
+t.trades1: Quotes written up from site notes
+t.trades2: Job invoices into your accounts
+t.trades3: Chasing late payments
+t.clinic1: Booking reminders and rebooking
+t.clinic2: New client forms and files
+t.clinic3: Missed call follow-ups
+t.retail1: Stock counts and reorders
+t.retail2: Price and listing updates
+t.retail3: Daily sales summary
+t.adviser1: Chasing client documents
+t.adviser2: File notes written from calls
+t.adviser3: Compliance records and checklists
+t.transport1: Run sheets and driver messages
+t.transport2: Filing proof of delivery
+t.transport3: Fuel and mileage logs
+auto.eyebrow: The work
+auto.title: What we do
+auto.lead: Two ways we help: automations that clear the repetitive work, and digital tools built around your business.
+auto.c1t: Quotes and invoices
+auto.c1d: Site notes or a voice memo become a priced quote. Approved jobs bill themselves.
+auto.c2t: Customer replies
+auto.c2d: Opening hours, pricing, availability, directions — answered in seconds, in your customer's language.
+auto.c3t: Bookings and reminders
+auto.c3d: Confirmations, reminders and rebooking texts that stop no-shows without anyone chasing.
+auto.c4t: Moving data between apps
+auto.c4d: No more retyping the same job into three systems. Your apps hand information to each other.
+auto.c5t: The numbers, weekly
+auto.c5d: Sales, stock, unpaid invoices and hours — one short summary on your phone every Monday.
+auto.c6t: Records you can show
+auto.c6d: File notes, consents and receipts filed as the work happens — ready when someone asks for them.
+about.title: Your Vision Our Solution
+about.p1: Every business runs on somebody's ambition — the café that should be two cafés, the crew that should be twice the size. What holds it back is rarely the vision; it's the repetitive work that eats the week. We build the systems that give those hours back, in the language you do business in.
+about.a1t: A — Ambition
+about.a1d: Yours. The reason the business exists.
+about.a2t: M — Meets
+about.a2d: We watch how your work really happens.
+about.a3t: B — Better
+about.a3d: Automation and digital tools that fit you — not the other way round.
+about.a4t: S — Solutions
+about.a4d: Working systems you own, with a person on call.
+off.g1: AI automation — work that runs itself
+off.g2: Digital solutions — built for your business
+auto.c7t: Websites that win trust
+auto.c7d: Fast, multilingual websites like this one — built to turn visitors into calls.
+auto.c8t: Staff and customer portals
+auto.c8d: Job tracking, photos, invoices and approvals — your own app on every phone.
+auto.c9t: Live dashboards
+auto.c9d: Sales, jobs and cash in one view that updates itself, wherever you are.
+form.ok: Thank you — we\u2019ll be in touch shortly
+form.err: Couldn\u2019t send just now — please call us instead.
+biz.other: Something else
+t.other1: Chasing the same information every week
+t.other2: Copying details between two systems
+t.other3: Sending the same update to customers
+why.t: Why partner with us
+why.s: Same money, two very different experiences. Here is the difference you should expect.
+why.old: The usual way
+why.new: With Ambs Solutions
+why.o1: Weeks of silence, then a status email
+why.o2: The same template with your logo dropped in
+why.o3: A big project that shows nothing for months
+why.o4: A vague quote that grows after you sign
+why.o5: Handed to someone you never speak to
+why.n1: You deal directly with the person who builds it
+why.n2: Built around how your business already works
+why.n3: One automation first — see it working, then decide
+why.n4: Scope and price agreed in writing before we start
+why.n5: You own every system we build, and can walk away with it
+form.okname: Thank you {name} \u2014 we\u2019ll be in touch shortly
+how.eyebrow: Three steps, in order
+how.title: How it works
+how.s1t: We watch the work
+how.s1d: We sit with whoever actually does the job. We leave with a written plan and an hours estimate. It is yours to keep, even if you don't hire us.
+how.s2t: We build one automation first
+how.s2d: Two to three weeks. You watch it run on your real jobs and your real customers before it goes anywhere near live.
+how.s3t: You own it
+how.s3d: We hand over the logins, train your team in the language they prefer, and stay on call. Leave whenever you like — the automation stays with you.
+trust.eyebrow: No rip and replace
+trust.title: Built around the tools you already have
+trust.lead: You do not need new software. We connect what is already on your desk and your phone.
+trust.u1t: Your data stays yours
+trust.u1d: Handled under the Privacy Act 2020, hosted in New Zealand or Australia, and never used to train anyone's model.
+trust.u2t: A person answers
+trust.u2d: One named contact who knows your business, reachable in New Zealand hours. No ticket queue.
+faq.eyebrow: Straight answers
+faq.title: Questions we get asked
+faq.q1: Will this replace my staff?
+faq.a1: No. It clears the repetitive work so your people can do the parts that need judgement, hands or a friendly face. Most owners use the hours to take on more work, not fewer staff.
+faq.q2: I'm not technical. Is that a problem?
+faq.a2: Not at all. If you can show us how the job gets done today, that is everything we need. We handle the rest and explain it in plain words.
+faq.q3: What happens when it breaks?
+faq.a3: We monitor every automation and get alerted before you notice. Fixes are included for 30 days after launch, and always included on ongoing care.
+faq.q4: Do you work outside Auckland?
+faq.a4: Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference.
+faq.q5: How small is too small?
+faq.a5: If you are spending more than three hours a week on the same task, there is something worth automating — whether you have one van or forty staff.
+form.eyebrow: Free session
+form.title: Book your free session
+form.lead: Tell us what is taking up your week. We will come back with a plan and an hours estimate.
+form.name: Your name
+form.biz: Business name
+form.email: Email
+form.phone: Phone
+form.msg: What eats your time?
+form.send: Send request
+form.note: We reply within one working day. Or call +64 22 099 9578.
