@@ -2,6 +2,19 @@
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the page with no leftover #section, and the home page in the installed app */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if(app&&location.pathname!=="/"){location.replace("/");return;}
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);});
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Automation glossary: AI and tech terms explained for NZ business | Ambs Solutions</title>
 <meta name="description" content="Clear meanings of the automation, AI and website terms New Zealand business owners hear, from API and CRM to webhook, workflow and the Privacy Act.">
@@ -27,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v=f539b2b8">
+<link rel="stylesheet" href="/assets/pages.css?v=da689ce9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "Automation glossary", "item": "https://ambs.co.nz/guides/automation-glossary"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "Automation glossary", "description": "Clear meanings of the automation, AI and website terms New Zealand business owners hear, from API and CRM to webhook, workflow and the Privacy Act.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1791, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/automation-glossary", "image": "https://ambs.co.nz/logo.png", "articleSection": "Getting started"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the difference between automation and AI?", "acceptedAnswer": {"@type": "Answer", "text": "Automation follows set rules: when this happens, do that. AI can handle less predictable work, such as reading an email and drafting a reply. Many useful systems combine the two, with plain automation doing most of the work and AI helping at one or two steps."}}, {"@type": "Question", "name": "Do I need to understand APIs to automate my business?", "acceptedAnswer": {"@type": "Answer", "text": "No. It helps to know that an API is how two programs exchange information, because it explains why some tools connect easily and others do not. The person building your automation should handle the technical detail and explain it in plain words."}}, {"@type": "Question", "name": "Is a chatbot the same as an AI agent?", "acceptedAnswer": {"@type": "Answer", "text": "Not quite. A chatbot answers messages in a conversation. An AI agent can also take actions, such as checking a calendar and making a booking. Both should have clear limits and a way to hand over to a person."}}]}]}</script>
 </head>
 <body>
@@ -57,6 +70,7 @@
   <h1>Automation glossary</h1>
   <p class="plead">Automation and AI come with a lot of jargon. Here are the terms you are most likely to hear, explained simply, with a note on why each one matters to a small business.</p>
   <div class="pmeta"><span>Getting started</span><span>8 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mkg"><span class="mkg-t" style="--i:0;--c:#E5352B">Trigger</span><span class="mkg-t" style="--i:1;--c:#F58220">Workflow</span><span class="mkg-t" style="--i:2;--c:#3FAE29">API</span><span class="mkg-t" style="--i:3;--c:#1877E0">Integration</span><span class="mkg-t" style="--i:4;--c:#7B2FBE">AI model</span><span class="mkg-t" style="--i:5;--c:#E5352B">Webhook</span><span class="mkg-t" style="--i:6;--c:#1877E0">Prompt</span><span class="mkg-t" style="--i:7;--c:#3FAE29">Dashboard</span></div></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose">
@@ -187,6 +201,6 @@
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
 </div></footer>
-<script src="/assets/pages.js?v=b53565bb" defer></script>
+<script src="/assets/pages.js?v=a266ec65" defer></script>
 </body>
 </html>
