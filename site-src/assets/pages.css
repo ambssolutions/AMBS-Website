@@ -673,3 +673,15 @@ html[data-theme="dark"] .msgs{background:linear-gradient(160deg,#1C2550,#161D3D)
 .msgs.in .msg{opacity:1;transform:none}
 .msgs.in .msg:nth-child(2){transition-delay:.5s}.msgs.in .msg:nth-child(3){transition-delay:1s}
 @media(prefers-reduced-motion:reduce){.msgs .msg{opacity:1;transform:none;transition:none}}
+
+/* numbered steps follow the logo colours: red, yellow, green, blue, purple */
+.steps-list>li:nth-child(5n+1)::before{background:linear-gradient(145deg,#FF6B5E,#E5352B)}
+.steps-list>li:nth-child(5n+2)::before{background:linear-gradient(145deg,#FFD43B,#E0A800);color:#3A2E00}
+.steps-list>li:nth-child(5n+3)::before{background:linear-gradient(145deg,#7BD45E,#3FAE29)}
+.steps-list>li:nth-child(5n+4)::before{background:linear-gradient(145deg,#4FA8FF,#1877E0)}
+.steps-list>li:nth-child(5n+5)::before{background:linear-gradient(145deg,#B06AF0,#7B2FBE)}
+.svc-steps li:nth-child(5n+1) .svc-n{background:linear-gradient(145deg,#FF6B5E,#E5352B);box-shadow:0 10px 20px -10px #E5352B}
+.svc-steps li:nth-child(5n+2) .svc-n{background:linear-gradient(145deg,#FFD43B,#E0A800);box-shadow:0 10px 20px -10px #E0A800;color:#3A2E00}
+.svc-steps li:nth-child(5n+3) .svc-n{background:linear-gradient(145deg,#7BD45E,#3FAE29);box-shadow:0 10px 20px -10px #3FAE29}
+.svc-steps li:nth-child(5n+4) .svc-n{background:linear-gradient(145deg,#4FA8FF,#1877E0);box-shadow:0 10px 20px -10px #1877E0}
+.svc-steps li:nth-child(5n+5) .svc-n{background:linear-gradient(145deg,#B06AF0,#7B2FBE);box-shadow:0 10px 20px -10px #7B2FBE}
