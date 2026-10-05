@@ -103,3 +103,11 @@
     pill.classList.toggle("on",r.top<innerHeight*.3&&done<.985);}
   addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(upd);}},{passive:true});upd();
 })();
+
+/* links to the home page fade this page out first, then the home page fades in on its section */
+(function(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||a.target==="_blank")return;
+    var h=a.getAttribute("href");if(!/^\/(#[\w-]+)?$/.test(h))return;
+    e.preventDefault();document.body.classList.add("leaving");setTimeout(function(){location.href=h;},260);});
+  addEventListener("pageshow",function(e){if(e.persisted)document.body.classList.remove("leaving");});
+})();
