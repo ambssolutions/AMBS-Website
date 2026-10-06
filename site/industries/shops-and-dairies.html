@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the same page, with no leftover #section */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo({top:0,behavior:"instant"});addEventListener("load",function(){window.scrollTo({top:0,behavior:"instant"});});
+}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Automation for shops and dairies in NZ | Ambs Solutions</title>
+<meta name="description" content="Automation for NZ shops and dairies: stock counts and reorders, supplier price updates, and a daily sales summary on your phone.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://ambs.co.nz/industries/shops-and-dairies">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ambs Solutions">
+<meta property="og:url" content="https://ambs.co.nz/industries/shops-and-dairies">
+<meta property="og:title" content="Automation for shops and dairies in NZ | Ambs Solutions">
+<meta property="og:description" content="Automation for NZ shops and dairies: stock counts and reorders, supplier price updates, and a daily sales summary on your phone.">
+<meta property="og:image" content="https://ambs.co.nz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_NZ">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F7FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1428" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<script>(function(){var t=null;try{t=sessionStorage.getItem("ambs:theme")}catch(e){}if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}document.documentElement.dataset.theme=t})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/pages.css?v=6d11a5d4">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Industries", "item": "https://ambs.co.nz/industries"}, {"@type": "ListItem", "position": 3, "name": "Automation for shops and dairies", "item": "https://ambs.co.nz/industries/shops-and-dairies"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Service", "name": "Automation for shops and dairies", "serviceType": "Business process automation for shops and dairies", "description": "Automation for NZ shops and dairies: stock counts and reorders, supplier price updates, and a daily sales summary on your phone.", "provider": {"@id": "https://ambs.co.nz/#business"}, "areaServed": {"@type": "Country", "name": "New Zealand"}, "url": "https://ambs.co.nz/industries/shops-and-dairies"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need a modern POS system for this?", "acceptedAnswer": {"@type": "Answer", "text": "It helps, but it is not always required. If your POS can export sales to Excel or Google Sheets, or emails you reports, we work from that. If it cannot, we can often start with a simple phone-based count and a spreadsheet."}}, {"@type": "Question", "name": "Will the system place orders with suppliers on its own?", "acceptedAnswer": {"@type": "Answer", "text": "Only if you want it to. Many owners prefer to see a suggested order first and approve it. Once you trust the suggestions for a particular supplier, you can choose to let those go out automatically."}}, {"@type": "Question", "name": "Can price changes update both my shop and my online store?", "acceptedAnswer": {"@type": "Answer", "text": "Partly. We do not connect to your POS or online store directly. When a supplier's prices change, the new prices can be checked against your margin rules and turned into one updated price list in Excel or Google Sheets, which you can import into your POS and online store where they allow it, with a list of shelf labels to reprint."}}, {"@type": "Question", "name": "How long before I see the daily summary working?", "acceptedAnswer": {"@type": "Answer", "text": "The first automation is typically built in one to two weeks and run alongside your current routine before it goes live, so you can check its numbers against your own."}}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="hdr"><div class="sh-bar">
+  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
+  <div class="sh-right">
+    <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
+    <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language"><option value="en" selected>English</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="mi">Te Reo Māori</option><option value="pa">ਪੰਜਾਬੀ</option></select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    <nav class="sh-nav" aria-label="Main"><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <a class="sh-btn sh-book" href="/#book">Book a call</a>
+    <a class="sh-btn sh-contact" href="#contact">Contact us</a>
+    <a class="sh-ico sh-sm sh-call" href="tel:+64220999578" aria-label="Call us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+    <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
+  </div>
+  <nav class="sh-drawer" id="siteNav" aria-label="Menu">
+    <a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides">Guides</a><a href="/industries" aria-current="page">Industries</a><a href="/#faq">Questions</a>
+    <a class="sh-btn sh-contact sh-wide" href="#contact">Contact us</a>
+    <div class="sh-pair" role="group" aria-label="Light or dark mode"><button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button><button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button></div>
+  </nav>
+</div></header>
+<main id="main">
+<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/industries">Industries</a></li><li aria-current="page">Automation for shops and dairies</li></ol></nav></div>
+<section class="phero"><div class="wrap">
+  <p class="eyebrow">Retail</p>
+  <h1>Automation for shops and dairies</h1>
+  <p class="plead">When the shop is open long hours, the counting, ordering and price changes get done late at night or not at all. We automate the routine parts so you know what to order and how yesterday went without digging through three systems.</p>
+  <div class="pmeta"><span>Retail</span><span>New Zealand-wide</span><span>Free first session</span></div>
+  
+</div></section>
+<div class="wrap layout">
+  <article class="prose">
+<div class="takeaways"><b>In short</b><ul><li>The three tasks we usually take off first are stock counts and reorders, price and listing updates, and a daily sales summary.</li><li>Together they typically come to around six and a half hours a week, as an estimate we check against your own shop.</li><li>We connect Xero, Microsoft 365 and Google Workspace, and work from what your existing POS and online store already produce, such as exports to Excel or Google Sheets and emailed reports.</li><li>Your family or staff can be trained in English, Hindi or Punjabi, whichever they prefer.</li></ul></div>
+<h2>What the repetitive work looks like in a shop or dairy</h2>
+<p>A dairy or small shop often opens early and closes late, with the owner or family covering most shifts. Between customers there are deliveries to check, a supplier rep waiting with an order sheet, shelves to face, and a cash-and-carry list to write before tomorrow morning. Gift stores, bottle stores, hardware shops and boutiques have a similar rhythm, with more online orders mixed in.</p>
+<p>The repetitive work is mostly about stock and numbers: what sold, what is running low, what the supplier just put the price up on, and whether the week is better or worse than last week. Much of it lives in the owner's head or a notebook behind the counter.</p>
+<p>That knowledge is valuable. Automation does not replace it, it just takes the counting, typing and adding up off you.</p>
+
+<h2>The three tasks we usually take off first</h2>
+<p>The hours below are typical estimates from similar New Zealand shops, not a promise. We measure your actual week during the free session.</p>
+<div class="task-grid">
+  <div class="task"><b>Stock counts and reorders</b><span>About 3.0 hours a week</span><p>Counts done on a phone, with a suggested order for each supplier.</p></div>
+  <div class="task"><b>Price and listing updates</b><span>About 2.0 hours a week</span><p>Supplier price changes checked against your margins, with one updated price list for your POS and online store.</p></div>
+  <div class="task"><b>Daily sales summary</b><span>About 1.5 hours a week</span><p>Yesterday's numbers on your phone each morning, without opening three systems.</p></div>
+</div>
+
+<h3>Stock counts and reorders</h3>
+<ol class="steps-list">
+  <li><strong>Sales reduce stock as you go.</strong> Where your POS tracks stock and can export it to Excel or Google Sheets, the count comes from that export. Where it does not, a quick count of key lines is entered on a phone.</li>
+  <li><strong>Low items are flagged.</strong> Each product has a level you want on hand. Anything below it goes on the reorder list.</li>
+  <li><strong>Orders are grouped by supplier.</strong> The list is split into one suggested order per supplier or for your cash-and-carry run, with quantities based on recent sales.</li>
+  <li><strong>You approve.</strong> Check the suggestion on your phone, change anything you know better, and send it. When the delivery arrives, received stock can be ticked off against the order.</li>
+</ol>
+<div class="callout callout--tip"><p><strong>Start with your fastest movers.</strong> Milk, bread, drinks, snacks and your best-selling lines matter most. A short, tidy list of key lines is more useful than an untidy list of everything.</p></div>
+
+<h3>Price and listing updates</h3>
+<p>Supplier price lists change often, and updating every price by hand invites mistakes. A typical setup reads the supplier's new price list from email or a spreadsheet, compares it with your current cost prices and works out the new sell price using your margin rules. You see a short list of changes to approve. Once approved, you get an updated price list in Excel or Google Sheets, ready to import into your POS and, if you sell online, your online store where they allow it, plus a list of shelf labels to reprint. New products can be added the same way, with descriptions and photos drafted for your online listings.</p>
+<p>Our guide on <a href="/guides/connect-your-business-apps">connecting your business apps</a> explains how this kind of hand-off between systems works.</p>
+
+<h3>Daily sales summary</h3>
+<p>Each morning, a short message arrives on your phone with yesterday's sales, how they compare with the same day last week, the top sellers, any items that ran out, and the cash and EFTPOS totals to reconcile. If you have more than one shop, each store gets its own line. This works from the daily report your POS can email or export to Excel or Google Sheets, so there is nothing extra to log into. Our guide to <a href="/guides/weekly-business-numbers-dashboard">your business numbers every week</a> covers which figures are worth watching.</p>
+
+<h2>Other shop tasks worth automating</h2>
+<ul>
+  <li>Supplier invoices from email checked against what was delivered and entered as draft bills in Xero.</li>
+  <li>Online order emails turned into a picking list for the shop, with a pickup-ready message to the customer.</li>
+  <li>Slow-moving stock flagged each month so you can discount it before it ages.</li>
+  <li>Staff hours from a simple sign-in totalled for payroll.</li>
+  <li>Customer questions about opening hours, stock and parking answered on your website and by email, in their language.</li>
+  <li>Use-by dates on chilled lines tracked, with a reminder before they are due.</li>
+</ul>
+
+<h2>Tools we usually connect for retail</h2>
+<ul>
+  <li><strong>Microsoft 365</strong>: Excel for price lists and reorder levels, and Outlook for supplier orders and the morning summary.</li>
+  <li><strong>Google Workspace</strong>: Google Sheets for price lists and reorder levels, and Gmail for supplier orders and the morning summary.</li>
+  <li><strong>Xero</strong> for bills and daily takings.</li>
+</ul>
+<p>We do not connect to your POS or online store directly. Where they can export to Excel or Google Sheets, or send you emails, we work from what they already produce.</p>
+
+<h2>Digital tools that help shops</h2>
+<ul>
+  <li><strong>A fast, multilingual website</strong> with your hours, location, what you stock and, if it suits you, online ordering for pickup.</li>
+  <li><strong>A staff portal</strong> where family or staff see the roster, opening and closing steps and today's deliveries.</li>
+  <li><strong>A live dashboard</strong> showing sales, stock value and margin across one or several stores, updated through the day.</li>
+</ul>
+<p>Read more on our <a href="/services/websites-and-portals">websites, portals and dashboards</a> page. If you also run a café counter or takeaway, our page on <a href="/industries/cafes-and-takeaways">automation for cafés and takeaways</a> covers rosters and food supplier orders.</p>
+
+<h2>What working with us looks like</h2>
+<ol class="steps-list">
+  <li><strong>We watch the work.</strong> A free session in the shop with whoever does the ordering. You keep the written plan and hours estimate even if you do not hire us.</li>
+  <li><strong>We build one automation first.</strong> Usually one to two weeks, run on real sales and real orders before it goes live.</li>
+  <li><strong>You own it.</strong> It is built in your own accounts, so you keep everything if we stop working together. We train your family or staff in English, Hindi or Punjabi, whichever they prefer. Fixes and tweaks are free for the first 30 days after launch; after that, support is a monthly plan or pay as you go, whichever suits you. A named contact stays reachable in New Zealand hours.</li>
+</ol>
+
+<h2>Getting started checklist</h2>
+<ul>
+  <li>The name of your POS, whether it tracks stock, and what reports it can export or email.</li>
+  <li>A list of your main suppliers and how each takes orders.</li>
+  <li>One or two recent supplier price lists.</li>
+  <li>The numbers you check now, and where you get them from.</li>
+  <li>Your best-selling products, if you can list them.</li>
+</ul>
+<p>When it suits, <a href="/#book">book a free session</a> and we will come and see how your shop runs.</p>
+<h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need a modern POS system for this?</summary><p>It helps, but it is not always required. If your POS can export sales to Excel or Google Sheets, or emails you reports, we work from that. If it cannot, we can often start with a simple phone-based count and a spreadsheet.</p></details><details><summary>Will the system place orders with suppliers on its own?</summary><p>Only if you want it to. Many owners prefer to see a suggested order first and approve it. Once you trust the suggestions for a particular supplier, you can choose to let those go out automatically.</p></details><details><summary>Can price changes update both my shop and my online store?</summary><p>Partly. We do not connect to your POS or online store directly. When a supplier&#x27;s prices change, the new prices can be checked against your margin rules and turned into one updated price list in Excel or Google Sheets, which you can import into your POS and online store where they allow it, with a list of shelf labels to reprint.</p></details><details><summary>How long before I see the daily summary working?</summary><p>The first automation is typically built in one to two weeks and run alongside your current routine before it goes live, so you can check its numbers against your own.</p></details></div>
+  </article>
+  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
+</div>
+<div class="wrap"><section class="section"><div class="section-h"><h2>Keep reading</h2><a href="/guides">All guides →</a></div><div class="cards"><a class="card" href="/guides/weekly-business-numbers-dashboard" data-cat="Digital tools"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16"/><path d="M4 14l4-3 4 2 7-6"/></svg></span><span class="tag">Digital tools</span><h3>Your business numbers, every week</h3><p>What to track, where the numbers come from, and how to get them on your phone every Monday.</p><span class="go">Read the guide</span></a><a class="card" href="/guides/connect-your-business-apps" data-cat="Automation"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><path d="M10 6.5h5.5a2 2 0 0 1 2 2V14"/></svg></span><span class="tag">Automation</span><h3>Connect your business apps</h3><p>Stop retyping the same job into three systems. How app connections work and where to start.</p><span class="go">Read the guide</span></a><a class="card" href="/industries/cafes-and-takeaways" data-cat="Hospitality"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3c0 1.5 1 1.5 1 3M12 3c0 1.5 1 1.5 1 3"/></svg></span><span class="tag">Hospitality</span><h3>Cafés and takeaways</h3><p>Rosters, supplier orders and review replies, handled.</p><span class="go">Learn more</span></a></div></section><section class="cta"><div><h2>See what you could hand over</h2><p>Book a free session. We look at how your work really happens and leave you with a written plan and an hours estimate, yours to keep.</p></div>
+  <div class="btns"><a class="btn btn--go" href="/#book">Book a free session</a><a class="btn btn--ghost" href="tel:+64220999578">Call +64 22 099 9578</a></div></section></div>
+</main>
+<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
+<footer class="ftr f2"><div class="wrap">
+  <div class="f2-grid">
+    <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
+      <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p></div>
+    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a></nav>
+    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p><a href="/services">Services</a><a href="/industries">Industries</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <div class="f2-col" id="contact"><p class="f2-h">Contact us</p><a href="/#book">Book a call</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
+  </div>
+  <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
+</div></footer>
+<script src="/assets/pages.js?v=b2152225" defer></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the same page, with no leftover #section */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo({top:0,behavior:"instant"});addEventListener("load",function(){window.scrollTo({top:0,behavior:"instant"});});
+}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Automation for clinics and salons in NZ | Ambs Solutions</title>
+<meta name="description" content="Automation for NZ clinics and salons: booking reminders and rebooking, client forms and files, and missed-call follow-ups, built around the tools you use.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://ambs.co.nz/industries/clinics-and-salons">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ambs Solutions">
+<meta property="og:url" content="https://ambs.co.nz/industries/clinics-and-salons">
+<meta property="og:title" content="Automation for clinics and salons in NZ | Ambs Solutions">
+<meta property="og:description" content="Automation for NZ clinics and salons: booking reminders and rebooking, client forms and files, and missed-call follow-ups, built around the tools you use.">
+<meta property="og:image" content="https://ambs.co.nz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_NZ">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F7FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1428" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<script>(function(){var t=null;try{t=sessionStorage.getItem("ambs:theme")}catch(e){}if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}document.documentElement.dataset.theme=t})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/pages.css?v=6d11a5d4">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Industries", "item": "https://ambs.co.nz/industries"}, {"@type": "ListItem", "position": 3, "name": "Automation for clinics and salons", "item": "https://ambs.co.nz/industries/clinics-and-salons"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Service", "name": "Automation for clinics and salons", "serviceType": "Business process automation for clinics and salons", "description": "Automation for NZ clinics and salons: booking reminders and rebooking, client forms and files, and missed-call follow-ups, built around the tools you use.", "provider": {"@id": "https://ambs.co.nz/#business"}, "areaServed": {"@type": "Country", "name": "New Zealand"}, "url": "https://ambs.co.nz/industries/clinics-and-salons"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will reminders work with my existing booking system?", "acceptedAnswer": {"@type": "Answer", "text": "Usually, yes. Many booking systems have some reminders built in, and we help you switch those on properly. We do not connect to the booking system directly, but where it sends you booking emails or can export to Excel or Google Sheets, we can fill the gaps from that, such as rebooking messages and follow-ups after a no-show. We check what yours can do during the free session."}}, {"@type": "Question", "name": "Is it safe to automate forms that contain health information?", "acceptedAnswer": {"@type": "Answer", "text": "It can be, provided you know where the information goes, who can see it and how long it is kept. We handle data under the Privacy Act 2020, host the data we store for you in New Zealand or Australia and never use it to train AI models. Only Ambs works on your project and sees your data, and the AI tools we use run on business plans that do not train on it. Your booking system and other apps keep data in their own locations, so check those too. Check with your professional body if your profession has extra record-keeping rules."}}, {"@type": "Question", "name": "What happens when a client replies to an automated text?", "acceptedAnswer": {"@type": "Answer", "text": "Replies can be routed back to you or your front desk rather than into a void. Simple answers such as a confirmation can update the booking automatically, and anything else is flagged for a person to answer."}}, {"@type": "Question", "name": "Can messages go out in languages other than English?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Reminders and replies can be set up in the languages your clients prefer, and we can train your team in English, Hindi or Punjabi, whichever they prefer."}}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="hdr"><div class="sh-bar">
+  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
+  <div class="sh-right">
+    <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
+    <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language"><option value="en" selected>English</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="mi">Te Reo Māori</option><option value="pa">ਪੰਜਾਬੀ</option></select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    <nav class="sh-nav" aria-label="Main"><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <a class="sh-btn sh-book" href="/#book">Book a call</a>
+    <a class="sh-btn sh-contact" href="#contact">Contact us</a>
+    <a class="sh-ico sh-sm sh-call" href="tel:+64220999578" aria-label="Call us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+    <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
+  </div>
+  <nav class="sh-drawer" id="siteNav" aria-label="Menu">
+    <a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides">Guides</a><a href="/industries" aria-current="page">Industries</a><a href="/#faq">Questions</a>
+    <a class="sh-btn sh-contact sh-wide" href="#contact">Contact us</a>
+    <div class="sh-pair" role="group" aria-label="Light or dark mode"><button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button><button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button></div>
+  </nav>
+</div></header>
+<main id="main">
+<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/industries">Industries</a></li><li aria-current="page">Automation for clinics and salons</li></ol></nav></div>
+<section class="phero"><div class="wrap">
+  <p class="eyebrow">Health and beauty</p>
+  <h1>Automation for clinics and salons</h1>
+  <p class="plead">Your front desk is often you, between clients, with gloves on. We automate the reminders, forms and call-backs so fewer appointments are missed and fewer people fall through the gaps.</p>
+  <div class="pmeta"><span>Health and beauty</span><span>New Zealand-wide</span><span>Free first session</span></div>
+  
+</div></section>
+<div class="wrap layout">
+  <article class="prose">
+<div class="takeaways"><b>In short</b><ul><li>The three tasks we usually take off first are booking reminders and rebooking, new client forms and files, and missed call follow-ups.</li><li>Together they typically come to around seven and a half hours a week, as an estimate we check against your own diary.</li><li>We work from what your existing booking system already produces, such as booking emails or exports, alongside your email and phone, rather than asking you to switch.</li><li>Client and health information is handled under the Privacy Act 2020, and data we store for you is hosted in New Zealand or Australia.</li></ul></div>
+<h2>What the repetitive work looks like in a clinic or salon</h2>
+<p>In a physio practice, a hair salon, a beauty or nail studio, a massage clinic or a small allied health practice, the day is booked in back-to-back slots. Admin gets squeezed into the gaps: confirming tomorrow's appointments, chasing a new client who has not filled in their intake form, and trying to call back the number that rang three times while you were with someone.</p>
+<p>Every missed step has a cost. An unconfirmed appointment can turn into a no-show. A form that was not completed means questions eating into the start of a session. A missed call can be a new client who books somewhere else.</p>
+<p>These tasks repeat with almost every appointment, which makes them well suited to automation. The system handles the routine messages, and your team handles the people.</p>
+
+<h2>The three tasks we usually take off first</h2>
+<p>The hours are typical estimates from similar New Zealand businesses, not a guarantee. We measure your own week in the free session.</p>
+<div class="task-grid">
+  <div class="task"><b>Booking reminders and rebooking</b><span>About 3.5 hours a week</span><p>Confirmations, reminders and rebooking prompts that run without anyone chasing.</p></div>
+  <div class="task"><b>New client forms and files</b><span>About 2.5 hours a week</span><p>Intake and consent forms completed before the visit and filed in the right place.</p></div>
+  <div class="task"><b>Missed call follow-ups</b><span>About 1.5 hours a week</span><p>A prompt text back to missed callers, with a link to book.</p></div>
+</div>
+
+<h3>Booking reminders and rebooking</h3>
+<ol class="steps-list">
+  <li><strong>Confirmation on booking.</strong> As soon as an appointment is made, the client gets a confirmation with the time, address, parking notes and anything they need to bring.</li>
+  <li><strong>Reminder before the visit.</strong> A reminder goes out a day or two before, with a simple way to confirm, reschedule or cancel.</li>
+  <li><strong>Gaps are filled.</strong> When someone cancels, clients on your waitlist can be offered the slot.</li>
+  <li><strong>Rebooking after the visit.</strong> Clients who usually come back every few weeks get a friendly prompt when they are due, which helps keep regulars from drifting away.</li>
+</ol>
+<p>Our guide to <a href="/guides/reduce-no-shows-with-booking-reminders">reducing no-shows with booking reminders</a> covers timing and wording in more detail.</p>
+
+<h3>New client forms and files</h3>
+<p>Paper intake forms get lost, and typing them into your system takes time. A typical setup sends new clients a short online form when they book. It asks the questions you need, such as contact details, relevant history, allergies or consent, and checks that required fields are filled. The completed form is saved to the client's file, a copy is kept as a PDF, and you are told if anything needs your attention before the appointment, such as a medical condition or a patch test that is due.</p>
+<div class="callout callout--warn"><p><strong>Health information needs extra care.</strong> Decide who can see each form, where it is stored and how long you keep it before you automate anything. Our <a href="/guides/privacy-act-2020-and-automation">Privacy Act 2020 guide</a> lists what to check, and your professional body may have its own requirements.</p></div>
+
+<h3>Missed call follow-ups</h3>
+<ol class="steps-list">
+  <li><strong>A missed call is detected.</strong> Where your phone system allows it, an unanswered call during opening hours is logged with the caller's number.</li>
+  <li><strong>A text goes back quickly.</strong> The caller gets a short message saying you are with a client, with a link to book online or a request to reply with what they need.</li>
+  <li><strong>Replies are sorted.</strong> Simple questions such as prices, hours or availability can be answered automatically, using the approach in our guide to <a href="/guides/ai-customer-replies-for-small-business">AI customer replies</a>.</li>
+  <li><strong>The rest come to you.</strong> Anything that needs a person lands on a short call-back list for your next gap.</li>
+</ol>
+
+<h2>Other tasks worth automating</h2>
+<ul>
+  <li>Aftercare instructions sent automatically after particular treatments.</li>
+  <li>Review requests sent to clients after their visit.</li>
+  <li>Gift voucher sales recorded and tracked, with reminders before they expire.</li>
+  <li>Daily takings and appointment numbers summarised for the owner each evening.</li>
+  <li>Product stock for retail shelves counted and reordered on a schedule.</li>
+  <li>Staff commission or contractor hours totalled at the end of each pay period.</li>
+</ul>
+
+<h2>Tools we usually connect for clinics and salons</h2>
+<ul>
+  <li><strong>Microsoft 365</strong>: Outlook for confirmations and client emails, Excel for simple reports, and OneDrive or SharePoint for client files.</li>
+  <li><strong>Google Workspace</strong>: Gmail and Google Calendar, Google Sheets for simple reports, and Google Drive for client files.</li>
+  <li><strong>Xero</strong> for invoices and takings.</li>
+</ul>
+<p>We do not connect to your booking system directly. Where it sends you booking emails or can export to Excel or Google Sheets, we work from what it already produces.</p>
+
+<h2>Digital tools that help</h2>
+<ul>
+  <li><strong>A website that turns visitors into bookings.</strong> Clear treatments and prices, fast on a phone, in the languages your clients speak, with booking front and centre.</li>
+  <li><strong>A client portal</strong> where clients update their details, complete forms and see upcoming appointments.</li>
+  <li><strong>A staff portal</strong> with each practitioner's day, client notes and protocols in one place.</li>
+  <li><strong>A live dashboard</strong> showing bookings, no-shows, rebooking rates and takings for the week.</li>
+</ul>
+<p>See <a href="/services/websites-and-portals">websites, portals and dashboards</a> for how we build these.</p>
+
+<h2>What working with us looks like</h2>
+<ol class="steps-list">
+  <li><strong>We watch the work.</strong> A free session with whoever runs the front desk. You keep the written plan and hours estimate even if you do not hire us.</li>
+  <li><strong>We build one automation first.</strong> Usually one to two weeks, tested on real bookings and real clients before it goes live.</li>
+  <li><strong>You own it.</strong> It is built in your own accounts, so you keep everything if we stop working together. We train your team in English, Hindi or Punjabi, whichever they prefer. Fixes and tweaks are free for the first 30 days after launch; after that, support is a monthly plan or pay as you go, whichever suits you. A named contact stays reachable in New Zealand hours.</li>
+</ol>
+
+<h2>Getting started checklist</h2>
+<ul>
+  <li>The name of your booking system, who holds the admin login, and what it can export or email.</li>
+  <li>A rough count of no-shows and late cancellations in a normal week.</li>
+  <li>Your current intake or consent forms, paper or digital.</li>
+  <li>The reminder and confirmation wording you use now, if any.</li>
+  <li>A note of who should be able to see client and health information.</li>
+</ul>
+<p>When you are ready, <a href="/#book">book a free session</a> and we will start with whichever task is costing you most.</p>
+<h2 id="questions">Common questions</h2><div class="faq"><details><summary>Will reminders work with my existing booking system?</summary><p>Usually, yes. Many booking systems have some reminders built in, and we help you switch those on properly. We do not connect to the booking system directly, but where it sends you booking emails or can export to Excel or Google Sheets, we can fill the gaps from that, such as rebooking messages and follow-ups after a no-show. We check what yours can do during the free session.</p></details><details><summary>Is it safe to automate forms that contain health information?</summary><p>It can be, provided you know where the information goes, who can see it and how long it is kept. We handle data under the Privacy Act 2020, host the data we store for you in New Zealand or Australia and never use it to train AI models. Only Ambs works on your project and sees your data, and the AI tools we use run on business plans that do not train on it. Your booking system and other apps keep data in their own locations, so check those too. Check with your professional body if your profession has extra record-keeping rules.</p></details><details><summary>What happens when a client replies to an automated text?</summary><p>Replies can be routed back to you or your front desk rather than into a void. Simple answers such as a confirmation can update the booking automatically, and anything else is flagged for a person to answer.</p></details><details><summary>Can messages go out in languages other than English?</summary><p>Yes. Reminders and replies can be set up in the languages your clients prefer, and we can train your team in English, Hindi or Punjabi, whichever they prefer.</p></details></div>
+  </article>
+  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
+</div>
+<div class="wrap"><section class="section"><div class="section-h"><h2>Keep reading</h2><a href="/guides">All guides →</a></div><div class="cards"><a class="card" href="/guides/reduce-no-shows-with-booking-reminders" data-cat="Automation"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></span><span class="tag">Automation</span><h3>Reduce no-shows with booking reminders</h3><p>Confirmations, reminders and rebooking messages that run without anyone chasing.</p><span class="go">Read the guide</span></a><a class="card" href="/guides/privacy-act-2020-and-automation" data-cat="Compliance"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg></span><span class="tag">Compliance</span><h3>The Privacy Act 2020 and automation</h3><p>What New Zealand businesses should check before automating anything that touches personal information.</p><span class="go">Read the guide</span></a><a class="card" href="/services/ai-automation" data-cat="Services"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span><span class="tag">Services</span><h3>AI automation</h3><p>Quotes, replies, bookings, data and reporting that run themselves, built around the tools you already use.</p><span class="go">Learn more</span></a></div></section><section class="cta"><div><h2>See what you could hand over</h2><p>Book a free session. We look at how your work really happens and leave you with a written plan and an hours estimate, yours to keep.</p></div>
+  <div class="btns"><a class="btn btn--go" href="/#book">Book a free session</a><a class="btn btn--ghost" href="tel:+64220999578">Call +64 22 099 9578</a></div></section></div>
+</main>
+<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
+<footer class="ftr f2"><div class="wrap">
+  <div class="f2-grid">
+    <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
+      <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p></div>
+    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a></nav>
+    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p><a href="/services">Services</a><a href="/industries">Industries</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <div class="f2-col" id="contact"><p class="f2-h">Contact us</p><a href="/#book">Book a call</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
+  </div>
+  <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
+</div></footer>
+<script src="/assets/pages.js?v=b2152225" defer></script>
+</body>
+</html>

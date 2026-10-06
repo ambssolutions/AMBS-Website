@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the same page, with no leftover #section */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo({top:0,behavior:"instant"});addEventListener("load",function(){window.scrollTo({top:0,behavior:"instant"});});
+}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Automation glossary: AI and tech terms explained for NZ business | Ambs Solutions</title>
+<meta name="description" content="Clear meanings of the automation, AI and website terms New Zealand business owners hear, from API and CRM to webhook, workflow and the Privacy Act.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://ambs.co.nz/guides/automation-glossary">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ambs Solutions">
+<meta property="og:url" content="https://ambs.co.nz/guides/automation-glossary">
+<meta property="og:title" content="Automation glossary: AI and tech terms explained for NZ business | Ambs Solutions">
+<meta property="og:description" content="Clear meanings of the automation, AI and website terms New Zealand business owners hear, from API and CRM to webhook, workflow and the Privacy Act.">
+<meta property="og:image" content="https://ambs.co.nz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_NZ">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F7FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1428" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<script>(function(){var t=null;try{t=sessionStorage.getItem("ambs:theme")}catch(e){}if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}document.documentElement.dataset.theme=t})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/pages.css?v=6d11a5d4">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "Automation glossary", "item": "https://ambs.co.nz/guides/automation-glossary"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "Automation glossary", "description": "Clear meanings of the automation, AI and website terms New Zealand business owners hear, from API and CRM to webhook, workflow and the Privacy Act.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 2067, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/automation-glossary", "image": "https://ambs.co.nz/logo.png", "articleSection": "Getting started"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the difference between automation and AI?", "acceptedAnswer": {"@type": "Answer", "text": "Automation follows set rules: when this happens, do that. AI can handle less predictable work, such as reading an email and drafting a reply. Many useful systems combine the two, with plain automation doing most of the work and AI helping at one or two steps."}}, {"@type": "Question", "name": "Do I need to understand APIs to automate my business?", "acceptedAnswer": {"@type": "Answer", "text": "No. It helps to know that an API is how two programs exchange information, because it explains why some tools connect easily and others don't. The person building your automation should handle the technical detail and explain it in plain words."}}, {"@type": "Question", "name": "Is a chatbot the same as an AI agent?", "acceptedAnswer": {"@type": "Answer", "text": "Not quite. A chatbot answers messages in a conversation. An AI agent can also take actions, such as checking a calendar and making a booking. Both should have clear limits and a way to hand over to a person."}}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="hdr"><div class="sh-bar">
+  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
+  <div class="sh-right">
+    <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
+    <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language"><option value="en" selected>English</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="mi">Te Reo Māori</option><option value="pa">ਪੰਜਾਬੀ</option></select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    <nav class="sh-nav" aria-label="Main"><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides" aria-current="page">Guides</a><a href="/#faq">Questions</a></nav>
+    <a class="sh-btn sh-book" href="/#book">Book a call</a>
+    <a class="sh-btn sh-contact" href="#contact">Contact us</a>
+    <a class="sh-ico sh-sm sh-call" href="tel:+64220999578" aria-label="Call us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+    <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
+  </div>
+  <nav class="sh-drawer" id="siteNav" aria-label="Menu">
+    <a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides" aria-current="page">Guides</a><a href="/industries">Industries</a><a href="/#faq">Questions</a>
+    <a class="sh-btn sh-contact sh-wide" href="#contact">Contact us</a>
+    <div class="sh-pair" role="group" aria-label="Light or dark mode"><button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button><button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button></div>
+  </nav>
+</div></header>
+<main id="main">
+<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/guides">Guides</a></li><li aria-current="page">Automation glossary</li></ol></nav></div>
+<section class="phero"><div class="wrap">
+  <p class="eyebrow">Getting started</p>
+  <h1>Automation glossary</h1>
+  <p class="plead">API, webhook, LLM, CRM. Automation and AI come with a lot of jargon. Here are the terms you&#x27;re most likely to hear, explained in plain words, with a note on why each one matters to a small business.</p>
+  <div class="pmeta"><span>Getting started</span><span>9 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mkg"><span class="mkg-t" style="--i:0;--c:#E5352B">Trigger</span><span class="mkg-t" style="--i:1;--c:#F58220">Workflow</span><span class="mkg-t" style="--i:2;--c:#3FAE29">API</span><span class="mkg-t" style="--i:3;--c:#1877E0">Integration</span><span class="mkg-t" style="--i:4;--c:#7B2FBE">AI model</span><span class="mkg-t" style="--i:5;--c:#E5352B">Webhook</span><span class="mkg-t" style="--i:6;--c:#1877E0">Prompt</span><span class="mkg-t" style="--i:7;--c:#3FAE29">Dashboard</span></div></div>
+</div></section>
+<div class="wrap layout">
+  <article class="prose">
+<div class="takeaways"><b>In short</b><ul><li>You don&#x27;t need to know these terms to automate, but they help you ask better questions.</li><li>Most automations come down to a trigger, some steps and an action, joined up by an API or webhook.</li><li>AI tools can draft and summarise, but a person should check anything that matters.</li><li>Security and privacy terms, such as two-factor authentication and personal information, are worth knowing well.</li></ul></div>
+<h2>How to use this automation glossary</h2>
+<p>Picture a meeting about your new booking system. Someone says the API pushes a webhook to the CRM, and everyone nods. You nod too. Inside, you're wondering what any of it means, and whether it's going to cost you.</p>
+<p>You're not alone. Tech people speak in shorthand, and most of it describes simple ideas. This page turns that shorthand back into plain words.</p>
+<p>Terms are listed alphabetically and grouped by letter. Each one starts with a short, simple meaning. Where it helps, there's an example from a typical New Zealand small business.</p>
+<p>Heard a term that isn't here? Ask whoever's building your system to explain it. A good builder will happily do that without making you feel silly. And where an entry touches on law or tax, it's general information, not legal or tax advice.</p>
+<div class="callout callout--tip"><p><strong>The three words that explain most automations.</strong> A <em>trigger</em> starts it, a <em>workflow</em> sets out the steps, and an <em>integration</em> lets your apps pass information along the way.</p></div>
+
+<h2>A–B: AI agents, APIs and automation</h2>
+<dl class="gloss">
+  <dt>AI agent</dt>
+  <dd>An AI system that can carry out tasks, not just answer questions. For example, it might read a booking request, check the calendar and offer a time. It should work within clear limits, with a person able to step in.</dd>
+  <dt>API</dt>
+  <dd>Short for application programming interface. Think of it as a secure doorway that lets one program ask another for information, or send it some. Most modern business software has one, including Xero, Microsoft 365 and Google Workspace. It's what makes most app connections possible.</dd>
+  <dt>Approval step</dt>
+  <dd>A point where an automation pauses so a person can check and confirm before it carries on. For example, a drafted quote waits for your OK before it goes to the customer.</dd>
+  <dt>Automation</dt>
+  <dd>Getting software to do a repetitive task a person used to do by hand, following the same rules every time. For example, sending booking reminders, or turning an approved job into an invoice. Not sure where to begin? Our guide on <a href="/guides/how-to-choose-what-to-automate-first">choosing what to automate first</a> covers where to start.</dd>
+  <dt>Backup</dt>
+  <dd>A separate copy of your data that you can restore if the original is lost, deleted or damaged. A good backup is stored somewhere different from the original. It's also tested now and then, so you know it actually works.</dd>
+  <dt>Bank feed</dt>
+  <dd>A connection that brings your bank transactions into your accounting software automatically, so nobody has to type them in. It's usually the starting point for matching payments to invoices. For example, a customer's payment lands in the feed, ready to match to the invoice it pays.</dd>
+</dl>
+
+<h2>C: chatbots, cloud software and CRM</h2>
+<dl class="gloss">
+  <dt>Chatbot</dt>
+  <dd>A program that answers messages in a chat window, such as one on your website. Simple chatbots follow fixed scripts. AI chatbots can understand questions written in everyday language. Either way, there should be an easy route to a real person.</dd>
+  <dt>Cloud software</dt>
+  <dd>Software you use through a web browser or app, with your data stored on the provider's servers rather than on your own computer. Xero, Gmail and Google Sheets are all cloud software. For example, you can check an invoice from the café counter or the ute, not just the office PC.</dd>
+  <dt>CRM</dt>
+  <dd>Short for customer relationship management. It's a system that keeps all your customer details, enquiries, notes and history in one place. There's plenty of dedicated CRM software. For a very small business, though, a well organised spreadsheet in Excel or Google Sheets can do the job.</dd>
+  <dt>CSV file</dt>
+  <dd>A simple text file of data in rows and columns, separated by commas. Most software can export and import CSV files. That makes them a handy go-between when two tools can't connect directly. For example, you might export a customer list from one system and import it into another.</dd>
+</dl>
+
+<h2>D–G: dashboards, data mapping and GST</h2>
+<dl class="gloss">
+  <dt>Dashboard</dt>
+  <dd>A single screen that shows your key numbers, such as sales, unpaid invoices and jobs, and updates itself as things change. Our guide to <a href="/guides/weekly-business-numbers-dashboard">your business numbers every week</a> explains what to put on one.</dd>
+  <dt>Data mapping</dt>
+  <dd>Working out which piece of information in one app matches which piece in another. For example, deciding that "Client name" in your booking system goes into "Contact" in your accounting software. Getting this right is a big part of any integration.</dd>
+  <dt>Field</dt>
+  <dd>One piece of information in a form or record, such as a name, phone number or invoice date. Automations move information field by field.</dd>
+  <dt>Google Business Profile</dt>
+  <dd>Google's free listing for your business, which can appear in Google Maps and local search results. It shows your hours, location, phone number, photos and reviews. It's one of the most useful things a local business can keep up to date. For example, a public holiday change to your hours belongs here first.</dd>
+  <dt>GST</dt>
+  <dd>Goods and Services Tax, New Zealand's 15% tax on most goods and services. Any automation that creates quotes or invoices needs to handle GST correctly. Your accountant can confirm how it applies to your business.</dd>
+</dl>
+
+<h2>H–N: hallucinations, integrations and no-code</h2>
+<dl class="gloss">
+  <dt>Hallucination</dt>
+  <dd>When an AI tool states something that sounds confident but is wrong or made up. It's the main reason a person should check AI-written content before it goes to a customer. For example, a drafted reply might quote opening hours you don't actually keep.</dd>
+  <dt>Hosting</dt>
+  <dd>Where a website, app or data actually lives: the servers that store it and keep it running. Hosting location matters for speed and for privacy. Data we store for clients is hosted in New Zealand or Australia.</dd>
+  <dt>Human in the loop</dt>
+  <dd>A design where a person reviews or approves key steps of an automated process, rather than letting it run entirely on its own. It's sensible wherever a mistake would be costly or embarrassing.</dd>
+  <dt>Integration</dt>
+  <dd>A connection between two pieces of software so they share information automatically. For example, an integration might turn each approved quote into a draft invoice in Xero. Our guide to <a href="/guides/connect-your-business-apps">connecting your business apps</a> covers how they work.</dd>
+  <dt>LLM</dt>
+  <dd>Short for large language model. It's the type of AI behind most modern chat and writing tools. It has learned patterns from a huge amount of text. That lets it understand questions and write replies, summaries and drafts.</dd>
+  <dt>Low-code</dt>
+  <dd>Tools that let you build apps or automations mostly by dragging and configuring, with a little code where needed. They sit between no-code tools and fully custom software.</dd>
+  <dt>Multi-factor authentication</dt>
+  <dd>The general name for logins that need more than one proof of identity. Two-factor authentication is the most common kind.</dd>
+  <dt>No-code</dt>
+  <dd>Tools that let people build automations, forms or simple apps without writing any code, usually by choosing steps from menus. They're great for simple jobs. Complex processes can outgrow them, though.</dd>
+  <dt>Notifiable privacy breach</dt>
+  <dd>A privacy breach that has caused, or is likely to cause, serious harm to someone. Under the Privacy Act 2020, you must tell the Privacy Commissioner and the people affected as soon as practicable.</dd>
+</dl>
+
+<h2>O–S: OCR, the Privacy Act and SEO</h2>
+<dl class="gloss">
+  <dt>OCR</dt>
+  <dd>Short for optical character recognition. It's software that reads text from a photo or scanned document and turns it into data a computer can use. Receipt and bill capture tools use it to pull details from documents. For example, snap a supplier invoice and the amount and date come out ready to use.</dd>
+  <dt>Permissions</dt>
+  <dd>Settings that control who can see or change what in a system. Good permissions mean each person sees only what their role needs. For example, your casual staff can see the roster, but not the bank account.</dd>
+  <dt>Personal information</dt>
+  <dd>Any information about an identifiable person, such as a name, phone number, address, health details or booking history. The Privacy Act 2020 sets the rules for collecting, storing and using it.</dd>
+  <dt>Portal</dt>
+  <dd>A private website or app where staff or customers log in to see and do things. For example, they might track a job, upload photos, approve a quote or download an invoice. It's your own app on every phone, without an app store.</dd>
+  <dt>Privacy Act 2020</dt>
+  <dd>New Zealand's main privacy law. It's built around 13 information privacy principles. They cover how personal information is collected, stored, used, shared and deleted. Our <a href="/guides/privacy-act-2020-and-automation">guide to the Privacy Act and automation</a> explains what to check.</dd>
+  <dt>Prompt</dt>
+  <dd>The instructions or question you give an AI tool. Clear prompts, with examples and limits, usually get more reliable results. For example, "Reply in two sentences, and never offer a discount" works better than "Write a reply".</dd>
+  <dt>Scheduled task</dt>
+  <dd>An automation that runs at a set time, rather than in response to an event. For example, a sales summary sent every Monday at 7am is a scheduled task.</dd>
+  <dt>SEO</dt>
+  <dd>Short for search engine optimisation. It's the work of helping search engines understand your website, so it shows up when people search for what you offer. For local businesses, it starts with clear pages and a complete Google Business Profile.</dd>
+  <dt>Single source of truth</dt>
+  <dd>One agreed place where a piece of information is kept and updated, with every other system reading from it. For example, if customer details live only in your CRM and flow out from there, you avoid three slightly different versions.</dd>
+  <dt>SSL and HTTPS</dt>
+  <dd>The security that encrypts information travelling between a website and a visitor's browser. A site using it has an address starting with https://, and browsers warn visitors when a site doesn't use it. Every website with a contact form should have it.</dd>
+  <dt>Sync</dt>
+  <dd>Short for synchronise. It means keeping the same information up to date in two or more places, so a change in one shows up in the others. For example, a customer's new phone number, updated once, appears everywhere it's used.</dd>
+</dl>
+<div class="callout callout--note"><p><strong>Privacy terms are worth knowing well.</strong> Personal information, permissions and notifiable breaches aren't just tech talk. They're where the Privacy Act 2020 meets your everyday systems, so it pays to understand them before you automate anything that holds customer details.</p></div>
+
+<h2>T–Z: triggers, webhooks and workflows</h2>
+<dl class="gloss">
+  <dt>Template</dt>
+  <dd>A reusable layout for a document or message, with gaps the automation fills in. For example, the customer's name and appointment time in a reminder text.</dd>
+  <dt>Training data</dt>
+  <dd>The information used to teach an AI model. Some AI providers use what customers send them to train future models, so check the settings and terms before sharing business data. Data we handle for clients is never used to train anyone's AI model. The AI tools we use on client data run on business plans that don't train on it.</dd>
+  <dt>Trigger</dt>
+  <dd>The event that starts an automation. A new booking, an email arriving, a form being submitted or a job being marked complete are all common triggers.</dd>
+  <dt>Two-factor authentication</dt>
+  <dd>A login that needs your password plus a second check, usually a code from your phone or an authenticator app. It makes it much harder for someone with a stolen password to get in. It's worth turning on for email, accounting and banking.</dd>
+  <dt>Webhook</dt>
+  <dd>A message one app sends to another the moment something happens, such as "a new order has just come in". It lets automations react straight away, rather than checking for changes every few minutes. For example, an online order can reach your packing list within moments.</dd>
+  <dt>Workflow</dt>
+  <dd>The series of steps a task goes through from start to finish, whether done by people, software or both. Writing the workflow down is usually the first step in automating it. For example: enquiry comes in, quote goes out, job is booked, invoice is sent.</dd>
+</dl>
+<h2 id="questions">Common questions</h2><div class="faq"><details><summary>What is the difference between automation and AI?</summary><p>Automation follows set rules: when this happens, do that. AI can handle less predictable work, such as reading an email and drafting a reply. Many useful systems combine the two, with plain automation doing most of the work and AI helping at one or two steps.</p></details><details><summary>Do I need to understand APIs to automate my business?</summary><p>No. It helps to know that an API is how two programs exchange information, because it explains why some tools connect easily and others don&#x27;t. The person building your automation should handle the technical detail and explain it in plain words.</p></details><details><summary>Is a chatbot the same as an AI agent?</summary><p>Not quite. A chatbot answers messages in a conversation. An AI agent can also take actions, such as checking a calendar and making a booking. Both should have clear limits and a way to hand over to a person.</p></details></div>
+  </article>
+  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
+</div>
+<div class="wrap"><section class="section"><div class="section-h"><h2>Keep reading</h2><a href="/guides">All guides →</a></div><div class="cards"><a class="card" href="/guides/how-to-choose-what-to-automate-first" data-cat="Getting started"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8"/></svg></span><span class="tag">Getting started</span><h3>How to choose what to automate first</h3><p>A simple way to find the task likely to give you the most hours back.</p><span class="go">Read the guide</span></a><a class="card" href="/guides/connect-your-business-apps" data-cat="Automation"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><path d="M10 6.5h5.5a2 2 0 0 1 2 2V14"/></svg></span><span class="tag">Automation</span><h3>Connect your business apps</h3><p>Stop retyping the same job into three systems. How app connections work and where to start.</p><span class="go">Read the guide</span></a><a class="card" href="/guides/privacy-act-2020-and-automation" data-cat="Compliance"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg></span><span class="tag">Compliance</span><h3>The Privacy Act 2020 and automation</h3><p>What New Zealand businesses should check before automating anything that touches personal information.</p><span class="go">Read the guide</span></a></div></section><section class="cta"><div><h2>See what you could hand over</h2><p>Book a free session. We look at how your work really happens and leave you with a written plan and an hours estimate, yours to keep.</p></div>
+  <div class="btns"><a class="btn btn--go" href="/#book">Book a free session</a><a class="btn btn--ghost" href="tel:+64220999578">Call +64 22 099 9578</a></div></section></div>
+</main>
+<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
+<footer class="ftr f2"><div class="wrap">
+  <div class="f2-grid">
+    <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
+      <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p></div>
+    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a></nav>
+    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p><a href="/services">Services</a><a href="/industries">Industries</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <div class="f2-col" id="contact"><p class="f2-h">Contact us</p><a href="/#book">Book a call</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
+  </div>
+  <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
+</div></footer>
+<script src="/assets/pages.js?v=b2152225" defer></script>
+</body>
+</html>

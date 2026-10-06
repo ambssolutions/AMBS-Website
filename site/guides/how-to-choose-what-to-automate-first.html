@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the same page, with no leftover #section */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo({top:0,behavior:"instant"});addEventListener("load",function(){window.scrollTo({top:0,behavior:"instant"});});
+}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to choose what to automate first: a guide for NZ businesses | Ambs Solutions</title>
+<meta name="description" content="A simple, practical way for New Zealand small businesses to find the task worth automating first: list it, time it, score it, and start with one.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://ambs.co.nz/guides/how-to-choose-what-to-automate-first">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ambs Solutions">
+<meta property="og:url" content="https://ambs.co.nz/guides/how-to-choose-what-to-automate-first">
+<meta property="og:title" content="How to choose what to automate first: a guide for NZ businesses | Ambs Solutions">
+<meta property="og:description" content="A simple, practical way for New Zealand small businesses to find the task worth automating first: list it, time it, score it, and start with one.">
+<meta property="og:image" content="https://ambs.co.nz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_NZ">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F7FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1428" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<script>(function(){var t=null;try{t=sessionStorage.getItem("ambs:theme")}catch(e){}if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}document.documentElement.dataset.theme=t})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/pages.css?v=6d11a5d4">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "How to choose what to automate first", "item": "https://ambs.co.nz/guides/how-to-choose-what-to-automate-first"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png"}, {"@type": "Article", "headline": "How to choose what to automate first", "description": "A simple, practical way for New Zealand small businesses to find the task worth automating first: list it, time it, score it, and start with one.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 1408, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/how-to-choose-what-to-automate-first", "image": "https://ambs.co.nz/logo.png", "articleSection": "Getting started"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How many hours a week makes a task worth automating?", "acceptedAnswer": {"@type": "Answer", "text": "As a rule of thumb, anything that takes three hours or more a week, every week, is worth a look. Smaller tasks can still be worth it if they are error-prone or hold up other work, like an invoice that does not go out until someone has time."}}, {"@type": "Question", "name": "Should I automate the task I hate most?", "acceptedAnswer": {"@type": "Answer", "text": "Only if it also scores well on time and repetition. The job you dislike most is often a one-off or needs judgement, and those are poor first candidates. Start with the boring, predictable work."}}, {"@type": "Question", "name": "Do I need new software to automate?", "acceptedAnswer": {"@type": "Answer", "text": "Usually not. Most first automations connect tools you already pay for: Xero for accounting, and Microsoft 365 or Google Workspace for email, calendar and spreadsheets."}}, {"@type": "Question", "name": "What if the task changes a lot from week to week?", "acceptedAnswer": {"@type": "Answer", "text": "Then automate the predictable part and leave the decision with a person. For example, a quote can be drafted automatically from site notes and then checked by you before it is sent."}}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="hdr"><div class="sh-bar">
+  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
+  <div class="sh-right">
+    <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
+    <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language"><option value="en" selected>English</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="mi">Te Reo Māori</option><option value="pa">ਪੰਜਾਬੀ</option></select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    <nav class="sh-nav" aria-label="Main"><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides" aria-current="page">Guides</a><a href="/#faq">Questions</a></nav>
+    <a class="sh-btn sh-book" href="/#book">Book a call</a>
+    <a class="sh-btn sh-contact" href="#contact">Contact us</a>
+    <a class="sh-ico sh-sm sh-call" href="tel:+64220999578" aria-label="Call us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+    <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
+  </div>
+  <nav class="sh-drawer" id="siteNav" aria-label="Menu">
+    <a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a><a href="/services">Services</a><a href="/guides" aria-current="page">Guides</a><a href="/industries">Industries</a><a href="/#faq">Questions</a>
+    <a class="sh-btn sh-contact sh-wide" href="#contact">Contact us</a>
+    <div class="sh-pair" role="group" aria-label="Light or dark mode"><button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button><button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button></div>
+  </nav>
+</div></header>
+<main id="main">
+<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/guides">Guides</a></li><li aria-current="page">How to choose what to automate first</li></ol></nav></div>
+<section class="phero"><div class="wrap">
+  <p class="eyebrow">Getting started</p>
+  <h1>How to choose what to automate first</h1>
+  <p class="plead">You&#x27;ve got a dozen jobs that could be automated. The trick is choosing what to automate first: the one task that gives you the most time back with the least disruption, so you can see it working before you pick the next.</p>
+  <div class="pmeta"><span>Getting started</span><span>6 min read</span><span>Updated 4 October 2026</span></div>
+  <div class="g-art" aria-hidden="true"><div class="mk mkc"><div class="mkc-list"><div class="mk-card mkc-row" style="--r:0"><span class="mkc-ico" style="--c:#F58220"></span><i class="mk-bar" style="width:58%"></i><b>1.5 h/wk</b></div><div class="mk-card mkc-row mkc-pick" style="--r:1"><span class="mkc-ico" style="--c:#1877E0"></span><i class="mk-bar" style="width:70%"></i><b>4 h/wk</b><em>Start here</em></div><div class="mk-card mkc-row" style="--r:2"><span class="mkc-ico" style="--c:#3FAE29"></span><i class="mk-bar" style="width:48%"></i><b>2 h/wk</b></div><div class="mk-card mkc-row" style="--r:3"><span class="mkc-ico" style="--c:#7B2FBE"></span><i class="mk-bar" style="width:40%"></i><b>0.5 h/wk</b></div></div></div></div>
+</div></section>
+<div class="wrap layout">
+  <article class="prose">
+<div class="takeaways"><b>In short</b><ul><li>Start with work that&#x27;s repetitive, rule-based and happens every week, not the job you dislike most.</li><li>Time it for one normal week before deciding. Guesses are often off, in both directions.</li><li>Score each task on hours, frequency, risk and how many tools it touches, then start with the highest scorer.</li><li>Automate one task, check it on real work before it goes live, then decide what comes next.</li></ul></div>
+<h2>Why the first automation you choose matters most</h2>
+<p>Picture a café owner on a Sunday night. The roster's half done, there's a supplier order to get in before Monday, and the phone keeps buzzing with shift swap messages.</p>
+<div class="msgs" aria-label="Example shift swap messages">
+  <p class="msg msg--in">hey can anyone cover my tues morning? got a dentist thing</p>
+  <p class="msg msg--in">I can do tues if someone takes my sat close</p>
+  <p class="msg msg--out">Thanks both. Let me check the roster and get back to you.</p>
+</div>
+<p>Every one of those jobs could be automated. So which one goes first?</p>
+<p>It matters more than you'd think. Your first automation sets the tone for everything that follows. If it saves real time and runs quietly in the background, your team will trust the next one.</p>
+<p>If it's ambitious, half-finished or changes how everyone works overnight, it becomes the project nobody wants to talk about.</p>
+<p>That's why we start with one task. Not a platform, not a transformation programme, just one piece of repetitive work that goes away. You see it running on your real jobs and real customers, and only then decide what to do next.</p>
+
+<h2>Step 1: List the repetitive work</h2>
+<p>Spend fifteen minutes writing down every task that happens again and again. Don't filter yet. Just get it all on paper.</p>
+<p>Ask the people who actually do the work. Owners often underestimate how much admin lands on someone else's desk, and the person doing it usually knows exactly where the time goes.</p>
+<p>Good prompts to get the list going:</p>
+<ul>
+  <li>What do you type into more than one system?</li>
+  <li>What do you copy and paste from emails, texts or forms?</li>
+  <li>What do you chase every week: documents, payments, confirmations, timesheets?</li>
+  <li>Which questions do customers ask over and over?</li>
+  <li>What report or summary do you put together by hand?</li>
+</ul>
+<p>The answers tend to look familiar. Rosters and shift swap messages in cafés. Quotes written up from site notes in trades. Booking reminders in clinics. Stock counts and reorders in shops. Chasing client documents for advisers. Filing proof of delivery for transport companies.</p>
+<p>If your list has more than a dozen items, that's normal. You're only picking one.</p>
+
+<h2>Step 2: Time each task for one normal week</h2>
+<p>Before you decide anything, measure. Gut feel is a poor guide here: the job that feels endless might take an hour, and the one you barely notice might quietly eat a whole afternoon.</p>
+<p>Pick a normal week, not the week before Christmas, and keep a rough tally of how long each task takes. A note on your phone is enough. Nobody needs a stopwatch.</p>
+<div class="callout callout--tip"><p><strong>Count the interruptions too.</strong> A task that only takes a few minutes but happens many times a day costs more than the minutes suggest, because every interruption pulls someone away from paid work.</p></div>
+<p>Our typical estimates for the top three tasks in the industries we work with range from about six and a half to nine hours a week. Those are estimates, not results, and your own tally is what counts.</p>
+
+<h2>Step 3: Score each task to find what to automate first</h2>
+<p>Now you've got a list and some real hours. Score each task from 1 to 5 on four things, add the scores up and sort the list.</p>
+<table>
+  <thead><tr><th>Question</th><th>Scores high when</th><th>Scores low when</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Hours</strong>: how much time does it take?</td><td>Three hours or more a week</td><td>A few minutes a month</td></tr>
+    <tr><td><strong>Repetition</strong>: does it follow the same steps?</td><td>Same steps, every time</td><td>Different every time, needs judgement</td></tr>
+    <tr><td><strong>Risk</strong>: what happens if it goes wrong?</td><td>Easy to check, easy to undo</td><td>Money or legal consequences with no check</td></tr>
+    <tr><td><strong>Tools</strong>: how many systems does it touch?</td><td>One or two tools you already use</td><td>Paper, unknown systems or no access</td></tr>
+  </tbody>
+</table>
+<p>The highest score is your first candidate. It won't always be the job you expected.</p>
+<p>If two tasks tie, pick the one your team will notice most. A visible win builds momentum, and that makes the second automation much easier to get going.</p>
+<div class="callout callout--note"><p><strong>The job you hate isn't always the one.</strong> The task you dislike most is often a one-off or needs judgement. If it doesn't score well on hours and repetition, park it and start with the boring, predictable work.</p></div>
+
+<h2>Step 4: Watch for these warning signs</h2>
+<p>Some tasks look like good candidates on paper but are better left for later. Check your top scorer against these before you commit:</p>
+<ul>
+  <li><strong>The process isn't settled.</strong> If everyone does it differently, agree on one way of working first. Automating a messy process just makes the mess faster.</li>
+  <li><strong>It depends on a decision.</strong> Automate the preparation, such as gathering information or drafting a message, and keep the decision with a person.</li>
+  <li><strong>It involves sensitive personal information.</strong> It can still be automated, but check how the data is stored, who can see it and where it goes. Our <a href="/guides/privacy-act-2020-and-automation">Privacy Act guide</a> covers what to check.</li>
+  <li><strong>Nobody owns it.</strong> Every automation needs one person who notices if it stops working.</li>
+</ul>
+<p>A warning sign doesn't rule a task out forever. It just means there's a bit of groundwork to do first, and your second-highest scorer might be the better place to start.</p>
+
+<h2>Step 5: Start with one task, then measure the hours saved</h2>
+<p>Once you've chosen your first task, the temptation is to bolt on "just one more thing". Resist it. Keep the scope tight:</p>
+<ol class="steps-list">
+  <li><strong>Write down what "done" looks like.</strong> For example: "every approved job creates a draft invoice in Xero within a few minutes, with the right customer and line items."</li>
+  <li><strong>Build it around the tools you already have.</strong> New software should be the exception, not the starting point.</li>
+  <li><strong>Run it alongside the old way.</strong> Check its work on real jobs for long enough to trust it before you switch the manual process off.</li>
+  <li><strong>Measure the time saved.</strong> Compare against the week you timed in step 2. That number tells you whether to do the next one.</li>
+</ol>
+<p>That last step is why the timing in step 2 matters so much. Without a starting figure, you're left guessing whether it worked.</p>
+
+<h2>What a good first automation looks like</h2>
+<p>Good first automations share a few traits. They take a task that's repetitive, rule-based and frequent. They connect one or two tools you already use. And their output is easy to check.</p>
+<p>Here are some common examples:</p>
+<div class="task-grid">
+  <div class="task"><b>Booking reminders</b><span>Clinics and salons</span><p>Confirmations and reminders sent automatically, with a simple way to rebook.</p></div>
+  <div class="task"><b>Invoices from approved jobs</b><span>Trades and building</span><p>An approved quote becomes a draft invoice in your accounting software.</p></div>
+  <div class="task"><b>Document chasing</b><span>Advisers and accountants</span><p>Polite reminders until every document is in, with a checklist that updates itself.</p></div>
+  <div class="task"><b>Daily sales summary</b><span>Shops and dairies</span><p>Yesterday's numbers on your phone each morning, without opening three systems.</p></div>
+</div>
+<p>Notice what they have in common. Each one replaces the same small steps done over and over, and if something looks off, a person can spot it straight away.</p>
+
+<h2>Not sure which task to automate first?</h2>
+<p>Back to that café owner on a Sunday night. With a list, a week of timings and a simple score, the choice stops being a guess. One job goes first, and the rest wait their turn.</p>
+<p>If you're still not sure which of your tasks fits, that's exactly what our free session is for. We sit with whoever does the work, time it with you, and leave you with a written plan and an hours estimate that's yours to keep.</p>
+<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
+<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+<div class="g-calc-in">
+<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+</div>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
+<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session &#8594;</a></p>
+</section><h2 id="questions">Common questions</h2><div class="faq"><details><summary>How many hours a week makes a task worth automating?</summary><p>As a rule of thumb, anything that takes three hours or more a week, every week, is worth a look. Smaller tasks can still be worth it if they are error-prone or hold up other work, like an invoice that does not go out until someone has time.</p></details><details><summary>Should I automate the task I hate most?</summary><p>Only if it also scores well on time and repetition. The job you dislike most is often a one-off or needs judgement, and those are poor first candidates. Start with the boring, predictable work.</p></details><details><summary>Do I need new software to automate?</summary><p>Usually not. Most first automations connect tools you already pay for: Xero for accounting, and Microsoft 365 or Google Workspace for email, calendar and spreadsheets.</p></details><details><summary>What if the task changes a lot from week to week?</summary><p>Then automate the predictable part and leave the decision with a person. For example, a quote can be drafted automatically from site notes and then checked by you before it is sent.</p></details></div>
+  </article>
+  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
+</div>
+<div class="wrap"><section class="section"><div class="section-h"><h2>Keep reading</h2><a href="/guides">All guides →</a></div><div class="cards"><a class="card" href="/guides/automate-quotes-and-invoices" data-cat="Automation"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></svg></span><span class="tag">Automation</span><h3>Automate quotes and invoices</h3><p>From site notes to a priced quote, and from an approved job to an invoice in your accounts.</p><span class="go">Read the guide</span></a><a class="card" href="/guides/connect-your-business-apps" data-cat="Automation"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><path d="M10 6.5h5.5a2 2 0 0 1 2 2V14"/></svg></span><span class="tag">Automation</span><h3>Connect your business apps</h3><p>Stop retyping the same job into three systems. How app connections work and where to start.</p><span class="go">Read the guide</span></a><a class="card" href="/guides/automation-glossary" data-cat="Getting started"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></span><span class="tag">Getting started</span><h3>Automation glossary</h3><p>Plain-English meanings of the automation and AI terms you will hear.</p><span class="go">Read the guide</span></a></div></section><section class="cta"><div><h2>See what you could hand over</h2><p>Book a free session. We look at how your work really happens and leave you with a written plan and an hours estimate, yours to keep.</p></div>
+  <div class="btns"><a class="btn btn--go" href="/#book">Book a free session</a><a class="btn btn--ghost" href="tel:+64220999578">Call +64 22 099 9578</a></div></section></div>
+</main>
+<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
+<footer class="ftr f2"><div class="wrap">
+  <div class="f2-grid">
+    <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
+      <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p></div>
+    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a></nav>
+    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p><a href="/services">Services</a><a href="/industries">Industries</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <div class="f2-col" id="contact"><p class="f2-h">Contact us</p><a href="/#book">Book a call</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
+  </div>
+  <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
+</div></footer>
+<script src="/assets/pages.js?v=b2152225" defer></script>
+</body>
+</html>
