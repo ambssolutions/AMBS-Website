@@ -8,70 +8,23 @@
 <style>
 :root{color-scheme:dark}
 body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#0E1326;color:#EDEFF8}
-main{max-width:680px;margin:0 auto;padding:28px 16px 60px;text-align:center}
+main{max-width:760px;margin:0 auto;padding:28px 16px 60px;text-align:center}
 h1{font-size:1.4rem;margin:0 0 .4rem}
-h2{font-size:1.05rem;margin:1.8rem 0 .4rem}
 p{margin:.3rem 0 1rem;color:#B9C0D6;font-size:.92rem}
 .frame{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px -16px rgba(0,0,0,.6)}
-.frame iframe{display:block;width:100%;height:520px;border:0}
-form{display:grid;gap:.8rem;text-align:left;background:#1B2240;border:1px solid rgba(233,237,249,.12);border-radius:18px;padding:1.2rem}
-.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.8rem}
-label{display:grid;gap:.3rem;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#B9C0D6}
-input,textarea{box-sizing:border-box;width:100%;min-width:0;font:inherit;font-size:16px;padding:.7rem .8rem;border-radius:12px;border:1px solid #C9CEDF;background:#fff;color:#14172B}
-textarea{min-height:90px;resize:vertical}
-button{justify-self:center;font:700 1rem/1 inherit;padding:.95rem 1.8rem;border:0;border-radius:999px;background:linear-gradient(180deg,#E3F6C8,#B7E39A);color:#1E4A12;cursor:pointer}
-button[disabled]{opacity:.6}
-#msg{min-height:1.5em;text-align:center;font-weight:600}
-.ok{color:#8FE24A}.err{color:#FF8A80}
+.frame iframe{display:block;width:100%;height:760px;border:0}
+.btn{display:inline-block;margin-top:1.2rem;font-weight:700;padding:.9rem 1.6rem;border-radius:999px;background:linear-gradient(180deg,#E3F6C8,#B7E39A);color:#1E4A12;text-decoration:none}
 small{display:block;margin-top:1.4rem;color:#8A93B0}
 a{color:#8CC4FF}
 </style>
 </head>
 <body>
 <main>
-  <h1>Booking test</h1>
+  <h1>Book your free session</h1>
   <p>Test page only. Not linked from the website and hidden from Google.</p>
-
-  <h2>1. When we are free</h2>
-  <p>Shaded times are busy.</p>
-  <div class="frame"><iframe src="https://calendar.zoho.com.au/zc/ui/embed/#calendar=08011249b46eb2d52bbafee6ec193a8b0000338bf078f4387debcd70471835f05eadeb7855f201fee9da686e71dc45546ef775622cc15a531dc58146283679809e591a5011378bd281b60bd33f&amp;title=hello&amp;type=1&amp;language=en&amp;timezone=Pacific%2FAuckland&amp;showTitle=1&amp;showTimezone=1&amp;startingDayOfWeek=0&amp;timeFormat=0&amp;view=month&amp;showDetail=0&amp;theme=1&amp;showAttendee=0&amp;showSwitchingViews=0&amp;expandAllday=0&amp;eventColorType=light&amp;showAllEvents=0&amp;showLogo=1" title="AMBS availability" frameborder="0" scrolling="no"></iframe></div>
-
-  <h2>2. Request your free session</h2>
-  <p>Pick a free day and time. We will confirm by email.</p>
-  <form id="zform" novalidate>
-    <label>Your name<input id="zn" autocomplete="name" required></label>
-    <label>Email<input id="ze" type="email" autocomplete="email" required></label>
-    <div class="row">
-      <label>Date<input id="zd" type="date" required></label>
-      <label>Time<input id="zt" type="time" step="900" value="10:00" required></label>
-    </div>
-    <label>What would you like to talk about?<textarea id="zr"></textarea></label>
-    <button type="submit" id="zb">Request this time</button>
-    <div id="msg" aria-live="polite"></div>
-  </form>
-
+  <div class="frame"><iframe src="https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039045" title="Book a free session with AMBS" frameborder="0" allowfullscreen></iframe></div>
+  <a class="btn" href="https://hello-ambs.zohobookings.com.au/35319000000039045" target="_blank" rel="noopener">Open booking page in a new tab</a>
   <small><a href="/">Back to ambs.co.nz</a></small>
 </main>
-<script>
-(function(){
-  var API="https://calendar.zoho.com.au/eventreq/08011249b46eb2d52bbafee6ec193a8b0000338bf078f4387debcd70471835f05eadeb7855f201fee9da686e71dc45546ef775622cc15a531dc58146283679809e591a5011378bd281b60bd33f";
-  var $=function(id){return document.getElementById(id)},msg=$("msg");
-  function setDay(){var t=new Date();t.setDate(t.getDate()+1);$("zd").min=new Date().toISOString().slice(0,10);$("zd").value=t.toISOString().slice(0,10);$("zt").value="10:00";}setDay();
-  $("zform").addEventListener("submit",function(e){
-    e.preventDefault();
-    var n=$("zn").value.trim(),m=$("ze").value.trim(),d=$("zd").value,tm=$("zt").value,r=$("zr").value.trim();
-    if(!n||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)||!d||!tm){msg.className="err";msg.textContent="Please fill in your name, a valid email, a date and a time.";return;}
-    var p=d.split("-"),date=p[1]+"/"+p[2]+"/"+p[0];
-    var url=API+"?name="+encodeURIComponent(n)+"&mailId="+encodeURIComponent(m)+"&date="+encodeURIComponent(date)+"&time="+encodeURIComponent(tm)+"&reason="+encodeURIComponent(r||"Free session");
-    $("zb").disabled=true;msg.className="";msg.textContent="Sending…";
-    fetch(url,{mode:"no-cors",credentials:"omit"}).then(function(){
-      msg.className="ok";msg.textContent="Thanks "+n.split(" ")[0]+"! Your request for "+p[2]+"/"+p[1]+"/"+p[0]+" at "+tm+" has been sent. We will confirm by email.";
-      $("zform").reset();setDay();$("zb").disabled=false;
-    }).catch(function(){
-      msg.className="err";msg.textContent="Sorry, that did not send. Please call +64 22 099 9578.";$("zb").disabled=false;
-    });
-  });
-})();
-</script>
 </body>
 </html>
