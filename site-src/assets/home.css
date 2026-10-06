@@ -2253,7 +2253,7 @@ footer.f2 .f2-grid>.f2-brand{order:0}footer.f2 .f2-grid>.f2-col:last-child{order
 html:not([data-theme=dark]) .hero .hero-copy::before{background:linear-gradient(180deg,rgba(255,255,255,.82) 0,rgba(238,242,250,.66) 100%)!important;border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 34px 74px -30px rgba(20,23,43,.55),0 2px 6px -2px rgba(20,23,43,.12)}
 html[data-theme=dark] .hero .hero-copy::before{background:linear-gradient(180deg,rgba(32,41,80,.86) 0,rgba(22,29,59,.78) 100%)!important;border:1px solid rgba(233,237,249,.12);box-shadow:inset 0 1px 0 rgba(233,237,249,.08),0 34px 74px -30px rgba(0,0,0,.9)}
 html.how-pin #how{height:var(--how-h,320vh)}
-html.how-pin #how .how-pin{position:sticky;top:var(--how-top,72px);height:calc(100vh - var(--how-top,72px));height:calc(100svh - var(--how-top,72px));display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(1.2rem,5vh,3rem);box-sizing:border-box;overflow:hidden}
+html.how-pin #how .how-pin{position:sticky;top:var(--how-top,72px);height:calc(100vh - var(--how-top,72px));height:calc(100svh - var(--how-top,72px));display:flex;flex-direction:column;justify-content:center;padding:1rem 0 1.4rem;box-sizing:border-box;overflow:hidden}
 html.how-pin #how .sec-head{margin-bottom:0}
 html.how-pin #how .steps{position:relative;display:block!important;width:100%!important;max-width:1100px;margin-left:auto!important;margin-right:auto!important;height:var(--stack-h,360px);margin-top:clamp(1rem,3vh,2rem)!important;padding-bottom:0!important}
 html.how-pin #how .step{position:absolute!important;left:0;right:0;top:0;min-height:0;will-change:transform;transform-origin:50% 0}
@@ -2262,3 +2262,21 @@ html.how-pin body #how .step{opacity:1!important;transition:none!important}
 @media (min-width:1024px){html body #how .steps{grid-template-columns:repeat(3,1fr)!important;gap:1.4rem!important;padding-bottom:0!important}
 html body #how .step{position:relative!important;top:auto!important;grid-template-columns:1fr!important;align-content:start!important;min-height:0!important;transform:none!important}
 html body #how .step:hover{transform:translateY(-4px)!important}}
+html.how-pin body #how .step{min-height:0!important;padding:1.35rem 1.5rem 1.5rem!important;gap:.5rem!important;align-content:start!important}
+html.how-pin body #how .step-n{font-size:clamp(2.6rem,11vw,3.4rem)!important}
+html.how-pin body #how .step h3{margin:0 0 .35rem!important}
+html body #how .step{justify-items:center!important;text-align:center!important}
+html body #how .step-n{margin:0!important;line-height:.9!important}
+html body #how .step p{margin-left:auto;margin-right:auto}
+@media (min-width:1024px){html body #how .step{gap:.7rem!important;padding:2rem 1.8rem 2.2rem!important}html body #how .step-n{font-size:clamp(3.4rem,5vw,4.6rem)!important}}
+html:not([data-theme=dark]) body #how .step{border:1px solid rgba(20,23,43,.13)!important;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 22px 44px -22px rgba(20,23,43,.5),0 2px 6px -2px rgba(20,23,43,.12)!important}
+html:not([data-theme=dark]) body #how .step:nth-child(1){background:linear-gradient(180deg,#ffffff 0,#f1f5fc 100%)!important}
+html:not([data-theme=dark]) body #how .step:nth-child(2){background:linear-gradient(180deg,#eef4fd 0,#e1eafa 100%)!important}
+html:not([data-theme=dark]) body #how .step:nth-child(3){background:linear-gradient(180deg,#e2ecfc 0,#d2e1f8 100%)!important}
+html:not([data-theme=dark]) body #how .step h3{color:#14172b!important}
+html:not([data-theme=dark]) body #how .step p{color:#3f4766!important}
+.langselect,html:not([data-theme=dark]) .langselect{border:1.6px solid #89dc8c!important}
+.langselect:hover,html:not([data-theme=dark]) .langselect:hover{border-color:#5fc663!important}
+html.how-pin body #how{padding-bottom:0!important}
+html.how-pin body #how .step{grid-template-columns:1fr!important}
+html body #how .step-n{padding:0 .1em 0 .04em!important;overflow:visible!important}
