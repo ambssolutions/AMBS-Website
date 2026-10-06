@@ -8,23 +8,39 @@
 <style>
 :root{color-scheme:dark}
 body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#0E1326;color:#EDEFF8}
-main{max-width:760px;margin:0 auto;padding:28px 16px 60px;text-align:center}
+main{max-width:760px;margin:0 auto;padding:28px 16px 90px;text-align:center}
 h1{font-size:1.4rem;margin:0 0 .4rem}
+h2{font-size:1.05rem;margin:1.8rem 0 .4rem}
 p{margin:.3rem 0 1rem;color:#B9C0D6;font-size:.92rem}
 .frame{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px -16px rgba(0,0,0,.6)}
-.frame iframe{display:block;width:100%;height:760px;border:0}
-.btn{display:inline-block;margin-top:1.2rem;font-weight:700;padding:.9rem 1.6rem;border-radius:999px;background:linear-gradient(180deg,#E3F6C8,#B7E39A);color:#1E4A12;text-decoration:none}
+.frame iframe{display:block;width:100%;height:780px;border:0}
 small{display:block;margin-top:1.4rem;color:#8A93B0}
 a{color:#8CC4FF}
 </style>
 </head>
 <body>
 <main>
-  <h1>Book your free session</h1>
+  <h1>Booking test</h1>
   <p>Test page only. Not linked from the website and hidden from Google.</p>
-  <div class="frame"><iframe src="https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039045" title="Book a free session with AMBS" frameborder="0" allowfullscreen></iframe></div>
-  <a class="btn" href="https://hello-ambs.zohobookings.com.au/35319000000039045" target="_blank" rel="noopener">Open booking page in a new tab</a>
+
+  <h2>1. Built into the page</h2>
+  <p>Pick a free time below. Busy times are not offered.</p>
+  <div class="frame"><iframe src="https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039009?serviceId=35319000000039045" title="Book a free session with AMBS" frameborder="0" allowfullscreen></iframe></div>
+
+  <h2>2. Zoho's pop-up button</h2>
+  <p>Tap the purple "Book now" button at the bottom right of the screen.</p>
+
   <small><a href="/">Back to ambs.co.nz</a></small>
 </main>
+<script src="https://bookings.nimbuspop.com/assets/embed.js"></script>
+<script>
+  Bookings.buttonModal({
+    url: "https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039009?serviceId=35319000000039045",
+    text: "Book now",
+    color: "#5646A5",
+    textColor: "#ffffff",
+    position: "bottom-right"
+  });
+</script>
 </body>
 </html>
