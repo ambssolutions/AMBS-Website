@@ -82,7 +82,7 @@ en:{
  "form.eyebrow":"Free session","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
  "form.name":"Your name","form.biz":"Business name","form.email":"Email","form.phone":"Phone",
  "form.msg":"What eats your time?","form.send":"Send request",
- "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.","form.pick":"Pick a time that suits you","form.loading":"Loading available times","form.or":"Or fill in the form below and we will get back to you.",
+ "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.","form.pick":"Pick a time that suits you","form.tabCal":"Pick a time","form.tabForm":"Send a request","form.loading":"Loading available times","form.or":"Or fill in the form below and we will get back to you.",
  "foot.tag":"Built in Auckland. Working nationwide.",
  "foot.fine":"Translations are provided to help and may contain errors. If there is any difference, the English version applies."
 }
@@ -1731,4 +1731,22 @@ try{(function(){
   fr.addEventListener("load",function(){setTimeout(done,3500);});
   if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting;})){io.disconnect();setTimeout(done,15000);}},{rootMargin:"600px 0px"});io.observe(box);}
   else setTimeout(done,15000);
+})();}catch(e){}
+
+/* Book your free session: nothing is open until the visitor picks the calendar or the request form,
+   and only one of the two is open at a time */
+try{(function(){
+  var btns=[].slice.call(document.querySelectorAll(".bk-switch [data-bk]"));if(!btns.length)return;
+  var panes={cal:document.getElementById("bkCal"),form:document.getElementById("bkForm")};
+  function pick(which){
+    btns.forEach(function(b){b.setAttribute("aria-expanded",b.getAttribute("data-bk")===which?"true":"false");});
+    Object.keys(panes).forEach(function(k){if(panes[k])panes[k].classList.toggle("bk-off",k!==which);});
+  }
+  btns.forEach(function(b){b.addEventListener("click",function(){pick(b.getAttribute("data-bk"));});});
+  /* "Contact us" buttons open the request form; every "Book" button opens the calendar */
+  document.querySelectorAll('a[href="#book"],a[href="/#book"]').forEach(function(a){
+    a.addEventListener("click",function(){pick(a.classList.contains("nav-contact")?"form":"cal");},true);
+  });
+  /* arriving from another page: the head script turns /#book-time and /#book-request into #book and says which to open */
+  if(window.__ambsOpen)pick(window.__ambsOpen);
 })();}catch(e){}

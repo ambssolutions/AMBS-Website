@@ -2240,3 +2240,13 @@ footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!i
 .zbook-frame.zready .zload{opacity:0;visibility:hidden}
 @media (prefers-reduced-motion:reduce){.zload i::after{animation:none;width:100%}}
 footer.f2 .f2-grid>.f2-brand{order:0}footer.f2 .f2-grid>.f2-col:last-child{order:1}footer.f2 .f2-grid>.f2-col:nth-child(2){order:2}footer.f2 .f2-grid>.f2-col:nth-child(3){order:3}
+.bk-switch{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:520px;margin:1.6rem auto 0}
+.bk-switch button{flex:1 1 200px;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;min-height:52px;padding:.7rem 1.2rem;border-radius:999px;border:1px solid rgba(20,23,43,.14);background:#fff;color:#14172b;font:inherit;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 8px 18px -12px rgba(20,23,43,.5);transition:background .25s ease,color .25s ease,box-shadow .25s ease,transform .2s ease}
+.bk-switch button svg{width:20px;height:20px;flex:none}
+.bk-switch button:hover{transform:translateY(-1px);box-shadow:0 12px 22px -12px rgba(20,23,43,.55)}
+.contact .bk-switch button{color:#14172b}
+.bk-switch button[aria-expanded=true],.contact .bk-switch button[aria-expanded=true]{background:linear-gradient(180deg,#d3efb9,#a9d98c);color:#274f16;border-color:rgba(39,79,22,.25)}
+.bk-switch button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.bk-off{display:none!important}
+.zbook{margin-top:1.2rem}
+#bkForm{margin-top:1.4rem}
