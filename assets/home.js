@@ -1176,7 +1176,7 @@ try{
   function measure(){sticks=cards.map(function(c){return parseFloat(getComputedStyle(c).top)||0;});heights=cards.map(function(c){return c.offsetHeight||1;});}
   function update(){
     ticking=false;
-    if(document.documentElement.classList.contains("how-pin"))return;
+    return;
     var tops=cards.map(function(c){return c.getBoundingClientRect().top;});
     var cover=tops.map(function(t,k){if(!k)return 0;return Math.max(0,Math.min(1,1-(t-sticks[k])/heights[k-1]));});
     cards.forEach(function(c,i){
@@ -1364,13 +1364,16 @@ try{
     f.t=setTimeout(function(){if(flipping===f){flipping=null;f.done();}},FLIP_MS+30);
     flipping=f;
   }
-  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);flip(k,isOpen[k]);if(isOpen[k]){show(k);copyIn(k,260);}}
+  /* tapping a heading folds the card open or shut with a plain CSS fold (no page-wide shuffling) */
+  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);setOpen();if(isOpen[k]){panels[k].classList.add("seen");show(k);copyIn(k,200);}}
   if("IntersectionObserver" in window){
+    /* phones and tablets: each service unfolds slowly by itself as its heading comes up into view
+       (a native CSS fold, no scripted page shuffling); one you close by hand stays closed */
     var opener=new IntersectionObserver(function(es){es.forEach(function(e){
-      if(mode!=="list"||!e.isIntersecting||e.boundingClientRect.top<innerHeight*.3)return;
+      if(mode!=="list"||!e.isIntersecting)return;
       var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
-      isOpen[k]=true;settle(k);flip(k,true);show(k);copyIn(k,260);
-    });},{rootMargin:"0px 0px -22% 0px"});
+      isOpen[k]=true;settle(k);setOpen();panels[k].classList.add("seen");show(k);copyIn(k,300);
+    });},{rootMargin:"0px 0px -18% 0px"});
     accs.forEach(function(a){opener.observe(a);});
     var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
     panels.forEach(function(p){seen.observe(p);});
@@ -1635,7 +1638,7 @@ try{
     busy=true;front.classList.add("kh-leave");
     setTimeout(function(){front.classList.add("kh-snap");front.classList.remove("kh-leave");order.push(order.shift());paint();
       front.getBoundingClientRect();front.classList.remove("kh-snap");busy=false;},480);}
-  function loop(){clearTimeout(timer);if(paused||!inView||document.hidden||reduce)return;timer=setTimeout(function(){next();loop();},3600);}
+  function loop(first){clearTimeout(timer);if(paused||!inView||document.hidden||reduce)return;timer=setTimeout(function(){next();loop();},first?900:3600);}
   cards.forEach(function(el,c){el.addEventListener("click",function(e){if(order[0]!==c){e.preventDefault();bringToFront(c);}});});
   deck.querySelector(".kh-next").addEventListener("click",function(){next();loop();});
   deck.addEventListener("mouseenter",function(){paused=true;loop();});
@@ -1647,7 +1650,7 @@ try{
   /* swipe on phones */
   var sx=null;deck.addEventListener("touchstart",function(e){sx=e.touches[0].clientX;},{passive:true});
   deck.addEventListener("touchend",function(e){if(sx==null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>40){next();loop();}},{passive:true});
-  if("IntersectionObserver" in window)new IntersectionObserver(function(es){inView=es[0].isIntersecting;loop();},{threshold:.4}).observe(deck);else{inView=true;}
+  if("IntersectionObserver" in window)new IntersectionObserver(function(es){var was=inView;inView=es[0].isIntersecting;loop(inView&&!was);},{threshold:.35}).observe(deck);else{inView=true;}
   document.addEventListener("visibilitychange",loop);
   paint();loop();
 })();
@@ -1750,8 +1753,9 @@ try{(function(){
   btns.forEach(function(b){b.addEventListener("click",function(){pick(b.getAttribute("data-bk"));});});
 })();}catch(e){}
 
-/* How it works: pin the section while the three cards slide up and stack, then let the page move on */
-try{(function(){
+/* How it works: pin the section while the three cards slide up and stack, then let the page move on
+   (switched off: the cards now stack with plain CSS sticky positioning, which scrolls natively and feels smoother) */
+try{(function(){return;
   var sec=document.getElementById("how");if(!sec)return;
   var cards=[].slice.call(sec.querySelectorAll(".step"));if(cards.length<2)return;
   var root=document.documentElement,pin=sec.querySelector(".how-pin"),steps=sec.querySelector(".steps"),head=sec.querySelector(".sec-head");
@@ -1766,7 +1770,7 @@ try{(function(){
     var room=innerHeight-top,headH=head?Math.round(steps.getBoundingClientRect().top-head.getBoundingClientRect().top):0;
     /* on taller screens let each earlier card show more of itself (number and title) so the stack fills the screen */
     var bar=document.querySelector(".qbar"),barH=bar&&getComputedStyle(bar).display!=="none"?bar.offsetHeight+14:0;
-    GAP=Math.max(58,Math.min(170,Math.round(maxH*0.72),Math.floor((room-headH-40-barH-maxH)/(cards.length-1))));
+    GAP=Math.max(58,Math.min(112,Math.round(maxH*0.45),Math.floor((room-headH-40-barH-maxH)/(cards.length-1))));
     stackH=maxH+GAP*(cards.length-1);sec.style.setProperty("--stack-h",stackH+"px");
     var need=headH+stackH+40;
     /* phones and tablets only: on laptops and wider screens the three cards sit side by side */
@@ -1779,24 +1783,35 @@ try{(function(){
   }
   /* each incoming card travels exactly as far as the page scrolls, so it moves with the finger like a real card,
      then settles softly in place; the cards behind ease back a touch as the next one covers them */
-  var cur=-1,drop=0,dist=[],starts=[],HOLD=0;
+  var cur=-1,drop=0,HOLD=0,ph=[];
+  /* each incoming card: rises with the scroll to rest a clear gap below the card before it, waits there
+     for a short stretch of scrolling, then slides up over that card into the stack */
   function plan(){
     var stepsTop=steps.getBoundingClientRect().top-pin.getBoundingClientRect().top;
     drop=Math.max(stackH,(innerHeight-top)-stepsTop+16);
-    dist=[];starts=[];var s=0;
-    cards.forEach(function(c,i){if(!i){dist.push(0);starts.push(0);return;}var d=Math.max(1,drop-i*GAP);starts.push(s);dist.push(d);s+=d;});
+    var REST=Math.round(innerHeight*0.28),SPACE=22,s=0;ph=[null];
+    for(var i=1;i<cards.length;i++){
+      var land=i*GAP,rest=Math.min(drop,(i-1)*GAP+cards[i-1].offsetHeight+SPACE);
+      var a=Math.max(0,drop-rest),c=Math.max(1,rest-land);
+      ph.push({land:land,rest:rest,a0:s,a1:s+a,h1:s+a+REST,b1:s+a+REST+c});
+      s+=a+REST+c;
+    }
     HOLD=Math.round(innerHeight*0.12);
     sec.style.setProperty("--how-h",((innerHeight-top)+s+HOLD)+"px");
   }
   function soft(x){return x<0?0:x>1?1:1-(1-x)*(1-x);}
+  function smooth(x){return x<0?0:x>1?1:x*x*(3-2*x);}
   function paint(px){
-    var n=cards.length,kk=[];
-    for(var i=0;i<n;i++)kk.push(i?Math.min(1,Math.max(0,(px-starts[i])/dist[i])):1);
+    var n=cards.length,cover=[0];
+    for(var i=1;i<n;i++){var q=ph[i];cover.push(px<=q.h1?0:px>=q.b1?1:(px-q.h1)/(q.b1-q.h1));}
     cards.forEach(function(c,i){
-      var y=i?drop-(drop-i*GAP)*kk[i]:0;
-      /* the last few pixels of travel ease in, so the card lands instead of stopping dead */
-      if(i&&kk[i]>0.88&&kk[i]<1){var r=(kk[i]-0.88)/0.12;y=drop-(drop-i*GAP)*(0.88+0.12*soft(r));}
-      var over=0;for(var j=i+1;j<n;j++)over+=soft(kk[j]);
+      var y=0;
+      if(i){var q=ph[i];
+        if(px<q.a1){var k=q.a1>q.a0?(px-q.a0)/(q.a1-q.a0):1;k=Math.max(0,Math.min(1,k));y=drop-(drop-q.rest)*(k>0.85?0.85+0.15*soft((k-0.85)/0.15):k);}
+        else if(px<q.h1)y=q.rest;
+        else y=q.rest-(q.rest-q.land)*smooth(cover[i]);
+      }
+      var over=0;for(var j=i+1;j<n;j++)over+=smooth(cover[j]);
       c.style.setProperty("transform","translate3d(0,"+y.toFixed(2)+"px,0) scale("+(1-over*0.03).toFixed(4)+")","important");
       c.style.zIndex=String(i+1);
     });
