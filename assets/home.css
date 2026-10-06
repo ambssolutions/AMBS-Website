@@ -2316,3 +2316,4 @@ html body #how .step h3{margin:0 0 .35rem!important}
 .wd--list .wd-panel.open.seen .wd-in>*{opacity:1;transform:none;transition:opacity 1s ease .25s,transform 1.2s cubic-bezier(.22,1,.36,1) .15s}
 .wd--list .wd-panel.open.seen .wd-in>.wd-copy{transition-delay:.5s,.4s}
 @media (prefers-reduced-motion:reduce){.wd--list .wd-panel.open .wd-in>*{opacity:1!important;transform:none!important;transition:none!important}}
+html:not([data-theme=dark]) .qbar a svg{color:#14172b!important}
