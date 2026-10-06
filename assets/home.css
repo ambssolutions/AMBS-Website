@@ -1855,7 +1855,7 @@ html[data-theme=dark] .hero.is-stacked .hero-cut{background:linear-gradient(to b
 .wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.34s,.26s}
 .wd--list .wd-panel{contain:layout paint}
 @media (prefers-reduced-motion:reduce){.wd--list .wd-in>*{transition:none;transform:none}}
-.wd--list .wd-body{transition:grid-template-rows 1.3s cubic-bezier(.25,.8,.25,1)!important}
+.wd--list .wd-body{transition:grid-template-rows 2.2s cubic-bezier(.45,.05,.25,1)!important}
 .wd-flipping .wd-stage *{animation-play-state:paused!important}
 .updatebar{width:max-content;max-width:calc(100vw - 32px);box-sizing:border-box;gap:10px;padding:8px 8px 8px 18px}
 .updatebar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
@@ -2313,7 +2313,7 @@ html body #how .step-n{font-size:clamp(2.6rem,11vw,3.4rem)!important}
 html body #how .step h3{margin:0 0 .35rem!important}
 }
 .wd--list .wd-panel.open:not(.seen) .wd-in>*{opacity:0;transform:translateY(22px) scale(.985);transition:none}
-.wd--list .wd-panel.open.seen .wd-in>*{opacity:1;transform:none;transition:opacity 1s ease .25s,transform 1.2s cubic-bezier(.22,1,.36,1) .15s}
-.wd--list .wd-panel.open.seen .wd-in>.wd-copy{transition-delay:.5s,.4s}
+.wd--list .wd-panel.open.seen .wd-in>*{opacity:1;transform:none;transition:opacity 1.6s ease .45s,transform 1.9s cubic-bezier(.22,1,.36,1) .3s}
+.wd--list .wd-panel.open.seen .wd-in>.wd-copy{transition-delay:.9s,.75s}
 @media (prefers-reduced-motion:reduce){.wd--list .wd-panel.open .wd-in>*{opacity:1!important;transform:none!important;transition:none!important}}
 html:not([data-theme=dark]) .qbar a svg{color:#14172b!important}
