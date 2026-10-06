@@ -620,12 +620,15 @@ if("IntersectionObserver" in window && !reduced){
   function sky(){
     if(window.__skyLock)return;
     const h=new Date().getHours();
-    const k=h>=5&&h<9?"sky-dawn":h>=9&&h<17?"sky-day":h>=17&&h<21?"sky-dusk":"sky-night";
+    let k=h>=5&&h<9?"sky-dawn":h>=9&&h<17?"sky-day":h>=17&&h<21?"sky-dusk":"sky-night";
+    /* light mode stays light after dark: use the soft evening look instead of the night sky */
+    if(k==="sky-night"&&document.documentElement.getAttribute("data-theme")!=="dark")k="sky-dusk";
     hero.classList.remove("sky-dawn","sky-day","sky-dusk","sky-night");
     hero.classList.add(k);
     document.documentElement.classList.remove("sky-dawn","sky-day","sky-dusk","sky-night");
     document.documentElement.classList.add(k);
   }
+  if(window.MutationObserver)new MutationObserver(function(){sky();}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
   let lastMood="wx-clear";let manual=false;
   function mood(code){
     hero.classList.remove("wx-clear","wx-cloud","wx-rain","wx-storm");
@@ -646,7 +649,8 @@ if("IntersectionObserver" in window && !reduced){
   window.__setSky=function(k){
     window.__skyLock=(k!=="live");
     if(k==="live"){const h=new Date().getHours();
-      k=h>=5&&h<9?"sky-dawn":h>=9&&h<17?"sky-day":h>=17&&h<21?"sky-dusk":"sky-night";}
+      k=h>=5&&h<9?"sky-dawn":h>=9&&h<17?"sky-day":h>=17&&h<21?"sky-dusk":"sky-night";
+      if(k==="sky-night"&&document.documentElement.getAttribute("data-theme")!=="dark")k="sky-dusk";}
     ["sky-dawn","sky-day","sky-dusk","sky-night"].forEach(c=>{
       hero.classList.remove(c);document.documentElement.classList.remove(c);});
     hero.classList.add(k);document.documentElement.classList.add(k);
