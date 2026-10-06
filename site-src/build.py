@@ -320,6 +320,56 @@ def build_404():
 '''+footer()
     open(os.path.join(OUT,'404.html'),'w',encoding='utf8').write(out)
 
+def build_booked():
+    ld={'@context':'https://schema.org','@type':'WebPage','name':'Booking confirmed'}
+    out=head('Booking confirmed | Ambs Solutions','Your Discovery Call with Ambs Solutions is booked.','/booking-confirmed',ld).replace('index,follow,max-image-preview:large','noindex')
+    # Zoho Bookings redirects here inside the booking frame on the home page; take over the whole window
+    out=out.replace('<head>','<head>\n<script>if(window.top!==window.self){try{window.top.location.replace(location.href)}catch(e){}}</script>',1)
+    out+=header('')+'''<main id="main">
+<section class="phero"><div class="wrap">
+  <p class="eyebrow">Booking confirmed</p>
+  <h1 id="bkH">You are booked in</h1>
+  <div class="bk-card">
+    <dl>
+      <div><dt>Meeting</dt><dd id="bkSvc">Discovery Call</dd></div>
+      <div id="bkDateRow" hidden><dt>Date</dt><dd id="bkDate"></dd></div>
+      <div id="bkTimeRow" hidden><dt>Time</dt><dd id="bkTime"></dd></div>
+      <div><dt>Length</dt><dd>30 minutes</dd></div>
+      <div><dt>With</dt><dd>Ambs Solutions</dd></div>
+      <div id="bkRefRow" hidden><dt>Booking ref</dt><dd id="bkRef"></dd></div>
+    </dl>
+  </div>
+  <p class="plead" id="bkMail"><span id="bkMailTxt">We have emailed you the details and a calendar invite.</span> To change the time, use the link in that email or call <a href="tel:+64220999578">+64 22 099 9578</a>.</p>
+  <div class="pmeta"><a class="btn btn--go" href="/">Back to the home page</a></div>
+</div></section>
+</main>
+<script>
+(function(){try{
+  var q=new URLSearchParams(location.search),g=function(k){return (q.get(k)||"").trim();};
+  var set=function(id,v){var el=document.getElementById(id);if(el&&v)el.textContent=v;};
+  var show=function(id){var el=document.getElementById(id);if(el)el.hidden=false;};
+  var first=g("customer_first_name")||g("customer_name").split(" ")[0];
+  if(first)set("bkH","You are booked in, "+first);
+  set("bkSvc",g("service_name"));
+  if(g("booking_id")){set("bkRef",g("booking_id"));show("bkRefRow");}
+  var st=g("booking_start_time"),en=g("booking_end_time");
+  if(st){var zoned=/(Z|[+-]\\d\\d:?\\d\\d)$/.test(st),d=new Date(st),e2=en?new Date(en):null;
+    if(!isNaN(d)){
+      var opt=zoned?{}:{timeZone:"UTC"};
+      var day=d.toLocaleDateString("en-NZ",Object.assign({weekday:"long",day:"numeric",month:"long",year:"numeric"},opt));
+      var tf=function(x){return x.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},opt));};
+      var t=tf(d)+(e2&&!isNaN(e2)?" to "+tf(e2):"");
+      if(zoned){try{var tz=d.toLocaleTimeString("en-NZ",{timeZoneName:"short"}).split(" ").pop();if(tz)t+=" "+tz;}catch(x){}}
+      set("bkDate",day);show("bkDateRow");set("bkTime",t);show("bkTimeRow");}}
+  var em=g("customer_email");
+  if(em)set("bkMailTxt","We have emailed the details and a calendar invite to "+em+".");
+  /* the link carries the visitor's name and email; take them out of the address bar and history */
+  if(location.search&&history.replaceState)history.replaceState(null,"",location.pathname);
+}catch(e){}})();
+</script>
+'''+footer()
+    open(os.path.join(OUT,'booking-confirmed.html'),'w',encoding='utf8').write(out)
+
 def build_legal(slug):
     raw=open(os.path.join(SRC,'content','legal',slug+'.html'),encoding='utf8').read()
     m=re.match(r'\s*<!--META\s*(\{.*?\})\s*-->\s*(.*)',raw,re.S); meta=json.loads(m.group(1)); body=m.group(2).strip()
@@ -381,4 +431,4 @@ if __name__=='__main__':
             w=build_page(p); total+=w; print(f'{p[0]}/{p[1]}: {w} words')
         elif not os.path.exists(path): print(f'MISSING {p[0]}/{p[1]}')
     for s in ('services','industries','guides'): build_hub(s)
-    build_404(); build_legal('privacy'); build_legal('terms'); build_sitemap(); print('done, total words',total)
+    build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap(); print('done, total words',total)

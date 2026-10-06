@@ -82,7 +82,7 @@ en:{
  "form.eyebrow":"Free session","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
  "form.name":"Your name","form.biz":"Business name","form.email":"Email","form.phone":"Phone",
  "form.msg":"What eats your time?","form.send":"Send request",
- "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.","form.pick":"Pick a time that suits you","form.or":"Or fill in the form below and we will get back to you.",
+ "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.","form.pick":"Pick a time that suits you","form.loading":"Loading available times","form.or":"Or fill in the form below and we will get back to you.",
  "foot.tag":"Built in Auckland. Working nationwide.",
  "foot.fine":"Translations are provided to help and may contain errors. If there is any difference, the English version applies."
 }
@@ -225,20 +225,22 @@ window.ambsGlide=(function(){
   const calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const stop=()=>{if(raf){cancelAnimationFrame(raf);raf=0;}};
   ["wheel","touchstart","keydown","mousedown"].forEach(t=>addEventListener(t,stop,{passive:true}));
+  /* target can be a number or a function; a function is re-read every frame, so the glide
+     follows a section that moves while sections above it open up (What we do on phones) */
   return function(target){
-    stop();target=Math.max(0,Math.min(target,document.documentElement.scrollHeight-innerHeight));
-    const start=window.pageYOffset,dist=target-start;
-    if(calm||Math.abs(dist)<2){window.scrollTo({top:target,behavior:"auto"});return;}
+    stop();
+    const aim=()=>Math.max(0,Math.min(typeof target==="function"?target():target,document.documentElement.scrollHeight-innerHeight));
+    const start=window.pageYOffset,dist=aim()-start;
+    if(calm||Math.abs(dist)<2){window.scrollTo({top:aim(),behavior:"auto"});return;}
     const dur=Math.max(750,Math.min(1600,600+Math.abs(dist)*.16)),t0=performance.now();
     const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-    const step=now=>{const k=Math.min(1,(now-t0)/dur);window.scrollTo({top:start+dist*ease(k),behavior:"instant"});raf=k<1?requestAnimationFrame(step):0;};
+    const step=now=>{const k=Math.min(1,(now-t0)/dur);window.scrollTo({top:start+(aim()-start)*ease(k),behavior:"instant"});raf=k<1?requestAnimationFrame(step):0;};
     raf=requestAnimationFrame(step);
   };
 })();
 function scrollToId(id){
   const el=document.getElementById(id);if(!el)return;
-  const y=el.getBoundingClientRect().top+window.pageYOffset-headerOffset();
-  window.ambsGlide(Math.max(0,y));
+  window.ambsGlide(()=>el.getBoundingClientRect().top+window.pageYOffset-headerOffset());
   settleOn(id);
 }
 /* sections above can open up while the page glides past them (What we do on phones), so check on arrival and glide the last stretch */
@@ -1715,3 +1717,14 @@ try{
   secs.forEach(function(s){io.observe(s);});
 })();
 }catch(e){if(window.console)console.error(e);}
+
+/* booking calendar: cover Zoho's own loading screen with ours. Zoho sends no "ready" signal,
+   so lift the cover a few seconds after its page loads, and never later than 15s after the
+   calendar comes near the screen (the iframe is lazy-loaded) */
+try{(function(){
+  var box=document.querySelector(".zbook-frame"),fr=box&&box.querySelector("iframe");if(!box||!fr)return;
+  var done=function(){box.classList.add("zready");};
+  fr.addEventListener("load",function(){setTimeout(done,3500);});
+  if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting;})){io.disconnect();setTimeout(done,15000);}},{rootMargin:"600px 0px"});io.observe(box);}
+  else setTimeout(done,15000);
+})();}catch(e){}

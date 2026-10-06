@@ -2230,3 +2230,12 @@ footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!i
 .zbook-frame iframe{display:block;width:100%;height:760px;height:clamp(620px,88svh,820px);border:0}
 .zbook-or{margin:1.3rem auto 0;padding:0 16px;font-size:.92rem;opacity:.85}
 .form .form-note{text-align:center;margin-left:auto;margin-right:auto}
+.zbook-frame{position:relative}
+.zload{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding:min(24vh,200px) 16px 0;background:#fff;transition:opacity .5s ease,visibility 0s .5s}
+.zload img{width:160px;height:auto;display:block}
+.zload p{margin:0;color:#3a3f5c;font-weight:600;font-size:.95rem}
+.zload i{position:relative;display:block;width:140px;height:3px;border-radius:3px;background:#ece6f7;overflow:hidden}
+.zload i::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;border-radius:3px;background:linear-gradient(90deg,#9a4fe0,#5a1c93);animation:zload 1.2s ease-in-out infinite}
+@keyframes zload{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+.zbook-frame.zready .zload{opacity:0;visibility:hidden}
+@media (prefers-reduced-motion:reduce){.zload i::after{animation:none;width:100%}}

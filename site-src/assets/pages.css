@@ -860,3 +860,13 @@ body:has(.updatebar.on) .totop{opacity:0;visibility:hidden}
 .updatebar #updatego{padding:.5em 1.05em}
 .updatebar--done{padding:11px 18px}
 @media (prefers-reduced-motion:reduce){.updatebar{transition:none}}
+.bk-card{max-width:460px;margin:1.6rem auto 1.4rem;padding:1.1rem 1.4rem;border-radius:18px;background:#fff;border:1px solid rgba(20,23,43,.10);box-shadow:0 10px 24px -18px rgba(20,23,43,.35);text-align:left}
+.bk-card dl{margin:0}
+.bk-card dl>div{display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(20,23,43,.08)}
+.bk-card dl>div:last-child{border-bottom:0}
+.bk-card dl>div[hidden]{display:none}
+.bk-card dt{color:#6b7190;font-size:.9rem}
+.bk-card dd{margin:0;font-weight:600;color:#14172b;text-align:right}
+html[data-theme=dark] .bk-card{background:#171e3a;border-color:rgba(233,237,249,.12)}
+html[data-theme=dark] .bk-card dt{color:#aab1cc}
+html[data-theme=dark] .bk-card dd{color:#eef0f8}
