@@ -8,9 +8,9 @@
 <style>
 :root{color-scheme:dark}
 body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#0E1326;color:#EDEFF8}
-main{max-width:760px;margin:0 auto;padding:28px 16px 90px;text-align:center}
+main{max-width:760px;margin:0 auto;padding:28px 16px 60px;text-align:center}
 h1{font-size:1.4rem;margin:0 0 .4rem}
-h2{font-size:1.05rem;margin:1.8rem 0 .4rem}
+h2{font-size:1.05rem;margin:2rem 0 .4rem}
 p{margin:.3rem 0 1rem;color:#B9C0D6;font-size:.92rem}
 .frame{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px -16px rgba(0,0,0,.6)}
 .frame iframe{display:block;width:100%;height:780px;border:0}
@@ -23,24 +23,15 @@ a{color:#8CC4FF}
   <h1>Booking test</h1>
   <p>Test page only. Not linked from the website and hidden from Google.</p>
 
-  <h2>1. Built into the page</h2>
-  <p>Pick a free time below. Busy times are not offered.</p>
-  <div class="frame"><iframe src="https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039009?serviceId=35319000000039045" title="Book a free session with AMBS" frameborder="0" allowfullscreen></iframe></div>
+  <h2>A. Zoho Calendar slot booking</h2>
+  <p>Pick a free time. Busy times in your calendar are not offered.</p>
+  <div class="frame"><iframe src="https://calendar.zoho.com.au/zc/view/slot-booking/0801123d91f6b9d8704a14590161861700007fc19c9c8621ec6c3af2efbc531cc2ebb40caf3318e2fc9fc542c855ecbac1ffa0f1487becbc944b429df53573ac78" title="Book a free session with AMBS" frameborder="0" allowfullscreen></iframe></div>
+  <p><a href="https://calendar.zoho.com.au/zc/view/slot-booking/0801123d91f6b9d8704a14590161861700007fc19c9c8621ec6c3af2efbc531cc2ebb40caf3318e2fc9fc542c855ecbac1ffa0f1487becbc944b429df53573ac78" target="_blank" rel="noopener">Open in a new tab</a></p>
 
-  <h2>2. Zoho's pop-up button</h2>
-  <p>Tap the purple "Book now" button at the bottom right of the screen.</p>
+  <h2>B. Zoho Bookings (for comparison)</h2>
+  <div class="frame"><iframe src="https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039009?serviceId=35319000000039045" title="Book a free session with AMBS (Zoho Bookings)" frameborder="0" allowfullscreen></iframe></div>
 
   <small><a href="/">Back to ambs.co.nz</a></small>
 </main>
-<script src="https://bookings.nimbuspop.com/assets/embed.js"></script>
-<script>
-  Bookings.buttonModal({
-    url: "https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039009?serviceId=35319000000039045",
-    text: "Book now",
-    color: "#5646A5",
-    textColor: "#ffffff",
-    position: "bottom-right"
-  });
-</script>
 </body>
 </html>
