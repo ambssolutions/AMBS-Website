@@ -248,7 +248,7 @@ SVC=[
       d='The jobs your team does the same way every week, done for you. Built around the tools you already use.',
       inc=[('invoice','Quotes and invoices'),('chat','Customer replies'),('cal','Bookings and reminders'),('link','Moving data between apps'),('chart','The numbers, weekly'),('shield','Records you can show')],
       go='Explore AI automation'),
- dict(slug='websites-and-portals',ic='web',k='Digital solutions',t='Websites, portals and dashboards',c1='#0F9D58',c2='#0E8FB5',
+ dict(slug='websites-and-portals',ic='web',k='Digital solutions',t='Websites, portals and dashboards',c1='#139918',c2='#1877E0',
       d='Fast, multilingual websites that turn visitors into calls, plus your own apps for staff, customers and live numbers.',
       inc=[('web','Websites that win trust'),('chat','Multilingual by design'),('clinic','Staff and customer portals'),('chart','Live dashboards'),('shield','Yours to own'),('target','Built to turn visits into calls')],
       go='Explore websites and portals'),
