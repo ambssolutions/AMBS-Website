@@ -2239,3 +2239,4 @@ footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!i
 @keyframes zload{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
 .zbook-frame.zready .zload{opacity:0;visibility:hidden}
 @media (prefers-reduced-motion:reduce){.zload i::after{animation:none;width:100%}}
+footer.f2 .f2-grid>.f2-brand{order:0}footer.f2 .f2-grid>.f2-col:last-child{order:1}footer.f2 .f2-grid>.f2-col:nth-child(2){order:2}footer.f2 .f2-grid>.f2-col:nth-child(3){order:3}

@@ -58,7 +58,7 @@ en:{
  "priv.full":"Read the full Privacy Policy","terms.full":"Read the full Terms of Use",
  "theme.t":"Light / dark mode",
  "nav.bookcall":"Book a call",
- "foot.loc":"Auckland, New Zealand",
+ "foot.loc":"Auckland, NZ",
  "err.name":"Please enter your name","err.email":"That email address does not look right",
  "err.phone":"Please enter a New Zealand number, like 021 234 5678 or +64 21 234 5678",
  "err.phoneintl":"Please check the phone number, for example 412 345 678",
