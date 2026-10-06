@@ -1723,6 +1723,10 @@ try{
    calendar comes near the screen (the iframe is lazy-loaded) */
 try{(function(){
   var box=document.querySelector(".zbook-frame"),fr=box&&box.querySelector("iframe");if(!box||!fr)return;
+  /* Safari (every browser on iPhone/iPad) leaves the box blank when Zoho opens the confirmation page
+     inside it, so ask Zoho to open it in the whole window instead. Chrome already works the default way. */
+  var ua=navigator.userAgent||"",webkit=/iP(hone|ad|od)/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)||(/Safari\//.test(ua)&&!/Chrome|Chromium|Edg|OPR|Android/.test(ua));
+  if(webkit&&fr.src.indexOf("redirection_type=")<0)fr.src=fr.src+(fr.src.indexOf("#")>-1&&fr.src.split("#")[1].indexOf("?")>-1?"&":"?")+"redirection_type=top";
   var done=function(){box.classList.add("zready");};
   fr.addEventListener("load",function(){setTimeout(done,3500);});
   if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting;})){io.disconnect();setTimeout(done,15000);}},{rootMargin:"600px 0px"});io.observe(box);}
