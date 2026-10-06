@@ -79,7 +79,7 @@ en:{
  "faq.q3":"What happens when it breaks?","faq.a3":"We set up monitoring where the tools allow, so most problems are caught early. For the first 30 days after launch, fixes and tweaks are free. After that, support is a monthly plan or pay as you go, whichever suits you.",
  "faq.q4":"Do you work outside Auckland?","faq.a4":"Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference.",
  "faq.q5":"How small is too small?","faq.a5":"If you spend more than three hours a week on the same task, it is usually worth a look, whether you have one van or forty staff.",
- "form.eyebrow":"Free session","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
+ "form.eyebrow":"Let's talk","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
  "form.name":"Your name","form.biz":"Business name","form.email":"Email","form.phone":"Phone",
  "form.msg":"What eats your time?","form.send":"Send request",
  "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.","form.pick":"Pick a time that suits you","form.tabCal":"Pick a time","form.tabForm":"Send a request","form.loading":"Loading available times","form.or":"Or fill in the form below and we will get back to you.",
