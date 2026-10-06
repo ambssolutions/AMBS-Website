@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Booking options | AMBS</title>
+<style>
+:root{color-scheme:dark}
+body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#0E1326;color:#EDEFF8}
+main{max-width:760px;margin:0 auto;padding:28px 16px 100px;text-align:center}
+h1{font-size:1.4rem;margin:0 0 .4rem}
+h2{font-size:1.05rem;margin:2.4rem 0 .4rem}
+p{margin:.3rem 0 1rem;color:#B9C0D6;font-size:.92rem}
+#inline-container{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px -16px rgba(0,0,0,.6)}
+#inline-container iframe{display:block}
+#booking-link{display:inline-block;padding:.75rem 1.6rem;border-radius:999px;background:#5646A5;color:#fff;font-weight:600;text-decoration:none}
+small{display:block;margin-top:1.6rem;color:#8A93B0}
+a{color:#8CC4FF}
+</style>
+</head>
+<body>
+<main>
+  <h1>Booking options</h1>
+  <p>Test page only. Not linked from the website and hidden from Google.</p>
+
+  <h2>1. Inline: calendar shown on the page</h2>
+  <p>The booking calendar sits right in the page.</p>
+  <div id="inline-container"></div>
+
+  <h2>2. Floating button</h2>
+  <p>Look at the bottom-right corner of your screen: the purple "Book now" button stays there while you scroll and opens the calendar in a pop-up.</p>
+
+  <h2>3. Link or button in the page</h2>
+  <p>Tap the button below. The calendar opens in a pop-up over the page.</p>
+  <a href="#" id="booking-link">Book now</a>
+
+  <small><a href="/booking-b">Booking test B</a> · <a href="/">Back to ambs.co.nz</a></small>
+</main>
+<script src="https://bookings.nimbuspop.com/assets/embed.js"></script>
+<script>
+(function(){
+  var url = "https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000038152";
+  function init(){
+    if (!window.Bookings) return;
+    Bookings.inlineEmbed({ url: url, parent: "#inline-container", height: "720px" });
+    Bookings.buttonModal({ url: url, text: "Book now", color: "#5646A5", textColor: "#ffffff", position: "bottom-right" });
+    document.getElementById("booking-link").onclick = Bookings.linkModal({ url: url, width: "90%", height: "85%" });
+  }
+  if (document.readyState === "complete") init(); else window.addEventListener("load", init);
+})();
+</script>
+</body>
+</html>
