@@ -1371,13 +1371,13 @@ try{
   /* tapping a heading folds the card open or shut with a plain CSS fold (no page-wide shuffling) */
   function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);setOpen();if(isOpen[k]){panels[k].classList.add("seen");show(k);copyIn(k,200);}}
   if("IntersectionObserver" in window){
-    /* phones and tablets: each service unfolds slowly by itself as its heading comes up into view
+    /* phones and tablets: each service unfolds slowly by itself as its heading reaches the upper part of the screen (above where a phone keyboard would sit)
        (a native CSS fold, no scripted page shuffling); one you close by hand stays closed */
     var opener=new IntersectionObserver(function(es){es.forEach(function(e){
       if(mode!=="list"||!e.isIntersecting)return;
       var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
       isOpen[k]=true;settle(k);setOpen();panels[k].classList.add("seen");show(k);copyIn(k,300);
-    });},{rootMargin:"0px 0px -18% 0px"});
+    });},{rootMargin:"0px 0px -55% 0px"});
     accs.forEach(function(a){opener.observe(a);});
     var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
     panels.forEach(function(p){seen.observe(p);});
