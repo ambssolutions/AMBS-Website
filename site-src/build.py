@@ -336,7 +336,6 @@ def build_booked():
       <div id="bkTimeRow" hidden><dt>Time</dt><dd id="bkTime"></dd></div>
       <div><dt>Length</dt><dd>30 minutes</dd></div>
       <div><dt>With</dt><dd>Ambs Solutions</dd></div>
-      <div id="bkRefRow" hidden><dt>Booking ref</dt><dd id="bkRef"></dd></div>
     </dl>
   </div>
   <p class="plead" id="bkMail"><span id="bkMailTxt">We have emailed you the details and a calendar invite.</span> To change the time, use the link in that email or call <a href="tel:+64220999578">+64 22 099 9578</a>.</p>
@@ -351,7 +350,6 @@ def build_booked():
   var first=g("customer_first_name")||g("customer_name").split(" ")[0];
   if(first)set("bkH","You are booked in, "+first);
   set("bkSvc",g("service_name"));
-  if(g("booking_id")){set("bkRef",g("booking_id"));show("bkRefRow");}
   var st=g("booking_start_time"),en=g("booking_end_time");
   if(st){var zoned=/(Z|[+-]\\d\\d:?\\d\\d)$/.test(st),d=new Date(st),e2=en?new Date(en):null;
     if(!isNaN(d)){
