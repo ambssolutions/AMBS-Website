@@ -2327,3 +2327,9 @@ html .docket-num,html:not([data-theme=dark]) .docket-num,html[data-theme=dark] .
 .wd-pts li::before{content:"";position:absolute;left:0;top:.18em;width:1.05rem;height:1.05rem;border-radius:50%;background:#139918 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/70% no-repeat}
 html[data-theme=dark] .wd-pts li::before{background-color:#34d139}
 .wd--list .wd-pts{margin:0 0 .9rem}
+
+/* phone and tablet menu: options centred */
+.drawer a{text-align:center!important;justify-content:center}
+.drawer .installbtn{justify-content:center}
+.drawer .installtip{text-align:center}
+.drawer .nav-contact{margin-left:0!important;margin-right:0!important}
