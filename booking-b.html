@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" data-i18nv="8d011b40">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<script>
+/* arriving from another page with a #section (menu or footer links): the browser would jump before the page has finished laying out
+   and land in the wrong place, so take the jump over and keep it on target until the layout settles */
+(function(){try{
+  var h=location.hash;if(!h||h.length<2)return;
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];if(nav&&nav.type==="reload")return;
+  var id=decodeURIComponent(h.slice(1));if(!/^[\w-]+$/.test(id))return;
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  history.replaceState(null,"",location.pathname+location.search);
+  window.__ambsArrive=id;
+  var root=document.documentElement,calm=matchMedia("(prefers-reduced-motion: reduce)").matches,shown=false;
+  if(!calm)root.classList.add("arriving");
+  function show(){if(shown)return;shown=true;requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.add("arrived");root.classList.remove("arriving");});});}
+  setTimeout(show,1600);
+  var stop=false,t0=0,still=0,last=null;
+  function off(){var hd=document.querySelector("header");return (hd?hd.getBoundingClientRect().height:70)+12;}
+  function want(){var el=document.getElementById(id);return el?Math.max(0,Math.round(el.getBoundingClientRect().top+pageYOffset-off())):null;}
+  function quit(){stop=true;show();}
+  ["wheel","touchstart","keydown","mousedown"].forEach(function(ev){addEventListener(ev,quit,{passive:true,once:true});});
+  function step(){if(stop)return;var y=want();if(y===null)return;
+    if(Math.abs(pageYOffset-y)>2)scrollTo({top:y,behavior:"instant"});
+    still=(last===y)?still+1:0;last=y;
+    if(still>=3||performance.now()-t0>1200)show();
+    if(performance.now()-t0<4000&&still<8)setTimeout(step,120);
+    else history.replaceState(null,"",location.pathname+location.search+"#"+id);}
+  function start(){t0=performance.now();step();}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+}catch(e){}})();
+</script>
+<script>
+/* a refresh always starts fresh: top of the same page, with no leftover #section */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo({top:0,behavior:"instant"});addEventListener("load",function(){window.scrollTo({top:0,behavior:"instant"});});
+}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Automation &amp; Websites, Auckland NZ | Ambs Solutions</title>
+<meta name="description" content="Auckland-based AI automation for NZ businesses: quotes and invoices, customer replies, bookings and reminders, websites and dashboards. Free first session.">
+<!-- Tab icon follows the phone's light or dark setting. The browser picks the
+     first link whose media matches, so the plain one stays last as a fallback
+     for anything that does not understand media on an icon link. -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-dark.png"  media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-light.png">
+<!-- One home screen icon, on white. Both iOS and Android read this once when
+     the app is added and never look again, so a dark variant only decided
+     which one you were stuck with. The tab icon below does follow the theme,
+     because browsers re-evaluate that on every load. -->
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="application-name" content="Ambs Solutions">
+<!-- The site has its own language picker, so the browser must not translate
+     on top of it. Without this, choosing Punjabi sets lang="pa" and Chrome
+     then offers to translate the page back to English on the next load. -->
+<meta name="google" content="notranslate">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ambs">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="canonical" href="https://ambs.co.nz/">
+<!-- Structured data: tells search engines what this business is, rather than
+     leaving them to infer it from the copy. Every value here already appears
+     on the page. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": "https://ambs.co.nz/#business",
+  "name": "Ambs Solutions",
+  "url": "https://ambs.co.nz/",
+  "logo": "https://ambs.co.nz/icon-192-v4.png",
+  "image": "https://ambs.co.nz/logo.png",
+  "description": "AI automation and digital solutions for New Zealand businesses. Auckland based, working nationwide.",
+  "email": "hello@ambs.co.nz",
+  "telephone": "+64220999578",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Auckland",
+    "addressCountry": "NZ"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "New Zealand"
+  },
+  "availableLanguage": ["en", "hi", "pa"],
+  "sameAs": [],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "What we do",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI automation",
+        "description": "Quotes and invoices, customer replies, bookings and reminders handled automatically." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital solutions",
+        "description": "Websites, portals and dashboards built around how the business already works." } }
+    ]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://ambs.co.nz/#website",
+  "url": "https://ambs.co.nz/",
+  "name": "Ambs Solutions",
+  "inLanguage": "en-NZ",
+  "publisher": { "@id": "https://ambs.co.nz/#business" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Will this replace my staff?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. It clears the repetitive work so your people can do the parts that need judgement, hands or a friendly face. The aim is to free up hours for more work, not to cut staff." } },
+    { "@type": "Question", "name": "I'm not technical. Is that a problem?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Not at all. If you can show us how the job gets done today, that is everything we need. We handle the rest and explain it in plain words." } },
+    { "@type": "Question", "name": "What happens when it breaks?",
+      "acceptedAnswer": { "@type": "Answer", "text": "We set up monitoring where the tools allow, so most problems are caught early. For the first 30 days after launch, fixes and tweaks are free. After that, support is a monthly plan or pay as you go, whichever suits you." } },
+    { "@type": "Question", "name": "Do you work outside Auckland?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference." } },
+    { "@type": "Question", "name": "How small is too small?",
+      "acceptedAnswer": { "@type": "Answer", "text": "If you spend more than three hours a week on the same task, it is usually worth a look, whether you have one van or forty staff." } }
+  ]
+}
+</script>
+
+<!-- The light value ships in the markup and matches theme_color in the
+     manifest. The manifest also carries a dark pair, which is how Chrome
+     handles a dark status bar for an installed app — the meta tag never
+     could. In a browser tab the script below adds colour-scheme rules. -->
+<meta name="theme-color" content="#FCFBF6">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ambs.co.nz/">
+<meta property="og:title" content="AI Automation &amp; Websites, Auckland NZ | Ambs Solutions">
+<meta property="og:description" content="We solve your operational headaches with easy-to-use AI.">
+<meta property="og:image" content="https://ambs.co.nz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ambs Solutions: AI automation, websites and digital tools for New Zealand businesses">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ambs.co.nz/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+Gurmukhi:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+Gurmukhi:wght@400;500;700&display=swap"></noscript>
+<script>/* a saved non-English choice: start fetching it now and hold the page briefly so English does not flash first */
+(function(){try{var l=sessionStorage.getItem("ambs:lang");if(!/^(zh|hi|mi|pa)$/.test(l||""))return;var d=document.documentElement;d.classList.add("i18n-wait");
+var k=document.createElement("link");k.rel="preload";k.as="fetch";k.crossOrigin="anonymous";k.href="/assets/i18n/"+l+".json?v="+(d.getAttribute("data-i18nv")||"");document.head.appendChild(k);
+setTimeout(function(){d.classList.remove("i18n-wait");},2500);}catch(e){}})();</script>
+<style>html.i18n-wait body{visibility:hidden}</style>
+<link rel="stylesheet" href="/assets/home.css?v=7c8f2ffc">
+<script>
+/* Theme is decided before first paint, so the page never flashes the wrong one.
+   An explicit choice by the visitor wins; otherwise we follow the device. */
+(function(){
+  var t=null;
+  /* sessionStorage, so a refresh keeps it but reopening the site starts fresh */
+  try{ t=sessionStorage.getItem("ambs:theme"); }catch(e){}
+  /* clear the old permanent key left by earlier visits */
+  try{ localStorage.removeItem("ambs:theme"); }catch(e){}
+  if(t!=="dark"&&t!=="light"){
+    t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+  }
+  document.documentElement.dataset.theme=t;
+})();
+</script>
+<style>
+.zbook{max-width:640px;margin:0 auto 1.8rem;text-align:center}
+.zbook-h{font-weight:700;font-size:1.05rem;margin:0 0 .8rem}
+.zbook-frame{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px -16px rgba(0,0,0,.45);border:1px solid rgba(20,23,43,.10)}
+.zbook-frame iframe{display:block;width:100%;height:720px;border:0}
+.zbook-or{margin:1.3rem 0 0;font-size:.92rem;opacity:.8}
+.ztest{position:fixed;top:0;left:0;right:0;z-index:9999;background:#5646A5;color:#fff;font:600 12px/1.2 system-ui,sans-serif;text-align:center;padding:4px 8px}
+</style>
+</head>
+<body>
+<div class="ztest">Test layout B: Zoho Bookings (not live)</div>
+
+<header>
+  <div class="bar">
+    <a class="mark" href="#top"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="AMBS Solutions" fetchpriority="high" decoding="async"></picture></a>
+    <div class="bar-right">
+      <button class="hdr-ico hdr-theme" id="themebtn" type="button" aria-label="Switch light or dark mode"></button>
+      <div class="langpills" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+        <button type="button" data-lang="hi" aria-pressed="false">हिन्दी</button>
+        <button type="button" data-lang="mi" aria-pressed="false">Māori</button>
+        <button type="button" data-lang="pa" aria-pressed="false">ਪੰਜਾਬੀ</button>
+      </div>
+      <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+        <option value="hi">हिन्दी</option>
+        <option value="mi">Te Reo Māori</option>
+        <option value="pa">ਪੰਜਾਬੀ</option>
+      </select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+      <nav class="navlinks">
+      <a href="#automate" data-i18n="nav.automate">What we do</a>
+      <a href="#about" data-i18n="nav.about">About us</a>
+      <a href="#how" data-i18n="nav.how">How it works</a>
+      <a href="/services" data-i18n="foot.services">Services</a>
+      <a href="/guides" data-i18n="nav.guides">Guides</a>
+      <a href="#faq" data-i18n="nav.faq">Questions</a>
+    </nav>
+      <a class="btn btn--sm nav-book" href="#book" data-i18n="nav.bookcall">Book a call</a>
+      <a class="btn btn--fill btn--sm nav-contact" href="#book" data-i18n="nav.contact">Contact us</a>
+      <a class="hdr-tel" href="tel:+64220999578">+64 22 099 9578</a>
+      <a class="hdr-ico hdr-call" href="tel:+64220999578" aria-label="Call us">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span class="callnum">+64 22 099 9578</span></a>
+      <button class="menu-btn" id="menubtn" aria-expanded="false" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+  <div class="drawer" id="drawer">
+    <a href="#automate" data-i18n="nav.automate">What we do</a>
+    <a href="#about" data-i18n="nav.about">About us</a>
+    <a href="#why" data-i18n="nav.why">Why us</a>
+    <a href="#how" data-i18n="nav.how">How it works</a>
+    <a href="/services" data-i18n="foot.services">Services</a>
+    <a href="/guides" data-i18n="nav.guides">Guides</a>
+    <a href="/industries" data-i18n="foot.industries">Industries</a>
+    <a href="#faq" data-i18n="nav.faq">Questions</a>
+    <a class="btn btn--fill nav-contact" href="#book" data-i18n="nav.contact">Contact us</a>
+    <button type="button" class="installbtn" id="installbtn" hidden>
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5M4 20h16"/></svg>
+      <span>Add to home screen</span>
+    </button>
+    <p class="installtip" id="installtip" hidden>
+      Tap the Share button in Safari, then choose <b>Add to Home Screen</b>.
+    </p>
+    <div class="theme-pair" id="themepair" role="group" aria-label="Light or dark mode">
+      <button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button>
+      <button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button>
+    </div>
+  </div>
+</header>
+<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span data-i18n="bar.call">Call</span></a><a class="qb-book" href="#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span data-i18n="bar.book">Book</span></a></nav>
+
+
+<div id="progress" aria-hidden="true"></div>
+<main id="top">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="greet" id="greet" aria-live="polite"></p>
+        
+        <p class="wxline" id="wxline" hidden></p>
+        <h1 data-i18n="hero.h1">We solve your operational headaches
+with easy-to-use AI.</h1>
+        <p class="hero-sub" data-i18n="hero.sub">You bring the business problems, we bring the solutions. We handle the admin automation, source the right software and build a simplified system.</p>
+        <div class="hero-cta">
+          <a class="btn btn--sun" href="#book" data-i18n="hero.cta1">Book a free session</a>
+          <a class="btn btn--ghost" href="#automate" data-i18n="hero.cta2">See what we automate</a>
+        </div>
+        <p class="hero-note" data-i18n="hero.note">No cost, no jargon. Based in Auckland, working nationwide.</p>
+      </div>
+
+      <!-- signature -->
+      <div class="docket" id="docket">
+        <p class="docket-label" data-i18n="card.pick">Pick your business</p>
+        <div class="chips" id="chips" role="group" aria-label="Business type"></div>
+        <p class="docket-label" data-i18n="card.handled">What we'd take off you first</p>
+        <div class="tickets" id="tickets" aria-live="polite"></div>
+        <div class="docket-total">
+          <span class="docket-num" id="total">0.0</span>
+          <span class="docket-unit" data-i18n="card.hoursback">estimated hours back a week</span>
+        </div>
+        <p class="docket-foot"><b id="monthline"></b><br><span data-i18n="card.note">Estimates from typical New Zealand jobs. We measure yours in the walkthrough.</span></p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- WHAT WE AUTOMATE: moving strip -->
+  <div class="auto-strip" aria-label="Examples of work we automate">
+    <span class="as-label"><i aria-hidden="true"></i><span data-i18n="ticker.label">What we automate</span></span>
+    <div class="as-viewport"><div class="as-track" id="asTrack"></div></div>
+  </div>
+
+  <!-- WHAT WE AUTOMATE -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="icg-b" gradientUnits="userSpaceOnUse" x1="3" y1="3" x2="21" y2="21"><stop offset="0" stop-color="#4FA8FF"/><stop offset="1" stop-color="#1257C9"/></linearGradient>
+  <linearGradient id="icg-g" gradientUnits="userSpaceOnUse" x1="3" y1="3" x2="21" y2="21"><stop offset="0" stop-color="#7DD65A"/><stop offset="1" stop-color="#23801A"/></linearGradient>
+</defs></svg>
+  <section id="automate">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow" data-i18n="auto.eyebrow">The work</p>
+        <h2 data-i18n="auto.title">What we do</h2>
+        <p class="lead" data-i18n="auto.lead">Two ways we help: automations that clear the repetitive work, and digital tools built around your business.</p>
+      </div>
+      <div class="wd-track" id="wdTrack">
+      <div class="wd" id="wdShow">
+        <div class="wd-tabs" role="tablist" aria-label="What we do">
+        <p class="wd-grp" data-i18n="off.g1">AI automation: work that runs in the background</p>
+        <button type="button" role="tab" class="wd-tab" id="wd-t1" aria-controls="wd-p1" aria-selected="true" tabindex="0"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M6 3h8l4 4v14H6z"/></g><path class="ic-line" pathLength="1" d="M6 3h8l4 4v14H6z"/><path class="ic-line" pathLength="1" d="M14 3v4h4"/><path class="ic-line ic-a" pathLength="1" d="M12 10v7.5"/><path class="ic-line ic-a" pathLength="1" d="M14.2 11.6c-.4-.6-1.2-1-2.2-1-1.2 0-2.1.6-2.1 1.5 0 2 4.4 1 4.4 3.1 0 .9-1 1.5-2.2 1.5-1 0-1.9-.4-2.3-1.1"/></svg></span><span class="wd-tt" data-i18n="auto.c1t">Quotes and invoices</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t2" aria-controls="wd-p2" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h9A2.5 2.5 0 0 1 18 6.5v6a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V15A2 2 0 0 1 4 13z"/></g><path class="ic-line" pathLength="1" d="M4 6.5A2.5 2.5 0 0 1 6.5 4h9A2.5 2.5 0 0 1 18 6.5v6a2.5 2.5 0 0 1-2.5 2.5H10l-4 3.5V15A2 2 0 0 1 4 13z"/><path class="ic-line ic-b" pathLength="1" d="M8 8.6h6"/><path class="ic-line ic-b" pathLength="1" d="M8 11.4h3.5"/><path class="ic-line ic-a" pathLength="1" d="M20 15v4M18 17h4"/></svg></span><span class="wd-tt" data-i18n="auto.c2t">Customer replies</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t3" aria-controls="wd-p3" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g transform="translate(-.3 -.7)"><g class="ic-fill"><path d="M5.5 5h8a2.5 2.5 0 0 1 2.5 2.5V10.6A4.6 4.6 0 0 0 11.6 15.2V19H5.5A2.5 2.5 0 0 1 3 16.5V7.5A2.5 2.5 0 0 1 5.5 5z"/></g><path class="ic-line" pathLength="1" d="M9.6 19H5.5A2.5 2.5 0 0 1 3 16.5V7.5A2.5 2.5 0 0 1 5.5 5h8A2.5 2.5 0 0 1 16 7.5v1.6"/><path class="ic-line" pathLength="1" d="M7 3v3.5M12 3v3.5M3 10h13"/><path class="ic-line ic-a" pathLength="1" d="M12.2 19.6h9.3l-1.3-1.8v-3a3.35 3.35 0 0 0-6.7 0v3z"/><path class="ic-line ic-a" pathLength="1" d="M15.4 21.8a1.5 1.5 0 0 0 2.9 0"/></g></svg></span><span class="wd-tt" data-i18n="auto.c3t">Bookings and reminders</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t4" aria-controls="wd-p4" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></g><rect class="ic-line" pathLength="1" x="3" y="3" width="7" height="7" rx="2"/><rect class="ic-line" pathLength="1" x="14" y="14" width="7" height="7" rx="2"/><path class="ic-line" pathLength="1" d="M10 6.5h5.5a2 2 0 0 1 2 2V14"/><path class="ic-line ic-a" pathLength="1" d="M15.5 12l2 2 2-2"/><path class="ic-line" pathLength="1" d="M14 17.5H8.5a2 2 0 0 1-2-2V10"/><path class="ic-line ic-b" pathLength="1" d="M8.5 12l-2-2-2 2"/></svg></span><span class="wd-tt" data-i18n="auto.c4t">Moving data between apps</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t5" aria-controls="wd-p5" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 20v-6l4-3 4 2 7-6v13z"/></g><path class="ic-line" pathLength="1" d="M4 4v16h16"/><path class="ic-line ic-a" pathLength="1" d="M4 14l4-3 4 2 7-6"/><path class="ic-line ic-a" pathLength="1" d="M15 7h4v4"/></svg></span><span class="wd-tt" data-i18n="auto.c5t">The numbers, weekly</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab" id="wd-t6" aria-controls="wd-p6" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/></g><path class="ic-line ic-b" pathLength="1" d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path class="ic-line ic-a" pathLength="1" d="M9 12l2 2 4-4"/></svg></span><span class="wd-tt" data-i18n="auto.c6t">Records you can show</span><span class="wd-timer"></span></button>
+        <p class="wd-grp wd-grp--g" data-i18n="off.g2">Digital solutions built for your business</p>
+        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t7" aria-controls="wd-p7" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="3" y="4" width="18" height="16" rx="2.5"/></g><rect class="ic-line" pathLength="1" x="3" y="4" width="18" height="16" rx="2.5"/><path class="ic-line" pathLength="1" d="M3 8.5h18"/><circle class="ic-line" pathLength="1" cx="12" cy="14.3" r="3.6"/><path class="ic-line" pathLength="1" d="M8.4 14.3h7.2"/><path class="ic-line ic-a" pathLength="1" d="M12 10.7c1.3 1.1 1.3 6.1 0 7.2M12 10.7c-1.3 1.1-1.3 6.1 0 7.2"/></svg></span><span class="wd-tt" data-i18n="auto.c7t">Websites that win trust</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t8" aria-controls="wd-p8" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/></g><rect class="ic-line" pathLength="1" x="6.5" y="2.5" width="11" height="19" rx="2.5"/><circle class="ic-line ic-a" pathLength="1" cx="12" cy="9.8" r="2.2"/><path class="ic-line ic-a" pathLength="1" d="M8.8 15.6c.6-1.5 1.8-2.3 3.2-2.3s2.6.8 3.2 2.3"/><path class="ic-line" pathLength="1" d="M10.5 18.6h3"/></svg></span><span class="wd-tt" data-i18n="auto.c8t">Staff and customer portals</span><span class="wd-timer"></span></button>
+        <button type="button" role="tab" class="wd-tab wd-tab--g" id="wd-t9" aria-controls="wd-p9" aria-selected="false" tabindex="-1"><span class="wd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ic-fill"><path d="M4 16a8 8 0 0 1 16 0z"/></g><path class="ic-line" pathLength="1" d="M4 16a8 8 0 0 1 16 0"/><path class="ic-line ic-a" pathLength="1" d="M12 16l3.6-4.6"/><path class="ic-line" pathLength="1" d="M4 20h16"/><path class="ic-line" pathLength="1" d="M7 12.4l1 .6M12 8.4v1.2M17 12.4l-1 .6"/></svg></span><span class="wd-tt" data-i18n="auto.c9t">Live dashboards</span><span class="wd-timer"></span></button>
+        </div>
+        <p class="wd-hint" data-i18n="wd.swipe">Swipe to see more</p>
+        <div class="wd-panels">
+        <div class="wd-panel on" role="tabpanel" id="wd-p1" aria-labelledby="wd-t1">
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk1">
+  <div class="mk-card m1-memo"><span class="m1-mic"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span><span class="m1-wave"><i style="--d:0"></i><i style="--d:1"></i><i style="--d:2"></i><i style="--d:3"></i><i style="--d:4"></i><i style="--d:5"></i><i style="--d:6"></i><i style="--d:7"></i><i style="--d:8"></i><i style="--d:9"></i><i style="--d:10"></i><i style="--d:11"></i></span><span class="m1-time">0:42</span></div>
+  <span class="mk-flow"><i></i></span>
+  <div class="mk-card m1-quote"><div class="m1-qh"><span class="m1-dot"></span><i class="mk-bar" style="width:46%"></i><em>#1042</em></div>
+    <div class="m1-row"><i class="mk-bar" style="width:62%"></i><b>$480.00</b></div><div class="m1-row"><i class="mk-bar" style="width:48%"></i><b>$320.00</b></div><div class="m1-row"><i class="mk-bar" style="width:56%"></i><b>$440.00</b></div>
+    <div class="m1-tot"><i class="mk-bar" style="width:30%"></i><b>$1,240.00</b></div></div>
+  <span class="mk-flow"><i></i></span>
+  <div class="m1-paid"><b>&#10003;</b><span>$1,240.00</span><i class="mk-bar" style="width:70%"></i></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m1-memo" style="--si:0"><b></b><em data-i18n="wd.s1a">Voice memo</em></span><span class="wd-st" data-t=".m1-quote" style="--si:1"><b></b><em data-i18n="wd.s1b">Quote drafted</em></span><span class="wd-st" data-t=".m1-paid" style="--si:2"><b></b><em data-i18n="wd.s1c">Invoice paid</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c1t">Quotes and invoices</h3><p data-i18n="auto.c1d">Site notes or a voice memo become a draft quote. Approved jobs become an invoice ready to check and send.</p><a class="wd-more" href="/guides/automate-quotes-and-invoices"><span data-i18n="kh.read">Read the guide</span></a></div>
+        </div>
+        <div class="wd-panel" role="tabpanel" id="wd-p2" aria-labelledby="wd-t2" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk2">
+  <div class="m2-col">
+    <div class="mk-card m2-review"><div class="m2-who"><span class="m2-av"></span><i class="mk-bar" style="width:42%"></i></div><div class="m2-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><i class="mk-bar" style="width:92%"></i><i class="mk-bar" style="width:70%"></i></div>
+    <div class="mk-card m2-reply"><div class="m2-who"><span class="m2-av m2-av--biz"></span><i class="mk-bar" style="width:36%"></i><em class="m2-ai">AI</em></div><div class="m2-dots"><i></i><i></i><i></i></div><div class="m2-text"><i class="mk-bar" style="width:88%"></i><i class="mk-bar" style="width:62%"></i></div><span class="m2-ok">&#10003;</span></div>
+  </div>
+  <div class="mk-phone m2-phone"><div class="m2-chat"><div class="m2-b m2-in"><i class="mk-bar" style="width:86%"></i><i class="mk-bar" style="width:52%"></i></div><div class="m2-typing"><i></i><i></i><i></i></div><div class="m2-b m2-out"><i class="mk-bar" style="width:88%"></i><i class="mk-bar" style="width:64%"></i></div></div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m2-review" style="--si:0"><b></b><em data-i18n="wd.s2a">Review comes in</em></span><span class="wd-st" data-t=".m2-reply" style="--si:1"><b></b><em data-i18n="wd.s2b">Reply drafted</em></span><span class="wd-st" data-t=".m2-phone" style="--si:2"><b></b><em data-i18n="wd.s2c">Questions answered</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c2t">Customer replies</h3><p data-i18n="auto.c2d">Opening hours, pricing and directions answered quickly on your website and by email, with replies to Google reviews drafted for you to approve.</p><a class="wd-more" href="/guides/ai-customer-replies-for-small-business"><span data-i18n="kh.read">Read the guide</span></a></div>
+        </div>
+        <div class="wd-panel" role="tabpanel" id="wd-p3" aria-labelledby="wd-t3" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk3">
+  <div class="mk-card m3-cal"><div class="m3-col"><span class="m3-day">12</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">13</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-free"></span></div><div class="m3-col"><span class="m3-day">14</span><span class="m3-ap"></span><span class="m3-ap"></span><span class="m3-ap m3-gap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">15</span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-ap"></span></div><div class="m3-col"><span class="m3-day">16</span><span class="m3-free"></span><span class="m3-ap"></span><span class="m3-free"></span><span class="m3-ap"></span></div></div>
+  <div class="mk-card m3-sms"><span class="m3-bell"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><div class="m3-txt"><i class="mk-bar" style="width:90%"></i><i class="mk-bar" style="width:64%"></i></div><div class="m3-btns"><b><svg viewBox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2 8.8-9.2"/></svg></b><b><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95"/><path d="M19.2 4.5v4h-4"/></svg></b></div></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m3-cal" style="--si:0"><b></b><em data-i18n="wd.s3a">Job booked</em></span><span class="wd-st" data-t=".m3-sms" style="--si:1"><b></b><em data-i18n="wd.s3b">Reminder sent</em></span><span class="wd-st" data-t=".m3-gap" style="--si:2"><b></b><em data-i18n="wd.s3c">Gap filled</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c3t">Bookings and reminders</h3><p data-i18n="auto.c3d">Confirmations, reminders and rebooking texts that cut down no-shows without anyone chasing.</p><a class="wd-more" href="/guides/reduce-no-shows-with-booking-reminders"><span data-i18n="kh.read">Read the guide</span></a></div>
+        </div>
+        <div class="wd-panel" role="tabpanel" id="wd-p4" aria-labelledby="wd-t4" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk4">
+  <div class="mk-card m4-app m4-a"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div><span class="mk-flow m4-f"><i></i></span><div class="mk-card m4-app m4-b"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div><span class="mk-flow m4-f"><i></i></span><div class="mk-card m4-app m4-c"><span class="m4-top"></span><span class="m4-row" style="--r:0"><i class="mk-bar" style="width:70%"></i></span><span class="m4-row" style="--r:1"><i class="mk-bar" style="width:62%"></i></span><span class="m4-row" style="--r:2"><i class="mk-bar" style="width:54%"></i></span><span class="m4-row" style="--r:3"><i class="mk-bar" style="width:46%"></i></span></div>
+  <div class="mk-card m4-rec"><span class="m4-dot"></span><i class="mk-bar" style="width:70%"></i><b>$860</b></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m4-a" style="--si:0"><b></b><em data-i18n="wd.s4a">Typed once</em></span><span class="wd-st" data-t=".m4-b,.m4-c" style="--si:1"><b></b><em data-i18n="wd.s4b">Copied across</em></span><span class="wd-st" data-t=".m4-rec" style="--si:2"><b></b><em data-i18n="wd.s4c">Record ready</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c4t">Moving data between apps</h3><p data-i18n="auto.c4d">No more retyping the same job into three systems. Where your apps allow it, information passes from one to the next automatically.</p><a class="wd-more" href="/guides/connect-your-business-apps"><span data-i18n="kh.read">Read the guide</span></a></div>
+        </div>
+        <div class="wd-panel" role="tabpanel" id="wd-p5" aria-labelledby="wd-t5" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk5">
+  <div class="mk-phone m5-phone"><span class="m5-time">8:00</span><i class="mk-bar" style="width:40%"></i>
+    <div class="m5-note"><div class="m5-nh"><span class="m5-app"></span><i class="mk-bar" style="width:38%"></i></div>
+      <div class="m5-kpi"><span class="m5-c1"></span><i class="mk-bar" style="width:48%"></i><b>$12,480</b></div><div class="m5-kpi"><span class="m5-c2"></span><i class="mk-bar" style="width:40%"></i><b>$3,150</b></div>
+      <div class="m5-kpi"><span class="m5-c3"></span><i class="mk-bar" style="width:44%"></i><b>46</b></div><div class="m5-kpi"><span class="m5-c4"></span><i class="mk-bar" style="width:36%"></i><b>12</b></div></div></div>
+  <div class="mk-card m5-chart"><div class="m5-bars"><i style="--h:42%;--d:0"></i><i style="--h:58%;--d:1"></i><i style="--h:50%;--d:2"></i><i style="--h:72%;--d:3"></i><i style="--h:64%;--d:4"></i><i style="--h:80%;--d:5"></i><i style="--h:94%;--d:6"></i></div><svg viewBox="0 0 100 30" preserveAspectRatio="none"><polyline pathLength="1" points="0,26 16,21 33,23 50,14 66,16 83,8 100,3"/></svg></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m5-chart" style="--si:0"><b></b><em data-i18n="wd.s5a">Numbers gathered</em></span><span class="wd-st" data-t=".m5-note" style="--si:1"><b></b><em data-i18n="wd.s5b">Summary written</em></span><span class="wd-st" data-t=".m5-time" style="--si:2"><b></b><em data-i18n="wd.s5c">On your phone</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c5t">The numbers, weekly</h3><p data-i18n="auto.c5d">Sales, stock, unpaid invoices and hours in one short summary on your phone every Monday.</p><a class="wd-more" href="/guides/weekly-business-numbers-dashboard"><span data-i18n="kh.read">Read the guide</span></a></div>
+        </div>
+        <div class="wd-panel" role="tabpanel" id="wd-p6" aria-labelledby="wd-t6" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk6">
+  <div class="mk-card m6-log"><div class="m6-row" style="--r:0"><span class="m6-t">09:14</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:70%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:1"><span class="m6-t">11:02</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:56%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:2"><span class="m6-t">14:37</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:64%"></i><b>&#10003;</b></div><div class="m6-row" style="--r:3"><span class="m6-t">16:20</span><span class="m6-doc"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span><i class="mk-bar" style="width:48%"></i><b>&#10003;</b></div></div>
+  <div class="m6-vault"><span class="m6-paper m6-p1"></span><span class="m6-paper m6-p2"></span><span class="m6-folder"><span class="m6-tab"></span></span><span class="m6-shield"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m6-log" style="--si:0"><b></b><em data-i18n="wd.s6a">Work logged</em></span><span class="wd-st" data-t=".m6-folder,.m6-paper" style="--si:1"><b></b><em data-i18n="wd.s6b">Filed away</em></span><span class="wd-st" data-t=".m6-shield" style="--si:2"><b></b><em data-i18n="wd.s6c">Ready to show</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c6t">Records you can show</h3><p data-i18n="auto.c6d">File notes, consents and receipts filed as the work happens, ready when someone asks for them.</p><a class="wd-more" href="/services/ai-automation"><span data-i18n="wd.more">Learn more</span></a></div>
+        </div>
+        <div class="wd-panel wd-panel--g" role="tabpanel" id="wd-p7" aria-labelledby="wd-t7" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk7">
+  <div class="mk-card m7-browser"><div class="m7-top"><b></b><b></b><b></b><span><i class="mk-bar" style="width:60%"></i></span></div>
+    <div class="m7-hero"><div class="m7-lines"><i class="mk-bar" style="width:80%"></i><i class="mk-bar" style="width:56%"></i></div><span class="m7-cta"></span></div>
+    <div class="m7-langs"><span style="--l:0">EN</span><span style="--l:1">中文</span><span style="--l:2">हिन्दी</span><span style="--l:3">MI</span><span style="--l:4">ਪੰਜਾਬੀ</span></div>
+    <div class="m7-grid"><i></i><i></i><i></i></div></div>
+  <div class="mk-phone m7-phone"><div class="m7-ph-hero"></div><i class="mk-bar" style="width:80%"></i><i class="mk-bar" style="width:55%"></i><span class="m7-call"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m7-browser" style="--si:0"><b></b><em data-i18n="wd.s7a">Fast website</em></span><span class="wd-st" data-t=".m7-langs" style="--si:1"><b></b><em data-i18n="wd.s7b">Their language</em></span><span class="wd-st" data-t=".m7-call" style="--si:2"><b></b><em data-i18n="wd.s7c">They call you</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c7t">Websites that win trust</h3><p data-i18n="auto.c7d">Fast, multilingual websites like this one, built to turn visitors into calls.</p><a class="wd-more" href="/guides/websites-that-turn-visitors-into-calls"><span data-i18n="kh.read">Read the guide</span></a></div>
+        </div>
+        <div class="wd-panel wd-panel--g" role="tabpanel" id="wd-p8" aria-labelledby="wd-t8" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk8">
+  <div class="mk-phone m8-phone"><div class="m8-head"><i class="mk-bar" style="width:55%"></i></div>
+    <div class="m8-photos"><span><svg viewBox="0 0 24 24"><path d="M3 19l6-8 4 5 3-3 5 6z"/><circle cx="16" cy="7" r="2"/></svg></span><span><svg viewBox="0 0 24 24"><path d="M3 19l6-8 4 5 3-3 5 6z"/><circle cx="16" cy="7" r="2"/></svg></span><span><svg viewBox="0 0 24 24"><path d="M3 19l6-8 4 5 3-3 5 6z"/><circle cx="16" cy="7" r="2"/></svg></span></div>
+    <div class="m8-row" style="--r:0"><b>&#10003;</b><i class="mk-bar" style="width:70%"></i></div><div class="m8-row" style="--r:1"><b>&#10003;</b><i class="mk-bar" style="width:58%"></i></div><div class="m8-row" style="--r:2"><b>&#10003;</b><i class="mk-bar" style="width:64%"></i></div>
+    <span class="m8-approve">&#10003;</span></div>
+  <div class="mk-card m8-notif"><span class="m3-bell"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><div class="m3-txt"><i class="mk-bar" style="width:86%"></i><i class="mk-bar" style="width:58%"></i></div><b class="m8-ok">&#10003;</b></div>
+</div><div class="wd-steps"><span class="wd-st" data-t=".m8-photos" style="--si:0"><b></b><em data-i18n="wd.s8a">Photos from site</em></span><span class="wd-st" data-t=".m8-row" style="--si:1"><b></b><em data-i18n="wd.s8b">Checklist done</em></span><span class="wd-st" data-t=".m8-notif" style="--si:2"><b></b><em data-i18n="wd.s8c">Approved</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c8t">Staff and customer portals</h3><p data-i18n="auto.c8d">Job tracking, photos, invoices and approvals in your own app on every phone.</p><a class="wd-more" href="/services/websites-and-portals"><span data-i18n="wd.more">Learn more</span></a></div>
+        </div>
+        <div class="wd-panel wd-panel--g" role="tabpanel" id="wd-p9" aria-labelledby="wd-t9" inert>
+          <div class="wd-stage" aria-hidden="true"><div class="mk mk9"><div class="mk-card m9-dash">
+  <div class="m9-kpis"><div class="m9-k"><i class="mk-bar" style="width:50%"></i><b>$48,920</b><em>&#8593;</em></div><div class="m9-k"><i class="mk-bar" style="width:44%"></i><b>$6,310</b><em class="m9-dn">&#8595;</em></div><div class="m9-k"><i class="mk-bar" style="width:40%"></i><b>37</b><em>&#8593;</em></div></div>
+  <div class="m9-row"><div class="m9-line"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path class="m9-area" d="M0,34 L14,28 L28,30 L42,20 L57,23 L71,12 L85,14 L100,5 L100,40 L0,40 Z"/><polyline pathLength="1" points="0,34 14,28 28,30 42,20 57,23 71,12 85,14 100,5"/></svg></div>
+  <div class="m9-donut"><svg viewBox="0 0 64 64"><circle class="m9-bg" cx="32" cy="32" r="24"/><circle class="m9-ring" cx="32" cy="32" r="24" pathLength="100"/></svg><b>68%</b></div>
+  <div class="m9-bars"><i style="--h:55%;--d:0"></i><i style="--h:70%;--d:1"></i><i style="--h:48%;--d:2"></i><i style="--h:86%;--d:3"></i><i style="--h:66%;--d:4"></i></div></div>
+</div></div><div class="wd-steps"><span class="wd-st" data-t=".m9-kpis" style="--si:0"><b></b><em data-i18n="wd.s9a">Sales and cash</em></span><span class="wd-st" data-t=".m9-line" style="--si:1"><b></b><em data-i18n="wd.s9b">The trend</em></span><span class="wd-st" data-t=".m9-donut,.m9-bars" style="--si:2"><b></b><em data-i18n="wd.s9c">Jobs on track</em></span></div></div>
+          <div class="wd-copy"><h3 data-i18n="auto.c9t">Live dashboards</h3><p data-i18n="auto.c9d">Sales, jobs and cash in one view that updates itself, wherever you are.</p><a class="wd-more" href="/services/websites-and-portals"><span data-i18n="wd.more">Learn more</span></a></div>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+
+  <section id="transform" class="transform">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow" data-i18n="tf.eyebrow">Before and after</p>
+        <h2 data-i18n="tf.title">See your business transformed</h2>
+        <p class="lead" data-i18n="tf.lead">Drag the handle to swap paper piles and late nights for systems that do most of the work for you. Tap any dot to see what changes.</p>
+      </div>
+      <div class="tf-stage rv" id="tfStage" style="--pos:50%">
+        <div class="tf-layer tf-before"><svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+ <defs><linearGradient id="tfb-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EFEAE4"/><stop offset="1" stop-color="#E0D8CF"/></linearGradient></defs>
+ <rect width="1000" height="560" fill="url(#tfb-bg)"/>
+ <g transform="translate(96 56)"><rect width="130" height="118" rx="10" fill="#FFFDF9" stroke="#D4CABF"/><rect width="130" height="24" rx="10" fill="#E5534B"/><rect y="14" width="130" height="10" fill="#E5534B"/>
+  <g stroke="#E5534B" stroke-width="3" stroke-linecap="round"><path d="M18 42l12 12M30 42L18 54M58 42l12 12M70 42L58 54M98 70l12 12M110 70L98 82M18 90l12 12M30 90L18 102M58 70l12 12M70 70L58 82"/></g></g>
+ <g transform="translate(880 112)"><circle r="48" fill="#FFFDF9" stroke="#9C9188" stroke-width="4"/><path d="M0 0L-22 -10M0 0L0 -36" stroke="#4A4440" stroke-width="5" stroke-linecap="round"/><circle r="4" fill="#4A4440"/></g>
+ <path d="M958 46a22 22 0 1 0 22 30 18 18 0 1 1 -22 -30z" fill="#6E6A8A"/>
+ <rect y="404" width="1000" height="156" fill="#CDBFB1"/><rect y="404" width="1000" height="8" fill="#BFAF9F"/>
+ <g transform="translate(320 98)"><rect width="360" height="232" rx="16" fill="#3B3F4A"/><rect x="14" y="14" width="332" height="190" rx="6" fill="#FBF8F4"/>
+  <g stroke="#E2DAD0" stroke-width="2"><path d="M14 52h332M14 84h332M14 116h332M14 148h332M14 180h332M90 14v190M170 14v190M250 14v190"/></g>
+  <g fill="#F4B6B2"><rect x="92" y="54" width="76" height="28"/><rect x="252" y="86" width="92" height="28"/><rect x="172" y="150" width="76" height="28"/><rect x="16" y="118" width="72" height="28"/></g>
+  <g fill="#D7CEC4"><rect x="20" y="210" width="40" height="10" rx="3"/><rect x="66" y="210" width="40" height="10" rx="3"/><rect x="112" y="210" width="40" height="10" rx="3"/><rect x="158" y="210" width="40" height="10" rx="3"/><rect x="204" y="210" width="40" height="10" rx="3"/></g>
+  <path d="M318 26l18 32h-36z" fill="#E5534B"/><rect x="316" y="36" width="4" height="12" rx="2" fill="#fff"/><circle cx="318" cy="52" r="2.4" fill="#fff"/>
+  <rect x="160" y="232" width="40" height="40" fill="#3B3F4A"/><rect x="110" y="268" width="140" height="12" rx="6" fill="#3B3F4A"/></g>
+ <g fill="#FFE27A" stroke="#E6C24A"><rect x="226" y="98" width="58" height="58" transform="rotate(-8 255 127)"/><rect x="216" y="184" width="58" height="58" transform="rotate(6 245 213)"/><rect x="688" y="120" width="58" height="58" transform="rotate(9 717 149)"/><rect x="700" y="204" width="58" height="58" transform="rotate(-5 729 233)"/></g>
+ <g stroke="#B79A2E" stroke-width="3" stroke-linecap="round"><path d="M236 118h30M236 130h22M228 204h32M229 216h20M698 142h32M700 154h22M711 226h30M712 238h18"/></g>
+ <g fill="#FFFDF9" stroke="#CFC6BB" stroke-width="2"><rect x="92" y="330" width="170" height="78" transform="rotate(-6 177 369)"/><rect x="100" y="318" width="170" height="78" transform="rotate(4 185 357)"/><rect x="86" y="306" width="170" height="78" transform="rotate(-3 171 345)"/><rect x="104" y="292" width="170" height="78" transform="rotate(7 189 331)"/></g>
+ <g stroke="#D7CEC4" stroke-width="3" stroke-linecap="round"><path d="M126 312h90M124 326h70M128 340h84"/></g>
+ <g transform="translate(548 356)"><path d="M0 0h44l-5 48H5z" fill="#FFFDF9" stroke="#B9AA9C" stroke-width="2"/><path d="M44 12h8a8 8 0 0 1 0 16h-10" fill="none" stroke="#B9AA9C" stroke-width="3"/><rect x="2" y="6" width="40" height="7" fill="#8A5A3B"/></g>
+ <g transform="translate(608 366)"><path d="M0 0h40l-5 40H5z" fill="#FFFDF9" stroke="#B9AA9C" stroke-width="2"/><rect x="2" y="6" width="36" height="6" fill="#8A5A3B"/></g>
+ <g transform="translate(758 292)"><rect width="94" height="164" rx="16" fill="#2B2F38"/><rect x="7" y="12" width="80" height="138" rx="8" fill="#4B505C"/><g fill="#6B7180"><rect x="16" y="30" width="62" height="12" rx="4"/><rect x="16" y="52" width="62" height="12" rx="4"/><rect x="16" y="74" width="62" height="12" rx="4"/><rect x="16" y="96" width="62" height="12" rx="4"/></g>
+  <circle cx="90" cy="6" r="18" fill="#E5534B"/><text x="90" y="12" text-anchor="middle" font-size="17" font-weight="800" fill="#fff" font-family="Arial,sans-serif">12</text></g>
+ <g fill="#FFFDF9" stroke="#C9BCAE" stroke-width="2"><g transform="rotate(-10 925 360)"><rect x="872" y="330" width="106" height="66" rx="5"/><path d="M872 332l53 34 53-34" fill="none"/></g><g transform="rotate(6 920 384)"><rect x="866" y="352" width="106" height="66" rx="5"/><path d="M866 354l53 34 53-34" fill="none"/></g><g transform="rotate(-3 930 404)"><rect x="878" y="372" width="106" height="66" rx="5"/><path d="M878 374l53 34 53-34" fill="none"/></g></g>
+ <circle cx="978" cy="334" r="16" fill="#E5534B"/><rect x="976" y="324" width="4" height="12" rx="2" fill="#fff"/><circle cx="978" cy="341" r="2.4" fill="#fff"/>
+</svg></div>
+        <div class="tf-layer tf-after"><svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+ <defs><linearGradient id="tfa-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EAF3FD"/><stop offset="1" stop-color="#E6F6EA"/></linearGradient>
+  <linearGradient id="tfa-blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4FA8FF"/><stop offset="1" stop-color="#1257C9"/></linearGradient>
+  <linearGradient id="tfa-green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7DD65A"/><stop offset="1" stop-color="#23801A"/></linearGradient></defs>
+ <rect width="1000" height="560" fill="url(#tfa-bg)"/>
+ <g transform="translate(96 56)"><rect width="130" height="118" rx="10" fill="#fff" stroke="#C9D8EC"/><rect width="130" height="24" rx="10" fill="#1877E0"/><rect y="14" width="130" height="10" fill="#1877E0"/>
+  <g fill="#3FAE29"><circle cx="24" cy="48" r="7"/><circle cx="64" cy="48" r="7"/><circle cx="104" cy="76" r="7"/><circle cx="24" cy="100" r="7"/><circle cx="64" cy="76" r="7"/></g><g fill="#DCE7F5"><circle cx="104" cy="48" r="7"/><circle cx="24" cy="76" r="7"/><circle cx="64" cy="100" r="7"/><circle cx="104" cy="100" r="7"/></g></g>
+ <g transform="translate(880 112)"><circle r="48" fill="#fff" stroke="#9DB7D8" stroke-width="4"/><path d="M0 0L18 12M0 0L0 -36" stroke="#1E2448" stroke-width="5" stroke-linecap="round"/><circle r="4" fill="#1E2448"/></g>
+ <g class="tf-sun" transform="translate(964 56)"><circle r="15" fill="#FFC21A"/><g stroke="#FFC21A" stroke-width="4" stroke-linecap="round"><path d="M0 -26v-6M0 26v6M-26 0h-6M26 0h6M-18 -18l-4 -4M18 18l4 4M-18 18l-4 4M18 -18l4 -4"/></g></g>
+ <rect y="404" width="1000" height="156" fill="#D3E3F4"/><rect y="404" width="1000" height="8" fill="#C1D5EC"/>
+ <g class="tf-wires" fill="none" stroke="#1877E0" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"><path d="M500 470V380"/><path d="M474 476C380 470 260 450 200 410"/><path d="M526 476C640 470 760 470 806 456"/><path d="M526 466C700 440 860 420 912 378"/></g>
+ <g transform="translate(500 476)"><circle r="30" fill="url(#tfa-blue)"/><circle r="38" fill="none" stroke="#1877E0" stroke-opacity=".25" stroke-width="3" class="tf-pulse"/><path d="M-11 1l7 7 15-15" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <g transform="translate(320 98)"><rect width="360" height="232" rx="16" fill="#1E2448"/><rect x="14" y="14" width="332" height="190" rx="6" fill="#fff"/>
+  <rect x="14" y="14" width="332" height="30" rx="6" fill="#F1F6FD"/><circle cx="36" cy="29" r="8" fill="#3FAE29"/><path d="M32 29l3 3 5-6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><rect x="52" y="24" width="90" height="10" rx="5" fill="#C9D8EC"/>
+  <circle cx="86" cy="118" r="44" fill="none" stroke="#E3ECF8" stroke-width="16"/><circle class="tf-ring" cx="86" cy="118" r="44" fill="none" stroke="url(#tfa-green)" stroke-width="16" pathLength="100" stroke-dasharray="70 100" transform="rotate(-90 86 118)" stroke-linecap="round"/>
+  <g fill="url(#tfa-blue)"><rect class="tf-bar" x="166" y="122" width="22" height="58" rx="4"/><rect class="tf-bar" x="196" y="102" width="22" height="78" rx="4"/><rect class="tf-bar" x="226" y="112" width="22" height="68" rx="4"/><rect class="tf-bar" x="256" y="84" width="22" height="96" rx="4"/><rect class="tf-bar" x="286" y="66" width="22" height="114" rx="4"/></g>
+  <polyline class="tf-line" points="166,96 196,86 226,90 256,70 296,54 330,48" fill="none" stroke="#3FAE29" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+  <rect x="160" y="232" width="40" height="40" fill="#1E2448"/><rect x="110" y="268" width="140" height="12" rx="6" fill="#1E2448"/></g>
+ <g transform="translate(96 284)"><rect width="176" height="124" rx="16" fill="#fff" stroke="#C9D8EC" stroke-width="2"/><g fill="#EAF2FC"><rect x="16" y="18" width="144" height="26" rx="7"/><rect x="16" y="50" width="144" height="26" rx="7"/><rect x="16" y="82" width="144" height="26" rx="7"/></g>
+  <g fill="#1877E0"><rect x="26" y="27" width="50" height="8" rx="4"/><rect x="26" y="59" width="64" height="8" rx="4"/><rect x="26" y="91" width="40" height="8" rx="4"/></g><g fill="#3FAE29"><circle cx="146" cy="31" r="6"/><circle cx="146" cy="63" r="6"/><circle cx="146" cy="95" r="6"/></g>
+  <circle cx="170" cy="4" r="18" fill="url(#tfa-green)"/><path d="M162 4l5 5 10-10" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <g class="tf-plant" transform="translate(586 330)"><path d="M10 48h44l-6 34H16z" fill="#F58220"/><path d="M32 48C32 26 20 14 6 10c2 16 12 30 26 38zM32 48C32 22 44 6 60 2c-1 20-12 38-28 46z" fill="url(#tfa-green)"/></g>
+ <g transform="translate(758 292)"><rect width="94" height="164" rx="16" fill="#1E2448"/><rect x="7" y="12" width="80" height="138" rx="8" fill="#fff"/>
+  <g fill="#EAF2FC"><rect x="14" y="26" width="66" height="22" rx="6"/><rect x="14" y="54" width="66" height="22" rx="6"/><rect x="14" y="82" width="66" height="22" rx="6"/><rect x="14" y="110" width="66" height="22" rx="6"/></g>
+  <g fill="#3FAE29"><circle cx="70" cy="37" r="5"/><circle cx="70" cy="65" r="5"/><circle cx="70" cy="93" r="5"/></g><circle class="tf-blink" cx="70" cy="121" r="5" fill="#FFC21A"/>
+  <g fill="#1877E0"><rect x="20" y="33" width="36" height="7" rx="3.5"/><rect x="20" y="61" width="28" height="7" rx="3.5"/><rect x="20" y="89" width="40" height="7" rx="3.5"/><rect x="20" y="117" width="30" height="7" rx="3.5"/></g></g>
+ <g class="tf-chat"><rect x="858" y="262" width="122" height="52" rx="16" fill="#fff" stroke="#C9D8EC" stroke-width="2"/><rect x="876" y="280" width="70" height="8" rx="4" fill="#C9D8EC"/><rect x="876" y="294" width="46" height="8" rx="4" fill="#C9D8EC"/>
+  <rect x="842" y="326" width="138" height="56" rx="16" fill="url(#tfa-blue)"/><rect x="860" y="344" width="84" height="8" rx="4" fill="#fff" fill-opacity=".7"/><rect x="860" y="358" width="56" height="8" rx="4" fill="#fff" fill-opacity=".7"/><path d="M950 356l5 5 10-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+</svg></div>
+        <span class="tf-tag tf-tag--before" data-i18n="tf.before">Before</span>
+        <span class="tf-tag tf-tag--after" data-i18n="tf.after">With Ambs</span>
+        <div class="tf-handle" aria-hidden="true"><span class="tf-knob">&#8592;&#8594;</span></div>
+        <input class="tf-range" id="tfRange" type="range" min="0" max="100" value="50" step="0.5" aria-label="Drag to compare">
+        <div class="tf-pins"><button type="button" class="tf-pin tf-pin--before" data-side="before" data-x="25" data-t="t.other1" data-d="" style="left:25%;top:24%"><span class="tf-pin-ring"></span><span class="tf-pin-dot"></span></button><button type="button" class="tf-pin tf-pin--before" data-side="before" data-x="50" data-t="t.other2" data-d="" style="left:50%;top:40%"><span class="tf-pin-ring"></span><span class="tf-pin-dot"></span></button><button type="button" class="tf-pin tf-pin--before" data-side="before" data-x="93" data-t="t.other3" data-d="" style="left:93%;top:64%"><span class="tf-pin-ring"></span><span class="tf-pin-dot"></span></button><button type="button" class="tf-pin tf-pin--after" data-side="after" data-x="50" data-t="auto.c9t" data-d="auto.c9d" style="left:50%;top:40%"><span class="tf-pin-ring"></span><span class="tf-pin-dot"></span></button><button type="button" class="tf-pin tf-pin--after" data-side="after" data-x="18" data-t="auto.c6t" data-d="auto.c6d" style="left:18%;top:56%"><span class="tf-pin-ring"></span><span class="tf-pin-dot"></span></button><button type="button" class="tf-pin tf-pin--after" data-side="after" data-x="80.6" data-t="auto.c8t" data-d="auto.c8d" style="left:80.6%;top:66%"><span class="tf-pin-ring"></span><span class="tf-pin-dot"></span></button><button type="button" class="tf-pin tf-pin--after" data-side="after" data-x="91" data-t="auto.c2t" data-d="auto.c2d" style="left:91%;top:52%"><span class="tf-pin-ring"></span><span class="tf-pin-dot"></span></button></div>
+      </div>
+      <div class="tf-cap" id="tfCap" aria-live="polite"><span class="tf-cap-dot"></span><div><b id="tfCapT" data-i18n="tf.hint">Tap a dot to see what changes.</b><p id="tfCapD"></p></div></div>
+    </div>
+  </section>
+  <section id="about">
+    <div class="wrap">
+      <h2 class="rv" data-i18n="about.title">Your Vision Our Solution</h2>
+            <div class="about-grid rv">
+        <div class="about-story">
+        <p class="about-p" data-i18n="about.p1">Every business runs on somebody's ambition: the café that should be two cafés, the crew that should be twice the size. What holds it back is rarely the vision. It's the repetitive work that eats the week. We build the systems that give those hours back, in the language you do business in.</p>
+      </div>
+        <div class="acronym">
+          <div class="acr"><b data-i18n="about.a1t">A · Ambition</b><p data-i18n="about.a1d">Yours. The reason the business exists.</p></div>
+          <div class="acr"><b data-i18n="about.a2t">M · Meets</b><p data-i18n="about.a2d">We watch how your work really happens.</p></div>
+          <div class="acr"><b data-i18n="about.a3t">B · Better</b><p data-i18n="about.a3d">Automation and digital tools that fit you, not the other way round.</p></div>
+          <div class="acr"><b data-i18n="about.a4t">S · Solutions</b><p data-i18n="about.a4d">Working systems you own, with a real person to call.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="wrap">
+      <h2 class="rv" data-i18n="why.t">Why partner with us</h2>
+      <p class="lead rv" data-i18n="why.s">Here is what you can expect when you work with us.</p>
+      <div class="why-grid rv">
+        <div class="why-col why-old">
+          <h3 data-i18n="why.old">What often goes wrong</h3>
+          <ul>
+            <li data-i18n="why.o1">Weeks of silence, then a status email</li>
+            <li data-i18n="why.o2">The same template with your logo dropped in</li>
+            <li data-i18n="why.o3">A big project that shows nothing for months</li>
+            <li data-i18n="why.o4">A vague quote that grows after you sign</li>
+            <li data-i18n="why.o5">Handed to someone you never speak to</li>
+          </ul>
+        </div>
+        <div class="why-col why-new">
+          <h3 data-i18n="why.new">With Ambs Solutions</h3>
+          <ul>
+            <li data-i18n="why.n1">You deal directly with the person who builds it</li>
+            <li data-i18n="why.n2">Built around how your business already works</li>
+            <li data-i18n="why.n3">One automation first. See it working, then decide.</li>
+            <li data-i18n="why.n4">Scope and price agreed in writing before we start</li>
+            <li data-i18n="why.n5">Systems set up in your own accounts, so you keep them if you stop working with us</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow" data-i18n="how.eyebrow">Three steps, in order</p>
+        <h2 data-i18n="how.title">How it works</h2>
+      </div>
+      <div class="steps rv">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div>
+            <h3 data-i18n="how.s1t">We watch the work</h3>
+            <p data-i18n="how.s1d">We sit with whoever actually does the job. We leave with a written plan and an hours estimate. It is yours to keep, even if you don't hire us.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div>
+            <h3 data-i18n="how.s2t">We build one automation first</h3>
+            <p data-i18n="how.s2d">Usually one to two weeks, depending on the job. You see it run on your real jobs, checked alongside the way you do it now, before it goes live.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div>
+            <h3 data-i18n="how.s3t">You own it</h3>
+            <p data-i18n="how.s3d">We hand over the logins, train your team, and fix or tweak anything free for the first 30 days. If you stop working with us, the automation stays in your accounts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="trust">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow eyebrow--dark" data-i18n="trust.eyebrow">No rip and replace</p>
+        <h2 data-i18n="trust.title">Built around the tools you already have</h2>
+        <p class="lead" data-i18n="trust.lead">Most of the time you will not need new software. We start with what is already on your desk and your phone.</p>
+      </div>
+      <div class="tools rv">
+        <span class="tool">Xero</span><span class="tool">Microsoft 365</span><span class="tool">Google Workspace</span>
+        <span class="tool">Outlook</span><span class="tool">Excel</span><span class="tool">Teams</span>
+        <span class="tool">OneDrive</span><span class="tool">Gmail</span><span class="tool">Google Sheets</span>
+        <span class="tool">Google Calendar</span><span class="tool">Google Drive</span><span class="tool">SharePoint</span>
+      </div>
+      <p class="tools-tm" data-i18n="trust.tm">Product names belong to their owners. We are not affiliated with them.</p>
+      <div class="trust-grid rv">
+        <div class="tcell">
+          <h3 data-i18n="trust.u1t">Your data stays yours</h3>
+          <p data-i18n="trust.u1d">Handled under the Privacy Act 2020. What we store for you is kept in New Zealand or Australia where we can, and we tell you first if a tool keeps data overseas. Only our own team works on your data, and AI tools run on business plans that don't train on it.</p>
+        </div>
+        <div class="tcell">
+          <h3 data-i18n="trust.u2t">A person answers</h3>
+          <p data-i18n="trust.u2d">One named contact who knows your business, reachable in New Zealand hours. No ticket queue.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="knowledge" class="knowledge knowledge--slim">
+    <div class="wrap">
+      <div class="kh-slim rv"><div class="kh-left">
+        <div class="sec-head rv">
+          <p class="eyebrow" data-i18n="kh.eyebrow">Knowledge hub</p>
+          <h2 data-i18n="kh.title">Learn before you automate</h2>
+          <p class="lead" data-i18n="kh.lead">Practical, plain-English guides for New Zealand businesses: what to automate first, how it works and what to watch for.</p>
+        </div>
+        <div class="kh-links"><a class="kh-btn" href="/guides" data-i18n="kh.all">Browse all guides</a><a class="kh-tlink" href="/industries"><span data-i18n="kh.ind">Industries</span> <span aria-hidden="true">&#8594;</span></a><a class="kh-tlink" href="/services"><span data-i18n="foot.services">Services</span> <span aria-hidden="true">&#8594;</span></a></div></div><div class="kh-deck" aria-label="Popular guides"><a class="kh-gc" href="/guides/how-to-choose-what-to-automate-first" style="--p:0;--c1:#E5352B;--c2:#FF6B5E"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span><span class="kh-ctag">Start here · 5 min read</span></span><b class="kh-ct">How to choose what to automate first</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/automate-quotes-and-invoices" style="--p:1;--c1:#F5B800;--c2:#FFD93B;--ct:#8A6A00"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></svg></span><span class="kh-ctag">Money · 8 min read</span></span><b class="kh-ct">How to automate quotes and invoices</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/reduce-no-shows-with-booking-reminders" style="--p:2;--c1:#3FAE29;--c2:#7BD45E"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4"/></svg></span><span class="kh-ctag">Bookings · 7 min read</span></span><b class="kh-ct">How to reduce no-shows with booking reminders</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/ai-customer-replies-for-small-business" style="--p:3;--c1:#1877E0;--c2:#4FA8FF"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/></svg></span><span class="kh-ctag">Customers · 8 min read</span></span><b class="kh-ct">AI customer replies for small business</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><a class="kh-gc" href="/guides/weekly-business-numbers-dashboard" style="--p:4;--c1:#7B2FBE;--c2:#B06AF0"><span class="kh-ctop"><span class="kh-cico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></svg></span><span class="kh-ctag">Numbers · 8 min read</span></span><b class="kh-ct">Your business numbers, every week</b><span class="kh-cl"><i></i><i></i><i></i></span><span class="kh-cgo">Read the guide <span aria-hidden="true">&#8594;</span></span></a><div class="kh-dctl"><button type="button" class="kh-next" aria-label="Next guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="kh-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow" data-i18n="faq.eyebrow">Straight answers</p>
+        <h2 data-i18n="faq.title">Questions we get asked</h2>
+      </div>
+      <div class="faq rv" id="faqlist">
+        <div class="q"><button type="button"><span data-i18n="faq.q1">Will this replace my staff?</span></button>
+          <div class="a" data-i18n="faq.a1">No. It clears the repetitive work so your people can do the parts that need judgement, hands or a friendly face. The aim is to free up hours for more work, not to cut staff.</div></div>
+        <div class="q"><button type="button"><span data-i18n="faq.q2">I'm not technical. Is that a problem?</span></button>
+          <div class="a" data-i18n="faq.a2">Not at all. If you can show us how the job gets done today, that is everything we need. We handle the rest and explain it in plain words.</div></div>
+        <div class="q"><button type="button"><span data-i18n="faq.q3">What happens when it breaks?</span></button>
+          <div class="a" data-i18n="faq.a3">We set up monitoring where the tools allow, so most problems are caught early. For the first 30 days after launch, fixes and tweaks are free. After that, support is a monthly plan or pay as you go, whichever suits you.</div></div>
+        <div class="q"><button type="button"><span data-i18n="faq.q4">Do you work outside Auckland?</span></button>
+          <div class="a" data-i18n="faq.a4">Yes, right across the country. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference.</div></div>
+        <div class="q"><button type="button"><span data-i18n="faq.q5">How small is too small?</span></button>
+          <div class="a" data-i18n="faq.a5">If you spend more than three hours a week on the same task, it is usually worth a look, whether you have one van or forty staff.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="contact" id="book">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow eyebrow--dark" data-i18n="form.eyebrow">Free session</p>
+        <h2 data-i18n="form.title">Book your free session</h2>
+        <p class="lead" data-i18n="form.lead">Tell us what is taking up your week. We will come back with a plan and an hours estimate.</p>
+      </div>
+      <div class="zbook">
+        <p class="zbook-h">Pick a time that suits you</p>
+        <div class="zbook-frame"><iframe src="https://hello-ambs.zohobookings.com.au/portal-embed#/35319000000039009?serviceId=35319000000039045" title="Book a free session with AMBS" loading="lazy" frameborder="0" allowfullscreen></iframe></div>
+        <p class="zbook-or">Or tell us what is taking up your week and we will get back to you.</p>
+      </div>
+      <div class="form rv">
+        <div class="field"><label for="f-name" data-i18n="form.name">Your name</label><input id="f-name" type="text" autocomplete="name"></div>
+        <div class="field"><label for="f-biz" data-i18n="form.biz">Business name</label><input id="f-biz" type="text" autocomplete="organization"></div>
+        <div class="field"><label for="f-email" data-i18n="form.email">Email</label><input id="f-email" type="email" autocomplete="email"></div>
+        <div class="field"><label for="f-phone" data-i18n="form.phone">Phone</label><div class="phone-row"><select id="f-cc" aria-label="Country code" autocomplete="tel-country-code"></select><input id="f-phone" type="tel" autocomplete="tel-national" inputmode="tel"></div></div>
+        <div class="field field--full"><label for="f-msg" data-i18n="form.msg">What eats your time?</label><textarea id="f-msg"></textarea></div>
+        <input id="f-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0">
+        <div class="field--full">
+          <button class="btn btn--sun" type="button" id="sendbtn" data-i18n="form.send">Send request</button>
+          <p class="form-note" data-i18n="form.note">We aim to reply within one working day. Or call +64 22 099 9578.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="f2">
+  <div class="wrap">
+    <div class="f2-grid">
+      <div class="f2-brand">
+        <a class="f2-logo" href="#top" aria-label="AMBS Solutions, back to top"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="AMBS Solutions" loading="lazy" decoding="async"></picture></a>
+        <p data-i18n="foot.tag">Built in Auckland. Working nationwide.</p>
+      </div>
+      <nav class="f2-col" aria-label="Company">
+        <p class="f2-h" data-i18n="foot.menu">Company</p>
+        <a href="#automate" data-i18n="nav.automate">What we do</a>
+        <a href="#about" data-i18n="nav.about">About us</a>
+        <a href="#why" data-i18n="nav.why">Why us</a>
+        <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#faq" data-i18n="nav.faq">Questions</a>
+      </nav>
+      <nav class="f2-col" aria-label="Explore">
+        <p class="f2-h" data-i18n="foot.explore">Explore</p>
+        <a href="/services" data-i18n="foot.services">Services</a>
+        <a href="/industries" data-i18n="foot.industries">Industries</a>
+        <a href="/guides" data-i18n="nav.guides">Guides</a>
+        <a href="#book" data-i18n="nav.bookcall">Book a call</a>
+      </nav>
+      <div class="f2-col" id="contact">
+        <p class="f2-h" data-i18n="nav.contact">Contact us</p>
+        <a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a>
+        <a href="tel:+64220999578">+64 22 099 9578</a>
+        <span data-i18n="foot.loc">Auckland, New Zealand</span>
+      </div>
+    </div>
+    <div class="f2-bottom">
+      <p class="f2-copy" data-i18n="legal.copy">© 2026 Ambs Solutions. All rights reserved.</p>
+      <nav class="f2-legal" aria-label="Legal">
+        <a href="/privacy" data-i18n="priv.t">Privacy</a>
+        <a href="/terms" data-i18n="terms.t">Terms of use</a>
+        <a href="#top" data-i18n="legal.back">Back to top</a>
+      </nav>
+    </div>
+    <p class="f2-fine" data-i18n="foot.fine">Translations are provided to help and may contain errors. If there is any difference, the English version applies.</p>
+  </div>
+</footer>
+
+<button class="totop" id="totop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
+<script src="/assets/home.js?v=ed0ee10d"></script>
+</body>
+</html>
