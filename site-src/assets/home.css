@@ -2317,3 +2317,7 @@ html body #how .step h3{margin:0 0 .35rem!important}
 .wd--list .wd-panel.open.seen .wd-in>.wd-copy{transition-delay:.9s,.75s}
 @media (prefers-reduced-motion:reduce){.wd--list .wd-panel.open .wd-in>*{opacity:1!important;transform:none!important;transition:none!important}}
 html:not([data-theme=dark]) .qbar a svg{color:#14172b!important}
+/* homepage card: the small estimates note sits centred under the monthly line */
+.docket .docket-foot span{margin-left:auto!important;margin-right:auto!important}
+/* hours total and monthly line: the same pastel green as the selected business chip */
+html .docket-num,html:not([data-theme=dark]) .docket-num,html[data-theme=dark] .docket-num,html #monthline,html:not([data-theme=dark]) #monthline,html[data-theme=dark] #monthline{color:#97e29a!important}
