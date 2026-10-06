@@ -1373,10 +1373,16 @@ try{
   if("IntersectionObserver" in window){
     /* phones and tablets: each service unfolds slowly by itself as its heading reaches the upper part of the screen (above where a phone keyboard would sit)
        (a native CSS fold, no scripted page shuffling); one you close by hand stays closed */
+    /* only one card unfolds at a time: while one is opening the rest wait, then the next opens if its heading is still in the top half */
+    var autoBusy=false;
+    function autoOpen(k){autoBusy=true;isOpen[k]=true;settle(k);setOpen();panels[k].classList.add("seen");show(k);copyIn(k,300);
+      setTimeout(function(){autoBusy=false;if(mode!=="list")return;
+        for(var j=0;j<accs.length;j++){if(isOpen[j]||closedByHand[j])continue;var t=accs[j].getBoundingClientRect().top;
+          if(t>=0&&t<=innerHeight*.45){autoOpen(j);return;}}},2300);}
     var opener=new IntersectionObserver(function(es){es.forEach(function(e){
-      if(mode!=="list"||!e.isIntersecting)return;
+      if(mode!=="list"||!e.isIntersecting||autoBusy)return;
       var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
-      isOpen[k]=true;settle(k);setOpen();panels[k].classList.add("seen");show(k);copyIn(k,300);
+      autoOpen(k);
     });},{rootMargin:"0px 0px -55% 0px"});
     accs.forEach(function(a){opener.observe(a);});
     var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
