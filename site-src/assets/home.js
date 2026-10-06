@@ -34,6 +34,7 @@ en:{
  "auto.c7t":"Websites that win trust","auto.c7d":"Fast, multilingual websites like this one, built to turn visitors into calls.",
  "auto.c8t":"Staff and customer portals","auto.c8d":"Job tracking, photos, invoices and approvals in your own app on every phone.",
  "auto.c9t":"Live dashboards","auto.c9d":"Sales, jobs and cash in one view that updates itself, wherever you are.",
+ "auto.c1p1":"Your prices and wording, so every quote looks like yours","auto.c1p2":"Invoices land in your accounting app, nothing retyped","auto.c1p3":"Polite payment reminders sent on time","auto.c2p1":"Replies written in your own tone of voice","auto.c2p2":"Urgent messages flagged to you straight away","auto.c2p3":"New enquiries sorted and passed to the right person","auto.c3p1":"Works with the booking system you already use","auto.c3p2":"Cancelled spots offered to people on a waitlist","auto.c3p3":"Follow-up texts after a visit asking for a review","auto.c4p1":"New customers added to every app at once","auto.c4p2":"Contact details kept the same everywhere","auto.c4p3":"Set up and tested by us, then left to run","auto.c5p1":"This week compared with last week at a glance","auto.c5p2":"Simple charts that show which way things are heading","auto.c5p3":"No spreadsheets or logins needed","auto.c6p1":"Everything dated and stored in one safe place","auto.c6p2":"Any record found in seconds","auto.c6p3":"Kept for as long as your industry requires","auto.c7p1":"Easy for you to update, no developer needed","auto.c7p2":"Set up so Google understands what you offer","auto.c7p3":"Enquiry forms that come straight to your inbox","auto.c8p1":"Each person sees only what they need","auto.c8p2":"Your logo and colours, with secure sign-in","auto.c8p3":"Installs on the home screen like a normal app","auto.c9p1":"Built around the numbers you care about","auto.c9p2":"Alerts when a number moves outside your normal range","auto.c9p3":"Easy to share with your team or accountant",
  "cta.call":"Call us",
  "form.ok":"Thank you, we’ll be in touch shortly.","form.err":"Couldn’t send just now. Please call us instead.",
  "nav.contact":"Contact us",
@@ -1371,19 +1372,19 @@ try{
   /* tapping a heading folds the card open or shut with a plain CSS fold (no page-wide shuffling) */
   function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);setOpen();if(isOpen[k]){panels[k].classList.add("seen");show(k);copyIn(k,200);}}
   if("IntersectionObserver" in window){
-    /* phones and tablets: each service unfolds slowly by itself as its heading reaches the upper part of the screen (above where a phone keyboard would sit)
+    /* phones and tablets: each service unfolds slowly by itself as its heading reaches the upper 60% of the screen
        (a native CSS fold, no scripted page shuffling); one you close by hand stays closed */
-    /* only one card unfolds at a time: while one is opening the rest wait, then the next opens if its heading is still in the top half */
+    /* only one card unfolds at a time: while one is opening the rest wait, then the next opens if its heading is still in the upper 60% of the screen */
     var autoBusy=false;
     function autoOpen(k){autoBusy=true;isOpen[k]=true;settle(k);setOpen();panels[k].classList.add("seen");show(k);copyIn(k,300);
       setTimeout(function(){autoBusy=false;if(mode!=="list")return;
         for(var j=0;j<accs.length;j++){if(isOpen[j]||closedByHand[j])continue;var t=accs[j].getBoundingClientRect().top;
-          if(t>=0&&t<=innerHeight*.45){autoOpen(j);return;}}},2300);}
+          if(t>=0&&t<=innerHeight*.6){autoOpen(j);return;}}},2300);}
     var opener=new IntersectionObserver(function(es){es.forEach(function(e){
       if(mode!=="list"||!e.isIntersecting||autoBusy)return;
       var k=accs.indexOf(e.target);if(k<0||isOpen[k]||closedByHand[k])return;
       autoOpen(k);
-    });},{rootMargin:"0px 0px -55% 0px"});
+    });},{rootMargin:"0px 0px -40% 0px"});
     accs.forEach(function(a){opener.observe(a);});
     var seen=new IntersectionObserver(function(es){es.forEach(function(e){var k=panels.indexOf(e.target);if(k>=0)inView[k]=e.isIntersecting;});run();},{threshold:0});
     panels.forEach(function(p){seen.observe(p);});
