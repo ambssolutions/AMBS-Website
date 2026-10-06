@@ -8,7 +8,7 @@ en:{
  "hero.sub":"You bring the business problems, we bring the solutions. We handle the admin automation, source the right software and build a simplified system.",
  "hero.cta1":"Book a free session","hero.cta2":"See what we automate",
  "hero.note":"No cost, no jargon. Based in Auckland, working nationwide.",
- "card.pick":"Pick your business","card.handled":"What we'd take off you first","card.hoursback":"estimated hours back a week",
+ "card.pick":"Pick your business","card.handled":"What we'd take off you first","card.hoursback":"estimated hours\nback a week",
  "card.month":"Roughly {n} hours a month (estimate).","card.note":"Estimates from typical New Zealand jobs. We measure yours in the walkthrough.",
  "biz.cafe":"Café or takeaway","biz.trades":"Trades and building","biz.clinic":"Clinic or salon","biz.retail":"Shop or dairy","biz.adviser":"Adviser or accountant","biz.transport":"Transport and delivery",
  "t.cafe1":"Rosters and shift swap messages","t.cafe2":"Supplier orders and invoice entry","t.cafe3":"Google review and email replies",
@@ -1141,7 +1141,7 @@ if("IntersectionObserver" in window && !reduced){
 try{
 /* dark mode: the footer logo gets its colours the first time it scrolls into view */
 (function(){
-  var f=document.querySelector(".foot-logo");
+  var f=document.querySelector(".foot-logo")||document.querySelector("footer .f2-logo img");
   if(!f||!("IntersectionObserver" in window)||(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches))return;
   f.classList.add("pre-light");
   new IntersectionObserver(function(es,o){
@@ -1176,6 +1176,7 @@ try{
   function measure(){sticks=cards.map(function(c){return parseFloat(getComputedStyle(c).top)||0;});heights=cards.map(function(c){return c.offsetHeight||1;});}
   function update(){
     ticking=false;
+    if(document.documentElement.classList.contains("how-pin"))return;
     var tops=cards.map(function(c){return c.getBoundingClientRect().top;});
     var cover=tops.map(function(t,k){if(!k)return 0;return Math.max(0,Math.min(1,1-(t-sticks[k])/heights[k-1]));});
     cards.forEach(function(c,i){
@@ -1773,23 +1774,45 @@ try{(function(){
     /* keep the finished stack clear of the Call | Book bar at the bottom of the screen */
     var over=Math.round(steps.getBoundingClientRect().top-pin.getBoundingClientRect().top+stackH-(room-barH-12));
     if(over>0&&GAP>58){GAP=Math.max(58,GAP-Math.ceil(over/(cards.length-1)));stackH=maxH+GAP*(cards.length-1);sec.style.setProperty("--stack-h",stackH+"px");}
-    on=true;sec.style.setProperty("--how-h",(room+innerHeight*0.6*(cards.length-1)+innerHeight*0.15)+"px");
+    on=true;plan();
     tick();
   }
-  function ease(x){return x<0?0:x>1?1:1-Math.pow(1-x,3);}
-  function tick(){raf=0;if(!on)return;
-    var r=sec.getBoundingClientRect(),total=sec.offsetHeight-(innerHeight-top),p=total>0?Math.min(1,Math.max(0,(top-r.top)/total)):0;
-    var n=cards.length,seg=0.82/(n-1);
+  /* each incoming card travels exactly as far as the page scrolls, so it moves with the finger like a real card,
+     then settles softly in place; the cards behind ease back a touch as the next one covers them */
+  var cur=-1,drop=0,dist=[],starts=[],HOLD=0;
+  function plan(){
+    var stepsTop=steps.getBoundingClientRect().top-pin.getBoundingClientRect().top;
+    drop=Math.max(stackH,(innerHeight-top)-stepsTop+16);
+    dist=[];starts=[];var s=0;
+    cards.forEach(function(c,i){if(!i){dist.push(0);starts.push(0);return;}var d=Math.max(1,drop-i*GAP);starts.push(s);dist.push(d);s+=d;});
+    HOLD=Math.round(innerHeight*0.12);
+    sec.style.setProperty("--how-h",((innerHeight-top)+s+HOLD)+"px");
+  }
+  function soft(x){return x<0?0:x>1?1:1-(1-x)*(1-x);}
+  function paint(px){
+    var n=cards.length,kk=[];
+    for(var i=0;i<n;i++)kk.push(i?Math.min(1,Math.max(0,(px-starts[i])/dist[i])):1);
     cards.forEach(function(c,i){
-      var k=i===0?1:ease((p-(i-1)*seg-0.04)/seg);
-      var over=0;for(var j=i+1;j<n;j++)over+=ease((p-(j-1)*seg-0.04)/seg);
-      var y=i===0?0:(1-k)*Math.max(stackH+60,innerHeight-top)+i*GAP*k,sc=1-over*0.03;
-      c.style.setProperty("transform","translateY("+y.toFixed(1)+"px) scale("+sc.toFixed(3)+")","important");
+      var y=i?drop-(drop-i*GAP)*kk[i]:0;
+      /* the last few pixels of travel ease in, so the card lands instead of stopping dead */
+      if(i&&kk[i]>0.88&&kk[i]<1){var r=(kk[i]-0.88)/0.12;y=drop-(drop-i*GAP)*(0.88+0.12*soft(r));}
+      var over=0;for(var j=i+1;j<n;j++)over+=soft(kk[j]);
+      c.style.setProperty("transform","translate3d(0,"+y.toFixed(2)+"px,0) scale("+(1-over*0.03).toFixed(4)+")","important");
       c.style.zIndex=String(i+1);
     });
   }
+  function target(){var r=sec.getBoundingClientRect();return Math.max(0,top-r.top);}
+  function tick(){raf=0;if(!on)return;
+    var want=target();
+    if(cur<0||Math.abs(want-cur)>innerHeight)cur=want;else cur+=(want-cur)*0.35;
+    if(Math.abs(want-cur)<0.3)cur=want;
+    paint(cur);
+    if(cur!==want)raf=requestAnimationFrame(tick);
+  }
   addEventListener("scroll",function(){if(on&&!raf)raf=requestAnimationFrame(tick);},{passive:true});
-  var rt=0;addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(layout,150);});
+  /* the phone address bar showing or hiding changes the height a little: ignore that, only re-measure on a real resize */
+  var lw=innerWidth,lh=innerHeight,rt=0;
+  addEventListener("resize",function(){if(innerWidth===lw&&Math.abs(innerHeight-lh)<140)return;lw=innerWidth;lh=innerHeight;clearTimeout(rt);rt=setTimeout(layout,150);});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
   addEventListener("load",layout);layout();
 })();}catch(e){}
