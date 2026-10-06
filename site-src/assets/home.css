@@ -2182,7 +2182,7 @@ footer.f2 .f2-grid>.f2-col:last-child span{max-width:7.5em}}
 footer.f2 .f2-grid{column-gap:.7rem!important}
 footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!important}}
 .kh-gc{align-items:center;text-align:center}
-.kh-ctop{flex-direction:column;justify-content:center;gap:.45rem}
+.kh-ctop{flex-direction:row;justify-content:center;gap:.6rem}
 .kh-cl{justify-items:center;width:100%}
 .kh-cgo{justify-content:center;align-items:baseline!important}
 .kh-cgo span[aria-hidden]{-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E")center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.6 4.6 17.8 14.8' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E")center/contain no-repeat}
@@ -2220,3 +2220,7 @@ footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!i
 .wd--list .wd-panel.open .wd-in>*{transition:opacity 1s ease .3s,transform 1.3s cubic-bezier(.22,1,.36,1) .2s}
 .wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.55s,.45s}
 @media (prefers-reduced-motion:reduce){.wd--list .wd-in>*,.wd--list .wd-panel.open .wd-in>*{transition:none}}
+/* Knowledge hub cards: a little taller so "Read the guide" never gets cut off */
+.kh-gc{height:258px;gap:.6rem}
+.kh-deck{height:322px}
+@media (max-width:899px){.kh-deck{height:312px}}
