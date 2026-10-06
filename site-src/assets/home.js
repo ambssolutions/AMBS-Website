@@ -1718,19 +1718,22 @@ try{
 })();
 }catch(e){if(window.console)console.error(e);}
 
-/* booking calendar: cover Zoho's own loading screen with ours. Zoho sends no "ready" signal,
-   so lift the cover a few seconds after its page loads, and never later than 15s after the
-   calendar comes near the screen (the iframe is lazy-loaded) */
+/* booking calendar: nothing loads until the visitor taps "Pick a time". From that tap our loading screen
+   covers the box (and Zoho's own loading screen) until the calendar is ready. Zoho sends no "ready" signal,
+   so lift the cover a few seconds after its page loads, and never later than 15s after the tap */
 try{(function(){
   var box=document.querySelector(".zbook-frame"),fr=box&&box.querySelector("iframe");if(!box||!fr)return;
+  var url=fr.getAttribute("data-src")||"";if(!url)return;
   /* Safari (every browser on iPhone/iPad) leaves the box blank when Zoho opens the confirmation page
      inside it, so ask Zoho to open it in the whole window instead. Chrome already works the default way. */
   var ua=navigator.userAgent||"",webkit=/iP(hone|ad|od)/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)||(/Safari\//.test(ua)&&!/Chrome|Chromium|Edg|OPR|Android/.test(ua));
-  if(webkit&&fr.src.indexOf("redirection_type=")<0)fr.src=fr.src+(fr.src.indexOf("#")>-1&&fr.src.split("#")[1].indexOf("?")>-1?"&":"?")+"redirection_type=top";
-  var done=function(){box.classList.add("zready");};
-  fr.addEventListener("load",function(){setTimeout(done,3500);});
-  if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting;})){io.disconnect();setTimeout(done,15000);}},{rootMargin:"600px 0px"});io.observe(box);}
-  else setTimeout(done,15000);
+  if(webkit&&url.indexOf("redirection_type=")<0)url+=(url.indexOf("#")>-1&&url.split("#")[1].indexOf("?")>-1?"&":"?")+"redirection_type=top";
+  var started=false,done=function(){box.classList.add("zready");};
+  window.ambsStartCalendar=function(){
+    if(started)return;started=true;
+    fr.addEventListener("load",function(){setTimeout(done,4500);});
+    fr.src=url;setTimeout(done,15000);
+  };
 })();}catch(e){}
 
 /* Book your free session: nothing is open until the visitor picks the calendar or the request form,
@@ -1741,12 +1744,7 @@ try{(function(){
   function pick(which){
     btns.forEach(function(b){b.setAttribute("aria-expanded",b.getAttribute("data-bk")===which?"true":"false");});
     Object.keys(panes).forEach(function(k){if(panes[k])panes[k].classList.toggle("bk-off",k!==which);});
+    if(which==="cal"&&window.ambsStartCalendar)window.ambsStartCalendar();
   }
   btns.forEach(function(b){b.addEventListener("click",function(){pick(b.getAttribute("data-bk"));});});
-  /* "Contact us" buttons open the request form; every "Book" button opens the calendar */
-  document.querySelectorAll('a[href="#book"],a[href="/#book"]').forEach(function(a){
-    a.addEventListener("click",function(){pick(a.classList.contains("nav-contact")?"form":"cal");},true);
-  });
-  /* arriving from another page: the head script turns /#book-time and /#book-request into #book and says which to open */
-  if(window.__ambsOpen)pick(window.__ambsOpen);
 })();}catch(e){}
