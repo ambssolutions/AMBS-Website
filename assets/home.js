@@ -1748,3 +1748,42 @@ try{(function(){
   }
   btns.forEach(function(b){b.addEventListener("click",function(){pick(b.getAttribute("data-bk"));});});
 })();}catch(e){}
+
+/* How it works: pin the section while the three cards slide up and stack, then let the page move on */
+try{(function(){
+  var sec=document.getElementById("how");if(!sec)return;
+  var cards=[].slice.call(sec.querySelectorAll(".step"));if(cards.length<2)return;
+  var root=document.documentElement,pin=sec.querySelector(".how-pin"),steps=sec.querySelector(".steps"),head=sec.querySelector(".sec-head");
+  var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;if(calm||!pin||!steps)return;
+  var GAP=14,on=false,raf=0,top=72,stackH=0;
+  function hdr(){var h=document.querySelector("header");return h?Math.round(h.getBoundingClientRect().height):72;}
+  function layout(){
+    if(innerWidth>=1024){root.classList.remove("how-pin");on=false;cards.forEach(function(c){c.style.removeProperty("transform");c.style.zIndex="";});return;}
+    top=hdr();root.style.setProperty("--how-top",top+"px");
+    root.classList.add("how-pin");
+    var maxH=0;cards.forEach(function(c){c.style.removeProperty("transform");maxH=Math.max(maxH,c.offsetHeight);});
+    stackH=maxH+GAP*(cards.length-1);sec.style.setProperty("--stack-h",stackH+"px");
+    var room=innerHeight-top,need=(head?head.offsetHeight:0)+stackH+40;
+    /* phones and tablets only: on laptops and wider screens the three cards sit side by side */
+    if(need>room||innerWidth>=1024){root.classList.remove("how-pin");on=false;cards.forEach(function(c){c.style.removeProperty("transform");});return;}
+    on=true;sec.style.setProperty("--how-h",(room+innerHeight*0.75*(cards.length-1)+innerHeight*0.35)+"px");
+    tick();
+  }
+  function ease(x){return x<0?0:x>1?1:1-Math.pow(1-x,3);}
+  function tick(){raf=0;if(!on)return;
+    var r=sec.getBoundingClientRect(),total=sec.offsetHeight-(innerHeight-top),p=total>0?Math.min(1,Math.max(0,(top-r.top)/total)):0;
+    var n=cards.length,seg=0.82/(n-1);
+    cards.forEach(function(c,i){
+      var k=i===0?1:ease((p-(i-1)*seg-0.04)/seg);
+      var over=0;for(var j=i+1;j<n;j++)over+=ease((p-(j-1)*seg-0.04)/seg);
+      var y=i===0?0:(1-k)*Math.max(stackH+60,innerHeight-top)+i*GAP*k,sc=1-over*0.05;
+      c.style.setProperty("transform","translateY("+y.toFixed(1)+"px) scale("+sc.toFixed(3)+")","important");
+      c.style.zIndex=String(i+1);
+    });
+  }
+  addEventListener("scroll",function(){if(on&&!raf)raf=requestAnimationFrame(tick);},{passive:true});
+  var rt=0;addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(layout,150);});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
+  addEventListener("load",layout);layout();
+})();}catch(e){}
+
