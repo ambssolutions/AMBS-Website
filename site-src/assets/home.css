@@ -2280,3 +2280,27 @@ html:not([data-theme=dark]) body #how .step p{color:#3f4766!important}
 html.how-pin body #how{padding-bottom:0!important}
 html.how-pin body #how .step{grid-template-columns:1fr!important}
 html body #how .step-n{padding:0 .1em 0 .04em!important;overflow:visible!important}
+html.sky-night:not([data-theme=dark]) .hero .hero-copy::before{background:linear-gradient(180deg,rgba(32,41,80,.8) 0,rgba(22,29,59,.72) 100%)!important;border:1px solid rgba(233,237,249,.14)!important;box-shadow:inset 0 1px 0 rgba(233,237,249,.08),0 34px 74px -30px rgba(0,0,0,.85)!important}
+html.sky-night .tx-accent{color:#8cc4ff}
+html.how-pin body #how .step{will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+@keyframes ambs-lite-on{0%,22%{filter:brightness(.1) saturate(0)}55%{filter:brightness(.55) saturate(.15)}78%{filter:brightness(.85) saturate(.6)}to{filter:brightness(1) saturate(1)}}
+html[data-theme=dark]:root body .mark img,html.sky-night:root body .mark img{filter:brightness(1) saturate(1)}
+html[data-theme=dark]:root .foot-logo,html[data-theme=dark]:root a.foot-brand:hover .foot-logo{filter:brightness(1) saturate(1)!important}
+html[data-theme=dark]:root .foot-logo.pre-light{filter:brightness(.1) saturate(0)!important}
+html[data-theme=dark]:root .foot-logo.is-lit{animation:ambs-lite-on 2.2s linear backwards}
+@keyframes ambs-butter-on{from{filter:brightness(.18) saturate(0)}to{filter:brightness(1) saturate(1)}}
+html[data-theme=dark]:root .mark img{animation:ambs-butter-on 2.4s cubic-bezier(.45,0,.2,1) .25s backwards!important;will-change:filter}
+html[data-theme=dark]:root footer .f2-logo img.pre-light{filter:brightness(.18) saturate(0)!important}
+html[data-theme=dark]:root footer .f2-logo img.is-lit{animation:ambs-butter-on 2.4s cubic-bezier(.45,0,.2,1) backwards!important;will-change:filter}
+@media (prefers-reduced-motion:reduce){html[data-theme=dark]:root .mark img,html[data-theme=dark]:root footer .f2-logo img.is-lit{animation:none!important}html[data-theme=dark]:root footer .f2-logo img.pre-light{filter:none!important}}
+.hero .hero-copy{align-items:center!important;text-align:center!important}
+.hero .hero-copy h1,.hero .hero-copy .hero-sub,.hero .hero-copy .hero-note{margin-left:auto!important;margin-right:auto!important;text-align:center!important}
+.hero .hero-cta{justify-content:center!important;align-items:center!important}
+.hero .greet,.hero .wxline{justify-content:center!important;text-align:center!important;margin-left:auto!important;margin-right:auto!important}
+.docket{text-align:center}
+.docket .docket-label{text-align:center!important}
+.docket .chips{justify-content:center!important}
+.docket .docket-total{justify-content:center!important}
+.docket .ticket{text-align:left}
+.docket .docket-foot{text-align:center!important;margin-left:auto!important;margin-right:auto!important;align-self:center}
+.docket .docket-unit{white-space:pre-line!important;max-width:none!important;text-align:left!important;line-height:1.25}

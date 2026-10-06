@@ -871,3 +871,7 @@ html[data-theme=dark] .bk-card{background:#171e3a;border-color:rgba(233,237,249,
 html[data-theme=dark] .bk-card dt{color:#aab1cc}
 html[data-theme=dark] .bk-card dd{color:#eef0f8}
 footer.f2 .f2-grid>.f2-brand{order:0}footer.f2 .f2-grid>.f2-col:last-child{order:1}footer.f2 .f2-grid>.f2-col:nth-child(2){order:2}footer.f2 .f2-grid>.f2-col:nth-child(3){order:3}
+@keyframes ambs-butter-on{from{filter:brightness(.18) saturate(0)}to{filter:brightness(1) saturate(1)}}
+html[data-theme=dark] footer .f2-logo img.pre-light{filter:brightness(.18) saturate(0)!important}
+html[data-theme=dark] footer .f2-logo img.is-lit{animation:ambs-butter-on 2.4s cubic-bezier(.45,0,.2,1) backwards;will-change:filter}
+@media (prefers-reduced-motion:reduce){html[data-theme=dark] footer .f2-logo img.is-lit{animation:none}html[data-theme=dark] footer .f2-logo img.pre-light{filter:none!important}}

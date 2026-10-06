@@ -209,3 +209,11 @@
   document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){if(reg)reg.update().catch(function(){});check();}});
   setInterval(check,30*60*1000);
 })();
+
+/* dark mode: the footer logo powers on (grey to full colour) the first time it scrolls into view */
+try{(function(){
+  var f=document.querySelector("footer .f2-logo img");
+  if(!f||!("IntersectionObserver" in window)||(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches))return;
+  f.classList.add("pre-light");
+  new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){f.classList.remove("pre-light");f.classList.add("is-lit");o.disconnect();}});},{threshold:.5}).observe(f);
+})();}catch(e){}
