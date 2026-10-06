@@ -82,7 +82,7 @@ en:{
  "form.eyebrow":"Free session","form.title":"Book your free session","form.lead":"Tell us what is taking up your week. We will come back with a plan and an hours estimate.",
  "form.name":"Your name","form.biz":"Business name","form.email":"Email","form.phone":"Phone",
  "form.msg":"What eats your time?","form.send":"Send request",
- "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.",
+ "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.","form.pick":"Pick a time that suits you","form.or":"Or fill in the form below and we will get back to you.",
  "foot.tag":"Built in Auckland. Working nationwide.",
  "foot.fine":"Translations are provided to help and may contain errors. If there is any difference, the English version applies."
 }
