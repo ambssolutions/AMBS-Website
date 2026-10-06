@@ -1755,18 +1755,25 @@ try{(function(){
   var cards=[].slice.call(sec.querySelectorAll(".step"));if(cards.length<2)return;
   var root=document.documentElement,pin=sec.querySelector(".how-pin"),steps=sec.querySelector(".steps"),head=sec.querySelector(".sec-head");
   var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;if(calm||!pin||!steps)return;
-  var GAP=14,on=false,raf=0,top=72,stackH=0;
+  var GAP=58,on=false,raf=0,top=72,stackH=0;
   function hdr(){var h=document.querySelector("header");return h?Math.round(h.getBoundingClientRect().height):72;}
   function layout(){
     if(innerWidth>=1024){root.classList.remove("how-pin");on=false;cards.forEach(function(c){c.style.removeProperty("transform");c.style.zIndex="";});return;}
     top=hdr();root.style.setProperty("--how-top",top+"px");
     root.classList.add("how-pin");
     var maxH=0;cards.forEach(function(c){c.style.removeProperty("transform");maxH=Math.max(maxH,c.offsetHeight);});
+    var room=innerHeight-top,headH=head?Math.round(steps.getBoundingClientRect().top-head.getBoundingClientRect().top):0;
+    /* on taller screens let each earlier card show more of itself (number and title) so the stack fills the screen */
+    var bar=document.querySelector(".qbar"),barH=bar&&getComputedStyle(bar).display!=="none"?bar.offsetHeight+14:0;
+    GAP=Math.max(58,Math.min(170,Math.round(maxH*0.72),Math.floor((room-headH-40-barH-maxH)/(cards.length-1))));
     stackH=maxH+GAP*(cards.length-1);sec.style.setProperty("--stack-h",stackH+"px");
-    var room=innerHeight-top,need=(head?head.offsetHeight:0)+stackH+40;
+    var need=headH+stackH+40;
     /* phones and tablets only: on laptops and wider screens the three cards sit side by side */
     if(need>room||innerWidth>=1024){root.classList.remove("how-pin");on=false;cards.forEach(function(c){c.style.removeProperty("transform");});return;}
-    on=true;sec.style.setProperty("--how-h",(room+innerHeight*0.75*(cards.length-1)+innerHeight*0.35)+"px");
+    /* keep the finished stack clear of the Call | Book bar at the bottom of the screen */
+    var over=Math.round(steps.getBoundingClientRect().top-pin.getBoundingClientRect().top+stackH-(room-barH-12));
+    if(over>0&&GAP>58){GAP=Math.max(58,GAP-Math.ceil(over/(cards.length-1)));stackH=maxH+GAP*(cards.length-1);sec.style.setProperty("--stack-h",stackH+"px");}
+    on=true;sec.style.setProperty("--how-h",(room+innerHeight*0.6*(cards.length-1)+innerHeight*0.15)+"px");
     tick();
   }
   function ease(x){return x<0?0:x>1?1:1-Math.pow(1-x,3);}
@@ -1776,7 +1783,7 @@ try{(function(){
     cards.forEach(function(c,i){
       var k=i===0?1:ease((p-(i-1)*seg-0.04)/seg);
       var over=0;for(var j=i+1;j<n;j++)over+=ease((p-(j-1)*seg-0.04)/seg);
-      var y=i===0?0:(1-k)*Math.max(stackH+60,innerHeight-top)+i*GAP*k,sc=1-over*0.05;
+      var y=i===0?0:(1-k)*Math.max(stackH+60,innerHeight-top)+i*GAP*k,sc=1-over*0.03;
       c.style.setProperty("transform","translateY("+y.toFixed(1)+"px) scale("+sc.toFixed(3)+")","important");
       c.style.zIndex=String(i+1);
     });
