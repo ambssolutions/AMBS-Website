@@ -875,3 +875,7 @@ footer.f2 .f2-grid>.f2-brand{order:0}footer.f2 .f2-grid>.f2-col:last-child{order
 html[data-theme=dark] footer .f2-logo img.pre-light{filter:brightness(.18) saturate(0)!important}
 html[data-theme=dark] footer .f2-logo img.is-lit{animation:ambs-butter-on 2.4s cubic-bezier(.45,0,.2,1) backwards;will-change:filter}
 @media (prefers-reduced-motion:reduce){html[data-theme=dark] footer .f2-logo img.is-lit{animation:none}html[data-theme=dark] footer .f2-logo img.pre-light{filter:none!important}}
+
+/* phone and tablet menu: options centred; the current page is marked in blue without the side bar */
+.sh-drawer>a:not(.sh-btn){text-align:center}
+.sh-drawer>a[aria-current],html[data-theme=dark] .sh-drawer>a[aria-current]{box-shadow:none;padding-left:0}
