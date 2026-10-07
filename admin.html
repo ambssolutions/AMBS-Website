@@ -1,0 +1,1316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Website editor · AMBS</title>
+<link rel="icon" href="/favicon-light.png">
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#14172b;--muted:#5b6176;--line:rgba(20,23,43,.12);--green:#139918;--green-2:#34d139;--pastel:#dcf2c6;--pastel-2:#97e29a;--blue:#1877e0;--amber:#a86200;--amber-bg:#fff2d6;--red:#b42318;--red-bg:#fde8e6;--ok-bg:#e3f6e4;--focus:#1877e0;--shadow:0 10px 30px -18px rgba(20,23,43,.45)}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1122;--card:#161c33;--ink:#e9edf9;--muted:#a3abc4;--line:rgba(233,237,249,.14);--amber:#ffc666;--amber-bg:#3a2c0e;--red:#ff9d94;--red-bg:#3c1714;--ok-bg:#163a1a;--shadow:0 10px 30px -18px rgba(0,0,0,.8)}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--blue)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header.top{background:var(--card);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;min-height:60px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+header.top img{height:30px;width:auto}
+header.top h1{font-size:1.05rem;margin:0;font-weight:700}
+header.top .who{margin-left:auto;font-size:.88rem;color:var(--muted);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:999px;padding:.6rem 1.1rem;font-weight:700;cursor:pointer;background:var(--card);border:1.5px solid var(--line);color:var(--ink)}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:linear-gradient(180deg,var(--green-2),var(--green));color:#fff;border-color:transparent}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.soft{background:linear-gradient(180deg,var(--pastel),var(--pastel-2));color:#165618;border-color:transparent}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.link{background:none;border:0;padding:.3rem .2rem;color:var(--blue);font-weight:600}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+/* sign in */
+.login{max-width:400px;margin:10vh auto;background:var(--card);border-radius:20px;padding:28px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.login img{height:40px;display:block;margin:0 auto 12px}
+.login h2{text-align:center;margin:0 0 4px;font-size:1.3rem}
+.login p{text-align:center;color:var(--muted);margin:0 0 18px;font-size:.95rem}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+input.t{width:100%;padding:.7rem .85rem;border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
+.login .btn{width:100%;margin-top:18px}
+.msg{border-radius:12px;padding:.7rem .9rem;margin:12px 0;font-size:.92rem}
+.msg.err{background:var(--red-bg);color:var(--red)}
+.msg.ok{background:var(--ok-bg)}
+/* toolbar */
+.bar{position:sticky;top:0;z-index:15;background:var(--bg);padding:12px 0;border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bar input.t{flex:1 1 220px;max-width:380px;background:var(--card)}
+.bar .count{font-weight:700;color:var(--muted);font-size:.92rem}
+.bar .count.has{color:var(--green)}
+.bar .sp{flex:1}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;padding-top:20px;padding-bottom:120px}
+nav.secs{position:sticky;top:84px;align-self:start;display:flex;flex-direction:column;gap:2px}
+nav.secs button{text-align:left;background:none;border:0;padding:.5rem .7rem;border-radius:10px;cursor:pointer;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+nav.secs button:hover{background:var(--card);color:var(--ink)}
+nav.secs button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+nav.secs .dot{min-width:1.4rem;height:1.4rem;border-radius:999px;background:var(--green);color:#fff;font-size:.75rem;display:inline-flex;align-items:center;justify-content:center;padding:0 .35rem}
+@media (max-width:820px){.layout{grid-template-columns:minmax(0,1fr);gap:12px}nav.secs{position:static;flex-direction:row;overflow-x:auto;padding-bottom:4px}nav.secs button{white-space:nowrap;flex:0 0 auto}header.top{position:relative}.bar{top:0}.bar input.t{flex:1 1 100%;max-width:none}.bar .sp{display:none}.bar .btn{padding:.5rem .9rem;font-size:.92rem}.bar .count{flex:1 1 100%;order:3;font-size:.85rem}header.top .who{margin-left:0;width:100%}}
+h2.sec{font-size:1.25rem;margin:0 0 4px}
+p.sechelp{color:var(--muted);margin:0 0 16px;font-size:.92rem}
+.item{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.item.changed{border-color:var(--green);box-shadow:0 0 0 3px rgba(19,153,24,.12)}
+.item .k{font-size:.88rem;font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}.item .k code{font-size:.7rem;font-weight:400;color:var(--muted)}
+textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:.6rem .75rem;background:var(--bg);resize:vertical;min-height:2.6rem;line-height:1.45}
+textarea.en{font-size:1rem;font-weight:500}
+details.trs{margin-top:8px}
+details.trs summary{cursor:pointer;font-size:.88rem;color:var(--muted);font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tr{margin-top:10px}
+.tr .h{display:flex;gap:8px;align-items:center;font-size:.85rem;font-weight:600;margin-bottom:4px;flex-wrap:wrap}
+.tag{font-size:.72rem;font-weight:700;border-radius:999px;padding:.12rem .55rem;white-space:nowrap}
+.tag.auto{background:var(--amber-bg);color:var(--amber)}
+.tag.rev{background:var(--ok-bg);color:var(--green)}
+.tag.stale{background:var(--red-bg);color:var(--red)}
+.tag.chg{background:var(--green);color:#fff}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:.8rem;color:var(--muted);font-weight:500;margin-left:auto;cursor:pointer}
+.empty{color:var(--muted);padding:30px 0;text-align:center}
+/* review dialog */
+dialog{border:0;border-radius:20px;padding:0;width:min(760px,calc(100vw - 32px));max-height:calc(100vh - 40px);background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(10,12,25,.55)}
+dialog .hd{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+dialog .hd h2{margin:0;font-size:1.15rem}
+dialog .bd{padding:16px 20px;overflow:auto;max-height:calc(100vh - 200px)}
+dialog .ft{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center}dialog .ft #dlgNote{flex:1 1 100%}
+.ch{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.ch .old{color:var(--muted);text-decoration:line-through;font-size:.92rem;white-space:pre-wrap}
+.ch .new{font-weight:600;white-space:pre-wrap}
+.spin{display:inline-block;width:16px;height:16px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--green);animation:sp 1s linear infinite;vertical-align:-3px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+/* tabs */
+nav.tabs{display:flex;gap:4px;overflow-x:auto;padding:0 0 0;margin-top:2px}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.7rem .9rem;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--green)}
+nav.tabs button:hover{color:var(--ink)}
+.narrow{max-width:860px;padding-top:24px;padding-bottom:120px}
+/* forms */
+.panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:16px}
+.panel h3{margin:0 0 4px;font-size:1.05rem}
+.panel p.help{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+.fld{margin:12px 0}
+.fld>label,.fld>.lbl{display:flex;justify-content:space-between;gap:8px;font-weight:600;font-size:.9rem;margin-bottom:4px}
+.fld .cnt{font-weight:500;color:var(--muted);font-size:.8rem}
+.fld .cnt.over{color:var(--red)}
+.fld input.t,.fld select,.fld textarea{width:100%}
+select.t{width:100%;max-width:100%;padding:.6rem .75rem;border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+.li{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.li textarea{flex:1}
+.li .x{flex:0 0 auto;border:0;background:var(--red-bg);color:var(--red);border-radius:10px;width:34px;height:34px;cursor:pointer;font-weight:700}
+.qa{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}
+.qa .li{margin:0}
+.add{background:none;border:1.5px dashed var(--line);border-radius:12px;padding:.5rem .9rem;cursor:pointer;font-weight:600;color:var(--muted)}
+.add:hover{border-color:var(--green);color:var(--green)}
+.actions{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:12px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;z-index:5}
+.actions .sp{flex:1}
+.btn.danger{color:var(--red)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.75rem 1.1rem;border-radius:14px;font-weight:600;z-index:50;box-shadow:var(--shadow);max-width:calc(100vw - 32px)}
+.toast.err{background:var(--red);color:#fff}
+/* rich text */
+.rte-bar{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border:1.5px solid var(--line);border-bottom:0;border-radius:14px 14px 0 0;background:var(--bg);position:sticky;top:0;z-index:4}
+.rte-bar button{border:1px solid transparent;background:var(--card);border-radius:9px;padding:.35rem .6rem;font-size:.85rem;font-weight:700;cursor:pointer;color:var(--ink)}
+.rte-bar button:hover{border-color:var(--line)}
+.rte-bar .sep{width:1px;background:var(--line);margin:2px 4px}
+.rte{min-height:320px;border:1.5px solid var(--line);border-radius:0 0 14px 14px;padding:14px 18px;background:var(--card);line-height:1.6;outline:none}
+.rte:focus{border-color:var(--focus)}
+.rte h2{font-size:1.35rem;margin:1.2em 0 .4em}.rte h3{font-size:1.1rem;margin:1em 0 .3em}
+.rte p{margin:.6em 0}.rte a{color:var(--blue)}
+.rte .callout{border:1px solid var(--line);border-left:4px solid var(--green);border-radius:12px;padding:.5rem .9rem;margin:1rem 0;background:var(--bg)}
+.rte figure{margin:1rem 0}.rte figure img{max-width:100%;height:auto;border-radius:12px;display:block}
+.rte figcaption{font-size:.88rem;color:var(--muted);text-align:center;margin-top:.3rem}
+.rte .ed-special{position:relative;border:1.5px dashed var(--line);border-radius:12px;padding:28px 12px 10px;margin:1rem 0;color:var(--muted);font-size:.88rem;max-height:160px;overflow:hidden;user-select:none}
+.rte .ed-special::before{content:"Special block (example or diagram). It stays as it is; select it and press Delete to remove it.";position:absolute;top:6px;left:12px;font-weight:700;font-size:.75rem;color:var(--amber)}
+/* photos */
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.ph{background:var(--card);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.ph img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--bg);display:block}
+.ph .meta{padding:8px 10px;font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;gap:4px;flex:1}
+.ph .meta b{color:var(--ink);font-size:.8rem;word-break:break-all}
+.ph button{margin:0 10px 10px}
+.pick .ph{cursor:pointer}.pick .ph:hover{border-color:var(--green)}
+.logo-prev{display:flex;gap:12px;flex-wrap:wrap}
+.logo-prev div{flex:1 1 220px;border-radius:14px;padding:18px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+.logo-prev img{max-width:100%;height:60px;object-fit:contain}
+.og-prev img{width:100%;max-width:600px;aspect-ratio:1200/630;object-fit:cover;border-radius:14px;border:1px solid var(--line);display:block}
+.cc table{width:100%;border-collapse:collapse}
+.cc td{padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:middle}
+.cc input{width:90px;padding:.45rem .6rem;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);text-align:right}
+nav.secs .btn.soft{background:linear-gradient(180deg,var(--pastel),var(--pastel-2));color:#165618;justify-content:center}
+.pick .ph{text-align:left;padding:0;font:inherit;color:inherit}
+.layout>main{min-width:0}
+.rte{overflow-wrap:anywhere}
+.rte table{display:block;overflow-x:auto}
+@media (max-width:640px){.actions{gap:8px}.actions .btn{padding:.5rem .85rem;font-size:.9rem}.actions .sp{display:none}}
+/* add / remove */
+.grp-bar{display:flex;align-items:center;gap:10px;margin:18px 2px 6px;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.grp-bar .btn{text-transform:none;letter-spacing:0;font-size:.85rem;margin-left:auto}
+.grp-bar.gone .tag{text-transform:none;letter-spacing:0}
+.item.removed{opacity:.45}.item.removed textarea{pointer-events:none}
+.addrow{display:block;width:100%;margin:6px 0 18px}
+.drag{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;color:var(--muted);font-size:1.2rem;line-height:1;padding:.4rem .35rem;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:32px;flex:none}
+.drag:hover{background:var(--bg);color:var(--ink)}
+.is-sorting>.be-b>:not(.be-h),.is-sorting>.bitem>:not(.bitem-h),.is-sorting>.be-add,.is-sorting>.be-b .be-h .btn,.is-sorting>.bitem .bitem-h .btn{display:none}
+.is-sorting>.be-b .be-h,.is-sorting>.bitem .bitem-h{margin:0}
+.dragging{position:relative;z-index:5;box-shadow:0 18px 40px -14px rgba(20,23,43,.45);outline:2px solid var(--green);outline-offset:2px;background:var(--card)}
+body.sorting,body.sorting *{cursor:grabbing!important;user-select:none!important;-webkit-user-select:none!important}
+.tag.sched{background:rgba(124,77,255,.14);color:#5b34c9}
+@media (prefers-color-scheme:dark){.tag.sched{background:rgba(160,130,255,.2);color:#c9b8ff}}
+.sched-box{margin-top:12px}.sched-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sched-row input{width:auto;min-width:min(100%,240px)}
+.crow{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.crow.gone{opacity:.55}
+.panel>.crow:first-child,.hs-list>.crow:first-child{border-top:0}
+.cthumb{width:84px;height:54px;border-radius:10px;overflow:hidden;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted);flex:0 0 auto}
+.cthumb img{width:100%;height:100%;object-fit:cover}
+.cmain{flex:1 1 220px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.cgrp{font-size:.8rem;color:var(--muted)}
+.clink{display:flex;gap:6px;align-items:center;font-size:.8rem;color:var(--muted)}.clink input{padding:.35rem .55rem;font-size:.85rem;flex:1;min-width:0}
+.cbtns{display:flex;gap:6px;flex-wrap:wrap}.cbtns .btn{padding:.4rem .8rem;font-size:.85rem}
+.addcard{margin-top:12px}.addcard summary{list-style:none;display:inline-block}.addcard[open] summary{margin-bottom:8px}
+/* preview */
+.pv{position:fixed;inset:0;z-index:60;background:rgba(10,12,25,.82);display:flex;flex-direction:column}
+.pv-bar{display:flex;gap:8px;align-items:center;padding:10px 16px;background:var(--card);flex-wrap:wrap}
+.pv-bar b{margin-right:auto}
+.pv-bar .btn{padding:.45rem .9rem}
+.pv-bar .btn[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pv-stage{flex:1;overflow:auto;display:flex;justify-content:center;padding:16px}
+.pv-frame{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);transform-origin:top center;flex:0 0 auto}
+.pv-frame iframe{border:0;display:block;width:100%;height:100%}
+.pv-note{color:#fff;opacity:.8;font-size:.85rem;text-align:center;padding:0 16px 10px}
+/* blocks editor */
+.be{display:flex;flex-direction:column;gap:12px}
+.be-b{border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;background:var(--bg)}
+.be-h,.bitem-h{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.be-h b{font-size:.95rem}.be-h .sp,.bitem-h .sp{flex:1}
+.be-h .btn,.bitem-h .btn{font-size:.82rem;padding:.2rem .4rem}
+.be-add{border:1.5px dashed var(--line);border-radius:16px;padding:12px 14px}
+.be-types{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-top:8px}
+.be-type{text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:.55rem .7rem;cursor:pointer;display:flex;flex-direction:column;gap:2px;font:inherit;color:inherit}
+.be-type:hover{border-color:var(--green)}.be-type span{font-size:.78rem;color:var(--muted)}
+.bitem{border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px;background:var(--card)}
+.bph{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.rte-bar.mini{position:static}
+.mn-row{display:grid;grid-template-columns:auto 1fr 1.3fr auto auto auto;gap:6px;align-items:center;margin-bottom:8px}
+@media (max-width:640px){.mn-row{grid-template-columns:auto 1fr auto auto auto}.mn-row input:nth-of-type(2){grid-column:2/-1;grid-row:2}}
+.hs-row .cbtns .btn{min-width:40px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<section id="login" class="login hidden" aria-labelledby="loginH">
+  <img src="/logo-400.webp" alt="AMBS">
+  <h2 id="loginH">Website editor</h2>
+  <p>Sign in to edit the wording on ambs.co.nz.</p>
+  <form id="loginForm">
+    <label class="f" for="email">Email</label>
+    <input class="t" id="email" type="email" autocomplete="username" required>
+    <label class="f" for="pw">Password</label>
+    <input class="t" id="pw" type="password" autocomplete="current-password" required>
+    <div id="loginMsg" class="msg err hidden" role="alert"></div>
+    <button class="btn primary" type="submit" id="loginBtn">Sign in</button>
+  </form>
+</section>
+
+<div id="app" class="hidden">
+  <header class="top"><div class="wrap">
+    <img src="/logo-400.webp" alt="AMBS">
+    <h1>Website editor</h1>
+    <div class="who"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="signOut" type="button">Sign out</button></div>
+  </div>
+  <div class="wrap"><nav class="tabs" role="tablist" aria-label="What to edit">
+    <button type="button" role="tab" data-tab="wording" aria-selected="true">Homepage wording</button>
+    <button type="button" role="tab" data-tab="sections" aria-selected="false">Homepage sections</button>
+    <button type="button" role="tab" data-tab="pages" aria-selected="false">Pages &amp; news</button>
+    <button type="button" role="tab" data-tab="menus" aria-selected="false">Menus</button>
+    <button type="button" role="tab" data-tab="photos" aria-selected="false">Photos &amp; logo</button>
+    <button type="button" role="tab" data-tab="business" aria-selected="false">Business details</button>
+    <button type="button" role="tab" data-tab="calc" aria-selected="false">Hours calculator</button>
+    <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
+  </nav></div>
+  </header>
+  <section id="tab-wording" class="tab">
+  <div class="bar"><div class="wrap">
+    <input class="t" id="search" type="search" placeholder="Search the wording…" aria-label="Search the wording">
+    <span class="count" id="count" aria-live="polite">No changes</span>
+    <span class="sp"></span>
+    <button class="btn" id="discard" type="button" disabled>Discard changes</button>
+    <button class="btn" id="preview" type="button" disabled>Preview</button>
+    <button class="btn primary" id="review" type="button" disabled>Review &amp; publish</button>
+  </div></div>
+  <div class="wrap layout">
+    <nav class="secs" id="secs" aria-label="Page sections"></nav>
+    <main id="list"><p class="empty"><span class="spin"></span> Loading the website wording…</p></main>
+  </div>
+  </section>
+
+  <section id="tab-pages" class="tab hidden">
+    <div class="wrap layout">
+      <nav class="secs" id="pgNav" aria-label="Pages"></nav>
+      <main id="pgMain"><p class="empty"><span class="spin"></span> Loading the pages…</p></main>
+    </div>
+  </section>
+
+  <section id="tab-photos" class="tab hidden"><div class="wrap narrow" id="phMain"><p class="empty"><span class="spin"></span> Loading the photos…</p></div></section>
+  <section id="tab-business" class="tab hidden"><div class="wrap narrow" id="bzMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+  <section id="tab-sections" class="tab hidden"><div class="wrap narrow" id="hsMain"></div></section>
+  <section id="tab-menus" class="tab hidden"><div class="wrap narrow" id="mnMain"></div></section>
+  <section id="tab-history" class="tab hidden"><div class="wrap narrow" id="hiMain"></div></section>
+  <section id="tab-calc" class="tab hidden"><div class="wrap narrow" id="ccMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+</div>
+<input type="file" id="filePick" accept="image/*" class="hidden">
+
+<dialog id="dlg" aria-labelledby="dlgH">
+  <div class="hd"><h2 id="dlgH">Review &amp; publish</h2></div>
+  <div class="bd" id="dlgBody"></div>
+  <div class="ft">
+    <span id="dlgNote" style="color:var(--muted);font-size:.88rem"></span>
+    <button class="btn" id="dlgClose" type="button">Keep editing</button>
+    <button class="btn primary" id="dlgPublish" type="button" disabled>Publish to ambs.co.nz</button>
+  </div>
+</dialog>
+
+<script>
+(function(){
+"use strict";
+var SUPA="https://onunconxcvkwowtgalxn.supabase.co", KEY="sb_publishable_xahs0OqyRaBptSTSvR3Vgg_ZtvsFX2U";
+var LANGS=[["zh","中文 Chinese"],["hi","हिन्दी Hindi"],["pa","ਪੰਜਾਬੀ Punjabi"],["mi","Te reo Māori"]];
+var SECTION_NAMES={header:"Top bar & menu",top:"Top of the page",automate:"What we do",transform:"Before & after",about:"About us",why:"Why us",how:"How it works",section:"Trust strip",knowledge:"Guides",faq:"Questions",book:"Booking & contact form",footer:"Footer",other:"Other wording"};
+var SECTION_HELP={other:"Wording that appears in forms, the hours calculator, pop-up messages and buttons."};
+var $=function(id){return document.getElementById(id)};
+var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}},del:function(k){try{localStorage.removeItem(k)}catch(e){}}};
+var ss={get:function(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{sessionStorage.setItem(k,v)}catch(e){}},del:function(k){try{sessionStorage.removeItem(k)}catch(e){}}};
+
+/* ---------- sign in (Supabase email + password) ---------- */
+var session=null;try{session=JSON.parse(ss.get("ambs-ed-session")||"null")}catch(e){}
+function saveSession(s){session=s;if(s)ss.set("ambs-ed-session",JSON.stringify(s));else ss.del("ambs-ed-session");}
+function authFetch(path,body){return fetch(SUPA+"/auth/v1/"+path,{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error_description||j.msg||j.message||"Sign-in failed");return j})})}
+function keep(j){saveSession({access:j.access_token,refresh:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000,email:(j.user&&j.user.email)||(session&&session.email)})}
+function token(){
+  if(!session)return Promise.reject(new Error("signin"));
+  if(Date.now()<session.exp-60000)return Promise.resolve(session.access);
+  return authFetch("token?grant_type=refresh_token",{refresh_token:session.refresh}).then(function(j){keep(j);return session.access}).catch(function(){saveSession(null);throw new Error("signin")});
+}
+function api(path,body){
+  return token().then(function(t){return fetch("/api/"+path,{method:"POST",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(body||{})})})
+    .then(function(r){return r.json().catch(function(){return{error:"Unexpected reply ("+r.status+")"}}).then(function(j){if(r.status===401){saveSession(null);showLogin("Please sign in again.");throw new Error("signin")}if(!r.ok)throw new Error(j.error||("Error "+r.status));return j})});
+}
+function showLogin(msg){$("app").classList.add("hidden");$("login").classList.remove("hidden");var m=$("loginMsg");if(msg){m.textContent=msg;m.classList.remove("hidden")}else m.classList.add("hidden");}
+$("loginForm").addEventListener("submit",function(e){
+  e.preventDefault();var b=$("loginBtn");b.disabled=true;b.textContent="Signing in…";
+  authFetch("token?grant_type=password",{email:$("email").value.trim(),password:$("pw").value})
+    .then(function(j){keep(j);$("pw").value="";start()})
+    .catch(function(err){showLogin(err.message==="Invalid login credentials"?"That email and password don't match.":err.message)})
+    .then(function(){b.disabled=false;b.textContent="Sign in"});
+});
+$("signOut").addEventListener("click",function(){
+  if(Object.keys(draft).length&&!confirm("You have changes that aren't published. They'll stay saved in this browser. Sign out?"))return;
+  var t=session&&session.access;saveSession(null);
+  if(t)fetch(SUPA+"/auth/v1/logout",{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+t}}).catch(function(){});
+  showLogin();
+});
+
+/* ---------- data ---------- */
+var items=[],byKey={},draft={},section=null,STRUCT={lists:{},cards:[],tools:[],icons:[]},KEYLIST={};
+/* draft: { key: { en?, zh?, hi?, pa?, mi?, rev?: {lang:true|false} } }  kept in this browser until published */
+try{draft=JSON.parse(store.get("ambs-ed-draft")||"{}")||{}}catch(e){draft={}}
+function saveDraft(){
+  Object.keys(draft).forEach(function(k){if(k==="__ops")return;var d=draft[k];if(d.rev&&!Object.keys(d.rev).length)delete d.rev;if(!Object.keys(d).length)delete draft[k]});
+  if(draft.__ops&&!opsCount())delete draft.__ops;
+  store.set("ambs-ed-draft",JSON.stringify(draft));updateBar();
+}
+function cur(k,f){var d=draft[k];if(d&&typeof d[f]==="string")return d[f];var it=byKey[k];return f==="en"?it.en:it.tr[f]}
+function isRev(k,l){var d=draft[k];if(d&&d.rev&&l in d.rev)return d.rev[l];return byKey[k].status[l]==="reviewed"}
+function enChanged(k){var d=draft[k];return !!(d&&typeof d.en==="string"&&d.en!==byKey[k].en)}
+function changedKeys(){return Object.keys(draft).filter(function(k){return byKey[k]})}
+/* added and removed homepage items, cards and tools, kept with the draft until published */
+function ops(){return draft.__ops||(draft.__ops={add:[],remove:[],cards:{add:[],remove:[],photo:[],drawing:[],link:[]},tools:null})}
+function opsCount(){var o=draft.__ops;if(!o)return 0;var c=o.cards;return o.add.length+o.remove.length+c.add.length+c.remove.length+c.photo.length+c.drawing.length+c.link.length+(o.tools?1:0)}
+function nChanges(){return changedKeys().length+opsCount()}
+var LIST_KEYS={faq:["faq.q#","faq.a#"],"why.o":["why.o#"],"why.n":["why.n#"],about:["about.a#t","about.a#d"],how:["how.s#t","how.s#d"],trust:["trust.u#t","trust.u#d"]};
+var LIST_NAMES={faq:["question","Question","Answer"],"why.o":["row (what often goes wrong)","Text"],"why.n":["row (with Ambs Solutions)","Text"],about:["letter","Heading, for example “A · Ambition”","Text"],how:["step","Step title","Step text"],trust:["point","Heading","Text"],pts:["point","Point"]};
+function keysFor(id,n){if(id.indexOf("pts:")===0)return["auto.c"+id.slice(4)+"p"+n];return LIST_KEYS[id].map(function(k){return k.replace("#",n)})}
+function lname(id){return LIST_NAMES[id.indexOf("pts:")===0?"pts":id]}
+function isRemoved(id,n){return ops().remove.some(function(r){return r.list===id&&r.n===n})}
+
+function start(){
+  $("login").classList.add("hidden");$("app").classList.remove("hidden");
+  if(window.edTabs)window.edTabs.reset();
+  $("whoEmail").textContent=session&&session.email||"";
+  $("list").innerHTML='<p class="empty"><span class="spin"></span> Loading the website wording…</p>';
+  api("content").then(function(j){
+    items=j.items;byKey={};items.forEach(function(it){byKey[it.key]=it});
+    Object.keys(draft).forEach(function(k){if(!byKey[k]&&k!=="__ops")delete draft[k]});
+    STRUCT={lists:j.lists||{},cards:j.cards||[],tools:j.tools||[],icons:j.icons||[]};KEYLIST={};
+    Object.keys(STRUCT.lists).forEach(function(id){STRUCT.lists[id].ns.forEach(function(n){keysFor(id,n).forEach(function(k,i){KEYLIST[k]={list:id,n:n,first:i===0,last:i===keysFor(id,n).length-1}})})});
+    var secs=[];items.forEach(function(it){if(secs.indexOf(it.section)<0)secs.push(it.section)});
+    if(!section||secs.indexOf(section)<0)section=secs[0];
+    renderNav(secs);render();saveDraft();
+  }).catch(function(err){if(err.message!=="signin")$("list").innerHTML='<div class="msg err">Could not load the wording: '+esc(err.message)+'</div>'});
+}
+/* plain-English names for each piece of wording */
+var PART={eyebrow:"Small label above the heading",title:"Heading",h:"Heading",h1:"Main heading",h2:"Heading",lead:"Intro text",sub:"Subheading",intro:"Intro text",note:"Small print",btn:"Button",cta:"Button",more:"Link",read:"Link text",label:"Label",ph:"Placeholder",placeholder:"Placeholder",q:"Question",a:"Answer"};
+function words(s){return s.replace(/([a-z])([A-Z0-9])/g,"$1 $2").replace(/[_-]/g," ").toLowerCase()}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function label(k){
+  var i=k.indexOf("."),pre=k.slice(0,i),rest=k.slice(i+1),m;
+  if((m=rest.match(/^c(\d+)(t|d|p(\d+))$/))){
+    var t=byKey[pre+".c"+m[1]+"t"],name=t?cur(pre+".c"+m[1]+"t","en"):"Card "+m[1];
+    return name+" · "+(m[2]==="t"?"Title":m[2]==="d"?"Description":"Point "+m[3]);
+  }
+  if((m=rest.match(/^(q|a)(\d+)$/)))return (m[1]==="q"?"Question ":"Answer ")+m[2];
+  if((m=rest.match(/^s(\d+)(t|d)$/)))return "Step "+m[1]+" · "+(m[2]==="t"?"Title":"Description");
+  if(PART[rest])return PART[rest];
+  return cap(words(rest.replace(/\./g," ")));
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+/* ---------- rendering ---------- */
+function renderNav(secs){
+  var n=$("secs");n.innerHTML="";
+  secs.forEach(function(s){
+    var b=document.createElement("button");b.type="button";b.dataset.s=s;
+    b.innerHTML='<span>'+esc(SECTION_NAMES[s]||s)+'</span><span class="dot hidden"></span>';
+    b.addEventListener("click",function(){section=s;$("search").value="";render();window.scrollTo({top:0})});
+    n.appendChild(b);
+  });
+}
+function navMarks(){
+  var counts={};changedKeys().forEach(function(k){var s=byKey[k].section;counts[s]=(counts[s]||0)+1});
+  Array.prototype.forEach.call($("secs").children,function(b){
+    b.classList.toggle("on",b.dataset.s===section&&!$("search").value.trim());
+    var d=b.querySelector(".dot");var c=counts[b.dataset.s]||0;d.textContent=c;d.classList.toggle("hidden",!c);
+  });
+}
+function autosize(t){t.style.height="auto";t.style.height=(t.scrollHeight+3)+"px"}
+function render(){
+  var q=$("search").value.trim().toLowerCase(),list=$("list");
+  var shown=items.filter(function(it){
+    if(!q)return it.section===section;
+    return (cur(it.key,"en")+" "+it.key+" "+LANGS.map(function(l){return cur(it.key,l[0])}).join(" ")).toLowerCase().indexOf(q)>=0;
+  });
+  list.innerHTML=q?'<h2 class="sec">Search results</h2><p class="sechelp">'+shown.length+' match'+(shown.length===1?'':'es')+' for “'+esc(q)+'”</p>'
+    :'<h2 class="sec">'+esc(SECTION_NAMES[section]||section)+'</h2><p class="sechelp">'+esc(SECTION_HELP[section]||"Change the English and press Review & publish. Until Claude translates your change, the other languages show your new English. Next time you chat with Claude, say “translate the editor changes”.")+'</p>';
+  if(!shown.length){list.insertAdjacentHTML("beforeend",'<p class="empty">Nothing matches.</p>')}
+  if(!q&&section==="automate")list.appendChild(cardsPanel());
+  if(!q&&section==="section")list.appendChild(toolsPanel());
+  shown.forEach(function(it){
+    var L=KEYLIST[it.key];
+    if(L&&L.first)list.appendChild(groupBar(L.list,L.n));
+    var c=card(it);if(L&&isRemoved(L.list,L.n))c.classList.add("removed");list.appendChild(c);
+    if(!q&&L&&L.last){var ns=STRUCT.lists[L.list].ns;if(L.n===ns[ns.length-1]){ops().add.filter(function(a){return a.list===L.list}).forEach(function(a){list.appendChild(newItem(a))});list.appendChild(addBtn(L.list))}}
+  });
+  list.querySelectorAll("textarea").forEach(autosize);
+  navMarks();
+}
+function groupBar(id,n){
+  var nm=lname(id),gone=isRemoved(id,n),el=document.createElement("div");el.className="grp-bar"+(gone?" gone":"");
+  el.innerHTML='<span>'+esc(cap(nm[0]))+'</span>'+(gone?'<span class="tag stale">Will be removed when you publish</span><button type="button" class="btn link">Undo</button>':'<button type="button" class="btn link danger">Remove this '+esc(nm[0].replace(/ \(.*\)/,""))+'</button>');
+  el.querySelector("button").addEventListener("click",function(){var o=ops();
+    if(gone)o.remove=o.remove.filter(function(r){return!(r.list===id&&r.n===n)});
+    else{var left=STRUCT.lists[id].ns.filter(function(x){return!isRemoved(id,x)}).length+o.add.filter(function(a){return a.list===id}).length;if(left<=1){alert("Keep at least one "+nm[0]+" here.");return}o.remove.push({list:id,n:n})}
+    saveDraft();render()});
+  return el}
+function newItem(a){
+  var nm=lname(a.list),el=document.createElement("div");el.className="item changed newitem";
+  el.innerHTML='<div class="k"><span>New '+esc(nm[0])+'</span><span class="tag chg">New</span><button type="button" class="btn link danger" style="margin-left:auto">Remove</button></div>';
+  nm.slice(1).forEach(function(lbl,i){var w=document.createElement("div");w.style.marginTop="8px";w.innerHTML='<div style="font-size:.85rem;font-weight:600;margin-bottom:4px">'+esc(lbl)+'</div><textarea class="en" rows="1"></textarea>';var t=w.querySelector("textarea");t.value=a.en[i]||"";t.addEventListener("input",function(){a.en[i]=t.value;autosize(t);saveDraft()});el.appendChild(w)});
+  el.querySelector(".k button").addEventListener("click",function(){var o=ops();o.add=o.add.filter(function(x){return x!==a});saveDraft();render()});
+  el.insertAdjacentHTML("beforeend",'<p style="font-size:.82rem;color:var(--muted);margin:8px 0 0">The other languages show this in English until Claude translates it.</p>');
+  return el}
+function addBtn(id){var nm=lname(id),b=document.createElement("button");b.type="button";b.className="add addrow";b.textContent="+ Add a "+nm[0];
+  b.addEventListener("click",function(){var a={list:id,en:nm.slice(1).map(function(){return""})};ops().add.push(a);saveDraft();render();var all=document.querySelectorAll(".newitem textarea");var t=document.querySelector('.newitem:last-of-type textarea');setTimeout(function(){var els=document.querySelectorAll(".newitem");var last=els[els.length-1];if(last){last.scrollIntoView({block:"center"});last.querySelector("textarea").focus()}},50)});return b}
+function cardTitle(n){var k="auto.c"+n+"t";return byKey[k]?cur(k,"en"):"Card "+n}
+function cardsPanel(){
+  var o=ops().cards,p=document.createElement("div");p.className="panel cards-panel";
+  p.innerHTML='<h3>Cards</h3><p class="help">Add a new card, remove one, or show a photo instead of the drawing. The wording of each card is further down this page.</p><div class="cl"></div>';
+  var cl=p.querySelector(".cl");
+  STRUCT.cards.forEach(function(c){
+    var removed=o.remove.indexOf(c.n)>=0,ph=o.photo.filter(function(x){return x.n===c.n})[0],back=o.drawing.indexOf(c.n)>=0,ln=o.link.filter(function(x){return x.n===c.n})[0];
+    var showsPhoto=ph?ph.url:(back?null:c.photo);
+    var r=document.createElement("div");r.className="crow"+(removed?" gone":"");
+    r.innerHTML='<div class="cthumb">'+(showsPhoto?'<img alt="" src="'+esc(window.edPhotoSrc?window.edPhotoSrc(showsPhoto):showsPhoto)+'">':'<span>Drawing</span>')+'</div><div class="cmain"><b>'+esc(cardTitle(c.n))+'</b><span class="cgrp">'+(c.digital?"Digital solutions":"AI automation")+(removed?' · <span class="tag stale">Will be removed</span>':ph?' · <span class="tag chg">New photo</span>':back?' · <span class="tag chg">Back to drawing</span>':'')+'</span><label class="clink">Link <input class="t" value=""></label></div><div class="cbtns"></div>';
+    var inp=r.querySelector("input");inp.value=ln?ln.href:c.link;inp.addEventListener("change",function(){o.link=o.link.filter(function(x){return x.n!==c.n});if(inp.value.trim()&&inp.value.trim()!==c.link)o.link.push({n:c.n,href:inp.value.trim()});saveDraft()});
+    var bx=r.querySelector(".cbtns");
+    function btn(t,f,cls){var b=document.createElement("button");b.type="button";b.className="btn"+(cls?" "+cls:"");b.textContent=t;b.addEventListener("click",f);bx.appendChild(b)}
+    if(removed)btn("Undo",function(){o.remove=o.remove.filter(function(x){return x!==c.n});saveDraft();render()});
+    else{
+      btn(showsPhoto?"Change photo":"Use a photo",function(){window.edPickPhoto().then(function(pp){if(!pp)return;o.photo=o.photo.filter(function(x){return x.n!==c.n});o.drawing=o.drawing.filter(function(x){return x!==c.n});o.photo.push({n:c.n,url:pp.url});saveDraft();render()})});
+      if(showsPhoto&&c.hasDrawing)btn("Back to the drawing",function(){o.photo=o.photo.filter(function(x){return x.n!==c.n});if(c.photo)o.drawing.push(c.n);saveDraft();render()});
+      if(ph||back)btn("Undo",function(){o.photo=o.photo.filter(function(x){return x.n!==c.n});o.drawing=o.drawing.filter(function(x){return x!==c.n});saveDraft();render()});
+      btn("Remove card",function(){if(STRUCT.cards.length-o.remove.length<=1){alert("Keep at least one card.");return}if(confirm("Remove “"+cardTitle(c.n)+"” from the homepage when you publish?")){o.remove.push(c.n);saveDraft();render()}},"danger");
+    }
+    cl.appendChild(r);
+  });
+  o.add.forEach(function(c){var r=document.createElement("div");r.className="crow";r.innerHTML='<div class="cthumb"><img alt="" src="'+esc(window.edPhotoSrc?window.edPhotoSrc(c.photo):c.photo)+'"></div><div class="cmain"><b>'+esc(c.t)+'</b><span class="cgrp">'+(c.digital?"Digital solutions":"AI automation")+' · <span class="tag chg">New card</span></span></div><div class="cbtns"><button type="button" class="btn danger">Remove</button></div>';
+    r.querySelector("button").addEventListener("click",function(){o.add=o.add.filter(function(x){return x!==c});saveDraft();render()});cl.appendChild(r)});
+  var f=document.createElement("details");f.className="addcard";f.innerHTML='<summary class="add">+ Add a card</summary><div class="grid2"><div class="fld"><label>Group</label><select class="t" data-f="g"><option value="0">AI automation</option><option value="1">Digital solutions</option></select></div><div class="fld"><label>Icon</label><select class="t" data-f="i">'+STRUCT.icons.map(function(k){return'<option>'+esc(k)+'</option>'}).join("")+'</select></div></div><div class="fld"><label>Title</label><input class="t" data-f="t"></div><div class="fld"><label>Description</label><textarea class="t" rows="2" data-f="d"></textarea></div><div class="fld"><label>Points (one per line)</label><textarea class="t" rows="3" data-f="p"></textarea></div><div class="fld"><label>Link for “Learn more”</label><input class="t" data-f="l" value="/services" placeholder="/guides/... or /services/..."></div><div class="fld"><label>Photo</label><div><button type="button" class="btn" data-f="ph">Choose a photo</button> <span class="phname" style="font-size:.85rem;color:var(--muted)"></span></div></div><button type="button" class="btn primary" data-f="go">Add this card</button>';
+  var chosen=null;f.querySelector('[data-f=ph]').addEventListener("click",function(){window.edPickPhoto().then(function(pp){if(!pp)return;chosen=pp.url;f.querySelector(".phname").textContent=pp.url.split("/").pop()})});
+  f.querySelector('[data-f=go]').addEventListener("click",function(){var v=function(x){return f.querySelector('[data-f='+x+']').value.trim()};
+    if(!v("t")){alert("Give the card a title");return}if(!chosen){alert("Choose a photo for the card");return}
+    o.add.push({digital:v("g")==="1",icon:v("i"),t:v("t"),d:v("d"),p:v("p").split("\n").map(function(x){return x.trim()}).filter(Boolean).slice(0,6),link:v("l")||"/services",photo:chosen});saveDraft();render()});
+  p.appendChild(f);return p}
+function toolsPanel(){
+  var p=document.createElement("div");p.className="panel";var cur0=ops().tools||STRUCT.tools;
+  p.innerHTML='<h3>Tools strip</h3><p class="help">The product names that scroll across this section. One per line.</p><textarea class="t" rows="6" style="width:100%"></textarea>';
+  var t=p.querySelector("textarea");t.value=cur0.join("\n");t.addEventListener("input",function(){var v=t.value.split("\n").map(function(x){return x.trim()}).filter(Boolean);ops().tools=(v.join("|")===STRUCT.tools.join("|"))?null:v;saveDraft()});
+  return p}
+function card(it){
+  var k=it.key,el=document.createElement("div");el.className="item";el.dataset.k=k;
+  el.innerHTML='<div class="k"><span>'+esc(label(k))+'</span><code>'+esc(k)+'</code><span class="tag chg hidden">Changed</span></div>'+
+    '<label class="hidden" for="en-'+esc(k)+'">English</label><textarea class="en" id="en-'+esc(k)+'" rows="1"></textarea>'+
+    '<details class="trs"><summary>Translations <span class="sum"></span></summary><div class="trbox"></div></details>';
+  var ta=el.querySelector("textarea.en");ta.value=cur(k,"en");
+  ta.addEventListener("input",function(){
+    var d=draft[k]||(draft[k]={});
+    if(ta.value===it.en)delete d.en;else d.en=ta.value;
+    autosize(ta);saveDraft();refreshCard(el);
+  });
+  var box=el.querySelector(".trbox");
+  LANGS.forEach(function(L){
+    var l=L[0],t=document.createElement("div");t.className="tr";t.dataset.l=l;
+    t.innerHTML='<div class="h"><span>'+L[1]+'</span><span class="tag"></span><label class="chk"><input type="checkbox"> Checked by a fluent speaker</label></div><textarea rows="1" lang="'+l+'" aria-label="'+esc(L[1])+'"></textarea>';
+    var tt=t.querySelector("textarea");tt.value=cur(k,l);
+    tt.addEventListener("input",function(){var d=draft[k]||(draft[k]={});if(tt.value===it.tr[l])delete d[l];else d[l]=tt.value;autosize(tt);saveDraft();refreshCard(el)});
+    var cb=t.querySelector("input");cb.checked=isRev(k,l);
+    cb.addEventListener("change",function(){var d=draft[k]||(draft[k]={});d.rev=d.rev||{};var was=it.status[l]==="reviewed";if(cb.checked===was)delete d.rev[l];else d.rev[l]=cb.checked;saveDraft();refreshCard(el)});
+    box.appendChild(t);
+  });
+  el.querySelector("details").addEventListener("toggle",function(){el.querySelectorAll(".trbox textarea").forEach(autosize)});
+  refreshCard(el);return el;
+}
+function refreshCard(el){
+  var k=el.dataset.k,ch=!!draft[k],stale=enChanged(k);
+  el.classList.toggle("changed",ch);el.querySelector(".tag.chg").classList.toggle("hidden",!ch);
+  var nAuto=0;
+  el.querySelectorAll(".tr").forEach(function(t){
+    var l=t.dataset.l,tag=t.querySelector(".tag"),rev=isRev(k,l),edited=draft[k]&&typeof draft[k][l]==="string";
+    if(stale&&!edited){tag.className="tag stale";tag.textContent="Shows English until translated"}
+    else if(byKey[k].status[l]==="needs"&&!edited){tag.className="tag stale";tag.textContent="Waiting for translation";nAuto++}
+    else if(rev){tag.className="tag rev";tag.textContent="Checked"}
+    else{tag.className="tag auto";tag.textContent=byKey[k].status[l]?"Auto-translated":"Not checked yet";nAuto++}
+  });
+  var waiting=LANGS.some(function(L){return byKey[k].status[L[0]]==="needs"});
+  el.querySelector(".sum").innerHTML=stale?'<span class="tag stale">Translations waiting after you publish</span>':waiting?'<span class="tag stale">Waiting for translation</span>':(nAuto?'<span class="tag auto">'+nAuto+' not checked</span>':'<span class="tag rev">All checked</span>');
+}
+function updateBar(){
+  var n=nChanges(),c=$("count");
+  c.textContent=n?n+" unpublished change"+(n===1?"":"s"):"No changes";c.classList.toggle("has",!!n);
+  $("review").disabled=!n;$("discard").disabled=!n;$("preview").disabled=!n;
+  if(items.length)navMarks();
+}
+$("search").addEventListener("input",function(){render()});
+$("discard").addEventListener("click",function(){if(confirm("Discard all unpublished changes?")){draft={};saveDraft();render()}});
+window.addEventListener("beforeunload",function(e){if(nChanges()){e.preventDefault();e.returnValue=""}});
+
+/* ---------- review, translate, publish ---------- */
+var pending=null;
+$("review").addEventListener("click",function(){
+  var keys=changedKeys();if(!nChanges())return;
+  var body=$("dlgBody"),pub=$("dlgPublish"),note=$("dlgNote");
+  pending={changes:{},status:{},ops:cleanOps()};pub.disabled=true;note.textContent="";
+  body.innerHTML="";
+  opsSummary().forEach(function(t){var b=document.createElement("div");b.className="ch";b.innerHTML='<div class="new">'+esc(t)+'</div>';body.appendChild(b)});
+  keys.forEach(function(k){
+    var it=byKey[k],d=draft[k],box=document.createElement("div");box.className="ch";box.dataset.k=k;
+    var html='<div style="font-size:.8rem;color:var(--muted);font-weight:600">'+esc(SECTION_NAMES[it.section]||it.section)+' · '+esc(label(k))+'</div>';
+    if(enChanged(k))html+='<div class="old">'+esc(it.en)+'</div><div class="new">'+esc(d.en)+'</div>';
+    else html+='<div class="new">'+esc(it.en)+'</div>';
+    html+='<div class="trv"></div>';box.innerHTML=html;body.appendChild(box);
+  });
+  $("dlg").showModal();
+  keys.forEach(function(k){
+    var it=byKey[k],d=draft[k],c={was:it.en},st={},changed=enChanged(k),wait=[];
+    if(changed)c.en=d.en;
+    LANGS.forEach(function(L){var l=L[0],manual=typeof d[l]==="string"&&d[l]!==it.tr[l];
+      if(manual){c[l]=d[l];st[l]=(d.rev&&d.rev[l])?"reviewed":"auto"}
+      else if(changed){c[l]=null;st[l]="needs";wait.push(L[1])}
+      else if(d.rev&&l in d.rev){st[l]=d.rev[l]?"reviewed":"auto"}
+    });
+    pending.changes[k]=c;if(Object.keys(st).length)pending.status[k]=st;
+    var trv=body.querySelector('.ch[data-k="'+CSS.escape(k)+'"] .trv');
+    var marks=LANGS.filter(function(L){return !changed&&d.rev&&L[0] in d.rev}).map(function(L){return L[1].split(" ").pop()+(d.rev[L[0]]?" marked as checked":" marked as not checked")});
+    var edits=LANGS.filter(function(L){return !changed&&typeof c[L[0]]==="string"}).map(function(L){return L[1].split(" ").pop()+" translation edited"});
+    if(marks.length||edits.length)trv.innerHTML='<div style="font-size:.88rem;color:var(--muted);margin-top:6px">'+esc(edits.concat(marks).join(" · "))+'</div>';
+    if(wait.length)trv.innerHTML='<div class="msg" style="background:var(--amber-bg);color:var(--amber);margin:8px 0 0">'+esc(wait.length===4?"Chinese, Hindi, Punjabi and Māori":wait.join(", "))+' will show this English until Claude translates it.</div>';
+  });
+  var nWait=keys.filter(function(k){return pending.status[k]&&LANGS.some(function(L){return pending.status[k][L[0]]==="needs"})}).length+ops().add.length+ops().cards.add.length;
+  note.innerHTML=nWait?'After publishing, next time you chat with Claude say <b>“translate the editor changes”</b>.':'';
+  pub.disabled=false;pub.focus();
+});
+$("dlgClose").addEventListener("click",function(){$("dlg").close()});
+function cleanOps(){var o=ops();return{add:o.add.map(function(a){return{list:a.list,en:a.en}}),remove:o.remove,cards:o.cards,tools:o.tools}}
+function opsSummary(){var o=ops(),out=[];
+  o.add.forEach(function(a){out.push("Add "+lname(a.list)[0]+": "+(a.en[0]||"(empty)"))});
+  o.remove.forEach(function(r){out.push("Remove "+lname(r.list)[0]+": "+cur(keysFor(r.list,r.n)[0],"en"))});
+  o.cards.add.forEach(function(c){out.push("New card: "+c.t)});o.cards.remove.forEach(function(n){out.push("Remove card: "+cardTitle(n))});
+  o.cards.photo.forEach(function(x){out.push("Photo on card: "+cardTitle(x.n))});o.cards.drawing.forEach(function(n){out.push("Drawing back on card: "+cardTitle(n))});
+  o.cards.link.forEach(function(x){out.push("Card link: "+cardTitle(x.n)+" → "+x.href)});if(o.tools)out.push("Tools strip: "+o.tools.join(", "));return out}
+/* what the publish button would send, without the review screen */
+function buildPayload(){var p={changes:{},status:{},ops:cleanOps()};changedKeys().forEach(function(k){var it=byKey[k],d=draft[k],c={was:it.en};if(enChanged(k))c.en=d.en;LANGS.forEach(function(L){var l=L[0];if(typeof d[l]==="string"&&d[l]!==it.tr[l])c[l]=d[l]});p.changes[k]=c});return p}
+$("preview").addEventListener("click",function(){var b=this;b.disabled=true;var t=b.textContent;b.innerHTML='<span class="spin"></span> Preparing…';
+  var pl=buildPayload();pl.preview=true;api("publish",pl).then(function(j){window.edShowPreview(j.html,j.js,"Homepage preview")}).catch(function(e){if(e.message!=="signin")alert(e.message)}).then(function(){b.disabled=false;b.textContent=t})});
+$("dlgPublish").addEventListener("click",function(){
+  var pub=$("dlgPublish"),note=$("dlgNote");pub.disabled=true;$("dlgClose").disabled=true;
+  note.innerHTML='<span class="spin"></span> Publishing…';
+  api("publish",pending).then(function(j){
+    draft={};saveDraft();
+    $("dlgBody").innerHTML='<div class="msg ok"><b>Published.</b> Your changes will be live on ambs.co.nz in about a minute (build '+esc(j.build)+'). You may need to refresh the page to see them.'+(Object.keys(pending.status).some(function(k){return LANGS.some(function(L){return pending.status[k][L[0]]==="needs"})})?'<br><br>The other languages show your English for now. Next time you chat with Claude, say <b>“translate the editor changes”</b>.':'')+'</div>';
+    note.textContent="";$("dlgClose").textContent="Done";$("dlgClose").disabled=false;pub.classList.add("hidden");
+    $("dlgClose").onclick=function(){$("dlg").close();pub.classList.remove("hidden");$("dlgClose").textContent="Keep editing";$("dlgClose").onclick=null;start()};
+  }).catch(function(err){
+    note.innerHTML='<span style="color:var(--red)">'+esc(err.message)+'</span>';pub.disabled=false;$("dlgClose").disabled=false;
+  });
+});
+
+window.ED={api:api,esc:esc,store:store,autosize:autosize,confirmLeave:function(){return changedKeys().length>0}};
+if(session)start();else showLogin();
+})();
+</script>
+<script>
+/* ---------- the other tabs: pages, photos, business details, calculator ---------- */
+(function(){
+"use strict";
+var ED=window.ED,api=ED.api,esc=ED.esc;
+var $=function(id){return document.getElementById(id)};
+var loaded={wording:true},current="wording",dirty=false,fresh={};
+var LIVE_NOTE="Live on ambs.co.nz in about 2 minutes.";
+var ICON_NAMES={auto:"Lightning",web:"Website",cafe:"Coffee cup",trades:"Tools",clinic:"Medical cross",retail:"Shop",adviser:"Document",transport:"Truck",guide:"Book",shield:"Shield",chart:"Chart",chat:"Speech bubble",cal:"Calendar",link:"Link",invoice:"Invoice",book:"Open book",target:"Target"};
+var SEC={guides:"Guides",industries:"Industries",services:"Services",news:"News",legal:"Legal pages",page:"Pages"};
+var SEC_ONE={guides:"guide",industries:"industry page",services:"service page"};
+
+function toast(msg,err){var t=document.createElement("div");t.className="toast"+(err?" err":"");t.setAttribute("role",err?"alert":"status");t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove()},err?6000:3800)}
+function h(html){var t=document.createElement("template");t.innerHTML=html.trim();return t.content.firstElementChild}
+function fail(err){if(err&&err.message!=="signin")toast(err.message||String(err),true)}
+function busy(btn,on,label){if(!btn)return;if(on){btn.dataset.l=btn.textContent;btn.disabled=true;btn.innerHTML='<span class="spin"></span> '+esc(label||"Saving…")}else{btn.disabled=false;btn.textContent=btn.dataset.l||btn.textContent}}
+function counter(input,max){var f=input.closest(".fld"),c=f&&f.querySelector(".cnt");if(!c)return;var u=function(){c.textContent=input.value.length+" / "+max;c.classList.toggle("over",input.value.length>max)};input.addEventListener("input",u);u()}
+function markDirty(){dirty=true}
+/* drag to reorder: hold the ⠿ handle and move it up or down; works with a mouse and on touch screens.
+   onDrop(from,to) gets the old and new position. The ↑ ↓ buttons stay for keyboards. */
+function sortable(box,itemSel,onDrop){
+  box.dataset.sortable="1";
+  box.addEventListener("pointerdown",function(e){
+    var hd=e.target.closest(".drag");if(!hd||hd.closest("[data-sortable]")!==box||e.button>0)return;
+    var it=hd.closest(itemSel);if(!it||it.parentNode!==box)return;
+    e.preventDefault();e.stopPropagation();
+    var items=function(){return Array.prototype.filter.call(box.children,function(x){return x.matches(itemSel)})};
+    var from=items().indexOf(it),y=e.clientY,tm;
+    /* big items (blocks, questions) fold to their title bar while dragging, keeping the grabbed one under the finger */
+    var t0=it.getBoundingClientRect().top;
+    it.classList.add("dragging");document.body.classList.add("sorting");box.classList.add("is-sorting");
+    var t1=it.getBoundingClientRect().top;if(t1!==t0)scrollBy(0,t1-t0);
+    function place(){var list=items().filter(function(x){return x!==it}),before=null;
+      for(var i=0;i<list.length;i++){var r=list[i].getBoundingClientRect();if(y<r.top+r.height/2){before=list[i];break}}
+      if(before){if(it.nextElementSibling!==before)box.insertBefore(it,before)}
+      else if(list.length){var last=list[list.length-1];if(last.nextElementSibling!==it)box.insertBefore(it,last.nextSibling)}}
+    /* listen on the whole window: moving the item in the page would lose a capture on the handle */
+    function move(ev){if(ev.pointerId!==e.pointerId)return;ev.preventDefault();y=ev.clientY;place()}
+    /* scroll the page while dragging near the top or bottom edge */
+    tm=setInterval(function(){var d=y<70?-14:y>innerHeight-70?14:0;if(d){scrollBy(0,d);place()}},30);
+    function up(ev){if(ev.pointerId!==e.pointerId)return;clearInterval(tm);removeEventListener("pointermove",move);removeEventListener("pointerup",up);removeEventListener("pointercancel",up);
+      it.classList.remove("dragging");document.body.classList.remove("sorting");box.classList.remove("is-sorting");var to=items().indexOf(it);
+      if(to!==from)onDrop(from,to);
+      /* show where it landed */
+      var moved=Array.prototype.filter.call(box.children,function(x){return x.matches(itemSel)})[to];if(moved&&moved.scrollIntoView)moved.scrollIntoView({block:"nearest"})}
+    addEventListener("pointermove",move,{passive:false});addEventListener("pointerup",up);addEventListener("pointercancel",up);
+  })}
+function moveIn(arr,from,to){arr.splice(to,0,arr.splice(from,1)[0])}
+window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue=""}});
+function leaveOk(){if(!dirty)return true;if(confirm("You have unsaved changes on this page. Leave without saving?")){dirty=false;return true}return false}
+
+/* ---------- preview: the page shown at phone, tablet or laptop size ---------- */
+function showPreview(html,js,title){
+  var doc=String(html).replace(/<head>/i,'<head><base href="'+location.origin+'/" target="_blank"><script>try{var sw={controller:null,ready:new Promise(function(){}),register:function(){return Promise.reject(new Error("preview"))},getRegistration:function(){return Promise.resolve(undefined)},getRegistrations:function(){return Promise.resolve([])},addEventListener:function(){},removeEventListener:function(){}};Object.defineProperty(navigator,"serviceWorker",{value:sw,configurable:true})}catch(e){}'+
+    /* forms in the preview work but send nothing */
+    'try{var F0=window.fetch;window.fetch=function(u){if(/web3forms|portal\\.ambs/.test(String(u)))return new Promise(function(ok){setTimeout(function(){ok(new Response(\'{"success":true}\'))},500)});return F0.apply(this,arguments)};navigator.sendBeacon=function(){return true}}catch(e){}<\/script>');
+  doc=freshImgs(doc);
+  if(/data-blk-form/.test(doc)&&!/assets\/forms\.js/.test(doc))doc=doc.replace(/<\/body>/i,'<script src="/assets/forms.js?v='+Date.now()+'" defer><\/script></body>');
+  if(js){var u=URL.createObjectURL(new Blob([js],{type:"text/javascript"}));doc=doc.replace(/(<script[^>]*src=")\/assets\/home\.js\?v=[^"]*"/,"$1"+u+'"')}
+  var pv=h('<div class="pv" role="dialog" aria-label="'+esc(title||"Preview")+'"><div class="pv-bar"><b>'+esc(title||"Preview")+'</b><button type="button" class="btn" data-w="390" aria-pressed="true">Phone</button><button type="button" class="btn" data-w="820" aria-pressed="false">Tablet</button><button type="button" class="btn" data-w="1280" aria-pressed="false">Laptop</button><button type="button" class="btn primary" data-x>Close preview</button></div><p class="pv-note">This is how it will look once published. Nothing has been published yet.</p><div class="pv-stage"><div class="pv-frame"><iframe title="Preview"></iframe></div></div></div>');
+  document.body.appendChild(pv);document.body.style.overflow="hidden";
+  var fr=pv.querySelector(".pv-frame"),ifr=pv.querySelector("iframe"),stage=pv.querySelector(".pv-stage");ifr.srcdoc=doc;
+  function size(w){var avail=stage.clientWidth-32,sc=Math.min(1,avail/w),hh=Math.round((stage.clientHeight-32)/sc);fr.style.width=w+"px";fr.style.height=hh+"px";fr.style.transform="scale("+sc+")";fr.style.marginBottom=(hh*sc-hh)+"px";pv.querySelectorAll("[data-w]").forEach(function(b){b.setAttribute("aria-pressed",String(+b.dataset.w===w))})}
+  var w=window.innerWidth<700?390:1280;size(w);
+  pv.querySelectorAll("[data-w]").forEach(function(b){b.addEventListener("click",function(){w=+b.dataset.w;size(w)})});
+  var onR=function(){size(w)};window.addEventListener("resize",onR);
+  function close(){pv.remove();document.body.style.overflow="";window.removeEventListener("resize",onR);document.removeEventListener("keydown",onK)}
+  function onK(e){if(e.key==="Escape")close()}document.addEventListener("keydown",onK);
+  pv.querySelector("[data-x]").addEventListener("click",close);
+}
+window.edShowPreview=showPreview;
+window.edPickPhoto=function(){return choosePhoto()};
+window.edPhotoSrc=function(u){return photoSrc(u)};
+
+/* tabs */
+function show(name){
+  if(name===current)return;if(!leaveOk())return;current=name;
+  document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
+  document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit})[name]()}
+}
+document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
+window.edTabs={reset:function(){loaded={wording:true};if(current!=="wording"){var c=current;current="";show(c)}}};
+
+/* ---------- reading pictures in the browser ---------- */
+function loadImg(file){return new Promise(function(ok,no){var u=URL.createObjectURL(file),i=new Image();i.onload=function(){ok(i)};i.onerror=function(){no(new Error("That file isn't a picture this browser can open. Try a JPG or PNG."))};i.src=u})}
+function canvasOf(w,hh){var c=document.createElement("canvas");c.width=w;c.height=hh;return c}
+function toB64(canvas,type,q){return new Promise(function(ok,no){canvas.toBlob(function(b){if(!b)return no(new Error("This browser couldn't prepare the picture"));if(type==="image/webp"&&b.type!=="image/webp")return no(new Error("This browser can't save WebP pictures. Please use Chrome, Edge, Firefox or Safari 14+."));var r=new FileReader();r.onload=function(){ok({b64:String(r.result).split(",")[1],blob:b})};r.readAsDataURL(b)},type,q)})}
+function fitInside(img,w,hh){var c=canvasOf(w,hh),x=c.getContext("2d"),s=Math.min(w/img.naturalWidth,hh/img.naturalHeight),dw=img.naturalWidth*s,dh=img.naturalHeight*s;x.imageSmoothingQuality="high";x.drawImage(img,(w-dw)/2,(hh-dh)/2,dw,dh);return c}
+function cover(img,w,hh){var c=canvasOf(w,hh),x=c.getContext("2d"),s=Math.max(w/img.naturalWidth,hh/img.naturalHeight),dw=img.naturalWidth*s,dh=img.naturalHeight*s;x.imageSmoothingQuality="high";x.drawImage(img,(w-dw)/2,(hh-dh)/2,dw,dh);return c}
+function shrink(img,maxW){var s=Math.min(1,maxW/img.naturalWidth),w=Math.round(img.naturalWidth*s),hh=Math.round(img.naturalHeight*s),c=canvasOf(w,hh);var x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(img,0,0,w,hh);return c}
+function uploadPhoto(file){
+  return loadImg(file).then(function(img){var c=shrink(img,1600);return toB64(c,"image/webp",.82).then(function(r){
+    return api("media",{action:"upload",name:file.name,base64:r.b64}).then(function(j){fresh[j.url]={src:URL.createObjectURL(r.blob),w:c.width,h:c.height};return j})})});
+}
+function pickFile(multiple){return new Promise(function(ok){var f=$("filePick");f.value="";f.multiple=!!multiple;f.onchange=function(){ok(Array.prototype.slice.call(f.files))};f.click()})}
+function photoSrc(url){return fresh[url]?fresh[url].src:url}
+
+/* ======================= PAGES ======================= */
+var site=null,open=null;
+function pagesInit(){
+  $("pgMain").innerHTML='<p class="empty"><span class="spin"></span> Loading the pages…</p>';
+  return api("pages",{action:"list"}).then(function(j){site=j;pagesNav();if(open)openPage(open.section,open.slug);else $("pgMain").innerHTML='<h2 class="sec">Pages</h2><p class="sechelp">Pick a page on the left to edit it, or add a new one. Saved changes go live in about 2 minutes.</p>'}).catch(fail);
+}
+function pagesNav(){
+  var n=$("pgNav");n.innerHTML="";
+  var add=h('<button type="button" class="btn soft" style="justify-content:center;margin-bottom:8px">+ New page</button>');add.addEventListener("click",newPage);n.appendChild(add);
+  var hub=h('<button type="button" data-k="hubs"><span>Section pages &amp; service cards</span></button>');hub.addEventListener("click",function(){if(leaveOk())openHubs()});n.appendChild(hub);
+  var grp=function(t){n.appendChild(h('<div style="font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px .7rem 4px">'+esc(t)+'</div>'))};
+  if((site.custom||[]).length){grp("Pages");site.custom.forEach(function(p){navBtn(n,"page",p.slug,p.title,p)})}
+  ["services","industries","guides","news"].forEach(function(sec){var ps=site.pages.filter(function(p){return p.section===sec});if(!ps.length)return;
+    grp(SEC[sec]);ps.forEach(function(p){navBtn(n,p.section,p.slug,p.title,p)});
+  });
+  n.appendChild(h('<div style="font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px .7rem 4px">Legal pages</div>'));
+  site.legal.forEach(function(p){navBtn(n,"legal",p.slug,p.title)});
+  markNav();
+}
+function navBtn(n,sec,slug,title,p){var b=document.createElement("button");b.type="button";b.dataset.k=sec+"/"+slug;b.innerHTML="<span>"+esc(title)+"</span>"+(p&&!edLive(p)?(edSched(p)?'<span class="tag sched" style="font-size:.65rem">Scheduled</span>':'<span class="tag auto" style="font-size:.65rem">Draft</span>'):"");b.addEventListener("click",function(){if(leaveOk())openPage(sec,slug)});n.appendChild(b)}
+function markNav(){var k=open?open.section+"/"+open.slug:(open===false?"hubs":"");document.querySelectorAll("#pgNav button[data-k]").forEach(function(b){b.classList.toggle("on",b.dataset.k===k)})}
+/* scheduled publishing: times are New Zealand time, "2026-10-10T09:00" */
+function nowNZ(){return new Date().toLocaleString("sv-SE",{timeZone:"Pacific/Auckland"}).replace(" ","T").slice(0,16)}
+function edLive(d){return !d.draft||!!(d.publish_at&&d.publish_at<=nowNZ())}
+function edSched(d){return d.draft&&d.publish_at&&d.publish_at>nowNZ()?d.publish_at:""}
+function whenText(t){var a=String(t).split(/[-T:]/).map(Number);return new Date(Date.UTC(a[0],a[1]-1,a[2],a[3],a[4])).toLocaleString("en-NZ",{timeZone:"UTC",weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})}
+function stateTag(live,sch){return live?'<span class="tag rev" style="vertical-align:middle">On the website</span>':sch?'<span class="tag sched" style="vertical-align:middle">Scheduled for '+esc(whenText(sch))+'</span>':'<span class="tag auto" style="vertical-align:middle">Draft, not on the website</span>'}
+/* the box under the buttons for picking when a page goes live */
+function scheduleBox(act,sch,go){
+  var box=h('<div class="panel sched-box hidden"><h3>Publish later</h3><p class="help">Pick when this page goes on the website (New Zealand time). It stays a draft until then and is published automatically within the hour after that time.</p><div class="sched-row"><input class="t" type="datetime-local" step="900" aria-label="Date and time to publish"><button type="button" class="btn primary">Schedule</button>'+(sch?'<button type="button" class="btn">Cancel the schedule</button>':'')+'</div></div>');
+  var inp=box.querySelector("input"),bs=box.querySelectorAll("button");
+  inp.min=nowNZ();
+  if(sch)inp.value=sch;else{var d=new Date(Date.now()+864e5),t=d.toLocaleString("sv-SE",{timeZone:"Pacific/Auckland"}).slice(0,10);inp.value=t+"T09:00"}
+  bs[0].addEventListener("click",function(){var v=inp.value;if(!v){inp.focus();return}if(v<=nowNZ()){toast("Pick a time in the future",true);return}go(bs[0],v)});
+  if(bs[1])bs[1].addEventListener("click",function(){go(bs[1],"")});
+  act.parentNode.insertBefore(box,act.nextSibling);
+  return box}
+function pageUrl(sec,slug){return sec==="legal"||sec==="page"?"/"+slug:"/"+sec+"/"+slug}
+
+function newPage(){
+  if(!leaveOk())return;
+  var m=$("pgMain");open=false;markNav();
+  m.innerHTML='<h2 class="sec">Add a new page</h2><div class="panel"><div class="fld"><label for="npSec">What kind of page?</label><select id="npSec" class="t"><option value="page">Page built from blocks (any address, like /about)</option><option value="news">News post</option><option value="guides">Guide</option><option value="industries">Industry page</option><option value="services">Service page</option></select></div><div class="fld" id="npSlugF"><label for="npSlug">Address (optional)</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)">For example “about” makes ambs.co.nz/about. Left empty, it comes from the title.</p><input class="t" id="npSlug" placeholder="about"></div><div class="fld"><label for="npTitle">Title</label><input class="t" id="npTitle" placeholder="For example: How to automate your rosters"></div><div class="fld" id="npFromF"><label for="npFrom">Start from</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)" id="npFromHelp"></p><select id="npFrom" class="t"></select></div><button type="button" class="btn primary" id="npGo">Create page</button><p class="help" style="margin-top:12px">The new page starts as a draft, so nothing appears on the website until you press Publish.</p></div>';
+  /* the pages of the chosen kind, to borrow their layout */
+  function fromList(){var sec=$("npSec").value,ps=sec==="page"?(site.custom||[]):site.pages.filter(function(p){return p.section===sec});
+    $("npFrom").innerHTML='<option value="">A blank page</option>'+ps.map(function(p){return'<option value="'+esc(p.slug)+'">'+(sec==="page"?"A copy of: ":"The layout of: ")+esc(p.title)+'</option>'}).join("");
+    $("npFromHelp").textContent=sec==="page"?"A copy keeps all the blocks of that page, ready to change.":"Keeps the headings, lists, tip boxes, key points and questions of that "+(sec==="news"?"post":"page")+", with [starter text] for you to replace.";
+    $("npFromF").style.display=ps.length?"":"none";
+    if(sec==="news"||sec==="guides"){var last=ps.filter(function(p){return edLive(p)}).slice(-1)[0];if(last)$("npFrom").value=last.slug}}
+  fromList();
+  $("npTitle").focus();$("npSec").addEventListener("change",function(){$("npSlugF").style.display=this.value==="page"?"":"none";fromList()});
+  $("npGo").addEventListener("click",function(){var b=this,t=$("npTitle").value.trim(),sec=$("npSec").value,from=$("npFrom").value;if(!t){$("npTitle").focus();return}busy(b,true,"Creating…");
+    (from?api("pages",{action:"get",section:sec,slug:from}).then(function(d){return sec==="page"?{blocks:d.custom.blocks}:skeleton(d)}):Promise.resolve(null)).then(function(start){
+    return api("pages",{action:"create",section:sec,title:t,slug:sec==="page"?$("npSlug").value.trim():"",start:start})}).then(function(j){linksList=null;return api("pages",{action:"list"}).then(function(l){site=l;pagesNav();openPage(j.section,j.slug);toast("Draft created. It goes on the website when you press Publish.")})}).catch(function(e){busy(b,false);fail(e)})});
+}
+
+/* the shape of an earlier post: its headings stay (in [brackets]), its words become starter text */
+var STARTER=/\[(Write this part here|Point|Key point \d+|Question|Answer|Tip heading|Write the tip here|Photo here[^\]]*)\]/;
+function skeleton(d){
+  var box=document.createElement("div"),out=[],lastP=false,meta=d.meta||{},card=d.card||{};box.innerHTML=d.body||"";
+  Array.prototype.forEach.call(box.children,function(el){var t=el.tagName,tag=t.toLowerCase();
+    if(t==="H2"||t==="H3"||t==="H4"){out.push("<"+tag+">["+esc(el.textContent.trim())+"]</"+tag+">");lastP=false}
+    else if(t==="UL"||t==="OL"){var n=Math.max(2,Math.min(el.children.length,5)),li="";for(var i=0;i<n;i++)li+="<li>[Point]</li>";out.push("<"+tag+">"+li+"</"+tag+">");lastP=false}
+    else if(t==="DIV"&&el.classList.contains("callout")){out.push('<div class="'+esc(el.className)+'"><p><strong>[Tip heading]</strong> [Write the tip here]</p></div>');lastP=false}
+    else if(t==="FIGURE"||el.querySelector("img")){out.push("<p>[Photo here: click this line and press “Photo”]</p>");lastP=false}
+    else if(t==="P"||t==="BLOCKQUOTE"||t==="TABLE"){if(!lastP)out.push("<p>[Write this part here]</p>");lastP=true}});
+  if(!out.length)out.push("<p>[Write this part here]</p>");
+  return{body:out.join("\n"),eyebrow:meta.eyebrow,category:card.category,icon:card.icon,related:meta.related||[],
+    takeaways:(meta.takeaways||[]).map(function(x,i){return"[Key point "+(i+1)+"]"}),faq:(meta.faq||[]).map(function(){return["[Question]","[Answer]"]})}}
+function openPage(sec,slug){
+  var m=$("pgMain");open={section:sec,slug:slug};markNav();dirty=false;
+  m.innerHTML='<p class="empty"><span class="spin"></span> Opening the page…</p>';
+  api("pages",{action:"get",section:sec,slug:slug}).then(function(d){if(sec==="page")renderCustom(slug,d);else renderPage(sec,slug,d)}).catch(fail);
+}
+function fld(id,label,value,opts){opts=opts||{};var tag=opts.area?'<textarea class="t" id="'+id+'" rows="'+(opts.rows||2)+'"></textarea>':'<input class="t" id="'+id+'">';
+  var el=h('<div class="fld"><label for="'+id+'"><span>'+esc(label)+'</span>'+(opts.max?'<span class="cnt"></span>':'')+'</label>'+(opts.help?'<p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)">'+esc(opts.help)+'</p>':'')+tag+'</div>');
+  var inp=el.querySelector(opts.area?"textarea":"input");inp.value=value||"";inp.addEventListener("input",markDirty);if(opts.area)inp.addEventListener("input",function(){ED.autosize(inp)});if(opts.max)counter(inp,opts.max);return el}
+function listEditor(title,help,items,addLabel){
+  var p=h('<div class="panel"><h3>'+esc(title)+'</h3><p class="help">'+esc(help)+'</p><div class="items"></div><button type="button" class="add">+ '+esc(addLabel)+'</button></div>');
+  var box=p.querySelector(".items");
+  function row(v){var r=h('<div class="li"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><textarea class="t" rows="2"></textarea><button type="button" class="x" aria-label="Remove">✕</button></div>');var t=r.querySelector("textarea");t.value=v||"";t.addEventListener("input",function(){markDirty();ED.autosize(t)});r.querySelector(".x").addEventListener("click",function(){r.remove();markDirty()});box.appendChild(r);requestAnimationFrame(function(){ED.autosize(t)});return t}
+  (items||[]).forEach(row);sortable(box,".li",markDirty);p.querySelector(".add").addEventListener("click",function(){row("").focus();markDirty()});
+  p.values=function(){return Array.prototype.map.call(box.querySelectorAll("textarea"),function(t){return t.value.trim()}).filter(Boolean)};return p}
+function faqEditor(items){
+  var p=h('<div class="panel"><h3>Questions and answers</h3><p class="help">Shown near the end of the page. Google can show these in search results too.</p><div class="items"></div><button type="button" class="add">+ Add a question</button></div>');
+  var box=p.querySelector(".items");
+  function row(q,a){var r=h('<div class="qa"><div class="li"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><textarea class="t" rows="1" placeholder="Question"></textarea><button type="button" class="x" aria-label="Remove question">✕</button></div><textarea class="t" rows="3" placeholder="Answer" style="width:100%;margin-top:6px"></textarea></div>');
+    var ts=r.querySelectorAll("textarea");ts[0].value=q||"";ts[1].value=a||"";ts.forEach(function(t){t.addEventListener("input",function(){markDirty();ED.autosize(t)});requestAnimationFrame(function(){ED.autosize(t)})});
+    r.querySelector(".x").addEventListener("click",function(){r.remove();markDirty()});box.appendChild(r);return ts[0]}
+  (items||[]).forEach(function(x){row(x[0],x[1])});sortable(box,".qa",markDirty);p.querySelector(".add").addEventListener("click",function(){row("","").focus();markDirty()});
+  p.values=function(){return Array.prototype.map.call(box.querySelectorAll(".qa"),function(r){var t=r.querySelectorAll("textarea");return[t[0].value.trim(),t[1].value.trim()]}).filter(function(x){return x[0]&&x[1]})};return p}
+
+function renderPage(sec,slug,d){
+  var meta=d.meta,m=$("pgMain"),card=d.card||{};m.innerHTML="";
+  var live=sec==="legal"||edLive(card),sch=sec==="legal"?"":edSched(card);
+  var top=h('<div><h2 class="sec">'+esc(meta.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">'+(sec==="legal"?"Legal page":esc(SEC[sec]))+(live?' · <a href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p></div>');m.appendChild(top);
+  var head=h('<div class="panel"><h3>Top of the page</h3></div>');
+  if(sec!=="legal")head.appendChild(fld("pgEyebrow","Small label above the heading",meta.eyebrow,{max:40}));
+  head.appendChild(fld("pgH1","Page heading",meta.h1,{max:90}));
+  if(sec!=="legal")head.appendChild(fld("pgLead","Introduction",meta.lead,{area:true,rows:3,max:320}));
+  else head.appendChild(fld("pgUpdated","Last updated (shown under the heading)",meta.updated,{max:40}));
+  m.appendChild(head);
+  var tk=null,fq=null,rel=null;
+  if(sec!=="legal"){
+    tk=listEditor("Key points","A short box of the main points near the top of the page. Leave empty to hide it.",meta.takeaways,"Add a point");m.appendChild(tk);
+  }
+  /* article */
+  var art=h('<div class="panel"><h3>Article</h3><p class="help">Type straight into the box. Use the buttons to add headings, lists, links, tip boxes and photos.</p></div>');
+  var bar=h('<div class="rte-bar" role="toolbar" aria-label="Formatting"></div>');
+  [["p","Text"],["h2","Heading"],["h3","Subheading"],"|",["bold","B"],["italic","I"],["link","Link"],["unlink","Remove link"],"|",["ul","• List"],["ol","1. List"],["tip","Tip box"],["photo","Photo"],"|",["undo","Undo"],["redo","Redo"]].forEach(function(b){
+    if(b==="|"){bar.appendChild(h('<span class="sep"></span>'));return}
+    var x=h('<button type="button" data-c="'+b[0]+'">'+esc(b[1])+'</button>');if(b[0]==="bold")x.style.fontWeight="900";if(b[0]==="italic")x.style.fontStyle="italic";bar.appendChild(x)});
+  var rte=h('<div class="rte prose" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Article text"></div>');
+  rte.innerHTML=prepBody(d.body);
+  art.appendChild(bar);art.appendChild(rte);m.appendChild(art);
+  wireRte(bar,rte);
+  if(sec!=="legal"){
+    fq=faqEditor(meta.faq);m.appendChild(fq);
+    rel=h('<div class="panel"><h3>Related pages</h3><p class="help">Up to three pages shown at the bottom under “Keep reading”.</p><div class="grid2" style="grid-template-columns:1fr"></div></div>');
+    var opts='<option value="">(none)</option>'+site.pages.filter(function(p){return !(p.section===sec&&p.slug===slug)}).map(function(p){return'<option value="'+p.section+'/'+p.slug+'">'+esc(SEC[p.section].replace(/s$/,"")+": "+p.title)+'</option>'}).join("");
+    for(var i=0;i<3;i++){var s=h('<select class="t" style="margin-bottom:8px" aria-label="Related page '+(i+1)+'">'+opts+'</select>');s.value=(meta.related||[])[i]||"";s.addEventListener("change",markDirty);rel.querySelector(".grid2").appendChild(s)}
+    m.appendChild(rel);
+    var cp=h('<div class="panel"><h3>Card on the '+esc(SEC[sec])+' page</h3><p class="help">How this page appears in the list on the '+esc(SEC[sec])+' page and under “Keep reading”.</p><div class="grid2"></div></div>');
+    var g=cp.querySelector(".grid2");g.appendChild(fld("cdTitle","Card title",card.title,{max:60}));g.appendChild(fld("cdCat","Category",card.category,{max:30,help:sec==="news"||sec==="guides"?"Pick one already used or type a new one. Visitors can filter by category.":""}));
+    /* the categories already used in this section, to pick from */
+    var cats=[];site.pages.forEach(function(p){if(p.section===sec&&p.category&&cats.indexOf(p.category)<0)cats.push(p.category)});
+    var dl=h('<datalist id="catList"></datalist>');dl.innerHTML=cats.map(function(c){return'<option value="'+esc(c)+'">'}).join("");cp.appendChild(dl);g.querySelector("#cdCat").setAttribute("list","catList");
+    cp.appendChild(fld("cdBlurb","Card text",card.blurb,{area:true,max:160}));
+    if(sec==="news"){var newsPh={photo:card.photo||""};cp.appendChild(bPhoto("Photo (shown on the card and at the top of the post)",newsPh,"photo"));cp.newsPh=newsPh;cp.appendChild(fld("pgPub","Date published",meta.published,{help:"Year-month-day, for example 2026-10-07"}))}
+    var ic=h('<div class="fld"'+(sec==="news"?' style="display:none"':'')+'><label for="cdIcon">Icon</label><select class="t" id="cdIcon">'+site.icons.map(function(k){return'<option value="'+k+'">'+esc(ICON_NAMES[k]||k)+'</option>'}).join("")+'</select></div>');ic.querySelector("select").value=card.icon||"guide";ic.querySelector("select").addEventListener("change",markDirty);cp.appendChild(ic);
+    m.appendChild(cp);
+  }
+  var gp=h('<div class="panel"><h3>On Google</h3><p class="help">The title and description people see in Google search results and when the page is shared.</p></div>');
+  gp.appendChild(fld("seoTitle","Title in Google",meta.title,{max:65}));gp.appendChild(fld("seoDesc","Description in Google",meta.description,{area:true,max:160}));m.appendChild(gp);
+  var act=h('<div class="actions">'+(sec!=="legal"?'<button type="button" class="btn danger" id="pgDel">Delete page</button>':'')+'<span class="sp"></span><button type="button" class="btn" id="pgPrev">Preview</button>'+(sec!=="legal"?'<button type="button" class="btn" id="pgDraft">'+(live?"Take off the website (draft)":"Save draft")+'</button>':'')+(live?'':'<button type="button" class="btn" id="pgLater">'+(sch?"Change schedule":"Publish later…")+'</button>')+'<button type="button" class="btn primary" id="pgSave">'+(live?"Save &amp; publish":"Publish now")+'</button></div>');
+  m.appendChild(act);
+  m.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
+  function collect(){var v=function(id){var e=$(id);return e?e.value:undefined};
+    var nm={h1:v("pgH1"),title:v("seoTitle"),description:v("seoDesc")};
+    if(sec==="legal")nm.updated=v("pgUpdated");else{nm.eyebrow=v("pgEyebrow");nm.lead=v("pgLead");nm.takeaways=tk.values();nm.faq=fq.values();nm.related=Array.prototype.map.call(rel.querySelectorAll("select"),function(s){return s.value}).filter(Boolean)}
+    if(sec==="news")nm.published=v("pgPub");
+    return nm}
+  $("pgPrev").addEventListener("click",function(){var b=this;busy(b,true,"Preparing…");previewPage(sec,slug,collect(),bodyOut(rte)).catch(fail).then(function(){busy(b,false)})});
+  function savePage(b,draft,when){
+    var v=function(id){var e=$(id);return e?e.value:undefined};
+    var nm=collect();
+    if(draft&&live&&!confirm("Take this page off the website? It stays here as a draft."))return;
+    if(!nm.h1.trim()){toast("The page needs a heading",true);$("pgH1").focus();return}
+    if((!draft||when)&&STARTER.test(bodyOut(rte)+JSON.stringify(nm))&&!confirm(when?"Some [starter text] from the layout is still in this page. Schedule it anyway?":"Some [starter text] from the layout is still in this page. Publish it anyway?"))return;
+    var payload={action:"save",section:sec,slug:slug,sha:d.sha,meta:nm,body:bodyOut(rte),draft:!!draft,schedule:when||""};
+    if(sec!=="legal")payload.card={title:v("cdTitle"),blurb:v("cdBlurb"),category:v("cdCat"),icon:v("cdIcon")};
+    if(sec==="news")payload.card.photo=cp.newsPh.photo;
+    busy(b,true);
+    api("pages",payload).then(function(){dirty=false;linksList=null;toast(when?"Scheduled. It goes on the website after "+whenText(when)+" (New Zealand time).":draft?(live?"Taken off the website. "+LIVE_NOTE:"Draft saved. Nothing has been published."):(live?"Saved. ":"Published. ")+LIVE_NOTE);return api("pages",{action:"list"}).then(function(l){site=l;pagesNav();openPage(sec,slug)})}).catch(function(e){busy(b,false);fail(e)});
+  }
+  $("pgSave").addEventListener("click",function(){savePage(this,false)});
+  if($("pgDraft"))$("pgDraft").addEventListener("click",function(){savePage(this,true)});
+  if($("pgLater")){var sb=scheduleBox(act,sch,function(b,when){savePage(b,true,when)});$("pgLater").addEventListener("click",function(){sb.classList.toggle("hidden");if(!sb.classList.contains("hidden"))sb.querySelector("input").focus()})}
+  var del=$("pgDel");if(del)del.addEventListener("click",function(){
+    if(!confirm("Delete “"+(meta.h1||slug)+"” from the website? You can bring it back from History."))return;busy(del,true,"Deleting…");
+    api("pages",{action:"delete",section:sec,slug:slug}).then(function(){dirty=false;open=null;toast("Page deleted. "+LIVE_NOTE);pagesInit()}).catch(function(e){busy(del,false);fail(e)});
+  });
+}
+
+/* preview of a page: the live page with the edited content put in its place */
+function pageDoc(url,fallback){return fetch(url,{cache:"no-store"}).then(function(r){if(r.ok)return r.text();if(!fallback)throw new Error("Could not load the page to preview");return fetch(fallback,{cache:"no-store"}).then(function(r2){return r2.text()})}).then(function(t){return new DOMParser().parseFromString(t,"text/html")})}
+function setText(d,sel,v){var e=d.querySelector(sel);if(e&&typeof v==="string")e.textContent=v}
+function freshImgs(html){return String(html).replace(/src="(\/assets\/uploads\/[^"]+)"/g,function(a,u){return'src="'+photoSrc(u)+'"'})}
+function previewPage(sec,slug,meta,body){
+  /* a page that isn't on the website yet borrows the look of a published page of the same kind, or of a guide */
+  var other=site.pages.filter(function(p){return p.section===sec&&p.slug!==slug&&edLive(p)})[0];
+  var borrowed=false;
+  return pageDoc(pageUrl(sec,slug),other?pageUrl(sec,other.slug):"/guides/automation-glossary").then(function(d){
+    borrowed=!other&&!d.querySelector('link[rel=canonical][href$="'+pageUrl(sec,slug)+'"]');
+    if(borrowed&&sec!=="guides"){d.querySelectorAll("header [aria-current]").forEach(function(x){x.removeAttribute("aria-current")});var g=d.querySelector(".g-art");if(g)g.remove();var cr=d.querySelectorAll(".crumbs li");if(cr[1]){var a=cr[1].querySelector("a");if(a){a.textContent=SEC[sec];a.href="/"+sec}}if(cr[2])cr[2].textContent=meta.h1;
+      var pm=d.querySelector(".phero .pmeta");if(pm)pm.innerHTML="<span>"+esc(meta.eyebrow||SEC[sec])+"</span>"+(sec==="news"?"<span>"+esc(new Date((meta.published||nowNZ().slice(0,10))+"T12:00:00Z").toLocaleDateString("en-NZ",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}))+"</span>":"")}
+    setText(d,".phero .eyebrow",meta.eyebrow);setText(d,".phero h1",meta.h1);setText(d,".phero .plead",meta.lead);
+    if(sec==="legal"){var pm=d.querySelectorAll(".phero .pmeta span");if(pm[1]&&meta.updated)pm[1].textContent="Last updated "+meta.updated}
+    var art=d.querySelector("article.prose");
+    if(art){var calc=sec==="guides"?art.querySelector(".g-calc"):null;
+      var tk=(meta.takeaways||[]).length?'<div class="takeaways"><b>In short</b><ul>'+meta.takeaways.map(function(x){return"<li>"+esc(x)+"</li>"}).join("")+"</ul></div>":"";
+      var fq=(meta.faq||[]).length?'<h2 id="questions">Common questions</h2><div class="faq">'+meta.faq.map(function(x){return"<details><summary>"+esc(x[0])+"</summary><p>"+esc(x[1])+"</p></details>"}).join("")+"</div>":"";
+      art.innerHTML=tk+freshImgs(body)+(calc?calc.outerHTML:"")+fq}
+    if(meta.title)d.title=meta.title;
+    showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Page preview");
+  });
+}
+
+/* the article: anything the editor can't safely edit (examples, diagrams) is kept as a locked block */
+var EDITABLE=/^(P|H2|H3|H4|UL|OL|BLOCKQUOTE|FIGURE|TABLE|HR)$/;
+/* ---------- smart paste: text from Word, Google Docs, emails or web pages keeps its headings, lists, bold, italics
+   and links, in the website's own styles; fonts, colours, sizes and pictures are left behind ---------- */
+function pasteHtml(html,o){
+  o=o||{};var doc=new DOMParser().parseFromString(html,"text/html"),out=[],para="",list=null;
+  var H=function(level){return o.h2&&level<=2?"h2":"h3"};
+  function flush(){if(para.replace(/<br>/g,"").replace(/&nbsp;|\s/g,"")){out.push("<p>"+para.replace(/^(<br>)+|(<br>)+$/g,"").trim()+"</p>")}para=""}
+  function endList(){if(list){out.push("<"+list.tag+">"+list.items.map(function(x){return"<li>"+x+"</li>"}).join("")+"</"+list.tag+">");list=null}}
+  function st(el,prop){return(el.getAttribute&&el.getAttribute("style")||"").toLowerCase().replace(/\s/g,"").indexOf(prop)>=0}
+  function inline(n){
+    if(n.nodeType===3)return esc(n.nodeValue.replace(/\s+/g," "));
+    if(n.nodeType!==1)return"";
+    var t=n.tagName,inner=Array.prototype.map.call(n.childNodes,inline).join("");
+    if(t==="BR")return"<br>";
+    if(t==="IMG"||t==="STYLE"||t==="SCRIPT")return"";
+    if(t==="SPAN"&&st(n,"mso-list:ignore"))return"";
+    if(!inner.replace(/<[^>]+>|\s|&nbsp;/g,""))return inner.indexOf("<br>")>=0?inner:(n.textContent?" ":"");
+    var bold=t==="STRONG"||(t==="B"&&!st(n,"font-weight:normal"))||/font-weight:(bold|[6-9]00)/.test((n.getAttribute("style")||"").toLowerCase().replace(/\s/g,""));
+    var ital=t==="EM"||t==="I"||st(n,"font-style:italic");
+    if(t==="A"){var u=(n.getAttribute("href")||"").trim();if(/^(https?:|mailto:|tel:|\/)/i.test(u))inner='<a href="'+esc(u)+'">'+inner+"</a>"}
+    if(ital)inner="<em>"+inner+"</em>";if(bold)inner="<strong>"+inner+"</strong>";
+    return inner}
+  function wordList(el){var ig=el.querySelector('span[style*="mso-list:Ignore" i]');return ig?(/^\s*\(?[0-9a-z]{1,3}[.)]/i.test(ig.textContent)?"ol":"ul"):(/MsoListParagraph/.test(el.className)?"ul":null)}
+  function block(n){
+    if(n.nodeType===3){if(n.nodeValue.trim()){endList();para+=inline(n)}return}
+    if(n.nodeType!==1)return;
+    var t=n.tagName;
+    if(/^(STYLE|SCRIPT|META|TITLE|LINK|IMG|HEAD)$/.test(t))return;
+    if(/^H[1-6]$/.test(t)){flush();endList();var x=inline(n).replace(/<\/?strong>/g,"").trim();if(x)out.push("<"+H(+t[1])+">"+x+"</"+H(+t[1])+">");return}
+    if(t==="UL"||t==="OL"){flush();endList();var items=[];n.querySelectorAll("li").forEach(function(li){var c=li.cloneNode(true);c.querySelectorAll("ul,ol").forEach(function(z){z.remove()});var x=inline(c).trim();if(x)items.push(x)});
+      if(items.length)out.push("<"+t.toLowerCase()+">"+items.map(function(x){return"<li>"+x+"</li>"}).join("")+"</"+t.toLowerCase()+">");return}
+    if(t==="P"||t==="LI"){var wl=t==="P"&&wordList(n);
+      if(wl){flush();if(!list||list.tag!==wl){endList();list={tag:wl,items:[]}}var x=inline(n).trim();if(x)list.items.push(x);return}
+      flush();endList();para=inline(n);flush();return}
+    if(t==="TR"){flush();endList();para=Array.prototype.map.call(n.children,function(c){return inline(c).trim()}).filter(Boolean).join(" · ");flush();return}
+    if(/^(DIV|SECTION|ARTICLE|MAIN|BODY|HTML|TABLE|TBODY|THEAD|BLOCKQUOTE|FIGURE|HEADER|FOOTER|CENTER)$/.test(t)||(t==="B"&&n.id&&/docs-internal-guid/.test(n.id))){
+      Array.prototype.forEach.call(n.childNodes,block);if(!/^(B)$/.test(t)){flush();endList()}return}
+    endList();para+=inline(n)}
+  block(doc.body);flush();endList();
+  return out.join("")}
+/* plain text: blank lines make paragraphs, "- " or "• " make bullet points, "1. " makes a numbered list */
+function pasteText(text){
+  var out=[],list=null;function endList(){if(list){out.push("<"+list.tag+">"+list.items.map(function(x){return"<li>"+esc(x)+"</li>"}).join("")+"</"+list.tag+">");list=null}}
+  String(text).replace(/\r/g,"").split(/\n\s*\n/).forEach(function(chunk){
+    chunk.split("\n").forEach(function(line,i,all){var m=/^\s*(?:[-•*·▪]\s+|(\d{1,2})[.)]\s+)(.*)$/.exec(line);
+      if(m){var tag=m[1]?"ol":"ul";if(!list||list.tag!==tag){endList();list={tag:tag,items:[]}}list.items.push(m[2].trim());return}
+      endList();if(line.trim())out.push("<p>"+esc(line.trim())+"</p>")})});
+  endList();return out.join("")}
+function smartPaste(e,o,root){
+  e.preventDefault();var cd=e.clipboardData||window.clipboardData,html=cd.getData("text/html"),text=cd.getData("text/plain"),out="";
+  try{out=html?pasteHtml(html,o):""}catch(x){out=""}
+  if(!out.replace(/<[^>]+>/g,"").trim())out=pasteText(text);
+  /* a single short line pastes straight into the current paragraph */
+  if(!/<\/(h2|h3|ul|ol)>/.test(out)&&(out.match(/<p>/g)||[]).length<=1){document.execCommand("insertHTML",false,out.replace(/^<p>|<\/p>$/g,""));return}
+  /* several paragraphs, headings or lists go in as their own blocks: after the line the cursor is on, or in place of it when it is empty */
+  var sel=getSelection(),rg=sel.rangeCount?sel.getRangeAt(0):null,blk=rg?rg.startContainer:null;
+  var t=document.createElement("template");t.innerHTML=out;var nodes=Array.prototype.slice.call(t.content.childNodes),last=nodes[nodes.length-1];
+  var done=function(){var r2=document.createRange();r2.selectNodeContents(last);r2.collapse(false);sel.removeAllRanges();sel.addRange(r2)};
+  if(root&&blk===root){var at=root.childNodes[rg.startOffset]||null;nodes.forEach(function(n){root.insertBefore(n,at)});done();return}
+  while(blk&&blk.parentNode!==root)blk=blk.parentNode;
+  if(!root||!blk){document.execCommand("insertHTML",false,out);return}
+  if(rg&&!rg.collapsed)rg.deleteContents();
+  var empty=!blk.textContent.trim()&&!(blk.querySelector&&blk.querySelector("img"));
+  /* the cursor at the very start of a line puts the paste before it */
+  var before=false;if(!empty&&rg){var pre=document.createRange();pre.selectNodeContents(blk);pre.setEnd(rg.startContainer,rg.startOffset);before=!pre.toString().trim()}
+  var ref=empty||before?blk:blk.nextSibling;
+  nodes.forEach(function(n){root.insertBefore(n,ref)});
+  if(empty)blk.remove();
+  done()}
+function prepBody(html){
+  var box=document.createElement("div");box.innerHTML=html;
+  Array.prototype.slice.call(box.children).forEach(function(el){
+    if(EDITABLE.test(el.tagName))return;
+    if(el.tagName==="DIV"&&el.classList.contains("callout"))return;
+    el.setAttribute("contenteditable","false");el.setAttribute("data-ed-special","1");el.classList.add("ed-special");
+  });
+  box.querySelectorAll("img").forEach(function(i){var u=i.getAttribute("src");if(fresh[u]){i.setAttribute("data-ed-src",u);i.src=fresh[u].src}});
+  return box.innerHTML;
+}
+function bodyOut(rte){
+  var c=rte.cloneNode(true);
+  c.querySelectorAll("[data-ed-src]").forEach(function(i){i.setAttribute("src",i.getAttribute("data-ed-src"))});
+  c.querySelectorAll(".ed-special").forEach(function(e){e.classList.remove("ed-special");if(!e.className)e.removeAttribute("class")});
+  c.querySelectorAll("[contenteditable],[data-ed-special],[data-ed-src]").forEach(function(e){e.removeAttribute("contenteditable");e.removeAttribute("data-ed-special");e.removeAttribute("data-ed-src")});
+  c.querySelectorAll("b").forEach(function(b){var s=document.createElement("strong");s.innerHTML=b.innerHTML;b.replaceWith(s)});
+  c.querySelectorAll("i").forEach(function(b){var s=document.createElement("em");s.innerHTML=b.innerHTML;b.replaceWith(s)});
+  c.querySelectorAll("span[style],font").forEach(function(s){s.replaceWith.apply(s,Array.prototype.slice.call(s.childNodes))});
+  c.querySelectorAll("[style]").forEach(function(e){e.removeAttribute("style")});
+  /* loose text at the top level becomes a paragraph */
+  Array.prototype.slice.call(c.childNodes).forEach(function(n){if(n.nodeType===3&&n.textContent.trim()){var p=document.createElement("p");p.textContent=n.textContent;n.replaceWith(p)}else if(n.nodeType===1&&n.tagName==="DIV"&&!n.className){var p2=document.createElement("p");p2.innerHTML=n.innerHTML;n.replaceWith(p2)}});
+  return c.innerHTML.replace(/<\/(p|h2|h3|ul|ol|figure|div|table|blockquote)>(?!\n)/g,"</$1>\n");
+}
+function wireRte(bar,rte){
+  try{document.execCommand("defaultParagraphSeparator",false,"p")}catch(e){}
+  rte.addEventListener("input",markDirty);
+  rte.addEventListener("paste",function(e){smartPaste(e,{h2:true},rte)});
+  bar.addEventListener("mousedown",function(e){if(e.target.closest("button"))e.preventDefault()});
+  bar.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var c=b.dataset.c;rte.focus();
+    if(c==="p"||c==="h2"||c==="h3")document.execCommand("formatBlock",false,"<"+c+">");
+    else if(c==="bold"||c==="italic"||c==="undo"||c==="redo"||c==="unlink")document.execCommand(c);
+    else if(c==="ul")document.execCommand("insertUnorderedList");
+    else if(c==="ol")document.execCommand("insertOrderedList");
+    else if(c==="link"){var u=prompt("Link to (a page on this site like /guides/automation-glossary, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;document.execCommand("createLink",false,u)}}
+    else if(c==="tip")document.execCommand("insertHTML",false,'<div class="callout callout--tip"><p>Tip: write your tip here.</p></div><p><br></p>');
+    else if(c==="photo"){var sel=window.getSelection(),range=sel.rangeCount?sel.getRangeAt(0).cloneRange():null;choosePhoto().then(function(ph){if(!ph)return;rte.focus();if(range){sel.removeAllRanges();sel.addRange(range)}
+      var alt=prompt("Describe the photo in a few words (read out to people who can't see it):","")||"";var cap=prompt("Caption under the photo (optional):","")||"";
+      var dims=fresh[ph.url]?' width="'+fresh[ph.url].w+'" height="'+fresh[ph.url].h+'"':(ph.w?' width="'+ph.w+'" height="'+ph.h+'"':"");
+      document.execCommand("insertHTML",false,'<figure><img src="'+esc(photoSrc(ph.url))+'"'+(fresh[ph.url]?' data-ed-src="'+esc(ph.url)+'"':'')+' alt="'+esc(alt)+'" loading="lazy"'+dims+'>'+(cap?'<figcaption>'+esc(cap)+'</figcaption>':'')+'</figure><p><br></p>');markDirty()})}
+    markDirty();
+  });
+}
+
+/* photo chooser used by the article editor */
+function choosePhoto(){
+  return new Promise(function(done){
+    var dlg=h('<dialog aria-label="Choose a photo"><div class="hd"><h2>Choose a photo</h2></div><div class="bd"><button type="button" class="btn soft" id="cpUp">Upload a new photo</button><div class="photos pick" style="margin-top:14px"><p class="empty"><span class="spin"></span> Loading…</p></div></div><div class="ft"><button type="button" class="btn" id="cpX">Cancel</button></div></dialog>');
+    document.body.appendChild(dlg);dlg.showModal();
+    var fin=function(v){dlg.close();dlg.remove();done(v)};
+    dlg.querySelector("#cpX").addEventListener("click",function(){fin(null)});
+    dlg.addEventListener("cancel",function(){fin(null)});
+    var grid=dlg.querySelector(".photos");
+    function list(){api("media",{action:"list"}).then(function(j){grid.innerHTML=j.photos.length?"":'<p class="empty">No photos yet. Upload one.</p>';
+      j.photos.forEach(function(p){var c=h('<button type="button" class="ph"><img alt="" loading="lazy"><span class="meta"><b>'+esc(p.path.split("/").pop())+'</b></span></button>');var im=c.querySelector("img");im.src=photoSrc(p.url);
+        c.addEventListener("click",function(){p.w=im.naturalWidth;p.h=im.naturalHeight;fin(p)});grid.appendChild(c)})}).catch(fail)}
+    list();
+    dlg.querySelector("#cpUp").addEventListener("click",function(){var b=this;pickFile(false).then(function(fs){if(!fs.length)return;busy(b,true,"Uploading…");uploadPhoto(fs[0]).then(function(j){busy(b,false);fin({url:j.url,path:j.path})}).catch(function(e){busy(b,false);fail(e)})})});
+  });
+}
+
+/* section pages and service cards */
+function openHubs(){
+  open=false;markNav();dirty=false;var m=$("pgMain");m.innerHTML='<h2 class="sec">Section pages &amp; service cards</h2><p class="sechelp">The top of the Services, Industries and Guides pages, the two big service cards and the “How every project runs” steps.</p>';
+  var hubs=site.hubs;
+  ["services","industries","guides"].forEach(function(sec){var p=h('<div class="panel"><h3>'+SEC[sec]+' page <a href="/'+sec+'" target="_blank" rel="noopener" style="font-size:.85rem;font-weight:600">View</a></h3></div>');
+    p.appendChild(fld("hb-"+sec+"-h1","Heading",hubs[sec].h1,{max:90}));p.appendChild(fld("hb-"+sec+"-lead","Introduction",hubs[sec].lead,{area:true,max:320}));
+    p.appendChild(fld("hb-"+sec+"-title","Title in Google",hubs[sec].title,{max:65}));p.appendChild(fld("hb-"+sec+"-desc","Description in Google",hubs[sec].desc,{area:true,max:160}));m.appendChild(p)});
+  site.service_cards.forEach(function(c,i){var p=h('<div class="panel"><h3>Service card: '+esc(c.title)+'</h3><p class="help">Shown on the Services page.</p><div class="grid2"></div></div>');var g=p.querySelector(".grid2");
+    g.appendChild(fld("sc"+i+"label","Small label",c.label,{max:30}));g.appendChild(fld("sc"+i+"title","Title",c.title,{max:60}));
+    p.appendChild(fld("sc"+i+"text","Text",c.text,{area:true,max:200}));p.appendChild(fld("sc"+i+"button","Button wording",c.button,{max:40}));
+    var inc=listEditor("What's included","One per line, shown with a tick.",c.includes.map(function(x){return x.text}),"Add a line");inc.style.border="0";inc.style.padding="0";inc.id="sc"+i+"inc";p.appendChild(inc);m.appendChild(p)});
+  var st=h('<div class="panel"><h3>How every project runs</h3><p class="help">The numbered steps on the Services page.</p></div>');
+  site.service_steps.forEach(function(x,i){st.appendChild(fld("st"+i+"t","Step "+(i+1)+" title",x.title,{max:50}));st.appendChild(fld("st"+i+"d","Step "+(i+1)+" text",x.text,{area:true,max:200}))});m.appendChild(st);
+  var act=h('<div class="actions"><span class="sp"></span><select class="t" id="hbWhich" style="width:auto"><option value="services">Preview the Services page</option><option value="industries">Preview the Industries page</option><option value="guides">Preview the Guides page</option></select><button type="button" class="btn" id="hbPrev">Preview</button><button type="button" class="btn primary" id="hbSave">Save &amp; publish</button></div>');m.appendChild(act);
+  $("hbPrev").addEventListener("click",function(){var b=this,sec=$("hbWhich").value,v=function(id){return $(id).value};busy(b,true,"Preparing…");
+    pageDoc("/"+sec).then(function(d){setText(d,".phero h1",v("hb-"+sec+"-h1"));setText(d,".phero .plead",v("hb-"+sec+"-lead"));
+      if(sec==="services"){d.querySelectorAll(".svc-card").forEach(function(c,i){if(!$("sc"+i+"title"))return;setText(c,".svc-k",v("sc"+i+"label"));setText(c,".svc-t",v("sc"+i+"title"));setText(c,".svc-d",v("sc"+i+"text"));var g=c.querySelector(".svc-go");if(g&&g.firstChild)g.firstChild.textContent=v("sc"+i+"button")+" ";
+          var ul=c.querySelector(".svc-inc"),lis=ul?ul.querySelectorAll("li"):[],vals=$("sc"+i+"inc").values();vals.forEach(function(t,k){var li=lis[k]||lis[lis.length-1].cloneNode(true);if(!lis[k])ul.appendChild(li);li.lastChild.textContent=t});for(var k=vals.length;k<lis.length;k++)lis[k].remove()});
+        d.querySelectorAll(".svc-steps li").forEach(function(li,i){if(!$("st"+i+"t"))return;setText(li,"b",v("st"+i+"t"));setText(li,"p",v("st"+i+"d"))})}
+      showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Preview")}).catch(fail).then(function(){busy(b,false)})});
+  m.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
+  $("hbSave").addEventListener("click",function(){var b=this,v=function(id){return $(id).value};
+    var out={action:"hubs",hubs:{},service_cards:[],service_steps:[]};
+    ["services","industries","guides"].forEach(function(sec){out.hubs[sec]={h1:v("hb-"+sec+"-h1"),lead:v("hb-"+sec+"-lead"),title:v("hb-"+sec+"-title"),desc:v("hb-"+sec+"-desc")}});
+    site.service_cards.forEach(function(c,i){out.service_cards.push({label:v("sc"+i+"label"),title:v("sc"+i+"title"),text:v("sc"+i+"text"),button:v("sc"+i+"button"),includes:$("sc"+i+"inc").values().map(function(t,k){return{icon:(c.includes[k]||c.includes[c.includes.length-1]).icon,text:t}})})});
+    site.service_steps.forEach(function(x,i){out.service_steps.push({title:v("st"+i+"t"),text:v("st"+i+"d")})});
+    busy(b,true);api("pages",out).then(function(){dirty=false;toast("Saved. "+LIVE_NOTE);return api("pages",{action:"list"}).then(function(l){site=l;openHubs()})}).catch(function(e){busy(b,false);fail(e)})});
+}
+
+/* ======================= PHOTOS & LOGO ======================= */
+function photosInit(){
+  var m=$("phMain");m.innerHTML='';
+  var up=h('<div class="panel"><h3>Photos</h3><p class="help">Upload photos to use in your pages. They are resized and compressed automatically so the site stays fast. To put a photo in a page, open the page and press “Photo” above the article.</p><button type="button" class="btn primary" id="phAdd">Upload photos</button><div class="photos" id="phGrid" style="margin-top:16px"><p class="empty"><span class="spin"></span> Loading…</p></div></div>');
+  m.appendChild(up);
+  var lg=h('<div class="panel"><h3>Logo</h3><p class="help">Shown at the top and bottom of every page. Use a PNG with a see-through background for the best result. It is fitted into the same space, so a wide logo works best.</p><div class="logo-prev"><div style="background:#fff"><img src="/logo-400.webp" alt="Current logo on white"></div><div style="background:#0d1122"><img src="/logo-400.webp" alt="Current logo on dark"></div></div><div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" id="lgPick">Choose a new logo</button><button type="button" class="btn primary hidden" id="lgSave">Use this logo</button></div></div>');
+  m.appendChild(lg);
+  var og=h('<div class="panel og-prev"><h3>Sharing picture</h3><p class="help">The picture shown when someone shares ambs.co.nz on Facebook, LinkedIn, WhatsApp and similar. It is cropped to 1200 × 630.</p><img src="/og-image.png" alt="Current sharing picture"><div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" id="ogPick">Choose a new picture</button><button type="button" class="btn primary hidden" id="ogSave">Use this picture</button></div></div>');
+  m.appendChild(og);
+  var ic=h('<div class="panel"><h3>App and browser icon</h3><p class="help">The small picture in the browser tab and on phones when the website is added to the home screen. Use a square picture; it is resized for every device. Phones that already added the app may keep the old icon until it is added again.</p><div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><img id="icPrev" src="/icon-192-v4.png" alt="Current app icon" style="width:72px;height:72px;border-radius:18px;border:1px solid var(--line)"><img id="icFav" src="/favicon-light.png" alt="Current browser icon" style="width:32px;height:32px;border-radius:6px;border:1px solid var(--line)"></div><div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" id="icPick">Choose a new icon</button><button type="button" class="btn primary hidden" id="icSave">Use this icon</button></div></div>');
+  m.appendChild(ic);
+  var newIcons=null;
+  $("icPick").addEventListener("click",function(){pickFile(false).then(function(fs){if(!fs.length)return;loadImg(fs[0]).then(function(img){
+    var sq=function(n,pad,bg){var c=canvasOf(n,n),x=c.getContext("2d");if(bg){x.fillStyle=bg;x.fillRect(0,0,n,n)}var inner=Math.round(n*(1-2*pad)),s=Math.max(inner/img.naturalWidth,inner/img.naturalHeight),dw=img.naturalWidth*s,dh=img.naturalHeight*s;x.save();x.beginPath();x.rect(n*pad,n*pad,inner,inner);x.clip();x.imageSmoothingQuality="high";x.drawImage(img,(n-dw)/2,(n-dh)/2,dw,dh);x.restore();return c};
+    var set=[["icon192",sq(192,0,"#FCFBF6")],["icon512",sq(512,0,"#FCFBF6")],["mask192",sq(192,.1,"#FCFBF6")],["mask512",sq(512,.1,"#FCFBF6")],["apple",sq(180,0,"#FCFBF6")],["fav",sq(32,0,"#FCFBF6")]];
+    return Promise.all(set.map(function(x){return toB64(x[1],"image/png")})).then(function(r){newIcons={};set.forEach(function(x,i){newIcons[x[0]]=r[i].b64});$("icPrev").src=URL.createObjectURL(r[1].blob);$("icFav").src=URL.createObjectURL(r[5].blob);$("icSave").classList.remove("hidden")})}).catch(fail)})});
+  $("icSave").addEventListener("click",function(){var b=this;if(!newIcons)return;busy(b,true);api("media",Object.assign({action:"icons"},newIcons)).then(function(){busy(b,false);b.classList.add("hidden");toast("New icon saved. "+LIVE_NOTE)}).catch(function(e){busy(b,false);fail(e)})});
+  function grid(){api("media",{action:"list"}).then(function(j){var g=$("phGrid");g.innerHTML=j.photos.length?"":'<p class="empty">No photos uploaded yet.</p>';
+    j.photos.slice().reverse().forEach(function(p){var c=h('<div class="ph"><img alt="" loading="lazy"><div class="meta"><b>'+esc(p.path.split("/").pop())+'</b><span>'+Math.round(p.size/1024)+' KB</span><span>'+(p.usedOn.length?"Used on: "+esc(p.usedOn.join(", ")):"Not used on a page yet")+'</span></div><button type="button" class="btn danger">Delete</button></div>');
+      c.querySelector("img").src=photoSrc(p.url);
+      c.querySelector("button").addEventListener("click",function(){var b=this;if(!confirm(p.usedOn.length?"This photo is used on "+p.usedOn.join(", ")+". Delete it anyway? It will disappear from those pages.":"Delete this photo?"))return;busy(b,true,"Deleting…");api("media",{action:"delete",path:p.path}).then(function(){toast("Photo deleted.");grid()}).catch(function(e){busy(b,false);fail(e)})});
+      g.appendChild(c)})}).catch(fail)}
+  grid();
+  $("phAdd").addEventListener("click",function(){var b=this;pickFile(true).then(function(fs){if(!fs.length)return;busy(b,true,"Uploading "+fs.length+"…");
+    fs.reduce(function(p,f){return p.then(function(){return uploadPhoto(f)})},Promise.resolve()).then(function(){busy(b,false);toast(fs.length+" photo"+(fs.length>1?"s":"")+" uploaded. "+LIVE_NOTE);grid()}).catch(function(e){busy(b,false);fail(e);grid()})})});
+  var newLogo=null;
+  $("lgPick").addEventListener("click",function(){pickFile(false).then(function(fs){if(!fs.length)return;loadImg(fs[0]).then(function(img){
+    var big=fitInside(img,613,224),small=fitInside(img,400,146);
+    return Promise.all([toB64(big,"image/png"),toB64(big,"image/webp",.9),toB64(small,"image/png"),toB64(small,"image/webp",.9)]).then(function(r){
+      newLogo={png:r[0].b64,webp:r[1].b64,png400:r[2].b64,webp400:r[3].b64};var u=URL.createObjectURL(r[3].blob);lg.querySelectorAll(".logo-prev img").forEach(function(i){i.src=u});$("lgSave").classList.remove("hidden")})}).catch(fail)})});
+  $("lgSave").addEventListener("click",function(){var b=this;if(!newLogo)return;busy(b,true);api("media",Object.assign({action:"logo"},newLogo)).then(function(){busy(b,false);b.classList.add("hidden");toast("New logo saved. "+LIVE_NOTE)}).catch(function(e){busy(b,false);fail(e)})});
+  var newOg=null;
+  $("ogPick").addEventListener("click",function(){pickFile(false).then(function(fs){if(!fs.length)return;loadImg(fs[0]).then(function(img){var c=cover(img,1200,630);return toB64(c,"image/png").then(function(r){newOg=r.b64;og.querySelector("img").src=URL.createObjectURL(r.blob);$("ogSave").classList.remove("hidden")})}).catch(fail)})});
+  $("ogSave").addEventListener("click",function(){var b=this;if(!newOg)return;busy(b,true);api("media",{action:"social",png:newOg}).then(function(){busy(b,false);b.classList.add("hidden");toast("Sharing picture saved. "+LIVE_NOTE)}).catch(function(e){busy(b,false);fail(e)})});
+}
+
+/* ======================= BUSINESS DETAILS ======================= */
+function businessInit(){
+  var m=$("bzMain");api("settings",{action:"get"}).then(function(j){var b=j.business;m.innerHTML="";
+    var p=h('<div class="panel"><h3>Business details</h3><p class="help">Changed everywhere they appear: the menu, footer, Call buttons, contact section, every page and the details Google reads. Type them exactly as you want them shown.</p></div>');
+    p.appendChild(fld("bzPhone","Phone number",b.phone,{help:"With the country code, for example +64 22 099 9578"}));p.appendChild(fld("bzEmail","Email address",b.email));p.appendChild(fld("bzLoc","Location",b.location,{help:"As shown in the footer, for example Auckland, NZ"}));
+    var act=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="bzSave">Save &amp; publish</button></div>');m.appendChild(p);m.appendChild(act);
+    $("bzSave").addEventListener("click",function(){var btn=this;if(!confirm("Change these details everywhere on the website?"))return;busy(btn,true);
+      api("settings",{action:"business",phone:$("bzPhone").value,email:$("bzEmail").value,location:$("bzLoc").value}).then(function(r){dirty=false;busy(btn,false);toast("Updated in "+r.files+" places. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
+  }).catch(fail);
+}
+
+
+/* ======================= BLOCKS (pages and homepage sections) ======================= */
+var BT={text:"Text",media:"Text with photo",photo:"Photo",gallery:"Photo gallery",cards:"Cards",buttons:"Buttons",faq:"Questions and answers",cta:"Call to action",quote:"Quote or testimonial",video:"Video",columns:"Two columns",form:"Contact form"};
+var BT_HELP={text:"A heading and formatted text.",media:"Text beside a photo, with an optional button.",photo:"One photo with a caption.",gallery:"A grid of photos.",cards:"A row of boxes, each with a title, text and optional link or photo.",buttons:"One or more buttons.",faq:"Questions that open to show the answer.",cta:"A bold coloured box with a button.",quote:"Words from a customer.",video:"A YouTube or Vimeo video.",columns:"Two blocks of text side by side.",form:"A form people fill in. It arrives in your email and in portal Leads."};
+var FT={name:"Name",email:"Email",phone:"Phone",text:"Short answer",message:"Long answer",select:"Dropdown (pick one)",checkbox:"Tick box",date:"Date"};
+var NEWB={text:function(){return{type:"text",heading:"",body:"<p></p>"}},media:function(){return{type:"media",heading:"",body:"<p></p>",photo:"",alt:"",side:"right",button:{label:"",link:""}}},photo:function(){return{type:"photo",photo:"",alt:"",caption:""}},gallery:function(){return{type:"gallery",photos:[]}},
+  cards:function(){return{type:"cards",heading:"",items:[{title:"",text:"",link:""},{title:"",text:"",link:""},{title:"",text:"",link:""}]}},buttons:function(){return{type:"buttons",center:false,items:[{label:"Book a free session",link:"/#book",style:"primary"}]}},
+  faq:function(){return{type:"faq",heading:"",items:[{q:"",a:""}]}},cta:function(){return{type:"cta",heading:"",text:"",button:{label:"Book a free session",link:"/#book"}}},quote:function(){return{type:"quote",quote:"",name:"",role:""}},
+  video:function(){return{type:"video",url:"",caption:""}},columns:function(){return{type:"columns",leftHeading:"",left:"<p></p>",rightHeading:"",right:"<p></p>"}},
+  form:function(){return{type:"form",name:"Contact form",heading:"Get in touch",text:"",button:"Send",thanks:"Thanks, your message has been sent. We will be in touch soon.",
+    fields:[{type:"name",label:"Your name",required:true},{type:"email",label:"Email",required:true},{type:"phone",label:"Phone",required:false},{type:"message",label:"How can we help?",required:true}]}}};
+var linksList=null;
+function siteLinks(){
+  if(linksList)return Promise.resolve(linksList);
+  return (site?Promise.resolve(site):api("pages",{action:"list"}).then(function(j){site=j;return j})).then(function(s){
+    linksList=[["/","Homepage"],["/#automate","Homepage: What we do"],["/#about","Homepage: About us"],["/#why","Homepage: Why us"],["/#how","Homepage: How it works"],["/#faq","Homepage: Questions"],["/#book","Homepage: Book a call"],["/services","Services"],["/industries","Industries"],["/guides","Guides"]];
+    if(s.pages.some(function(p){return p.section==="news"}))linksList.push(["/news","News"]);
+    s.pages.forEach(function(p){linksList.push(["/"+p.section+"/"+p.slug,p.title])});(s.custom||[]).forEach(function(p){linksList.push(["/"+p.slug,p.title])});s.legal.forEach(function(p){linksList.push(["/"+p.slug,p.title])});
+    var dl=$("siteLinks")||document.body.appendChild(h('<datalist id="siteLinks"></datalist>'));dl.innerHTML=linksList.map(function(l){return'<option value="'+esc(l[0])+'">'+esc(l[1])+'</option>'}).join("");
+    return linksList})}
+function bFld(label,obj,key,o){o=o||{};var el=h('<div class="fld"><label><span>'+esc(label)+'</span></label>'+(o.help?'<p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)">'+esc(o.help)+'</p>':'')+(o.area?'<textarea class="t" rows="'+(o.rows||2)+'"></textarea>':'<input class="t"'+(o.link?' list="siteLinks" placeholder="/page or https://…"':'')+(o.ph?' placeholder="'+esc(o.ph)+'"':'')+'>')+'</div>');
+  var i=el.querySelector("input,textarea");i.value=obj[key]||"";i.addEventListener("input",function(){obj[key]=i.value;markDirty();if(o.area)ED.autosize(i)});if(o.area)requestAnimationFrame(function(){ED.autosize(i)});return el}
+function bRich(label,obj,key){
+  var el=h('<div class="fld"><label><span>'+esc(label)+'</span></label><div class="rte-bar mini" role="toolbar"></div><div class="rte" contenteditable="true" role="textbox" aria-multiline="true" style="min-height:110px"></div></div>');
+  var bar=el.querySelector(".rte-bar"),r=el.querySelector(".rte");
+  [["bold","B"],["italic","I"],["link","Link"],["unlink","Remove link"],["ul","• List"],["ol","1. List"],["h3","Subheading"],["p","Text"]].forEach(function(b){bar.appendChild(h('<button type="button" data-c="'+b[0]+'">'+esc(b[1])+'</button>'))});
+  r.innerHTML=obj[key]||"<p></p>";
+  try{document.execCommand("defaultParagraphSeparator",false,"p")}catch(e){}
+  var sync=function(){obj[key]=bodyOut(r);markDirty()};
+  r.addEventListener("input",sync);
+  r.addEventListener("paste",function(e){smartPaste(e,{h2:false},r);sync()});
+  bar.addEventListener("mousedown",function(e){if(e.target.closest("button"))e.preventDefault()});
+  bar.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var c=b.dataset.c;r.focus();
+    if(c==="p"||c==="h3")document.execCommand("formatBlock",false,"<"+c+">");else if(c==="ul")document.execCommand("insertUnorderedList");else if(c==="ol")document.execCommand("insertOrderedList");
+    else if(c==="link"){var u=prompt("Link to (a page on this site like /guides, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;document.execCommand("createLink",false,u)}}
+    else document.execCommand(c);sync()});
+  return el}
+function bPhoto(label,obj,key,altKey){
+  var el=h('<div class="fld"><label><span>'+esc(label)+'</span></label><div class="bph"><div class="cthumb"></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn">Choose photo</button><button type="button" class="btn danger">Remove</button></div></div></div>');
+  var th=el.querySelector(".cthumb"),bs=el.querySelectorAll("button");
+  var draw=function(){th.innerHTML=obj[key]?'<img alt="" src="'+esc(photoSrc(obj[key]))+'">':"<span>None</span>";bs[1].style.display=obj[key]?"":"none"};draw();
+  bs[0].addEventListener("click",function(){choosePhoto().then(function(p){if(!p)return;obj[key]=p.url;if(altKey&&!obj[altKey]){var a=prompt("Describe the photo in a few words (read out to people who can't see it):","");if(a)obj[altKey]=a}draw();markDirty()})});
+  bs[1].addEventListener("click",function(){obj[key]="";draw();markDirty()});
+  return el}
+function bList(label,arr,make,fields,addLabel,max){
+  var el=h('<div class="fld"><label><span>'+esc(label)+'</span></label><div class="bitems"></div><button type="button" class="add">+ '+esc(addLabel)+'</button></div>');
+  var box=el.querySelector(".bitems"),add=el.querySelector(".add");
+  function draw(){box.innerHTML="";arr.forEach(function(it,i){var r=h('<div class="bitem"><div class="bitem-h"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><b>'+(i+1)+'</b><span class="sp"></span><button type="button" class="btn link" data-m="-1" aria-label="Move up">↑</button><button type="button" class="btn link" data-m="1" aria-label="Move down">↓</button><button type="button" class="btn link danger" data-x>Remove</button></div></div>');
+      fields(it).forEach(function(f){r.appendChild(f)});
+      r.querySelectorAll("[data-m]").forEach(function(b){b.addEventListener("click",function(){var j=i+ +b.dataset.m;if(j<0||j>=arr.length)return;arr.splice(j,0,arr.splice(i,1)[0]);draw();markDirty()})});
+      r.querySelector("[data-x]").addEventListener("click",function(){arr.splice(i,1);draw();markDirty()});box.appendChild(r)});
+    add.style.display=max&&arr.length>=max?"none":""}
+  sortable(box,".bitem",function(a,b){moveIn(arr,a,b);draw();markDirty()});
+  add.addEventListener("click",function(){arr.push(make());draw();markDirty()});draw();return el}
+function blockFields(b){
+  var f=[],link=function(o,k,l){return bFld(l||"Link",o,k,{link:true})};
+  b.button=b.button||{label:"",link:""};
+  if(b.type==="text"){f.push(bFld("Heading (optional)",b,"heading"),bRich("Text",b,"body"))}
+  else if(b.type==="media"){f.push(bFld("Heading",b,"heading"),bRich("Text",b,"body"),bPhoto("Photo",b,"photo","alt"),bFld("Photo description",b,"alt"));
+    var side=h('<div class="fld"><label><span>Photo position</span></label><select class="t"><option value="right">Photo on the right</option><option value="left">Photo on the left</option></select></div>');side.querySelector("select").value=b.side||"right";side.querySelector("select").addEventListener("change",function(e){b.side=e.target.value;markDirty()});f.push(side);
+    f.push(h('<div class="grid2"></div>'));f[f.length-1].appendChild(bFld("Button wording (optional)",b.button,"label"));f[f.length-1].appendChild(link(b.button,"link","Button link"))}
+  else if(b.type==="photo"){f.push(bPhoto("Photo",b,"photo","alt"),bFld("Photo description",b,"alt"),bFld("Caption (optional)",b,"caption"))}
+  else if(b.type==="gallery"){b.photos=b.photos||[];f.push(bList("Photos",b.photos,function(){return{photo:"",alt:""}},function(it){return[bPhoto("Photo",it,"photo","alt"),bFld("Caption (optional)",it,"caption")]},"Add a photo",24))}
+  else if(b.type==="cards"){b.items=b.items||[];f.push(bFld("Heading (optional)",b,"heading"),bList("Cards",b.items,function(){return{title:"",text:"",link:""}},function(it){return[bFld("Title",it,"title"),bFld("Text",it,"text",{area:true}),link(it,"link","Link (optional)"),bPhoto("Photo (optional)",it,"photo","alt")]},"Add a card",12))}
+  else if(b.type==="buttons"){b.items=b.items||[];var ck=h('<label class="chk" style="margin:0 0 8px"><input type="checkbox"> Centre the buttons</label>');ck.querySelector("input").checked=!!b.center;ck.querySelector("input").addEventListener("change",function(e){b.center=e.target.checked;markDirty()});f.push(ck);
+    f.push(bList("Buttons",b.items,function(){return{label:"",link:"",style:"primary"}},function(it){var st=h('<div class="fld"><label><span>Style</span></label><select class="t"><option value="primary">Green</option><option value="secondary">Plain</option></select></div>');st.querySelector("select").value=it.style||"primary";st.querySelector("select").addEventListener("change",function(e){it.style=e.target.value;markDirty()});return[bFld("Wording",it,"label"),link(it,"link"),st]},"Add a button",4))}
+  else if(b.type==="faq"){b.items=b.items||[];f.push(bFld("Heading (optional)",b,"heading"),bList("Questions",b.items,function(){return{q:"",a:""}},function(it){return[bFld("Question",it,"q"),bFld("Answer",it,"a",{area:true,rows:3})]},"Add a question",30))}
+  else if(b.type==="cta"){f.push(bFld("Heading",b,"heading"),bFld("Text",b,"text",{area:true}),bFld("Button wording",b.button,"label"),link(b.button,"link","Button link"))}
+  else if(b.type==="quote"){f.push(bFld("Quote",b,"quote",{area:true,rows:3}),bFld("Name",b,"name"),bFld("Business or role (optional)",b,"role"),bPhoto("Photo of the person (optional)",b,"photo"))}
+  else if(b.type==="video"){f.push(bFld("YouTube or Vimeo link",b,"url",{ph:"https://www.youtube.com/watch?v=…"}),bFld("Caption (optional)",b,"caption"))}
+  else if(b.type==="columns"){var g=h('<div class="grid2"></div>');var l=h('<div></div>'),r=h('<div></div>');l.appendChild(bFld("Left heading",b,"leftHeading"));l.appendChild(bRich("Left text",b,"left"));r.appendChild(bFld("Right heading",b,"rightHeading"));r.appendChild(bRich("Right text",b,"right"));g.appendChild(l);g.appendChild(r);f.push(g)}
+  else if(b.type==="form"){b.fields=b.fields||[];
+    f.push(h('<p class="help" style="margin:0 0 10px;font-size:.86rem;color:var(--muted)">Each message is emailed to you (like the booking form on the homepage) and saved in Leads in the AMBS portal.</p>'));
+    f.push(bFld("Heading (optional)",b,"heading"),bFld("Introduction (optional)",b,"text",{area:true}));
+    f.push(bList("Questions",b.fields,function(){return{type:"text",label:"",required:false}},function(it){
+      var kind=h('<div class="fld"><label><span>Kind of answer</span></label><select class="t">'+Object.keys(FT).map(function(k){return'<option value="'+k+'">'+esc(FT[k])+'</option>'}).join("")+'</select></div>');
+      var ks=kind.querySelector("select");ks.value=it.type||"text";
+      var ch=h('<div class="fld"><label><span>Choices, one per line</span></label><textarea class="t" rows="3"></textarea></div>');var ct=ch.querySelector("textarea");ct.value=(it.options||[]).join("\n");
+      ct.addEventListener("input",function(){it.options=ct.value.split("\n").map(function(x){return x.trim()}).filter(Boolean);markDirty();ED.autosize(ct)});
+      var opts=h('<div style="display:flex;gap:18px;flex-wrap:wrap;margin:2px 0 4px"><label class="chk" style="margin:0"><input type="checkbox"> Must be filled in</label><label class="chk" style="margin:0"><input type="checkbox"> Full width</label></div>');
+      var cb=opts.querySelectorAll("input");cb[0].checked=!!it.required;cb[1].checked=!!it.wide;
+      cb[0].addEventListener("change",function(){it.required=cb[0].checked;markDirty()});cb[1].addEventListener("change",function(){it.wide=cb[1].checked;markDirty()});
+      var sync=function(){ch.style.display=ks.value==="select"?"":"none";cb[1].parentNode.style.display=ks.value==="message"||ks.value==="checkbox"?"none":""};
+      ks.addEventListener("change",function(){it.type=ks.value;if(it.type==="select"&&!it.options)it.options=[];sync();markDirty()});sync();
+      return[kind,bFld("Question",it,"label",{ph:"For example: Which service are you interested in?"}),ch,opts]},"Add a question",15));
+    var g=h('<div class="grid2"></div>');g.appendChild(bFld("Button wording",b,"button",{ph:"Send"}));g.appendChild(bFld("Name in your email",b,"name",{help:"So you know which form it came from",ph:"Contact form"}));f.push(g);
+    f.push(bFld("Message shown after sending",b,"thanks",{area:true}))}
+  return f}
+function blockEditor(blocks){
+  var wrap=h('<div class="be"></div>');siteLinks();
+  function draw(){wrap.innerHTML="";
+    if(!blocks.length)wrap.appendChild(h('<p class="empty" style="padding:14px 0">No blocks yet. Add one below.</p>'));
+    blocks.forEach(function(b,i){
+      var el=h('<div class="be-b"><div class="be-h"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><b>'+esc(BT[b.type]||b.type)+'</b><span class="sp"></span><button type="button" class="btn link" data-m="-1" aria-label="Move up">↑ Up</button><button type="button" class="btn link" data-m="1" aria-label="Move down">↓ Down</button><button type="button" class="btn link danger" data-x>Remove</button></div></div>');
+      blockFields(b).forEach(function(x){el.appendChild(x)});
+      el.querySelectorAll(".be-h [data-m]").forEach(function(x){x.addEventListener("click",function(){var j=i+ +x.dataset.m;if(j<0||j>=blocks.length)return;blocks.splice(j,0,blocks.splice(i,1)[0]);draw();markDirty()})});
+      el.querySelector(".be-h [data-x]").addEventListener("click",function(){if(!confirm("Remove this "+(BT[b.type]||"block").toLowerCase()+" block?"))return;blocks.splice(i,1);draw();markDirty()});
+      wrap.appendChild(el)});
+    var add=h('<div class="be-add"><b>Add a block</b><div class="be-types"></div></div>');
+    Object.keys(BT).forEach(function(t){var x=h('<button type="button" class="be-type"><b>'+esc(BT[t])+'</b><span>'+esc(BT_HELP[t])+'</span></button>');x.addEventListener("click",function(){blocks.push(NEWB[t]());draw();markDirty();var all=wrap.querySelectorAll(".be-b");all[all.length-1].scrollIntoView({block:"center"})});add.querySelector(".be-types").appendChild(x)});
+    wrap.appendChild(add);
+    wrap.querySelectorAll(".rte").forEach(function(r){r.addEventListener("focus",function(){})});
+  }
+  sortable(wrap,".be-b",function(a,b){moveIn(blocks,a,b);draw();markDirty()});
+  draw();return wrap}
+var BLOCKS_LIB=null;
+function blocksLib(){return BLOCKS_LIB||(BLOCKS_LIB=import(location.origin+"/assets/blocks.mjs"))}
+function addBlocksCss(d){if(!d.querySelector('link[href*="blocks.css"]')){var l=d.createElement("link");l.rel="stylesheet";l.href="/assets/blocks.css?v="+Date.now();d.head.appendChild(l)}}
+
+/* ======================= PAGES MADE OF BLOCKS ======================= */
+function renderCustom(slug,d){
+  var c=d.custom,m=$("pgMain");m.innerHTML="";c.blocks=c.blocks||[];
+  var live=edLive(c),sch=edSched(c);
+  m.appendChild(h('<div><h2 class="sec">'+esc(c.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">Page at ambs.co.nz/'+esc(slug)+(live?' · <a href="/'+esc(slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p></div>'));
+  var head=h('<div class="panel"><h3>Top of the page</h3></div>');
+  var tmp={eyebrow:c.eyebrow,h1:c.h1,lead:c.lead,title:c.title,description:c.description};
+  head.appendChild(bFld("Small label above the heading (optional)",c,"eyebrow"));head.appendChild(bFld("Page heading",c,"h1"));head.appendChild(bFld("Introduction (optional)",c,"lead",{area:true}));m.appendChild(head);
+  var bp=h('<div class="panel"><h3>Page content</h3><p class="help">Build the page from blocks. Each block uses the website’s own design, so it matches the rest of the site on phones and laptops.</p></div>');bp.appendChild(blockEditor(c.blocks));m.appendChild(bp);
+  var op=h('<div class="panel"><h3>Bottom of the page and Google</h3></div>');var ck=h('<label class="chk" style="margin:0 0 6px"><input type="checkbox"> Show the “Book a free session” box at the bottom</label>');ck.querySelector("input").checked=c.cta!==false;ck.querySelector("input").addEventListener("change",function(e){c.cta=e.target.checked;markDirty()});op.appendChild(ck);
+  op.appendChild(bFld("Title in Google",c,"title"));op.appendChild(bFld("Description in Google",c,"description",{area:true}));m.appendChild(op);
+  m.appendChild(h('<p class="help" style="color:var(--muted);font-size:.9rem">To link to this page from the menu or footer, add “/'+esc(slug)+'” in the Menus tab.</p>'));
+  var act=h('<div class="actions"><button type="button" class="btn danger" id="cpDel">Delete page</button><span class="sp"></span><button type="button" class="btn" id="cpPrev">Preview</button><button type="button" class="btn" id="cpDraft">'+(live?"Take off the website (draft)":"Save draft")+'</button>'+(live?'':'<button type="button" class="btn" id="cpLater">'+(sch?"Change schedule":"Publish later…")+'</button>')+'<button type="button" class="btn primary" id="cpPub">'+(live?"Save &amp; publish":"Publish now")+'</button></div>');m.appendChild(act);
+  function go(draft,b,when){if(!String(c.h1||"").trim()){toast("The page needs a heading",true);return}if(draft&&live&&!confirm("Take this page off the website? It stays here as a draft."))return;busy(b,true);
+    api("pages",{action:"save",section:"page",slug:slug,sha:d.sha,custom:c,draft:draft,schedule:when||""}).then(function(){dirty=false;linksList=null;toast(when?"Scheduled. It goes on the website after "+whenText(when)+" (New Zealand time).":draft?(live?"Taken off the website. "+LIVE_NOTE:"Draft saved. Nothing has been published."):"Published. "+LIVE_NOTE);return api("pages",{action:"list"}).then(function(l){site=l;pagesNav();openPage("page",slug)})}).catch(function(e){busy(b,false);fail(e)})}
+  $("cpPub").addEventListener("click",function(){go(false,this)});$("cpDraft").addEventListener("click",function(){go(true,this)});
+  if($("cpLater")){var sb=scheduleBox(act,sch,function(b,when){go(true,b,when)});$("cpLater").addEventListener("click",function(){sb.classList.toggle("hidden");if(!sb.classList.contains("hidden"))sb.querySelector("input").focus()})}
+  $("cpPrev").addEventListener("click",function(){var b=this;busy(b,true,"Preparing…");previewCustom(slug,c).catch(fail).then(function(){busy(b,false)})});
+  $("cpDel").addEventListener("click",function(){var b=this;if(!confirm("Delete the page “"+(c.h1||slug)+"”? You can bring it back from History."))return;busy(b,true,"Deleting…");
+    api("pages",{action:"delete",section:"page",slug:slug}).then(function(){dirty=false;open=null;linksList=null;toast("Page deleted.");pagesInit()}).catch(function(e){busy(b,false);fail(e)})});
+}
+function previewCustom(slug,c){
+  return Promise.all([blocksLib(),pageDoc("/"+slug,"/terms"),pageDoc("/guides/automation-glossary").catch(function(){return null})]).then(function(r){
+    var lib=r[0],d=r[1],g=r[2];addBlocksCss(d);
+    var cta=c.cta!==false&&g&&g.querySelector("main section.cta")?'<div class="wrap">'+g.querySelector("main section.cta").outerHTML+'</div>':"";
+    var main=d.querySelector("main");
+    main.innerHTML='<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">'+esc(c.h1)+'</li></ol></nav></div><section class="phero"><div class="wrap">'+(c.eyebrow?'<p class="eyebrow">'+esc(c.eyebrow)+'</p>':'')+'<h1>'+esc(c.h1)+'</h1>'+(c.lead?'<p class="plead">'+esc(c.lead)+'</p>':'')+'</div></section><div class="wrap edpage"><div class="blk-flow">'+freshImgs(lib.renderBlocks(c.blocks))+'</div></div>'+cta;
+    d.title=c.title||c.h1;showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Page preview")})}
+
+/* ======================= HOMEPAGE SECTIONS ======================= */
+var lay=null;
+function layoutLoad(){return api("layout",{action:"get"}).then(function(j){lay=j;return j})}
+function sectionsInit(){
+  var m=$("hsMain");m.innerHTML='<p class="empty"><span class="spin"></span> Loading…</p>';
+  layoutLoad().then(function(){drawSections()}).catch(fail)}
+function secName(id){var s=lay.sections;return s.custom[id]?(s.custom[id].title||"New section"):(s.names[id]||id)}
+function drawSections(){
+  var S=lay.sections,m=$("hsMain");m.innerHTML="";
+  m.appendChild(h('<div><h2 class="sec">Homepage sections</h2><p class="sechelp">Put the sections in any order, hide the ones you don’t want, or add new sections made of blocks. The top of the page always stays first.</p></div>'));
+  var p=h('<div class="panel"><div class="hs-list"></div><button type="button" class="add" style="margin-top:10px">+ Add a section</button></div>');var list=p.querySelector(".hs-list");
+  S.order.forEach(function(id,i){var hid=S.hidden.indexOf(id)>=0,cu=!!S.custom[id];
+    var r=h('<div class="crow hs-row'+(hid?' gone':'')+'"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><div class="cmain"><b>'+esc(secName(id))+'</b><span class="cgrp">'+(cu?'Made of blocks':'Built-in section')+(hid?' · <span class="tag stale">Hidden</span>':'')+'</span></div><div class="cbtns"></div></div>');
+    var bx=r.querySelector(".cbtns");
+    function btn(t,f,cls){var b=document.createElement("button");b.type="button";b.className="btn"+(cls?" "+cls:"");b.textContent=t;b.addEventListener("click",f);bx.appendChild(b)}
+    btn("↑",function(){if(i>0){S.order.splice(i-1,0,S.order.splice(i,1)[0]);markDirty();drawSections()}});btn("↓",function(){if(i<S.order.length-1){S.order.splice(i+1,0,S.order.splice(i,1)[0]);markDirty();drawSections()}});
+    btn(hid?"Show":"Hide",function(){if(hid)S.hidden=S.hidden.filter(function(x){return x!==id});else S.hidden.push(id);markDirty();drawSections()});
+    if(cu){btn("Edit",function(){editSection(id)});btn("Delete",function(){if(!confirm("Delete the section “"+secName(id)+"”?"))return;delete S.custom[id];S.order=S.order.filter(function(x){return x!==id});S.hidden=S.hidden.filter(function(x){return x!==id});markDirty();drawSections()},"danger")}
+    list.appendChild(r)});
+  sortable(list,".hs-row",function(a,b){moveIn(S.order,a,b);markDirty();drawSections()});
+  p.querySelector(".add").addEventListener("click",function(){var id="c-"+Date.now().toString(36);S.custom[id]={eyebrow:"",title:"New section",lead:"",style:"plain",blocks:[NEWB.text()]};var at=S.order.indexOf("faq");S.order.splice(at<0?S.order.length:at,0,id);markDirty();editSection(id)});
+  m.appendChild(p);
+  m.appendChild(h('<div id="hsEdit"></div>'));
+  var act=h('<div class="actions"><span class="sp"></span><button type="button" class="btn" id="hsPrev">Preview</button><button type="button" class="btn primary" id="hsSave">Save &amp; publish</button></div>');m.appendChild(act);
+  $("hsPrev").addEventListener("click",function(){var b=this;busy(b,true,"Preparing…");previewHome({sections:S}).catch(fail).then(function(){busy(b,false)})});
+  $("hsSave").addEventListener("click",function(){var b=this;busy(b,true);api("layout",{action:"sections",order:S.order,hidden:S.hidden,custom:S.custom}).then(function(){dirty=false;toast("Saved. "+LIVE_NOTE+" New wording shows in English in the other languages until Claude translates it.");return layoutLoad().then(drawSections)}).catch(function(e){busy(b,false);fail(e)})});
+}
+function editSection(id){
+  drawSections();var S=lay.sections,sec=S.custom[id],box=$("hsEdit");
+  var p=h('<div class="panel"><h3>Section: '+esc(sec.title||"New section")+'</h3><p class="help">This section appears on the homepage where it sits in the list above.</p></div>');
+  p.appendChild(bFld("Small label above the heading (optional)",sec,"eyebrow"));p.appendChild(bFld("Heading",sec,"title"));p.appendChild(bFld("Introduction (optional)",sec,"lead",{area:true}));
+  var st=h('<div class="fld"><label><span>Background</span></label><select class="t"><option value="plain">Plain</option><option value="tinted">Soft colour</option></select></div>');st.querySelector("select").value=sec.style||"plain";st.querySelector("select").addEventListener("change",function(e){sec.style=e.target.value;markDirty()});p.appendChild(st);
+  p.appendChild(blockEditor(sec.blocks));box.appendChild(p);p.scrollIntoView({block:"start"})}
+function previewHome(o){
+  return Promise.all([pageDoc("/"),blocksLib()]).then(function(r){var d=r[0],lib=r[1];
+    if(o.sections){var S=o.sections,main=d.querySelector("main"),units={};
+      main.querySelectorAll(":scope > section").forEach(function(s){var id=s.id||s.className.split(" ")[0];units[id]=s});
+      var strip=main.querySelector(":scope > .auto-strip");
+      main.querySelectorAll(":scope > section.edsec").forEach(function(s){s.remove()});
+      S.order.forEach(function(id){var el=units[id];
+        if(!el&&S.custom[id]){var t=d.createElement("template");t.innerHTML=freshImgs(lib.renderSection(id,S.custom[id]));el=t.content.firstElementChild}
+        if(!el)return;if(id==="automate"&&strip)main.appendChild(strip);main.appendChild(el);
+        var hide=S.hidden.indexOf(id)>=0;el.hidden=hide;if(id==="automate"&&strip)strip.hidden=hide});
+      addBlocksCss(d)}
+    if(o.menus){var M=o.menus;
+      var fill=function(sel,list,before){var host=d.querySelector(sel);if(!host)return;host.querySelectorAll(":scope > a:not(.btn)").forEach(function(a){a.remove()});var ref=before?host.querySelector(before):null;
+        list.forEach(function(it){var a=d.createElement("a");a.href=it.href;a.textContent=it.label;host.insertBefore(a,ref)})};
+      fill(".navlinks",M.main);fill("#drawer",M.drawer,".nav-contact");
+      var cols=d.querySelectorAll("footer nav.f2-col");if(cols[0])fill("footer nav.f2-col[aria-label=Company]",M.company);fill("footer nav.f2-col[aria-label=Explore]",M.explore)}
+    showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Homepage preview")})}
+
+/* ======================= MENUS ======================= */
+var MENU_NAMES={main:["Top menu (laptops)","The links across the top of every page on a laptop. Room for 6."],drawer:["Phone and tablet menu","The links in the menu that opens from the ☰ button."],company:["Footer: Company","The middle column at the bottom of every page."],explore:["Footer: Explore","The right-hand column at the bottom of every page."]};
+function menusInit(){var m=$("mnMain");m.innerHTML='<p class="empty"><span class="spin"></span> Loading…</p>';Promise.all([layoutLoad(),siteLinks()]).then(drawMenus).catch(fail)}
+function drawMenus(){
+  var M=lay.menus,m=$("mnMain");m.innerHTML="";
+  m.appendChild(h('<div><h2 class="sec">Menus and footer links</h2><p class="sechelp">Add, remove, rename and reorder links. Link to any page on the site (start typing to pick one) or to another website.</p></div>'));
+  Object.keys(MENU_NAMES).forEach(function(n){var list=M[n]=M[n]||[],lim=lay.limits[n];
+    var p=h('<div class="panel"><h3>'+esc(MENU_NAMES[n][0])+'</h3><p class="help">'+esc(MENU_NAMES[n][1])+'</p><div class="mn-list"></div><button type="button" class="add">+ Add a link</button></div>');var box=p.querySelector(".mn-list");
+    function draw(){box.innerHTML="";list.forEach(function(it,i){var r=h('<div class="mn-row"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><input class="t" aria-label="Link name" placeholder="Name"><input class="t" aria-label="Link address" list="siteLinks" placeholder="/page or https://…"><button type="button" class="btn link" data-m="-1" aria-label="Move up">↑</button><button type="button" class="btn link" data-m="1" aria-label="Move down">↓</button><button type="button" class="btn link danger" data-x aria-label="Remove">✕</button></div>');
+        var ins=r.querySelectorAll("input");ins[0].value=it.label||"";ins[1].value=it.href||"";
+        ins[0].addEventListener("input",function(){it.label=ins[0].value;markDirty()});ins[1].addEventListener("input",function(){it.href=ins[1].value;markDirty()});
+        r.querySelectorAll("[data-m]").forEach(function(b){b.addEventListener("click",function(){var j=i+ +b.dataset.m;if(j<0||j>=list.length)return;list.splice(j,0,list.splice(i,1)[0]);markDirty();draw()})});
+        r.querySelector("[data-x]").addEventListener("click",function(){list.splice(i,1);markDirty();draw()});box.appendChild(r)});
+      var full=list.length>=lim;p.querySelector(".add").disabled=full;p.querySelector(".add").textContent=full?"Full: remove a link to add another":"+ Add a link"}
+    sortable(box,".mn-row",function(a,b){moveIn(list,a,b);markDirty();draw()});
+    p.querySelector(".add").addEventListener("click",function(){list.push({label:"",href:""});markDirty();draw();var ins=box.querySelectorAll(".mn-row input");ins[ins.length-2].focus()});
+    draw();m.appendChild(p)});
+  var act=h('<div class="actions"><span class="sp"></span><button type="button" class="btn" id="mnPrev">Preview</button><button type="button" class="btn primary" id="mnSave">Save &amp; publish</button></div>');m.appendChild(act);
+  $("mnPrev").addEventListener("click",function(){var b=this;busy(b,true,"Preparing…");previewHome({menus:M}).catch(fail).then(function(){busy(b,false)})});
+  $("mnSave").addEventListener("click",function(){var b=this,bad=Object.keys(M).some(function(n){return M[n].some(function(it){return!String(it.label||"").trim()||!String(it.href||"").trim()})});if(bad){toast("Every link needs a name and an address",true);return}
+    busy(b,true);api("layout",{action:"menus",menus:M}).then(function(){dirty=false;toast("Saved. "+LIVE_NOTE);return layoutLoad().then(drawMenus)}).catch(function(e){busy(b,false);fail(e)})});
+}
+
+/* ======================= HISTORY ======================= */
+var SECN={guides:"guide",industries:"industry page",services:"service page",news:"news post",page:"page",legal:"page"};
+function friendly(t){var m;
+  if((m=/^schedule (guides|industries|services|news|page)\/([a-z0-9-]+) for (\d{4}-\d\d-\d\dT\d\d:\d\d)$/.exec(t)))return"Scheduled the "+SECN[m[1]]+" “"+m[2].replace(/-/g," ")+"” for "+whenText(m[3]);
+  if((m=/^(update|draft|new page|delete page) (?:(guides|industries|services|news|legal|page)\/|\/)?([a-z0-9-]+)$/.exec(t))){var what=(SECN[m[2]]||"page")+" “"+m[3].replace(/-/g," ")+"”";return({update:"Published the ",draft:"Saved a draft of the ","new page":"Created the ","delete page":"Deleted the "})[m[1]]+what}
+  if((m=/^add photo .*\/([^\/]+)$/.exec(t)))return"Uploaded a photo ("+m[1]+")";if((m=/^remove photo .*\/([^\/]+)$/.exec(t)))return"Deleted a photo ("+m[1]+")";
+  if((m=/^(\d+) wording changes?$/.exec(t)))return"Changed homepage wording ("+m[1]+" item"+(m[1]==="1"?"":"s")+")";
+  var map={"menus":"Changed the menus","homepage sections":"Changed the homepage sections","business details":"Changed the business details","calculator hours":"Changed the hours calculator","new logo":"Changed the logo","new sharing picture":"Changed the sharing picture","new app icon":"Changed the app icon","section pages wording":"Changed the section pages and service cards"};
+  if(map[t])return map[t];if((m=/^undo “(.*)”$/.exec(t)))return"Undid: "+friendly(m[1]);return t.charAt(0).toUpperCase()+t.slice(1)}
+function historyInit(){var m=$("hiMain");m.innerHTML='<p class="empty"><span class="spin"></span> Loading…</p>';
+  api("history",{action:"list"}).then(function(j){m.innerHTML="";
+    m.appendChild(h('<div><h2 class="sec">History</h2><p class="sechelp">Everything published from the editor, newest first. Undo puts back what a change replaced, then publishes again.</p></div>'));
+    var p=h('<div class="panel"></div>');if(!j.items.length)p.appendChild(h('<p class="empty">Nothing published from the editor yet.</p>'));
+    j.items.forEach(function(it){var dt=new Date(it.date);var r=h('<div class="crow"><div class="cmain"><b>'+esc(friendly(it.text))+'</b><span class="cgrp">'+esc(dt.toLocaleString("en-NZ",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}))+(it.who?' · '+esc(it.who):'')+(it.draft?' · <span class="tag auto">Draft</span>':'')+'</span></div><div class="cbtns"><button type="button" class="btn">Undo</button></div></div>');
+      r.querySelector("button").addEventListener("click",function(){var b=this;if(!confirm("Undo “"+friendly(it.text)+"”?"))return;busy(b,true,"Undoing…");
+        var go=function(force){return api("history",{action:"undo",sha:it.sha,force:force})};
+        go(false).catch(function(e){if(/changed again later/.test(e.message)&&confirm(e.message+" Undo anyway?"))return go(true);throw e}).then(function(x){if(x){toast("Undone. "+LIVE_NOTE);historyInit()}else busy(b,false)}).catch(function(e){busy(b,false);fail(e)})});
+      p.appendChild(r)});
+    m.appendChild(p)}).catch(fail)}
+
+/* ======================= CALCULATOR ======================= */
+function calcInit(){
+  var m=$("ccMain");api("settings",{action:"get"}).then(function(j){m.innerHTML="";
+    var p=h('<div class="panel cc"><h3>Hours calculator</h3><p class="help">The estimated hours a week for each task in “Pick your business” on the homepage. To change the names of the businesses or tasks, use Homepage wording → Other wording.</p></div>');
+    j.calculator.forEach(function(b){var t=h('<div style="margin-top:14px"><b>'+esc(b.name)+'</b><table><tbody></tbody></table></div>');var tb=t.querySelector("tbody");
+      b.tasks.forEach(function(k,i){var r=h('<tr><td>'+esc(k.name)+'</td><td style="text-align:right;white-space:nowrap"><input type="number" min="0" max="40" step="0.5" aria-label="Hours a week for '+esc(k.name)+'"> hr</td></tr>');var inp=r.querySelector("input");inp.value=k.hours;inp.dataset.b=b.id;inp.dataset.i=i;inp.addEventListener("input",markDirty);tb.appendChild(r)});p.appendChild(t)});
+    var act=h('<div class="actions"><span class="sp"></span><button type="button" class="btn" id="ccPrev">Preview</button><button type="button" class="btn primary" id="ccSave">Save &amp; publish</button></div>');m.appendChild(p);m.appendChild(act);
+    $("ccPrev").addEventListener("click",function(){var btn=this,hours={};p.querySelectorAll("input").forEach(function(i){(hours[i.dataset.b]=hours[i.dataset.b]||[])[+i.dataset.i]=parseFloat(i.value)});busy(btn,true,"Preparing…");
+      api("settings",{action:"calculator",hours:hours,preview:true}).then(function(r){showPreview(r.html,r.js,"Homepage preview")}).catch(fail).then(function(){busy(btn,false)})});
+    $("ccSave").addEventListener("click",function(){var btn=this,hours={};p.querySelectorAll("input").forEach(function(i){(hours[i.dataset.b]=hours[i.dataset.b]||[])[+i.dataset.i]=parseFloat(i.value)});busy(btn,true);
+      api("settings",{action:"calculator",hours:hours}).then(function(){dirty=false;busy(btn,false);toast("Saved. Live in about a minute.")}).catch(function(e){busy(btn,false);fail(e)})});
+  }).catch(fail);
+}
+})();
+</script>
+</body>
+</html>

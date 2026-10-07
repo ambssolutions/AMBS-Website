@@ -1,0 +1,249 @@
+{
+ "_about": "Pages on ambs.co.nz. Edited by the website editor (/admin); build.py reads this file.",
+ "pages": [
+  {
+   "section": "services",
+   "slug": "ai-automation",
+   "title": "AI automation",
+   "blurb": "Quotes, replies, bookings, data and reporting that run themselves, built around the tools you already use.",
+   "category": "Services",
+   "icon": "auto"
+  },
+  {
+   "section": "services",
+   "slug": "websites-and-portals",
+   "title": "Websites, portals and dashboards",
+   "blurb": "Fast multilingual websites, staff and customer portals, and live dashboards you own.",
+   "category": "Services",
+   "icon": "web"
+  },
+  {
+   "section": "industries",
+   "slug": "cafes-and-takeaways",
+   "title": "Cafés and takeaways",
+   "blurb": "Rosters, supplier orders and review replies, handled.",
+   "category": "Hospitality",
+   "icon": "cafe"
+  },
+  {
+   "section": "industries",
+   "slug": "trades-and-building",
+   "title": "Trades and building",
+   "blurb": "Quotes from site notes, invoices into your accounts, late payments chased.",
+   "category": "Trades",
+   "icon": "trades"
+  },
+  {
+   "section": "industries",
+   "slug": "clinics-and-salons",
+   "title": "Clinics and salons",
+   "blurb": "Reminders and rebooking, client forms and missed-call follow-ups.",
+   "category": "Health and beauty",
+   "icon": "clinic"
+  },
+  {
+   "section": "industries",
+   "slug": "shops-and-dairies",
+   "title": "Shops and dairies",
+   "blurb": "Stock counts, price updates and a daily sales summary.",
+   "category": "Retail",
+   "icon": "retail"
+  },
+  {
+   "section": "industries",
+   "slug": "advisers-and-accountants",
+   "title": "Advisers and accountants",
+   "blurb": "Document chasing, file notes from calls and compliance records.",
+   "category": "Professional services",
+   "icon": "adviser"
+  },
+  {
+   "section": "industries",
+   "slug": "transport-and-delivery",
+   "title": "Transport and delivery",
+   "blurb": "Run sheets, proof of delivery and fuel and mileage logs.",
+   "category": "Transport",
+   "icon": "transport"
+  },
+  {
+   "section": "guides",
+   "slug": "how-to-choose-what-to-automate-first",
+   "title": "How to choose what to automate first",
+   "blurb": "A simple way to find the task likely to give you the most hours back.",
+   "category": "Getting started",
+   "icon": "target"
+  },
+  {
+   "section": "guides",
+   "slug": "automate-quotes-and-invoices",
+   "title": "Automate quotes and invoices",
+   "blurb": "From site notes to a priced quote, and from an approved job to an invoice in your accounts.",
+   "category": "Automation",
+   "icon": "invoice"
+  },
+  {
+   "section": "guides",
+   "slug": "reduce-no-shows-with-booking-reminders",
+   "title": "Reduce no-shows with booking reminders",
+   "blurb": "Confirmations, reminders and rebooking messages that run without anyone chasing.",
+   "category": "Automation",
+   "icon": "cal"
+  },
+  {
+   "section": "guides",
+   "slug": "ai-customer-replies-for-small-business",
+   "title": "AI customer replies for small business",
+   "blurb": "Answer the same questions quickly, in your customer's language, while a person handles the rest.",
+   "category": "Automation",
+   "icon": "chat"
+  },
+  {
+   "section": "guides",
+   "slug": "connect-your-business-apps",
+   "title": "Connect your business apps",
+   "blurb": "Stop retyping the same job into three systems. How app connections work and where to start.",
+   "category": "Automation",
+   "icon": "link"
+  },
+  {
+   "section": "guides",
+   "slug": "weekly-business-numbers-dashboard",
+   "title": "Your business numbers, every week",
+   "blurb": "What to track, where the numbers come from, and how to get them on your phone every Monday.",
+   "category": "Digital tools",
+   "icon": "chart"
+  },
+  {
+   "section": "guides",
+   "slug": "privacy-act-2020-and-automation",
+   "title": "The Privacy Act 2020 and automation",
+   "blurb": "What New Zealand businesses should check before automating anything that touches personal information.",
+   "category": "Compliance",
+   "icon": "shield"
+  },
+  {
+   "section": "guides",
+   "slug": "websites-that-turn-visitors-into-calls",
+   "title": "Websites that turn visitors into calls",
+   "blurb": "What makes a small-business website earn enquiries, from speed to languages to the contact form.",
+   "category": "Digital tools",
+   "icon": "web"
+  },
+  {
+   "section": "guides",
+   "slug": "automation-glossary",
+   "title": "Automation glossary",
+   "blurb": "Plain-English meanings of the automation and AI terms you will hear.",
+   "category": "Getting started",
+   "icon": "book"
+  }
+ ],
+ "hubs": {
+  "services": {
+   "title": "Services: AI automation and digital solutions in New Zealand | Ambs Solutions",
+   "h1": "Automation and digital tools, built around your business",
+   "lead": "Two ways we help New Zealand businesses: automations that clear the repetitive work, and digital tools that make the business easier to run and easier to find.",
+   "desc": "AI automation, websites, staff and customer portals and live dashboards for New Zealand small businesses. Built around the tools you already use."
+  },
+  "industries": {
+   "title": "Industries we help with automation in New Zealand | Ambs Solutions",
+   "h1": "Automation for the way your industry actually works",
+   "lead": "Every industry has its own repetitive work. Pick yours to see the tasks we usually take off first, the tools we connect, and typical estimates of the time involved.",
+   "desc": "Automation for New Zealand cafés, trades, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery businesses."
+  },
+  "guides": {
+   "title": "Guides: automation and digital tools for NZ businesses | Ambs Solutions",
+   "h1": "Practical guides to automation for New Zealand businesses",
+   "lead": "Practical guides on what to automate, how it works, what it takes and what to watch for. Written for owners, not engineers.",
+   "desc": "Practical guides for NZ small businesses: what to automate first, invoicing, booking reminders, AI replies, app connections, dashboards and privacy."
+  }
+ },
+ "service_cards": [
+  {
+   "slug": "ai-automation",
+   "icon": "auto",
+   "label": "Automation",
+   "title": "AI automation",
+   "text": "The jobs your team does the same way every week, done for you. Built around the tools you already use.",
+   "button": "Explore AI automation",
+   "colour1": "#1877E0",
+   "colour2": "#7B4DFF",
+   "includes": [
+    {
+     "icon": "invoice",
+     "text": "Quotes and invoices"
+    },
+    {
+     "icon": "chat",
+     "text": "Customer replies"
+    },
+    {
+     "icon": "cal",
+     "text": "Bookings and reminders"
+    },
+    {
+     "icon": "link",
+     "text": "Moving data between apps"
+    },
+    {
+     "icon": "chart",
+     "text": "The numbers, weekly"
+    },
+    {
+     "icon": "shield",
+     "text": "Records you can show"
+    }
+   ]
+  },
+  {
+   "slug": "websites-and-portals",
+   "icon": "web",
+   "label": "Digital solutions",
+   "title": "Websites, portals and dashboards",
+   "text": "Fast, multilingual websites that turn visitors into calls, plus your own apps for staff, customers and live numbers.",
+   "button": "Explore websites and portals",
+   "colour1": "#139918",
+   "colour2": "#1877E0",
+   "includes": [
+    {
+     "icon": "web",
+     "text": "Websites that win trust"
+    },
+    {
+     "icon": "chat",
+     "text": "Multilingual by design"
+    },
+    {
+     "icon": "clinic",
+     "text": "Staff and customer portals"
+    },
+    {
+     "icon": "chart",
+     "text": "Live dashboards"
+    },
+    {
+     "icon": "shield",
+     "text": "Yours to own"
+    },
+    {
+     "icon": "target",
+     "text": "Built to turn visits into calls"
+    }
+   ]
+  }
+ ],
+ "service_steps": [
+  {
+   "title": "Free first session",
+   "text": "We look at how your work really happens and leave you with a written plan and an hours estimate."
+  },
+  {
+   "title": "Built in one to two weeks",
+   "text": "One task first, built in your own accounts and tested on your real jobs before it goes live."
+  },
+  {
+   "title": "30 days of free support",
+   "text": "Fixes and tweaks are free for the first 30 days. After that, a monthly plan or pay as you go."
+  }
+ ]
+}

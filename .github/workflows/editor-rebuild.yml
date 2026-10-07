@@ -1,0 +1,60 @@
+# The website editor (/admin) saves page sources with a commit message starting "Editor source:".
+# Vercel skips that commit (see ignoreCommand in vercel.json). This workflow rebuilds the pages
+# with site-src/build.py and commits the result, which Vercel then publishes once.
+# It also runs every hour to publish pages scheduled in the editor once their time has come
+# (it only builds when one is due, so a quiet hour costs a few seconds and publishes nothing).
+name: Rebuild pages after editor changes
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: editor-rebuild
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    if: github.event_name != 'push' || startsWith(github.event.head_commit.message, 'Editor source:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Anything to publish?
+        id: due
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then echo "go=yes" >> "$GITHUB_OUTPUT"
+          else echo "go=$(python3 site-src/scheduled_due.py)" >> "$GITHUB_OUTPUT"; fi
+      - name: Build pages
+        if: steps.due.outputs.go == 'yes'
+        run: python3 site-src/build.py
+      - name: New build number
+        if: steps.due.outputs.go == 'yes'
+        run: |
+          python3 - <<'PY'
+          import json, datetime, zoneinfo
+          v = json.load(open("version.json"))
+          v["build"] = str(int(v.get("build", "0")) + 1)
+          v["released"] = datetime.datetime.now(zoneinfo.ZoneInfo("Pacific/Auckland")).date().isoformat()
+          open("version.json", "w").write(json.dumps(v, indent=2) + "\n")
+          PY
+      - name: Commit and push
+        if: steps.due.outputs.go == 'yes'
+        run: |
+          git config user.name "AMBS website editor"
+          git config user.email "hello@ambs.co.nz"
+          git add -A
+          if [ "${{ github.event_name }}" = "push" ]; then msg="Website editor: publish pages"; else msg="Website editor: publish scheduled pages"; fi
+          git commit -m "$msg"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase origin main
+          done
+          exit 1

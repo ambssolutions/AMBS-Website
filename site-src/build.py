@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds the AMBS sub-pages from content fragments.
    content/<section>/<slug>.html = <!--META {json} --> + article body.  Output goes to ../site/."""
-import json, os, re, html, sys, datetime
+import json, os, re, html, sys, datetime, urllib.parse
 SRC=os.path.dirname(os.path.abspath(__file__))
 # Output goes to the website root: the folder above site-src when it holds the site (this repository), otherwise ../site
 _up=os.path.dirname(SRC)
@@ -28,53 +28,61 @@ ICON={
  'book':'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/>',
  'target':'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8"/>',
 }
+# pages, hub page wording and the service cards live in content/pages.json, which the website editor changes
+SITE=json.load(open(os.path.join(SRC,'content','pages.json'),encoding='utf8'))
 # section, slug, card title, card blurb, category, icon
-PAGES=[
- ('services','ai-automation','AI automation','Quotes, replies, bookings, data and reporting that run themselves, built around the tools you already use.','Services','auto'),
- ('services','websites-and-portals','Websites, portals and dashboards','Fast multilingual websites, staff and customer portals, and live dashboards you own.','Services','web'),
- ('industries','cafes-and-takeaways','Cafés and takeaways','Rosters, supplier orders and review replies, handled.','Hospitality','cafe'),
- ('industries','trades-and-building','Trades and building','Quotes from site notes, invoices into your accounts, late payments chased.','Trades','trades'),
- ('industries','clinics-and-salons','Clinics and salons','Reminders and rebooking, client forms and missed-call follow-ups.','Health and beauty','clinic'),
- ('industries','shops-and-dairies','Shops and dairies','Stock counts, price updates and a daily sales summary.','Retail','retail'),
- ('industries','advisers-and-accountants','Advisers and accountants','Document chasing, file notes from calls and compliance records.','Professional services','adviser'),
- ('industries','transport-and-delivery','Transport and delivery','Run sheets, proof of delivery and fuel and mileage logs.','Transport','transport'),
- ('guides','how-to-choose-what-to-automate-first','How to choose what to automate first','A simple way to find the task likely to give you the most hours back.','Getting started','target'),
- ('guides','automate-quotes-and-invoices','Automate quotes and invoices','From site notes to a priced quote, and from an approved job to an invoice in your accounts.','Automation','invoice'),
- ('guides','reduce-no-shows-with-booking-reminders','Reduce no-shows with booking reminders','Confirmations, reminders and rebooking messages that run without anyone chasing.','Automation','cal'),
- ('guides','ai-customer-replies-for-small-business','AI customer replies for small business','Answer the same questions quickly, in your customer\'s language, while a person handles the rest.','Automation','chat'),
- ('guides','connect-your-business-apps','Connect your business apps','Stop retyping the same job into three systems. How app connections work and where to start.','Automation','link'),
- ('guides','weekly-business-numbers-dashboard','Your business numbers, every week','What to track, where the numbers come from, and how to get them on your phone every Monday.','Digital tools','chart'),
- ('guides','privacy-act-2020-and-automation','The Privacy Act 2020 and automation','What New Zealand businesses should check before automating anything that touches personal information.','Compliance','shield'),
- ('guides','websites-that-turn-visitors-into-calls','Websites that turn visitors into calls','What makes a small-business website earn enquiries, from speed to languages to the contact form.','Digital tools','web'),
- ('guides','automation-glossary','Automation glossary','Plain-English meanings of the automation and AI terms you will hear.','Getting started','book'),
-]
-SECTION={'services':('Services','What we build'),'industries':('Industries','Who we help'),'guides':('Guides','Knowledge hub')}
-HUB={
- 'services':dict(title='Services: AI automation and digital solutions in New Zealand | Ambs Solutions',h1='Automation and digital tools, built around your business',
-   lead='Two ways we help New Zealand businesses: automations that clear the repetitive work, and digital tools that make the business easier to run and easier to find.',
-   desc='AI automation, websites, staff and customer portals and live dashboards for New Zealand small businesses. Built around the tools you already use.'),
- 'industries':dict(title='Industries we help with automation in New Zealand | Ambs Solutions',h1='Automation for the way your industry actually works',
-   lead='Every industry has its own repetitive work. Pick yours to see the tasks we usually take off first, the tools we connect, and typical estimates of the time involved.',
-   desc='Automation for New Zealand cafés, trades, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery businesses.'),
- 'guides':dict(title='Guides: automation and digital tools for NZ businesses | Ambs Solutions',h1='Practical guides to automation for New Zealand businesses',
-   lead='Practical guides on what to automate, how it works, what it takes and what to watch for. Written for owners, not engineers.',
-   desc='Practical guides for NZ small businesses: what to automate first, invoicing, booking reminders, AI replies, app connections, dashboards and privacy.'),
-}
+# pages saved as drafts in the editor are not published; a scheduled draft goes live once its time
+# (New Zealand time, "publish_at") has come. A GitHub workflow rebuilds every hour to publish them.
+import zoneinfo
+NOW=os.environ.get('AMBS_NOW') or datetime.datetime.now(zoneinfo.ZoneInfo('Pacific/Auckland')).strftime('%Y-%m-%dT%H:%M')
+def is_live(d): return not d.get('draft') or bool(d.get('publish_at') and d['publish_at']<=NOW)
+PAGES=[(p['section'],p['slug'],p['title'],p['blurb'],p['category'],p['icon']) for p in SITE['pages'] if is_live(p)]
+PHOTO={(p['section'],p['slug']):p['photo'] for p in SITE['pages'] if p.get('photo')}
+SECTION={'services':('Services','What we build'),'industries':('Industries','Who we help'),'guides':('Guides','Knowledge hub'),'news':('News','Latest news')}
+HUB=SITE['hubs']
+HUB.setdefault('news',dict(title='News | Ambs Solutions',h1='News',lead='The latest from Ambs Solutions.',desc='News and updates from Ambs Solutions, AI automation and digital solutions for New Zealand businesses.'))
+
+def _load(name,default):
+    f=os.path.join(SRC,'content',name)
+    return json.load(open(f,encoding='utf8')) if os.path.exists(f) else default
+# English wording of the homepage, used for menu labels
+_HJS=open(os.path.join(SRC,'assets','home.js'),encoding='utf8').read()
+_a=_HJS.index('const I18N = {\nen:{')+len('const I18N = {\nen:{')
+EN={m.group(1):json.loads(m.group(2)) for m in re.finditer(r'"([A-Za-z0-9_.-]+)":("(?:[^"\\]|\\.)*")',_HJS[_a:_HJS.index('\n}',_a)])}
+# menus and footer links, edited in the website editor
+MENUS=_load('menus.json',{})
+# homepage section order, hidden sections and sections made of blocks
+HOMESEC=_load('home-sections.json',{'order':[],'hidden':[],'custom':{}})
+# pages at their own address, made of blocks
+CUSTOM={}
+_cdir=os.path.join(SRC,'content','custom')
+if os.path.isdir(_cdir):
+    for _f in sorted(os.listdir(_cdir)):
+        if _f.endswith('.json'):
+            _d=json.load(open(os.path.join(_cdir,_f),encoding='utf8'))
+            if is_live(_d): CUSTOM[_f[:-5]]=_d
+def menu_label(it): return EN.get(it.get('key',''),'') or it.get('label','')
+def menu_key(it): return it['key'] if it.get('key') in EN else 'ed.menu.'+it.get('id','x')
+def sub_href(h): return '/'+h if h.startswith('#') else h
 def e(x): return html.escape(x, quote=True)
 def url(sec,slug=None): return f'/{sec}' + (f'/{slug}' if slug else '')
 def card(p,tag=None):
     sec,slug,t,d,cat,ic=p
+    ph=PHOTO.get((sec,slug))
+    if ph: return (f'<a class="card card--photo" href="{url(sec,slug)}" data-cat="{e(cat)}"><img class="card-photo" src="{e(ph)}" alt="" loading="lazy" decoding="async">'
+            f'<span class="tag">{e(tag or cat)}</span><h3>{e(t)}</h3><p>{e(d)}</p><span class="go">Read more</span></a>')
     return (f'<a class="card" href="{url(sec,slug)}" data-cat="{e(cat)}"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true">{ICON[ic]}</svg></span>'
             f'<span class="tag">{e(tag or cat)}</span><h3>{e(t)}</h3><p>{e(d)}</p><span class="go">{ "Read the guide" if sec=="guides" else "Learn more"}</span></a>')
 def find(path):
-    sec,slug=path.split('/'); return next(p for p in PAGES if p[0]==sec and p[1]==slug)
+    sec,slug=path.split('/'); return next((p for p in PAGES if p[0]==sec and p[1]==slug),None)
 
 import hashlib
 def _v(name):
     return hashlib.md5(open(os.path.join(SRC,'assets',name),'rb').read()).hexdigest()[:8]
-CSSV=_v('pages.css');JSV=_v('pages.js')
+CSSV=_v('pages.css');JSV=_v('pages.js');BLV=_v('blocks.css');FMV=_v('forms.js')
+FORMS_JS=f'<script src="/assets/forms.js?v={FMV}" defer></script>'
 THEME="""<script>(function(){var t=null;try{t=sessionStorage.getItem("ambs:theme")}catch(e){}if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}document.documentElement.dataset.theme=t})();</script>"""
-def head(title,desc,canon,ld,ogtype='website'):
+def head(title,desc,canon,ld,ogtype='website',blocks=False):
     return f'''<!doctype html>
 <html lang="en-NZ">
 <head>
@@ -116,7 +124,7 @@ def head(title,desc,canon,ld,ogtype='website'):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/pages.css?v={CSSV}">
+<link rel="stylesheet" href="/assets/pages.css?v={CSSV}">{chr(10)+'<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'">' if blocks else ''}
 <script type="application/ld+json">{json.dumps(ld,ensure_ascii=False)}</script>
 </head>
 <body>
@@ -126,10 +134,11 @@ def head(title,desc,canon,ld,ogtype='website'):
 def header(active):
     ico_mail='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="17" rx="2.6"/><path d="M3 5.2L12 12.8l9-7.6"/></svg>'
     ico_call='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>'
-    cur={'services':'services','industries':'industries','guides':'guides'}.get(active,'')
-    def a(href,label,key): return f'<a href="{href}"' + (' aria-current="page"' if key==cur else '') + f'>{label}</a>'
-    main=[('/#automate','What we do','automate'),('/#about','About us','about'),('/#how','How it works','how'),('/services','Services','services'),('/guides','Guides','guides'),('/#faq','Questions','faq')]
-    drawer=[('/#automate','What we do','automate'),('/#about','About us','about'),('/#why','Why us','why'),('/#how','How it works','how'),('/services','Services','services'),('/guides','Guides','guides'),('/industries','Industries','industries'),('/#faq','Questions','faq')]
+    cur=active or ''
+    def a(href,label,key): return f'<a href="{href}"' + (' aria-current="page"' if key and key==cur else '') + f'>{label}</a>'
+    akey=lambda h:h.strip('/').split('/')[0] if h.startswith('/') and not h.startswith('/#') else ''
+    main=[(sub_href(it['href']),e(menu_label(it)),akey(sub_href(it['href']))) for it in MENUS.get('main',[])]
+    drawer=[(sub_href(it['href']),e(menu_label(it)),akey(sub_href(it['href']))) for it in MENUS.get('drawer',[])]
     return f'''<header class="hdr"><div class="sh-bar">
   <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
   <div class="sh-right">
@@ -148,6 +157,7 @@ def header(active):
   </nav>
 </div></header>
 '''
+def fcol(name): return ''.join(f'<a href="{e(sub_href(it["href"]))}">{e(menu_label(it))}</a>' for it in MENUS.get(name,[]))
 def footer():
     col=lambda sec:''.join(f'<li><a href="{url(p[0],p[1])}">{e(p[2])}</a></li>' for p in PAGES if p[0]==sec)
     return f'''<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
@@ -155,8 +165,8 @@ def footer():
   <div class="f2-grid">
     <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
       <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p></div>
-    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a></nav>
-    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p><a href="/services">Services</a><a href="/industries">Industries</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p>{fcol('company')}</nav>
+    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p>{fcol('explore')}</nav>
     <div class="f2-col" id="contact"><p class="f2-h">Contact us</p><a href="/#book">Book a call</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
   </div>
   <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
@@ -196,8 +206,8 @@ def build_page(p):
     cr_html,cr_ld=crumbs([('Home','/'),(stitle,url(sec)),(meta['h1'],None)])
     cr_ld['itemListElement'][-1]['item']=BASE+canon
     graph=[cr_ld,ORG]
-    if sec=='guides':
-        graph.append({'@type':'Article','headline':meta['h1'],'description':meta['description'],'datePublished':meta.get('published',TODAY),'dateModified':meta.get('updated',TODAY),
+    if sec in ('guides','news'):
+        graph.append({'@type':'Article' if sec=='guides' else 'NewsArticle','headline':meta['h1'],'description':meta['description'],'datePublished':meta.get('published',TODAY),'dateModified':meta.get('updated',TODAY),
           'inLanguage':'en-NZ','wordCount':words,'author':{'@type':'Organization','name':'Ambs Solutions','url':BASE+'/'},'publisher':{'@id':BASE+'/#business'},
           'mainEntityOfPage':BASE+canon,'image':BASE+'/logo.png','articleSection':cat})
     else:
@@ -211,12 +221,16 @@ def build_page(p):
     faq=''
     if meta.get('faq'):
         faq='<h2 id="questions">Common questions</h2><div class="faq">'+''.join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q,a in meta['faq'])+'</div>'
-    rel=[find(r) for r in meta.get('related',[])][:3]
+    rel=[x for x in (find(r) for r in meta.get('related',[])) if x][:3]
     related=(f'<section class="section"><div class="section-h"><h2>Keep reading</h2><a href="/guides">All guides →</a></div><div class="cards">{"".join(card(r) for r in rel)}</div></section>') if rel else ''
     pills=[f'<span>{e(meta.get("eyebrow",cat))}</span>']
     if sec=='guides': pills+= [f'<span>{mins} min read</span>',f'<span>Updated {datetime.date.fromisoformat(meta.get("updated",TODAY)).strftime("%-d %B %Y")}</span>']
+    elif sec=='news':
+        if cat and cat!='News': pills.append(f'<a class="pcat" href="/news?c={urllib.parse.quote(cat)}">{e(cat)}</a>')
+        pills+= [f'<span>{datetime.date.fromisoformat(meta.get("published",TODAY)).strftime("%-d %B %Y")}</span>',f'<span>{mins} min read</span>']
     else: pills+= ['<span>New Zealand-wide</span>','<span>Free first session</span>']
     art=f'<div class="g-art" aria-hidden="true">{GUIDE_ART[slug]}</div>' if sec=='guides' and slug in GUIDE_ART else ''
+    if sec=='news' and PHOTO.get((sec,slug)): art=f'<figure class="news-hero"><img src="{e(PHOTO[(sec,slug)])}" alt="" decoding="async"></figure>'
     if sec=='guides' and slug not in ('automation-glossary','privacy-act-2020-and-automation'): faq=calc()+faq
     out=head(meta['title'],meta['description'],canon,ld,'article' if sec=='guides' else 'website')+header(sec)+f'''<main id="main">
 <div class="wrap">{cr_html}</div>
@@ -243,16 +257,7 @@ def build_page(p):
     return words
 
 
-SVC=[
- dict(slug='ai-automation',ic='auto',k='Automation',t='AI automation',c1='#1877E0',c2='#7B4DFF',
-      d='The jobs your team does the same way every week, done for you. Built around the tools you already use.',
-      inc=[('invoice','Quotes and invoices'),('chat','Customer replies'),('cal','Bookings and reminders'),('link','Moving data between apps'),('chart','The numbers, weekly'),('shield','Records you can show')],
-      go='Explore AI automation'),
- dict(slug='websites-and-portals',ic='web',k='Digital solutions',t='Websites, portals and dashboards',c1='#139918',c2='#1877E0',
-      d='Fast, multilingual websites that turn visitors into calls, plus your own apps for staff, customers and live numbers.',
-      inc=[('web','Websites that win trust'),('chat','Multilingual by design'),('clinic','Staff and customer portals'),('chart','Live dashboards'),('shield','Yours to own'),('target','Built to turn visits into calls')],
-      go='Explore websites and portals'),
-]
+SVC=[dict(slug=x['slug'],ic=x['icon'],k=x['label'],t=x['title'],c1=x['colour1'],c2=x['colour2'],d=x['text'],inc=[(i['icon'],i['text']) for i in x['includes']],go=x['button']) for x in SITE['service_cards']]
 def services_feature():
     out='<section class="section svc-sec"><div class="svc-grid">'
     for i,s in enumerate(SVC):
@@ -263,26 +268,34 @@ def services_feature():
               f'<span class="svc-k">{e(s["k"])}</span><h2 class="svc-t">{e(s["t"])}</h2><p class="svc-d">{e(s["d"])}</p>'
               f'<ul class="svc-inc">{lis}</ul><span class="svc-go">{e(s["go"])} <span aria-hidden="true">&#8594;</span></span></a>')
     out+='</div></section>'
-    steps=[('1','Free first session','We look at how your work really happens and leave you with a written plan and an hours estimate.'),
-           ('2','Built in one to two weeks','One task first, built in your own accounts and tested on your real jobs before it goes live.'),
-           ('3','30 days of free support','Fixes and tweaks are free for the first 30 days. After that, a monthly plan or pay as you go.')]
+    steps=[(str(i+1),x['title'],x['text']) for i,x in enumerate(SITE['service_steps'])]
     out+='<section class="section svc-how"><div class="section-h"><h2>How every project runs</h2></div><ol class="svc-steps">'+''.join(
         f'<li><span class="svc-n">{n}</span><b>{e(t)}</b><p>{e(d)}</p></li>' for k,(n,t,d) in enumerate(steps))+'</ol></section>'
     return out
 
+def page_meta(p):
+    raw=open(os.path.join(SRC,'content',p[0],p[1]+'.html'),encoding='utf8').read()
+    m=re.match(r'\s*<!--META\s*(\{.*?\})\s*-->',raw,re.S); return json.loads(m.group(1)) if m else {}
 def build_hub(sec):
     h=HUB[sec]; canon=url(sec)
     cr_html,cr_ld=crumbs([('Home','/'),(SECTION[sec][0],None)]); cr_ld['itemListElement'][-1]['item']=BASE+canon
     items=[p for p in PAGES if p[0]==sec]
+    if sec=='news': items.sort(key=lambda p:page_meta(p).get('published',''),reverse=True)
     ld={'@context':'https://schema.org','@graph':[cr_ld,ORG,{'@type':'CollectionPage','name':h['h1'],'description':h['desc'],'url':BASE+canon,
         'mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+url(p[0],p[1]),'name':p[2]} for i,p in enumerate(items)]}}]}
     cats=[]; [cats.append(p[4]) for p in items if p[4] not in cats]
     filt=''
-    if sec=='guides':
-        filt='<div class="filters" data-for="hubGrid" role="group" aria-label="Filter guides"><button type="button" data-f="all" aria-pressed="true">All</button>'+''.join(f'<button type="button" data-f="{e(c)}" aria-pressed="false">{e(c)}</button>' for c in cats)+'</div>'
+    if sec in ('guides','news'):
+        # a search box, and category buttons when there is more than one category
+        word=SECTION[sec][0].lower()
+        filt=(f'<div class="hub-tools"><label class="hub-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>'
+              f'<input type="search" data-for="hubGrid" placeholder="Search {word}" aria-label="Search {word}" autocomplete="off"></label></div>')
+        if len(cats)>1 or sec=='guides':
+            filt+=f'<div class="filters" data-for="hubGrid" role="group" aria-label="Filter {word}"><button type="button" data-f="all" aria-pressed="true">All</button>'+''.join(f'<button type="button" data-f="{e(c)}" aria-pressed="false">{e(c)}</button>' for c in cats)+'</div>'
+        filt+=f'<p class="hub-none" id="hubNone" hidden>No {word} match that search.</p>'
     extra=''
     if sec!='guides':
-        extra='<section class="section"><div class="section-h"><h2>Popular guides</h2><a href="/guides">All guides →</a></div><div class="cards">'+''.join(card(p) for p in PAGES if p[0]=='guides')[:0]+''.join(card(find(x)) for x in ['guides/how-to-choose-what-to-automate-first','guides/connect-your-business-apps','guides/privacy-act-2020-and-automation'])+'</div></section>'
+        extra='<section class="section"><div class="section-h"><h2>Popular guides</h2><a href="/guides">All guides →</a></div><div class="cards">'+''.join(card(p) for p in PAGES if p[0]=='guides')[:0]+''.join(card(p) for p in (find(x) for x in ['guides/how-to-choose-what-to-automate-first','guides/connect-your-business-apps','guides/privacy-act-2020-and-automation']) if p)+'</div></section>'
     else:
         extra='<section class="section"><div class="section-h"><h2>Guides by industry</h2><a href="/industries">All industries →</a></div><div class="cards">'+''.join(card(p) for p in PAGES if p[0]=='industries')+'</div></section>'
     main_grid=f'<section class="section">{filt}<div class="cards" id="hubGrid">{"".join(card(p) for p in items)}</div></section>'
@@ -295,7 +308,7 @@ def build_hub(sec):
   <p class="eyebrow">{e(SECTION[sec][1])}</p>
   <h1>{e(h["h1"])}</h1>
   <p class="plead">{e(h["lead"])}</p>
-  <div class="pmeta"><span>{len(items)} {SECTION[sec][0].lower()}</span><span>New Zealand-wide</span><span>Free first session</span></div>
+  <div class="pmeta"><span>{len(items)} {('post' if len(items)==1 else 'posts') if sec=='news' else SECTION[sec][0].lower()}</span><span>New Zealand-wide</span><span>Free first session</span></div>
 </div></section>
 <div class="wrap">
   {main_grid}
@@ -315,7 +328,7 @@ def build_404():
   <p class="plead">The page you were looking for is not here. It may have moved, or the link may have a typo. These will get you back on track.</p>
   <div class="pmeta"><a class="btn btn--go" href="/">Go to the home page</a><a class="btn btn--ghost" href="/guides">Browse the guides</a></div>
 </div></section>
-<div class="wrap"><section class="section"><div class="cards">{"".join(card(find(x)) for x in ["services/ai-automation","services/websites-and-portals","industries/trades-and-building","guides/how-to-choose-what-to-automate-first"])}</div></section></div>
+<div class="wrap"><section class="section"><div class="cards">{"".join(card(p) for p in (find(x) for x in ["services/ai-automation","services/websites-and-portals","industries/trades-and-building","guides/how-to-choose-what-to-automate-first"]) if p)}</div></section></div>
 </main>
 '''+footer()
     open(os.path.join(OUT,'404.html'),'w',encoding='utf8').write(out)
@@ -392,16 +405,105 @@ def build_legal(slug):
 '''+footer()
     open(os.path.join(OUT,slug+'.html'),'w',encoding='utf8').write(out)
 
+def build_custom(slug,d,blocks_html):
+    canon='/'+slug
+    cr_html,cr_ld=crumbs([('Home','/'),(d.get('h1',slug),None)])
+    cr_ld['itemListElement'][-1]['item']=BASE+canon
+    ld={'@context':'https://schema.org','@graph':[cr_ld,{'@type':'WebPage','name':d.get('h1',slug),'url':BASE+canon,'inLanguage':'en-NZ','publisher':{'@id':BASE+'/#business'}},ORG]}
+    eb=f'<p class="eyebrow">{e(d["eyebrow"])}</p>' if d.get('eyebrow') else ''
+    lead=f'<p class="plead">{e(d["lead"])}</p>' if d.get('lead') else ''
+    out=head(d.get('title') or d.get('h1',slug)+' | Ambs Solutions',d.get('description',''),canon,ld,blocks=True)+header(slug)+f'''<main id="main">
+<div class="wrap">{cr_html}</div>
+<section class="phero"><div class="wrap">
+  {eb}
+  <h1>{e(d.get("h1",slug))}</h1>
+  {lead}
+</div></section>
+<div class="wrap edpage"><div class="blk-flow">
+{blocks_html}
+</div></div>
+{'<div class="wrap">'+cta()+'</div>' if d.get('cta',True) else ''}
+</main>
+'''+footer()
+    if 'data-blk-form' in blocks_html: out=out.replace('</body>',FORMS_JS+'\n</body>',1)
+    open(os.path.join(OUT,slug+'.html'),'w',encoding='utf8').write(out)
+
+def render_blocks(pages,sections):
+    """Blocks are drawn by site-src/assets/blocks.mjs (the same code the editor's preview uses), through node."""
+    if not pages and not sections: return {'pages':{},'sections':{},'strings':{}}
+    import subprocess
+    r=subprocess.run(['node',os.path.join(SRC,'blocks-cli.mjs')],input=json.dumps({'pages':pages,'sections':sections}),capture_output=True,text=True,check=True)
+    return json.loads(r.stdout)
+
 def build_sitemap():
-    rows=[('/', '1.0','weekly')]+[(url(s),'0.8','weekly') for s in ('services','industries','guides')]+[(url(p[0],p[1]),'0.7' if p[0]!='guides' else '0.6','monthly') for p in PAGES]+[('/privacy','0.3','yearly'),('/terms','0.3','yearly')]
+    rows=[('/', '1.0','weekly')]+[(url(s),'0.8','weekly') for s in ('services','industries','guides')]+[(url(p[0],p[1]),'0.7' if p[0]!='guides' else '0.6','monthly') for p in PAGES]+([('/news','0.6','weekly')] if any(p[0]=='news' for p in PAGES) else [])+[('/'+s_,'0.5','monthly') for s_ in CUSTOM]+[('/privacy','0.3','yearly'),('/terms','0.3','yearly')]
     x='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url>\n    <loc>{BASE}{u if u!="/" else "/"}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{f}</changefreq>\n    <priority>{pr}</priority>\n  </url>\n' for u,pr,f in rows)+'</urlset>\n'
     open(os.path.join(OUT,'sitemap.xml'),'w').write(x)
 
-def stamp_home():
+MENU_INDENT={'main':'      ','drawer':'    ','company':'        ','explore':'        '}
+def home_menus(h):
+    """Menu and footer links on the homepage, between <!--ed:menu:NAME--> markers."""
+    for name,ind in MENU_INDENT.items():
+        if name not in MENUS: continue
+        body=''.join(f'{ind}<a href="{e(it["href"])}" data-i18n="{menu_key(it)}">{e(menu_label(it))}</a>\n' for it in MENUS[name])
+        h=re.sub(r'(<!--ed:menu:'+name+r'-->\n)[\s\S]*?([ \t]*<!--/ed:menu:'+name+r'-->)',lambda m:m.group(1)+body+m.group(2),h)
+    return h
+
+SEC_RE=re.compile(r'([\s\S]*?)(  <section\b[^>]*>[\s\S]*?\n  </section>\n)')
+def home_sections(h,custom_html):
+    """Homepage sections after the hero: put in the saved order, hidden ones kept but not shown, block sections added."""
+    a=h.index('<!-- WHAT WE AUTOMATE: moving strip -->'); a=h.rindex('\n',0,a)+1
+    z=h.index('</main>')
+    mid=h[a:z]
+    mid=re.sub(r'  <!--ed:sec:[^>]*-->[\s\S]*?<!--/ed:sec:[^>]*-->\n','',mid)
+    units=[];pos=0
+    for m in SEC_RE.finditer(mid):
+        tag=re.match(r'  <section\b([^>]*)>',m.group(2)).group(1)
+        sid=(re.search(r'\sid="([^"]+)"',tag) or re.search(r'class="([^" ]+)',tag)).group(1)
+        units.append([sid,m.group(1)+m.group(2)]);pos=m.end()
+    tail=mid[pos:]
+    order=[x for x in HOMESEC.get('order',[]) if x in custom_html or any(u[0]==x for u in units)]
+    order+= [u[0] for u in units if u[0] not in order]+[c for c in custom_html if c not in order]
+    hidden=set(HOMESEC.get('hidden',[]))
+    out=''
+    for sid in order:
+        u=next((u for u in units if u[0]==sid),None)
+        if u:
+            t=re.sub(r' data-ed-hidden hidden','',u[1])
+            if sid in hidden: t=re.sub(r'(?m)^(  <(?:section\b|div class="auto-strip")[^>]*?)>',r'\1 data-ed-hidden hidden>',t)
+            out+=t
+        elif sid in custom_html and sid not in hidden:
+            out+=f'  <!--ed:sec:{sid}-->\n  {custom_html[sid]}\n  <!--/ed:sec:{sid}-->\n'
+    return h[:a]+out+tail+h[z:]
+
+def sync_ed_strings(strings):
+    """Wording added in the editor (keys starting "ed."): changed English clears that line's translations and queues it for Claude."""
+    i18n_dir=os.path.join(SRC,'assets','i18n')
+    langs=sorted(f[:-5] for f in os.listdir(i18n_dir) if f.endswith('.json'))
+    stf=os.path.join(SRC,'content','translation-status.json')
+    st=json.load(open(stf,encoding='utf8')) if os.path.exists(stf) else {}
+    tr={l:json.load(open(os.path.join(i18n_dir,l+'.json'),encoding='utf8')) for l in langs}
+    changed=False
+    for k,v in strings.items():
+        if st.get(k,{}).get('_en')!=v:
+            st[k]=dict({l:'needs' for l in langs},_en=v); changed=True
+            for l in langs: tr[l].pop(k,None)
+    for k in [k for k in st if k.startswith('ed.') and k not in strings]:
+        st.pop(k); changed=True
+        for l in langs: tr[l].pop(k,None)
+    open(os.path.join(SRC,'content','ed-strings.json'),'w',encoding='utf8').write(json.dumps(strings,ensure_ascii=False,indent=1,sort_keys=True)+'\n')
+    if changed:
+        open(stf,'w',encoding='utf8').write(json.dumps(st,ensure_ascii=False,indent=1)+'\n')
+        for l in langs: open(os.path.join(i18n_dir,l+'.json'),'w',encoding='utf8').write(json.dumps(tr[l],ensure_ascii=False,separators=(',',':')))
+
+def stamp_home(custom_html=None,strings=None):
     """The home page keeps its styles, scripts and extra languages in site-src/assets (home.css, home.js, i18n/*.json).
        Copy them to the site and stamp index.html with content hashes so browsers and the offline worker fetch new copies after a change."""
     names=['home.css','home.js']
     i18n_dir=os.path.join(SRC,'assets','i18n')
+    custom_html=custom_html or {}
+    menu_strings={menu_key(it):it.get('label','') for n in MENU_INDENT for it in MENUS.get(n,[]) if menu_key(it).startswith('ed.')}
+    if os.path.isdir(i18n_dir): sync_ed_strings(dict(menu_strings,**(strings or {})))
     langs=sorted(f for f in os.listdir(i18n_dir) if f.endswith('.json')) if os.path.isdir(i18n_dir) else []
     for f in names: open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
     if langs:
@@ -410,6 +512,14 @@ def stamp_home():
     idx=os.path.join(OUT,'index.html')
     if not os.path.exists(idx): return
     h=open(idx,encoding='utf8').read()
+    h=home_menus(h)
+    if HOMESEC.get('order') or HOMESEC.get('hidden') or custom_html or '<!--ed:sec:' in h: h=home_sections(h,custom_html)
+    # the block styles are only loaded when the homepage has a section made of blocks
+    h=re.sub(r'\n<link rel="stylesheet" href="/assets/blocks\.css\?v=[A-Za-z0-9]+">','',h)
+    if custom_html: h=re.sub(r'(<link rel="stylesheet" href="/assets/home\.css\?v=[A-Za-z0-9]+">)',lambda m:m.group(1)+'\n<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'">',h)
+    # contact forms in homepage sections need their script
+    h=re.sub(r'<script src="/assets/forms\.js\?v=[A-Za-z0-9]+" defer></script>\n','',h)
+    if any('data-blk-form' in x for x in custom_html.values()): h=h.replace('</body>',FORMS_JS+'\n</body>',1)
     h=re.sub(r'home\.css\?v=[A-Za-z0-9]+','home.css?v='+_v('home.css'),h)
     h=re.sub(r'home\.js\?v=[A-Za-z0-9]+','home.js?v='+_v('home.js'),h)
     if langs:
@@ -419,8 +529,10 @@ def stamp_home():
 
 if __name__=='__main__':
     os.makedirs(os.path.join(OUT,'assets'),exist_ok=True)
-    for f in ('pages.css','pages.js'): open(os.path.join(OUT,'assets',f),'w').write(open(os.path.join(SRC,'assets',f)).read())
-    stamp_home()
+    for f in ('pages.css','pages.js','blocks.css','blocks.mjs','forms.js'): open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
+    secs={k:v for k,v in HOMESEC.get('custom',{}).items()}
+    rb=render_blocks({k:v.get('blocks',[]) for k,v in CUSTOM.items()},secs)
+    stamp_home(rb['sections'],rb['strings'])
     only=sys.argv[1:]
     total=0
     for p in PAGES:
@@ -428,5 +540,6 @@ if __name__=='__main__':
         if os.path.exists(path) and (not only or p[0]+'/'+p[1] in only):
             w=build_page(p); total+=w; print(f'{p[0]}/{p[1]}: {w} words')
         elif not os.path.exists(path): print(f'MISSING {p[0]}/{p[1]}')
-    for s in ('services','industries','guides'): build_hub(s)
+    for s in ('services','industries','guides')+(('news',) if any(p[0]=='news' for p in PAGES) else ()): build_hub(s)
+    for slug,d in CUSTOM.items(): build_custom(slug,d,rb['pages'].get(slug,''))
     build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap(); print('done, total words',total)

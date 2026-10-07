@@ -1,0 +1,99 @@
+{
+ "_about": "Menus and footer links. Edited in the website editor (/admin); build.py writes them into every page.",
+ "main": [
+  {
+   "href": "#automate",
+   "key": "nav.automate"
+  },
+  {
+   "href": "#about",
+   "key": "nav.about"
+  },
+  {
+   "href": "#how",
+   "key": "nav.how"
+  },
+  {
+   "href": "/services",
+   "key": "foot.services"
+  },
+  {
+   "href": "/guides",
+   "key": "nav.guides"
+  },
+  {
+   "href": "#faq",
+   "key": "nav.faq"
+  }
+ ],
+ "drawer": [
+  {
+   "href": "#automate",
+   "key": "nav.automate"
+  },
+  {
+   "href": "#about",
+   "key": "nav.about"
+  },
+  {
+   "href": "#why",
+   "key": "nav.why"
+  },
+  {
+   "href": "#how",
+   "key": "nav.how"
+  },
+  {
+   "href": "/services",
+   "key": "foot.services"
+  },
+  {
+   "href": "/guides",
+   "key": "nav.guides"
+  },
+  {
+   "href": "/industries",
+   "key": "foot.industries"
+  },
+  {
+   "href": "#faq",
+   "key": "nav.faq"
+  }
+ ],
+ "company": [
+  {
+   "href": "#automate",
+   "key": "nav.automate"
+  },
+  {
+   "href": "#about",
+   "key": "nav.about"
+  },
+  {
+   "href": "#why",
+   "key": "nav.why"
+  },
+  {
+   "href": "#how",
+   "key": "nav.how"
+  }
+ ],
+ "explore": [
+  {
+   "href": "/services",
+   "key": "foot.services"
+  },
+  {
+   "href": "/industries",
+   "key": "foot.industries"
+  },
+  {
+   "href": "/guides",
+   "key": "nav.guides"
+  },
+  {
+   "href": "#faq",
+   "key": "nav.faq"
+  }
+ ]
+}
