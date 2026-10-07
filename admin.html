@@ -35,6 +35,8 @@ header.top .who{margin-left:auto;font-size:.88rem;color:var(--muted);display:fle
 label.f{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
 input.t{width:100%;padding:.7rem .85rem;border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
 .login .btn{width:100%;margin-top:18px}
+.login .btn.forgot{margin-top:10px;font-size:.9rem;font-weight:600}
+.login .sub{text-align:center;color:var(--muted);margin:0 0 14px;font-size:.92rem}
 .msg{border-radius:12px;padding:.7rem .9rem;margin:12px 0;font-size:.92rem}
 .msg.err{background:var(--red-bg);color:var(--red)}
 .msg.ok{background:var(--ok-bg)}
@@ -215,6 +217,24 @@ body.sorting,body.sorting *{cursor:grabbing!important;user-select:none!important
     <input class="t" id="pw" type="password" autocomplete="current-password" required>
     <div id="loginMsg" class="msg err hidden" role="alert"></div>
     <button class="btn primary" type="submit" id="loginBtn">Sign in</button>
+    <button class="btn link forgot" type="button" id="forgotLink">Forgot password?</button>
+  </form>
+  <form id="forgotForm" class="hidden">
+    <p class="sub">Type your email and we’ll send you a link to set a new password.</p>
+    <label class="f" for="fEmail">Email</label>
+    <input class="t" id="fEmail" type="email" autocomplete="username" required>
+    <div id="forgotMsg" class="msg hidden" role="status"></div>
+    <button class="btn primary" type="submit" id="forgotBtn">Email me a link</button>
+    <button class="btn link forgot" type="button" id="forgotBack">Back to sign in</button>
+  </form>
+  <form id="resetForm" class="hidden">
+    <p class="sub">Choose a new password for the website editor.</p>
+    <label class="f" for="nPw1">New password</label>
+    <input class="t" id="nPw1" type="password" autocomplete="new-password" minlength="10" required>
+    <label class="f" for="nPw2">Type it again</label>
+    <input class="t" id="nPw2" type="password" autocomplete="new-password" minlength="10" required>
+    <div id="resetMsg" class="msg err hidden" role="alert"></div>
+    <button class="btn primary" type="submit" id="resetBtn">Save new password</button>
   </form>
 </section>
 
@@ -222,7 +242,7 @@ body.sorting,body.sorting *{cursor:grabbing!important;user-select:none!important
   <header class="top"><div class="wrap">
     <img src="/logo-400.webp" alt="AMBS">
     <h1>Website editor</h1>
-    <div class="who"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="signOut" type="button">Sign out</button></div>
+    <div class="who"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
   </div>
   <div class="wrap"><nav class="tabs" role="tablist" aria-label="What to edit">
     <button type="button" role="tab" data-tab="wording" aria-selected="true">Homepage wording</button>
@@ -301,13 +321,51 @@ function api(path,body){
   return token().then(function(t){return fetch("/api/"+path,{method:"POST",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(body||{})})})
     .then(function(r){return r.json().catch(function(){return{error:"Unexpected reply ("+r.status+")"}}).then(function(j){if(r.status===401){saveSession(null);showLogin("Please sign in again.");throw new Error("signin")}if(!r.ok)throw new Error(j.error||("Error "+r.status));return j})});
 }
-function showLogin(msg){$("app").classList.add("hidden");$("login").classList.remove("hidden");var m=$("loginMsg");if(msg){m.textContent=msg;m.classList.remove("hidden")}else m.classList.add("hidden");}
+function showLogin(msg){showForm("loginForm");$("app").classList.add("hidden");$("login").classList.remove("hidden");var m=$("loginMsg");if(msg){m.textContent=msg;m.classList.remove("hidden")}else m.classList.add("hidden");}
 $("loginForm").addEventListener("submit",function(e){
   e.preventDefault();var b=$("loginBtn");b.disabled=true;b.textContent="Signing in…";
   authFetch("token?grant_type=password",{email:$("email").value.trim(),password:$("pw").value})
     .then(function(j){keep(j);$("pw").value="";start()})
     .catch(function(err){showLogin(err.message==="Invalid login credentials"?"That email and password don't match.":err.message)})
     .then(function(){b.disabled=false;b.textContent="Sign in"});
+});
+/* ---------- passwords: forgotten (emailed link back to this page) and changed while signed in ---------- */
+var PW_MIN=10;
+/* toast and busy live in the editor's second script; the sign-in screen works without them */
+function pwToast(m){if(window.edToast)window.edToast(m)}
+function pwBusy(b,on,l){if(window.edBusy)window.edBusy(b,on,l);else{b.disabled=on;if(on)b.dataset.l=b.textContent;b.textContent=on?(l||"Saving…"):(b.dataset.l||b.textContent)}}
+function pwProblem(a,b){if(a.length<PW_MIN)return"Use at least "+PW_MIN+" characters.";if(a!==b)return"The two passwords don't match.";return""}
+function setPassword(pw){
+  return token().then(function(t){return fetch(SUPA+"/auth/v1/user",{method:"PUT",headers:{apikey:KEY,Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({password:pw})})})
+    .then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok){var m=j.msg||j.message||j.error_description||"The password couldn't be changed";
+      if(/different from the old/i.test(m))m="That's your current password. Choose a new one.";else if(/weak|pwned|leaked/i.test(m))m="That password is too easy to guess. Choose a longer or less common one.";else if(/reauthenticat/i.test(m))m="For safety, sign out and sign in again, then change your password.";throw new Error(m)}return j})})}
+function showForm(id){["loginForm","forgotForm","resetForm"].forEach(function(f){$(f).classList.toggle("hidden",f!==id)})}
+$("forgotLink").addEventListener("click",function(){$("fEmail").value=$("email").value;$("forgotMsg").classList.add("hidden");showForm("forgotForm");$("fEmail").focus()});
+$("forgotBack").addEventListener("click",function(){showForm("loginForm")});
+$("forgotForm").addEventListener("submit",function(e){
+  e.preventDefault();var b=$("forgotBtn"),m=$("forgotMsg");b.disabled=true;b.textContent="Sending…";
+  fetch(SUPA+"/auth/v1/recover?redirect_to="+encodeURIComponent(location.origin+"/admin"),{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({email:$("fEmail").value.trim()})})
+    .then(function(r){m.className="msg "+(r.status===429?"err":"ok");m.textContent=r.status===429?"Too many requests. Please wait a few minutes and try again.":"If that email can use the editor, a link is on its way. Check your inbox (and junk folder), then open the link on this device."})
+    .catch(function(){m.className="msg err";m.textContent="Couldn't send the email. Check your connection and try again."})
+    .then(function(){m.classList.remove("hidden");b.disabled=false;b.textContent="Email me a link"});
+});
+$("resetForm").addEventListener("submit",function(e){
+  e.preventDefault();var b=$("resetBtn"),m=$("resetMsg"),a=$("nPw1").value,c=$("nPw2").value,bad=pwProblem(a,c);
+  if(bad){m.textContent=bad;m.classList.remove("hidden");return}
+  b.disabled=true;b.textContent="Saving…";
+  setPassword(a).then(function(){$("nPw1").value=$("nPw2").value="";showForm("loginForm");start();setTimeout(function(){pwToast("New password saved. Use it next time you sign in.")},300)})
+    .catch(function(err){m.textContent=err.message==="signin"?"This link has expired. Ask for a new one.":err.message;m.classList.remove("hidden")})
+    .then(function(){b.disabled=false;b.textContent="Save new password"});
+});
+$("changePw").addEventListener("click",function(){
+  var tp=document.createElement("template");tp.innerHTML='<dialog aria-labelledby="cpH"><div class="hd"><h2 id="cpH">Change password</h2></div><div class="bd"><p class="help" style="margin-top:0">At least '+PW_MIN+' characters. A short sentence you can remember works well.</p><div class="fld"><label for="cp1">New password</label><input class="t" id="cp1" type="password" autocomplete="new-password"></div><div class="fld"><label for="cp2">Type it again</label><input class="t" id="cp2" type="password" autocomplete="new-password"></div><div class="msg err hidden" role="alert"></div></div><div class="ft"><button class="btn" type="button" data-x>Cancel</button><button class="btn primary" type="button" data-go>Save new password</button></div></dialog>';
+  var d=tp.content.firstElementChild;document.body.appendChild(d);d.showModal();d.querySelector("#cp1").focus();
+  var close=function(){d.close();d.remove()},m=d.querySelector(".msg");
+  d.querySelector("[data-x]").addEventListener("click",close);d.addEventListener("cancel",function(){d.remove()});
+  d.querySelector("[data-go]").addEventListener("click",function(){var b=this,a=d.querySelector("#cp1").value,c=d.querySelector("#cp2").value,bad=pwProblem(a,c);
+    if(bad){m.textContent=bad;m.classList.remove("hidden");return}
+    pwBusy(b,true,"Saving…");setPassword(a).then(function(){close();pwToast("Password changed. Use the new one next time you sign in.")})
+      .catch(function(err){pwBusy(b,false);if(err.message==="signin"){close();showLogin("Please sign in again, then change your password.");return}m.textContent=err.message;m.classList.remove("hidden")})});
 });
 $("signOut").addEventListener("click",function(){
   if(Object.keys(draft).length&&!confirm("You have changes that aren't published. They'll stay saved in this browser. Sign out?"))return;
@@ -570,7 +628,17 @@ $("dlgPublish").addEventListener("click",function(){
 });
 
 window.ED={api:api,esc:esc,store:store,autosize:autosize,confirmLeave:function(){return changedKeys().length>0}};
-if(session)start();else showLogin();
+/* arriving from a "set a new password" email link: Supabase puts a short-lived sign-in in the address */
+(function(){
+  var hs=new URLSearchParams(location.hash.slice(1)),q=new URLSearchParams(location.search);
+  if(hs.get("error")||q.get("error")){if(history.replaceState)history.replaceState(null,"",location.pathname);
+    showLogin(/expired|invalid/i.test(hs.get("error_description")||q.get("error_description")||"")?"That link has expired or was already used. Press “Forgot password?” to get a new one.":"That link didn't work. Press “Forgot password?” to get a new one.");return}
+  if(hs.get("type")==="recovery"&&hs.get("access_token")){
+    keep({access_token:hs.get("access_token"),refresh_token:hs.get("refresh_token"),expires_in:+hs.get("expires_in")||3600});
+    if(history.replaceState)history.replaceState(null,"",location.pathname);
+    showLogin();showForm("resetForm");$("nPw1").focus();return}
+  if(session)start();else showLogin();
+})();
 })();
 </script>
 <script>
@@ -588,6 +656,7 @@ var SEC_ONE={guides:"guide",industries:"industry page",services:"service page"};
 function toast(msg,err){var t=document.createElement("div");t.className="toast"+(err?" err":"");t.setAttribute("role",err?"alert":"status");t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove()},err?6000:3800)}
 function h(html){var t=document.createElement("template");t.innerHTML=html.trim();return t.content.firstElementChild}
 function fail(err){if(err&&err.message!=="signin")toast(err.message||String(err),true)}
+window.edToast=function(m,e){toast(m,e)};window.edBusy=function(b,on,l){busy(b,on,l)};
 function busy(btn,on,label){if(!btn)return;if(on){btn.dataset.l=btn.textContent;btn.disabled=true;btn.innerHTML='<span class="spin"></span> '+esc(label||"Saving…")}else{btn.disabled=false;btn.textContent=btn.dataset.l||btn.textContent}}
 function counter(input,max){var f=input.closest(".fld"),c=f&&f.querySelector(".cnt");if(!c)return;var u=function(){c.textContent=input.value.length+" / "+max;c.classList.toggle("over",input.value.length>max)};input.addEventListener("input",u);u()}
 function markDirty(){dirty=true}
