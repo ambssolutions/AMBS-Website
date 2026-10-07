@@ -1,0 +1,18 @@
+{
+  "name": "AMBS website editor",
+  "short_name": "AMBS editor",
+  "description": "Update ambs.co.nz: wording, pages, news, photos and menus.",
+  "id": "/admin",
+  "start_url": "/admin",
+  "scope": "/admin",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#ffffff",
+  "background_color": "#f4f6fb",
+  "icons": [
+    { "src": "/icon-192-v4.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512-v4.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-192-maskable-v4.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-512-maskable-v4.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

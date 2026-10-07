@@ -2,8 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="/admin.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AMBS editor">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161c33" media="(prefers-color-scheme: dark)">
 <title>Website editor · AMBS</title>
 <link rel="icon" href="/favicon-light.png">
 <style>
@@ -146,7 +154,7 @@ select.t{width:100%;max-width:100%;padding:.6rem .75rem;border-radius:12px;borde
 .cc input{width:90px;padding:.45rem .6rem;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);text-align:right}
 nav.secs .btn.soft{background:linear-gradient(180deg,var(--pastel),var(--pastel-2));color:#165618;justify-content:center}
 .pick .ph{text-align:left;padding:0;font:inherit;color:inherit}
-.layout>main{min-width:0}
+.layout>main,.layout>.pg-col{min-width:0}
 .rte{overflow-wrap:anywhere}
 .rte table{display:block;overflow-x:auto}
 @media (max-width:640px){.actions{gap:8px}.actions .btn{padding:.5rem .85rem;font-size:.9rem}.actions .sp{display:none}}
@@ -202,6 +210,84 @@ body.sorting,body.sorting *{cursor:grabbing!important;user-select:none!important
 @media (max-width:640px){.mn-row{grid-template-columns:auto 1fr auto auto auto}.mn-row input:nth-of-type(2){grid-column:2/-1;grid-row:2}}
 .hs-row .cbtns .btn{min-width:40px}
 .hidden{display:none!important}
+/* ===== phones: more room to edit, controls within thumb reach ===== */
+.acct-btn,.tabpick,.more-btn,.pg-back,.be-sum,.be-add-btn,.cam-only,.ph-x{display:none}
+.more-pop{display:contents}
+.be-add-btn{width:100%;border:1.5px dashed var(--line);background:var(--card);border-radius:16px;padding:.85rem;font-weight:800;color:var(--ink);cursor:pointer}
+@media (pointer:coarse){.cam-only{display:inline-block}}
+@media (max-width:760px){
+  .t,input,select,textarea,.rte{font-size:16px!important}
+  .dsk{display:none}
+  /* header: logo, title and one account button */
+  header.top{position:relative;z-index:30}
+  header.top .wrap{flex-wrap:nowrap;min-height:54px;padding-top:6px;padding-bottom:6px}
+  header.top img{height:26px}
+  .acct-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:1.25rem;cursor:pointer}
+  header.top .who{display:none;position:absolute;right:12px;top:58px;width:min(280px,calc(100vw - 24px));flex-direction:column;align-items:stretch;gap:0;margin:0;padding:8px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);font-size:1rem}
+  header.top .who.open{display:flex}
+  header.top .who>*{padding:.75rem .8rem;border-radius:10px;text-align:left;text-decoration:none}
+  header.top .who>a,header.top .who>.btn.link{color:var(--ink);font-weight:600}
+  header.top .who>a:hover,header.top .who>.btn.link:hover{background:var(--bg)}
+  header.top .who #whoEmail{color:var(--muted);font-size:.85rem;border-bottom:1px solid var(--line);border-radius:0;margin-bottom:4px}
+  header.top .who #signOut{color:var(--red)}
+  /* tabs: one picker instead of a strip that runs off the screen */
+  nav.tabs{display:none}
+  .tabpick{display:flex;align-items:center;gap:10px;padding:2px 0 10px}
+  .tabpick span{font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .tabpick select{flex:1;min-width:0;padding:.6rem .8rem;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-weight:700}
+  /* homepage wording: search on top, buttons in a bar at the bottom */
+  .bar{padding:8px 0}
+  .bar-acts{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--line);box-shadow:0 -10px 24px -18px rgba(20,23,43,.4)}
+  .bar-acts .btn{flex:1 1 auto;padding:.7rem .6rem;font-size:.95rem}
+  .bar-acts .btn.primary{flex:2 1 auto}
+  .bar .count{order:0;flex:0 0 auto}
+  /* save bars: the main buttons stay, the rest go under "More" */
+  .actions{padding:10px 0 calc(10px + env(safe-area-inset-bottom));gap:8px;flex-wrap:nowrap;margin:0 -16px;padding-left:12px;padding-right:12px;background:var(--card);box-shadow:0 -10px 24px -18px rgba(20,23,43,.4)}
+  .actions>.btn{padding:.7rem .9rem;font-size:.95rem;white-space:nowrap}
+  .actions>.btn.primary{flex:1 1 auto}
+  .actions .sp{display:none}
+  .actions.has-more{position:sticky}
+  .more-btn{display:inline-flex;align-items:center;gap:4px}
+  .more-pop{display:none;position:absolute;left:12px;bottom:calc(100% + 8px);flex-direction:column;align-items:stretch;gap:6px;padding:8px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);min-width:230px;z-index:25}
+  .more-pop.open{display:flex}
+  .more-pop .btn{text-align:left;width:100%}
+  /* messages at the top, away from the buttons */
+  .toast{top:calc(12px + env(safe-area-inset-top));bottom:auto}
+  /* pages: the list first, then the page on its own with a way back */
+  #pgNav{flex-direction:column;overflow:visible}
+  #pgNav button{white-space:normal;padding:.8rem .7rem}
+  #tab-pages:not(.pg-open) .pg-col{display:none}
+  #tab-pages.pg-open #pgNav{display:none}
+  .pg-back{display:inline-block;font-size:1rem;margin:2px 0 6px;padding:.4rem 0}
+  /* formatting buttons in one row you can swipe */
+  .rte-bar{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .rte-bar::-webkit-scrollbar{display:none}
+  .rte-bar button{flex:0 0 auto;padding:.5rem .7rem}
+  .rte-bar .sep{flex:0 0 1px}
+  .rte-bar.mini{position:sticky;top:0}
+  /* blocks fold to their title; tap to open */
+  .be-b.folded>:not(.be-h){display:none}
+  .be-b.folded .be-h{margin:0}
+  .be-h{cursor:pointer;flex-wrap:wrap}
+  .be-h .be-sum{display:block;flex:1 1 100%;order:9;color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:30px}
+  .be-b:not(.folded) .be-sum{display:none}
+  .be-h .btn{padding:.35rem .45rem}
+  .be-h .lbl{display:none}
+  .be-h .ph-x{display:inline}
+  .be-h>b{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .be-h{flex-wrap:wrap;row-gap:0}
+  /* adding a block: a panel that slides up */
+  .be-add{border:0;padding:0}
+  .be-add>b{display:none}
+  .be-add-btn{display:block}
+  .be-add .be-types{display:none}
+  .be-add.open::before{content:"";position:fixed;inset:0;background:rgba(10,12,25,.5);z-index:59}
+  .be-add.open .be-types{display:grid;grid-template-columns:1fr;position:fixed;left:0;right:0;bottom:0;max-height:72vh;overflow:auto;margin:0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));background:var(--card);border-radius:22px 22px 0 0;z-index:60;box-shadow:0 -20px 50px -20px rgba(0,0,0,.5);animation:sheetUp .25s ease-out}
+  .be-add.open .be-types::before{content:"Add a block";font-weight:800;font-size:1.05rem;padding:0 4px 6px}
+  .be-type{padding:.8rem .9rem}
+  dialog{width:calc(100vw - 16px);max-height:calc(100vh - 16px)}
+}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
 </style>
 </head>
 <body>
@@ -242,7 +328,8 @@ body.sorting,body.sorting *{cursor:grabbing!important;user-select:none!important
   <header class="top"><div class="wrap">
     <img src="/logo-400.webp" alt="AMBS">
     <h1>Website editor</h1>
-    <div class="who"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
+    <button class="acct-btn" id="acctBtn" type="button" aria-label="Account and sign out" aria-expanded="false" aria-controls="whoBox"><span aria-hidden="true">☰</span></button>
+    <div class="who" id="whoBox"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
   </div>
   <div class="wrap"><nav class="tabs" role="tablist" aria-label="What to edit">
     <button type="button" role="tab" data-tab="wording" aria-selected="true">Homepage wording</button>
@@ -253,16 +340,19 @@ body.sorting,body.sorting *{cursor:grabbing!important;user-select:none!important
     <button type="button" role="tab" data-tab="business" aria-selected="false">Business details</button>
     <button type="button" role="tab" data-tab="calc" aria-selected="false">Hours calculator</button>
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
-  </nav></div>
+  </nav>
+  <label class="tabpick"><span>Editing</span><select id="tabPick" aria-label="What to edit"></select></label></div>
   </header>
   <section id="tab-wording" class="tab">
   <div class="bar"><div class="wrap">
     <input class="t" id="search" type="search" placeholder="Search the wording…" aria-label="Search the wording">
     <span class="count" id="count" aria-live="polite">No changes</span>
     <span class="sp"></span>
-    <button class="btn" id="discard" type="button" disabled>Discard changes</button>
+    <div class="bar-acts">
+    <button class="btn" id="discard" type="button" disabled>Discard<span class="dsk"> changes</span></button>
     <button class="btn" id="preview" type="button" disabled>Preview</button>
     <button class="btn primary" id="review" type="button" disabled>Review &amp; publish</button>
+    </div>
   </div></div>
   <div class="wrap layout">
     <nav class="secs" id="secs" aria-label="Page sections"></nav>
@@ -273,7 +363,8 @@ body.sorting,body.sorting *{cursor:grabbing!important;user-select:none!important
   <section id="tab-pages" class="tab hidden">
     <div class="wrap layout">
       <nav class="secs" id="pgNav" aria-label="Pages"></nav>
-      <main id="pgMain"><p class="empty"><span class="spin"></span> Loading the pages…</p></main>
+      <div class="pg-col"><button type="button" class="btn link pg-back" id="pgBack">← All pages</button>
+      <main id="pgMain"><p class="empty"><span class="spin"></span> Loading the pages…</p></main></div>
     </div>
   </section>
 
@@ -718,12 +809,38 @@ window.edPhotoSrc=function(u){return photoSrc(u)};
 
 /* tabs */
 function show(name){
-  if(name===current)return;if(!leaveOk())return;current=name;
+  if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
   if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit})[name]()}
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
+/* ---------- phones ---------- */
+var isPhone=function(){return window.matchMedia("(max-width:760px)").matches};
+/* the tabs as one picker */
+(function(){var tp=$("tabPick");document.querySelectorAll(".tabs [data-tab]").forEach(function(b){var o=document.createElement("option");o.value=b.dataset.tab;o.textContent=b.textContent;tp.appendChild(o)});
+  tp.value=current||"wording";tp.addEventListener("change",function(){show(tp.value);window.scrollTo(0,0)})})();
+/* email, view site, change password and sign out behind one button */
+(function(){var btn=$("acctBtn"),box=$("whoBox");
+  var set=function(on){box.classList.toggle("open",on);btn.setAttribute("aria-expanded",String(on))};
+  btn.addEventListener("click",function(e){e.stopPropagation();set(!box.classList.contains("open"))});
+  box.addEventListener("click",function(e){if(e.target.closest("a,button"))set(false)});
+  document.addEventListener("click",function(e){if(!box.contains(e.target)&&e.target!==btn)set(false)});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)})})();
+/* save bars on phones: the main button and Preview stay; Delete, Draft, Schedule and the like go under "More" */
+function phoneActions(act){
+  if(act.dataset.ph||!isPhone())return;act.dataset.ph="1";
+  var bs=Array.prototype.filter.call(act.children,function(b){return b.tagName==="BUTTON"&&!b.classList.contains("primary")&&!/^preview$/i.test(b.textContent.trim())});
+  if(bs.length<2)return;
+  var pop=document.createElement("div");pop.className="more-pop";
+  var more=document.createElement("button");more.type="button";more.className="btn more-btn";more.setAttribute("aria-expanded","false");more.innerHTML='<span aria-hidden="true">⋯</span> More';
+  bs.forEach(function(b){pop.appendChild(b)});act.insertBefore(pop,act.firstChild);act.insertBefore(more,pop);act.classList.add("has-more");
+  var set=function(on){pop.classList.toggle("open",on);more.setAttribute("aria-expanded",String(on))};
+  more.addEventListener("click",function(e){e.stopPropagation();set(!pop.classList.contains("open"))});
+  pop.addEventListener("click",function(){setTimeout(function(){set(false)},0)});
+  document.addEventListener("click",function(e){if(!pop.contains(e.target)&&e.target!==more)set(false)})}
+new MutationObserver(function(ms){ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,function(n){if(n.nodeType!==1)return;
+  if(n.classList.contains("actions"))phoneActions(n);n.querySelectorAll&&n.querySelectorAll(".actions").forEach(phoneActions)})})}).observe(document.body,{childList:true,subtree:true});
 window.edTabs={reset:function(){loaded={wording:true};if(current!=="wording"){var c=current;current="";show(c)}}};
 
 /* ---------- reading pictures in the browser ---------- */
@@ -760,7 +877,9 @@ function pagesNav(){
   markNav();
 }
 function navBtn(n,sec,slug,title,p){var b=document.createElement("button");b.type="button";b.dataset.k=sec+"/"+slug;b.innerHTML="<span>"+esc(title)+"</span>"+(p&&!edLive(p)?(edSched(p)?'<span class="tag sched" style="font-size:.65rem">Scheduled</span>':'<span class="tag auto" style="font-size:.65rem">Draft</span>'):"");b.addEventListener("click",function(){if(leaveOk())openPage(sec,slug)});n.appendChild(b)}
-function markNav(){var k=open?open.section+"/"+open.slug:(open===false?"hubs":"");document.querySelectorAll("#pgNav button[data-k]").forEach(function(b){b.classList.toggle("on",b.dataset.k===k)})}
+function markNav(){var k=open?open.section+"/"+open.slug:(open===false?"hubs":"");document.querySelectorAll("#pgNav button[data-k]").forEach(function(b){b.classList.toggle("on",b.dataset.k===k)});
+  var tp=$("tab-pages"),was=tp.classList.contains("pg-open");tp.classList.toggle("pg-open",open!==null);if(isPhone()&&was!==(open!==null))window.scrollTo(0,0)}
+$("pgBack").addEventListener("click",function(){if(!leaveOk())return;open=null;markNav();$("pgMain").innerHTML=""});
 /* scheduled publishing: times are New Zealand time, "2026-10-10T09:00" */
 function nowNZ(){return new Date().toLocaleString("sv-SE",{timeZone:"Pacific/Auckland"}).replace(" ","T").slice(0,16)}
 function edLive(d){return !d.draft||!!(d.publish_at&&d.publish_at<=nowNZ())}
@@ -1044,7 +1163,7 @@ function wireRte(bar,rte){
 /* photo chooser used by the article editor */
 function choosePhoto(){
   return new Promise(function(done){
-    var dlg=h('<dialog aria-label="Choose a photo"><div class="hd"><h2>Choose a photo</h2></div><div class="bd"><button type="button" class="btn soft" id="cpUp">Upload a new photo</button><div class="photos pick" style="margin-top:14px"><p class="empty"><span class="spin"></span> Loading…</p></div></div><div class="ft"><button type="button" class="btn" id="cpX">Cancel</button></div></dialog>');
+    var dlg=h('<dialog aria-label="Choose a photo"><div class="hd"><h2>Choose a photo</h2></div><div class="bd"><button type="button" class="btn soft" id="cpUp">Upload a new photo</button> <button type="button" class="btn cam-only" id="cpCam">Take a photo</button><div class="photos pick" style="margin-top:14px"><p class="empty"><span class="spin"></span> Loading…</p></div></div><div class="ft"><button type="button" class="btn" id="cpX">Cancel</button></div></dialog>');
     document.body.appendChild(dlg);dlg.showModal();
     var fin=function(v){dlg.close();dlg.remove();done(v)};
     dlg.querySelector("#cpX").addEventListener("click",function(){fin(null)});
@@ -1054,6 +1173,8 @@ function choosePhoto(){
       j.photos.forEach(function(p){var c=h('<button type="button" class="ph"><img alt="" loading="lazy"><span class="meta"><b>'+esc(p.path.split("/").pop())+'</b></span></button>');var im=c.querySelector("img");im.src=photoSrc(p.url);
         c.addEventListener("click",function(){p.w=im.naturalWidth;p.h=im.naturalHeight;fin(p)});grid.appendChild(c)})}).catch(fail)}
     list();
+    dlg.querySelector("#cpCam").addEventListener("click",function(){var b=this,inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.setAttribute("capture","environment");
+      inp.onchange=function(){var f=inp.files&&inp.files[0];if(!f)return;busy(b,true,"Uploading…");uploadPhoto(f).then(function(j){busy(b,false);fin({url:j.url,path:j.path})}).catch(function(e){busy(b,false);fail(e)})};inp.click()});
     dlg.querySelector("#cpUp").addEventListener("click",function(){var b=this;pickFile(false).then(function(fs){if(!fs.length)return;busy(b,true,"Uploading…");uploadPhoto(fs[0]).then(function(j){busy(b,false);fin({url:j.url,path:j.path})}).catch(function(e){busy(b,false);fail(e)})})});
   });
 }
@@ -1222,18 +1343,28 @@ function blockFields(b){
     var g=h('<div class="grid2"></div>');g.appendChild(bFld("Button wording",b,"button",{ph:"Send"}));g.appendChild(bFld("Name in your email",b,"name",{help:"So you know which form it came from",ph:"Contact form"}));f.push(g);
     f.push(bFld("Message shown after sending",b,"thanks",{area:true}))}
   return f}
+/* a few words to recognise a folded block by */
+function blockSum(b){var t=b.heading||b.title||b.quote||b.name||b.url||b.leftHeading||"";
+  if(!t&&b.body)t=String(b.body).replace(/<[^>]+>/g," ");if(!t&&b.items&&b.items[0])t=b.items[0].title||b.items[0].label||b.items[0].q||"";
+  if(!t&&b.photos)t=b.photos.length+" photo"+(b.photos.length===1?"":"s");if(!t&&b.fields)t=b.fields.length+" question"+(b.fields.length===1?"":"s");
+  t=String(t).replace(/\s+/g," ").trim();return t.length>60?t.slice(0,58)+"…":t||"Empty"}
 function blockEditor(blocks){
   var wrap=h('<div class="be"></div>');siteLinks();
+  var opened=new WeakSet();if(blocks.length<=1)blocks.forEach(function(b){opened.add(b)});
   function draw(){wrap.innerHTML="";
     if(!blocks.length)wrap.appendChild(h('<p class="empty" style="padding:14px 0">No blocks yet. Add one below.</p>'));
     blocks.forEach(function(b,i){
-      var el=h('<div class="be-b"><div class="be-h"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><b>'+esc(BT[b.type]||b.type)+'</b><span class="sp"></span><button type="button" class="btn link" data-m="-1" aria-label="Move up">↑ Up</button><button type="button" class="btn link" data-m="1" aria-label="Move down">↓ Down</button><button type="button" class="btn link danger" data-x>Remove</button></div></div>');
+      var el=h('<div class="be-b'+(opened.has(b)?'':' folded')+'"><div class="be-h"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><b>'+esc(BT[b.type]||b.type)+'</b><span class="sp"></span><button type="button" class="btn link" data-m="-1" aria-label="Move up">↑<span class="lbl"> Up</span></button><button type="button" class="btn link" data-m="1" aria-label="Move down">↓<span class="lbl"> Down</span></button><button type="button" class="btn link danger" data-x aria-label="Remove this block"><span class="ph-x" aria-hidden="true">✕</span><span class="lbl">Remove</span></button><span class="be-sum">'+esc(blockSum(b))+'</span></div></div>');
+      /* tapping the title bar opens or folds the block (folding only shows on phones) */
+      el.querySelector(".be-h").addEventListener("click",function(e){if(e.target.closest("button,.drag"))return;if(opened.has(b)){opened.delete(b);el.classList.add("folded");el.querySelector(".be-sum").textContent=blockSum(b)}else{opened.add(b);el.classList.remove("folded")}});
       blockFields(b).forEach(function(x){el.appendChild(x)});
       el.querySelectorAll(".be-h [data-m]").forEach(function(x){x.addEventListener("click",function(){var j=i+ +x.dataset.m;if(j<0||j>=blocks.length)return;blocks.splice(j,0,blocks.splice(i,1)[0]);draw();markDirty()})});
       el.querySelector(".be-h [data-x]").addEventListener("click",function(){if(!confirm("Remove this "+(BT[b.type]||"block").toLowerCase()+" block?"))return;blocks.splice(i,1);draw();markDirty()});
       wrap.appendChild(el)});
-    var add=h('<div class="be-add"><b>Add a block</b><div class="be-types"></div></div>');
-    Object.keys(BT).forEach(function(t){var x=h('<button type="button" class="be-type"><b>'+esc(BT[t])+'</b><span>'+esc(BT_HELP[t])+'</span></button>');x.addEventListener("click",function(){blocks.push(NEWB[t]());draw();markDirty();var all=wrap.querySelectorAll(".be-b");all[all.length-1].scrollIntoView({block:"center"})});add.querySelector(".be-types").appendChild(x)});
+    var add=h('<div class="be-add"><b>Add a block</b><button type="button" class="be-add-btn">+ Add a block</button><div class="be-types"></div></div>');
+    add.querySelector(".be-add-btn").addEventListener("click",function(){add.classList.add("open")});
+    add.addEventListener("click",function(e){if(e.target===add)add.classList.remove("open")});
+    Object.keys(BT).forEach(function(t){var x=h('<button type="button" class="be-type"><b>'+esc(BT[t])+'</b><span>'+esc(BT_HELP[t])+'</span></button>');x.addEventListener("click",function(){var nb=NEWB[t]();if(isPhone())opened=new WeakSet();opened.add(nb);blocks.push(nb);draw();markDirty();var all=wrap.querySelectorAll(".be-b");all[all.length-1].scrollIntoView({block:isPhone()?"start":"center"})});add.querySelector(".be-types").appendChild(x)});
     wrap.appendChild(add);
     wrap.querySelectorAll(".rte").forEach(function(r){r.addEventListener("focus",function(){})});
   }
