@@ -85,8 +85,7 @@ en:{
  "form.msg":"What eats your time?","form.send":"Send request",
  "form.note":"We aim to reply within one working day. Or call +64 22 099 9578.","form.pick":"Pick a time that suits you","form.tabCal":"Pick a time","form.tabForm":"Send a request","form.loading":"Loading available times","form.or":"Or fill in the form below and we will get back to you.",
  "foot.tag":"Built in Auckland. Working nationwide.",
- "foot.fine":"Translations are provided to help and may contain errors. If there is any difference, the English version applies.",
- "faq.q6":"Test","faq.a6":"Teststtstststststststststs"
+ "foot.fine":"Translations are provided to help and may contain errors. If there is any difference, the English version applies."
 }
 /* Chinese, Hindi, Māori and Punjabi load on demand from /assets/i18n/<lang>.json */
 };
