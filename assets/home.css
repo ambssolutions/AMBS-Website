@@ -2320,7 +2320,11 @@ html:not([data-theme=dark]) .qbar a svg{color:#14172b!important}
 /* homepage card: the small estimates note sits centred under the monthly line */
 .docket .docket-foot span{margin-left:auto!important;margin-right:auto!important}
 /* hours total and monthly line: the same pastel green as the selected business chip */
-html .docket-num,html:not([data-theme=dark]) .docket-num,html[data-theme=dark] .docket-num,html #monthline,html:not([data-theme=dark]) #monthline,html[data-theme=dark] #monthline{color:#97e29a!important}
+/* hours on the calculator card: the a lighter logo green on the light card (pastel was too pale there, the full logo green too dark), soft pastel green in dark mode */
+html .docket-num,html:not([data-theme=dark]) .docket-num{color:#3cc840!important;background:linear-gradient(180deg,#6fe072,#34c838);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+html #monthline,html:not([data-theme=dark]) #monthline{color:#2fb833!important}
+html[data-theme=dark] .docket-num{color:#97e29a!important;background:none;-webkit-text-fill-color:#97e29a}
+html[data-theme=dark] #monthline{color:#97e29a!important}
 /* What we do: three short points under each description, ticked in the logo green */
 .wd-pts{list-style:none;margin:0 0 1rem;padding:0;display:grid;gap:.45rem;text-align:left}
 .wd-pts li{position:relative;padding-left:1.6rem;font-size:.95rem;line-height:1.45;color:var(--rd-muted)}
