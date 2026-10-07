@@ -61,6 +61,9 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
+  /* the website editor and its API always go straight to the network */
+  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin')) return;
+
   /* never cache the version file, or an update could never be seen */
   if (url.pathname.endsWith('/version.json')) {
     e.respondWith(fetch(req, { cache: 'no-store' }).catch(() => new Response('{}')));

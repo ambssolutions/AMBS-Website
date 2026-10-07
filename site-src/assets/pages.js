@@ -43,13 +43,23 @@
   var bar=document.querySelector(".progress");
   if(bar){var tick=false;function upd(){tick=false;var h=document.documentElement.scrollHeight-innerHeight;bar.style.width=(h>0?scrollY/h*100:0)+"%";}
     addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(upd);}},{passive:true});upd();}
-  /* hub filters (guides / industries) */
-  document.querySelectorAll(".filters").forEach(function(f){
-    var grid=document.getElementById(f.dataset.for);if(!grid)return;
-    f.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
-      f.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
-      grid.querySelectorAll(".card").forEach(function(c){c.hidden=b.dataset.f!=="all"&&c.dataset.cat!==b.dataset.f;});});
-  });
+  /* hub filters and search (guides / news): a card shows when it is in the chosen category and has every word searched for */
+  (function(){
+    var grid=document.getElementById("hubGrid");if(!grid)return;
+    var f=document.querySelector('.filters[data-for="hubGrid"]'),q=document.querySelector('.hub-search input'),none=document.getElementById("hubNone");
+    var cat="all";
+    function norm(t){return String(t||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"");}
+    function apply(){var words=norm(q&&q.value).split(/\s+/).filter(Boolean),shown=0;
+      grid.querySelectorAll(".card").forEach(function(c){var txt=norm(c.textContent+" "+c.dataset.cat);
+        var ok=(cat==="all"||c.dataset.cat===cat)&&words.every(function(w){return txt.indexOf(w)>=0;});c.hidden=!ok;if(ok)shown++;});
+      if(none)none.hidden=shown>0;}
+    function pick(v){cat=v;if(f)f.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",String(x.dataset.f===v));});apply();}
+    if(f)f.addEventListener("click",function(e){var b=e.target.closest("button");if(b)pick(b.dataset.f);});
+    if(q)q.addEventListener("input",apply);
+    /* /news?c=Category opens with that category chosen */
+    try{var want=new URLSearchParams(location.search).get("c");
+      if(want&&f&&f.querySelector('button[data-f="'+want.replace(/["\\]/g,"")+'"]'))pick(want);}catch(e){}
+  })();
   if(calm)return;
   /* headline rises in word by word */
   var h1=document.querySelector(".phero h1");

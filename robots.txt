@@ -1,5 +1,7 @@
 # ambs.co.nz — all crawlers welcome
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
 Sitemap: https://ambs.co.nz/sitemap.xml

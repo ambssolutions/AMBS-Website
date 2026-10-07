@@ -1,4 +1,5 @@
 {
+  "ignoreCommand": "case \"$VERCEL_GIT_COMMIT_MESSAGE\" in \"Editor source:\"*|\"Editor draft:\"*) exit 0;; *) exit 1;; esac",
   "cleanUrls": true,
   "headers": [
     {
@@ -62,6 +63,24 @@
           "value": "public, max-age=3600, must-revalidate"
         }
       ]
+    },
+    {
+      "source": "/admin(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
-  ]
+  ],
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 60
+    }
+  }
 }

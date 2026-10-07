@@ -104,6 +104,7 @@ const BIZ=[
 const TICK=`<svg viewBox="0 0 24 24" fill="none" stroke="#F8FAF7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg>`;
 
 let lang="en", active=0, countTimer=null;
+const ED_HTML=new WeakMap();
 const t=k=>(I18N[lang]&&I18N[lang][k])||I18N.en[k]||k;
 const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -126,7 +127,9 @@ function applyLang(next){
   langReady();
   lang=I18N[next]?next:"en";
   document.documentElement.lang=lang;
-  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});
+  /* wording added in the website editor may not be in the English list yet: it keeps the text it was published with */
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(!(k in I18N.en)){if(el.dataset.en0===undefined)el.dataset.en0=el.textContent;el.textContent=(I18N[lang]&&I18N[lang][k])||el.dataset.en0;}else el.textContent=t(k)});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{const k=el.dataset.i18nHtml;if(!ED_HTML.has(el))ED_HTML.set(el,el.innerHTML);el.innerHTML=(I18N[lang]&&I18N[lang][k])||ED_HTML.get(el)});
   document.querySelectorAll(".langpills button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
   document.getElementById("langselect").value=lang;
   renderChips();

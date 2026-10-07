@@ -879,3 +879,26 @@ html[data-theme=dark] footer .f2-logo img.is-lit{animation:ambs-butter-on 2.4s c
 /* phone and tablet menu: options centred; the current page is marked in blue without the side bar */
 .sh-drawer>a:not(.sh-btn){text-align:center}
 .sh-drawer>a[aria-current],html[data-theme=dark] .sh-drawer>a[aria-current]{box-shadow:none;padding-left:0}
+/* photos added in the website editor */
+.prose figure{margin:1.8rem 0}
+.prose figure img{display:block;width:100%;height:auto;border-radius:18px;border:1px solid var(--line)}
+.prose figcaption{margin-top:.55rem;font-size:.9rem;color:var(--muted,#5b6176);text-align:center}
+/* News: cards and the top of a post show a photo */
+.card.card--photo{padding:0 0 1.4rem;overflow:hidden}
+.card.card--photo>*:not(.card-photo){margin-left:1.4rem;margin-right:1.4rem}
+.card.card--photo .card-photo{display:block;width:100%;margin:0 0 .9rem;aspect-ratio:16/9;object-fit:cover}
+.news-hero{margin:1.6rem auto 0;max-width:980px}
+.news-hero img{display:block;width:100%;height:auto;max-height:520px;object-fit:cover;border-radius:24px;box-shadow:0 18px 40px -26px rgba(20,23,43,.45)}
+/* guides and news: search box and the category link on a news post */
+.hub-tools{margin:0 0 1rem;display:flex;justify-content:center}
+.hub-search{display:flex;align-items:center;gap:.6rem;width:100%;max-width:460px;padding:0 1rem;border-radius:999px;border:1px solid var(--line);background:var(--card);box-shadow:0 12px 30px -26px rgba(20,23,43,.55);transition:border-color .2s,box-shadow .2s}
+.hub-search:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,119,224,.16)}
+.hub-search svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.hub-search input{flex:1;min-width:0;border:0;background:none;font:500 1rem/1 var(--body);color:var(--ink);padding:.85rem 0;outline:none}
+.hub-search input::placeholder{color:var(--muted)}
+.hub-none{text-align:center;margin:0 0 1.2rem;color:var(--muted);font-weight:600}
+.pmeta a.pcat{font:700 .82rem/1 var(--body);padding:.55em .85em;border-radius:999px;background:var(--ico-bg);color:var(--blue);border:1px solid transparent;text-decoration:none}
+.pmeta a.pcat:hover{border-color:var(--blue)}
+html[data-theme=dark] .pmeta a.pcat{color:#8cc4ff}
+@media (max-width:720px){.hub-search{max-width:none}}
+.cards .card[hidden]{display:none}
