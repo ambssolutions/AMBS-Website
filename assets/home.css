@@ -1855,7 +1855,7 @@ html[data-theme=dark] .hero.is-stacked .hero-cut{background:linear-gradient(to b
 .wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.34s,.26s}
 .wd--list .wd-panel{contain:layout paint}
 @media (prefers-reduced-motion:reduce){.wd--list .wd-in>*{transition:none;transform:none}}
-.wd--list .wd-body{transition:grid-template-rows 2.2s cubic-bezier(.45,.05,.25,1)!important}
+.wd--list .wd-body{transition:grid-template-rows 1.4s cubic-bezier(.45,.05,.25,1)!important}
 .wd-flipping .wd-stage *{animation-play-state:paused!important}
 .updatebar{width:max-content;max-width:calc(100vw - 32px);box-sizing:border-box;gap:10px;padding:8px 8px 8px 18px}
 .updatebar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
@@ -2215,10 +2215,10 @@ footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!i
 .qbar.shine .qb-book span,.qbar.shine .qb-book svg{animation-delay:.45s}}
 .anim-off,.anim-off *,.anim-off ::after,.anim-off ::before{animation-play-state:paused!important}
 .wd-panel:not(.run):not(.vis) *,.wd-panel:not(.run):not(.vis) ::after,.wd-panel:not(.run):not(.vis) ::before{animation-play-state:paused!important}
-/* What we do cards open more slowly and softly, so the reveal is easy to see */
-.wd--list .wd-in>*{transition:opacity .45s ease,transform .6s cubic-bezier(.22,1,.36,1)}
-.wd--list .wd-panel.open .wd-in>*{transition:opacity 1s ease .3s,transform 1.3s cubic-bezier(.22,1,.36,1) .2s}
-.wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.55s,.45s}
+/* What we do cards open softly, so the reveal is easy to see, without making people wait */
+.wd--list .wd-in>*{transition:opacity .4s ease,transform .5s cubic-bezier(.22,1,.36,1)}
+.wd--list .wd-panel.open .wd-in>*{transition:opacity .75s ease .2s,transform 1s cubic-bezier(.22,1,.36,1) .15s}
+.wd--list .wd-panel.open .wd-in>.wd-copy{transition-delay:.38s,.3s}
 @media (prefers-reduced-motion:reduce){.wd--list .wd-in>*,.wd--list .wd-panel.open .wd-in>*{transition:none}}
 /* Knowledge hub cards: a little taller so "Read the guide" never gets cut off */
 .kh-gc{height:258px;gap:.6rem}
