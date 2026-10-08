@@ -5,10 +5,11 @@
    { action: "create", section, title }                        section: guides | industries | services | news | page
    { action: "delete", section, slug }
    { action: "hubs", hubs, service_cards, service_steps }
+   { action: "search", q }                                     every page, post, section intro, menu link and business detail containing q
    section "page" is a page at its own address (/slug) made of blocks, kept in site-src/content/custom/<slug>.json.
    Saves start "Editor source:" (a GitHub workflow rebuilds and publishes the pages) or, for drafts that
    are not on the website, "Editor draft:" (saved, nothing published). */
-import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths } from "./_lib.js";
+import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths, readEnglish } from "./_lib.js";
 import { cleanBlocks } from "./_blocks.js";
 
 const SECTIONS = ["guides", "industries", "services", "news", "legal"];
@@ -101,6 +102,68 @@ export default async function handler(req, res) {
         custom.push({ section: "page", slug: f.path.split("/").pop().replace(/\.json$/, ""), title: d.h1, draft: !!d.draft, ...(d.publish_at ? { publish_at: d.publish_at } : {}) });
       }
       return send(res, 200, { now: nowNZ(), pages: site.pages, custom, legal, hubs: site.hubs, service_cards: site.service_cards, service_steps: site.service_steps, icons: ICONS });
+    }
+
+    if (b.action === "search") {
+      const q = str(b.q, 100).trim().toLowerCase();
+      if (q.length < 2) return send(res, 200, { results: [] });
+      const plain = (h) => String(h ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&[a-z]+;/g, " ").replace(/\s+/g, " ").trim();
+      const results = [];
+      /* one result per place a match is found, with a few words either side */
+      const look = (base, where, text) => {
+        const t = plain(text), i = t.toLowerCase().indexOf(q);
+        if (i < 0 || results.filter((r) => r.key === base.key).length >= 3) return;
+        const a = Math.max(0, i - 50), z = Math.min(t.length, i + q.length + 70);
+        results.push({ ...base, where, snippet: (a ? "…" : "") + t.slice(a, z) + (z < t.length ? "…" : "") });
+      };
+      const strings = (v, out = []) => {
+        if (typeof v === "string") out.push(v);
+        else if (Array.isArray(v)) v.forEach((x) => strings(x, out));
+        else if (v && typeof v === "object") for (const [k, x] of Object.entries(v)) if (!["type", "photo", "link", "url", "style", "side", "icon"].includes(k)) strings(x, out);
+        return out;
+      };
+      const pagesFound = await Promise.all(site.pages.map(async (p) => ({ p, f: await readFile(src(p.section, p.slug), head) })));
+      for (const { p, f } of pagesFound) {
+        const base = { kind: "page", section: p.section, slug: p.slug, title: p.title, key: p.section + "/" + p.slug };
+        look(base, "Card", [p.title, p.blurb, p.category].join(" · "));
+        if (!f) continue;
+        const { meta, body } = parse(f.text);
+        look(base, "Top of the page", [meta.eyebrow, meta.h1, meta.lead].filter(Boolean).join(" · "));
+        look(base, "Key points", (meta.takeaways || []).join(" · "));
+        look(base, "Article", body);
+        look(base, "Questions", (meta.faq || []).map((x) => x.join(" ")).join(" · "));
+        look(base, "On Google", [meta.title, meta.description].join(" · "));
+      }
+      for (const slug of ["terms", "privacy"]) {
+        const f = await readFile(src("legal", slug), head);
+        if (!f) continue;
+        const { meta, body } = parse(f.text);
+        const base = { kind: "page", section: "legal", slug, title: meta.h1, key: "legal/" + slug };
+        look(base, "Heading", meta.h1);
+        look(base, "Page text", body);
+      }
+      const customs = (await listPaths(head)).filter((x) => /^site-src\/content\/custom\/[a-z0-9-]+\.json$/.test(x.path));
+      for (const x of await Promise.all(customs.map(async (c) => ({ c, f: await readFile(c.path, head) })))) {
+        if (!x.f) continue;
+        const d = JSON.parse(x.f.text), slug = x.c.path.split("/").pop().replace(/\.json$/, "");
+        const base = { kind: "page", section: "page", slug, title: d.h1, key: "page/" + slug };
+        look(base, "Top of the page", [d.eyebrow, d.h1, d.lead].filter(Boolean).join(" · "));
+        look(base, "Page content", strings(d.blocks).join(" · "));
+        look(base, "On Google", [d.title, d.description].join(" · "));
+      }
+      const hubBase = { kind: "hubs", title: "Section pages & service cards", key: "hubs" };
+      for (const [sec, h] of Object.entries(site.hubs || {})) look(hubBase, sec.charAt(0).toUpperCase() + sec.slice(1) + " page intro", [h.h1, h.lead, h.desc].join(" · "));
+      look(hubBase, "Service cards", strings(site.service_cards).join(" · "));
+      look(hubBase, "How every project runs", strings(site.service_steps).join(" · "));
+      const mf = await readFile("site-src/content/menus.json", head);
+      if (mf) {
+        const en = readEnglish((await readFile("site-src/assets/home.js", head)).text), m = JSON.parse(mf.text);
+        const names = { main: "Top menu", drawer: "Phone menu", company: "Footer: Company", explore: "Footer: Explore" };
+        for (const n of Object.keys(names)) look({ kind: "menus", title: "Menus", key: "menus" }, names[n], (m[n] || []).map((it) => ((it.key && en[it.key]) || it.label || "") + " " + it.href).join(" · "));
+      }
+      const sf = await readFile("site-src/content/site.json", head);
+      if (sf) look({ kind: "business", title: "Business details", key: "business" }, "Phone, email and location", Object.values(JSON.parse(sf.text)).join(" · "));
+      return send(res, 200, { results: results.slice(0, 80) });
     }
 
     if (b.action === "get") {
