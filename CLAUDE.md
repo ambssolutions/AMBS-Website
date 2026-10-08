@@ -16,7 +16,8 @@ These notes apply to this site and to any other AMBS Solutions website.
 
 ## Design preferences
 - Stacked card sections (like "How it works"): use native CSS `position: sticky` stacking.
-  - Cards scroll normally and stick near the top, one under the next, each leaving its number row showing.
+  - The section heading pins under the top bar (CSS sticky), so the whole section feels pinned.
+  - Cards scroll normally and stick just below that heading, one under the next, each leaving its number row showing.
   - Then they release together.
   - Don't pin sections or move the cards with scroll-driven JavaScript. The owner wants the effortless, native feel.
 - Expanding cards (like "What we do" on phones): unfold slowly and smoothly with a native CSS fold (`grid-template-rows` transition, about 1.4s), with the content fading in.
