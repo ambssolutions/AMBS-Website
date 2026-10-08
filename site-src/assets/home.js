@@ -1767,6 +1767,11 @@ try{(function(){
   btns.forEach(function(b){b.addEventListener("click",function(){pick(b.getAttribute("data-bk"));});});
 })();}catch(e){}
 
+/* How it works on phones: the cards stack just below the pinned heading, so tell the CSS how tall that heading is
+   (measured on load and when the screen size changes, never while scrolling) */
+(function(){var sec=document.getElementById("how"),head=sec&&sec.querySelector(".sec-head");if(!head)return;
+  var set=function(){sec.style.setProperty("--how-head",head.offsetHeight+"px")};set();
+  if("ResizeObserver" in window)new ResizeObserver(set).observe(head);else addEventListener("resize",set)})();
 /* How it works: pin the section while the three cards slide up and stack, then let the page move on
    (switched off: the cards now stack with plain CSS sticky positioning, which scrolls natively and feels smoother) */
 try{(function(){return;
