@@ -1,0 +1,17 @@
+{
+ "order": [
+  "automate",
+  "transform",
+  "why",
+  "about",
+  "how",
+  "trust",
+  "knowledge",
+  "faq",
+  "book"
+ ],
+ "hidden": [
+  "trust"
+ ],
+ "custom": {}
+}
