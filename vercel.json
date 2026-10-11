@@ -1,4 +1,10 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "**": false
+    }
+  },
   "ignoreCommand": "case \"$VERCEL_GIT_COMMIT_MESSAGE\" in \"Editor source:\"*|\"Editor draft:\"*) exit 0;; *) exit 1;; esac",
   "cleanUrls": true,
   "headers": [
