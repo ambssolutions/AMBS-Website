@@ -446,6 +446,9 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 .sh{display:flex;align-items:center;gap:8px}.sh .sx{margin-left:auto}.sbox .note{margin:0}
 .snew{display:flex;align-items:flex-end;gap:8px}.snew .f{flex:1;margin:0}.scur{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.9rem}
 .srow{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:10px}.srow+.srow{margin-top:6px}.srow>div{flex:1;min-width:0}.srow small{display:block;color:var(--muted);font-size:.76rem}.srow.on{border-color:var(--accent)}
+.pv-col.drop{outline:3px dashed #1877E0;outline-offset:-6px;border-radius:14px}
+.hstart{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;font-size:.88rem}
+.sizebar{font-size:.84rem;display:flex;flex-direction:column;gap:5px;margin:4px 0 10px}.sizebar>i{display:block;height:6px;border-radius:3px;background:#24b328;max-width:100%}.sizebar.near>i{background:#F5B800}.sizebar.over{color:#b42318}.sizebar.over>i{background:#E5352B}
 .vadd{display:flex;flex-direction:column;gap:5px;background:#fff;border:1.5px solid #dfe3ee;border-radius:12px;padding:8px 10px}
 .vpal{background:transparent;padding:0;gap:6px;min-height:0}
 .vpal:hover{border-color:transparent}
@@ -476,7 +479,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
       <h1>Email Signature Builder</h1>
       <p>For any business. Six short steps. The preview updates as you go, and you can click any part of it to change that part.</p>
     </div>
-    <button type="button" class="btn small" id="sigSave">💾 Save</button><button type="button" class="btn sec small" id="sigList">📂 My signatures</button><button type="button" class="btn sec small" id="reset">Start again</button>
+    <button type="button" class="btn small" id="sigSave">💾 Save</button><button type="button" class="btn sec small" id="sigList">📂 My signatures</button><button type="button" class="btn sec small" id="htmlUp">📄 Upload HTML</button><input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden><button type="button" class="btn sec small" id="reset">Start again</button>
   </header>
 
   <div class="app">
@@ -834,7 +837,27 @@ function signatureInner(mode){var side=content(mode,"side",true),under=content(m
   out=T("font-family:"+S.font+";"+ebText())+top+'<tr><td align="'+S.align+'" style="padding:0;">'+out+'</td></tr>'+(under?'<tr><td align="'+S.align+'" style="padding:'+(S.gap+8)+'px 0 0 0;">'+under+'</td></tr>':"")+'</table>';
   if(S.card!=="none")out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td bgcolor="'+S.colors.cardBg+'" style="background:'+S.colors.cardBg+';border-radius:12px;padding:18px 20px;'+ebCard()+'">'+out+'</td></tr></table>';
   return out}
-function builtHtml(){return signature("email").replace(/ data-measure="1"/g,"")}
+function builtHtml(){return slim(signature("email").replace(/ data-measure="1"/g,""))}
+/* make the copied code as small as it can be without changing how it looks: Gmail refuses signatures over 10,000 characters */
+function slim(h){
+  h=h.replace(/<(\w+)([^>]*)>/g,function(tag,name,attrs){
+    var va=(/ valign="(\w+)"/.exec(attrs)||[])[1],al=(/ align="(\w+)"/.exec(attrs)||[])[1],bg=(/ bgcolor="(#[0-9a-f]+)"/i.exec(attrs)||[])[1];
+    attrs=attrs.replace(/ style="([^"]*)"/,function(_,st){
+      var parts=st.split(";").map(function(x){return x.trim()}).filter(Boolean),seen={},out=[];
+      parts.forEach(function(d){var k=d.split(":")[0].trim().toLowerCase(),v=d.slice(d.indexOf(":")+1).trim();
+        if(va&&k==="vertical-align"&&v===va)return;                 /* valign="…" already says it */
+        if(k==="padding"&&/^0(px)?( 0(px)?){0,3}$/.test(v))return; /* zero padding is the default */
+        if((k==="font-style"||k==="font-weight")&&v==="normal")return;
+        if(k==="padding"){var q=v.replace(/\b0px\b/g,"0").split(/\s+/);if(q.length===4&&q[3]===q[1])q.pop();if(q.length===3&&q[2]===q[0])q.pop();if(q.length===2&&q[1]===q[0])q.pop();v=q.join(" ")}
+        if(k==="border-collapse"&&name!=="table")return;
+        if(bg&&k==="background"&&/border-(left|top):/i.test(st))return; /* stripe cells: the border and bgcolor draw it */
+        v=v.replace(/\b0px\b/g,"0").replace(/#([0-9a-f])\1([0-9a-f])\2([0-9a-f])\3\b/gi,"#$1$2$3");
+        seen[k]=v});
+      for(var k in seen)out.push(k+":"+seen[k]);
+      return out.length?' style="'+out.join(";")+'"':""});
+    attrs=attrs.replace(/(bgcolor|color)="#([0-9a-f])\2([0-9a-f])\3([0-9a-f])\4"/gi,'$1="#$2$3$4"');
+    return"<"+name+attrs+">"});
+  return h.replace(/>\s*\n\s*</g,"><").trim()}
 function emailHtml(){return S.useCode&&String(S.code||"").trim()?cleanCode(S.code,false):builtHtml()}
 /* your own HTML code: keep the signature, take out anything that could run (scripts, event handlers, javascript: links).
    forPreview also drops <style> and <link> so they can't restyle the builder itself. */
@@ -854,7 +877,7 @@ var SO_STYLES=[["animated","Handwriting that writes itself"],["still","Handwriti
 var INKS=[["dark","Dark"],["blue","Blue"],["purple","Purple"],["green","Green"],["white","White"]];
 var ITEM={
   custom:function(){return[["cpalette"],["cparts"],["order"]]},
-  brand:function(){return[["logoUp"],["text","company","Business name"],["text","website","Website"],["text","logoUrl","Logo web address (used in emails)"],["note","Tip: on your website, right-click your logo and choose “Copy image address”, then paste it here."],["color","brandP","Main colour"],["color","brandS","Second colour"],["color","brandA","Third colour"],["palette"],["newbrand"]]},
+  brand:function(){return[["htmlstart"],["logoUp"],["text","company","Business name"],["text","website","Website"],["text","logoUrl","Logo web address (used in emails)"],["note","Tip: on your website, right-click your logo and choose “Copy image address”, then paste it here."],["color","brandP","Main colour"],["color","brandS","Second colour"],["color","brandA","Third colour"],["palette"],["newbrand"]]},
   details:function(){return[["text","name","Your name"],["text","role","Role"],["text","company","Business"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["note","Booking and review links are under Design → Buttons. Social accounts are under Design → Social icons."]]},
   signoff:function(){return(S.signoffStyle==="animated"||S.signoffStyle==="still")
     ?[["select","signoffStyle","Style",SO_STYLES],["hand"],["select","signoff","Words",Object.keys(SIGNOFFS).map(function(k){return[SIGNOFFS[k].text,SIGNOFFS[k].text]})],["seg","signoffAnimColor","Ink",INKS],["range","signoffSize","Size",18,44],["replay"],["note","Plays once in Gmail, Apple Mail and the new Outlook. Older Outlook on Windows shows it already written."]]
@@ -1160,6 +1183,7 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
     else if(t==="banners"){el=h2('<div class="wide"><div class="lbl">Ready-made AMBS banners</div><div class="bnrs"></div></div>');var bw0=el.querySelector(".bnrs");
       var lg=S.maker.logo!==false;AMBS_BANNERS.forEach(function(bn){var x=document.createElement("button");x.type="button";x.setAttribute("aria-pressed",String(S.bannerUrl===bn.url||S.bannerUrl===bn.urlNo));x.innerHTML='<img alt="" src="'+(lg?bn.preview:bn.previewNo)+'"><small>'+esc(bn.label)+'</small>';
         x.addEventListener("click",function(){S.bannerUrl=lg?bn.url:bn.urlNo;S.bannerLink=bn.link;uploaded.banner=null;inOrder("banner")[1]=1;bw0.querySelectorAll("button").forEach(function(y){y.setAttribute("aria-pressed",String(y===x))});changed();go(STEP,"banner")});bw0.appendChild(x)})}
+    else if(t==="htmlstart"){el=h2('<div class="wide hstart"><span>Already have a signature as an HTML file?</span><button type="button" class="btn sec small">📄 Upload HTML file</button></div>');el.querySelector("button").addEventListener("click",function(){$("htmlFile").click()})}
     else if(t==="replay"){el=h2('<div class="wide"><button type="button" class="btn sec small">▶ Watch it write again</button></div>');el.querySelector("button").addEventListener("click",function(){document.querySelectorAll("#sig img.so-img").forEach(function(im){im.src=im.src.replace(/([?&])r=\d+/,"").replace(/\?.*$/,function(q){return q})+"&r="+Date.now()})})}
     else if(t==="place"){el=placeCtl(k)}
     else if(t==="note"){el=h2('<p class="note wide">'+esc(k)+'</p>')}
@@ -1205,13 +1229,14 @@ function codePanel(){var el=h2('<div class="codebox" id="codeBox"><div class="lb
   el.querySelector('[data-k="edit"]').addEventListener("click",function(){use(fmtCode(builtHtml()),S.useCode?"Back to the builder’s code. Edit away.":"You can now edit the code.")});
   el.querySelector('[data-k="paste"]').addEventListener("click",function(){try{navigator.clipboard.readText().then(function(x){if(!x.trim()){toast("Nothing to paste. Copy the HTML code first.");return}use(x,"Your HTML is in. Check the preview.")},function(){ta.value="";ta.focus();toast("Press Ctrl+V (or ⌘V) to paste into the box.")})}catch(e){ta.value="";ta.focus();toast("Press Ctrl+V (or ⌘V) to paste into the box.")}});
   el.querySelector('[data-k="file"]').addEventListener("click",function(){fi.click()});
-  fi.addEventListener("change",function(){var f=fi.files[0];if(!f)return;var r=new FileReader();r.onload=function(){use(String(r.result),"Opened "+f.name)};r.readAsText(f)});
+  fi.addEventListener("change",function(){var f=fi.files[0];if(f)useHtmlFile(f);fi.value=""});
   var bk=el.querySelector('[data-k="back"]');if(bk)bk.addEventListener("click",function(){S.useCode=false;save();update();go(STEP);toast("Back to the builder’s design. Your code is kept: press Edit this code to see the builder’s version.")});
   return el}
-function drawCopy(body){var mi=missing(),off=offline();
+function drawCopy(body){var mi=missing(),off=offline(),len=emailHtml().length,pct=Math.min(100,Math.round(len/100));
   checkPics(function(bad){if(!bad.length)return;var box=body.querySelector(".copybox");if(!box||box.querySelector(".picwarn"))return;box.insertBefore(h2('<p class="warn picwarn">'+esc(warnPics(bad))+'</p>'),box.firstChild);var ok=box.querySelector(".okmsg");if(ok)ok.remove()});
   body.appendChild(h2('<div class="copybox">'+(mi.length?'<div class="warn"><p>Before you copy: your '+esc(mi.join(" and "))+(mi.length>1?" need":" needs")+' to be online, or the email leaves '+(mi.length>1?"them":"it")+' out. Email apps can only show pictures that are on a website.</p>'+
     (off.length?(onAmbs()?'<button type="button" class="btn small" data-c="online">Put '+(off.length>1?"them":"it")+' online for me</button><small>Uses your website editor sign-in. Takes about a minute.</small>':'<small>Open this builder at <b>ambs.co.nz/email-signature</b> (signed in to the website editor) to put '+(off.length>1?"them":"it")+' online with one click. Or download '+(off.length>1?"them":"it")+', put '+(off.length>1?"them":"it")+' on your website and paste the web address in.</small>'):'')+'</div>':'<p class="okmsg">Everything is ready to copy, including your pictures and animations.</p>')+
+  '<div class="sizebar'+(len>10000?" over":len>8500?" near":"")+'"><div><b>Code size:</b> '+len.toLocaleString()+' of Gmail’s 10,000 characters'+(len>10000?" — too long for Gmail. Turn off a part, shorten the disclaimer, or use fewer icons.":len>8500?" — close to Gmail’s limit.":"")+'</div><i style="width:'+pct+'%"></i></div>'+
   '<div class="acts"><button type="button" class="btn" data-c="sig">Copy signature</button><button type="button" class="btn sec" data-c="code">Copy HTML code</button></div>'+
   '<div class="how"><h3>Gmail</h3><ol><li>Open Settings (the cog), then <b>See all settings</b>.</li><li>Scroll to <b>Signature</b> and press <b>Create new</b>.</li><li>Paste, then <b>Save changes</b> at the bottom.</li></ol>'+
   '<h3>Outlook (web and new Outlook)</h3><ol><li>Settings → <b>Mail</b> → <b>Compose and reply</b>.</li><li>Paste into <b>Email signature</b> and save.</li></ol>'+
@@ -1303,6 +1328,13 @@ function openSigs(askName){
           sigApi({action:"delete",id:x.id}).then(function(){if(S._sigId===x.id){delete S._sigId;delete S._sigName;save();sigTitle()}toast("Deleted “"+x.name+"”");draw()}).catch(function(e){toast(e.message)})});
         list.appendChild(row)})}).catch(function(e){list.innerHTML='<p class="note">'+esc(e.message==="signin"?"Please sign in again (reload the page).":e.message)+'</p>'})};
   draw();(askName?inp:ov.querySelector(".sx")).focus()}
+/* an .html signature file: show it, check its pictures, and let you edit it in the preview or the code box */
+function useHtmlFile(f){if(f.size>2*1024*1024){toast("That file is over 2 MB. Is it the right file?");return}var r=new FileReader();r.onload=function(){var code=String(r.result||"");
+    if(!/<[a-z][\s\S]*>/i.test(code)){toast("That file doesn’t look like HTML.");return}
+    if(MOVE)setMove(false);if(TEST)setTest(false);S.code=code;S.useCode=true;save();update();
+    var local=[];code.replace(/<img[^>]+src=["']([^"']+)["']/gi,function(_,u){if(!/^(https?:|data:|cid:)/i.test(u))local.push(u)});
+    go(STEPS.length-1);setTimeout(function(){var b=$("codeBox");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},80);
+    toast("Opened "+f.name+". Click any text in the preview to change it."+(local.length?" "+local.length+" picture"+(local.length>1?"s point":" points")+" to a file on your computer, so it won’t show in emails. Put it online and change its address in the code.":""))};r.readAsText(f)}
 function setMove(on){if(on&&TEST)setTest(false);if(on&&S.useCode){toast("Move or add works on the builder’s design. Go to Copy and use → HTML code → Back to the builder’s design.");return}MOVE=on;var b=$("movePv");if(b){b.setAttribute("aria-pressed",String(MOVE));b.textContent=MOVE?"✓ Done":"✥ Move or add"}update()}
 /* things you can add to any template from the preview */
 var ADDABLE=[["book","Booking button","📅"],["review","Review button","★"],["extra","Extra button","▭"],["social","Social icons","◎"],["logo","Logo","◆"],["photo","Photo","☺"],["tagline","Tagline","❞"],["rainbow","Brand stripe","≡"],["banner","Banner","▬"],["disclaimer","Disclaimer","§"],
@@ -1398,7 +1430,13 @@ function init(){
       changed();openItem("brand");toast(lc.main.length?"Logo added and "+lc.main.length+" brand colours picked from it":"Logo added")};im.src=r.src});e.target.value=""});
   $("photoFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){S.photoData=r;S.photoShow=true;var po=inOrder("photo");if(po)po[1]=1;changed();openItem("photo");toast("Photo previewed")},true)});
   $("bannerFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){uploaded.banner=r;if(/\/assets\/email\/made\//.test(S.bannerUrl||""))S.bannerUrl="";inOrder("banner")[1]=1;changed();openItem("banner");toast("Banner previewed")})});
-  $("sigSave").addEventListener("click",function(){saveSig(false,this)});$("sigList").addEventListener("click",openSigs);
+  $("sigSave").addEventListener("click",function(){saveSig(false,this)});
+  $("htmlUp").addEventListener("click",function(){$("htmlFile").click()});
+  $("htmlFile").addEventListener("change",function(){var f=this.files[0];if(f)useHtmlFile(f);this.value=""});
+  /* drop an .html file anywhere on the preview */
+  var pvc=document.querySelector(".pv-col");if(pvc){["dragover","dragenter"].forEach(function(t){pvc.addEventListener(t,function(e){if(e.dataTransfer&&[].some.call(e.dataTransfer.types||[],function(x){return x==="Files"})){e.preventDefault();pvc.classList.add("drop")}})});
+    pvc.addEventListener("dragleave",function(e){if(!pvc.contains(e.relatedTarget))pvc.classList.remove("drop")});
+    pvc.addEventListener("drop",function(e){pvc.classList.remove("drop");var f=e.dataTransfer&&e.dataTransfer.files[0];if(!f)return;e.preventDefault();if(/\.html?$/i.test(f.name)||f.type==="text/html")useHtmlFile(f);else toast("Drop an .html file to use it as your signature.")})}$("sigList").addEventListener("click",openSigs);
   var rs=$("reset"),armed=0;rs.addEventListener("click",function(){if(!armed){armed=1;rs.textContent="Click again to clear";setTimeout(function(){armed=0;rs.textContent="Start again"},3000);return}
     armed=0;rs.textContent="Start again";uploaded={logo:null,photo:null,banner:null};S=defaults();S.maker=mkDefaults();visited={0:1};changed();go(0);toast("Back to the AMBS example. Your saved signatures are still in My signatures.")});
   $("movePv").addEventListener("click",function(){setMove(!MOVE)});$("testPv").addEventListener("click",function(){setTest(!TEST)});$("fullPv").addEventListener("click",openPreview);
