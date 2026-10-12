@@ -743,11 +743,19 @@ var PRESETS=[
 ];
 
 var S;
-function validOrder(o){if(!Array.isArray(o))return false;var ids=o.map(function(x){return x[0]});return Object.keys(BLOCKS).every(function(k){return ids.indexOf(k)>=0})&&o.every(function(x){return(BLOCKS[x[0]]||String(x[0]).indexOf("c-")===0)&&(x[2]==="side"||x[2]==="under")})}
+/* a layout is usable if every entry is a known part in a known area (left, middle, right, underneath) */
+function validOrder(o){if(!Array.isArray(o)||!o.length)return false;return o.every(function(x){return Array.isArray(x)&&(BLOCKS[x[0]]||String(x[0]).indexOf("c-")===0)&&["left","side","right","under"].indexOf(x[2])>=0})}
+/* keep the saved arrangement; only add parts it doesn't mention (hidden), drop unknown or duplicate entries */
+function fixOrder(d){if(!Array.isArray(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true);return}
+  d.order=expandActions(d.order);var seen={},cust=(d.custom||[]).map(function(c){return c.id});
+  d.order=d.order.filter(function(x){if(!Array.isArray(x)||seen[x[0]])return false;var ok=BLOCKS[x[0]]||cust.indexOf(x[0])>=0;if(!ok)return false;if(["left","side","right","under"].indexOf(x[2])<0)x[2]="side";seen[x[0]]=1;return true});
+  placeMedia(d,"both",false);
+  Object.keys(BLOCKS).forEach(function(k){if(!d.order.some(function(x){return x[0]===k}))d.order.push([k,0,k==="banner"||k==="disclaimer"||k==="rainbow"?"under":"side",0])});
+  if(!validOrder(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true)}}
 function load(){var d=defaults();d.maker=null;d.custom=[];try{var raw=localStorage.getItem("ambs-sig-builder-2");if(raw){var o=JSON.parse(raw);for(var k in d)if(o[k]!==undefined)d[k]=(d[k]&&typeof d[k]==="object"&&!Array.isArray(d[k])&&o[k]&&typeof o[k]==="object")?Object.assign(d[k],o[k]):o[k];
     if(o._sigId){d._sigId=o._sigId;d._sigName=o._sigName}
     /* an AMBS signature with no logo set gets the AMBS logo back */
-    if(!d.logoData&&!String(d.logoUrl||"").trim()&&/ambs/i.test(d.company||""))d.logoUrl="https://ambs.co.nz/logo-400.png";if(/ambs/i.test(d.company||"")&&d.social&&!String(d.social.instagram||"").trim())d.social.instagram="ambssolutions";if(Array.isArray(d.order))d.order=expandActions(d.order);placeMedia(d,"both",false);if(!validOrder(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true)}}}catch(e){}return d}
+    if(!d.logoData&&!String(d.logoUrl||"").trim()&&/ambs/i.test(d.company||""))d.logoUrl="https://ambs.co.nz/logo-400.png";if(/ambs/i.test(d.company||"")&&d.social&&!String(d.social.instagram||"").trim())d.social.instagram="ambssolutions";fixOrder(d)}}catch(e){}return d}
 function save(){try{localStorage.setItem("ambs-sig-builder-2",JSON.stringify(S))}catch(e){}}
 var uploaded={logo:null,photo:null,banner:null};
 
@@ -1434,7 +1442,7 @@ function saveSig(asNew,btn,name){
     .catch(function(e){if(btn)btn.disabled=false;toast(e.message==="signin"?"Please sign in again (reload the page).":e.message)})}
 function openSig(id){return sigApi({action:"get",id:id}).then(function(j){var d=defaults(),o=j.state||{};d.maker=null;d.custom=[];
     for(var k in d)if(o[k]!==undefined)d[k]=(d[k]&&typeof d[k]==="object"&&!Array.isArray(d[k])&&o[k]&&typeof o[k]==="object")?Object.assign(d[k],o[k]):o[k];
-    if(Array.isArray(d.order))d.order=expandActions(d.order);if(!validOrder(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true)}
+    fixOrder(d);
     S=d;if(!S.maker)S.maker=mkDefaults();S._sigId=j.id;S._sigName=j.name;uploaded={logo:null,photo:null,banner:null};
     if(S.bannerMade&&!url(S.bannerUrl))mkRender(true);save();update();drawFlow();sigTitle();
     if(S.useCode&&String(S.code||"").trim()){go(STEPS.length-1);setTimeout(function(){var b=document.querySelector(".cfields");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},80);toast("Opened “"+j.name+"”. It’s HTML code: press ✨ Make it editable to change icons, spacing and layout, or change its words here.")}
