@@ -421,6 +421,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 .gcard input[type=email],.gcard input[type=password]{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink)}
 .gcard .gk{flex-direction:row;align-items:center;gap:8px;font-weight:500}.gfp{font-size:.82rem;color:var(--muted)}
 .gso{margin-left:8px}
+.codenote{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px;padding:8px 12px;border-radius:10px;background:#fff7e0;border:1px solid #f5d27a;color:#5a4300;font:600 12.5px/1.4 var(--body)}
 .vadd{display:flex;flex-direction:column;gap:5px;background:#fff;border:1.5px solid #dfe3ee;border-radius:12px;padding:8px 10px}
 .vpal{background:transparent;padding:0;gap:6px;min-height:0}
 .vpal:hover{border-color:transparent}
@@ -1263,7 +1264,8 @@ function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard
     S=t;barH=t.photoShow?Math.max(110,t.photoSize):110;card.querySelector(".ts").innerHTML=signature("preview");card.setAttribute("aria-pressed",String(keep.template===p[0]))});
   S=keep;barH=kb},now?0:150)}
 function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML=cleanCode(S.code,true);var ibc=$("inbox");ibc.classList.toggle("phone",S.pvWidth==="phone");ibc.classList.toggle("dark",S.pvMode==="dark");
-    document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});$("iconWarn").textContent="Showing your own HTML code. Go to Copy and use → HTML code to change it, or go back to the builder’s design.";return}
+    document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});$("iconWarn").textContent="Showing your own HTML code. Go to Copy and use → HTML code to change it, or go back to the builder’s design.";
+    var nb=h2('<div class="codenote"><span>Showing your own HTML code, so design changes don’t apply.</span><button type="button" class="btn small">Back to the builder’s design</button></div>');nb.querySelector("button").addEventListener("click",function(){S.useCode=false;save();update();if(STEPS[STEP].id==="copy")go(STEP)});pv.insertBefore(nb,pv.firstChild);return}
   if(MOVE){visualBoard(pv);var ib0=$("inbox");ib0.classList.toggle("phone",S.pvWidth==="phone");ib0.classList.toggle("dark",S.pvMode==="dark");return}pv.innerHTML=signature("preview");
   var m=pv.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
   markSel();
@@ -1281,6 +1283,10 @@ function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=
   else cb({src:r.result,w:im.naturalWidth,h:im.naturalHeight})};im.src=r.result};r.readAsDataURL(f)}
 function init(){
   S=load();if(!S.maker)S.maker=mkDefaults();
+  /* you're on your own HTML code, then change a design option: go back to the design, so the preview follows (your code is kept) */
+  var leaveCode=function(e){if(!S.useCode||!e.target.closest||e.target.closest("#codeBox"))return;if(!e.target.closest(".panel")||STEPS[STEP].id==="copy"||e.target.closest("#prevStep,#nextStep,.tpl-add,#tplFilter,label.f select"))return;if(e.type==="click"&&!e.target.closest("button,input,select,label,[role=button],.tcard,.vchip"))return;
+    S.useCode=false;save();toast("Back to the builder’s design. Your HTML code is kept in Copy and use → HTML code.");setTimeout(update,0)};
+  document.addEventListener("input",leaveCode,true);document.addEventListener("click",leaveCode,true);
   document.querySelectorAll("[data-pv]").forEach(function(g){g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S[g.dataset.pv]=b.dataset.v;update()})});
   document.addEventListener("click",function(e){var sig=$("sig");if(!sig.contains(e.target))return;e.preventDefault();if(MOVE)return;var t=e.target.closest("[data-edit]");if(!t)return;openItem(t.dataset.edit);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
   $("logoFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;readImg(f,function(r){var im=new Image();im.onload=function(){
