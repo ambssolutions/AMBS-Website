@@ -89,5 +89,11 @@
     "api/*.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/assets/email/px/:c.png",
+      "destination": "/api/px?c=:c"
+    }
+  ]
 }
