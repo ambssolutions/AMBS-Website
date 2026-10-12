@@ -25,9 +25,9 @@
     "photoShape": "rounded",
     "photoSize": 96,
     "photoUrl": "",
-    "bannerUrl": "https://ambs.co.nz/assets/email/banners/refer-10-bonus-light-nologo.jpg",
+    "bannerUrl": "",
     "bannerLink": "mailto:hello@ambs.co.nz?subject=Referral",
-    "bannerW": 540,
+    "bannerW": 519,
     "bookLabel": "Book a free session",
     "bookUrl": "https://ambs.co.nz/#book",
     "reviewLabel": "Review us on Google",
@@ -59,20 +59,22 @@
     "logoPos": "left",
     "logoBg": "none",
     "logoMatch": true,
-    "logoSize": 120,
+    "logoSize": 88,
     "logoUrl": "https://ambs.co.nz/logo-400.png",
     "divider": "rainbow",
     "dividerW": 3,
+    "lineGapL": 0,
+    "lineGapR": 9,
     "order": [
      [
-      "logo",
-      1,
+      "photo",
+      0,
       "left",
       0
      ],
      [
-      "photo",
-      0,
+      "logo",
+      1,
       "left",
       0
      ],
@@ -134,7 +136,7 @@
       "banner",
       1,
       "under",
-      0
+      1
      ],
      [
       "disclaimer",
@@ -164,11 +166,11 @@
     "textSize": 13,
     "rainbowW": 220,
     "iconStyle": "brand",
-    "iconSize": 35,
+    "iconSize": 34,
     "contactIcons": "glyph-dark",
     "btnStyle": "filled",
     "btnRadius": 20,
-    "btnPadX": 14,
+    "btnPadX": 8,
     "btnFont": 12,
     "bookIcon": "calendar",
     "useCode": false,
@@ -176,7 +178,7 @@
     "emboss": 0,
     "emb": {
      "btn": "1",
-     "icons": "1",
+     "icons": "0",
      "logo": "0",
      "banner": "2"
     },
@@ -188,7 +190,7 @@
       "bold": true
      },
      "contact": {
-      "size": 13,
+      "size": 12,
       "bold": false,
       "italic": false,
       "color": "#14172b",
@@ -196,18 +198,22 @@
      },
      "disclaimer": {
       "size": 13,
-      "align": "left"
+      "align": "left",
+      "dy": -6,
+      "color": "#1f2023"
      },
      "role": {
-      "size": 18
+      "size": 13
      },
      "book": {
-      "dx": -2
+      "dx": 1,
+      "dy": -2
      },
      "logo": {
       "dx": -16,
-      "dy": -20
-     }
+      "dy": 3
+     },
+     "banner": {}
     },
     "maker": {
      "goal": "refer",
@@ -219,23 +225,25 @@
      "badge": "10%",
      "badgeSmall": "BONUS",
      "icon": "none",
-     "style": "custom",
+     "style": "brand",
      "logo": false,
      "link": "mailto:hello@ambs.co.nz?subject=Referral",
      "styleChosen": true,
-     "emboss": 3,
+     "emboss": 5,
      "anim": "slide",
      "h": 130,
-     "cbg2": "#00ffff"
+     "cbg2": "#00ffff",
+     "chi": "#00f51d"
     },
     "custom": [],
-    "pieceGap": 7,
-    "iconGap": 2,
+    "pieceGap": 5,
+    "iconGap": 3,
     "btnGap": 7,
     "contactGap": 5,
-    "bannerMade": true
+    "bannerMade": true,
+    "lineLen": 89
    },
-   "updated": "2026-10-12T20:00:45.000Z",
+   "updated": "2026-10-12T21:00:48.485Z",
    "by": "hello@ambs.co.nz"
   }
  ]
