@@ -27,7 +27,7 @@
     "photoUrl": "",
     "bannerUrl": "",
     "bannerLink": "mailto:hello@ambs.co.nz?subject=Referral",
-    "bannerW": 519,
+    "bannerW": 506,
     "bookLabel": "Book a free session",
     "bookUrl": "https://ambs.co.nz/#book",
     "reviewLabel": "Review us on Google",
@@ -194,7 +194,7 @@
       "bold": false,
       "italic": false,
       "color": "#14172b",
-      "dy": -2
+      "dy": -4
      },
      "disclaimer": {
       "size": 13,
@@ -213,7 +213,13 @@
       "dx": -16,
       "dy": 3
      },
-     "banner": {}
+     "banner": {
+      "dy": -7,
+      "dx": -2
+     },
+     "social": {
+      "dy": -4
+     }
     },
     "maker": {
      "goal": "refer",
@@ -243,7 +249,7 @@
     "bannerMade": true,
     "lineLen": 89
    },
-   "updated": "2026-10-12T21:00:48.485Z",
+   "updated": "2026-10-12T21:04:11.039Z",
    "by": "hello@ambs.co.nz"
   }
  ]
