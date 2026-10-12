@@ -54,7 +54,7 @@
       var em=first(list,"email");if(em)data.email=em;
       btn.disabled=true;btn.textContent=m("sending");
       fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(data)})
-        .then(function(r){return r.json();}).then(function(d){if(!d||!d.success)throw new Error("send failed");btn.disabled=false;btn.innerHTML=label;done();})
+        .then(function(r){return r.json();}).then(function(d){if(!d||!d.success)throw new Error("send failed");btn.disabled=false;btn.innerHTML=label;if(window.gtag)gtag("event","generate_lead",{form:name});done();})
         .catch(function(){btn.disabled=false;btn.innerHTML=label;alert(m("err"));});
     });
   }
