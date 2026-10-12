@@ -2,6 +2,7 @@
    { action: "list" }                                      uploaded photos
    { action: "upload", name, base64 }                      a WebP the editor already resized in the browser
    { action: "delete", path }
+   { action: "email-asset", name, base64 }                  a picture for the email signature builder (banner, photo, logo); GIF, PNG or JPG
    { action: "logo", png, webp, png400, webp400 }          replace the logo (the editor renders each size)
    { action: "social", png }                               replace the picture shown when the site is shared
    { action: "icons", icon192, icon512, mask192, mask512, apple, fav }   replace the app and browser icons */
@@ -12,6 +13,8 @@ const MAX = 3 * 1024 * 1024;
 
 function bytes(b64) { return Math.floor(String(b64 || "").length * 3 / 4); }
 function isWebp(b64) { const b = Buffer.from(String(b64).slice(0, 24), "base64"); return b.slice(0, 4).toString() === "RIFF" && b.slice(8, 12).toString() === "WEBP"; }
+function isGif(b64) { return Buffer.from(String(b64).slice(0, 8), "base64").slice(0, 3).toString() === "GIF"; }
+function isJpg(b64) { const b = Buffer.from(String(b64).slice(0, 8), "base64"); return b[0] === 0xff && b[1] === 0xd8; }
 function isPng(b64) { return Buffer.from(String(b64).slice(0, 12), "base64").slice(1, 4).toString() === "PNG"; }
 
 export default async function handler(req, res) {
@@ -44,6 +47,17 @@ export default async function handler(req, res) {
       const path = DIR + base + "-" + Date.now().toString(36) + ".webp";
       await commitFiles(head, { [path]: { base64: b.base64 }, "version.json": await nextVersion(head) }, "Website editor: add photo " + path + by);
       return send(res, 200, { ok: true, path, url: "/" + path });
+    }
+
+    /* email pictures must be online for email apps to show them; they live at /assets/email/made/ */
+    if (b.action === "email-asset") {
+      const ext = isGif(b.base64) ? "gif" : isPng(b.base64) ? "png" : isJpg(b.base64) ? "jpg" : isWebp(b.base64) ? "webp" : "";
+      if (!ext) return send(res, 400, { error: "That picture could not be read. Use a GIF, PNG or JPG." });
+      if (bytes(b.base64) > MAX) return send(res, 400, { error: "That picture is over 3 MB. Make it smaller or use a still picture." });
+      const base = String(b.name || "picture").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "picture";
+      const path = "assets/email/made/" + base + "-" + Date.now().toString(36) + "." + ext;
+      await commitFiles(head, { [path]: { base64: b.base64 }, "version.json": await nextVersion(head) }, "Website editor: add email signature picture " + path + by);
+      return send(res, 200, { ok: true, path, url: "https://ambs.co.nz/" + path });
     }
 
     if (b.action === "delete") {
