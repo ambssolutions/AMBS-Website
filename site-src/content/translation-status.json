@@ -1,1 +1,74 @@
-{}
+{
+ "kh.g1k": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g1t": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g2k": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g2t": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g3k": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g3t": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g4k": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g4t": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g5k": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "kh.g5t": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "ins.btn": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ },
+ "ins.tip": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
+ }
+}

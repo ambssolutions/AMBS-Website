@@ -72,6 +72,10 @@ p.sechelp{color:var(--muted);margin:0 0 16px;font-size:.92rem}
 textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:.6rem .75rem;background:var(--bg);resize:vertical;min-height:2.6rem;line-height:1.45}
 textarea.en{font-size:1rem;font-weight:500}
 details.trs{margin-top:8px}
+details.st-grp{border-top:1px solid var(--line);padding:2px 0}
+details.st-grp summary{cursor:pointer;font-weight:700;padding:12px 2px;display:flex;gap:10px;align-items:center}
+details.st-grp summary .sum{font-weight:500;font-size:.85rem;color:var(--muted)}
+details.st-grp .st-box{padding:4px 0 10px}
 details.trs summary{cursor:pointer;font-size:.88rem;color:var(--muted);font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .tr{margin-top:10px}
 .tr .h{display:flex;gap:8px;align-items:center;font-size:.85rem;font-weight:600;margin-bottom:4px;flex-wrap:wrap}
@@ -543,6 +547,9 @@ function label(k){
     var t=byKey[pre+".c"+m[1]+"t"],name=t?cur(pre+".c"+m[1]+"t","en"):"Card "+m[1];
     return name+" · "+(m[2]==="t"?"Title":m[2]==="d"?"Description":"Point "+m[3]);
   }
+  if(pre==="kh"&&(m=rest.match(/^g(\d+)(t|k)$/)))return "Guide card "+m[1]+" · "+(m[2]==="t"?"Title":"Tag and reading time");
+  if(k==="ins.btn")return "Add to home screen button";
+  if(k==="ins.tip")return "Add to home screen tip (iPhone)";
   if((m=rest.match(/^(q|a)(\d+)$/)))return (m[1]==="q"?"Question ":"Answer ")+m[2];
   if((m=rest.match(/^s(\d+)(t|d)$/)))return "Step "+m[1]+" · "+(m[2]==="t"?"Title":"Description");
   if(PART[rest])return PART[rest];
@@ -871,12 +878,14 @@ function findHighlight(q,scope){
     box.querySelectorAll("input,textarea").forEach(function(el){if(!hit&&String(el.value||"").toLowerCase().indexOf(q)>=0)hit=el});
     if(!hit){var w=document.createTreeWalker(box,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode())){if(n.nodeValue.toLowerCase().indexOf(q)>=0&&n.parentElement.closest(".rte,.panel")){hit=n.parentElement;break}}}
     if(!hit){if(tries<40)setTimeout(look,200);return}
+    var dd=hit.closest("details");if(dd&&!dd.open)dd.open=true;
     hit.scrollIntoView({block:"center",behavior:"smooth"});hit.classList.add("find-flash");setTimeout(function(){hit.classList.remove("find-flash")},2600);
     if(hit.setSelectionRange){var i=hit.value.toLowerCase().indexOf(q);try{hit.focus({preventScroll:true});hit.setSelectionRange(i,i+q.length)}catch(e){}}
   })()}
 function whenSite(fn,n){n=n||0;if(site)fn();else if(n<50)setTimeout(function(){whenSite(fn,n+1)},200)}
 function goFind(r,q){
   if(r.kind==="wording"){show("wording");if(current!=="wording")return;window.edOpenWording(q);return}
+  if(r.kind==="sitetext")r={kind:"business"};
   if(r.kind==="menus"||r.kind==="business"){show(r.kind);if(current!==r.kind)return;findHighlight(q,r.kind==="menus"?"mnMain":"bzMain");return}
   if(current==="pages"){if(!leaveOk())return;dirty=false}else{var was=loaded.pages;show("pages");if(current!=="pages")return;if(!was){if(r.kind==="page")open={section:r.section,slug:r.slug};else whenSite(openHubs);findHighlight(q,"pgMain");return}}
   if(r.kind==="hubs")openHubs();else openPage(r.section,r.slug);
@@ -891,7 +900,7 @@ $("findBtn").addEventListener("click",function(){
     res.innerHTML='<p class="empty"><span class="spin"></span> Searching the whole website…</p>';
     var home=(window.edFindWording?window.edFindWording(q):[]).map(function(w){return{kind:"wording",title:w.label,where:"Homepage · "+w.section,snippet:w.text}});
     api("pages",{action:"search",q:q}).then(function(j){if(my!==seq)return;res.innerHTML="";
-      var groups=[["Homepage",home],["Pages and news",j.results.filter(function(r){return r.kind==="page"})],["Section pages and service cards",j.results.filter(function(r){return r.kind==="hubs"})],["Menus",j.results.filter(function(r){return r.kind==="menus"})],["Business details",j.results.filter(function(r){return r.kind==="business"})]];
+      var groups=[["Homepage",home],["Pages and news",j.results.filter(function(r){return r.kind==="page"})],["Section pages and service cards",j.results.filter(function(r){return r.kind==="hubs"})],["Menus",j.results.filter(function(r){return r.kind==="menus"})],["Wording on every page",j.results.filter(function(r){return r.kind==="sitetext"})],["Business details",j.results.filter(function(r){return r.kind==="business"})]];
       var total=0;groups.forEach(function(g){if(!g[1].length)return;total+=g[1].length;res.appendChild(h('<h3>'+esc(g[0])+' ('+g[1].length+')</h3>'));g[1].forEach(function(r){res.appendChild(row(r,q))})});
       if(!total)res.innerHTML='<p class="empty">Nothing on the website contains “'+esc(q)+'”.</p>'}).catch(function(e){if(my===seq){res.innerHTML="";fail(e)}})}
   inp.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(run,350)});
@@ -1322,6 +1331,19 @@ function businessInit(){
     var act=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="bzSave">Save &amp; publish</button></div>');m.appendChild(p);m.appendChild(act);
     $("bzSave").addEventListener("click",function(){var btn=this;if(!confirm("Change these details everywhere on the website?"))return;busy(btn,true);
       api("settings",{action:"business",phone:$("bzPhone").value,email:$("bzEmail").value,location:$("bzLoc").value}).then(function(r){dirty=false;busy(btn,false);toast("Updated in "+r.files+" places. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
+    /* Google Analytics: the measurement ID goes on every page when the site is rebuilt */
+    var ga=h('<div class="panel"><h3>Google Analytics</h3><p class="help">Your measurement ID from analytics.google.com (Admin → Data streams). It is added to every page. Leave it empty to turn Analytics off.</p></div>');
+    ga.appendChild(fld("gaId","Measurement ID",b.analytics_id||"",{help:"Starts with G-, for example G-AB12CD34EF"}));
+    var gaa=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="gaSave">Save &amp; publish</button></div>');m.appendChild(ga);m.appendChild(gaa);
+    $("gaSave").addEventListener("click",function(){var btn=this;busy(btn,true);api("settings",{action:"analytics",id:$("gaId").value}).then(function(){dirty=false;busy(btn,false);toast("Saved. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
+    /* the fixed wording on every page other than the homepage: top bar, booking box, footer, page labels, 404 and booking pages */
+    var st=h('<div class="panel st-panel"><h3>Wording on every page</h3><p class="help">The words that repeat on guide, industry, service, news and other pages: the top bar, the booking box at the bottom, the footer and small labels like “Common questions”. The homepage has its own wording in the Homepage tab. Change a line here and it changes on every page.</p></div>');
+    (j.sitetext||[]).forEach(function(g){var d=h('<details class="st-grp"><summary>'+esc(g.name)+' <span class="sum">'+g.items.length+' lines</span></summary><div class="st-box"></div></details>'),box=d.querySelector(".st-box");
+      g.items.forEach(function(it){var f=fld("st-"+it.key.replace(/\./g,"-"),it.label,it.text,it.long?{area:true,rows:2}:{});f.querySelector("input,textarea").dataset.stKey=it.key;box.appendChild(f)});
+      d.addEventListener("toggle",function(){if(d.open)box.querySelectorAll("textarea").forEach(function(t){ED.autosize(t)})});st.appendChild(d)});
+    var sta=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="stSave">Save &amp; publish</button></div>');m.appendChild(st);m.appendChild(sta);
+    $("stSave").addEventListener("click",function(){var btn=this,text={};st.querySelectorAll("[data-st-key]").forEach(function(x){text[x.dataset.stKey]=x.value});busy(btn,true);
+      api("settings",{action:"sitetext",text:text}).then(function(){dirty=false;busy(btn,false);toast("Saved. Every page is being rebuilt. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
   }).catch(fail);
 }
 

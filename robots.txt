@@ -3,5 +3,6 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
+Disallow: /email-signature
 
 Sitemap: https://ambs.co.nz/sitemap.xml

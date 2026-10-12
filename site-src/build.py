@@ -30,6 +30,24 @@ ICON={
 }
 # pages, hub page wording and the service cards live in content/pages.json, which the website editor changes
 SITE=json.load(open(os.path.join(SRC,'content','pages.json'),encoding='utf8'))
+# Google Analytics: the measurement ID is in site-src/content/site.json ("analytics_id"), editable in the website editor (Business details)
+GA_ID=json.load(open(os.path.join(SRC,'content','site.json'),encoding='utf8')).get('analytics_id','').strip()
+def ga_snippet():
+    # sends page views plus the actions that matter: booking clicks, phone and email taps, booking confirmed
+    if not re.match(r'^G-[A-Z0-9]{4,}$',GA_ID): return ''
+    return (f'<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>\n'
+      '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());'
+      f'gtag("config","{GA_ID}");'
+      'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";'
+      'if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});'
+      'else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);'
+      'if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->')
+def stamp_ga(path):
+    if not os.path.exists(path): return
+    h=open(path,encoding='utf8').read();h=re.sub(r'<!--ga-->.*?<!--/ga-->\n?','',h,flags=re.S)
+    s=ga_snippet()
+    if s: h=h.replace('</head>',s+'\n</head>',1)
+    open(path,'w',encoding='utf8').write(h)
 # section, slug, card title, card blurb, category, icon
 # pages saved as drafts in the editor are not published; a scheduled draft goes live once its time
 # (New Zealand time, "publish_at") has come. A GitHub workflow rebuilds every hour to publish them.
@@ -61,6 +79,34 @@ if os.path.isdir(_cdir):
         if _f.endswith('.json'):
             _d=json.load(open(os.path.join(_cdir,_f),encoding='utf8'))
             if is_live(_d): CUSTOM[_f[:-5]]=_d
+# fixed wording used on every page (bottom booking box, footer, page labels, 404 and booking pages):
+# site-src/content/site-text.json, edited in the website editor (Business details tab). Missing keys use these defaults.
+SITE_TEXT_DEFAULTS={
+ 'hdr.book':'Book a call','hdr.contact':'Contact us','qb.call':'Call','qb.book':'Book',
+ 'foot.tag':'AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.',
+ 'foot.company':'Company','foot.explore':'Explore','foot.contact':'Contact us','foot.book':'Book a call',
+ 'foot.copy':'© 2026 Ambs Solutions. All rights reserved.','foot.privacy':'Privacy','foot.terms':'Terms of use',
+ 'cta.h':'See what you could hand over','cta.p':'Book a free session. We look at how your work really happens and leave you with a written plan and an hours estimate, yours to keep.',
+ 'cta.btn':'Book a free session','cta.call':'Call +64 22 099 9578',
+ 'calc.k':'Try it with your own numbers','calc.h':'Work out your hours back','calc.sub':'Pick one repetitive task. Move the sliders to match a normal week.',
+ 'calc.times':'How many times a week','calc.mins':'Minutes each time','calc.share':'How much could be automated',
+ 'calc.now':'hours a week on this task now','calc.year':'hours a year back',
+ 'calc.note':'An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together.','calc.link':'Book a free session →',
+ 'pg.inshort':'In short','pg.questions':'Common questions','pg.onpage':'On this page','pg.keep':'Keep reading',
+ 'pg.allguides':'All guides →','pg.allind':'All industries →','pg.popular':'Popular guides','pg.byind':'Guides by industry','pg.svchow':'How every project runs',
+ 'pg.minread':'min read','pg.updated':'Updated','pg.nz':'New Zealand-wide','pg.free':'Free first session',
+ 'pg.readguide':'Read the guide','pg.learn':'Learn more','pg.readmore':'Read more','pg.post':'post','pg.posts':'posts',
+ 'pg.legalwhere':'Auckland, New Zealand','pg.lastupdated':'Last updated',
+ 'nf.eyebrow':'Error 404','nf.h1':'Page not found','nf.lead':'The page you were looking for is not here. It may have moved, or the link may have a typo. These will get you back on track.',
+ 'nf.home':'Go to the home page','nf.guides':'Browse the guides',
+ 'bk.eyebrow':'Booking confirmed','bk.h1':'You are booked in','bk.meeting':'Meeting','bk.service':'Discovery Call','bk.date':'Date','bk.time':'Time',
+ 'bk.length':'Length','bk.lengthv':'30 minutes','bk.with':'With','bk.withv':'Ambs Solutions',
+ 'bk.mail':'We have emailed you the details and a calendar invite.','bk.mailto':'We have emailed the details and a calendar invite to',
+ 'bk.change':'To change the time, use the link in that email or call','bk.back':'Back to the home page',
+}
+SITE_TEXT=dict(SITE_TEXT_DEFAULTS,**{k:v for k,v in _load('site-text.json',{}).items() if k in SITE_TEXT_DEFAULTS and isinstance(v,str)})
+def T(k): return SITE_TEXT[k]
+def TE(k): return html.escape(SITE_TEXT[k],quote=False)
 def menu_label(it): return EN.get(it.get('key',''),'') or it.get('label','')
 def menu_key(it): return it['key'] if it.get('key') in EN else 'ed.menu.'+it.get('id','x')
 def sub_href(h): return '/'+h if h.startswith('#') else h
@@ -70,9 +116,9 @@ def card(p,tag=None):
     sec,slug,t,d,cat,ic=p
     ph=PHOTO.get((sec,slug))
     if ph: return (f'<a class="card card--photo" href="{url(sec,slug)}" data-cat="{e(cat)}"><img class="card-photo" src="{e(ph)}" alt="" loading="lazy" decoding="async">'
-            f'<span class="tag">{e(tag or cat)}</span><h3>{e(t)}</h3><p>{e(d)}</p><span class="go">Read more</span></a>')
+            f'<span class="tag">{e(tag or cat)}</span><h3>{e(t)}</h3><p>{e(d)}</p><span class="go">{TE("pg.readmore")}</span></a>')
     return (f'<a class="card" href="{url(sec,slug)}" data-cat="{e(cat)}"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true">{ICON[ic]}</svg></span>'
-            f'<span class="tag">{e(tag or cat)}</span><h3>{e(t)}</h3><p>{e(d)}</p><span class="go">{ "Read the guide" if sec=="guides" else "Learn more"}</span></a>')
+            f'<span class="tag">{e(tag or cat)}</span><h3>{e(t)}</h3><p>{e(d)}</p><span class="go">{TE("pg.readguide") if sec=="guides" else TE("pg.learn")}</span></a>')
 def find(path):
     sec,slug=path.split('/'); return next((p for p in PAGES if p[0]==sec and p[1]==slug),None)
 
@@ -126,6 +172,7 @@ def head(title,desc,canon,ld,ogtype='website',blocks=False):
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/pages.css?v={CSSV}">{chr(10)+'<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'">' if blocks else ''}
 <script type="application/ld+json">{json.dumps(ld,ensure_ascii=False)}</script>
+{ga_snippet()}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -145,14 +192,14 @@ def header(active):
     <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
     <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language"><option value="en" selected>English</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="mi">Te Reo Māori</option><option value="pa">ਪੰਜਾਬੀ</option></select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
     <nav class="sh-nav" aria-label="Main">{''.join(a(*m) for m in main)}</nav>
-    <a class="sh-btn sh-book" href="/#book">Book a call</a>
-    <a class="sh-btn sh-contact" href="#contact">Contact us</a>
+    <a class="sh-btn sh-book" href="/#book">{TE("hdr.book")}</a>
+    <a class="sh-btn sh-contact" href="#contact">{TE("hdr.contact")}</a>
     <a class="sh-ico sh-sm sh-call" href="tel:+64220999578" aria-label="Call us">{ico_call}</a>
     <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
   </div>
   <nav class="sh-drawer" id="siteNav" aria-label="Menu">
     {''.join(a(*m) for m in drawer)}
-    <a class="sh-btn sh-contact sh-wide" href="#contact">Contact us</a>
+    <a class="sh-btn sh-contact sh-wide" href="#contact">{TE("hdr.contact")}</a>
     <div class="sh-pair" role="group" aria-label="Light or dark mode"><button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button><button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button></div>
   </nav>
 </div></header>
@@ -160,35 +207,35 @@ def header(active):
 def fcol(name): return ''.join(f'<a href="{e(sub_href(it["href"]))}">{e(menu_label(it))}</a>' for it in MENUS.get(name,[]))
 def footer():
     col=lambda sec:''.join(f'<li><a href="{url(p[0],p[1])}">{e(p[2])}</a></li>' for p in PAGES if p[0]==sec)
-    return f'''<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
+    return f'''<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>{TE("qb.call")}</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>{TE("qb.book")}</span></a></nav>
 <footer class="ftr f2"><div class="wrap">
   <div class="f2-grid">
     <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
-      <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p></div>
-    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p>{fcol('company')}</nav>
-    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p>{fcol('explore')}</nav>
-    <div class="f2-col" id="contact"><p class="f2-h">Contact us</p><a href="/#book">Book a call</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
+      <p>{TE("foot.tag")}</p></div>
+    <nav class="f2-col" aria-label="Company"><p class="f2-h">{TE("foot.company")}</p>{fcol('company')}</nav>
+    <nav class="f2-col" aria-label="Explore"><p class="f2-h">{TE("foot.explore")}</p>{fcol('explore')}</nav>
+    <div class="f2-col" id="contact"><p class="f2-h">{TE("foot.contact")}</p><a href="/#book">{TE("foot.book")}</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
   </div>
-  <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
+  <div class="f2-bottom"><p class="f2-copy">{TE("foot.copy")}</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">{TE("foot.privacy")}</a><a href="/terms">{TE("foot.terms")}</a></nav></div>
 </div></footer>
 <script src="/assets/pages.js?v={JSV}" defer></script>
 </body>
 </html>
 '''
 def calc():
-    return '''<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
-<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+    return f'''<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">{TE("calc.k")}</p><h2 id="calcH" class="g-calc-h">{TE("calc.h")}</h2>
+<p class="g-calc-sub">{TE("calc.sub")}</p>
 <div class="g-calc-in">
-<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
-<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
-<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+<label>{TE("calc.times")}<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>{TE("calc.mins")}<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>{TE("calc.share")}<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
 </div>
-<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
-<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session &#8594;</a></p>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>{TE("calc.now")}</span></div><div class="g-calc-big"><b id="cYear">87</b><span>{TE("calc.year")}</span></div></div>
+<p class="g-calc-note">{TE("calc.note")} <a href="/#book">{TE("calc.link")}</a></p>
 </section>'''
 def cta():
-    return '''<section class="cta"><div><h2>See what you could hand over</h2><p>Book a free session. We look at how your work really happens and leave you with a written plan and an hours estimate, yours to keep.</p></div>
-  <div class="btns"><a class="btn btn--go" href="/#book">Book a free session</a><a class="btn btn--ghost" href="tel:+64220999578">Call +64 22 099 9578</a></div></section>'''
+    return f'''<section class="cta"><div><h2>{TE("cta.h")}</h2><p>{TE("cta.p")}</p></div>
+  <div class="btns"><a class="btn btn--go" href="/#book">{TE("cta.btn")}</a><a class="btn btn--ghost" href="tel:+64220999578">{TE("cta.call")}</a></div></section>'''
 def crumbs(items):
     lis=''.join((f'<li><a href="{h}">{e(t)}</a></li>' if h else f'<li aria-current="page">{e(t)}</li>') for t,h in items)
     ld={'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':i+1,'name':t,'item':BASE+(h or items[-1][1] or '')} for i,(t,h) in enumerate(items)]}
@@ -217,18 +264,18 @@ def build_page(p):
         graph.append({'@type':'FAQPage','mainEntity':[{'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':a}} for q,a in meta['faq']]})
     ld={'@context':'https://schema.org','@graph':graph}
     tk=''.join(f'<li>{e(x)}</li>' for x in meta.get('takeaways',[]))
-    takeaways=f'<div class="takeaways"><b>In short</b><ul>{tk}</ul></div>' if tk else ''
+    takeaways=f'<div class="takeaways"><b>{TE("pg.inshort")}</b><ul>{tk}</ul></div>' if tk else ''
     faq=''
     if meta.get('faq'):
-        faq='<h2 id="questions">Common questions</h2><div class="faq">'+''.join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q,a in meta['faq'])+'</div>'
+        faq='<h2 id="questions">'+TE("pg.questions")+'</h2><div class="faq">'+''.join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q,a in meta['faq'])+'</div>'
     rel=[x for x in (find(r) for r in meta.get('related',[])) if x][:3]
-    related=(f'<section class="section"><div class="section-h"><h2>Keep reading</h2><a href="/guides">All guides →</a></div><div class="cards">{"".join(card(r) for r in rel)}</div></section>') if rel else ''
+    related=(f'<section class="section"><div class="section-h"><h2>{TE("pg.keep")}</h2><a href="/guides">{TE("pg.allguides")}</a></div><div class="cards">{"".join(card(r) for r in rel)}</div></section>') if rel else ''
     pills=[f'<span>{e(meta.get("eyebrow",cat))}</span>']
-    if sec=='guides': pills+= [f'<span>{mins} min read</span>',f'<span>Updated {datetime.date.fromisoformat(meta.get("updated",TODAY)).strftime("%-d %B %Y")}</span>']
+    if sec=='guides': pills+= [f'<span>{mins} {TE("pg.minread")}</span>',f'<span>{TE("pg.updated")} {datetime.date.fromisoformat(meta.get("updated",TODAY)).strftime("%-d %B %Y")}</span>']
     elif sec=='news':
         if cat and cat!='News': pills.append(f'<a class="pcat" href="/news?c={urllib.parse.quote(cat)}">{e(cat)}</a>')
-        pills+= [f'<span>{datetime.date.fromisoformat(meta.get("published",TODAY)).strftime("%-d %B %Y")}</span>',f'<span>{mins} min read</span>']
-    else: pills+= ['<span>New Zealand-wide</span>','<span>Free first session</span>']
+        pills+= [f'<span>{datetime.date.fromisoformat(meta.get("published",TODAY)).strftime("%-d %B %Y")}</span>',f'<span>{mins} {TE("pg.minread")}</span>']
+    else: pills+= ['<span>'+TE("pg.nz")+'</span>','<span>'+TE("pg.free")+'</span>']
     art=f'<div class="g-art" aria-hidden="true">{GUIDE_ART[slug]}</div>' if sec=='guides' and slug in GUIDE_ART else ''
     if sec=='news' and PHOTO.get((sec,slug)): art=f'<figure class="news-hero"><img src="{e(PHOTO[(sec,slug)])}" alt="" decoding="async"></figure>'
     if sec=='guides' and slug not in ('automation-glossary','privacy-act-2020-and-automation'): faq=calc()+faq
@@ -247,7 +294,7 @@ def build_page(p):
 {body}
 {faq}
   </article>
-  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
+  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>{TE("pg.onpage")}</b><ol id="tocList"></ol></div></aside>
 </div>
 <div class="wrap">{related}{cta()}</div>
 </main>
@@ -269,7 +316,7 @@ def services_feature():
               f'<ul class="svc-inc">{lis}</ul><span class="svc-go">{e(s["go"])} <span aria-hidden="true">&#8594;</span></span></a>')
     out+='</div></section>'
     steps=[(str(i+1),x['title'],x['text']) for i,x in enumerate(SITE['service_steps'])]
-    out+='<section class="section svc-how"><div class="section-h"><h2>How every project runs</h2></div><ol class="svc-steps">'+''.join(
+    out+='<section class="section svc-how"><div class="section-h"><h2>'+TE("pg.svchow")+'</h2></div><ol class="svc-steps">'+''.join(
         f'<li><span class="svc-n">{n}</span><b>{e(t)}</b><p>{e(d)}</p></li>' for k,(n,t,d) in enumerate(steps))+'</ol></section>'
     return out
 
@@ -295,9 +342,9 @@ def build_hub(sec):
         filt+=f'<p class="hub-none" id="hubNone" hidden>No {word} match that search.</p>'
     extra=''
     if sec!='guides':
-        extra='<section class="section"><div class="section-h"><h2>Popular guides</h2><a href="/guides">All guides →</a></div><div class="cards">'+''.join(card(p) for p in PAGES if p[0]=='guides')[:0]+''.join(card(p) for p in (find(x) for x in ['guides/how-to-choose-what-to-automate-first','guides/connect-your-business-apps','guides/privacy-act-2020-and-automation']) if p)+'</div></section>'
+        extra='<section class="section"><div class="section-h"><h2>'+TE("pg.popular")+'</h2><a href="/guides">'+TE("pg.allguides")+'</a></div><div class="cards">'+''.join(card(p) for p in PAGES if p[0]=='guides')[:0]+''.join(card(p) for p in (find(x) for x in ['guides/how-to-choose-what-to-automate-first','guides/connect-your-business-apps','guides/privacy-act-2020-and-automation']) if p)+'</div></section>'
     else:
-        extra='<section class="section"><div class="section-h"><h2>Guides by industry</h2><a href="/industries">All industries →</a></div><div class="cards">'+''.join(card(p) for p in PAGES if p[0]=='industries')+'</div></section>'
+        extra='<section class="section"><div class="section-h"><h2>'+TE("pg.byind")+'</h2><a href="/industries">'+TE("pg.allind")+'</a></div><div class="cards">'+''.join(card(p) for p in PAGES if p[0]=='industries')+'</div></section>'
     main_grid=f'<section class="section">{filt}<div class="cards" id="hubGrid">{"".join(card(p) for p in items)}</div></section>'
     hero_cls='phero'
     if sec=='services':
@@ -308,7 +355,7 @@ def build_hub(sec):
   <p class="eyebrow">{e(SECTION[sec][1])}</p>
   <h1>{e(h["h1"])}</h1>
   <p class="plead">{e(h["lead"])}</p>
-  <div class="pmeta"><span>{len(items)} {('post' if len(items)==1 else 'posts') if sec=='news' else SECTION[sec][0].lower()}</span><span>New Zealand-wide</span><span>Free first session</span></div>
+  <div class="pmeta"><span>{len(items)} {(T('pg.post') if len(items)==1 else T('pg.posts')) if sec=='news' else SECTION[sec][0].lower()}</span><span>{TE("pg.nz")}</span><span>{TE("pg.free")}</span></div>
 </div></section>
 <div class="wrap">
   {main_grid}
@@ -323,10 +370,10 @@ def build_404():
     ld={'@context':'https://schema.org','@type':'WebPage','name':'Page not found'}
     out=head('Page not found | Ambs Solutions','This page could not be found. Find our services, industries and guides here.','/404',ld).replace('index,follow,max-image-preview:large','noindex')+header('')+f'''<main id="main">
 <section class="phero"><div class="wrap">
-  <p class="eyebrow">Error 404</p>
-  <h1>Page not found</h1>
-  <p class="plead">The page you were looking for is not here. It may have moved, or the link may have a typo. These will get you back on track.</p>
-  <div class="pmeta"><a class="btn btn--go" href="/">Go to the home page</a><a class="btn btn--ghost" href="/guides">Browse the guides</a></div>
+  <p class="eyebrow">{TE("nf.eyebrow")}</p>
+  <h1>{TE("nf.h1")}</h1>
+  <p class="plead">{TE("nf.lead")}</p>
+  <div class="pmeta"><a class="btn btn--go" href="/">{TE("nf.home")}</a><a class="btn btn--ghost" href="/guides">{TE("nf.guides")}</a></div>
 </div></section>
 <div class="wrap"><section class="section"><div class="cards">{"".join(card(p) for p in (find(x) for x in ["services/ai-automation","services/websites-and-portals","industries/trades-and-building","guides/how-to-choose-what-to-automate-first"]) if p)}</div></section></div>
 </main>
@@ -338,30 +385,30 @@ def build_booked():
     out=head('Booking confirmed | Ambs Solutions','Your Discovery Call with Ambs Solutions is booked.','/booking-confirmed',ld).replace('index,follow,max-image-preview:large','noindex')
     # Zoho Bookings redirects here inside the booking frame on the home page; take over the whole window
     out=out.replace('<head>','<head>\n<script>if(window.top!==window.self){try{window.top.location.replace(location.href)}catch(e){}}</script>',1)
-    out+=header('')+'''<main id="main">
+    out+=header('')+f'''<main id="main">
 <section class="phero"><div class="wrap">
-  <p class="eyebrow">Booking confirmed</p>
-  <h1 id="bkH">You are booked in</h1>
+  <p class="eyebrow">{TE("bk.eyebrow")}</p>
+  <h1 id="bkH">{TE("bk.h1")}</h1>
   <div class="bk-card">
     <dl>
-      <div><dt>Meeting</dt><dd id="bkSvc">Discovery Call</dd></div>
-      <div id="bkDateRow" hidden><dt>Date</dt><dd id="bkDate"></dd></div>
-      <div id="bkTimeRow" hidden><dt>Time</dt><dd id="bkTime"></dd></div>
-      <div><dt>Length</dt><dd>30 minutes</dd></div>
-      <div><dt>With</dt><dd>Ambs Solutions</dd></div>
+      <div><dt>{TE("bk.meeting")}</dt><dd id="bkSvc">{TE("bk.service")}</dd></div>
+      <div id="bkDateRow" hidden><dt>{TE("bk.date")}</dt><dd id="bkDate"></dd></div>
+      <div id="bkTimeRow" hidden><dt>{TE("bk.time")}</dt><dd id="bkTime"></dd></div>
+      <div><dt>{TE("bk.length")}</dt><dd>{TE("bk.lengthv")}</dd></div>
+      <div><dt>{TE("bk.with")}</dt><dd>{TE("bk.withv")}</dd></div>
     </dl>
   </div>
-  <p class="plead" id="bkMail"><span id="bkMailTxt">We have emailed you the details and a calendar invite.</span> To change the time, use the link in that email or call <a href="tel:+64220999578">+64 22 099 9578</a>.</p>
-  <div class="pmeta"><a class="btn btn--go" href="/">Back to the home page</a></div>
+  <p class="plead" id="bkMail"><span id="bkMailTxt">{TE("bk.mail")}</span> {TE("bk.change")} <a href="tel:+64220999578">+64 22 099 9578</a>.</p>
+  <div class="pmeta"><a class="btn btn--go" href="/">{TE("bk.back")}</a></div>
 </div></section>
 </main>
-<script>
+'''+'''<script>
 (function(){try{
   var q=new URLSearchParams(location.search),g=function(k){return (q.get(k)||"").trim();};
   var set=function(id,v){var el=document.getElementById(id);if(el&&v)el.textContent=v;};
   var show=function(id){var el=document.getElementById(id);if(el)el.hidden=false;};
   var first=g("customer_first_name")||g("customer_name").split(" ")[0];
-  if(first)set("bkH","You are booked in, "+first);
+  if(first)set("bkH",__BKH__+", "+first);
   set("bkSvc",g("service_name"));
   var st=g("booking_start_time"),en=g("booking_end_time");
   if(st){var zoned=/(Z|[+-]\\d\\d:?\\d\\d)$/.test(st),d=new Date(st),e2=en?new Date(en):null;
@@ -373,12 +420,12 @@ def build_booked():
       if(zoned){try{var tz=d.toLocaleTimeString("en-NZ",{timeZoneName:"short"}).split(" ").pop();if(tz)t+=" "+tz;}catch(x){}}
       set("bkDate",day);show("bkDateRow");set("bkTime",t);show("bkTimeRow");}}
   var em=g("customer_email");
-  if(em)set("bkMailTxt","We have emailed the details and a calendar invite to "+em+".");
+  if(em)set("bkMailTxt",__BKTO__+" "+em+".");
   /* the link carries the visitor's name and email; take them out of the address bar and history */
   if(location.search&&history.replaceState)history.replaceState(null,"",location.pathname);
 }catch(e){}})();
 </script>
-'''+footer()
+'''.replace('__BKH__',json.dumps(T('bk.h1')).replace('</','<\\/')).replace('__BKTO__',json.dumps(T('bk.mailto')).replace('</','<\\/'))+footer()
     open(os.path.join(OUT,'booking-confirmed.html'),'w',encoding='utf8').write(out)
 
 def build_legal(slug):
@@ -393,13 +440,13 @@ def build_legal(slug):
 <section class="phero"><div class="wrap">
   <p class="eyebrow">Ambs Solutions</p>
   <h1>{e(meta["h1"])}</h1>
-  <div class="pmeta"><span>Auckland, New Zealand</span><span>Last updated {e(meta["updated"])}</span></div>
+  <div class="pmeta"><span>{TE("pg.legalwhere")}</span><span>{TE("pg.lastupdated")} {e(meta["updated"])}</span></div>
 </div></section>
 <div class="wrap layout">
   <article class="prose legal">
 {body}
   </article>
-  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
+  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>{TE("pg.onpage")}</b><ol id="tocList"></ol></div></aside>
 </div>
 </main>
 '''+footer()
@@ -542,4 +589,6 @@ if __name__=='__main__':
         elif not os.path.exists(path): print(f'MISSING {p[0]}/{p[1]}')
     for s in ('services','industries','guides')+(('news',) if any(p[0]=='news' for p in PAGES) else ()): build_hub(s)
     for slug,d in CUSTOM.items(): build_custom(slug,d,rb['pages'].get(slug,''))
-    build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap(); print('done, total words',total)
+    build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap()
+    for f in ('index.html','email-signature.html'): stamp_ga(os.path.join(OUT,f))
+    print('done, total words',total)

@@ -1,7 +1,10 @@
 /* POST /api/settings: business details and the hours calculator.
    { action: "get" }
    { action: "business", phone, email, location }   changes them everywhere on the site
-   { action: "calculator", hours: { cafe: [3, 2.5, 1.5], ... } } */
+   { action: "calculator", hours: { cafe: [3, 2.5, 1.5], ... } }
+   { action: "analytics", id: "G-XXXXXXX" }   the Google Analytics measurement ID (empty turns it off)
+   { action: "sitetext", text: { "cta.h": "...", ... } }   the wording on every page other than the homepage */
+import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
 import { requireEditor, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
 
 const SITE_JSON = "site-src/content/site.json";
@@ -32,7 +35,10 @@ export default async function handler(req, res) {
     if (b.action === "get") {
       const en = readEnglish(js);
       const biz = readBiz(js).map((x) => ({ ...x, name: en["biz." + x.id] || x.id, tasks: x.tasks.map((t) => ({ ...t, name: en[t.key] || t.key })) }));
-      return send(res, 200, { business: details, calculator: biz });
+      const st = await readFile(SITE_TEXT_JSON, head);
+      const text = st ? JSON.parse(st.text) : {};
+      const sitetext = SITE_TEXT_GROUPS.map((g) => ({ name: g.name, items: g.items.map(([key, label, long]) => ({ key, label, long: !!long, text: text[key] ?? "" })) }));
+      return send(res, 200, { business: details, calculator: biz, sitetext });
     }
 
     if (b.action === "business") {
@@ -49,7 +55,7 @@ export default async function handler(req, res) {
       if (next.email !== details.email) swaps.push([details.email, next.email]);
       if (next.location !== details.location) swaps.push([details.location, next.location]);
       if (!swaps.length) return send(res, 400, { error: "Nothing has changed" });
-      const files = { [SITE_JSON]: JSON.stringify(next, null, 1) + "\n" };
+      const files = { [SITE_JSON]: JSON.stringify({ ...details, ...next }, null, 1) + "\n" };
       const paths = (await listPaths(head)).filter((f) => TEXT.test(f.path) && !SKIP.test(f.path) && f.size < 600000);
       let changed = 0;
       await Promise.all(paths.map(async (f) => {
@@ -62,6 +68,29 @@ export default async function handler(req, res) {
       }));
       await commitFiles(head, files, "Editor source: business details" + by);
       return send(res, 200, { ok: true, files: changed });
+    }
+
+    if (b.action === "analytics") {
+      const id = String(b.id || "").trim().toUpperCase();
+      if (id && !/^G-[A-Z0-9]{4,}$/.test(id)) return send(res, 400, { error: "The measurement ID starts with G-, like G-AB12CD34EF" });
+      if (id === (details.analytics_id || "")) return send(res, 400, { error: "Nothing has changed" });
+      await commitFiles(head, { [SITE_JSON]: JSON.stringify({ ...details, analytics_id: id }, null, 1) + "\n" }, "Editor source: Google Analytics" + by);
+      return send(res, 200, { ok: true });
+    }
+
+    if (b.action === "sitetext") {
+      const st = await readFile(SITE_TEXT_JSON, head);
+      const text = st ? JSON.parse(st.text) : {};
+      const next = { ...text };
+      for (const k of SITE_TEXT_KEYS) {
+        if (!b.text || typeof b.text[k] !== "string") continue;
+        const v = b.text[k].replace(/\s+/g, " ").trim().slice(0, 400);
+        if (!v) return send(res, 400, { error: "Every line needs some wording" });
+        next[k] = v;
+      }
+      if (JSON.stringify(next) === JSON.stringify(text)) return send(res, 400, { error: "Nothing has changed" });
+      await commitFiles(head, { [SITE_TEXT_JSON]: JSON.stringify(next, null, 1) + "\n" }, "Editor source: wording on every page" + by);
+      return send(res, 200, { ok: true });
     }
 
     if (b.action === "calculator") {

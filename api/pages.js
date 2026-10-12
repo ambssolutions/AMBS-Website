@@ -9,6 +9,7 @@
    section "page" is a page at its own address (/slug) made of blocks, kept in site-src/content/custom/<slug>.json.
    Saves start "Editor source:" (a GitHub workflow rebuilds and publishes the pages) or, for drafts that
    are not on the website, "Editor draft:" (saved, nothing published). */
+import { SITE_TEXT_JSON, SITE_TEXT_GROUPS } from "./_sitetext.js";
 import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths, readEnglish } from "./_lib.js";
 import { cleanBlocks } from "./_blocks.js";
 
@@ -160,6 +161,11 @@ export default async function handler(req, res) {
         const en = readEnglish((await readFile("site-src/assets/home.js", head)).text), m = JSON.parse(mf.text);
         const names = { main: "Top menu", drawer: "Phone menu", company: "Footer: Company", explore: "Footer: Explore" };
         for (const n of Object.keys(names)) look({ kind: "menus", title: "Menus", key: "menus" }, names[n], (m[n] || []).map((it) => ((it.key && en[it.key]) || it.label || "") + " " + it.href).join(" · "));
+      }
+      const tf = await readFile(SITE_TEXT_JSON, head);
+      if (tf) {
+        const t = JSON.parse(tf.text);
+        for (const g of SITE_TEXT_GROUPS) for (const [k, label] of g.items) look({ kind: "sitetext", title: g.name, key: "sitetext:" + k }, "Wording on every page · " + label, t[k] || "");
       }
       const sf = await readFile("site-src/content/site.json", head);
       if (sf) look({ kind: "business", title: "Business details", key: "business" }, "Phone, email and location", Object.values(JSON.parse(sf.text)).join(" · "));
