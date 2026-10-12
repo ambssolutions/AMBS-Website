@@ -25,8 +25,8 @@
     "photoShape": "rounded",
     "photoSize": 96,
     "photoUrl": "",
-    "bannerUrl": "",
-    "bannerLink": "https://ambs.co.nz/#contact",
+    "bannerUrl": "https://ambs.co.nz/assets/email/banners/refer-10-bonus-light-nologo.jpg",
+    "bannerLink": "mailto:hello@ambs.co.nz?subject=Referral",
     "bannerW": 540,
     "bookLabel": "Book a free session",
     "bookUrl": "https://ambs.co.nz/#book",
@@ -191,11 +191,22 @@
       "size": 13,
       "bold": false,
       "italic": false,
-      "color": "#14172b"
+      "color": "#14172b",
+      "dy": -2
      },
      "disclaimer": {
       "size": 13,
       "align": "left"
+     },
+     "role": {
+      "size": 18
+     },
+     "book": {
+      "dx": -2
+     },
+     "logo": {
+      "dx": -16,
+      "dy": -20
      }
     },
     "maker": {
@@ -208,13 +219,14 @@
      "badge": "10%",
      "badgeSmall": "BONUS",
      "icon": "none",
-     "style": "light",
+     "style": "custom",
      "logo": false,
      "link": "mailto:hello@ambs.co.nz?subject=Referral",
      "styleChosen": true,
      "emboss": 3,
      "anim": "slide",
-     "h": 130
+     "h": 130,
+     "cbg2": "#00ffff"
     },
     "custom": [],
     "pieceGap": 7,
@@ -223,7 +235,7 @@
     "contactGap": 5,
     "bannerMade": true
    },
-   "updated": "2026-10-12T18:14:01.742Z",
+   "updated": "2026-10-12T20:00:45.000Z",
    "by": "hello@ambs.co.nz"
   }
  ]
