@@ -440,6 +440,12 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 .fpv-h{padding:14px 20px;border-bottom:1px solid #eceef3}.fpv-from{font-size:14px}.fpv-sub{font-size:18px;margin-top:4px;color:#202124}
 .fpv-body{padding:18px 20px 26px}.fpv-body p{margin:0 0 12px}.fpv-sig{margin-top:22px;overflow-x:auto}.fpv-sig img{max-width:none}
 .fpv.dark .fpv-mail{background:#1f1f1f;color:#e8eaed}.fpv.dark .fpv-h{border-color:#333}.fpv.dark .fpv-sub{color:#e8eaed}
+#codeEdit{outline:none;border-radius:8px;padding:2px;cursor:text}#codeEdit:hover{box-shadow:0 0 0 2px rgba(24,119,224,.25)}#codeEdit:focus{box-shadow:0 0 0 2px #1877E0}
+.sdlg{position:fixed;inset:0;z-index:60;background:rgba(13,17,34,.6);display:grid;place-items:center;padding:16px}
+.sbox{width:100%;max-width:520px;max-height:86vh;overflow:auto;background:var(--panel);color:var(--ink);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.sh{display:flex;align-items:center;gap:8px}.sh .sx{margin-left:auto}.sbox .note{margin:0}
+.snew{display:flex;align-items:flex-end;gap:8px}.snew .f{flex:1;margin:0}.scur{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.9rem}
+.srow{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:10px}.srow+.srow{margin-top:6px}.srow>div{flex:1;min-width:0}.srow small{display:block;color:var(--muted);font-size:.76rem}.srow.on{border-color:var(--accent)}
 .vadd{display:flex;flex-direction:column;gap:5px;background:#fff;border:1.5px solid #dfe3ee;border-radius:12px;padding:8px 10px}
 .vpal{background:transparent;padding:0;gap:6px;min-height:0}
 .vpal:hover{border-color:transparent}
@@ -470,7 +476,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
       <h1>Email Signature Builder</h1>
       <p>For any business. Six short steps. The preview updates as you go, and you can click any part of it to change that part.</p>
     </div>
-    <button type="button" class="btn sec small" id="reset">Start again</button>
+    <button type="button" class="btn small" id="sigSave">💾 Save</button><button type="button" class="btn sec small" id="sigList">📂 My signatures</button><button type="button" class="btn sec small" id="reset">Start again</button>
   </header>
 
   <div class="app">
@@ -679,6 +685,7 @@ var PRESETS=[
 var S;
 function validOrder(o){if(!Array.isArray(o))return false;var ids=o.map(function(x){return x[0]});return Object.keys(BLOCKS).every(function(k){return ids.indexOf(k)>=0})&&o.every(function(x){return(BLOCKS[x[0]]||String(x[0]).indexOf("c-")===0)&&(x[2]==="side"||x[2]==="under")})}
 function load(){var d=defaults();d.maker=null;d.custom=[];try{var raw=localStorage.getItem("ambs-sig-builder-2");if(raw){var o=JSON.parse(raw);for(var k in d)if(o[k]!==undefined)d[k]=(d[k]&&typeof d[k]==="object"&&!Array.isArray(d[k])&&o[k]&&typeof o[k]==="object")?Object.assign(d[k],o[k]):o[k];
+    if(o._sigId){d._sigId=o._sigId;d._sigName=o._sigName}
     /* an AMBS signature with no logo set gets the AMBS logo back */
     if(!d.logoData&&!String(d.logoUrl||"").trim()&&/ambs/i.test(d.company||""))d.logoUrl="https://ambs.co.nz/logo-400.png";if(/ambs/i.test(d.company||"")&&d.social&&!String(d.social.instagram||"").trim())d.social.instagram="ambssolutions";if(Array.isArray(d.order))d.order=expandActions(d.order);placeMedia(d,"both",false);if(!validOrder(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true)}}}catch(e){}return d}
 function save(){try{localStorage.setItem("ambs-sig-builder-2",JSON.stringify(S))}catch(e){}}
@@ -718,9 +725,10 @@ function photoHtml(mode){var sz=S.photoSize,r=S.photoShape==="circle"?"50%":S.ph
   var ph=img(src,sz,sz,S.name||"Photo","border-radius:"+r+";object-fit:cover;"+ebBox());return mode==="email"?ph:'<div data-edit="photo">'+ph+'</div>'}
 function a(href,txt,col,bold){return'<a href="'+esc(href)+'" style="color:'+col+';text-decoration:none;'+(bold?"font-weight:bold;":"")+'">'+txt+'</a>'}
 function vbar(h){var w=S.dividerW,cols=S.divider==="rainbow"?pal():[S.colors.line],seg=Math.max(2,Math.round(h/cols.length));
-  return T()+cols.map(function(c){return'<tr><td width="'+w+'" height="'+seg+'" bgcolor="'+c+'" style="width:'+w+'px;height:'+seg+'px;background:'+c+';font-size:0;line-height:0;">&nbsp;</td></tr>'}).join("")+'</table>'}
+  /* each colour is a cell's left border as well as its background: email apps that drop backgrounds on empty cells (or recolour them in dark mode) still keep borders */
+  return T()+cols.map(function(c){return'<tr><td width="'+w+'" height="'+seg+'" bgcolor="'+c+'" style="width:0;height:'+seg+'px;padding:0;background:'+c+';border-left:'+w+'px solid '+c+';font-size:1px;line-height:1px;mso-line-height-rule:exactly;">&#8203;</td></tr>'}).join("")+'</table>'}
 function hbar(wd,hh,solid){var cols=solid?[S.colors.line]:pal(),seg=Math.round(wd/cols.length);
-  return T(S.align==="center"?"margin:0 auto;":"")+'<tr>'+cols.map(function(c){return'<td width="'+seg+'" height="'+hh+'" bgcolor="'+c+'" style="width:'+seg+'px;height:'+hh+'px;background:'+c+';font-size:0;line-height:0;">&nbsp;</td>'}).join("")+'</tr></table>'}
+  return T(S.align==="center"?"margin:0 auto;":"")+'<tr>'+cols.map(function(c){return'<td width="'+seg+'" height="'+hh+'" bgcolor="'+c+'" style="width:'+seg+'px;height:0;padding:0;background:'+c+';border-top:'+hh+'px solid '+c+';font-size:1px;line-height:1px;mso-line-height-rule:exactly;">&#8203;</td>'}).join("")+'</tr></table>'}
 /* embossed look: a soft highlight above and shade below, so text, buttons, photo and card look raised (0 = flat, 10 = strong) */
 /* embossed level per part: 0 off, 1 soft, 2 raised, 3 strong */
 function embL(k){return Math.max(0,Math.min(3,+((S.emb||{})[k])||0))}
@@ -1253,6 +1261,48 @@ function openPreview(){var mode="light",dev="laptop";
   var close=function(){ov.remove();document.removeEventListener("keydown",esc1)},esc1=function(e){if(e.key==="Escape")close()};
   ov.querySelector(".fpv-x").addEventListener("click",close);document.addEventListener("keydown",esc1);ov.addEventListener("click",function(e){if(e.target===ov)close()});
   document.body.appendChild(ov);paint();ov.querySelector(".fpv-x").focus()}
+/* ---------- My signatures: save, open and delete named signatures ----------
+   On ambs.co.nz they're saved to the website account (api/signatures), so they open in any signed-in browser.
+   Elsewhere (the builder file or link) they're kept in this browser. */
+function sigApi(body){
+  if(onAmbs())return edToken().then(function(tok){return fetch("/api/signatures",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:JSON.stringify(body)})})
+    .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"That didn’t work. Please try again.");return j})});
+  return new Promise(function(ok,no){var d;try{d=JSON.parse(localStorage.getItem("ambs-sig-saved")||"{}")}catch(e){d={}}if(!Array.isArray(d.signatures))d.signatures=[];
+    var put=function(){try{localStorage.setItem("ambs-sig-saved",JSON.stringify(d))}catch(e){throw new Error("This browser is out of space for saved signatures.")}};
+    try{if(body.action==="list")return ok({signatures:d.signatures.map(function(x){return{id:x.id,name:x.name,updated:x.updated}}).sort(function(a,b){return String(b.updated).localeCompare(String(a.updated))})});
+      if(body.action==="get"){var g=d.signatures.filter(function(x){return x.id===body.id})[0];if(!g)throw new Error("That signature isn’t saved any more.");return ok(g)}
+      if(body.action==="save"){var now=new Date().toISOString(),x=body.id&&d.signatures.filter(function(y){return y.id===body.id})[0];if(x){x.name=body.name;x.state=body.state;x.updated=now}else{x={id:Date.now().toString(36),name:body.name,state:body.state,updated:now};d.signatures.push(x)}put();return ok({id:x.id,name:x.name})}
+      if(body.action==="delete"){d.signatures=d.signatures.filter(function(y){return y.id!==body.id});put();return ok({ok:true})}}catch(e){no(e)}})}
+function sigState(){var st=JSON.parse(JSON.stringify(S));delete st._lw;delete st._sigId;delete st._sigName;return st}
+function saveSig(asNew,btn,name){
+  if(!asNew&&!S._sigId){openSigs(true);return}
+  var nm=(name||S._sigName||"My signature").trim(),warn=uploaded.banner&&!url(S.bannerUrl)&&!S.bannerMade?" Your uploaded banner isn’t online yet, so it’s saved without it.":"";
+  if(btn){btn.disabled=true}
+  return sigApi({action:"save",id:asNew?null:S._sigId,name:nm,state:sigState()}).then(function(j){S._sigId=j.id;S._sigName=j.name;save();if(btn)btn.disabled=false;toast("Saved “"+j.name+"” ✓"+warn);sigTitle();return j})
+    .catch(function(e){if(btn)btn.disabled=false;toast(e.message==="signin"?"Please sign in again (reload the page).":e.message)})}
+function openSig(id){return sigApi({action:"get",id:id}).then(function(j){var d=defaults(),o=j.state||{};d.maker=null;d.custom=[];
+    for(var k in d)if(o[k]!==undefined)d[k]=(d[k]&&typeof d[k]==="object"&&!Array.isArray(d[k])&&o[k]&&typeof o[k]==="object")?Object.assign(d[k],o[k]):o[k];
+    if(Array.isArray(d.order))d.order=expandActions(d.order);if(!validOrder(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true)}
+    S=d;if(!S.maker)S.maker=mkDefaults();S._sigId=j.id;S._sigName=j.name;uploaded={logo:null,photo:null,banner:null};
+    if(S.bannerMade&&!url(S.bannerUrl))mkRender(true);save();update();drawFlow();go(STEP);sigTitle();toast("Opened “"+j.name+"”")})}
+function sigTitle(){var b=$("sigSave");if(b)b.title=S._sigId?"Save changes to “"+S._sigName+"”":"Save this signature"}
+function openSigs(askName){
+  var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" aria-label="My signatures"><div class="sbox"><div class="sh"><b>My signatures</b><button type="button" class="btn sec small sx">Close</button></div>'+
+    '<p class="note">'+(onAmbs()?"Saved to your website account, so they open in any browser where you’re signed in.":"Saved in this browser.")+'</p>'+
+    '<form class="snew"><label class="f">'+(S._sigId?"Save a copy as":"Name this signature")+'<input type="text" maxlength="80" placeholder="e.g. Binny – Director"></label><button type="submit" class="btn small">'+(S._sigId?"Save as new":"Save")+'</button></form>'+
+    (S._sigId?'<div class="scur">Open now: <b>'+esc(S._sigName)+'</b> <button type="button" class="btn small sup">Save changes</button></div>':'')+
+    '<div class="slist"><p class="note">Loading…</p></div></div></div>');
+  document.body.appendChild(ov);var list=ov.querySelector(".slist"),inp=ov.querySelector(".snew input");inp.value=S._sigId?S._sigName+" (copy)":(S.name&&S.name!=="Your Name"?S.name:"");
+  var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);ov.addEventListener("click",function(e){if(e.target===ov)close()});ov.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+  ov.querySelector(".snew").addEventListener("submit",function(e){e.preventDefault();var b=ov.querySelector(".snew button");saveSig(true,b,inp.value||"My signature").then(function(j){if(j)close()})});
+  var up=ov.querySelector(".sup");if(up)up.addEventListener("click",function(){saveSig(false,up).then(function(j){if(j)close()})});
+  var draw=function(){sigApi({action:"list"}).then(function(j){var a=j.signatures||[];if(!a.length){list.innerHTML='<p class="note">Nothing saved yet.</p>';return}
+      list.innerHTML="";a.forEach(function(x){var row=h2('<div class="srow'+(x.id===S._sigId?' on':'')+'"><div><b>'+esc(x.name)+'</b><small>'+(x.updated?new Date(x.updated).toLocaleString():"")+'</small></div><button type="button" class="btn small so">Open</button><button type="button" class="btn sec small sd">Delete</button></div>');
+        row.querySelector(".so").addEventListener("click",function(){openSig(x.id).then(close).catch(function(e){toast(e.message)})});
+        var del=row.querySelector(".sd"),armed=0;del.addEventListener("click",function(){if(!armed){armed=1;del.textContent="Click again to delete";setTimeout(function(){armed=0;del.textContent="Delete"},3000);return}
+          sigApi({action:"delete",id:x.id}).then(function(){if(S._sigId===x.id){delete S._sigId;delete S._sigName;save();sigTitle()}toast("Deleted “"+x.name+"”");draw()}).catch(function(e){toast(e.message)})});
+        list.appendChild(row)})}).catch(function(e){list.innerHTML='<p class="note">'+esc(e.message==="signin"?"Please sign in again (reload the page).":e.message)+'</p>'})};
+  draw();(askName?inp:ov.querySelector(".sx")).focus()}
 function setMove(on){if(on&&TEST)setTest(false);if(on&&S.useCode){toast("Move or add works on the builder’s design. Go to Copy and use → HTML code → Back to the builder’s design.");return}MOVE=on;var b=$("movePv");if(b){b.setAttribute("aria-pressed",String(MOVE));b.textContent=MOVE?"✓ Done":"✥ Move or add"}update()}
 /* things you can add to any template from the preview */
 var ADDABLE=[["book","Booking button","📅"],["review","Review button","★"],["extra","Extra button","▭"],["social","Social icons","◎"],["logo","Logo","◆"],["photo","Photo","☺"],["tagline","Tagline","❞"],["rainbow","Brand stripe","≡"],["banner","Banner","▬"],["disclaimer","Disclaimer","§"],
@@ -1313,9 +1363,10 @@ function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard
     if(t.signoffStyle==="animated")t.signoffStyle="still";
     S=t;barH=t.photoShow?Math.max(110,t.photoSize):110;card.querySelector(".ts").innerHTML=signature("preview");card.setAttribute("aria-pressed",String(keep.template===p[0]))});
   S=keep;barH=kb},now?0:150)}
-function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML=cleanCode(S.code,true);var ibc=$("inbox");ibc.classList.toggle("phone",S.pvWidth==="phone");ibc.classList.toggle("dark",S.pvMode==="dark");
+function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML='<div id="codeEdit" contenteditable="true" spellcheck="true">'+cleanCode(S.code,true)+'</div>';
+    var ce=$("codeEdit");ce.addEventListener("input",function(){var keep=(String(S.code).match(/<style[\s\S]*?<\/style>/gi)||[]).join("");S.code=keep+ce.innerHTML;save();var ta=document.querySelector("#codeBox textarea");if(ta)ta.value=S.code});var ibc=$("inbox");ibc.classList.toggle("phone",S.pvWidth==="phone");ibc.classList.toggle("dark",S.pvMode==="dark");
     document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});$("iconWarn").textContent="Showing your own HTML code. Go to Copy and use → HTML code to change it, or go back to the builder’s design.";
-    var nb=h2('<div class="codenote"><span>Showing your own HTML code, so design changes don’t apply.</span><button type="button" class="btn small">Back to the builder’s design</button></div>');nb.querySelector("button").addEventListener("click",function(){S.useCode=false;save();update();if(STEPS[STEP].id==="copy")go(STEP)});pv.insertBefore(nb,pv.firstChild);return}
+    var nb=h2('<div class="codenote" contenteditable="false"><span>Your own HTML code: click any text in it to change it. Design changes don’t apply.</span><button type="button" class="btn small">Back to the builder’s design</button></div>');nb.querySelector("button").addEventListener("click",function(){S.useCode=false;save();update();if(STEPS[STEP].id==="copy")go(STEP)});pv.insertBefore(nb,pv.firstChild);return}
   if(TEST){testView(pv);var ibt=$("inbox");ibt.classList.toggle("phone",S.pvWidth==="phone");ibt.classList.toggle("dark",S.pvMode==="dark");return}
   if(MOVE){visualBoard(pv);var ib0=$("inbox");ib0.classList.toggle("phone",S.pvWidth==="phone");ib0.classList.toggle("dark",S.pvMode==="dark");return}pv.innerHTML=signature("preview");
   var m=pv.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
@@ -1347,8 +1398,9 @@ function init(){
       changed();openItem("brand");toast(lc.main.length?"Logo added and "+lc.main.length+" brand colours picked from it":"Logo added")};im.src=r.src});e.target.value=""});
   $("photoFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){S.photoData=r;S.photoShow=true;var po=inOrder("photo");if(po)po[1]=1;changed();openItem("photo");toast("Photo previewed")},true)});
   $("bannerFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){uploaded.banner=r;if(/\/assets\/email\/made\//.test(S.bannerUrl||""))S.bannerUrl="";inOrder("banner")[1]=1;changed();openItem("banner");toast("Banner previewed")})});
+  $("sigSave").addEventListener("click",function(){saveSig(false,this)});$("sigList").addEventListener("click",openSigs);
   var rs=$("reset"),armed=0;rs.addEventListener("click",function(){if(!armed){armed=1;rs.textContent="Click again to clear";setTimeout(function(){armed=0;rs.textContent="Start again"},3000);return}
-    armed=0;rs.textContent="Start again";uploaded={logo:null,photo:null,banner:null};S=defaults();S.maker=mkDefaults();visited={0:1};changed();go(0);toast("Back to the AMBS example")});
+    armed=0;rs.textContent="Start again";uploaded={logo:null,photo:null,banner:null};S=defaults();S.maker=mkDefaults();visited={0:1};changed();go(0);toast("Back to the AMBS example. Your saved signatures are still in My signatures.")});
   $("movePv").addEventListener("click",function(){setMove(!MOVE)});$("testPv").addEventListener("click",function(){setTest(!TEST)});$("fullPv").addEventListener("click",openPreview);
   $("bigPv").addEventListener("click",function(){var on=document.querySelector(".app").classList.toggle("big");this.setAttribute("aria-pressed",String(on));this.textContent=on?"Smaller preview":"Bigger preview"});
   $("copySig").addEventListener("click",function(){copySig(this)});$("copyCode").addEventListener("click",function(){copyCode(this)});
