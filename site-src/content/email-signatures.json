@@ -25,9 +25,9 @@
     "photoShape": "rounded",
     "photoSize": 96,
     "photoUrl": "",
-    "bannerUrl": "https://ambs.co.nz/assets/email/made/ambs-solutions-banner-mv51uvi4.gif",
+    "bannerUrl": "",
     "bannerLink": "https://ambs.co.nz/#contact",
-    "bannerW": 583,
+    "bannerW": 545,
     "bookLabel": "Book a free session",
     "bookUrl": "https://ambs.co.nz/#book",
     "reviewLabel": "Review us on Google",
@@ -132,13 +132,13 @@
      ],
      [
       "banner",
-      0,
+      1,
       "under",
       0
      ],
      [
       "disclaimer",
-      0,
+      1,
       "under",
       0
      ]
@@ -214,15 +214,16 @@
      "styleChosen": true,
      "emboss": 3,
      "anim": "slide",
-     "h": 160
+     "h": 140
     },
     "custom": [],
-    "pieceGap": 10,
-    "iconGap": 5,
+    "pieceGap": 7,
+    "iconGap": 2,
     "btnGap": 7,
-    "contactGap": 5
+    "contactGap": 5,
+    "bannerMade": true
    },
-   "updated": "2026-10-12T17:37:11.912Z",
+   "updated": "2026-10-12T17:38:48.755Z",
    "by": "hello@ambs.co.nz"
   }
  ]
