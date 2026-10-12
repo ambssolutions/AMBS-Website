@@ -744,6 +744,9 @@ var PRESETS=[
 
 var S;
 /* a layout is usable if every entry is a known part in a known area (left, middle, right, underneath) */
+/* bring back every saved setting, including ones added after the first version (spacing, banner made here…) */
+function mergeState(d,o){for(var k in o){if(!Object.prototype.hasOwnProperty.call(o,k)||k==="_lw"||o[k]===undefined)continue;
+  d[k]=(d[k]&&typeof d[k]==="object"&&!Array.isArray(d[k])&&o[k]&&typeof o[k]==="object")?Object.assign(d[k],o[k]):o[k]}return d}
 function validOrder(o){if(!Array.isArray(o)||!o.length)return false;return o.every(function(x){return Array.isArray(x)&&(BLOCKS[x[0]]||String(x[0]).indexOf("c-")===0)&&["left","side","right","under"].indexOf(x[2])>=0})}
 /* keep the saved arrangement; only add parts it doesn't mention (hidden), drop unknown or duplicate entries */
 function fixOrder(d){if(!Array.isArray(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true);return}
@@ -752,7 +755,7 @@ function fixOrder(d){if(!Array.isArray(d.order)){d.order=JSON.parse(JSON.stringi
   placeMedia(d,"both",false);
   Object.keys(BLOCKS).forEach(function(k){if(!d.order.some(function(x){return x[0]===k}))d.order.push([k,0,k==="banner"||k==="disclaimer"||k==="rainbow"?"under":"side",0])});
   if(!validOrder(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true)}}
-function load(){var d=defaults();d.maker=null;d.custom=[];try{var raw=localStorage.getItem("ambs-sig-builder-2");if(raw){var o=JSON.parse(raw);for(var k in d)if(o[k]!==undefined)d[k]=(d[k]&&typeof d[k]==="object"&&!Array.isArray(d[k])&&o[k]&&typeof o[k]==="object")?Object.assign(d[k],o[k]):o[k];
+function load(){var d=defaults();d.maker=null;d.custom=[];try{var raw=localStorage.getItem("ambs-sig-builder-2");if(raw){var o=JSON.parse(raw);mergeState(d,o);
     if(o._sigId){d._sigId=o._sigId;d._sigName=o._sigName}
     /* an AMBS signature with no logo set gets the AMBS logo back */
     if(!d.logoData&&!String(d.logoUrl||"").trim()&&/ambs/i.test(d.company||""))d.logoUrl="https://ambs.co.nz/logo-400.png";if(/ambs/i.test(d.company||"")&&d.social&&!String(d.social.instagram||"").trim())d.social.instagram="ambssolutions";fixOrder(d)}}catch(e){}return d}
@@ -1441,7 +1444,7 @@ function saveSig(asNew,btn,name){
   return sigApi({action:"save",id:asNew?null:S._sigId,name:nm,state:sigState()}).then(function(j){S._sigId=j.id;S._sigName=j.name;save();if(btn)btn.disabled=false;toast("Saved “"+j.name+"” ✓"+warn);sigTitle();return j})
     .catch(function(e){if(btn)btn.disabled=false;toast(e.message==="signin"?"Please sign in again (reload the page).":e.message)})}
 function openSig(id){return sigApi({action:"get",id:id}).then(function(j){var d=defaults(),o=j.state||{};d.maker=null;d.custom=[];
-    for(var k in d)if(o[k]!==undefined)d[k]=(d[k]&&typeof d[k]==="object"&&!Array.isArray(d[k])&&o[k]&&typeof o[k]==="object")?Object.assign(d[k],o[k]):o[k];
+    mergeState(d,o);delete d._sigId;delete d._sigName;
     fixOrder(d);
     S=d;if(!S.maker)S.maker=mkDefaults();S._sigId=j.id;S._sigName=j.name;uploaded={logo:null,photo:null,banner:null};
     if(S.bannerMade&&!url(S.bannerUrl))mkRender(true);save();update();drawFlow();sigTitle();
