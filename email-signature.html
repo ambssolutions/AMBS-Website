@@ -451,6 +451,9 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 .sizebar{font-size:.84rem;display:flex;flex-direction:column;gap:5px;margin:4px 0 10px}.sizebar>i{display:block;height:6px;border-radius:3px;background:#24b328;max-width:100%}.sizebar.near>i{background:#F5B800}.sizebar.over{color:#b42318}.sizebar.over>i{background:#E5352B}
 .cfields{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}.cfields .note{margin:0 0 4px}
 .cfl{display:flex;flex-direction:column;gap:6px;max-height:420px;overflow:auto}.cfl .f{margin:0}.cfl .f span{font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}.cfl .cfa span{color:#1877E0}.cfl .cfi span{color:#7B2FBE}
+.nopt,.mopt{font:inherit;text-align:left;display:flex;flex-direction:column;gap:3px;width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);cursor:pointer}.nopt:hover,.mopt:hover,.nopt:focus-visible{border-color:var(--accent)}.nopt b{font-size:1rem}.nopt small{color:var(--muted);font-size:.84rem;line-height:1.35}
+.mopt{flex-direction:row;align-items:center;font-weight:600;font-size:1rem;min-height:48px}.mopt.sub{font-weight:500;color:var(--muted);border-style:dashed}
+#menuBtn{display:none}
 .vadd{display:flex;flex-direction:column;gap:5px;background:#fff;border:1.5px solid #dfe3ee;border-radius:12px;padding:8px 10px}
 .vpal{background:transparent;padding:0;gap:6px;min-height:0}
 .vpal:hover{border-color:transparent}
@@ -479,8 +482,11 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
   header.top .brandline{flex:1;min-width:0}header.top .rb,header.top p{display:none!important}
   header.top h1{font-size:1rem!important;margin:0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   header.top .btn{padding:8px 10px!important;min-height:38px;font-size:.84rem}
-  header.top #sigList .tx,header.top #htmlUp .tx{display:none}
-  header.top #reset{font-size:0!important;padding:8px 10px!important}header.top #reset::before{content:"↺";font-size:1rem}
+  header.top #sigList,header.top #htmlUp,header.top #reset,header.top #sigNew,header.top .gso{display:none!important}
+  header.top #menuBtn{display:inline-flex!important}header.top #menuBtn .tx{display:inline}
+  /* dialogs become sheets from the bottom */
+  .sdlg{place-items:end stretch!important;padding:0!important}.sdlg .sbox{max-width:none!important;border-radius:18px 18px 0 0!important;max-height:88vh;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))!important}
+  .snew{flex-direction:column;align-items:stretch}.srow{flex-wrap:wrap}.srow>div{flex:1 1 100%}.srow .btn{flex:1}
   header.top .gso{font-size:.8rem;padding:8px!important}
   .app{display:flex!important;flex-direction:column;gap:0!important}
   /* steps: a slim row of numbered dots with the current step named */
@@ -530,7 +536,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
       <h1>Email Signature Builder</h1>
       <p>For any business. Six short steps. The preview updates as you go, and you can click any part of it to change that part.</p>
     </div>
-    <button type="button" class="btn small" id="sigSave">💾 <span class="tx">Save</span></button><button type="button" class="btn sec small" id="sigList" aria-label="My signatures">📂 <span class="tx">My signatures</span></button><button type="button" class="btn sec small" id="htmlUp" aria-label="Upload HTML">📄 <span class="tx">Upload HTML</span></button><input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden><button type="button" class="btn sec small" id="reset">Start again</button>
+    <button type="button" class="btn sec small" id="sigNew">＋ <span class="tx">New signature</span></button><button type="button" class="btn small" id="sigSave">💾 <span class="tx">Save</span></button><button type="button" class="btn sec small" id="menuBtn" aria-label="Menu">☰ <span class="tx">Menu</span></button><button type="button" class="btn sec small" id="sigList" aria-label="My signatures">📂 <span class="tx">My signatures</span></button><button type="button" class="btn sec small" id="htmlUp" aria-label="Upload HTML">📄 <span class="tx">Upload HTML</span></button><input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden><button type="button" class="btn sec small" id="reset">Start again</button>
   </header>
 
   <div class="app">
@@ -839,7 +845,7 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="social"){var sz=S.iconSize,cs=SOCIAL.filter(function(k){return S.social[k]}).map(function(k){return'<a href="'+esc(socialUrl(k,S.social[k]))+'" style="text-decoration:none;">'+img(iconSrc(k,S.iconStyle,mode,embL("icons")),sz,sz,SOCIAL_NAME[k])+'</a>'});
 
     if(mode!=="email"&&!cs.length)return'<div style="font-size:11px;color:#8a90a3;border:1px dashed #c9cfe0;border-radius:6px;padding:6px 10px;display:inline-block;">Add an Instagram or TikTok username to show icons here</div>';
-    return cs.length?inlineTable(cs.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<cs.length-1?6:0)+'px 0 0;">'+x+'</td>'}),ctr):""}
+    return cs.length?inlineTable(cs.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<cs.length-1?iconGap():0)+'px 0 0;">'+x+'</td>'}),ctr):""}
   if(id==="banner"){var bw=S.bannerW,ab=AMBS_BANNERS.filter(function(x){return x.url===S.bannerUrl||x.urlNo===S.bannerUrl})[0],src=mode==="email"?url(S.bannerUrl):(uploaded.banner?uploaded.banner.src:(ab?(ab.urlNo===S.bannerUrl?ab.previewNo:ab.preview):url(S.bannerUrl)));
     if(!src)return mode==="email"?"":'<div style="width:'+bw+'px;max-width:100%;height:'+Math.round(bw/6)+'px;border:1.5px dashed #c9cfe0;border-radius:8px;color:#8a90a3;font:12px Arial;display:flex;align-items:center;justify-content:center;">Your banner (choose one in the Banner section)</div>';
     var bh=uploaded.banner&&mode!=="email"?Math.round(bw*uploaded.banner.h/uploaded.banner.w):(ab?Math.round(bw*0.15):Math.round(bw/6));
@@ -852,12 +858,15 @@ function rows(mode,zone){var out=[],groups=[];
   S.order.forEach(function(o){if(!o[1]||o[2]!==zone)return;var hh=block(o[0],mode,zone==="under");if(!hh)return;var cell={id:o[0],h:mode==="email"?hh:'<div data-edit="'+o[0]+'">'+hh+'</div>'};
     if(o[3]&&groups.length)groups[groups.length-1].cells.push(cell);else groups.push({id:o[0],cells:[cell]})});
   groups.forEach(function(g,n){var gs=st(g.id),al=gs.align||S.align,pad=(n===0?0:(["book","review","extra","social","rainbow","disclaimer","banner"].indexOf(g.id)>=0?S.gap+6:g.id==="role"?Math.max(0,S.gap-4):S.gap))+(+gs.dy||0);
-    var inner=g.cells.length===1?alignWrap(g.cells[0].h,al):T(boxAlign(al))+'<tr>'+g.cells.map(function(c,k){var cs=st(c.id),va=cs.valign||"middle";return'<td valign="'+va+'" style="vertical-align:'+va+';padding:'+(k>0?(+cs.dy||0):0)+'px '+(k<g.cells.length-1?(isBtn(c.id)&&isBtn(g.cells[k+1].id)?btnGap():14):0)+'px 0 '+(k>0?(+cs.dx||0):0)+'px;">'+c.h+'</td>'}).join("")+'</tr></table>';
+    var inner=g.cells.length===1?alignWrap(g.cells[0].h,al):T(boxAlign(al))+'<tr>'+g.cells.map(function(c,k){var cs=st(c.id),va=cs.valign||"middle";return'<td valign="'+va+'" style="vertical-align:'+va+';padding:'+(k>0?(+cs.dy||0):0)+'px '+(k<g.cells.length-1?(isBtn(c.id)&&isBtn(g.cells[k+1].id)?btnGap():pieceGap()):0)+'px 0 '+(k>0?(+cs.dx||0):0)+'px;">'+c.h+'</td>'}).join("")+'</tr></table>';
     out.push('<tr><td align="'+al+'" style="padding:'+pad+'px 0 0 '+(+gs.dx||0)+'px;text-align:'+al+';">'+inner+'</td></tr>')});
   return out}
 /* position: line a part up left, centre or right, and nudge it */
 function isBtn(id){return["book","review","extra"].indexOf(id)>=0||(String(id).indexOf("c-")===0&&(cget(id)||{}).type==="button")}
 function btnGap(){return S.btnGap==null?14:+S.btnGap}
+/* space between different parts on the same line, like social icons next to the buttons */
+function pieceGap(){return S.pieceGap==null||S.pieceGap===""?14:+S.pieceGap}
+function iconGap(){return S.iconGap==null||S.iconGap===""?6:+S.iconGap}
 /* space between phone, email, website and address: across the line in "One line", between the lines otherwise */
 function contactGap(){if(S.contactGap!=null&&S.contactGap!=="")return+S.contactGap;var csz=st("contact").size||S.textSize;return S.contactLayout==="line"?10:2*Math.max(1,Math.round(csz*0.18))}
 function boxAlign(al){return al==="center"?"margin:0 auto;":al==="right"?"margin-left:auto;":""}
@@ -941,12 +950,12 @@ var ITEM={
   role:function(){return[["text","role","Role"],["text","company","Business"],["color","st.role.color","Colour"],["range","st.role.size","Size",10,22,function(){return S.textSize}],["bi","role"]]},
   contact:function(){return[["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["seg","contactLayout","Layout",[["stack","One per line"],["pairs","Two per line"],["line","One line"]]],["range","contactGap","Space between them",0,24,function(){return contactGap()}],["select","contactIcons","Icons",[["none","None"],["letters","Letters (M, P, E, W, A)"],["brand","Colour circles"],["glyph","Colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["glyph-white","White"],["outline","Outline"]]],["check","contactLabels","Letters in one colour"],["color","st.contact.color","Text colour"],["range","st.contact.size","Size",10,20,function(){return S.textSize}],["bi","contact"]]},
   tagline:function(){return[["area","tagline","Tagline"],["color","st.tagline.color","Colour"],["range","st.tagline.size","Size",10,20,function(){return S.textSize-1}],["bi","tagline"]]},
-  actions:function(){return[["text","bookLabel","Booking button"],["text","bookUrl","Booking link"],["text","reviewLabel","Review button"],["text","reviewUrl","Review link"],["text","extraLabel","Extra button"],["text","extraUrl","Extra link"],["seg","btnStyle","Look",[["filled","Filled"],["outline","Outline"],["link","Text links"]]],["range","btnPadX","Button width (space either side of the words)",2,32],["range","btnGap","Space between buttons",0,48,function(){return btnGap()}],["seg","emb.btn","Embossed",EMB_OPTS],["range","btnFont","Button text size",9,18,function(){return btnFs()}],["seg","bookIcon","Booking icon",[["none","None"],["calendar","Calendar"]]],["color","colors.button","Booking button colour"],["color","colors.reviewBtn","Review button colour",null,null,"@p"],["color","colors.extraBtn","Extra button colour",null,null,"@p"],["range","btnRadius","Corners",0,20]]},
-  social:function(){return[["icons","iconStyle","Icon style"],["range","iconSize","Size",16,36],["seg","emb.icons","Embossed",EMB_OPTS],["text","social.facebook","Facebook"],["text","social.tiktok","TikTok"],["text","social.instagram","Instagram"],["text","social.linkedin","LinkedIn"],["text","social.youtube","YouTube"],["text","social.whatsapp","WhatsApp"],["text","social.x","X"],["text","social.google","Google profile"],["note","A username like @ambssolutions is fine. Icons show only for the ones you fill in."]]},
+  actions:function(){return[["text","bookLabel","Booking button"],["text","bookUrl","Booking link"],["text","reviewLabel","Review button"],["text","reviewUrl","Review link"],["text","extraLabel","Extra button"],["text","extraUrl","Extra link"],["seg","btnStyle","Look",[["filled","Filled"],["outline","Outline"],["link","Text links"]]],["range","btnPadX","Button width (space either side of the words)",2,32],["range","btnGap","Space between buttons",0,48,function(){return btnGap()}],["range","pieceGap","Space next to other parts on the same line (like social icons)",0,40,function(){return pieceGap()}],["seg","emb.btn","Embossed",EMB_OPTS],["range","btnFont","Button text size",9,18,function(){return btnFs()}],["seg","bookIcon","Booking icon",[["none","None"],["calendar","Calendar"]]],["color","colors.button","Booking button colour"],["color","colors.reviewBtn","Review button colour",null,null,"@p"],["color","colors.extraBtn","Extra button colour",null,null,"@p"],["range","btnRadius","Corners",0,20]]},
+  social:function(){return[["icons","iconStyle","Icon style"],["range","iconSize","Size",16,36],["range","iconGap","Space between icons",0,24,function(){return iconGap()}],["range","pieceGap","Space next to buttons on the same line",0,40,function(){return pieceGap()}],["seg","emb.icons","Embossed",EMB_OPTS],["text","social.facebook","Facebook"],["text","social.tiktok","TikTok"],["text","social.instagram","Instagram"],["text","social.linkedin","LinkedIn"],["text","social.youtube","YouTube"],["text","social.whatsapp","WhatsApp"],["text","social.x","X"],["text","social.google","Google profile"],["note","A username like @ambssolutions is fine. Icons show only for the ones you fill in."]]},
   banner:function(){return[["range","bannerW","Banner width in the email",200,640],["seg","emb.banner","Lift off the page (embossed)",EMB_OPTS],["blogo"],["maker"]].concat(S.company==="Ambs Solutions"||/ambs\.co\.nz/.test(S.website)?[["banners"]]:[]).concat([["file","bannerFile","Or upload a banner you already have"],["text","bannerUrl","Banner web address (used in the email)"],["text","bannerLink","Where it links to"],["note","Best size 1200 × 180 pixels. A GIF is fine and keeps its movement. It has to be online to show in emails: paste its web address above."]])},
   disclaimer:function(){return[["text","disclaimerLabel","Heading"],["area","disclaimer","Text"],["check","disclaimerJustify","Justify"],["color","st.disclaimer.color","Colour"],["range","st.disclaimer.size","Size",9,16,function(){return Math.max(10,S.textSize-2)}],["bi","disclaimer"]]},
   rainbow:function(){return[["range","rainbowW","Length",60,420]]},
-  layout:function(){return[["order"],["seg","align","Line it up",[["left","Left"],["center","Centre"]]],["seg","mainValign","Details column, up and down (next to the logo or photo)",[["top","Top"],["middle","Middle"],["bottom","Bottom"]]],["range","gap","Space between lines",0,18]]},
+  layout:function(){return[["order"],["range","pieceGap","Space between parts on the same line",0,40,function(){return pieceGap()}],["seg","align","Line it up",[["left","Left"],["center","Centre"]]],["seg","mainValign","Details column, up and down (next to the logo or photo)",[["top","Top"],["middle","Middle"],["bottom","Bottom"]]],["range","gap","Space between lines",0,18]]},
   style:function(){return[["seg","card","Background",[["none","None"],["light","Light card"],["dark","Dark card"]]],["range","emboss","Embossed text, photo and card",0,10],["seg","emb.btn","Embossed buttons",EMB_OPTS],["seg","emb.icons","Embossed icons",EMB_OPTS],["seg","emb.logo","Embossed logo",EMB_OPTS],["seg","emb.banner","Embossed banner",EMB_OPTS],["note","Icons and the logo are embossed into the picture itself, so they look raised in every email app. Text, buttons and the banner shadow show in Gmail, Apple Mail and the new Outlook; older Outlook shows them flat."],["select","font","Font",[["Arial, Helvetica, sans-serif","Arial"],["Helvetica, Arial, sans-serif","Helvetica"],["Verdana, Geneva, sans-serif","Verdana"],["Tahoma, Geneva, sans-serif","Tahoma"],["'Trebuchet MS', Arial, sans-serif","Trebuchet"],["Georgia, 'Times New Roman', serif","Georgia"]]],["range","nameSize","Name size",13,30],["range","textSize","Text size",11,16]].concat(COLOR_KEYS.map(function(c){return["color",c[0],c[1]]}))}
 };
 function inOrder(id){return S.order.filter(function(o){return o[0]===id})[0]}
@@ -1434,12 +1443,13 @@ function sigTitle(){var b=$("sigSave");if(b)b.title=S._sigId?"Save changes to �
 function openSigs(askName){
   var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" aria-label="My signatures"><div class="sbox"><div class="sh"><b>My signatures</b><button type="button" class="btn sec small sx">Close</button></div>'+
     '<p class="note">'+(onAmbs()?"Saved to your website account, so they open in any browser where you’re signed in.":"Saved in this browser.")+'</p>'+
-    '<form class="snew"><label class="f">'+(S._sigId?"Save a copy as":"Name this signature")+'<input type="text" maxlength="80" placeholder="e.g. Binny – Director"></label><button type="submit" class="btn small">'+(S._sigId?"Save as new":"Save")+'</button></form>'+
+    '<button type="button" class="btn sec small snbtn">＋ Start a new signature</button><form class="snew"><label class="f">'+(S._sigId?"Save a copy as":"Name this signature")+'<input type="text" maxlength="80" placeholder="e.g. Binny – Director"></label><button type="submit" class="btn small">'+(S._sigId?"Save as new":"Save")+'</button></form>'+
     (S._sigId?'<div class="scur">Open now: <b>'+esc(S._sigName)+'</b> <button type="button" class="btn small sup">Save changes</button></div>':'')+
     '<div class="slist"><p class="note">Loading…</p></div></div></div>');
   document.body.appendChild(ov);var list=ov.querySelector(".slist"),inp=ov.querySelector(".snew input");inp.value=S._sigId?S._sigName+" (copy)":(S.name&&S.name!=="Your Name"?S.name:"");
   var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);ov.addEventListener("click",function(e){if(e.target===ov)close()});ov.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
   ov.querySelector(".snew").addEventListener("submit",function(e){e.preventDefault();var b=ov.querySelector(".snew button");saveSig(true,b,inp.value||"My signature").then(function(j){if(j)close()})});
+  ov.querySelector(".snbtn").addEventListener("click",function(){close();askNew()});
   var up=ov.querySelector(".sup");if(up)up.addEventListener("click",function(){saveSig(false,up).then(function(j){if(j)close()})});
   var draw=function(){sigApi({action:"list"}).then(function(j){var a=j.signatures||[];if(!a.length){list.innerHTML='<p class="note">Nothing saved yet.</p>';return}
       list.innerHTML="";a.forEach(function(x){var row=h2('<div class="srow'+(x.id===S._sigId?' on':'')+'"><div><b>'+esc(x.name)+'</b><small>'+(x.updated?new Date(x.updated).toLocaleString():"")+'</small></div><button type="button" class="btn small so">Open</button><button type="button" class="btn sec small sd">Delete</button></div>');
@@ -1468,6 +1478,27 @@ function editSheet(id){var key=partKey(id),isC=String(id).indexOf("c-")===0,has=
   var close=function(){sh.classList.add("out");setTimeout(function(){sh.remove()},180);SEL=null;markSel();drawFlow()};
   sh.querySelector(".edone").addEventListener("click",close);
   requestAnimationFrame(function(){sh.classList.add("in")})}
+/* ---------- start a new signature ---------- */
+function newSig(keepBrand){var old=S,d=defaults();d.maker=mkDefaults();
+  if(keepBrand){["company","website","location","phone","logoUrl","logoData","logoRatio","logoShow","logoPos","logoBg","logoSize","logoMatch","brandP","brandS","brandA","palette","social","tagline","bookLabel","bookUrl","reviewLabel","reviewUrl","extraLabel","extraUrl","bannerUrl","bannerLink","bannerW","bannerMade","maker","disclaimer","disclaimerLabel","disclaimerJustify","emb","emboss"].concat(LOOK).forEach(function(k){if(old[k]!==undefined)d[k]=JSON.parse(JSON.stringify(old[k]))});d.custom=JSON.parse(JSON.stringify(old.custom||[]));d.template=old.template}
+  else{Object.assign(d,{company:"",website:"",location:"",phone:"",logoUrl:"",logoData:"",logoShow:false,brandP:"#2563eb",brandS:"#0f766e",brandA:"#f59e0b",palette:["#2563eb","#0f766e","#f59e0b"],bookLabel:"",bookUrl:"",reviewLabel:"",reviewUrl:"",extraLabel:"",extraUrl:"",bannerUrl:"",bannerLink:"",tagline:"",social:{instagram:"",tiktok:"",facebook:"",linkedin:"",whatsapp:"",youtube:"",x:"",google:""},disclaimer:"This email and any attachments are confidential and meant only for the person they are addressed to. If you received it by mistake, please let us know and delete it."});placeMedia(d,"both",true)}
+  d.name="Your Name";d.role="Your role";d.mobile="";d.email="";d.photoUrl="";d.photoData="";d.useCode=false;d.code="";
+  if(keepBrand&&old.bannerMade&&!url(old.bannerUrl)&&uploaded.banner){}else uploaded={logo:null,photo:null,banner:null};
+  S=d;visited={0:1};save();update();drawFlow();sigTitle();go(keepBrand?2:0);
+  toast(keepBrand?"New signature with the same brand. Add the person’s details, then press 💾 Save.":"New signature. Start with your brand, then press 💾 Save.")}
+function askNew(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" aria-label="New signature"><div class="sbox"><div class="sh"><b>New signature</b><button type="button" class="btn sec small sx">Cancel</button></div>'+
+    (S._sigId?'<p class="note">“'+esc(S._sigName)+'” stays saved in My signatures.</p>':'<p class="note">Tip: press 💾 Save first if you want to keep the one you have now.</p>')+
+    '<button type="button" class="nopt" data-k="brand"><b>Same brand, new person</b><small>Keeps the logo, colours, design, business details, buttons, social links and banner. Clears the name, role, mobile, email and photo.</small></button>'+
+    '<button type="button" class="nopt" data-k="blank"><b>Completely fresh</b><small>A new brand from scratch: upload a logo and we pick the colours.</small></button></div></div>');
+  document.body.appendChild(ov);var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);ov.addEventListener("click",function(e){if(e.target===ov)close()});
+  ov.querySelectorAll(".nopt").forEach(function(b){b.addEventListener("click",function(){close();newSig(b.dataset.k==="brand")})});ov.querySelector(".nopt").focus()}
+/* phones: one menu instead of a row of small buttons */
+function openMenu(){var ov=h2('<div class="sdlg msheet" role="dialog" aria-modal="true" aria-label="Menu"><div class="sbox"><div class="sh"><b>Menu</b><button type="button" class="btn sec small sx">Close</button></div>'+
+    '<button type="button" class="mopt" data-k="new">＋ New signature</button><button type="button" class="mopt" data-k="list">📂 My signatures</button><button type="button" class="mopt" data-k="html">📄 Upload an HTML file</button><button type="button" class="mopt" data-k="preview">👁 Full preview</button><button type="button" class="mopt" data-k="test">🔗 Test links</button><button type="button" class="mopt" data-k="copy">📋 Copy and use</button><button type="button" class="mopt sub" data-k="reset">↺ Start again (AMBS example)</button>'+(onAmbs()?'<button type="button" class="mopt sub" data-k="out">Sign out</button>':'')+'</div></div>');
+  document.body.appendChild(ov);var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);ov.addEventListener("click",function(e){if(e.target===ov)close()});
+  ov.querySelectorAll(".mopt").forEach(function(b){b.addEventListener("click",function(){var k=b.dataset.k;close();
+    if(k==="new")askNew();else if(k==="list")openSigs();else if(k==="html")$("htmlFile").click();else if(k==="preview")openPreview();else if(k==="test"){setTest(true);window.scrollTo(0,0)}else if(k==="copy")go(STEPS.length-1);
+    else if(k==="reset"){$("reset").click();$("reset").click()}else if(k==="out"){try{sessionStorage.removeItem("ambs-ed-session");localStorage.removeItem("ambs-ed-session")}catch(e){}location.reload()}})})}
 function setMove(on){if(on&&TEST)setTest(false);if(on&&S.useCode){toast("Move or add works on the builder’s design. Go to Copy and use → HTML code → Back to the builder’s design.");return}MOVE=on;var b=$("movePv");if(b){b.setAttribute("aria-pressed",String(MOVE));b.textContent=MOVE?"✓ Done":"✥ Move or add"}update()}
 /* things you can add to any template from the preview */
 var ADDABLE=[["book","Booking button","📅"],["review","Review button","★"],["extra","Extra button","▭"],["social","Social icons","◎"],["logo","Logo","◆"],["photo","Photo","☺"],["tagline","Tagline","❞"],["rainbow","Brand stripe","≡"],["banner","Banner","▬"],["disclaimer","Disclaimer","§"],
@@ -1567,6 +1598,7 @@ function init(){
   $("photoFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){S.photoData=r;S.photoShow=true;var po=inOrder("photo");if(po)po[1]=1;changed();openItem("photo");toast("Photo previewed")},true)});
   $("bannerFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){uploaded.banner=r;if(/\/assets\/email\/made\//.test(S.bannerUrl||""))S.bannerUrl="";inOrder("banner")[1]=1;changed();openItem("banner");toast("Banner previewed")})});
   $("sigSave").addEventListener("click",function(){saveSig(false,this)});
+  $("sigNew").addEventListener("click",askNew);$("menuBtn").addEventListener("click",openMenu);
   $("foldPv").addEventListener("click",function(){var c=document.querySelector(".pv-col"),f=c.classList.toggle("folded");this.textContent=f?"Show":"Hide";this.setAttribute("aria-expanded",String(!f))});
   $("htmlUp").addEventListener("click",function(){$("htmlFile").click()});
   $("htmlFile").addEventListener("change",function(){var f=this.files[0];if(f)useHtmlFile(f);this.value=""});
