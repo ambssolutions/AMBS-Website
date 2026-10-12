@@ -2,6 +2,7 @@
    { action: "list" }                                      uploaded photos
    { action: "upload", name, base64 }                      a WebP the editor already resized in the browser
    { action: "delete", path }
+   { action: "check" }                                      is this person allowed? (used by /email-signature)
    { action: "email-asset", name, base64 }                  a picture for the email signature builder (banner, photo, logo); GIF, PNG or JPG
    { action: "logo", png, webp, png400, webp400 }          replace the logo (the editor renders each size)
    { action: "social", png }                               replace the picture shown when the site is shared
@@ -22,6 +23,8 @@ export default async function handler(req, res) {
   if (!who) return;
   try {
     const b = await readBody(req);
+    /* the email signature builder asks this to confirm the person is signed in as an editor */
+    if (b.action === "check") return send(res, 200, { ok: true, email: who.email });
     const head = await headSha();
     const by = " (" + who.email + ")";
 
