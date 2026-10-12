@@ -1189,8 +1189,9 @@ function go(i,part){STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;
   if(window.innerWidth<=760&&!part)window.scrollTo(0,0);
   $("stepCount").textContent="Step "+(STEP+1)+" of "+STEPS.length;$("stepTitle").textContent=s.t;$("stepHint").textContent=s.d;
   var body=$("stepBody");body.innerHTML="";
-  if(S.useCode&&String(S.code||"").trim()&&s.id!=="copy"){var cn=h2('<div class="codenote"><span>This signature is your own HTML. Edit its words, links and pictures in Copy and use, or click text in the preview. Changing options here switches to the builder’s design (your HTML is kept).</span><button type="button" class="btn small">Edit my HTML</button></div>');
-    cn.querySelector("button").addEventListener("click",function(){go(STEPS.length-1);setTimeout(function(){var b=document.querySelector(".cfields");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},60)});body.appendChild(cn)}
+  if(S.useCode&&String(S.code||"").trim()&&s.id!=="copy"){var cn=h2('<div class="codenote"><span>This signature is HTML code, so these options can’t change it. Make it editable to change icons, spacing and layout, or edit its words in Copy and use.</span><button type="button" class="btn small mk-ed">✨ Make it editable</button><button type="button" class="btn sec small">Edit my HTML</button></div>');
+    cn.querySelector(".mk-ed").addEventListener("click",function(){if(!codeToDesign())toast("Couldn’t read this code.")});
+    cn.querySelector(".btn.sec").addEventListener("click",function(){go(STEPS.length-1);setTimeout(function(){var b=document.querySelector(".cfields");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},60)});body.appendChild(cn)}
   if(s.id==="template")drawTemplates(body);
   else if(s.id==="copy")drawCopy(body);
   else if(s.acc){part=part&&partKey(part);var want=part?(TUNE_PARTS.indexOf(part)>=0?"tune":String(part).indexOf("c-")===0?"custom":part):OPEN;if(part&&TUNE_PARTS.indexOf(part)>=0)TUNE=part;
@@ -1294,8 +1295,46 @@ function codeFields(){var doc=codeDoc(),nodes=codeWalk(doc),el=h2('<div class="c
       ii.addEventListener("input",function(){set(i,function(x){x.setAttribute("src",ii.value.trim())})})}
     list.appendChild(row)});
   if(!nodes.length)list.appendChild(h2('<p class="note">No text, links or pictures found in this code.</p>'));return el}
+/* read a signature's HTML back into the builder, so icons, spacing and layout can be changed again */
+function codeToDesign(){var d=new DOMParser().parseFromString(String(S.code||""),"text/html"),b=d.body,got=[];if(!b)return false;
+  var txt=function(e){return(e.textContent||"").replace(/[\s\u200b\u00a0]+/g," ").trim()},fs=function(e){var m=/font-size:\s*(\d+)px/i.exec(e.getAttribute("style")||"");return m?+m[1]:0};
+  var set=function(k,v,label){if(v!=null&&String(v).trim()!==""){S[k]=String(v).trim();got.push(label||k)}};
+  /* name: the biggest bold text that isn't a link */
+  var cands=[].filter.call(b.querySelectorAll("div,span,b,strong,td,p"),function(e){return!e.closest("a")&&txt(e)&&txt(e).length<60&&!e.querySelector("div,table,td,img")&&(/bold|[6-9]00/.test(e.getAttribute("style")||"")||/^(B|STRONG)$/.test(e.nodeName))});
+  cands.sort(function(x,y){return fs(y)-fs(x)});var nm=cands[0];if(nm)set("name",txt(nm),"name");
+  /* role · business: the line right after the name */
+  var leaves=[].filter.call(b.querySelectorAll("div,span,td,p"),function(e){return txt(e)&&!e.querySelector("div,span,td,p,table,a,img")&&!e.closest("a")}),ni=leaves.indexOf(nm);
+  if(ni<0&&nm)leaves.some(function(e,i){if(nm.contains(e)||e.contains(nm)){ni=i;return true}});
+  var nx=ni>=0?leaves[ni+1]:null;if(nx&&txt(nx).length<80&&!/^disclaimer/i.test(txt(nx))){var rt=txt(nx);if(rt){var pr=rt.split(/\s+[·|•-]\s+/);set("role",pr[0],"role");if(pr[1]){S.company=pr.slice(1).join(" · ");got.push("business")}}}
+  var tels=[],mail="",web="",soc={},buttons=[];
+  [].forEach.call(b.querySelectorAll("a[href]"),function(a){var h=a.getAttribute("href")||"",t=txt(a),st=(a.getAttribute("style")||"").toLowerCase(),img=a.querySelector("img");
+    if(/^tel:/i.test(h)){if(t&&tels.indexOf(t)<0)tels.push(t);return}
+    if(/^mailto:/i.test(h)){if(!mail)mail=h.slice(7).split("?")[0];return}
+    var m=/(instagram\.com|tiktok\.com|facebook\.com|linkedin\.com|youtube\.com|x\.com|twitter\.com|wa\.me)\/(@?[^\/?#]+(?:\/[^\/?#]+)?)/i.exec(h);
+    if(m&&img){var k={"instagram.com":"instagram","tiktok.com":"tiktok","facebook.com":"facebook","linkedin.com":"linkedin","youtube.com":"youtube","x.com":"x","twitter.com":"x","wa.me":"whatsapp"}[m[1].toLowerCase()];soc[k]=k==="linkedin"||k==="whatsapp"?h:m[2].replace(/^@/,"").replace(/^company\//,"");return}
+    if(/padding|background|border:/.test(st)&&t&&(!img||+(img.getAttribute("width")||99)<=24)){buttons.push({t:t.replace(/^★\s*/,""),h:h});return}
+    if(img&&/banner|\/made\//i.test(img.getAttribute("src")||"")){S.bannerUrl=img.getAttribute("src");S.bannerLink=h;var bo=inOrder("banner");if(bo)bo[1]=1;got.push("banner");return}
+    if(img)return;
+    if(/padding|background|border:/.test(st)&&t){buttons.push({t:t.replace(/^★\s*/,""),h:h});return}
+    if(!web&&/^https?:/i.test(h)&&/\.[a-z]{2,}/i.test(t))web=t});
+  if(tels[0]){S.phone=tels[0];got.push("phone")}if(tels[1]){S.mobile=tels[1]}if(mail){S.email=mail;got.push("email")}if(web){S.website=web;got.push("website")}
+  if(Object.keys(soc).length){S.social=Object.assign({instagram:"",tiktok:"",facebook:"",linkedin:"",whatsapp:"",youtube:"",x:"",google:""},soc);got.push("social links")}
+  var rv=buttons.filter(function(x){return/review|google|rate/i.test(x.t+x.h)})[0],rest=buttons.filter(function(x){return x!==rv});
+  if(rest[0]){S.bookLabel=rest[0].t;S.bookUrl=rest[0].h;got.push("buttons")}else{S.bookLabel=""}
+  if(rv){S.reviewLabel=rv.t;S.reviewUrl=rv.h}else S.reviewLabel="";if(rest[1]){S.extraLabel=rest[1].t;S.extraUrl=rest[1].h}else S.extraLabel="";
+  /* disclaimer */
+  var dis=[].filter.call(b.querySelectorAll("div,p,td"),function(e){return/^disclaimer\b/i.test(txt(e))&&!e.querySelector("div,p,table")})[0];
+  if(dis){var dt=txt(dis),lb=/^([^:]{1,30}:)\s*/.exec(dt);S.disclaimerLabel=lb?lb[1]:"";S.disclaimer=lb?dt.slice(lb[0].length):dt;var dob=inOrder("disclaimer");if(dob)dob[1]=1;got.push("disclaimer")}
+  /* logo and sign-off pictures */
+  [].forEach.call(b.querySelectorAll("img[src]"),function(im){var src=im.getAttribute("src");
+    var so=/signoff\/([a-z]+)\/([a-z-]+)-(dark|blue|purple|green|white)\.(gif|png)/i.exec(src);
+    if(so&&SIGNOFFS[so[2]]){S.signoffFont=so[1];S.signoff=SIGNOFFS[so[2]].text;S.signoffAnimColor=so[3];S.signoffStyle=so[4]==="gif"?"animated":"still";got.push("sign-off");return}
+    if(/logo/i.test(src)||/logo/i.test(im.getAttribute("alt")||"")){if(!/^data:/i.test(src)){S.logoUrl=src;S.logoData="";S.logoShow=true;got.push("logo")}}});
+  if(!got.length)return false;
+  S.useCode=false;save();update();drawFlow();go(STEP);
+  toast("Done: picked up your "+got.filter(function(v,i,a){return a.indexOf(v)===i}).join(", ")+". Icons, spacing and layout can be changed again. Check the preview, then press 💾 Save.");return true}
 function codePanel(){var el=h2('<div class="codebox" id="codeBox"><div class="lbl">HTML code</div><p class="note">'+(S.useCode?"You’re using your own code. Change it below and the preview updates as you type. Copy signature and Copy HTML code use it.":"Change the code by hand, or paste a signature you already have (from another tool, a website or an .html file). The preview shows it straight away.")+'</p>'+
-    '<div class="acts"><button type="button" class="btn sec small" data-k="edit">'+(S.useCode?"Start again from the builder’s design":"Edit this code")+'</button><button type="button" class="btn sec small" data-k="paste">Paste HTML</button><button type="button" class="btn sec small" data-k="file">Open an .html file</button>'+(S.useCode?'<button type="button" class="btn small" data-k="back">Back to the builder’s design</button>':'')+'</div>'+
+    '<div class="acts">'+(S.useCode?'<button type="button" class="btn small" data-k="todesign">✨ Make it editable</button>':'')+'<button type="button" class="btn sec small" data-k="edit">'+(S.useCode?"Start again from the builder’s design":"Edit this code")+'</button><button type="button" class="btn sec small" data-k="paste">Paste HTML</button><button type="button" class="btn sec small" data-k="file">Open an .html file</button>'+(S.useCode?'<button type="button" class="btn small" data-k="back">Back to the builder’s design</button>':'')+'</div>'+
     '<textarea spellcheck="false" autocomplete="off" aria-label="Signature HTML code" placeholder="Paste your signature’s HTML code here">'+esc(S.useCode?S.code:fmtCode(builtHtml()))+'</textarea><input type="file" accept=".html,.htm,text/html" hidden></div>');
   var ta=el.querySelector("textarea"),fi=el.querySelector("input[type=file]"),t=0;
   if(S.useCode&&String(S.code||"").trim())ta.before(codeFields());
@@ -1305,6 +1344,7 @@ function codePanel(){var el=h2('<div class="codebox" id="codeBox"><div class="lb
   el.querySelector('[data-k="paste"]').addEventListener("click",function(){try{navigator.clipboard.readText().then(function(x){if(!x.trim()){toast("Nothing to paste. Copy the HTML code first.");return}use(x,"Your HTML is in. Check the preview.")},function(){ta.value="";ta.focus();toast("Press Ctrl+V (or ⌘V) to paste into the box.")})}catch(e){ta.value="";ta.focus();toast("Press Ctrl+V (or ⌘V) to paste into the box.")}});
   el.querySelector('[data-k="file"]').addEventListener("click",function(){fi.click()});
   fi.addEventListener("change",function(){var f=fi.files[0];if(f)useHtmlFile(f);fi.value=""});
+  var td=el.querySelector('[data-k="todesign"]');if(td)td.addEventListener("click",function(){if(!codeToDesign())toast("Couldn’t read this code.")});
   var bk=el.querySelector('[data-k="back"]');if(bk)bk.addEventListener("click",function(){S.useCode=false;save();update();go(STEP);toast("Back to the builder’s design. Your code is kept: press Edit this code to see the builder’s version.")});
   return el}
 function drawCopy(body){var mi=missing(),off=offline(),len=emailHtml().length,pct=Math.min(100,Math.round(len/100));
@@ -1388,7 +1428,7 @@ function openSig(id){return sigApi({action:"get",id:id}).then(function(j){var d=
     if(Array.isArray(d.order))d.order=expandActions(d.order);if(!validOrder(d.order)){d.order=JSON.parse(JSON.stringify(DEF_ORDER));placeMedia(d,"both",true)}
     S=d;if(!S.maker)S.maker=mkDefaults();S._sigId=j.id;S._sigName=j.name;uploaded={logo:null,photo:null,banner:null};
     if(S.bannerMade&&!url(S.bannerUrl))mkRender(true);save();update();drawFlow();sigTitle();
-    if(S.useCode&&String(S.code||"").trim()){go(STEPS.length-1);setTimeout(function(){var b=document.querySelector(".cfields");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},80);toast("Opened “"+j.name+"”. It’s your own HTML: change its words, links and pictures here, or click text in the preview. Press 💾 Save when done.")}
+    if(S.useCode&&String(S.code||"").trim()){go(STEPS.length-1);setTimeout(function(){var b=document.querySelector(".cfields");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},80);toast("Opened “"+j.name+"”. It’s HTML code: press ✨ Make it editable to change icons, spacing and layout, or change its words here.")}
     else{go(STEP);toast("Opened “"+j.name+"”. Make your changes, then press 💾 Save.")}})}
 function sigTitle(){var b=$("sigSave");if(b)b.title=S._sigId?"Save changes to “"+S._sigName+"”":"Save this signature"}
 function openSigs(askName){
@@ -1491,7 +1531,7 @@ function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard
 function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML='<div id="codeEdit" contenteditable="true" spellcheck="true">'+cleanCode(S.code,true)+'</div>';
     var ce=$("codeEdit");ce.addEventListener("input",function(){var keep=(String(S.code).match(/<style[\s\S]*?<\/style>/gi)||[]).join("");S.code=keep+ce.innerHTML;save();var ta=document.querySelector("#codeBox textarea");if(ta)ta.value=S.code});var ibc=$("inbox");ibc.classList.toggle("phone",S.pvWidth==="phone");ibc.classList.toggle("dark",S.pvMode==="dark");
     document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});$("iconWarn").textContent="Showing your own HTML code. Go to Copy and use → HTML code to change it, or go back to the builder’s design.";
-    var nb=h2('<div class="codenote" contenteditable="false"><span>Your own HTML code: click any text in it to change it. Design changes don’t apply.</span><button type="button" class="btn small">Back to the builder’s design</button></div>');nb.querySelector("button").addEventListener("click",function(){S.useCode=false;save();update();if(STEPS[STEP].id==="copy")go(STEP)});pv.insertBefore(nb,pv.firstChild);return}
+    var nb=h2('<div class="codenote" contenteditable="false"><span>This signature is HTML code, so icons, spacing and layout can’t be changed. Make it editable to change everything.</span><button type="button" class="btn small">✨ Make it editable</button></div>');nb.querySelector("button").addEventListener("click",function(){if(!codeToDesign())toast("Couldn’t read this code. Use Copy and use → HTML code → Back to the builder’s design.")});pv.insertBefore(nb,pv.firstChild);return}
   if(TEST){testView(pv);var ibt=$("inbox");ibt.classList.toggle("phone",S.pvWidth==="phone");ibt.classList.toggle("dark",S.pvMode==="dark");return}
   if(MOVE){visualBoard(pv);var ib0=$("inbox");ib0.classList.toggle("phone",S.pvWidth==="phone");ib0.classList.toggle("dark",S.pvMode==="dark");return}pv.innerHTML=signature("preview");
   var m=pv.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
@@ -1517,6 +1557,7 @@ function init(){
   document.addEventListener("input",leaveCode,true);document.addEventListener("click",leaveCode,true);
   document.querySelectorAll("[data-pv]").forEach(function(g){g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S[g.dataset.pv]=b.dataset.v;update()})});
   document.addEventListener("click",function(e){var sig=$("sig");if(!sig.contains(e.target))return;
+    if(window.innerWidth<=760&&!TEST&&!MOVE&&S.useCode&&String(S.code||"").trim()&&!e.target.closest(".codenote")&&!e.target.closest("#codeEdit")){}
     if(window.innerWidth<=760&&!TEST&&!MOVE&&!(S.useCode&&String(S.code||"").trim())){var t0=e.target.closest("[data-edit]");if(t0){e.preventDefault();editSheet(t0.dataset.edit);return}}if(TEST){if(e.target.closest("a[href]"))return;if(!e.target.closest(".lt-list button"))e.preventDefault();return}e.preventDefault();if(MOVE)return;var t=e.target.closest("[data-edit]");if(!t)return;openItem(t.dataset.edit);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
   $("logoFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;readImg(f,function(r){var im=new Image();im.onload=function(){
       var c=document.createElement("canvas"),w=Math.min(400,im.naturalWidth);c.width=w;c.height=Math.round(w*im.naturalHeight/im.naturalWidth);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
