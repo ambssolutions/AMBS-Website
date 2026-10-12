@@ -227,7 +227,9 @@ header.top p{margin-top:2px!important}
 .pnav{position:static!important;margin:0!important;padding:0!important;border:0!important;display:flex;gap:8px;flex:none}
 .pnav .btn{flex:none!important;min-width:0!important;padding:9px 14px;font-size:.88rem}
 #stepBody{gap:10px!important}
-.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:2px}
+/* every section tab stays in view: tabs wrap onto a second line instead of scrolling off to the side */
+.tabs .tab{flex:1 1 auto;min-width:0;padding:6px 10px}.tabs .tab small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tab{flex:none;font:inherit;text-align:left;display:flex;flex-direction:column;gap:1px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer;max-width:240px}
 .tab b{font-size:.86rem}
 .tab .sum{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -422,6 +424,22 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 .gcard .gk{flex-direction:row;align-items:center;gap:8px;font-weight:500}.gfp{font-size:.82rem;color:var(--muted)}
 .gso{margin-left:8px}
 .codenote{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px;padding:8px 12px;border-radius:10px;background:#fff7e0;border:1px solid #f5d27a;color:#5a4300;font:600 12.5px/1.4 var(--body)}
+.lt-help{margin:0 0 12px;font:600 12px/1.4 var(--body);color:#5b6176;background:#eef6ff;border-radius:8px;padding:6px 10px}
+.lt-list{margin-top:18px;border-top:1px solid #e3e7ef;padding-top:12px;font:13px/1.45 var(--body);color:#14172b}
+.lt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:8px}.lt-h .lt-open{margin-left:auto}
+.lt-ok{color:#1f9e23;font-weight:700}.lt-bad{color:#b45309;font-weight:700}
+.lt-list table{width:100%;border-collapse:collapse}.lt-list td{padding:7px 8px;border-top:1px solid #eef0f5;vertical-align:top}.lt-list td:first-child{width:34%}
+.lt-list tr.bad td{background:#fff7e0}.lt-k{display:inline-block;font:700 10px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:#1877E0;background:#eef6ff;border-radius:999px;padding:3px 7px;margin-right:4px}
+.lt-p{color:#b45309;font-weight:600}.lt-list a{color:#1877E0;font-weight:700}
+.pvopen{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.fpv{position:fixed;inset:0;z-index:50;background:rgba(13,17,34,.72);display:flex;flex-direction:column}
+.fpv-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}.fpv-bar .fpv-x{margin-left:auto}.fpv-note{font-size:.8rem;color:var(--muted)}
+.fpv-stage{flex:1;overflow:auto;padding:24px 16px;display:flex;justify-content:center;align-items:flex-start}
+.fpv-mail{width:100%;max-width:860px;background:#fff;color:#202124;border-radius:12px;box-shadow:0 20px 50px -20px rgba(0,0,0,.6);overflow:hidden;font:14px/1.55 Arial,Helvetica,sans-serif;transition:max-width .25s}
+.fpv.phone .fpv-mail{max-width:390px}
+.fpv-h{padding:14px 20px;border-bottom:1px solid #eceef3}.fpv-from{font-size:14px}.fpv-sub{font-size:18px;margin-top:4px;color:#202124}
+.fpv-body{padding:18px 20px 26px}.fpv-body p{margin:0 0 12px}.fpv-sig{margin-top:22px;overflow-x:auto}.fpv-sig img{max-width:none}
+.fpv.dark .fpv-mail{background:#1f1f1f;color:#e8eaed}.fpv.dark .fpv-h{border-color:#333}.fpv.dark .fpv-sub{color:#e8eaed}
 .vadd{display:flex;flex-direction:column;gap:5px;background:#fff;border:1.5px solid #dfe3ee;border-radius:12px;padding:8px 10px}
 .vpal{background:transparent;padding:0;gap:6px;min-height:0}
 .vpal:hover{border-color:transparent}
@@ -465,7 +483,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 
     <section class="pv-col" aria-label="Preview">
       <div class="bar">
-        <span class="step">Preview <small>click any part to change it</small></span><button type="button" class="bigbtn movebtn" id="movePv" aria-pressed="false">✥ Move or add</button><button type="button" class="bigbtn" id="bigPv" aria-pressed="false">Bigger preview</button>
+        <span class="step">Preview <small>click any part to change it</small></span><button type="button" class="bigbtn movebtn" id="movePv" aria-pressed="false">✥ Move or add</button><button type="button" class="bigbtn movebtn" id="testPv" aria-pressed="false">🔗 Test links</button><button type="button" class="bigbtn pvopen" id="fullPv">👁 Preview</button><button type="button" class="bigbtn" id="bigPv" aria-pressed="false">Bigger preview</button>
         <div class="bar-r">
           <div class="seg" data-pv="pvWidth"><button type="button" data-v="desktop">Laptop</button><button type="button" data-v="phone">Phone</button></div>
           <div class="seg" data-pv="pvMode"><button type="button" data-v="light">Light</button><button type="button" data-v="dark">Dark</button></div>
@@ -527,7 +545,13 @@ function embFilter(lv,id){var e=EMB_LV[lv];return'<filter id="'+id+'" x="-20%" y
   '<feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="b2"/><feSpecularLighting in="b2" surfaceScale="'+e.ss+'" specularConstant=".9" specularExponent="16" lighting-color="#ffffff" result="sp"><fePointLight x="-30" y="-50" z="70"/></feSpecularLighting><feComposite in="sp" in2="SourceAlpha" operator="in" result="spi"/>'+
   '<feComposite in="SourceGraphic" in2="spi" operator="arithmetic" k1="0" k2="1" k3="'+e.k+'" k4="0" result="lit"/><feMerge><feMergeNode in="sh"/><feMergeNode in="lit"/></feMerge></filter>'}
 function embWrap(svg,lv,id){if(!lv)return svg;var m=/^(<svg[^>]*>)([\s\S]*)<\/svg>$/.exec(svg);if(!m)return svg;return m[1]+'<defs>'+embFilter(lv,id||"emb")+'</defs><g filter="url(#'+(id||"emb")+')"><g transform="translate(3 1.5) scale(.875)">'+m[2]+'</g></g></svg>'}
-function iconSvg(name,style,lv){return embWrap(iconSvg0(name,style),lv)}
+/* dark icons get a thin light edge so they still show when an email app turns the background dark
+   (pictures are never recoloured); on a white background the edge can't be seen. White icons get a soft dark edge. */
+function needsHalo(name,style){if(style==="glyph-dark"||style==="dark")return"#ffffff";if(style==="glyph-white")return"#14172b";
+  if((name==="tiktok"||name==="x")&&style!=="grey"&&style!=="glyph-grey")return"#ffffff";return null}
+function haloWrap(svg,col,id){if(!col)return svg;var m=/^(<svg[^>]*>)([\s\S]*)<\/svg>$/.exec(svg);if(!m)return svg;var op=col==="#ffffff"?".95":".55";
+  return m[1]+'<defs><filter id="'+id+'" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="dilate" radius="1.4" result="d"/><feFlood flood-color="'+col+'" flood-opacity="'+op+'"/><feComposite in2="d" operator="in" result="w"/><feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#'+id+')"><g transform="translate(1.44 1.44) scale(.94)">'+m[2]+'</g></g></svg>'}
+function iconSvg(name,style,lv){return haloWrap(embWrap(iconSvg0(name,style),lv),needsHalo(name,style),"halo")}
 function iconSvg0(name,style){
   if(style==="brand")return brandSvg(name);
   if(style==="outline"){var c0=ICON_COLORS[name];return'<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22.5" fill="none" stroke="'+c0+'" stroke-width="3"/><g transform="translate(13 13) scale(.9167)"><path fill="'+c0+'" d="'+ICON_PATHS[name]+'"/></g></svg>'}
@@ -666,7 +690,7 @@ function url(u){u=String(u||"").trim();if(!u)return"";if(/^(https?:|mailto:|tel:
 function socialUrl(k,v){v=String(v||"").trim();if(!v)return"";if(/^https?:\/\//i.test(v))return v;if(/^[\w.-]+\.[a-z]{2,}\//i.test(v))return"https://"+v;var h=v.replace(/^@/,"");
   if(k==="whatsapp")return"https://wa.me/"+v.replace(/\D/g,"");
   return{instagram:"https://instagram.com/"+h,tiktok:"https://www.tiktok.com/@"+h,facebook:"https://facebook.com/"+h,linkedin:"https://www.linkedin.com/company/"+h,youtube:"https://www.youtube.com/@"+h,x:"https://x.com/"+h,google:url(v)}[k]}
-function iconSrc(name,style,mode,lv){lv=+lv||0;return mode==="email"?HOST+style+"-"+name+(lv?"-e"+lv:"")+".png":"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(iconSvg(name,style,lv))}
+function iconSrc(name,style,mode,lv){lv=+lv||0;return mode==="email"?HOST+style+"-"+name+(lv?"-e"+lv:"")+".png?v=2":"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(iconSvg(name,style,lv))}
 function T(extra){return'<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;'+(extra||"")+'">'}
 function img(src,w,h,alt,extra){return'<img src="'+esc(src)+'" width="'+w+'" height="'+h+'" alt="'+esc(alt)+'" style="display:block;border:0;width:'+w+'px;height:'+h+'px;'+(extra||"")+'">'}
 function logoHtml(mode,w){return mode==="email"?logoInner(mode,w):'<div data-edit="logo" style="display:inline-block;">'+logoInner(mode,w)+'</div>'}
@@ -1203,7 +1227,33 @@ function arrangeBoard(){var el=h2('<div class="wide arr"><p class="note">Drag an
   draw();return el}
 /* move mode: the real signature pieces, draggable right in the preview */
 var MOVE=false;
-function setMove(on){if(on&&S.useCode){toast("Move or add works on the builder’s design. Go to Copy and use → HTML code → Back to the builder’s design.");return}MOVE=on;var b=$("movePv");if(b){b.setAttribute("aria-pressed",String(MOVE));b.textContent=MOVE?"✓ Done":"✥ Move or add"}update()}
+/* test links: the finished signature with every link live, and a list of where each one goes */
+var TEST=false;
+function setTest(on){TEST=on;if(on&&MOVE){MOVE=false;var mb=$("movePv");mb.setAttribute("aria-pressed","false");mb.textContent="✥ Move or add"}var b=$("testPv");if(b){b.setAttribute("aria-pressed",String(TEST));b.textContent=TEST?"✓ Done testing":"🔗 Test links"}update()}
+function linkKind(h){if(/^tel:/i.test(h))return["Phone","Calls "+h.slice(4)];if(/^mailto:/i.test(h))return["Email","Writes to "+h.slice(7).split("?")[0]];if(/^sms:/i.test(h))return["Text","Texts "+h.slice(4)];return["Web","Opens "+h.replace(/^https?:\/\//i,"").replace(/\/$/,"")]}
+function linkProblem(h,label){if(!h||h==="#"||/^https?:\/\/?$/i.test(h))return"No link set";if(/^javascript:/i.test(h))return"Not allowed";if(/^http:\/\//i.test(h))return"Not secure (http). Use https";if(/^mailto:/i.test(h)&&!/^mailto:[^@\s]+@[^@\s]+\.[^@\s]+/i.test(h))return"Email address looks wrong";if(/^tel:/i.test(h)&&h.replace(/\D/g,"").length<7)return"Phone number looks too short";if(/^https?:\/\//i.test(h)&&!/^https?:\/\/[^\/\s]+\.[^\/\s]+/i.test(h))return"Web address looks incomplete";return""}
+function testView(pv){var tmp=document.createElement("div");tmp.innerHTML=S.useCode&&String(S.code||"").trim()?cleanCode(S.code,true):signature("preview");tmp.querySelectorAll("[data-edit]").forEach(function(e){e.removeAttribute("data-edit")});
+  var links=[];tmp.querySelectorAll("a").forEach(function(a){var h=a.getAttribute("href")||"";a.setAttribute("target","_blank");a.setAttribute("rel","noopener");a.title=h;var im=a.querySelector("img"),lab=(a.textContent||"").replace(/\s+/g," ").trim()||(im&&im.getAttribute("alt"))||"Picture";links.push({h:h,lab:lab})});
+  pv.innerHTML='<p class="lt-help">Click anything in your signature to try its link. It opens in a new tab, like it would for someone reading your email.</p>'+tmp.innerHTML;
+  var bad=0,rows=links.map(function(l){var k=linkKind(l.h),pr=linkProblem(l.h,l.lab);if(pr)bad++;return'<tr'+(pr?' class="bad"':'')+'><td><b>'+esc(l.lab)+'</b></td><td><span class="lt-k">'+k[0]+'</span> '+esc(k[1])+(pr?'<br><span class="lt-p">⚠ '+esc(pr)+'</span>':'')+'</td><td>'+(l.h&&!/^javascript:/i.test(l.h)?'<a href="'+esc(l.h)+'" target="_blank" rel="noopener">Try it</a>':'')+'</td></tr>'}).join("");
+  pv.appendChild(h2('<div class="lt-list"><div class="lt-h"><b>'+links.length+' link'+(links.length===1?"":"s")+'</b>'+(bad?'<span class="lt-bad">'+bad+' need'+(bad===1?"s":"")+' a look</span>':'<span class="lt-ok">All look right ✓</span>')+'<button type="button" class="btn sec small lt-open">Open the signature on its own</button></div><table>'+(rows||'<tr><td>No links yet.</td></tr>')+'</table></div>'));
+  pv.querySelector(".lt-open").addEventListener("click",function(){var html='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc((S.name||"Signature")+" – signature")+'</title><base target="_blank"></head><body style="margin:0;padding:32px 20px;background:#ffffff;">'+emailHtml()+'</body></html>';
+    var w=window.open(URL.createObjectURL(new Blob([html],{type:"text/html"})),"_blank");if(!w)toast("Your browser blocked the new tab. Allow pop-ups for this page and try again.")})}
+/* full-screen preview: the signature in an email, as the person you write to sees it, with live links */
+function openPreview(){var mode="light",dev="laptop";
+  var ov=h2('<div class="fpv" role="dialog" aria-modal="true" aria-label="Signature preview"><div class="fpv-bar"><b>Preview</b><div class="seg" data-k="dev"><button type="button" data-v="laptop">Laptop</button><button type="button" data-v="phone">Phone</button></div><div class="seg" data-k="mode"><button type="button" data-v="light">Light</button><button type="button" data-v="dark">Dark</button></div><span class="fpv-note">Links work: click to try them.</span><button type="button" class="btn small fpv-x">Close</button></div><div class="fpv-stage"><div class="fpv-mail"><div class="fpv-h"><div class="fpv-from"></div><div class="fpv-sub">Re: Thanks for your time today</div></div><div class="fpv-body"><p>Hi Sam,</p><p>Great to speak with you today. I’ve attached the notes from our call, and I’m happy to help with the next steps whenever suits.</p><div class="fpv-sig"></div></div></div></div></div>');
+  var sig=ov.querySelector(".fpv-sig"),tmp=document.createElement("div");tmp.innerHTML=S.useCode&&String(S.code||"").trim()?cleanCode(S.code,true):signature("preview");
+  tmp.querySelectorAll("[data-edit]").forEach(function(e){e.removeAttribute("data-edit")});tmp.querySelectorAll("a").forEach(function(a){a.target="_blank";a.rel="noopener";a.title=a.getAttribute("href")||""});sig.innerHTML=tmp.innerHTML;
+  ov.querySelector(".fpv-from").innerHTML='<b>'+esc(S.name||"You")+'</b> '+(S.email?'&lt;'+esc(S.email)+'&gt;':'');
+  var paint=function(){ov.classList.toggle("dark",mode==="dark");ov.classList.toggle("phone",dev==="phone");ov.querySelectorAll(".seg").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.v===(g.dataset.k==="mode"?mode:dev)))})});
+    /* dark inbox: dark text turns light, like Gmail and Outlook; pictures stay as they are */
+    sig.querySelectorAll("[style*='color']").forEach(function(el){if(el.dataset.c0==null)el.dataset.c0=el.style.color;el.style.color=el.dataset.c0});
+    if(mode==="dark")sig.querySelectorAll("[style*='color']").forEach(function(el){var c=getComputedStyle(el).color.match(/\d+/g);if(!c)return;var L=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255,sat=Math.max(c[0],c[1],c[2])-Math.min(c[0],c[1],c[2]);if(L<0.42&&sat<60)el.style.color=L<0.25?"#e8eaed":"#bdc1c6"})};
+  ov.querySelectorAll(".seg").forEach(function(g){g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;if(g.dataset.k==="mode")mode=b.dataset.v;else dev=b.dataset.v;paint()})});
+  var close=function(){ov.remove();document.removeEventListener("keydown",esc1)},esc1=function(e){if(e.key==="Escape")close()};
+  ov.querySelector(".fpv-x").addEventListener("click",close);document.addEventListener("keydown",esc1);ov.addEventListener("click",function(e){if(e.target===ov)close()});
+  document.body.appendChild(ov);paint();ov.querySelector(".fpv-x").focus()}
+function setMove(on){if(on&&TEST)setTest(false);if(on&&S.useCode){toast("Move or add works on the builder’s design. Go to Copy and use → HTML code → Back to the builder’s design.");return}MOVE=on;var b=$("movePv");if(b){b.setAttribute("aria-pressed",String(MOVE));b.textContent=MOVE?"✓ Done":"✥ Move or add"}update()}
 /* things you can add to any template from the preview */
 var ADDABLE=[["book","Booking button","📅"],["review","Review button","★"],["extra","Extra button","▭"],["social","Social icons","◎"],["logo","Logo","◆"],["photo","Photo","☺"],["tagline","Tagline","❞"],["rainbow","Brand stripe","≡"],["banner","Banner","▬"],["disclaimer","Disclaimer","§"],
   ["c:button","New button","＋"],["c:text","Text line","T"],["c:link","Link","↗"],["c:image","Picture or badge","▣"],["c:quote","Quote","❝"],["c:divider","Divider line","—"],["c:spacer","Space","↕"]];
@@ -1266,6 +1316,7 @@ function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard
 function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML=cleanCode(S.code,true);var ibc=$("inbox");ibc.classList.toggle("phone",S.pvWidth==="phone");ibc.classList.toggle("dark",S.pvMode==="dark");
     document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});$("iconWarn").textContent="Showing your own HTML code. Go to Copy and use → HTML code to change it, or go back to the builder’s design.";
     var nb=h2('<div class="codenote"><span>Showing your own HTML code, so design changes don’t apply.</span><button type="button" class="btn small">Back to the builder’s design</button></div>');nb.querySelector("button").addEventListener("click",function(){S.useCode=false;save();update();if(STEPS[STEP].id==="copy")go(STEP)});pv.insertBefore(nb,pv.firstChild);return}
+  if(TEST){testView(pv);var ibt=$("inbox");ibt.classList.toggle("phone",S.pvWidth==="phone");ibt.classList.toggle("dark",S.pvMode==="dark");return}
   if(MOVE){visualBoard(pv);var ib0=$("inbox");ib0.classList.toggle("phone",S.pvWidth==="phone");ib0.classList.toggle("dark",S.pvMode==="dark");return}pv.innerHTML=signature("preview");
   var m=pv.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
   markSel();
@@ -1288,7 +1339,7 @@ function init(){
     S.useCode=false;save();toast("Back to the builder’s design. Your HTML code is kept in Copy and use → HTML code.");setTimeout(update,0)};
   document.addEventListener("input",leaveCode,true);document.addEventListener("click",leaveCode,true);
   document.querySelectorAll("[data-pv]").forEach(function(g){g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S[g.dataset.pv]=b.dataset.v;update()})});
-  document.addEventListener("click",function(e){var sig=$("sig");if(!sig.contains(e.target))return;e.preventDefault();if(MOVE)return;var t=e.target.closest("[data-edit]");if(!t)return;openItem(t.dataset.edit);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
+  document.addEventListener("click",function(e){var sig=$("sig");if(!sig.contains(e.target))return;if(TEST){if(e.target.closest("a[href]"))return;if(!e.target.closest(".lt-list button"))e.preventDefault();return}e.preventDefault();if(MOVE)return;var t=e.target.closest("[data-edit]");if(!t)return;openItem(t.dataset.edit);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
   $("logoFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;readImg(f,function(r){var im=new Image();im.onload=function(){
       var c=document.createElement("canvas"),w=Math.min(400,im.naturalWidth);c.width=w;c.height=Math.round(w*im.naturalHeight/im.naturalWidth);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
       S.logoData=c.toDataURL("image/png");S.logoRatio=im.naturalHeight/im.naturalWidth;S.logoShow=true;
@@ -1298,7 +1349,7 @@ function init(){
   $("bannerFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){uploaded.banner=r;if(/\/assets\/email\/made\//.test(S.bannerUrl||""))S.bannerUrl="";inOrder("banner")[1]=1;changed();openItem("banner");toast("Banner previewed")})});
   var rs=$("reset"),armed=0;rs.addEventListener("click",function(){if(!armed){armed=1;rs.textContent="Click again to clear";setTimeout(function(){armed=0;rs.textContent="Start again"},3000);return}
     armed=0;rs.textContent="Start again";uploaded={logo:null,photo:null,banner:null};S=defaults();S.maker=mkDefaults();visited={0:1};changed();go(0);toast("Back to the AMBS example")});
-  $("movePv").addEventListener("click",function(){setMove(!MOVE)});
+  $("movePv").addEventListener("click",function(){setMove(!MOVE)});$("testPv").addEventListener("click",function(){setTest(!TEST)});$("fullPv").addEventListener("click",openPreview);
   $("bigPv").addEventListener("click",function(){var on=document.querySelector(".app").classList.toggle("big");this.setAttribute("aria-pressed",String(on));this.textContent=on?"Smaller preview":"Bigger preview"});
   $("copySig").addEventListener("click",function(){copySig(this)});$("copyCode").addEventListener("click",function(){copyCode(this)});
   $("prevStep").addEventListener("click",function(){go(STEP-1)});$("nextStep").addEventListener("click",function(){go(STEP+1);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
