@@ -44,13 +44,16 @@
      "x": "",
      "google": ""
     },
-    "brandP": "#2563eb",
-    "brandS": "#0f766e",
-    "brandA": "#f59e0b",
+    "brandP": "#24b328",
+    "brandS": "#1877E0",
+    "brandA": "#7B2FBE",
     "palette": [
-     "#2563eb",
-     "#0f766e",
-     "#f59e0b"
+     "#E5352B",
+     "#FF8A00",
+     "#F5B800",
+     "#24b328",
+     "#1877E0",
+     "#7B2FBE"
     ],
     "logoRatio": 0.365,
     "logoData": "",
@@ -211,14 +214,16 @@
      },
      "logo": {
       "dx": -16,
-      "dy": 3
+      "dy": 3,
+      "align": "left"
      },
      "banner": {
-      "dy": -7,
+      "dy": -12,
       "dx": -2
      },
      "social": {
-      "dy": -4
+      "dy": -4,
+      "dx": -8
      }
     },
     "maker": {
@@ -249,7 +254,7 @@
     "bannerMade": true,
     "lineLen": 89
    },
-   "updated": "2026-10-12T21:04:11.039Z",
+   "updated": "2026-10-12T21:05:40.530Z",
    "by": "hello@ambs.co.nz"
   }
  ]
