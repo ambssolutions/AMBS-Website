@@ -125,19 +125,19 @@
       0
      ],
      [
+      "rainbow",
+      0,
+      "under",
+      0
+     ],
+     [
       "banner",
-      1,
+      0,
       "under",
       0
      ],
      [
       "disclaimer",
-      1,
-      "under",
-      0
-     ],
-     [
-      "rainbow",
       0,
       "under",
       0
@@ -164,7 +164,7 @@
     "textSize": 13,
     "rainbowW": 220,
     "iconStyle": "brand",
-    "iconSize": 36,
+    "iconSize": 35,
     "contactIcons": "glyph-dark",
     "btnStyle": "filled",
     "btnRadius": 20,
@@ -217,10 +217,12 @@
      "h": 160
     },
     "custom": [],
-    "btnGap": 11,
-    "contactGap": 3
+    "pieceGap": 10,
+    "iconGap": 5,
+    "btnGap": 7,
+    "contactGap": 5
    },
-   "updated": "2026-10-12T17:19:19.159Z",
+   "updated": "2026-10-12T17:37:08.957Z",
    "by": "hello@ambs.co.nz"
   }
  ]
