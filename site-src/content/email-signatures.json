@@ -66,7 +66,7 @@
     "logoUrl": "https://ambs.co.nz/logo-400.png",
     "divider": "rainbow",
     "dividerW": 5,
-    "lineGapL": 16,
+    "lineGapL": 17,
     "lineGapR": 9,
     "order": [
      [
@@ -200,7 +200,7 @@
       "bold": true,
       "italic": false,
       "color": "#14172b",
-      "dy": -2
+      "dy": -4
      },
      "disclaimer": {
       "size": 12,
@@ -263,13 +263,13 @@
     "btnGap": 7,
     "contactGap": 0,
     "bannerMade": true,
-    "lineLen": 89,
+    "lineLen": 100,
     "pvChosen": true,
     "btnPadY": 9,
-    "contactIconGap": 3,
+    "contactIconGap": 1,
     "contactSep": ""
    },
-   "updated": "2026-10-13T09:20:53.376Z",
+   "updated": "2026-10-13T09:25:22.979Z",
    "by": "hello@ambs.co.nz"
   },
   {
