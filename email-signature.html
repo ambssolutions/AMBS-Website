@@ -84,6 +84,11 @@ details.more{grid-column:1/-1;border:1px solid #e2e8f0;border-radius:12px;margin
 }
 .pwarn{margin:10px 10px 0!important;display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;background:#fff7e6;border:1px solid #f5c26b;color:#5b3b00;border-radius:12px;padding:8px 12px;font-size:.82rem;line-height:1.35;margin:0 0 8px}.pwarn[hidden]{display:none!important}.pwarn .pw-b{display:flex;gap:6px;flex-wrap:wrap}
 .inbox.phone #sig [data-edit="banner"] img{max-width:100%!important;height:auto!important}.inbox.phone #sig [data-edit="banner"] table{max-width:100%}
+header.top .hbtn{min-width:38px;justify-content:center;font-size:1.05rem!important;padding-left:10px!important;padding-right:10px!important}header.top .hbtn:disabled{opacity:.35;cursor:default}
+@media (min-width:761px){header.top #undoBtn{order:0}header.top #redoBtn{order:0;margin-right:6px}}
+@media (max-width:760px){header.top #undoBtn,header.top #redoBtn{display:inline-flex!important}}
+.pguide{position:absolute;z-index:3;pointer-events:none;border-right:2px dashed #e5352b;box-sizing:border-box}.pguide.fits{border-right-color:#24b328}.pguide .pg-l{position:absolute;right:4px;top:4px;white-space:nowrap;background:#e5352b;color:#fff;font:600 10px/1 system-ui,sans-serif;padding:3px 6px;border-radius:6px}.pguide.fits .pg-l{background:#24b328}.pguide .pg-over{position:absolute;left:100%;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(229,53,43,.10) 0 6px,rgba(229,53,43,.03) 6px 12px)}.pguide[hidden],.pguide .pg-over[hidden]{display:none}
+#pgBtn[aria-pressed=true]{background:#14172b;color:#fff;border-color:#14172b}
 .mytpl{border:1px dashed #cbd5e1;border-radius:14px;padding:10px 12px;margin:0 0 12px}.mytpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.mytpl .note{margin:0}.tcard.mine{position:relative;cursor:pointer}.tdel{position:absolute;top:6px;right:6px;border:0;border-radius:999px;background:rgba(15,23,42,.72);color:#fff;font:600 12px/1 inherit;padding:5px 8px;cursor:pointer}.tdel.on{background:#dc2626}
 .panel .mytpl .tpl-grid{max-height:none!important}
 .tcard{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
@@ -605,7 +610,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
       <h1>Email Signature Builder</h1>
       <p>For any business. Six short steps. The preview updates as you go, and you can click any part of it to change that part.</p>
     </div>
-    <button type="button" class="btn sec small" id="sigNew">＋ <span class="tx">New signature</span></button><button type="button" class="btn small" id="sigSave">💾 <span class="tx">Save</span></button><button type="button" class="btn sec small" id="menuBtn" aria-label="Menu">☰ <span class="tx">Menu</span></button><button type="button" class="btn sec small" id="sigList" aria-label="My signatures">📂 <span class="tx">My signatures</span></button><button type="button" class="btn sec small" id="htmlUp" aria-label="Upload HTML">📄 <span class="tx">Upload HTML</span></button><input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden><button type="button" class="btn sec small" id="reset">Start again</button>
+    <button type="button" class="btn sec small hbtn" id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>↶</button><button type="button" class="btn sec small hbtn" id="redoBtn" title="Redo (Ctrl+Y)" aria-label="Redo" disabled>↷</button><button type="button" class="btn sec small" id="sigNew">＋ <span class="tx">New signature</span></button><button type="button" class="btn small" id="sigSave">💾 <span class="tx">Save</span></button><button type="button" class="btn sec small" id="menuBtn" aria-label="Menu">☰ <span class="tx">Menu</span></button><button type="button" class="btn sec small" id="sigList" aria-label="My signatures">📂 <span class="tx">My signatures</span></button><button type="button" class="btn sec small" id="htmlUp" aria-label="Upload HTML">📄 <span class="tx">Upload HTML</span></button><input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden><button type="button" class="btn sec small" id="reset">Start again</button>
   </header>
 
   <div class="app">
@@ -829,7 +834,16 @@ function load(){var d=defaults();d.maker=null;d.custom=[];try{var raw=localStora
     if(o._sigId){d._sigId=o._sigId;d._sigName=o._sigName}
     /* an AMBS signature with no logo set gets the AMBS logo back */
     if(!d.logoData&&!String(d.logoUrl||"").trim()&&/ambs/i.test(d.company||""))d.logoUrl="https://ambs.co.nz/logo-400.png";if(/ambs/i.test(d.company||"")&&d.social&&!String(d.social.instagram||"").trim())d.social.instagram="ambssolutions";fixOrder(d)}}catch(e){}return d}
-function save(){try{localStorage.setItem("ambs-sig-builder-2",JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem("ambs-sig-builder-2",JSON.stringify(S))}catch(e){}histPush()}
+/* undo and redo: a snapshot after each change settles (typing a word counts as one change) */
+var HIST=[],HI=-1,HT=0,HLOCK=0;
+function histPush(now){if(HLOCK)return;clearTimeout(HT);var take=function(){var j;try{j=JSON.stringify(S)}catch(e){return}if(HIST[HI]===j)return;HIST=HIST.slice(0,HI+1);HIST.push(j);if(HIST.length>80)HIST.shift();HI=HIST.length-1;histBtns()};if(now)take();else HT=setTimeout(take,450)}
+function histBtns(){var u=$("undoBtn"),r=$("redoBtn");if(u)u.disabled=HI<=0;if(r)r.disabled=HI>=HIST.length-1}
+function histGo(d){clearTimeout(HT);var cur;try{cur=JSON.stringify(S)}catch(e){}if(d<0&&cur!==HIST[HI]){histPush(true)}
+  var n=HI+d;if(n<0||n>=HIST.length){toast(d<0?"Nothing more to undo.":"Nothing to redo.");return}
+  HI=n;HLOCK=1;var keep={_sigId:S._sigId,_sigName:S._sigName};S=JSON.parse(HIST[HI]);if(keep._sigId){S._sigId=keep._sigId;S._sigName=keep._sigName}
+  try{localStorage.setItem("ambs-sig-builder-2",JSON.stringify(S))}catch(e){}
+  if(S.bannerMade&&!url(S.bannerUrl)&&S.maker)mkRender(true);update();drawFlow();go(STEP);histBtns();setTimeout(function(){HLOCK=0},600);toast(d<0?"Undone":"Redone")}
 var uploaded={logo:null,photo:null,banner:null};
 
 /* ---------- making the signature (email-safe tables, inline styles) ---------- */
@@ -972,6 +986,9 @@ function colPad(id,va,base,noSide){var c=st(id),my=+c.dy||0,pd=Math.max(0,+c.pad
 /* the line moves up and down inside the space beside the text, so it never pushes the text */
 /* the space above the first part underneath (like a banner): moving that part up takes from this space */
 function underGap(){var f=S.order.filter(function(o){return o[1]&&o[2]==="under"&&(block(o[0],"preview")||block(o[0],"email"))})[0],dy=f?Math.min(0,+st(f[0]).dy||0):0;return Math.max(0,S.gap+8+dy)}
+/* banner height: a banner made here is redrawn taller or shorter; a picture you uploaded keeps its own shape */
+function bannerHeight(d){if(!S.bannerMade||!S.maker){toast("Height changes work for banners made here (Make one). For your own picture, change the width, or make it a different size first.");return}
+  var h=Math.max(120,Math.min(320,(+S.maker.h||180)+d));if(h===(+S.maker.h||180)){toast(d<0?"That’s the shortest it goes.":"That’s the tallest it goes.");return}S.maker.h=h;save();mkRender(true);toast("Banner height: "+h+" (of 1200 wide)")}
 function lineFree(){return Math.max(0,barH-lineLen())}
 function lineTop(){var f=lineFree(),dy=+((S.st.line||{}).dy)||0;return Math.max(0,Math.min(f,Math.round(f/2+dy)))}
 function lineLen(){var p=S.lineLen==null||S.lineLen===""?100:+S.lineLen;return Math.max(10,Math.round(barH*p/100))}
@@ -1679,7 +1696,7 @@ function openSig(id){return sigApi({action:"get",id:id}).then(function(j){var d=
     mergeState(d,o);delete d._sigId;delete d._sigName;
     fixOrder(d);
     S=d;["logo","photo"].forEach(function(k){var o=inOrder(k);if(o&&(o[2]==="left"||o[2]==="right"))colNorm(k)});if(!S.maker)S.maker=mkDefaults();S._sigId=j.id;S._sigName=j.name;uploaded={logo:null,photo:null,banner:null};
-    if(S.bannerMade&&!url(S.bannerUrl))mkRender(true);save();update();drawFlow();sigTitle();
+    if(S.bannerMade&&!url(S.bannerUrl))mkRender(true);HIST=[];HI=-1;save();histPush(true);update();drawFlow();sigTitle();
     if(S.useCode&&String(S.code||"").trim()){go(STEPS.length-1);setTimeout(function(){var b=document.querySelector(".cfields");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},80);toast("Opened “"+j.name+"”. It’s HTML code: press ✨ Make it editable to change icons, spacing and layout, or change its words here.")}
     else{go(STEP);toast("Opened “"+j.name+"”. Make your changes, then press 💾 Save.")}})}
 function sigTitle(){var b=$("sigSave");if(b)b.title=S._sigId?"Save changes to “"+S._sigName+"”":"Save this signature"}
@@ -1712,6 +1729,16 @@ function useHtmlFile(f){if(f.size>2*1024*1024){toast("That file is over 2 MB. Is
 /* on a phone the signature is shrunk to fit the preview card (it's still sent full size) */
 /* shrink the preview so the whole signature fits the preview box, across and down (Bigger preview shows it full size) */
 var PHONE_W=336;
+/* laptop preview: a dashed line where a phone screen ends; anything shaded past it moves down on phones */
+function phoneGuide(){var box=$("inbox"),sig=$("sig");if(!box||!sig)return;var g=$("phoneGuide");
+  var on=S.phoneGuide!==false&&S.pvWidth!=="phone"&&!MOVE&&!TEST&&!(S.useCode&&String(S.code||"").trim());
+  if(!on){if(g)g.hidden=true;return}
+  if(!g){g=h2('<div id="phoneGuide" class="pguide" aria-hidden="true"><span class="pg-l">📱 Phone width</span><span class="pg-over"></span></div>');box.appendChild(g)}
+  var z=+sig.style.zoom||1,r=sig.getBoundingClientRect(),b=box.getBoundingClientRect(),w=PHONE_W*z,nw=sigNaturalWidth(),over=Math.max(0,nw*z-w);
+  g.hidden=false;g.style.left=(r.left-b.left+box.scrollLeft)+"px";g.style.top=(r.top-b.top+box.scrollTop)+"px";g.style.width=w+"px";g.style.height=r.height+"px";
+  var o=g.querySelector(".pg-over"),under=S.order.filter(function(x){return x[2]==="under"}).map(function(x){return x[0]}),bot=0;
+  sig.querySelectorAll("[data-edit]").forEach(function(e){if(under.indexOf(e.dataset.edit)>=0||under.some(function(u){return e.closest('[data-edit="'+u+'"]')}))return;bot=Math.max(bot,e.getBoundingClientRect().bottom-r.top)});
+  o.style.width=over+"px";o.style.bottom="auto";o.style.height=(bot||r.height)+"px";o.hidden=!over;g.classList.toggle("fits",nw<=PHONE_W+4)}
 /* how wide the signature is when nothing wraps; wider than a phone means lines move down in the Outlook phone app */
 function sigNaturalWidth(){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;";d.innerHTML=signature("preview");document.body.appendChild(d);
   /* only the parts that can't shrink: the banner, disclaimer and other parts underneath already fit a phone */
@@ -1769,7 +1796,7 @@ function newSig(keepBrand){var old=S,d=defaults();d.maker=mkDefaults();
   else{Object.assign(d,{company:"",website:"",location:"",phone:"",logoUrl:"",logoData:"",logoShow:false,brandP:"#2563eb",brandS:"#0f766e",brandA:"#f59e0b",palette:["#2563eb","#0f766e","#f59e0b"],bookLabel:"",bookUrl:"",reviewLabel:"",reviewUrl:"",extraLabel:"",extraUrl:"",bannerUrl:"",bannerLink:"",tagline:"",social:{instagram:"",tiktok:"",facebook:"",linkedin:"",whatsapp:"",youtube:"",x:"",google:""},disclaimer:"This email and any attachments are confidential and meant only for the person they are addressed to. If you received it by mistake, please let us know and delete it."});placeMedia(d,"both",true)}
   d.name="Your Name";d.role="Your role";d.mobile="";d.email="";d.photoUrl="";d.photoData="";d.useCode=false;d.code="";
   if(keepBrand&&old.bannerMade&&!url(old.bannerUrl)&&uploaded.banner){}else uploaded={logo:null,photo:null,banner:null};
-  S=d;visited={0:1};save();update();drawFlow();sigTitle();go(keepBrand?2:0);
+  S=d;visited={0:1};HIST=[];HI=-1;save();histPush(true);update();drawFlow();sigTitle();go(keepBrand?2:0);
   toast(keepBrand?"New signature with the same brand. Add the person’s details, then press 💾 Save.":"New signature. Start with your brand, then press 💾 Save.")}
 function askNew(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" aria-label="New signature"><div class="sbox"><div class="sh"><b>New signature</b><button type="button" class="btn sec small sx">Cancel</button></div>'+
     (S._sigId?'<p class="note">“'+esc(S._sigName)+'” stays saved in My signatures.</p>':'<p class="note">Tip: press 💾 Save first if you want to keep the one you have now.</p>')+
@@ -1790,7 +1817,7 @@ function grabSpec(id){var ts=function(k,def){return{k:"st."+k+".size",min:k==="d
   if(id==="logo")return{se:{k:"logoSize",min:30,max:220,f:1,def:130,lbl:"Size"}};
   if(id==="photo")return{se:{k:"photoSize",min:56,max:160,f:1,def:96,lbl:"Size"}};
   if(id==="line")return{s:{k:"lineLen",min:20,max:150,f:"len",def:100,lbl:"Length"},e:{k:"dividerW",min:1,max:10,f:.5,def:3,lbl:"Thickness"}};
-  if(id==="banner")return{e:{k:"bannerW",min:200,max:640,f:1,def:460,lbl:"Width"}};
+  if(id==="banner")return S.bannerMade?{e:{k:"bannerW",min:200,max:640,f:1,def:460,lbl:"Width"},s:{k:"maker.h",min:120,max:320,f:2,def:180,lbl:"Height"}}:{e:{k:"bannerW",min:200,max:640,f:1,def:460,lbl:"Width"}};
   if(id==="rainbow")return{e:{k:"rainbowW",min:60,max:420,f:1,def:220,lbl:"Length"}};
   if(id==="social")return{se:{k:"iconSize",min:16,max:36,f:.3,def:26,lbl:"Size"}};
   if(isBtn(id)&&String(id).indexOf("c-")<0)return{e:{k:"btnPadX",min:2,max:32,f:.5,def:14,lbl:"Width"},s:{k:"btnFont",min:9,max:18,f:.25,def:13,lbl:"Text size"}};
@@ -1816,7 +1843,7 @@ function grabWire(g){
   g.addEventListener("pointerdown",function(e){if(!KEYPART)return;e.preventDefault();e.stopPropagation();var h=e.target.dataset&&e.target.dataset.h,id=KEYPART,sp=h?grabSpec(id)[h]:null,z=+($("sig").style.zoom)||1;
     GRAB={id:id,h:h,sp:sp,x:e.clientX,y:e.clientY,z:z,start:sp?grabGet(sp):0,mx:0,my:0,moved:0,raf:0,ev:null};GRAB_ON=true;g.classList.add("on");var qq=$("qbar");if(qq)qq.hidden=true;try{g.setPointerCapture(e.pointerId)}catch(err){}});
   g.addEventListener("pointermove",function(e){if(!GRAB)return;GRAB.ev={x:e.clientX,y:e.clientY};if(GRAB.raf)return;GRAB.raf=requestAnimationFrame(function(){GRAB.raf=0;var G=GRAB;if(!G||!G.ev)return;var dx=(G.ev.x-G.x)/G.z,dy=(G.ev.y-G.y)/G.z,tag=g.querySelector(".gtag");
-      if(G.sp){var t=G.h==="e"?dx:G.h==="s"?dy:(dx+dy)/2,v=G.sp.f==="len"?G.start+dy*2/Math.max(20,barH)*100:G.start+t*G.sp.f;v=grabSet(G.sp,v);save();update();tag.textContent=G.sp.lbl+": "+v+(G.sp.f==="len"?"%":"px");G.moved=1}
+      if(G.sp){var t=G.h==="e"?dx:G.h==="s"?dy:(dx+dy)/2,v=G.sp.f==="len"?G.start+dy*2/Math.max(20,barH)*100:G.start+t*G.sp.f;v=grabSet(G.sp,v);save();if(G.sp.k==="maker.h")mkRender(true);else update();tag.textContent=G.sp.lbl+": "+v+(G.sp.f==="len"?"%":"px");G.moved=1}
       else{var ix=Math.trunc(dx-G.mx),iy=Math.trunc(dy-G.my);if(ix||iy){var t0=toast;toast=function(){};try{moveBy(G.id,ix,iy)}finally{toast=t0}G.mx+=ix;G.my+=iy;G.moved=1;var c=S.st[G.id]||{};tag.textContent=G.id==="line"?"Logo gap "+S.lineGapL+"px · text gap "+S.lineGapR+"px":"Moved "+(c.dx||0)+"px across, "+(c.dy||0)+"px down"}}})});
   var end=function(){if(!GRAB)return;var G=GRAB;GRAB=null;GRAB_ON=false;g.classList.remove("on");if(G.moved){var id=G.id;if(document.querySelector(".esheet"))editSheet(id);else if(window.innerWidth>760)openItem(id);KEYPART=id;placeGrab();syncLineRanges()}};
   g.addEventListener("pointerup",end);g.addEventListener("pointercancel",end)}
@@ -1835,7 +1862,7 @@ function drawQbar(force){var box=$("inbox"),q=$("qbar"),g=$("grabBox"),id=KEYPAR
   if(force||QB_ID!==id||!q.contains(document.activeElement)){QB_ID=id;q.innerHTML="";var add=function(h,fn,ev){var el=h2(h);if(fn)el.addEventListener(ev||"click",function(e){e.preventDefault&&ev!=="input"&&e.preventDefault();fn(e,el)});q.appendChild(el);return el};
     add('<b class="qn">'+esc(qbName(id))+'</b>');
     var tk=QB_TEXT[id];if(tk&&!(id==="signoff"&&(S.signoffStyle==="animated"||S.signoffStyle==="still"))){var ti=add('<input class="qt" type="text" aria-label="Words">',function(e,el){setP(tk,el.value);save();update()},"input");ti.value=getP(tk)||""}
-    var sp=grabSpec(id);["se","e","s"].forEach(function(h){var x=sp[h];if(!x)return;var st=QB_STEP[x.k]||(x.k.indexOf("st.")===0?1:x.k.indexOf("custom:")===0?10:2),lbl=x.lbl.replace("Text size","Aa");
+    var sp=grabSpec(id);["se","e","s"].forEach(function(h){var x=sp[h];if(!x||x.k==="maker.h")return;var st=QB_STEP[x.k]||(x.k.indexOf("st.")===0?1:x.k.indexOf("custom:")===0?10:2),lbl=x.lbl.replace("Text size","Aa");
       var w=add('<span class="qs"><button type="button" aria-label="'+esc(x.lbl)+' smaller">−</button><small>'+esc(lbl)+'</small><button type="button" aria-label="'+esc(x.lbl)+' bigger">+</button></span>');
       w.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){var v=grabSet(x,grabGet(x)+(i?st:-st));save();update();toast(x.lbl+": "+v+(x.f==="len"?"%":"px"))})})});
     var ck=QB_COL[id];if(ck){var el0=grabEl(id),inner=el0&&(el0.querySelector(isBtn(id)?"a":"td,span,div,a")||el0),cur=getP(ck);cur=cur&&cur.charAt(0)!=="@"?cur:toHex(isBtn(id)?getComputedStyle(inner).backgroundColor:getComputedStyle(inner).color);
@@ -1853,7 +1880,9 @@ function drawQbar(force){var box=$("inbox"),q=$("qbar"),g=$("grabBox"),id=KEYPAR
     if(id==="contact"){cyc("Layout","contactLayout",[["stack","One per line"],["pairs","Two per line"],["line","One line"]]);cyc("Icons","contactIcons",[["letters","Letters"],["glyph","Colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["brand","Circles"],["outline","Outline"],["none","None"]])}
     if(id==="social"){if(window.ICON_STYLES)cyc("Style","iconStyle",ICON_STYLES.map(function(x){return[x[0],x[1]]}));opts("Accounts",more)}
     if(isBtn(id)&&String(id).indexOf("c-")<0){cyc("Look","btnStyle",[["filled","Filled"],["outline","Outline"],["link","Text link"]]);lnk(id+"Url","Link")}
-    if(id==="banner"){opts("Change picture",function(){$("bannerFile").click()});opts("Make one",function(){more();setTimeout(function(){var m=document.querySelector(".mk");if(m){var d=m.closest("details");if(d)d.open=true;m.scrollIntoView({block:"start",behavior:"smooth"})}},250)});lnk("bannerLink","Link")}
+    if(id==="banner"){var bh=add('<span class="qs" title="Banner height"><button type="button" aria-label="Banner shorter">−</button><small>Height</small><button type="button" aria-label="Banner taller">+</button></span>');
+      bh.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){bannerHeight(i?10:-10)})});
+      opts("Change picture",function(){$("bannerFile").click()});opts("Make one",function(){more();setTimeout(function(){var m=document.querySelector(".mk");if(m){var d=m.closest("details");if(d)d.open=true;m.scrollIntoView({block:"start",behavior:"smooth"})}},250)});lnk("bannerLink","Link")}
     if(id==="signoff")cyc("Style","signoffStyle",SO_STYLES);
     if(id==="photo"){opts("Change photo",function(){$("photoFile").click()});cyc("Shape","photoShape",[["circle","Circle"],["rounded","Rounded"],["square","Square"]])}
     if(id==="disclaimer"){opts("Edit text",function(){more();setTimeout(function(){var t=document.querySelector('.part[data-part="disclaimer"] textarea');if(t){t.focus();t.scrollIntoView({block:"center"})}},250)});cyc("Justify","disclaimerJustify",[[true,"On"],[false,"Off"]])}
@@ -1967,7 +1996,7 @@ function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons()
   $("fromLine").textContent=(S.name||"You")+(S.email?" <"+S.email+">":"");
   var mi=missing(),w=$("iconWarn");
   w.textContent=mi.length?"Before you copy: "+mi.join(" and ")+(mi.length>1?" need":" needs")+" a web address, or the email will leave "+(mi.length>1?"them":"it")+" out. Put the picture on your website (or any image host) and paste its web address.":"Paste into Gmail: Settings → See all settings → Signature. Outlook: Settings → Mail → Compose and reply → Email signature."}
-var update0=update;update=function(){update0.apply(this,arguments);placeGrab();phoneCheck()};
+var update0=update;update=function(){update0.apply(this,arguments);placeGrab();phoneCheck();setTimeout(phoneGuide,60)};
 function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
   if(square){var c=document.createElement("canvas"),s=Math.min(im.naturalWidth,im.naturalHeight),n=Math.min(s,400);c.width=c.height=n;c.getContext("2d").drawImage(im,(im.naturalWidth-s)/2,(im.naturalHeight-s)/2,s,s,0,0,n,n);cb(c.toDataURL("image/jpeg",.9))}
   else cb({src:r.result,w:im.naturalWidth,h:im.naturalHeight})};im.src=r.result};r.readAsDataURL(f)}
@@ -1978,12 +2007,17 @@ function tidyBar(){if(window.innerWidth<=760||document.querySelector(".bar.tidy"
   [$("kbHint"),bar.querySelector(".step")].forEach(function(x){if(x)l1.appendChild(x)});
   [$("copyCode"),$("copySig")].forEach(function(x){if(x){x.classList.add("small");c1.appendChild(x)}});
   bar.querySelectorAll(".seg[data-pv]").forEach(function(x){v.appendChild(x)});
+  var pg=h2('<button type="button" class="bigbtn" id="pgBtn" title="Show where a phone screen ends">📱 Phone guide</button>');pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));
+  pg.addEventListener("click",function(){S.phoneGuide=S.phoneGuide===false;pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));save();phoneGuide()});v.appendChild(pg);
   [["movePv","✥ Move or add","Drag parts around, or add buttons, icons and pictures"],["testPv","🔗 Test links","Click the links to check where they go"],["fullPv","👁 Full view","See it as it will look in an email"],["bigPv",null,"Show the preview bigger"]].forEach(function(x){var b=$(x[0]);if(!b)return;if(x[1])b.textContent=x[1];b.title=x[2];t.appendChild(b)});
   var fold=$("foldPv");if(fold)fold.hidden=true;
   r1.appendChild(l1);r1.appendChild(c1);r2.appendChild(v);r2.appendChild(t);bar.innerHTML="";bar.appendChild(r1);bar.appendChild(r2);if(fold)bar.appendChild(fold);bar.classList.add("tidy")}
 window.addEventListener("resize",function(){setTimeout(tidyBar,200)});
 function init(){
-  S=load();setTimeout(tidyBar,0);if(!S.maker)S.maker=mkDefaults();
+  $("undoBtn").addEventListener("click",function(){histGo(-1)});$("redoBtn").addEventListener("click",function(){histGo(1)});
+  document.addEventListener("keydown",function(e){if(!(e.ctrlKey||e.metaKey))return;var t=e.target;if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.nodeName)||t.isContentEditable))return;var k=e.key.toLowerCase();
+    if(k==="z"&&!e.shiftKey){e.preventDefault();histGo(-1)}else if(k==="y"||(k==="z"&&e.shiftKey)){e.preventDefault();histGo(1)}});
+  S=load();setTimeout(function(){histPush(true)},50);setTimeout(tidyBar,0);if(!S.maker)S.maker=mkDefaults();
   /* you're on your own HTML code, then change a design option: go back to the design, so the preview follows (your code is kept) */
   var leaveCode=function(e){if(!S.useCode||!e.target.closest||e.target.closest("#codeBox"))return;if(!e.target.closest(".panel")||STEPS[STEP].id==="copy"||e.target.closest("#prevStep,#nextStep,.tpl-add,#tplFilter,label.f select,.codenote,.tab,.acc>summary"))return;if(e.type==="click"&&!e.target.closest("button,input,select,label,[role=button],.tcard,.vchip"))return;
     S.useCode=false;save();toast("Back to the builder’s design. Your HTML code is kept in Copy and use → HTML code.");setTimeout(update,0)};
