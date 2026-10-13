@@ -471,8 +471,8 @@
     "name": "Satwinder Singh",
     "role": "Director",
     "company": "Delta Air Solutions",
-    "location": "Gordonton, Waikato",
-    "mobile": "",
+    "location": "",
+    "mobile": "+64 22 024 7888",
     "phone": "0800 247 888",
     "email": "deltaairnz@gmail.com",
     "website": "www.deltaair.co.nz",
@@ -489,19 +489,19 @@
     "photoShape": "rounded",
     "photoSize": 96,
     "photoUrl": "",
-    "bannerUrl": "",
+    "bannerUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-banner-mv71byr0.gif",
     "bannerLink": "https://www.deltaair.co.nz",
     "bannerW": 346,
     "bookLabel": "",
     "bookUrl": "",
-    "reviewLabel": "",
-    "reviewUrl": "",
+    "reviewLabel": "Rate us",
+    "reviewUrl": "google.com",
     "extraLabel": "",
     "extraUrl": "",
     "social": {
      "instagram": "@deltaairnz",
      "tiktok": "@deltaair.nz",
-     "facebook": "",
+     "facebook": "https://www.facebook.com/share/1Ewu4qPWee",
      "linkedin": "",
      "whatsapp": "+64220247888",
      "youtube": "",
@@ -665,8 +665,8 @@
       "bold": true,
       "italic": false,
       "color": "#14172b",
-      "dy": 2,
-      "dx": 2
+      "dy": -4,
+      "dx": 0
      },
      "disclaimer": {
       "size": 12,
@@ -697,7 +697,7 @@
       "dx": -22
      },
      "review": {
-      "dx": -4
+      "dx": -2
      },
      "name": {
       "size": 20
@@ -724,7 +724,7 @@
     "pieceGap": 5,
     "iconGap": 3,
     "btnGap": 7,
-    "contactGap": 1,
+    "contactGap": 2,
     "lineLen": 100,
     "bannerMade": true,
     "logoCols": {
@@ -739,9 +739,16 @@
      "dark": ""
     },
     "contactIconGap": 0,
-    "btnPadY": 9
+    "btnPadY": 9,
+    "contactOrder": [
+     "phone",
+     "email",
+     "mobile",
+     "web",
+     "location"
+    ]
    },
-   "updated": "2026-10-13T18:35:03.291Z",
+   "updated": "2026-10-13T19:44:31.480Z",
    "by": "hello@ambs.co.nz"
   }
  ]
