@@ -93,6 +93,7 @@ header.top .hbtn{min-width:38px;justify-content:center;font-size:1.05rem!importa
 .mobbar{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;background:#eef4ff;border:1px solid #b9cdf5;color:#1d3b74;border-radius:12px;padding:8px 12px;font-size:.82rem;line-height:1.35;margin:10px 10px 0}.mobbar.on{background:#eafbea;border-color:#9fdca3;color:#14532d}.mobbar[hidden]{display:none!important}.mobbar .pw-b{display:flex;gap:6px;flex-wrap:wrap}
 .pwarn .sh,.mobbar .sh{display:none}
 @media (max-width:760px){.pwarn .lg,.mobbar .lg{display:none}.pwarn .sh,.mobbar .sh{display:inline}.pwarn,.mobbar{padding:6px 8px!important;margin:6px 6px 0!important;font-size:.74rem!important;flex-wrap:nowrap!important}.pwarn .pw-b,.mobbar .pw-b{flex-wrap:nowrap}.pwarn .btn,.mobbar .btn{padding:5px 9px!important;font-size:.72rem!important;white-space:nowrap}.pwarn [data-pw="see"]{display:none}}
+.dropmark{position:absolute;z-index:7;background:#1877E0;border-radius:3px;box-shadow:0 0 0 2px rgba(24,119,224,.25);pointer-events:none}.dropmark[hidden]{display:none}.grabx.reloc{opacity:.55;border-color:#1877E0}
 .mytpl{border:1px dashed #cbd5e1;border-radius:14px;padding:10px 12px;margin:0 0 12px}.mytpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.mytpl .note{margin:0}.tcard.mine{position:relative;cursor:pointer}.tdel{position:absolute;top:6px;right:6px;border:0;border-radius:999px;background:rgba(15,23,42,.72);color:#fff;font:600 12px/1 inherit;padding:5px 8px;cursor:pointer}.tdel.on{background:#dc2626}
 .panel .mytpl .tpl-grid{max-height:none!important}
 .tcard{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
@@ -1903,13 +1904,42 @@ function placeGrab(){var box=$("inbox");if(!box)return;var g=$("grabBox");
   g.hidden=false;g.style.left=(r.left-b.left+box.scrollLeft-3)+"px";g.style.top=(r.top-b.top+box.scrollTop-3)+"px";g.style.width=(r.width+6)+"px";g.style.height=(r.height+6)+"px";
   ["e","s","se"].forEach(function(h){g.querySelector('[data-h="'+h+'"]').hidden=!sp[h]});
   if(!GRAB_ON)g.querySelector(".gtag").textContent="";drawQbar()}
+
+/* drag a part onto another to rearrange: left or right of it shares its line, top or bottom makes a new line, below everything goes to the bottom */
+function dropAt(px,py,id){var sig=$("sig"),best=null;
+  sig.querySelectorAll("[data-edit]").forEach(function(e){var k=e.dataset.edit;if(k===id||k==="line"||k==="signoff"||!inOrder(k)||e.closest('[data-edit="'+id+'"]'))return;if(e.parentNode.closest&&e.parentNode.closest("[data-edit]")&&e.parentNode.closest("[data-edit]")!==e)return;
+    var r=e.getBoundingClientRect();if(px>=r.left-6&&px<=r.right+6&&py>=r.top-6&&py<=r.bottom+6){var a=r.width*r.height;if(!best||a<best.a)best={id:k,r:r,a:a}}});
+  if(best){var o=inOrder(best.id),r=best.r,rx=(px-r.left)/r.width,ry=(py-r.top)/r.height,col=/^(left|right)$/.test(o[2]),w;
+    if(col)w=ry<0.5?"before":"after";else w=ry<0.28?"above":ry>0.72?"below":rx<0.5?"before":"after";return{t:best.id,w:w,r:r}}
+  var sr=sig.getBoundingClientRect();if(py>sr.bottom-30&&px>=sr.left&&px<=sr.right)return{t:null,w:"end",r:{left:sr.left,right:sr.right,top:sr.bottom-2,bottom:sr.bottom,width:sr.width,height:2}};return null}
+function relocate(id,D){var ord=S.order,o=inOrder(id);if(!o||!D)return false;var vis=function(z){return ord.filter(function(x){return x[1]&&x[2]===z})};
+  /* take it out; if it started a line, the next part on that line starts it now */
+  var zv=vis(o[2]),i=zv.indexOf(o);if(!o[3]&&zv[i+1]&&zv[i+1][3])zv[i+1][3]=0;ord.splice(ord.indexOf(o),1);
+  if(D.w==="end"){o[2]="under";o[3]=0;ord.push(o)}
+  else{var t=inOrder(D.t),z=t[2],tv=vis(z),ti=tv.indexOf(t);o[2]=z;
+    if(/^(left|right)$/.test(z)){o[3]=0;ord.splice(ord.indexOf(t)+(D.w==="after"?1:0),0,o)}
+    else if(D.w==="before"){o[3]=t[3];t[3]=1;ord.splice(ord.indexOf(t),0,o)}
+    else if(D.w==="after"){o[3]=1;ord.splice(ord.indexOf(t)+1,0,o)}
+    else if(D.w==="above"){var s0=ti;while(s0>0&&tv[s0][3])s0--;o[3]=0;ord.splice(ord.indexOf(tv[s0]),0,o)}
+    else{var e0=ti;while(tv[e0+1]&&tv[e0+1][3])e0++;o[3]=0;ord.splice(ord.indexOf(tv[e0])+1,0,o)}}
+  if(S.st[id]){delete S.st[id].dx;delete S.st[id].dy}return true}
+function dropMark(D){var box=$("inbox"),m=$("dropMark");if(!D){if(m)m.hidden=true;return}if(!m){m=h2('<div id="dropMark" class="dropmark" aria-hidden="true"></div>');box.appendChild(m)}
+  var b=box.getBoundingClientRect(),r=D.r,L=r.left-b.left+box.scrollLeft,T=r.top-b.top+box.scrollTop,st=m.style;m.hidden=false;
+  if(D.w==="before"||D.w==="after"){st.left=(D.w==="before"?L-4:L+r.width+1)+"px";st.top=T+"px";st.width="3px";st.height=r.height+"px"}
+  else{st.left=L+"px";st.top=(D.w==="above"?T-4:T+r.height+1)+"px";st.width=r.width+"px";st.height="3px"}}
 function grabWire(g){
   g.addEventListener("pointerdown",function(e){if(!KEYPART)return;e.preventDefault();e.stopPropagation();var h=e.target.dataset&&e.target.dataset.h,id=KEYPART,sp=h?grabSpec(id)[h]:null,z=+($("sig").style.zoom)||1;
-    GRAB={id:id,h:h,sp:sp,x:e.clientX,y:e.clientY,z:z,start:sp?grabGet(sp):0,mx:0,my:0,moved:0,raf:0,ev:null};GRAB_ON=true;g.classList.add("on");var qq=$("qbar");if(qq)qq.hidden=true;try{g.setPointerCapture(e.pointerId)}catch(err){}});
+    var el0=grabEl(id);GRAB={id:id,h:h,sp:sp,x:e.clientX,y:e.clientY,z:z,start:sp?grabGet(sp):0,mx:0,my:0,moved:0,raf:0,ev:null,rect:el0&&el0.getBoundingClientRect(),st0:JSON.stringify(S.st[id]||{}),canMove:!!inOrder(id)&&id!=="signoff"};GRAB_ON=true;g.classList.add("on");var qq=$("qbar");if(qq)qq.hidden=true;try{g.setPointerCapture(e.pointerId)}catch(err){}});
   g.addEventListener("pointermove",function(e){if(!GRAB)return;GRAB.ev={x:e.clientX,y:e.clientY};if(GRAB.raf)return;GRAB.raf=requestAnimationFrame(function(){GRAB.raf=0;var G=GRAB;if(!G||!G.ev)return;var dx=(G.ev.x-G.x)/G.z,dy=(G.ev.y-G.y)/G.z,tag=g.querySelector(".gtag");
       if(G.sp){var t=G.h==="e"?dx:G.h==="s"?dy:(dx+dy)/2,v=G.sp.f==="len"?G.start+dy*2/Math.max(20,barH)*100:G.start+t*G.sp.f;v=grabSet(G.sp,v);save();if(G.sp.k==="maker.h")mkRender(true);else update();tag.textContent=G.sp.lbl+": "+v+(G.sp.f==="len"?"%":"px");G.moved=1}
+      else if(G.canMove&&(G.reloc||(G.rect&&(G.ev.x<G.rect.left-24||G.ev.x>G.rect.right+24||G.ev.y<G.rect.top-24||G.ev.y>G.rect.bottom+24)))){
+        if(!G.reloc){G.reloc=1;S.st[G.id]=JSON.parse(G.st0);update();g.classList.add("reloc")}
+        g.style.pointerEvents="none";G.drop=dropAt(G.ev.x,G.ev.y,G.id);g.style.pointerEvents="";dropMark(G.drop);
+        tag.textContent=G.drop?(G.drop.w==="end"?"Drop: at the bottom":G.drop.w==="before"||G.drop.w==="after"?"Drop: next to "+blockLabel(G.drop.t):"Drop: on its own line "+G.drop.w+" "+blockLabel(G.drop.t)):"Drag onto another part"}
       else{var ix=Math.trunc(dx-G.mx),iy=Math.trunc(dy-G.my);if(ix||iy){var t0=toast;toast=function(){};try{moveBy(G.id,ix,iy)}finally{toast=t0}G.mx+=ix;G.my+=iy;G.moved=1;var c=S.st[G.id]||{};tag.textContent=G.id==="line"?"Logo gap "+S.lineGapL+"px · text gap "+S.lineGapR+"px":"Moved "+(c.dx||0)+"px across, "+(c.dy||0)+"px down"}}})});
-  var end=function(){if(!GRAB)return;var G=GRAB;GRAB=null;GRAB_ON=false;g.classList.remove("on");if(G.moved){var id=G.id;if(document.querySelector(".esheet"))editSheet(id);else if(window.innerWidth>760)openItem(id);KEYPART=id;placeGrab();syncLineRanges()}};
+  var end=function(){if(!GRAB)return;var G=GRAB;GRAB=null;GRAB_ON=false;g.classList.remove("on");g.classList.remove("reloc");dropMark(null);
+    if(G.reloc){if(G.drop&&relocate(G.id,G.drop)){save();changed();toast("Moved "+blockLabel(G.id))}else update();KEYPART=G.id;setTimeout(placeGrab,60);return}
+    if(G.moved){var id=G.id;if(document.querySelector(".esheet"))editSheet(id);else if(window.innerWidth>760)openItem(id);KEYPART=id;placeGrab();syncLineRanges()}};
   g.addEventListener("pointerup",end);g.addEventListener("pointercancel",end)}
 window.addEventListener("resize",function(){setTimeout(placeGrab,200)});
 /* one small toolbar on the selected part: the things people change most, in one row */
