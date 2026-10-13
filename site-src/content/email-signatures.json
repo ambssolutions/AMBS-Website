@@ -27,7 +27,7 @@
     "photoUrl": "",
     "bannerUrl": "",
     "bannerLink": "https://ambs.co.nz/#book",
-    "bannerW": 346,
+    "bannerW": 446,
     "bookLabel": "Book",
     "bookUrl": "https://ambs.co.nz/#book",
     "reviewLabel": "Rate Us",
@@ -109,7 +109,7 @@
       "book",
       1,
       "side",
-      1
+      0
      ],
      [
       "review",
@@ -148,7 +148,7 @@
       0
      ]
     ],
-    "contactLayout": "line",
+    "contactLayout": "stack",
     "align": "left",
     "gap": 6,
     "card": "none",
@@ -170,10 +170,10 @@
     "rainbowW": 220,
     "iconStyle": "brand",
     "iconSize": 34,
-    "contactIcons": "glyph-dark",
+    "contactIcons": "letters",
     "btnStyle": "filled",
     "btnRadius": 20,
-    "btnPadX": 8,
+    "btnPadX": 32,
     "btnFont": 12,
     "bookIcon": "calendar",
     "useCode": false,
@@ -185,15 +185,18 @@
      "logo": "0",
      "banner": "2"
     },
-    "pvWidth": "desktop",
+    "pvWidth": "phone",
     "pvMode": "light",
     "template": "Custom",
     "st": {
      "signoff": {
-      "bold": true
+      "bold": true,
+      "size": 12,
+      "valign": "middle",
+      "align": "left"
      },
      "contact": {
-      "size": 11,
+      "size": 12,
       "bold": false,
       "italic": false,
       "color": "#14172b",
@@ -207,7 +210,7 @@
       "dx": -80
      },
      "role": {
-      "size": 10,
+      "size": 11,
       "dy": -6
      },
      "book": {
@@ -229,6 +232,9 @@
      },
      "review": {
       "dx": -4
+     },
+     "name": {
+      "size": 18
      }
     },
     "maker": {
@@ -257,9 +263,167 @@
     "btnGap": 7,
     "contactGap": 5,
     "bannerMade": true,
-    "lineLen": 89
+    "lineLen": 88,
+    "pvChosen": true,
+    "mob": {
+     "order": [
+      [
+       "photo",
+       0,
+       "left",
+       0
+      ],
+      [
+       "logo",
+       1,
+       "left",
+       0
+      ],
+      [
+       "name",
+       1,
+       "side",
+       0
+      ],
+      [
+       "role",
+       1,
+       "side",
+       0
+      ],
+      [
+       "contact",
+       1,
+       "side",
+       0
+      ],
+      [
+       "social",
+       1,
+       "side",
+       0
+      ],
+      [
+       "book",
+       1,
+       "side",
+       1
+      ],
+      [
+       "review",
+       1,
+       "side",
+       1
+      ],
+      [
+       "extra",
+       1,
+       "side",
+       1
+      ],
+      [
+       "tagline",
+       0,
+       "side",
+       0
+      ],
+      [
+       "rainbow",
+       0,
+       "under",
+       0
+      ],
+      [
+       "banner",
+       1,
+       "under",
+       1
+      ],
+      [
+       "disclaimer",
+       1,
+       "under",
+       0
+      ]
+     ],
+     "st": {
+      "signoff": {
+       "bold": true,
+       "size": 12,
+       "valign": "middle",
+       "align": "left"
+      },
+      "contact": {
+       "size": 12,
+       "bold": true,
+       "italic": false,
+       "color": "#18191b",
+       "dy": 0
+      },
+      "disclaimer": {
+       "size": 9,
+       "align": "left",
+       "dy": -6,
+       "color": "#1f2023",
+       "dx": -80
+      },
+      "role": {
+       "size": 11,
+       "dy": -6,
+       "bold": true
+      },
+      "book": {
+       "dx": -1,
+       "dy": -2
+      },
+      "logo": {
+       "dx": 8,
+       "dy": 3,
+       "align": "left"
+      },
+      "banner": {
+       "dy": -8,
+       "dx": -2
+      },
+      "social": {
+       "dy": -4,
+       "dx": -22
+      },
+      "review": {
+       "dx": -4
+      },
+      "name": {
+       "size": 18
+      }
+     },
+     "contactLayout": "line",
+     "logoSize": 68,
+     "logoPos": "left",
+     "logoShow": true,
+     "logoMatch": false,
+     "nameSize": 17,
+     "textSize": 13,
+     "iconSize": 34,
+     "btnPadX": 15,
+     "btnFont": 12,
+     "btnGap": 7,
+     "pieceGap": 5,
+     "iconGap": 3,
+     "contactGap": 1,
+     "gap": 6,
+     "lineGapL": 16,
+     "lineGapR": 5,
+     "dividerW": 3,
+     "lineLen": 94,
+     "photoSize": 96,
+     "photoShow": false,
+     "align": "left",
+     "signoffSize": 37,
+     "bannerW": 446,
+     "rainbowW": 220
+    }
    },
-   "updated": "2026-10-13T08:15:30.387Z",
+   "updated": "2026-10-13T08:43:13.788Z",
    "by": "hello@ambs.co.nz"
   },
   {
