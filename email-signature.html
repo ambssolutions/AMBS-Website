@@ -682,6 +682,18 @@ header.top #menuBtn .tx{display:none!important}header.top #menuBtn{min-width:40p
 
 /* laptops: the preview card sizes to the signature instead of filling the column */
 @media (min-width:761px){.pv-col .mail{flex:0 0 auto!important}.pv-col .stage{flex:0 0 auto!important;padding:12px!important}.pv-col .inbox{max-width:600px!important}#inbox{padding-bottom:64px!important}}
+
+/* phones: preview card is a fifth of the screen; compact bar and one-line notice */
+@media (max-width:760px){
+.pv-col .mail{max-height:20vh!important;overflow:hidden!important}
+body:not([data-step="edit"]) .pv-col .mail{max-height:20vh!important}
+.pv-col .stage{max-height:none!important;padding:4px!important;overflow:hidden!important}
+.pv-col .inbox{padding:6px 8px!important}
+.pv-col>.bar{padding:2px 0!important;margin:0 0 4px!important;min-height:0!important}
+.pv-col>.bar .bigbtn{padding:4px 10px!important;font-size:.78rem!important;min-height:0!important}
+.pv-col>.bar .step{font-size:.9rem!important}
+.pwarn{padding:3px 8px!important;margin:4px 4px 0!important;font-size:.7rem!important}.pwarn .btn{padding:3px 8px!important;font-size:.68rem!important;min-height:0!important}
+}
 </style>
 
 </head><body>
@@ -1935,14 +1947,16 @@ function phoneFix(){var before=JSON.stringify(S),steps=[
     box.querySelector('[data-pw="undo"]').addEventListener("click",function(){var keep={_sigId:S._sigId,_sigName:S._sigName};S=JSON.parse(undo);Object.assign(S,keep);changed();toast("Changes undone")});
     box.querySelector('[data-pw="ok"]').addEventListener("click",function(){box.hidden=true})},400)}
 
+/* phones: the whole preview card takes about a fifth of the screen */
+function pvRoom(){var w=$("phoneWarn"),wh=w&&!w.hidden&&w.offsetHeight?w.offsetHeight+6:0;return Math.max(60,window.innerHeight*.2-wh-14)}
 function fitPhone(){var sig=$("sig");if(!sig)return;
-  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4,zp=bw>0&&bw<PHONE_W?bw/PHONE_W:1;if(window.innerWidth<=760&&STEPS[STEP]){var hh=sig.offsetHeight;if(STEPS[STEP].id!=="edit")zp=Math.min(zp,.4,hh>0?100/hh:1);else if(hh>0)zp=Math.min(zp,Math.max(.3,window.innerHeight*.19/hh))}if(zp<.995)sig.style.zoom=String(+zp.toFixed(3));return}
+  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4,zp=bw>0&&bw<PHONE_W?bw/PHONE_W:1;if(window.innerWidth<=760){var hh=sig.offsetHeight;if(hh>0)zp=Math.min(zp,Math.max(.18,pvRoom()/hh))}if(zp<.995)sig.style.zoom=String(+zp.toFixed(3));return}
   sig.style.width="";sig.style.zoom="";var ph=window.innerWidth<=760,big=$("bigPv")&&$("bigPv").getAttribute("aria-pressed")==="true";
   var box=sig.parentNode,stage=sig.closest(".stage"),w=sig.scrollWidth,h=sig.offsetHeight;if(!w||!h)return;
   var z=Math.min(ph?1:.62,(box.clientWidth-(ph?20:8))/w);
   if(!big)[box,stage].forEach(function(c){if(!c)return;var room=c.clientHeight-(c.scrollHeight-h)-10;if(room>80)z=Math.min(z,room/h)});
   if(big)z=Math.min(1,(box.clientWidth-8)/w);
-  z=Math.max(ph?.4:.55,z);if(ph&&STEPS[STEP]&&STEPS[STEP].id!=="edit")z=Math.min(z,.4,100/h);else if(ph)z=Math.min(z,Math.max(.3,window.innerHeight*.19/h));if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
+  z=Math.max(ph?.4:.55,z);if(ph)z=Math.min(z,Math.max(.18,pvRoom()/h));if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
 window.addEventListener("resize",function(){clearTimeout(window._fp);window._fp=setTimeout(fitPhone,150)});
 /* phones: tap a part of the signature and its settings slide up from the bottom; the preview stays in view */
 /* tapping or clicking the stripe jumps to its thickness and spacing controls */
