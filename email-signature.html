@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en-NZ"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon-light.png">
+<link rel="manifest" href="/email-signature.webmanifest"><link rel="apple-touch-icon" href="/apple-touch-icon-v4.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Signatures"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="theme-color" content="#ffffff">
 <style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Email Signature Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -694,8 +695,15 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:20vh!important}
 .pv-col>.bar .step{font-size:.9rem!important}
 .pwarn{padding:3px 8px!important;margin:4px 4px 0!important;font-size:.7rem!important}.pwarn .btn{padding:3px 8px!important;font-size:.68rem!important;min-height:0!important}
 }
+
+/* install as an app */
+.instbar{position:fixed;left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:58;display:flex;align-items:center;gap:8px;padding:8px 8px 8px 14px;border-radius:14px;background:#14172b;color:#fff;font:600 .85rem system-ui,sans-serif;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
+.instbar span{flex:1}.instbar .ib-go{border:0;border-radius:10px;padding:8px 14px;background:#24b328;color:#fff;font:700 .85rem system-ui,sans-serif}.instbar .ib-x{border:0;background:none;color:#fff;font-size:1rem;padding:6px 8px;opacity:.8}
+.iosteps{margin:6px 0 4px;padding-left:20px;line-height:1.5}.iosteps li{margin:6px 0}
 </style>
 
+<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -1992,10 +2000,10 @@ function askNew(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" a
   ov.querySelectorAll(".nopt").forEach(function(b){b.addEventListener("click",function(){close();newSig(b.dataset.k==="brand")})});ov.querySelector(".nopt").focus()}
 /* phones: one menu instead of a row of small buttons */
 function openMenu(){var ov=h2('<div class="sdlg msheet" role="dialog" aria-modal="true" aria-label="Menu"><div class="sbox"><div class="sh"><b>Menu</b><button type="button" class="btn sec small sx">Close</button></div>'+
-    '<button type="button" class="mopt" data-k="new">＋ New signature</button><button type="button" class="mopt" data-k="list">📂 My signatures</button><button type="button" class="mopt" data-k="html">📄 Upload an HTML file</button><button type="button" class="mopt" data-k="preview">👁 Full preview</button><button type="button" class="mopt" data-k="test">🔗 Test links</button><button type="button" class="mopt" data-k="copy">📋 Copy and use</button><button type="button" class="mopt sub" data-k="reset">↺ Start again (AMBS example)</button>'+(onAmbs()?'<button type="button" class="mopt sub" data-k="out">Sign out</button>':'')+'</div></div>');
+    '<button type="button" class="mopt" data-k="new">＋ New signature</button><button type="button" class="mopt" data-k="list">📂 My signatures</button><button type="button" class="mopt" data-k="html">📄 Upload an HTML file</button><button type="button" class="mopt" data-k="preview">👁 Full preview</button><button type="button" class="mopt" data-k="test">🔗 Test links</button><button type="button" class="mopt" data-k="copy">📋 Copy and use</button>'+(canInstall()?'<button type="button" class="mopt" data-k="install">📲 Install as an app</button>':'')+'<button type="button" class="mopt sub" data-k="reset">↺ Start again (AMBS example)</button>'+(onAmbs()?'<button type="button" class="mopt sub" data-k="out">Sign out</button>':'')+'</div></div>');
   document.body.appendChild(ov);var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);ov.addEventListener("click",function(e){if(e.target===ov)close()});
   ov.querySelectorAll(".mopt").forEach(function(b){b.addEventListener("click",function(){var k=b.dataset.k;close();
-    if(k==="new")askNew();else if(k==="list")openSigs();else if(k==="html")$("htmlFile").click();else if(k==="preview")openPreview();else if(k==="test"){setTest(true);window.scrollTo(0,0)}else if(k==="copy")go(STEPS.length-1);
+    if(k==="new")askNew();else if(k==="list")openSigs();else if(k==="html")$("htmlFile").click();else if(k==="preview")openPreview();else if(k==="test"){setTest(true);window.scrollTo(0,0)}else if(k==="copy")go(STEPS.length-1);else if(k==="install")installApp();
     else if(k==="reset"){$("reset").click();$("reset").click()}else if(k==="out"){try{sessionStorage.removeItem("ambs-ed-session");localStorage.removeItem("ambs-ed-session")}catch(e){}location.reload()}})})}
 var KEYPART=null;
 /* direct control in the preview: drag the selected part to move it, drag its handles to resize it */
@@ -2265,6 +2273,21 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
   var check=function(){fetch("/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){var b=String(d&&d.build||"");if(!b)return;if(first===null){first=b;return}
     if(b!==first&&!shown){shown=true;var n=h2('<div class="newver" role="status"><span>A newer version of the builder is ready.</span><button type="button">Refresh</button></div>');n.querySelector("button").addEventListener("click",function(){try{save()}catch(e){}location.reload()});document.body.appendChild(n)}}).catch(function(){})};
   check();document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});setInterval(check,10*60*1000)})();
+/* save the builder to the home screen as an app (Android: the browser's install prompt; iPhone: Share → Add to Home Screen) */
+var INSTALL_EV=null;
+function isStandalone(){return(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true}
+function isIOS(){return/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)}
+function canInstall(){return!isStandalone()&&(!!INSTALL_EV||isIOS())}
+function installApp(){if(INSTALL_EV){var ev=INSTALL_EV;INSTALL_EV=null;ev.prompt();(ev.userChoice||Promise.resolve({})).then(function(c){if(c&&c.outcome==="accepted")toast("Installed. Open it from your home screen.");var b=document.querySelector(".instbar");if(b)b.remove()});return}
+  if(isIOS()){var ov=h2('<div class="sdlg msheet" role="dialog" aria-modal="true" aria-label="Install"><div class="sbox"><div class="sh"><b>Add to your home screen</b><button type="button" class="btn sec small sx">Close</button></div><ol class="iosteps"><li>Tap the <b>Share</b> button <span aria-hidden="true">(the square with an arrow ⬆︎)</span> in Safari.</li><li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. The builder opens like an app from your home screen.</li></ol></div></div>');document.body.appendChild(ov);var cl=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",cl);ov.addEventListener("click",function(e){if(e.target===ov)cl()});return}
+  toast("Use your browser’s menu → Install app (or Add to Home screen).")}
+function instBar(){if(window.innerWidth>760||!canInstall()||document.querySelector(".instbar"))return;var seen=false;try{seen=localStorage.getItem("ambs-sig-instbar")==="1"}catch(e){}if(seen)return;
+  var b=h2('<div class="instbar" role="status"><span>📲 Add the builder to your home screen</span><button type="button" class="ib-go">Install</button><button type="button" class="ib-x" aria-label="Not now">✕</button></div>');
+  b.querySelector(".ib-go").addEventListener("click",function(){installApp()});b.querySelector(".ib-x").addEventListener("click",function(){b.remove();try{localStorage.setItem("ambs-sig-instbar","1")}catch(e){}});document.body.appendChild(b)}
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();INSTALL_EV=e;instBar()});
+window.addEventListener("appinstalled",function(){INSTALL_EV=null;var b=document.querySelector(".instbar");if(b)b.remove()});
+if(onAmbs()&&"serviceWorker" in navigator){try{navigator.serviceWorker.register("/sw.js").catch(function(){})}catch(e){}}
+setTimeout(function(){if(isIOS())instBar()},4000);
 function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
   if(square){var c=document.createElement("canvas"),s=Math.min(im.naturalWidth,im.naturalHeight),n=Math.min(s,400);c.width=c.height=n;c.getContext("2d").drawImage(im,(im.naturalWidth-s)/2,(im.naturalHeight-s)/2,s,s,0,0,n,n);cb(c.toDataURL("image/jpeg",.9))}
   else cb({src:r.result,w:im.naturalWidth,h:im.naturalHeight})};im.src=r.result};r.readAsDataURL(f)}
