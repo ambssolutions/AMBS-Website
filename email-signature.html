@@ -763,8 +763,6 @@ body.spage-on{overflow:hidden}
 @media (max-width:760px){.cf-row{grid-template-columns:repeat(2,1fr)}.bigcopy{width:100%}}
 </style>
 
-<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -2376,6 +2374,7 @@ function foundBox(){var it=SITEFILL&&SITEFILL.items;if(!it||!it.length)return h2
     row.querySelector("input").addEventListener("change",function(e){var c=e.target.checked;
       if(x.k==="@logo"){var lo=inOrder("logo");if(lo)lo[1]=c?1:0;S.logoShow=c}else setP(x.k,c?x.v:"");
       if(x.k.indexOf("social.")===0&&c){var so=inOrder("social");if(so)so[1]=1}
+      if(x.b&&c){var bo=inOrder(x.b);if(bo)bo[1]=1}
       save();var y=window.scrollY;changed();go(STEP);window.scrollTo(0,y);toast((c?"Using ":"Left out: ")+x.l)});l.appendChild(row)});
   return el}
 /* the order of the contact lines and social icons (Edit and save → Reorder) */
@@ -2402,7 +2401,7 @@ function startPick(){var w=h2('<div class="wide startpick"></div>');w.appendChil
   var sk=h2('<button type="button" class="sp-skip">Skip and keep the example details →</button>');sk.addEventListener("click",function(){go(stepId("details"))});w.appendChild(sk);return w}
 /* quick start: type the business website, we read the logo, name, phone, email, address and social accounts from it */
 var SITEFILL=null;
-function siteFillCard(){var el=h2('<div class="sfill"><h3>What’s your website?</h3><p>We fill in your logo, brand colours, business name, phone, email, address and social accounts from it. You can change anything after.</p><div class="row"><input type="url" inputmode="url" autocomplete="url" placeholder="yourbusiness.co.nz" aria-label="Your website"><button type="button" class="btn">Fill everything</button></div><div class="sfout"></div></div>');
+function siteFillCard(){var el=h2('<div class="sfill"><h3>What’s your website?</h3><p>We fill in your logo, brand colours, business name, phone, email, address, social accounts, booking and Google review links from it. You can change anything after.</p><div class="row"><input type="url" inputmode="url" autocomplete="url" placeholder="yourbusiness.co.nz" aria-label="Your website"><button type="button" class="btn">Fill everything</button></div><div class="sfout"></div></div>');
   var inp=el.querySelector("input"),btn=el.querySelector("button"),out=el.querySelector(".sfout");inp.value=SITEFILL&&SITEFILL.site||S.website||"";
   var go1=function(){var v=inp.value.trim();if(!v){inp.focus();toast("Type your website first, like yourbusiness.co.nz");return}siteFill(v,btn,out)};
   btn.addEventListener("click",go1);inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();go1()}});
@@ -2414,10 +2413,13 @@ function siteFill(site,btn,out){var keep=btn.textContent;
   .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Couldn’t read that website.");return j})})
   .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Name",d.person],["Logo",found.logo],["Business name",d.name],["Website",d.website],["Office phone",d.phone],["Mobile",d.mobile],["Email",d.email],["Address",d.address]];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])all.push([k==="x"?"X":k.charAt(0).toUpperCase()+k.slice(1),d.social[k]])});
+      var lk=d.links||{};all.push(["Booking link",lk.book?lk.book.url:""],["Google review link",lk.review||""],["Google profile",lk.google||""]);if(lk.extra)all.push(["Extra button",lk.extra.label+" → "+lk.extra.url]);
       var got=all.filter(function(x){return x[1]}).length;
       var html='<ul>'+all.map(function(x){return'<li class="'+(x[1]?"":"no")+'">'+(x[1]?"✓ ":"– ")+'<b>'+esc(x[0])+'</b>'+(x[1]&&x[1]!==true?': '+esc(String(x[1]).slice(0,40)):x[1]?"":" not found")+'</li>'}).join("")+'</ul><p class="sfmsg">'+(got?"Filled in "+got+" things. Check them below, then press <b>Next</b>. Undo puts everything back.":"We couldn’t find details on that website. Fill them in below.")+'</p>';
       var items=[{l:"Your name",k:"name",v:d.person},{l:"Role",k:"role",v:d.prole},{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])items.push({l:({x:"X",tiktok:"TikTok",whatsapp:"WhatsApp",youtube:"YouTube",linkedin:"LinkedIn"})[k]||k.charAt(0).toUpperCase()+k.slice(1),k:"social."+k,v:d.social[k]})});
+      if(lk.book)items.push({l:"Booking button: "+lk.book.label,k:"bookUrl",v:lk.book.url,b:"book"});if(lk.review)items.push({l:"Google review button",k:"reviewUrl",v:lk.review,b:"review"});
+      if(lk.google)items.push({l:"Google profile icon",k:"social.google",v:lk.google});if(lk.extra)items.push({l:"Extra button: "+lk.extra.label,k:"extraUrl",v:lk.extra.url,b:"extra"});
       SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
   .catch(function(e){out.innerHTML='<p class="sfmsg">'+esc(e.message==="signin"?"Please sign in to the website editor first.":e.message)+'</p>'})
   .then(function(){btn.disabled=false;btn.textContent=keep;var b2=document.querySelector(".sfill .btn");if(b2){b2.disabled=false;b2.textContent=keep}})}
@@ -2426,11 +2428,18 @@ function isMobileNum(p){var x=String(p||"").replace(/[^\d+]/g,"");if(/^\+?64/.te
 function splitPhones(list){var o="",m="";(list||[]).forEach(function(p){if(isMobileNum(p)){if(!m)m=p}else if(!o)o=p});return{office:o,mobile:m}}
 function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.website||"").split("/")[0]);
   /* a different business: the AMBS sample details go, whatever the website didn't give stays empty to fill in */
-  if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram=""}
+  if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram="";
+    /* AMBS's own booking and review links never go on another business's buttons */
+    if(/ambs\.co\.nz/i.test(S.bookUrl||""))S.bookUrl="";if(/Cayst76Z-_hGEBM/.test(S.reviewUrl||""))S.reviewUrl="";if(/ambs\.co\.nz/i.test(S.extraUrl||""))S.extraUrl="";if(/ambs\.co\.nz/i.test(S.bannerLink||""))S.bannerLink=""}
+  /* booking, Google review, Google profile and a main call-to-action from the website */
+  var lk=d.links||{},onB=function(id){var o=inOrder(id);if(o)o[1]=1};
+  if(lk.book&&lk.book.url){S.bookUrl=lk.book.url;S.bookLabel=lk.book.label||"Book online";onB("book")}
+  if(lk.review){S.reviewUrl=lk.review;if(!S.reviewLabel)S.reviewLabel="Review us on Google";onB("review")}
+  if(lk.extra&&lk.extra.url){S.extraUrl=lk.extra.url;S.extraLabel=lk.extra.label||"Find out more";onB("extra")}
   var sp=splitPhones(d.phones&&d.phones.length?d.phones:(d.phone?[d.phone]:[]));d.phone=sp.office;d.mobile=sp.mobile;
   var pp=(d.people||[])[0];if(pp&&pp.name){S.name=pp.name;if(pp.role)S.role=pp.role}d.person=pp?pp.name:"";d.prole=pp?pp.role||"":"";
   if(d.name)S.company=d.name;if(d.website)S.website=d.website;if(d.phone)S.phone=d.phone;if(d.mobile)S.mobile=d.mobile;if(d.email)S.email=d.email;if(d.address)S.location=d.address;
-  var soc=d.social||{};if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
+  var soc=Object.assign({},d.social||{});if(lk.google)soc.google=lk.google;if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
   var fin=function(gotLogo){save();changed();go(STEP,"brand");done({logo:gotLogo})};
   if(!d.logo||!d.logo.data){fin(false);return}
   var im=new Image();im.onload=function(){var w0=im.naturalWidth||400,h0=im.naturalHeight||Math.round(w0/2.7);if(!w0||!h0){fin(false);return}
