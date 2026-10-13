@@ -604,10 +604,25 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
   .fpv-bar{padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px}.fpv-stage{padding:12px 10px}.fpv-body{padding:14px 14px 20px}.fpv-sig{overflow:hidden}
 }
 @media (min-width:761px){.pv-col .tapnote{display:none}.pv-col .pvfold{display:none}header.top{display:flex!important;align-items:center;gap:8px!important;flex-wrap:wrap}header.top .brandline{flex:1 1 auto;min-width:0}}
+
+/* simple flow: start choices, details check, edit-and-save */
+.startpick{display:flex;flex-direction:column;gap:12px}
+.sp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sp-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px;border:1.5px solid var(--line);border-radius:14px;background:var(--panel);cursor:pointer;text-align:left;font:inherit;color:inherit}
+.sp-card:hover,.sp-card:focus-visible{border-color:#24b328}
+.sp-ic{font-size:1.5rem;line-height:1}.sp-card b{display:block;font-size:.95rem}.sp-card small{display:block;opacity:.7;font-size:.8rem;margin-top:2px}
+.sp-skip{background:none;border:0;color:inherit;opacity:.7;text-decoration:underline;font:inherit;font-size:.85rem;cursor:pointer;align-self:flex-start;padding:4px 0}
+.foundbox{grid-column:1/-1;padding:10px 12px;border-radius:12px;background:rgba(36,179,40,.06);border:1px solid rgba(36,179,40,.35);font-size:.84rem}
+.foundbox ul{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px 12px}.foundbox li.no{opacity:.55}.foundbox .sfmsg{display:none}
+.confirmbox{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px;border-radius:12px;border:1.5px solid #24b328;background:var(--panel);font-weight:600}
+.edhint{padding:12px 14px;border-radius:14px;border:1.5px solid #24b328;background:rgba(36,179,40,.06);font-size:.9rem}.edhint p{margin:0 0 10px}.edh-b{display:flex;gap:8px;flex-wrap:wrap}
+.moreset{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:0 12px 12px}.moreset:not([open]){padding-bottom:0}.moreset>summary{cursor:pointer;padding:12px 0;font-weight:700;list-style:none}.moreset>summary::after{content:" ▾";opacity:.6}
+.tpl-add{display:none!important}
+body:not([data-step="edit"]) .pwarn,body:not([data-step="edit"]) .mobbar{display:none!important}
+@media (max-width:760px){body:not([data-step="edit"]) .pv-col>.bar{display:none!important}body:not([data-step="edit"]) .pv-col .mail{max-height:230px;overflow:hidden}body:not([data-step="edit"]) .pv-col .mail-h,body:not([data-step="edit"]) .pv-col .msg{display:none}
+body:not([data-step="edit"]) .pwarn,body:not([data-step="edit"]) .mobbar{display:none!important}.sp-row{grid-template-columns:1fr}.sp-card{flex-direction:row;align-items:center;gap:10px}.sp-card small{display:block}}
 </style>
 
-<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -1159,8 +1174,9 @@ var SO_STYLES=[["animated","Handwriting that writes itself"],["still","Handwriti
 var INKS=[["dark","Dark"],["blue","Blue"],["purple","Purple"],["green","Green"],["white","White"]];
 var ITEM={
   custom:function(){return[["cpalette"],["cparts"],["order"]]},
-  brand:function(){return[["sitefill"],["logoUp"],["text","company","Business name"],["text","website","Website"],["text","logoUrl","Logo web address (used in emails)"],["note","Tip: on your website, right-click your logo and choose “Copy image address”, then paste it here."],["brandsets"],["color","brandP","Main colour"],["color","brandS","Second colour"],["color","brandA","Third colour"],["palette"],["newbrand"],["htmlstart"]]},
-  details:function(){return[["text","name","Your name"],["text","role","Role"],["text","company","Business"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["note","Booking and review links are under Design → Buttons. Social accounts are under Design → Social icons."]]},
+  start:function(){return[["startpick"]]},
+  brand:function(){return[["logoUp"],["text","company","Business name"],["text","website","Website"],["text","logoUrl","Logo web address (used in emails)"],["note","Tip: on your website, right-click your logo and choose “Copy image address”, then paste it here."],["brandsets"],["color","brandP","Main colour"],["color","brandS","Second colour"],["color","brandA","Third colour"],["palette"],["newbrand"]]},
+  details:function(){return[["foundbox"],["text","name","Your name"],["text","role","Role"],["text","company","Business"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["text","social.instagram","Instagram"],["text","social.tiktok","TikTok"],["text","social.facebook","Facebook"],["text","social.linkedin","LinkedIn"],["confirm"]]},
   signoff:function(){return(S.signoffStyle==="animated"||S.signoffStyle==="still")
     ?[["select","signoffStyle","Style",SO_STYLES],["hand"],["select","signoff","Words",Object.keys(SIGNOFFS).map(function(k){return[SIGNOFFS[k].text,SIGNOFFS[k].text]})],["seg","signoffAnimColor","Ink",INKS],["range","signoffSize","Size",18,44],["replay"],["note","Plays once in Gmail, Apple Mail and the new Outlook. Older Outlook on Windows shows it already written."]]
     :[["select","signoffStyle","Style",SO_STYLES],["text","signoff","Words"],["range","st.signoff.size","Size",10,44,function(){return soPlainSize()}],["color","st.signoff.color","Colour"],["bi","signoff"]]},
@@ -1193,16 +1209,15 @@ function setP(path,v){
 function h2(s){var t=document.createElement("template");t.innerHTML=s.trim();return t.content.firstChild}
 /* ---------- step-by-step flow ---------- */
 var STEPS=[
-  {id:"brand",t:"Your brand",d:"Type your website and we fill in the rest, or upload your logo.",parts:["brand"]},
-  {id:"template",t:"Template",d:"Pick a starting look, then add or move anything in it."},
-  {id:"details",t:"Your details",d:"Leave a line empty to leave it out.",parts:["details"]},
-  {id:"design",t:"Design",d:"Open a section to change it.",acc:["signoff","photo","logo","actions","social"]},
-  {id:"extras",t:"Extras",d:"Optional. Add your own parts, a banner, a disclaimer, colours, layout and fine-tuning.",acc:["custom","banner","disclaimer","style","layout","tune"]},
+  {id:"start",t:"Start",d:"Pick one way to begin. You can change anything later.",parts:["start"]},
+  {id:"details",t:"Check details",d:"This is what goes in your signature. Fix anything that’s wrong, then confirm.",parts:["details"]},
+  {id:"template",t:"Template",d:"Pick a look. Your details and colours go straight into it."},
+  {id:"edit",t:"Edit and save",d:"Tap any part of your signature to change it, then save.",acc:["brand","signoff","photo","logo","actions","social","custom","banner","disclaimer","style","layout","tune"]},
   {id:"copy",t:"Copy and use",d:"Copy the signature and paste it into your email."}
 ];
-var ACC_NAMES={custom:"Add your own parts",signoff:"Sign-off",photo:"Photo",logo:"Logo",actions:"Buttons",social:"Social icons",banner:"Banner",disclaimer:"Disclaimer",style:"Colours and fonts",layout:"Layout and order",tune:"Fine-tune text"};
+var ACC_NAMES={brand:"Logo and colours",custom:"Add your own parts",signoff:"Sign-off",photo:"Photo",logo:"Logo",actions:"Buttons",social:"Social icons",banner:"Banner",disclaimer:"Disclaimer",style:"Colours and fonts",layout:"Layout and order",tune:"Fine-tune text"};
 var TUNE_PARTS=["name","role","contact","tagline","rainbow"];
-function accSummary(id){var on=function(b){return b?"On":"Off"};
+function accSummary(id){var on=function(b){return b?"On":"Off"};if(id==="brand")return S.company||"Logo, brand colours";
   if(id==="signoff")return S.signoffStyle==="none"?"Off":(S.signoffStyle==="animated"?"Writes itself":S.signoffStyle==="still"?"Handwritten":S.signoffStyle==="script"?"Own words":"Plain")+" · "+(S.signoff||"");
   if(id==="photo")return on(S.photoShow);if(id==="logo")return S.logoShow?({left:"Left",right:"Right",top:"Above",bottom:"Below",social:"By the icons"})[S.logoPos]:"Off";
   if(id==="actions")return(shown("book")||shown("review")||shown("extra"))?({filled:"Filled buttons",outline:"Outline buttons",link:"Text links"})[S.btnStyle]:"Off";
@@ -1428,14 +1443,16 @@ function mkPanel(){var M=S.maker;var el=h2('<div class="wide mk"><div class="lbl
 
 var STEP=0,TUNE="name",SEL=null,visited={0:1};
 function partKey(p){return["book","review","extra"].indexOf(p)>=0?"actions":p==="line"?"logo":p}
-function stepOf(part){part=partKey(part);if(TUNE_PARTS.indexOf(part)>=0)part="tune";if(String(part).indexOf("c-")===0)part="custom";for(var i=0;i<STEPS.length;i++)if((STEPS[i].parts||[]).indexOf(part)>=0||(STEPS[i].acc||[]).indexOf(part)>=0)return i;if(["name","role","company","contact"].indexOf(part)>=0)return 2;return-1}
+function stepOf(part){part=partKey(part);if(TUNE_PARTS.indexOf(part)>=0)part="tune";if(String(part).indexOf("c-")===0)part="custom";for(var i=0;i<STEPS.length;i++)if((STEPS[i].parts||[]).indexOf(part)>=0||(STEPS[i].acc||[]).indexOf(part)>=0)return i;if(["name","role","company","contact"].indexOf(part)>=0)return stepId("details");return-1}
+function stepId(id){for(var i=0;i<STEPS.length;i++)if(STEPS[i].id===id)return i;return 0}
 function changed(){update();drawFlow()}
 function drawFlow(){var ol=$("flow");ol.innerHTML="";STEPS.forEach(function(s,i){var li=document.createElement("li"),b=document.createElement("button");b.type="button";
   if(i===STEP)b.setAttribute("aria-current","step");if(visited[i]&&i!==STEP)b.className="done";
   b.innerHTML='<span class="n">'+(visited[i]&&i!==STEP?"✓":(i+1))+'</span><span class="tx"><b>'+esc(s.t)+'</b></span>';
   b.addEventListener("click",function(){go(i)});li.appendChild(b);ol.appendChild(li)});
   document.querySelectorAll(".tab[data-acc]").forEach(function(d){var s=d.querySelector(".sum");if(s)s.textContent=accSummary(d.dataset.acc)})}
-function go(i,part){STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;var s=STEPS[STEP];
+var MORESET=false;
+function go(i,part){STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;var s=STEPS[STEP];document.body.setAttribute("data-step",s.id);setTimeout(fitPhone,30);
   if(window.innerWidth<=760&&!part)window.scrollTo(0,0);
   $("stepCount").textContent="Step "+(STEP+1)+" of "+STEPS.length;$("stepTitle").textContent=s.t;$("stepHint").textContent=s.d;
   var body=$("stepBody");body.innerHTML="";
@@ -1446,7 +1463,11 @@ function go(i,part){STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;
   else if(s.id==="copy")drawCopy(body);
   else if(s.acc){part=part&&partKey(part);var want=part?(TUNE_PARTS.indexOf(part)>=0?"tune":String(part).indexOf("c-")===0?"custom":part):OPEN;if(part&&TUNE_PARTS.indexOf(part)>=0)TUNE=part;
     var cur=(want&&s.acc.indexOf(want)>=0)?want:((OPEN&&s.acc.indexOf(OPEN)>=0)?OPEN:s.acc[0]);OPEN=cur;
-    var tabs=h2('<div class="tabs" role="tablist" aria-label="Sections"></div>'),pane=h2('<div class="tabpane" role="tabpanel"></div>');body.appendChild(tabs);body.appendChild(pane);
+    var tabs=h2('<div class="tabs" role="tablist" aria-label="Sections"></div>'),pane=h2('<div class="tabpane" role="tabpanel"></div>'),host=body;
+    if(s.id==="edit"){var hint=h2('<div class="edhint"><p><b>✏️ Tap any part of your signature</b> to change its words, size, colour or spacing. Drag a part to move it.</p><div class="edh-b"><button type="button" class="btn" data-e="save">💾 Save signature</button><button type="button" class="btn sec" data-e="tpl">Change template</button></div></div>');
+      hint.querySelector('[data-e="save"]').addEventListener("click",function(){var b=$("sigSave");if(b)b.click()});hint.querySelector('[data-e="tpl"]').addEventListener("click",function(){go(stepId("template"))});body.appendChild(hint);
+      var ms=h2('<details class="moreset"'+(part||MORESET?" open":"")+'><summary>More settings</summary></details>');ms.addEventListener("toggle",function(){MORESET=ms.open});body.appendChild(ms);host=ms}
+    host.appendChild(tabs);host.appendChild(pane);
     s.acc.forEach(function(a){var t=h2('<button type="button" role="tab" class="tab" data-acc="'+a+'" aria-selected="'+(a===cur)+'"><b>'+esc(ACC_NAMES[a])+'</b><span class="sum">'+esc(accSummary(a))+'</span></button>');
       t.addEventListener("click",function(){OPEN=a;go(STEP)});tabs.appendChild(t)});
     if(cur==="tune"){var chips=h2('<div class="chips"></div>');TUNE_PARTS.forEach(function(p){var c=document.createElement("button");c.type="button";c.textContent=PARTS.filter(function(x){return x[0]===p})[0][1];c.setAttribute("aria-pressed",String(TUNE===p));c.addEventListener("click",function(){TUNE=p;go(STEP)});chips.appendChild(c)});pane.appendChild(chips);renderPart(TUNE,pane,true);SEL=TUNE}
@@ -1462,7 +1483,7 @@ function openItem(id){id=partKey(id);var i=stepOf(id);if(i<0)return;var isC=Stri
 var SIMPLE_PARTS=["logo","name","role","contact","tagline","actions","social","banner","disclaimer","rainbow","signoff","photo"],MORE_OPEN={};
 function isAdvField(f){var t=f[0],k=String(f[1]||"");if(t==="note"||t==="logomatch"||t==="blogo")return true;
   return/^emb\./.test(k)||/^(logoBg|logoUrl|photoUrl|bannerUrl|bannerLink|btnGap|pieceGap|iconGap|btnPadX|btnPadY|btnFont|bookIcon|contactLabels|disclaimerJustify|btnRadius|disclaimerLabel)$/.test(k)||/^colors\.reviewBtn|^colors\.extraBtn/.test(k)}
-function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).concat(inOrder(id)||id==="actions"||id==="signoff"?[["place",id==="actions"?["book","review","extra"]:[id]]]:[]),o=inOrder(id),name=PARTS.filter(function(p){return p[0]===id})[0][1];
+function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).concat(inOrder(id)||id==="actions"||id==="signoff"?[["place",id==="actions"?["book","review","extra"]:[id]]]:[]),o=inOrder(id),name=(PARTS.filter(function(p){return p[0]===id})[0]||[id,""])[1];
   var box=h2('<div class="part" data-part="'+id+'"></div>');container.appendChild(box);
   var tools=o?'<span class="acts2"><button type="button" data-a="up" aria-label="Move up">▲</button><button type="button" data-a="down" aria-label="Move down">▼</button><button type="button" data-a="toggle">'+(o[1]?"Hide":"Show")+'</button></span>':'';
   box.innerHTML=(titled||o?'<div class="ied-h">'+(titled?'<b>'+esc(name)+'</b>':'<span></span>')+tools+'</div>':'')+(o&&!o[1]?'<p class="ied-off">This part is hidden. Press Show to add it back.</p>':'')+'<div class="ied-b"></div>';
@@ -1502,6 +1523,9 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
       var lg=S.maker.logo!==false;AMBS_BANNERS.forEach(function(bn){var x=document.createElement("button");x.type="button";x.setAttribute("aria-pressed",String(S.bannerUrl===bn.url||S.bannerUrl===bn.urlNo));x.innerHTML='<img alt="" src="'+(lg?bn.preview:bn.previewNo)+'"><small>'+esc(bn.label)+'</small>';
         x.addEventListener("click",function(){S.bannerUrl=lg?bn.url:bn.urlNo;S.bannerLink=bn.link;uploaded.banner=null;inOrder("banner")[1]=1;bw0.querySelectorAll("button").forEach(function(y){y.setAttribute("aria-pressed",String(y===x))});changed();go(STEP,"banner")});bw0.appendChild(x)})}
     else if(t==="sitefill"){el=siteFillCard()}
+    else if(t==="startpick"){el=startPick()}
+    else if(t==="foundbox"){el=h2('<div class="wide foundbox">'+(SITEFILL&&SITEFILL.html?'<b>Found on '+esc(SITEFILL.site)+'</b>'+SITEFILL.html:'<span>Empty lines are left out of your signature.</span>')+'</div>')}
+    else if(t==="confirm"){el=h2('<div class="wide confirmbox"><span>Everything right?</span><button type="button" class="btn">✓ Confirm details</button></div>');el.querySelector("button").addEventListener("click",function(){histPush(true);save();go(stepId("template"));toast("Details confirmed. Now pick a look.")})}
     else if(t==="htmlstart"){el=h2('<div class="wide hstart"><span>Already have a signature as an HTML file?</span><button type="button" class="btn sec small">📄 Upload HTML file</button></div>');el.querySelector("button").addEventListener("click",function(){$("htmlFile").click()})}
     else if(t==="replay"){el=h2('<div class="wide"><button type="button" class="btn sec small">▶ Watch it write again</button></div>');el.querySelector("button").addEventListener("click",function(){document.querySelectorAll("#sig img.so-img").forEach(function(im){im.src=im.src.replace(/([?&])r=\d+/,"").replace(/\?.*$/,function(q){return q})+"&r="+Date.now()})})}
     else if(t==="place"){el=placeCtl(k)}
@@ -1758,6 +1782,7 @@ function useHtmlFile(f){if(f.size>2*1024*1024){toast("That file is over 2 MB. Is
     if(!/<[a-z][\s\S]*>/i.test(code)){toast("That file doesn’t look like HTML.");return}
     if(MOVE)setMove(false);if(TEST)setTest(false);S.code=code;S.useCode=true;save();update();
     var local=[];code.replace(/<img[^>]+src=["']([^"']+)["']/gi,function(_,u){if(!/^(https?:|data:|cid:)/i.test(u))local.push(u)});
+    var made=false;try{made=!!codeToDesign()}catch(e){}if(made){go(stepId("details"));return}
     go(STEPS.length-1);setTimeout(function(){var b=$("codeBox");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},80);
     toast("Opened "+f.name+". Click any text in the preview to change it."+(local.length?" "+local.length+" picture"+(local.length>1?"s point":" points")+" to a file on your computer, so it won’t show in emails. Put it online and change its address in the code.":""))};r.readAsText(f)}
 /* on a phone the signature is shrunk to fit the preview card (it's still sent full size) */
@@ -1839,13 +1864,13 @@ function phoneFix(){var before=JSON.stringify(S),steps=[
     box.querySelector('[data-pw="ok"]').addEventListener("click",function(){box.hidden=true})},400)}
 
 function fitPhone(){var sig=$("sig");if(!sig)return;
-  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4;if(bw>0&&bw<PHONE_W)sig.style.zoom=String(+(bw/PHONE_W).toFixed(3));return}
+  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4,zp=bw>0&&bw<PHONE_W?bw/PHONE_W:1;if(window.innerWidth<=760&&STEPS[STEP]&&STEPS[STEP].id!=="edit"){var hh=sig.offsetHeight;zp=Math.min(zp,.62,hh>0?180/hh:1)}if(zp<.995)sig.style.zoom=String(+zp.toFixed(3));return}
   sig.style.width="";sig.style.zoom="";var ph=window.innerWidth<=760,big=$("bigPv")&&$("bigPv").getAttribute("aria-pressed")==="true";
   var box=sig.parentNode,stage=sig.closest(".stage"),w=sig.scrollWidth,h=sig.offsetHeight;if(!w||!h)return;
   var z=Math.min(ph?1:.9,(box.clientWidth-(ph?20:8))/w);
   if(!big)[box,stage].forEach(function(c){if(!c)return;var room=c.clientHeight-(c.scrollHeight-h)-10;if(room>80)z=Math.min(z,room/h)});
   if(big)z=Math.min(1,(box.clientWidth-8)/w);
-  z=Math.max(ph?.4:.55,z);if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
+  z=Math.max(ph?.4:.55,z);if(ph&&STEPS[STEP]&&STEPS[STEP].id!=="edit")z=Math.min(z,.55,180/h);if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
 window.addEventListener("resize",function(){clearTimeout(window._fp);window._fp=setTimeout(fitPhone,150)});
 /* phones: tap a part of the signature and its settings slide up from the bottom; the preview stays in view */
 /* tapping or clicking the stripe jumps to its thickness and spacing controls */
@@ -2101,6 +2126,11 @@ function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons()
   var mi=missing(),w=$("iconWarn");
   w.textContent=mi.length?"Before you copy: "+mi.join(" and ")+(mi.length>1?" need":" needs")+" a web address, or the email will leave "+(mi.length>1?"them":"it")+" out. Put the picture on your website (or any image host) and paste its web address.":"Paste into Gmail: Settings → See all settings → Signature. Outlook: Settings → Mail → Compose and reply → Email signature."}
 var update0=update;update=function(){syncActive();update0.apply(this,arguments);mobBar();placeGrab();phoneCheck();setTimeout(phoneGuide,60)};
+/* step 1: three ways in — website, logo, or an HTML signature */
+function startPick(){var w=h2('<div class="wide startpick"></div>');w.appendChild(siteFillCard());
+  var row=h2('<div class="sp-row"><button type="button" class="sp-card" data-sp="logo"><span class="sp-ic">🖼️</span><span><b>Upload your logo</b><small>We pick your brand colours from it</small></span></button><button type="button" class="sp-card" data-sp="html"><span class="sp-ic">📄</span><span><b>Use an HTML signature</b><small>Open one you already have</small></span></button></div>');
+  row.querySelector('[data-sp="logo"]').addEventListener("click",function(){$("logoFile").click()});row.querySelector('[data-sp="html"]').addEventListener("click",function(){$("htmlFile").click()});w.appendChild(row);
+  var sk=h2('<button type="button" class="sp-skip">Skip and keep the example details →</button>');sk.addEventListener("click",function(){go(stepId("details"))});w.appendChild(sk);return w}
 /* quick start: type the business website, we read the logo, name, phone, email, address and social accounts from it */
 var SITEFILL=null;
 function siteFillCard(){var el=h2('<div class="sfill"><h3>What’s your website?</h3><p>We fill in your logo, brand colours, business name, phone, email, address and social accounts from it. You can change anything after.</p><div class="row"><input type="url" inputmode="url" autocomplete="url" placeholder="yourbusiness.co.nz" aria-label="Your website"><button type="button" class="btn">Fill everything</button></div><div class="sfout"></div></div>');
@@ -2117,7 +2147,7 @@ function siteFill(site,btn,out){var keep=btn.textContent;
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])all.push([k==="x"?"X":k.charAt(0).toUpperCase()+k.slice(1),d.social[k]])});
       var got=all.filter(function(x){return x[1]}).length;
       var html='<ul>'+all.map(function(x){return'<li class="'+(x[1]?"":"no")+'">'+(x[1]?"✓ ":"– ")+'<b>'+esc(x[0])+'</b>'+(x[1]&&x[1]!==true?': '+esc(String(x[1]).slice(0,40)):x[1]?"":" not found")+'</li>'}).join("")+'</ul><p class="sfmsg">'+(got?"Filled in "+got+" things. Check them below, then press <b>Next</b>. Undo puts everything back.":"We couldn’t find details on that website. Fill them in below.")+'</p>';
-      SITEFILL={site:site,html:html};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
+      SITEFILL={site:site,html:html};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
   .catch(function(e){out.innerHTML='<p class="sfmsg">'+esc(e.message==="signin"?"Please sign in to the website editor first.":e.message)+'</p>'})
   .then(function(){btn.disabled=false;btn.textContent=keep;var b2=document.querySelector(".sfill .btn");if(b2){b2.disabled=false;b2.textContent=keep}})}
 function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.website||"").split("/")[0]);
@@ -2132,7 +2162,7 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
     var mailOk=/^image\/(png|jpe?g|gif)$/.test(d.logo.type)&&/^https:\/\//.test(d.logo.url);
     if(mailOk){S.logoUrl=d.logo.url;S.logoData=""}else{try{S.logoData=c.toDataURL("image/png");S.logoUrl=""}catch(e){fin(false);return}}
     S.logoRatio=h0/w0;S.logoShow=true;var lo=inOrder("logo");if(lo)lo[1]=1;
-    try{var lc=logoColours(im);if(lc.main.length){S.brandP=lc.main[0];S.brandS=lc.main[1]||lc.main[0];S.brandA=lc.main[2]||S.brandS;S.palette=lc.main.slice(0,6)}if(lc.dark){S.colors.text=lc.dark;S.colors.link=lc.dark}}catch(e){}
+    try{var lc=logoColours(im);var rd=lc.main.filter(function(c){return relLum(c)<.3});if(rd.length&&relLum(lc.main[0])>=.3)lc.main=[rd[0]].concat(lc.main.filter(function(c){return c!==rd[0]}));if(lc.main.length){S.brandP=lc.main[0];S.brandS=lc.main[1]||lc.main[0];S.brandA=lc.main[2]||S.brandS;S.palette=lc.main.slice(0,6)}if(lc.dark){S.colors.text=lc.dark;S.colors.link=lc.dark}}catch(e){}
     fin(true)};im.onerror=function(){fin(false)};im.src=d.logo.data}
 function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
   if(square){var c=document.createElement("canvas"),s=Math.min(im.naturalWidth,im.naturalHeight),n=Math.min(s,400);c.width=c.height=n;c.getContext("2d").drawImage(im,(im.naturalWidth-s)/2,(im.naturalHeight-s)/2,s,s,0,0,n,n);cb(c.toDataURL("image/jpeg",.9))}
@@ -2172,7 +2202,7 @@ function init(){
       var c=document.createElement("canvas"),w=Math.min(400,im.naturalWidth);c.width=w;c.height=Math.round(w*im.naturalHeight/im.naturalWidth);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
       S.logoData=c.toDataURL("image/png");S.logoRatio=im.naturalHeight/im.naturalWidth;S.logoShow=true;
       var lc=logoColours(im);if(lc.main.length){S.brandP=lc.main[0];S.brandS=lc.main[1]||lc.main[0];S.brandA=lc.main[2]||S.brandS;S.palette=lc.main.slice(0,6)}if(lc.dark){S.colors.text=lc.dark;S.colors.link=lc.dark}
-      changed();openItem("brand");toast(lc.main.length?"Logo added and "+lc.main.length+" brand colours picked from it":"Logo added")};im.src=r.src});e.target.value=""});
+      changed();if(STEPS[STEP].id==="start")go(stepId("details"));else openItem("brand");toast(lc.main.length?"Logo added and "+lc.main.length+" brand colours picked from it":"Logo added")};im.src=r.src});e.target.value=""});
   $("photoFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){S.photoData=r;S.photoShow=true;var po=inOrder("photo");if(po)po[1]=1;changed();openItem("photo");toast("Photo previewed")},true)});
   $("bannerFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){uploaded.banner=r;if(/\/assets\/email\/made\//.test(S.bannerUrl||""))S.bannerUrl="";inOrder("banner")[1]=1;changed();openItem("banner");toast("Banner previewed")})});
   $("sigSave").addEventListener("click",function(){saveSig(false,this)});
