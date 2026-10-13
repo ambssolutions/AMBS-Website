@@ -1,5 +1,6 @@
 /* Reads a business website and picks out what the email signature builder needs:
-   business name, phone, email, address, social accounts and the logo.
+   business name, phone, email, address, social accounts, booking, Google review and Google
+   profile links, a main call-to-action link and the logo.
    Used by api/siteinfo.js. Only public web addresses are fetched. */
 import dns from "node:dns/promises";
 import net from "node:net";
@@ -102,6 +103,67 @@ function socialFrom(href, found) {
   }
 }
 
+/* booking, Google review, Google profile and a main call-to-action link */
+const BOOK_HOSTS = /(^|\.)(calendly\.com|cal\.com|setmore\.com|acuityscheduling\.com|as\.me|youcanbook\.me|tidycal\.com|zcal\.co|simplybook\.(me|it|asia)|fresha\.com|gettimely\.com|cliniko\.com|nookal\.com|halaxy\.com|hotdoc\.com\.au|healthengine\.com\.au|bookwhen\.com|vagaro\.com|mindbodyonline\.com|opentable\.(com|co\.nz|com\.au)|resdiary\.com|nowbookit\.com|bookeo\.com|picktime\.com|square\.site|appointy\.com|meetings\.hubspot\.com|zoho\.com|bookings\.gettimely\.com|treatwell\.[a-z.]+|booksy\.com|timely\.(co\.nz|com))$/i;
+const BOOK_PATHS = /^https?:\/\/(?:(?:outlook\.office(?:365)?\.com\/(?:book|owa\/calendar\/[^/]+\/bookings))|(?:calendar\.app\.google\/)|(?:calendar\.google\.com\/calendar\/(?:appointments|u\/\d+\/appointments))|(?:(?:app|book)\.squareup\.com\/appointments)|(?:squareup\.com\/appointments)|(?:[\w-]+\.zohobookings\.[a-z.]+\/)|(?:[\w-]+\.setmore\.com))/i;
+const BOOK_TEXT = /\b(book(?:\s+(?:now|online|in|a|an|your|my|today|a\s+call|a\s+time|an?\s+appointment|a\s+meeting|a\s+consult(?:ation)?|a\s+session|a\s+table|a\s+service|a\s+free[\w\s]*))?|booking|appointments?|schedule\s+a\s+(?:call|meeting|time|consult(?:ation)?)|reserve(?:\s+a\s+table)?|make\s+a\s+reservation)\b/i;
+const EXTRA_TEXT = /^(get\s+(?:a|your|an)\s+(?:free\s+)?(?:quote|estimate|price)|request\s+a\s+(?:free\s+)?(?:quote|callback|call\s*back)|free\s+quote|order\s+(?:online|now)|shop\s+(?:now|online)|view\s+(?:our\s+)?menu|our\s+menu|see\s+(?:the\s+)?menu|donate(?:\s+now)?|enrol(?:\s+now)?|enroll(?:\s+now)?|apply\s+now|get\s+started|start\s+(?:a|your)\s+project|free\s+consultation|get\s+in\s+touch|enquire\s+(?:now|today)|contact\s+us\s+today)$/i;
+function googleLink(u) {
+  let x; try { x = new URL(u); } catch (e) { return null; }
+  const h = x.hostname.replace(/^www\./, ""), path = x.pathname;
+  if (h === "g.page") {
+    const m = /^\/r\/([\w-]+)(\/review)?/i.exec(path);
+    if (m) return { review: "https://g.page/r/" + m[1] + "/review", profile: m[2] ? "" : "https://g.page/r/" + m[1] };
+    const n = /^\/([\w.-]+)(\/review)?/i.exec(path);
+    if (n) return { review: n[2] ? "https://g.page/" + n[1] + "/review" : "", profile: "https://g.page/" + n[1] };
+  }
+  if (h === "search.google.com" && /writereview/i.test(path + x.search) && /placeid=/i.test(x.search)) return { review: x.href, profile: "" };
+  if (/^(maps\.app\.goo\.gl|goo\.gl|g\.co|share\.google)$/.test(h) && (h !== "goo.gl" || /^\/maps\//.test(path)) && (h !== "g.co" || /^\/kgs\//.test(path))) return { review: "", profile: x.href };
+  if (/^(maps\.)?google\.[a-z.]+$/.test(h) && (/^\/maps\/(place|search)\//.test(path) || ((/^\/maps\/?$/.test(path) || h.startsWith("maps.")) && /[?&]cid=\d+/.test(x.search)))) {
+    if (/writereview|\/review/i.test(path + x.search)) return { review: x.href, profile: "" };
+    return { review: "", profile: x.href };
+  }
+  /* google.com/search?...&ludocid=<id>#lrd=...,1,... : the reviews panel (",3," opens "write a review") */
+  if (/^google\.[a-z.]+$/.test(h) && path === "/search") {
+    const cid = x.searchParams.get("ludocid"), lrd = /lrd=([^&]+)/.exec(x.hash);
+    if (cid || lrd) {
+      let review = "";
+      if (lrd) { const parts = decodeURIComponent(lrd[1]).split(","); parts[1] = "3"; x.hash = "lrd=" + parts.join(","); review = x.href; }
+      return { review, profile: cid && /^\d+$/.test(cid) ? "https://maps.google.com/?cid=" + cid : "" };
+    }
+  }
+  if (/(^|\.)business\.site$/.test(h)) return { review: "", profile: x.origin };
+  return null;
+}
+function linkText(inner, tag) {
+  const t = ent(String(inner).replace(/<(script|style|svg)[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+  return t || attr(tag, "aria-label").trim() || attr(tag, "title").trim();
+}
+const niceLabel = (t, fallback) => { t = String(t || "").replace(/[→›»>➜➔✓✔★☆]+/g, "").replace(/\s+/g, " ").trim(); return t.length >= 3 && t.length <= 32 && /[a-z]/i.test(t) && !/^(https?:|www\.)/i.test(t) ? t.charAt(0).toUpperCase() + t.slice(1) : fallback; };
+export function findLinks(html, base) {
+  const out = { book: null, review: "", google: "", extra: null };
+  const origin = (() => { try { return new URL(base).origin; } catch (e) { return ""; } })();
+  let bookInside = null;
+  for (const m of html.matchAll(/<a\b([^>]*)>([\s\S]{0,600}?)<\/a>/gi)) {
+    const tag = "<a" + m[1] + ">", h = attr(tag, "href");
+    if (!h || /^(tel:|mailto:|javascript:)/i.test(h)) continue;
+    let u; try { u = new URL(ent(h).trim(), base); } catch (e) { continue; }
+    if (!/^https?:$/.test(u.protocol)) continue;
+    const href = u.href, text = linkText(m[2], tag);
+    const g = googleLink(href);
+    if (g) { if (g.review && !out.review) out.review = g.review; if (g.profile && !out.google) out.google = g.profile; continue; }
+    const host = u.hostname.replace(/^www\./, "");
+    if (!out.book && (BOOK_HOSTS.test(host) || BOOK_PATHS.test(href))) { out.book = { url: href, label: niceLabel(BOOK_TEXT.test(text) ? text : "", "Book online") }; continue; }
+    const inSite = u.origin === origin;
+    if (!bookInside && inSite && text.length <= 40 && BOOK_TEXT.test(text) && !/\b(e-?book|facebook|bookkeep\w*|notebook|guestbook|booklet)\b/i.test(text + " " + u.pathname) && (u.pathname !== "/" || u.hash)) bookInside = { url: href, label: niceLabel(text, "Book now") };
+    if (!out.extra && text.length <= 32 && EXTRA_TEXT.test(text.replace(/[→›»>!.]+$/g, "").trim())) out.extra = { url: href, label: niceLabel(text.replace(/[!.]+$/, ""), text) };
+  }
+  if (!out.book && bookInside) out.book = bookInside;
+  /* the business's map listing from structured data */
+  if (!out.google) for (const x of jsonLd(html)) { const hm = typeof x.hasMap === "string" ? x.hasMap : x.hasMap && x.hasMap.url; const g = hm && googleLink(hm); if (g && g.profile) { out.google = g.profile; break; } }
+  return out;
+}
+
 const cleanPhone = (s) => ent(s).replace(/^tel:/i, "").replace(/%20/g, " ").replace(/[^\d+()\- ]/g, "").replace(/\s+/g, " ").trim();
 const okPhone = (s) => { const d = s.replace(/\D/g, ""); return d.length >= 7 && d.length <= 15; };
 const okEmail = (s) => /^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/.test(s) && !/\.(png|jpe?g|gif|webp|svg)$/i.test(s) && !/(sentry|wixpress|example\.com|domain\.com|email\.com)/i.test(s);
@@ -181,6 +243,7 @@ export function readPage(html, base) {
   r.phones = [...byDigits.values()];
   r.emails = [...new Set(r.emails.map((e) => e.toLowerCase()).filter(okEmail))];
   r.logos = [...new Set(r.logos.filter(Boolean))];
+  r.links = findLinks(html, base);
   return r;
 }
 
@@ -222,6 +285,60 @@ export function normaliseSite(input) {
   try { const u = new URL(s); return u.href; } catch (e) { return ""; }
 }
 
+/* an animated logo (WebP, GIF, PNG) often starts or ends blank, and browsers only show a page the first
+   frame: keep the fullest frame as a still PNG, plus the animation as a GIF for email. Returns null for still pictures or when sharp
+   isn't available. */
+const isAnimated = (buf, type) =>
+  (/webp/.test(type) && buf.indexOf("ANIM", 12, "latin1") > 0 && buf.indexOf("ANIM", 12, "latin1") < 200) ||
+  (/png/.test(type) && buf.indexOf("acTL", 8, "latin1") > 0 && buf.indexOf("acTL", 8, "latin1") < buf.indexOf("IDAT", 8, "latin1")) ||
+  (/gif/.test(type) && buf.toString("latin1").split("\x21\xF9\x04").length > 2);
+async function stillFrame(buf, type) {
+  if (!isAnimated(buf, type)) return null;
+  let sharp;
+  try { sharp = (await import("sharp")).default; } catch (e) { return null; }
+  try {
+    const pages = Math.min((await sharp(buf, { animated: true }).metadata()).pages || 1, 400);
+    if (pages < 2) return null;
+    const step = Math.max(1, Math.floor(pages / 40));
+    let best = -1, bestPage = 0;
+    for (let k = 0; k < pages; k += step) {
+      const { data } = await sharp(buf, { page: k }).ensureAlpha().resize(80).raw().toBuffer({ resolveWithObject: true });
+      let n = 0; for (let i = 3; i < data.length; i += 4) if (data[i] > 40) n++;
+      if (n > best) { best = n; bestPage = k; }
+    }
+    const one = await sharp(buf, { page: bestPage }).png().toBuffer();
+    let trimmed = one, box = null;
+    try { const t = await sharp(one).trim().toBuffer({ resolveWithObject: true }); trimmed = t.data; box = { left: -t.info.trimOffsetLeft, top: -t.info.trimOffsetTop, width: t.info.width, height: t.info.height }; } catch (e) {}
+    const png = await sharp(trimmed).resize({ width: 800, withoutEnlargement: true }).png().toBuffer();
+    let gif = null; try { gif = await animatedGif(sharp, buf, pages, bestPage, box); } catch (e) {}
+    return { png, gif };
+  } catch (e) { return null; }
+}
+/* the same animation as a GIF for email (Gmail, Apple Mail and Outlook online play GIFs). It starts on the
+   fullest frame, because Outlook on Windows only shows the first frame. Kept small: about 40 frames, 300px wide. */
+async function animatedGif(sharp, buf, pages, bestPage, box) {
+  const meta = await sharp(buf, { animated: true }).metadata();
+  const delays = meta.delay || [];
+  for (const [width, maxFrames] of [[300, 40], [240, 28], [200, 18]]) {
+    const step = Math.max(1, Math.ceil(pages / maxFrames)), frames = [], delay = [];
+    const start = bestPage - (bestPage % step);
+    for (let n = 0; n < pages; n += step) {
+      const k = (start + n) % pages;
+      let img = sharp(buf, { page: k });
+      if (box) img = img.extract(box);
+      frames.push(await img.resize({ width, withoutEnlargement: true }).png().toBuffer());
+      let d = 0; for (let j = k; j < Math.min(k + step, pages); j++) d += delays[j] || 80;
+      delay.push(Math.max(20, Math.min(d, 5000)));
+    }
+    delay[0] = Math.max(delay[0], 1500); /* hold the full logo for a moment first */
+    const gif = await sharp(frames, { join: { animated: true } }).gif({ delay, loop: meta.loop || 0, effort: 7 }).toBuffer();
+    if (gif.length <= 450 * 1024) return gif;
+  }
+  return null;
+}
+
+const sameUrl = (a, b) => a.replace(/\/(index\.html?)?(?=#|$)/i, "") === b.replace(/\/(index\.html?)?(?=#|$)/i, "");
+const addLinks = (r, o) => { for (const k of ["book", "review", "google", "extra"]) if (!r.links[k] && o.links[k]) r.links[k] = o.links[k]; };
 export async function siteInfo(input) {
   const start = normaliseSite(input);
   if (!start) throw new Error("Please type a website address, like yourbusiness.co.nz");
@@ -238,6 +355,7 @@ export async function siteInfo(input) {
       r.emails = [...new Set(r.emails.concat(rc.emails))];
       r.address = r.address || rc.address;
       for (const k in rc.social) r.social[k] = r.social[k] || rc.social[k];
+      addLinks(r, rc);
     } catch (e) {}
   }
   /* the about or team page usually names the director or owner */
@@ -249,6 +367,7 @@ export async function siteInfo(input) {
       for (const p of ra.people) if (!have.has(p.name.toLowerCase())) r.people.push(p);
       for (const k in ra.social) r.social[k] = r.social[k] || ra.social[k];
       r.phones = [...new Set(r.phones.concat(ra.phones))];
+      addLinks(r, ra);
     } catch (e) {}
   }
   /* the logo, as a picture the builder can read colours from: the header's own logo first */
@@ -279,6 +398,7 @@ export async function siteInfo(input) {
     if (r.hdrSvg) found.push(r.hdrSvg);
     cands = [...new Set(found.slice(0, 3).concat(r.logos))];
   }
+  if (r.links.extra && r.links.book && sameUrl(r.links.extra.url, r.links.book.url)) r.links.extra = null;
   const host = new URL(page.url).hostname.replace(/^www\./, "");
   const emails = r.emails.slice().sort((a, b) => (b.endsWith("@" + host) ? 1 : 0) - (a.endsWith("@" + host) ? 1 : 0));
   for (const u of cands.concat(r.ogImage ? [r.ogImage] : []).slice(0, 6)) {
@@ -293,9 +413,17 @@ export async function siteInfo(input) {
       const g = await grab(u, 1.5e6, "image/*");
       const type = /svg/.test(g.type) || /\.svg(\?|$)/i.test(u) ? "image/svg+xml" : (g.type.startsWith("image/") ? g.type : "");
       if (!type || g.buf.length < 200) continue;
+      const still = await stillFrame(g.buf, type);
+      if (still) {
+        logo = { url: "", type: "image/png", data: "data:image/png;base64," + still.png.toString("base64"), fromOg: false, animated: true };
+        /* a GIF logo is used as it is; other animations come as a GIF made for email */
+        if (/gif/.test(type) && g.buf.length <= 450 * 1024 && /^https:/.test(g.url)) logo.animUrl = g.url;
+        else if (still.gif) logo.anim = "data:image/gif;base64," + still.gif.toString("base64");
+        break;
+      }
       logo = { url: g.url, type, data: "data:" + type + ";base64," + g.buf.toString("base64"), fromOg: u === r.ogImage && !r.logos.includes(u) };
       break;
     } catch (e) {}
   }
-  return { website: page.url.replace(/^https?:\/\//, "").replace(/\/$/, ""), name: r.name, phone: r.phones[0] || "", phones: r.phones.slice(0, 4), email: emails[0] || "", emails: emails.slice(0, 4), address: r.address.slice(0, 160), social: r.social, people: r.people.slice(0, 4), logo };
+  return { website: page.url.replace(/^https?:\/\//, "").replace(/\/$/, ""), name: r.name, phone: r.phones[0] || "", phones: r.phones.slice(0, 4), email: emails[0] || "", emails: emails.slice(0, 4), address: r.address.slice(0, 160), social: r.social, links: r.links, people: r.people.slice(0, 4), logo };
 }

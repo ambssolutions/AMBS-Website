@@ -574,7 +574,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
   .tabs .tab b{font-size:.74rem!important;line-height:1.15;font-weight:700;white-space:normal}
   .tabs .tab .sum{display:none!important}
   .tabs .tab::before{font-size:1.15rem;line-height:1}
-  .tab[data-acc="reorder"]::before{content:"⇅"}.tab[data-acc="brand"]::before{content:"🎨"}.tab[data-acc="signoff"]::before{content:"✍️"}.tab[data-acc="photo"]::before{content:"🧑"}.tab[data-acc="logo"]::before{content:"🏷️"}
+  .tab[data-acc="reorder"]::before{content:"⇅"}.tab[data-acc="dark"]::before{content:"🌙"}.tab[data-acc="brand"]::before{content:"🎨"}.tab[data-acc="signoff"]::before{content:"✍️"}.tab[data-acc="photo"]::before{content:"🧑"}.tab[data-acc="logo"]::before{content:"🏷️"}
   .tab[data-acc="actions"]::before{content:"🔘"}.tab[data-acc="social"]::before{content:"💬"}.tab[data-acc="custom"]::before{content:"➕"}
   .tab[data-acc="banner"]::before{content:"🖼️"}.tab[data-acc="disclaimer"]::before{content:"📄"}.tab[data-acc="style"]::before{content:"🎨"}
   .tab[data-acc="layout"]::before{content:"🧩"}.tab[data-acc="tune"]::before{content:"🔤"}
@@ -729,6 +729,8 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 .qbar.insheet .setcol{grid-column:1/-1;display:grid!important;grid-template-columns:repeat(3,1fr);gap:6px}.qbar.insheet .setcol small{grid-column:1/-1}.qbar .scsw{background:var(--soft,#f3f6fc)!important;border:1px solid var(--line)!important;color:var(--ink)!important;padding:6px!important;height:auto!important;min-width:0!important;width:auto!important;border-radius:10px!important;display:flex!important;flex-direction:column;gap:4px}.qbar .scsw span{display:block!important;font:600 .7rem system-ui,sans-serif;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qbar .scsw i{width:100%}.qbar:not(.insheet) .scsw{min-width:64px}
 
 /* reorder lists */
+.darkbox h4{margin:12px 0 6px;font-size:.88rem}.darkbox .dk-on{font-size:.95rem}.dk-logos{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dk-th{margin:0;border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:96px;justify-content:center}.dk-th.lt{background:#fff;color:#5b6176}.dk-th.dk{background:#1f1f1f;color:#bdc1c6}.dk-th img{max-width:100%;max-height:64px}.dk-th figcaption{font-size:.74rem;font-weight:600}.dk-acts{margin-top:8px;flex-wrap:wrap}.dk-cols{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.dk-c{display:flex;align-items:center;gap:8px}.dk-c span{flex:1;font-size:.84rem;font-weight:600}.dk-c input{width:40px;height:30px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff}.dk-c .chip[aria-pressed=true]{background:var(--ink);color:var(--panel)}
+.skipcopy{display:inline-block;margin-top:4px;font-size:.82rem}.skipcopy[hidden]{display:none}
 .reorderbox h4{margin:12px 0 6px;font-size:.88rem}
 .sortl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .sorti{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel);touch-action:none}
@@ -780,7 +782,7 @@ body.spage-on{overflow:hidden}
     <nav class="flow" aria-label="Steps"><ol id="flow"></ol></nav>
 
     <section class="panel" aria-labelledby="stepTitle">
-      <div class="ph"><div class="pht"><span class="kicker" id="stepCount"></span><h2 id="stepTitle"></h2><p id="stepHint"></p></div><div class="pnav"><button type="button" class="btn sec" id="prevStep">Back</button><button type="button" class="btn" id="nextStep">Next</button></div></div>
+      <div class="ph"><div class="pht"><span class="kicker" id="stepCount"></span><h2 id="stepTitle"></h2><p id="stepHint"></p><button type="button" class="linkbtn skipcopy" id="skipStep" hidden>Skip to Copy and use ⇥</button></div><div class="pnav"><button type="button" class="btn sec" id="prevStep">Back</button><button type="button" class="btn" id="nextStep">Next</button></div></div>
       <div id="stepBody"></div>
     </section>
 
@@ -901,7 +903,7 @@ function defaults(){return{
   colors:JSON.parse(JSON.stringify(DEF_COLORS)),contactLabels:false,
   font:"Arial, Helvetica, sans-serif",nameSize:17,textSize:13,rainbowW:220,
   iconStyle:"brand",iconSize:26,contactIcons:"letters",btnStyle:"filled",btnRadius:6,btnPadX:14,btnFont:0,contactSep:"·",bookIcon:"none",
-  useCode:false,code:"",emboss:0,emb:{btn:"0",icons:"0",logo:"0",banner:"0"},pvWidth:"desktop",pvMode:"light",template:"Brand stripe",st:{},maker:null,custom:[]
+  useCode:false,code:"",emboss:0,emb:{btn:"0",icons:"0",logo:"0",banner:"0"},pvWidth:"desktop",pvMode:"light",logoAnim:false,logoAnimUrl:"",logoAnimData:"",logoAnimRatio:0,darkOn:false,logoDarkUrl:"",logoDarkData:"",logoDarkRatio:0,dk:{text:"",muted:"",link:""},template:"Brand stripe",st:{},maker:null,custom:[]
 }}
 /* the old single "buttons" part becomes three pieces on one line: booking, review and extra */
 function expandActions(arr){var out=[];arr.forEach(function(x){if(x[0]==="actions"){out.push(["book",x[1],x[2]||"side",x[3]||0],["review",x[1],x[2]||"side",1],["extra",x[1],x[2]||"side",1])}else out.push([x[0],x[1],x[2]||"side",x[3]||0])});return out}
@@ -1032,13 +1034,19 @@ function makeLogoEmb(cb){var key=logoEmbKey(),lv=embL("logo"),src=S.logoData||(i
     var si=new Image();si.onload=function(){var c=document.createElement("canvas");c.width=W;c.height=H+pad;c.getContext("2d").drawImage(si,0,0);try{LOGO_EMB[key]=c.toDataURL("image/png")}catch(err){LOGO_EMB[key]=""}delete LOGO_EMB_BUSY[key];if(cb)cb();else update()};
     si.onerror=function(){delete LOGO_EMB_BUSY[key]};si.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg)};im.src=src}
 function logoInner(mode,w){w=w||S.logoSize;var h=Math.round(w*(S.logoRatio||0.365)),src,lv=embL("logo"),key=logoEmbKey();
-  if(lv&&(isAmbsLogo()||S.logoData)){var eh=Math.round(h*1.12);
+  var an=animLogo(mode);if(an){src=an;h=Math.round(w*(S.logoAnimRatio||S.logoRatio||0.365))}
+  else if(lv&&(isAmbsLogo()||S.logoData)){var eh=Math.round(h*1.12);
     if(mode==="email"){if(isAmbsLogo()){src=HOST+"logo-e"+lv+".png";h=eh}else if(S.logoEmbKey===key&&S.logoEmbUrl){src=S.logoEmbUrl;h=eh}else src=url(S.logoUrl)}
     else if(LOGO_EMB[key]){src=LOGO_EMB[key];h=eh}else{makeLogoEmb();src=S.logoData||AMBS_LOGO}}
   else if(mode==="email")src=isAmbsLogo()&&!S.logoData?HOST+"logo.png":url(S.logoUrl);
   else if(S.logoData)src=S.logoData;
   else src=S.logoUrl==="https://ambs.co.nz/logo-400.png"?AMBS_LOGO:url(S.logoUrl);
-  var link=url(S.website);return(link?'<a href="'+esc(link)+'" style="text-decoration:none;">':"")+img(src,w,h,S.company||"Logo")+(link?"</a>":"")}
+  var pic=img(src,w,h,S.company||"Logo");
+  /* dark mode logo: shown instead of the normal one by email apps in dark mode (Apple Mail, Outlook for Mac, new Outlook) */
+  if(mode==="email"&&darkExtras()&&url(S.logoDarkUrl)){var dh=Math.round(w*(S.logoDarkRatio||S.logoRatio||0.365));
+    pic=pic.replace("<img ",'<img class="dkl" ')+'<!--[if !mso]><!--><img class="dkd" src="'+esc(url(S.logoDarkUrl))+'" width="'+w+'" height="'+dh+'" alt="'+esc(S.company||"Logo")+'" style="display:none;border:0;width:'+w+'px;height:'+dh+'px;max-height:0;overflow:hidden;mso-hide:all;"><!--<![endif]-->'}
+  else if(mode!=="email"&&S.darkOn&&S.pvMode==="dark"&&darkLogoSrc(true))pic=img(darkLogoSrc(true),w,Math.round(w*(S.logoDarkRatio||S.logoRatio||0.365)),S.company||"Logo");
+  var link=url(S.website);return(link?'<a href="'+esc(link)+'" style="text-decoration:none;">':"")+pic+(link?"</a>":"")}
 function photoHtml(mode){var sz=S.photoSize,r=S.photoShape==="circle"?"50%":S.photoShape==="rounded"?"12px":"0",src=mode==="email"?url(S.photoUrl):(S.photoData||url(S.photoUrl));
   if(!src)return mode==="email"?"":'<div data-edit="photo" style="width:'+sz+'px;height:'+sz+'px;border-radius:'+r+';background:#e3e7ef;color:#5b6176;font:12px Arial;display:flex;align-items:center;justify-content:center;text-align:center;">Your<br>photo</div>';
   var ph=img(src,sz,sz,S.name||"Photo","border-radius:"+r+";object-fit:cover;"+ebBox());return mode==="email"?ph:'<div data-edit="photo">'+ph+'</div>'}
@@ -1272,7 +1280,7 @@ function signatureInner(mode){var side=content(mode,"side",true),under=content(m
   return out}
 /* pictures that aren't online yet are left out of the copied signature completely (an empty picture can upset Gmail) */
 function dropEmptyPics(h){return h.replace(/<a\b[^>]*>\s*<img\b[^>]*\bsrc=""[^>]*>\s*<\/a>/g,"").replace(/<img\b[^>]*\bsrc=""[^>]*>/g,"")}
-function builtOne(){return slim(keepPicSizes(dropEmptyPics(signature("email").replace(/ data-measure="1"/g,""))))}
+function builtOne(){var h=dropEmptyPics(signature("email").replace(/ data-measure="1"/g,""));if(darkExtras())h=darkTag(h);return slim(keepPicSizes(h))}
 /* a separate phone layout: arrangement, sizes and spacing for phones; colours, fonts and words stay shared */
 var MOB_KEYS=["order","st","contactLayout","logoSize","logoPos","logoShow","logoMatch","nameSize","textSize","iconSize","btnPadX","btnPadY","btnFont","btnGap","pieceGap","iconGap","contactGap","contactIconGap","gap","lineGapL","lineGapR","dividerW","lineLen","photoSize","photoShow","align","mainValign","signoffSize","bannerW","rainbowW","sigPad"];
 function pickMob(src){var o={};MOB_KEYS.forEach(function(k){if(src[k]!==undefined)o[k]=JSON.parse(JSON.stringify(src[k]))});return o}
@@ -1287,7 +1295,8 @@ function withLayout(which,fn){var keep=S,kb=barH;S=canonical(keep);if(which==="m
     for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh}}d.remove();
     return fn()}finally{S=keep;barH=kb}}
 var COPY_GMAIL=false;
-function builtHtml(){if(!S.mob||COPY_GMAIL)return S.mob?withLayout("lap",builtOne):builtOne();
+function builtHtml(){return darkStyle()+builtHtml2()}
+function builtHtml2(){if(!S.mob||COPY_GMAIL)return S.mob?withLayout("lap",builtOne):builtOne();
   var lap=withLayout("lap",builtOne),mob=withLayout("mob",builtOne);
   return'<style>@media only screen and (max-width:480px){.sgd{display:none!important;max-height:0!important;overflow:hidden!important}.sgm{display:block!important;max-height:none!important;overflow:visible!important}}</style>'+
     '<div class="sgd">'+lap+'</div><!--[if !mso]><!--><div class="sgm" style="display:none;max-height:0;overflow:hidden;">'+mob+'</div><!--<![endif]-->'}
@@ -1323,7 +1332,10 @@ function cleanCode(h,forPreview){var d=new DOMParser().parseFromString(String(h|
   d.querySelectorAll("script,iframe,object,embed,form,input,button,textarea,select,base,meta,title"+(forPreview?",style,link":"")).forEach(function(n){n.remove()});
   d.querySelectorAll("*").forEach(function(el){[].slice.call(el.attributes).forEach(function(at){var n=at.name.toLowerCase(),v=at.value.replace(/[\s\u0000-\u001f]/g,"").toLowerCase();if(n.indexOf("on")===0||((n==="href"||n==="src"||n==="xlink:href"||n==="action"||n==="formaction")&&(v.indexOf("javascript:")===0||v.indexOf("vbscript:")===0)))el.removeAttribute(at.name)})});
   var head=forPreview?"":[].map.call(d.head.querySelectorAll("style"),function(x){return x.outerHTML}).join("");return head+d.body.innerHTML.trim()}
-function missing(){var m=[];if(S.photoShow&&!url(S.photoUrl))m.push("your photo");if(S.order.some(function(o){return o[0]==="banner"&&o[1]})&&!url(S.bannerUrl))m.push("the banner");if(S.logoShow&&!url(S.logoUrl))m.push("your logo");if(S.logoData&&url(S.logoUrl)==="https://ambs.co.nz/logo-400.png"&&S.company!=="Ambs Solutions")m.push("your logo");return m}
+/* the moving (GIF) logo, when it's switched on: the online copy for email, the one in this browser for the preview */
+function animLogo(mode){if(!S.logoAnim)return"";return mode==="email"?url(S.logoAnimUrl):(S.logoAnimData||url(S.logoAnimUrl))}
+function hasAnim(){return!!(S.logoAnimData||url(S.logoAnimUrl))}
+function missing(){var m=[];if(S.photoShow&&!url(S.photoUrl))m.push("your photo");if(S.order.some(function(o){return o[0]==="banner"&&o[1]})&&!url(S.bannerUrl))m.push("the banner");if(S.logoShow&&!url(S.logoUrl)&&!(S.logoAnim&&url(S.logoAnimUrl)))m.push("your logo");if(S.logoData&&url(S.logoUrl)==="https://ambs.co.nz/logo-400.png"&&S.company!=="Ambs Solutions")m.push("your logo");return m}
 
 /* ---------- the editor: pick a part, change it ---------- */
 var $=function(id){return document.getElementById(id)};
@@ -1337,13 +1349,14 @@ var ITEM={
   custom:function(){return[["cpalette"],["cparts"],["order"]]},
   start:function(){return[["startpick"]]},
   reorder:function(){return[["reorderbox"]]},
+  dark:function(){return[["darkbox"]]},
   brand:function(){return[["logoUp"],["text","company","Business name"],["text","website","Website"],["text","logoUrl","Logo web address (used in emails)"],["note","Tip: on your website, right-click your logo and choose “Copy image address”, then paste it here."],["brandsets"],["color","brandP","Main colour"],["color","brandS","Second colour"],["color","brandA","Third colour"],["palette"],["newbrand"]]},
   details:function(){return[["foundbox"],["text","name","Your name"],["text","role","Role"],["text","company","Business"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["text","social.instagram","Instagram"],["text","social.tiktok","TikTok"],["text","social.facebook","Facebook"],["text","social.linkedin","LinkedIn"],["confirm"]]},
   signoff:function(){return(S.signoffStyle==="animated"||S.signoffStyle==="still")
     ?[["select","signoffStyle","Style",SO_STYLES],["hand"],["select","signoff","Words",Object.keys(SIGNOFFS).map(function(k){return[SIGNOFFS[k].text,SIGNOFFS[k].text]})],["seg","signoffAnimColor","Ink",INKS],["range","signoffSize","Size",18,44],["replay"],["note","Plays once in Gmail, Apple Mail and the new Outlook. Older Outlook on Windows shows it already written."]]
     :[["select","signoffStyle","Style",SO_STYLES],["text","signoff","Words"],["range","st.signoff.size","Size",10,44,function(){return soPlainSize()}],["color","st.signoff.color","Colour"],["bi","signoff"]]},
   photo:function(){return[["check","photoShow","Show a photo of me"],["file","photoFile","Choose a photo"],["seg","photoShape","Shape",[["circle","Circle"],["rounded","Rounded"],["square","Square"]]],["range","photoSize","Size",56,160],["text","photoUrl","Photo web address (used in the email)"],["note","To show in emails your photo has to be online. Put it on your website, then right-click it, choose “Copy image address” and paste it above."]]},
-  logo:function(){return[["logomatch"],["seg","logoWhere","Where",[["off","No logo"],["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"]]],["range","logoSize","Size",30,220],["seg","emb.logo","Embossed",EMB_OPTS],["seg","logoBg","Behind the logo",[["none","Nothing"],["brand","Brand colour tile"],["light","Grey tile"]]],["seg","divider","Line beside it",[["rainbow","Brand stripe"],["solid","One colour"],["none","None"]]],["linebox"],["file","logoFile","Try a different logo"],["text","logoUrl","Logo web address"]]},
+  logo:function(){return[["animlogo"],["logomatch"],["seg","logoWhere","Where",[["off","No logo"],["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"]]],["range","logoSize","Size",30,220],["seg","emb.logo","Embossed",EMB_OPTS],["seg","logoBg","Behind the logo",[["none","Nothing"],["brand","Brand colour tile"],["light","Grey tile"]]],["seg","divider","Line beside it",[["rainbow","Brand stripe"],["solid","One colour"],["none","None"]]],["linebox"],["file","logoFile","Try a different logo"],["text","logoUrl","Logo web address"]]},
   name:function(){return[["text","name","Name"],["color","st.name.color","Colour"],["range","st.name.size","Size",12,32,function(){return S.nameSize}],["bi","name"]]},
   role:function(){return[["text","role","Role"],["text","company","Business"],["color","st.role.color","Colour"],["range","st.role.size","Size",10,22,function(){return S.textSize}],["bi","role"]]},
   contact:function(){return[["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["seg","contactLayout","Layout",[["stack","One per line"],["pairs","Two per line"],["line","One line"]]],["range","contactGap","Gap between phone, email and website",0,24,function(){return contactGap()}],["range","contactIconGap","Gap between each icon and its words",0,24,function(){return cIconGap()}],["text","contactSep","Mark between them on one line (· | / or leave empty)"],["select","contactIcons","Icons",[["none","None"],["letters","Letters (M, P, E, W, A)"],["brand","Colour circles"],["glyph","Colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["glyph-white","White"],["outline","Outline"]]],["check","contactLabels","Letters in one colour"],["color","st.contact.color","Text colour"],["range","st.contact.size","Size",10,20,function(){return S.textSize}],["bi","contact"]]},
@@ -1374,12 +1387,12 @@ var STEPS=[
   {id:"start",sh:"Start",t:"Start",d:"Pick one way to begin. You can change anything later.",parts:["start"]},
   {id:"details",sh:"Details",t:"Check details",d:"This is what goes in your signature. Fix anything that’s wrong, then confirm.",parts:["details"]},
   {id:"template",sh:"Template",t:"Template",d:"Pick a look. Your details and colours go straight into it."},
-  {id:"edit",sh:"Edit",t:"Edit and save",d:"Tap any part of your signature to change it, then save.",acc:["brand","reorder","signoff","photo","logo","actions","social","custom","banner","disclaimer","style","layout","tune"]},
+  {id:"edit",sh:"Edit",t:"Edit and save",d:"Tap any part of your signature to change it, then save.",acc:["brand","dark","reorder","signoff","photo","logo","actions","social","custom","banner","disclaimer","style","layout","tune"]},
   {id:"copy",sh:"Copy",t:"Copy and use",d:"Copy the signature and paste it into your email."}
 ];
-var ACC_NAMES={brand:"Logo and colours",reorder:"Reorder",custom:"Add your own parts",signoff:"Sign-off",photo:"Photo",logo:"Logo",actions:"Buttons",social:"Social icons",banner:"Banner",disclaimer:"Disclaimer",style:"Colours and fonts",layout:"Layout and order",tune:"Fine-tune text"};
+var ACC_NAMES={brand:"Logo and colours",dark:"Dark mode",reorder:"Reorder",custom:"Add your own parts",signoff:"Sign-off",photo:"Photo",logo:"Logo",actions:"Buttons",social:"Social icons",banner:"Banner",disclaimer:"Disclaimer",style:"Colours and fonts",layout:"Layout and order",tune:"Fine-tune text"};
 var TUNE_PARTS=["name","role","contact","tagline","rainbow"];
-function accSummary(id){var on=function(b){return b?"On":"Off"};if(id==="brand")return S.company||"Logo, brand colours";if(id==="reorder")return"Contact lines, social icons";
+function accSummary(id){var on=function(b){return b?"On":"Off"};if(id==="brand")return S.company||"Logo, brand colours";if(id==="reorder")return"Contact lines, social icons";if(id==="dark")return S.darkOn?"On"+(darkLogoSrc(false)?" · own logo":""):"Off";
   if(id==="signoff")return S.signoffStyle==="none"?"Off":(S.signoffStyle==="animated"?"Writes itself":S.signoffStyle==="still"?"Handwritten":S.signoffStyle==="script"?"Own words":"Plain")+" · "+(S.signoff||"");
   if(id==="photo")return on(S.photoShow);if(id==="logo")return S.logoShow?({left:"Left",right:"Right",top:"Above",bottom:"Below",social:"By the icons"})[S.logoPos]:"Off";
   if(id==="actions")return(shown("book")||shown("review")||shown("extra"))?({filled:"Filled buttons",outline:"Outline buttons",link:"Text links"})[S.btnStyle]:"Off";
@@ -1645,7 +1658,7 @@ function go(i,part){if(window.innerWidth<=760)pvHandle();STEP=Math.max(0,Math.mi
     else{renderPart(cur,tgt);SEL=cur}}}
   else{s.parts.forEach(function(p){renderPart(p,body,s.parts.length>1)});SEL=part||s.parts[0]}
   if(s.id==="template"||s.id==="copy")SEL=null;
-  $("prevStep").disabled=STEP===0;var nx=STEPS[Math.min(STEP+1,STEPS.length-1)];$("nextStep").textContent=STEP===STEPS.length-1?"Done":s.id==="details"?"✓ Confirm details":"Next: "+(window.innerWidth<=760?nx.sh||nx.t:nx.t);$("nextStep").hidden=STEP===STEPS.length-1;
+  $("prevStep").disabled=STEP===0;var nx=STEPS[Math.min(STEP+1,STEPS.length-1)];$("nextStep").textContent=STEP===STEPS.length-1?"Done":s.id==="details"?"✓ Confirm details":"Next: "+(window.innerWidth<=760?nx.sh||nx.t:nx.t);$("nextStep").hidden=STEP===STEPS.length-1;$("skipStep").hidden=["start","details","template"].indexOf(s.id)<0;
   drawFlow();markSel();
   var op=body.querySelector(".acc[open]");if(op&&part)op.scrollIntoView({block:"nearest"})}
 function openItem(id){id=partKey(id);var i=stepOf(id);if(i<0)return;var isC=String(id).indexOf("c-")===0;
@@ -1699,6 +1712,9 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
         x.addEventListener("click",function(){S.bannerUrl=lg?bn.url:bn.urlNo;S.bannerLink=bn.link;uploaded.banner=null;inOrder("banner")[1]=1;bw0.querySelectorAll("button").forEach(function(y){y.setAttribute("aria-pressed",String(y===x))});changed();go(STEP,"banner")});bw0.appendChild(x)})}
     else if(t==="sitefill"){el=siteFillCard()}
     else if(t==="reorderbox"){el=reorderBox()}
+    else if(t==="darkbox"){el=darkBox()}
+    else if(t==="animlogo"){if(!hasAnim())return;el=h2('<div class="wide animlogo"><div class="lbl">Your logo moves</div><div class="seg" role="group" aria-label="Moving or still logo"><button type="button" data-v="1" aria-pressed="'+!!S.logoAnim+'">▶ Moving</button><button type="button" data-v="0" aria-pressed="'+!S.logoAnim+'">⏸ Still</button></div><p class="note">Moving: it plays in Gmail, Apple Mail and Outlook online (Outlook on Windows shows it still). Still: the full logo, never moving.</p></div>');
+      el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){S.logoAnim=b.dataset.v==="1";el.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});save();update();drawFlow();toast(S.logoAnim?"Moving logo":"Still logo")})})}
     else if(t==="startpick"){el=startPick()}
     else if(t==="foundbox"){el=foundBox()}
     else if(t==="confirm"){el=h2('<div class="wide confirmbox"><span>Everything right?</span><button type="button" class="btn">✓ Confirm details</button></div>');el.querySelector("button").addEventListener("click",function(){histPush(true);save();go(stepId("template"));toast("Details confirmed. Now pick a look.")})}
@@ -2228,6 +2244,7 @@ function drawQbar(force){var box=$("inbox"),q=$("qbar"),g=$("grabBox"),id=KEYPAR
     if(id==="line"){add('<button type="button" class="qb wide2">'+(S.divider==="rainbow"?"Rainbow":"One colour")+' ⇄</button>',function(){S.divider=S.divider==="rainbow"?"solid":"rainbow";changed();drawQbar(true)});
       var lc=add('<span class="qcols" title="Line colours"></span>');lineColours(lc,true)}
     if(id==="logo")add('<button type="button" class="qb wide2">Change</button>',function(){$("logoFile").click()});
+    if(id==="logo"&&hasAnim())add('<button type="button" class="qb wide2">'+(S.logoAnim?"⏸ Make it still":"▶ Make it move")+'</button>',function(e,el){S.logoAnim=!S.logoAnim;save();update();el.textContent=S.logoAnim?"⏸ Make it still":"▶ Make it move";toast(S.logoAnim?"Moving logo":"Still logo")});
     /* the choices that belong to this part, one tap to switch */
     var cyc=function(lbl,key,opts){var cur=getP(key),i=Math.max(0,opts.map(function(o){return o[0]}).indexOf(cur));add('<button type="button" class="qb wide2" title="'+esc(lbl)+': tap to change">'+esc(lbl)+': '+esc(opts[i][1])+' ⇄</button>',function(){var nx=opts[(i+1)%opts.length][0];setP(key,nx);changed();drawQbar(true)})};
     var lnk=function(key,ph){var li=add('<input class="qt qlink" type="url" aria-label="'+esc(ph)+'" placeholder="'+esc(ph)+'">',function(e,el){setP(key,el.value);save();update()},"input");li.value=getP(key)||""};
@@ -2360,7 +2377,9 @@ function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons()
   fitPhone();
   var ib=$("inbox");ib.classList.toggle("phone",S.pvWidth==="phone");ib.classList.toggle("dark",S.pvMode==="dark");
   /* dark inbox: like Gmail and Outlook, dark text becomes light; coloured text, buttons and pictures stay as they are */
-  if(S.pvMode==="dark")pv.querySelectorAll("[style*='color']").forEach(function(el){var c=getComputedStyle(el).color.match(/\d+/g);if(!c)return;var L=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255;var sat=Math.max(c[0],c[1],c[2])-Math.min(c[0],c[1],c[2]);if(L<0.42&&sat<60)el.style.color=L<0.25?"#e8eaed":"#bdc1c6"});
+  var dmap=S.pvMode==="dark"&&S.darkOn?darkMap():null;
+  if(S.pvMode==="dark")pv.querySelectorAll("[style*='color']").forEach(function(el){var c=getComputedStyle(el).color.match(/\d+/g);if(!c)return;
+    if(dmap){var hx="#"+c.slice(0,3).map(function(v){return("0"+(+v).toString(16)).slice(-2)}).join("");var to=dmap[hx];if(to!==undefined){if(to)el.style.color=to;return}}var L=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255;var sat=Math.max(c[0],c[1],c[2])-Math.min(c[0],c[1],c[2]);if(L<0.42&&sat<60)el.style.color=L<0.25?"#e8eaed":"#bdc1c6"});
   document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});
   $("fromLine").textContent=(S.name||"You")+(S.email?" <"+S.email+">":"");
   var mi=missing(),w=$("iconWarn");
@@ -2376,7 +2395,62 @@ function foundBox(){var it=SITEFILL&&SITEFILL.items;if(!it||!it.length)return h2
     row.querySelector("input").addEventListener("change",function(e){var c=e.target.checked;
       if(x.k==="@logo"){var lo=inOrder("logo");if(lo)lo[1]=c?1:0;S.logoShow=c}else setP(x.k,c?x.v:"");
       if(x.k.indexOf("social.")===0&&c){var so=inOrder("social");if(so)so[1]=1}
+      if(x.b&&c){var bo=inOrder(x.b);if(bo)bo[1]=1}
       save();var y=window.scrollY;changed();go(STEP);window.scrollTo(0,y);toast((c?"Using ":"Left out: ")+x.l)});l.appendChild(row)});
+  return el}
+/* dark mode: a version of the signature that email apps in dark mode switch to (Apple Mail, Outlook for Mac, new Outlook).
+   Gmail and Outlook on Windows ignore it and show the normal signature, so it's left out of the Gmail copy. */
+function darkExtras(){return!!S.darkOn&&!COPY_GMAIL}
+function darkLogoSrc(pv){return pv?(S.logoDarkData||url(S.logoDarkUrl)):(url(S.logoDarkUrl)||S.logoDarkData)}
+function hexN(c){c=String(c||"").trim().toLowerCase();if(/^#[0-9a-f]{3}$/.test(c))c="#"+c[1]+c[1]+c[2]+c[2]+c[3]+c[3];return/^#[0-9a-f]{6}$/.test(c)?c:""}
+function hexL(c){c=hexN(c);if(!c)return 1;var v=[1,3,5].map(function(i){return parseInt(c.substr(i,2),16)});return(0.2126*v[0]+0.7152*v[1]+0.0722*v[2])/255}
+var DK_AUTO={text:"#e8eaed",muted:"#bdc1c6",link:"#e8eaed"};
+function dkCol(k){var dk=S.dk||{};if(dk[k])return dk[k];return hexL(C(S.colors[k]))<0.5?DK_AUTO[k]:""}
+function darkCols(){var out=[],seen={};[["text","dkt"],["muted","dkm"],["link","dkk"]].forEach(function(x){var from=hexN(C(S.colors[x[0]]));if(!from||seen[from])return;seen[from]=1;out.push({from:from,cls:x[1],to:dkCol(x[0])})});return out}
+function darkMap(){var m={};darkCols().forEach(function(x){m[x.from]=x.to});return m}
+function darkTag(h){var cols=darkCols().filter(function(x){return x.to});if(!cols.length)return h;
+  return h.replace(/<(\w+)([^>]*)>/g,function(tag,name,attrs){var st=/ style="([^"]*)"/.exec(attrs);if(!st)return tag;var cm=/(?:^|;)\s*color:\s*(#[0-9a-fA-F]{3,6})/.exec(st[1]);if(!cm)return tag;
+    var hit=cols.filter(function(x){return x.from===hexN(cm[1])})[0];if(!hit)return tag;
+    attrs=/ class="/.test(attrs)?attrs.replace(/ class="/,' class="'+hit.cls+' '):' class="'+hit.cls+'"'+attrs;return"<"+name+attrs+">"})}
+function darkStyle(){if(!darkExtras())return"";var r=[];darkCols().forEach(function(x){if(x.to)r.push(["."+x.cls,"color:"+x.to+"!important"])});
+  if(S.logoShow&&url(S.logoDarkUrl))r.push([".dkl","display:none!important"],[".dkd","display:block!important;max-height:none!important"]);
+  if(!r.length)return"";return"<style>@media (prefers-color-scheme:dark){"+r.map(function(x){return x[0]+"{"+x[1]+"}"}).join("")+"}"+r.map(function(x){return"[data-ogsc] "+x[0]+"{"+x[1]+"}"}).join("")+"</style>"}
+/* a dark colour made bright enough for a dark background, keeping its hue and richness */
+function liftCol(r,g,b){r/=255;g/=255;b/=255;var mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,h=0,s=0,d=mx-mn;
+  if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d+6)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}
+  l=Math.max(l,0.62);s=Math.min(1,s*1.05);var c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2,o=h<60?[c,x,0]:h<120?[x,c,0]:h<180?[0,c,x]:h<240?[0,x,c]:h<300?[x,0,c]:[c,0,x];
+  return o.map(function(v){return Math.round((v+m)*255)})}
+/* a light version of the logo for dark backgrounds: black and grey turn light, dark colours brighten, a white box behind it goes */
+function makeDarkLogo(cb){var src=S.logoData||(isAmbsLogo()?AMBS_LOGO:url(S.logoUrl));if(!src){cb(false);return}
+  var im=new Image();if(/^https?:/i.test(src))im.crossOrigin="anonymous";
+  im.onload=function(){try{var w=Math.min(600,im.naturalWidth||400),h=Math.max(1,Math.round(w*(im.naturalHeight||1)/(im.naturalWidth||1))),c=document.createElement("canvas");c.width=w;c.height=h;var x=c.getContext("2d");x.drawImage(im,0,0,w,h);
+    var d=x.getImageData(0,0,w,h),p=d.data,lum=function(i){return(0.2126*p[i]+0.7152*p[i+1]+0.0722*p[i+2])/255},sat=function(i){return Math.max(p[i],p[i+1],p[i+2])-Math.min(p[i],p[i+1],p[i+2])};
+    var corners=[0,(w-1)*4,(h-1)*w*4,((h-1)*w+w-1)*4],box=corners.every(function(i){return p[i+3]>200&&lum(i)>0.9&&sat(i)<25});
+    for(var i=0;i<p.length;i+=4){if(p[i+3]<8)continue;if(box&&lum(i)>0.88&&sat(i)<30){p[i+3]=0;continue}var L=lum(i);if(L>=0.5)continue;
+      if(sat(i)<48){p[i]=255-p[i];p[i+1]=255-p[i+1];p[i+2]=255-p[i+2]}else{var rgb=liftCol(p[i],p[i+1],p[i+2]);p[i]=rgb[0];p[i+1]=rgb[1];p[i+2]=rgb[2]}}
+    x.putImageData(d,0,0);S.logoDarkData=c.toDataURL("image/png");S.logoDarkUrl="";S.logoDarkRatio=h/w;cb(true)}catch(e){cb(false)}};
+  im.onerror=function(){cb(false)};im.src=src}
+function darkBox(){var lt=S.logoData||(isAmbsLogo()?AMBS_LOGO:url(S.logoUrl)),dkSrc=darkLogoSrc(true);
+  var el=h2('<div class="wide darkbox"><label class="check dk-on"><input type="checkbox"'+(S.darkOn?" checked":"")+'> Dark mode version of my signature</label>'+
+    '<p class="note">When someone reads your email in dark mode, your signature switches to the logo and colours below. Works in Apple Mail (iPhone, iPad, Mac), Outlook for Mac and the new Outlook. Gmail and Outlook on Windows always show the normal (light) version.</p>'+
+    '<div class="dk-body"'+(S.darkOn?"":" hidden")+'><h4>Logo</h4><div class="dk-logos"><figure class="dk-th lt">'+(lt?'<img alt="Logo in light mode" src="'+esc(lt)+'">':'<span>No logo</span>')+'<figcaption>Light mode</figcaption></figure>'+
+    '<figure class="dk-th dk">'+(dkSrc?'<img alt="Logo in dark mode" src="'+esc(dkSrc)+'">':lt?'<img alt="Logo in dark mode" src="'+esc(lt)+'">':'<span>No logo</span>')+'<figcaption>Dark mode'+(dkSrc?"":" (same logo)")+'</figcaption></figure></div>'+
+    '<div class="acts dk-acts"><button type="button" class="btn sec small dk-make">✨ Make a light version for me</button><button type="button" class="btn sec small dk-up">Upload a dark mode logo</button>'+(dkSrc?'<button type="button" class="btn sec small dk-rm">Use the same logo</button>':'')+'<input type="file" accept="image/*" hidden></div>'+
+    (S.logoDarkData&&!url(S.logoDarkUrl)?'<p class="note">This logo goes online when you copy your signature (Copy and use → Put it online for me).</p>':'')+
+    '<h4>Colours</h4><div class="dk-cols"></div><button type="button" class="btn small dk-see">'+(S.pvMode==="dark"?"Showing dark mode ✓":"🌙 See it in dark mode")+'</button></div></div>');
+  var redraw=function(){var y=window.scrollY;save();update();go(STEP,"dark");window.scrollTo(0,y)};
+  var autoMake=function(then){makeDarkLogo(function(ok){if(!ok)toast("Couldn’t make one from this logo. Upload a dark mode logo instead.");if(then)then(ok)})};
+  el.querySelector(".dk-on input").addEventListener("change",function(e){S.darkOn=e.target.checked;if(S.darkOn){S.pvMode="dark";if(!darkLogoSrc(true)&&S.logoShow)autoMake(function(ok){redraw();toast(ok?"Dark mode is on. Here’s your signature in dark mode.":"Dark mode is on.")});else{redraw();toast("Dark mode is on.")}}else{S.pvMode="light";redraw()}});
+  el.querySelector(".dk-make").addEventListener("click",function(){autoMake(function(ok){if(ok){S.pvMode="dark";redraw();toast("Made a light version of your logo")}})});
+  var fi=el.querySelector("input[type=file]");el.querySelector(".dk-up").addEventListener("click",function(){fi.click()});
+  fi.addEventListener("change",function(){var f=fi.files&&fi.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){var w=Math.min(600,im.naturalWidth||400),h=Math.max(1,Math.round(w*im.naturalHeight/im.naturalWidth)),c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(im,0,0,w,h);
+    S.logoDarkData=c.toDataURL("image/png");S.logoDarkUrl="";S.logoDarkRatio=h/w;S.pvMode="dark";redraw();toast("Dark mode logo added")};im.onerror=function(){toast("That picture couldn’t be read")};im.src=rd.result};rd.readAsDataURL(f)});
+  var rm=el.querySelector(".dk-rm");if(rm)rm.addEventListener("click",function(){S.logoDarkData="";S.logoDarkUrl="";S.logoDarkRatio=0;redraw()});
+  var cw=el.querySelector(".dk-cols");[["text","Name and text"],["muted","Role and small text"],["link","Links"]].forEach(function(x){var k=x[0],dk=S.dk||(S.dk={text:"",muted:"",link:""}),cur=dkCol(k),isAuto=!dk[k];
+    var row=h2('<div class="dk-c"><span>'+x[1]+'</span><input type="color" value="'+esc(hexN(cur||C(S.colors[k]))||"#e8eaed")+'" aria-label="'+x[1]+' in dark mode"><button type="button" class="chip" aria-pressed="'+isAuto+'">Auto</button></div>');
+    row.querySelector("input").addEventListener("change",function(e){dk[k]=e.target.value;S.pvMode="dark";redraw()});
+    row.querySelector("button").addEventListener("click",function(){dk[k]="";redraw()});cw.appendChild(row)});
+  el.querySelector(".dk-see").addEventListener("click",function(){S.pvMode=S.pvMode==="dark"?"light":"dark";redraw()});
   return el}
 /* the order of the contact lines and social icons (Edit and save → Reorder) */
 var CONTACT_KINDS=["mobile","phone","email","web","location"],CONTACT_NAME={mobile:"Mobile",phone:"Office phone",email:"Email",web:"Website",location:"Address"},CONTACT_KEY={mobile:"mobile",phone:"phone",email:"email",web:"website",location:"location"};
@@ -2402,7 +2476,7 @@ function startPick(){var w=h2('<div class="wide startpick"></div>');w.appendChil
   var sk=h2('<button type="button" class="sp-skip">Skip and keep the example details →</button>');sk.addEventListener("click",function(){go(stepId("details"))});w.appendChild(sk);return w}
 /* quick start: type the business website, we read the logo, name, phone, email, address and social accounts from it */
 var SITEFILL=null;
-function siteFillCard(){var el=h2('<div class="sfill"><h3>What’s your website?</h3><p>We fill in your logo, brand colours, business name, phone, email, address and social accounts from it. You can change anything after.</p><div class="row"><input type="url" inputmode="url" autocomplete="url" placeholder="yourbusiness.co.nz" aria-label="Your website"><button type="button" class="btn">Fill everything</button></div><div class="sfout"></div></div>');
+function siteFillCard(){var el=h2('<div class="sfill"><h3>What’s your website?</h3><p>We fill in your logo, brand colours, business name, phone, email, address, social accounts, booking and Google review links from it. You can change anything after.</p><div class="row"><input type="url" inputmode="url" autocomplete="url" placeholder="yourbusiness.co.nz" aria-label="Your website"><button type="button" class="btn">Fill everything</button></div><div class="sfout"></div></div>');
   var inp=el.querySelector("input"),btn=el.querySelector("button"),out=el.querySelector(".sfout");inp.value=SITEFILL&&SITEFILL.site||S.website||"";
   var go1=function(){var v=inp.value.trim();if(!v){inp.focus();toast("Type your website first, like yourbusiness.co.nz");return}siteFill(v,btn,out)};
   btn.addEventListener("click",go1);inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();go1()}});
@@ -2414,32 +2488,59 @@ function siteFill(site,btn,out){var keep=btn.textContent;
   .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Couldn’t read that website.");return j})})
   .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Name",d.person],["Logo",found.logo],["Business name",d.name],["Website",d.website],["Office phone",d.phone],["Mobile",d.mobile],["Email",d.email],["Address",d.address]];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])all.push([k==="x"?"X":k.charAt(0).toUpperCase()+k.slice(1),d.social[k]])});
+      var lk=d.links||{};all.push(["Booking link",lk.book?lk.book.url:""],["Google review link",lk.review||""],["Google profile",lk.google||""]);if(lk.extra)all.push(["Extra button",lk.extra.label+" → "+lk.extra.url]);
       var got=all.filter(function(x){return x[1]}).length;
       var html='<ul>'+all.map(function(x){return'<li class="'+(x[1]?"":"no")+'">'+(x[1]?"✓ ":"– ")+'<b>'+esc(x[0])+'</b>'+(x[1]&&x[1]!==true?': '+esc(String(x[1]).slice(0,40)):x[1]?"":" not found")+'</li>'}).join("")+'</ul><p class="sfmsg">'+(got?"Filled in "+got+" things. Check them below, then press <b>Next</b>. Undo puts everything back.":"We couldn’t find details on that website. Fill them in below.")+'</p>';
       var items=[{l:"Your name",k:"name",v:d.person},{l:"Role",k:"role",v:d.prole},{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])items.push({l:({x:"X",tiktok:"TikTok",whatsapp:"WhatsApp",youtube:"YouTube",linkedin:"LinkedIn"})[k]||k.charAt(0).toUpperCase()+k.slice(1),k:"social."+k,v:d.social[k]})});
+      if(d.animLogo)items.splice(3,0,{l:"Moving logo (untick for a still logo)",k:"logoAnim",v:true});
+      if(lk.book)items.push({l:"Booking button: "+lk.book.label,k:"bookUrl",v:lk.book.url,b:"book"});if(lk.review)items.push({l:"Google review button",k:"reviewUrl",v:lk.review,b:"review"});
+      if(lk.google)items.push({l:"Google profile icon",k:"social.google",v:lk.google});if(lk.extra)items.push({l:"Extra button: "+lk.extra.label,k:"extraUrl",v:lk.extra.url,b:"extra"});
       SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
   .catch(function(e){out.innerHTML='<p class="sfmsg">'+esc(e.message==="signin"?"Please sign in to the website editor first.":e.message)+'</p>'})
   .then(function(){btn.disabled=false;btn.textContent=keep;var b2=document.querySelector(".sfill .btn");if(b2){b2.disabled=false;b2.textContent=keep}})}
 /* NZ and Australian mobiles start 02 / 04 (or +64 2 / +61 4); the rest count as the office phone */
 function isMobileNum(p){var x=String(p||"").replace(/[^\d+]/g,"");if(/^\+?64/.test(x))return/^\+?642/.test(x);if(/^\+?61/.test(x))return/^\+?614/.test(x);return/^0[24]/.test(x)&&!/^0800|^0508/.test(x)}
 function splitPhones(list){var o="",m="";(list||[]).forEach(function(p){if(isMobileNum(p)){if(!m)m=p}else if(!o)o=p});return{office:o,mobile:m}}
+/* an animated logo (WebP, GIF, APNG) can start or end blank: keep its fullest frame as a still picture
+   (the server does this too; this covers browsers that can read every frame) */
+function opaqueShare(src,w,h){var s=document.createElement("canvas");s.width=60;s.height=Math.max(1,Math.round(60*h/w));var x=s.getContext("2d");x.drawImage(src,0,0,s.width,s.height);var p=x.getImageData(0,0,s.width,s.height).data,n=0;for(var i=3;i<p.length;i+=4)if(p[i]>40)n++;return n/(p.length/4)}
+function stillLogo(src,cb){var done=false,fin=function(s,anim){if(!done){done=true;cb(s,anim)}};
+  var viaPage=function(){fin(src,false)};
+  var mt=(/^data:(image\/(?:webp|gif|png|apng|avif));base64,/i.exec(src)||[])[1];
+  if(!mt||typeof ImageDecoder==="undefined"){viaPage();return}
+  try{var bin=atob(src.slice(src.indexOf(",")+1)),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    ImageDecoder.isTypeSupported(mt).then(function(ok){if(!ok){viaPage();return}var dec=new ImageDecoder({data:u,type:mt});
+      return dec.tracks.ready.then(function(){var n=dec.tracks.selectedTrack?dec.tracks.selectedTrack.frameCount:1;if(n<=1){dec.close();viaPage();return}
+        var idx=[],step=Math.max(1,Math.floor(n/40));for(var k=0;k<n;k+=step)idx.push(k);var best=-1,bestUrl=null;
+        return idx.reduce(function(pr,k){return pr.then(function(){return dec.decode({frameIndex:k}).then(function(r){var f=r.image,w=f.displayWidth,h=f.displayHeight,c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(f,0,0);f.close();
+          var v=opaqueShare(c,w,h);if(v>best){best=v;bestUrl=c.toDataURL("image/png")}})})},Promise.resolve()).then(function(){dec.close();fin(bestUrl||src,!!bestUrl)})})}).catch(function(){viaPage()})}catch(e){viaPage()}}
 function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.website||"").split("/")[0]);
   /* a different business: the AMBS sample details go, whatever the website didn't give stays empty to fill in */
-  if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram=""}
+  if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram="";
+    /* AMBS's own booking and review links never go on another business's buttons */
+    if(/ambs\.co\.nz/i.test(S.bookUrl||""))S.bookUrl="";if(/Cayst76Z-_hGEBM/.test(S.reviewUrl||""))S.reviewUrl="";if(/ambs\.co\.nz/i.test(S.extraUrl||""))S.extraUrl="";if(/ambs\.co\.nz/i.test(S.bannerLink||""))S.bannerLink=""}
+  /* booking, Google review, Google profile and a main call-to-action from the website */
+  var lk=d.links||{},onB=function(id){var o=inOrder(id);if(o)o[1]=1};
+  if(lk.book&&lk.book.url){S.bookUrl=lk.book.url;S.bookLabel=lk.book.label||"Book online";onB("book")}
+  if(lk.review){S.reviewUrl=lk.review;if(!S.reviewLabel)S.reviewLabel="Review us on Google";onB("review")}
+  if(lk.extra&&lk.extra.url){S.extraUrl=lk.extra.url;S.extraLabel=lk.extra.label||"Find out more";onB("extra")}
   var sp=splitPhones(d.phones&&d.phones.length?d.phones:(d.phone?[d.phone]:[]));d.phone=sp.office;d.mobile=sp.mobile;
   var pp=(d.people||[])[0];if(pp&&pp.name){S.name=pp.name;if(pp.role)S.role=pp.role}d.person=pp?pp.name:"";d.prole=pp?pp.role||"":"";
   if(d.name)S.company=d.name;if(d.website)S.website=d.website;if(d.phone)S.phone=d.phone;if(d.mobile)S.mobile=d.mobile;if(d.email)S.email=d.email;if(d.address)S.location=d.address;
-  var soc=d.social||{};if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
+  var soc=Object.assign({},d.social||{});if(lk.google)soc.google=lk.google;if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
   var fin=function(gotLogo){save();changed();go(STEP,"brand");done({logo:gotLogo})};
   if(!d.logo||!d.logo.data){fin(false);return}
+  S.logoAnimData=d.logo.anim||"";S.logoAnimUrl=d.logo.animUrl||"";S.logoAnim=!!(d.logo.anim||d.logo.animUrl);S.logoAnimRatio=0;d.animLogo=S.logoAnim;
+  if(d.logo.anim){var ai=new Image();ai.onload=function(){if(ai.naturalWidth)S.logoAnimRatio=ai.naturalHeight/ai.naturalWidth;save();update()};ai.src=d.logo.anim}
+  stillLogo(d.logo.data,function(src,anim){if(anim){d.logo.type="image/png";d.logo.url=""}
   var im=new Image();im.onload=function(){var w0=im.naturalWidth||400,h0=im.naturalHeight||Math.round(w0/2.7);if(!w0||!h0){fin(false);return}
     var c=document.createElement("canvas"),w=Math.min(400,w0>=40?w0:400);c.width=w;c.height=Math.max(1,Math.round(w*h0/w0));c.getContext("2d").drawImage(im,0,0,c.width,c.height);
     var mailOk=/^image\/(png|jpe?g|gif)$/.test(d.logo.type)&&/^https:\/\//.test(d.logo.url);
     if(mailOk){S.logoUrl=d.logo.url;S.logoData=""}else{try{S.logoData=c.toDataURL("image/png");S.logoUrl=""}catch(e){fin(false);return}}
     S.logoRatio=h0/w0;S.logoShow=true;var lo=inOrder("logo");if(lo)lo[1]=1;
     try{applyLogoCols(logoColours(im))}catch(e){}
-    fin(true)};im.onerror=function(){fin(false)};im.src=d.logo.data}
+    fin(true)};im.onerror=function(){fin(false)};im.src=src})}
 /* tabs left open for a while: notice when a newer builder is live and offer a refresh (your work is saved in this browser) */
 (function(){if(!onAmbs())return;var first=null,shown=false;
   var check=function(){fetch("/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){var b=String(d&&d.build||"");if(!b)return;if(first===null){first=b;return}
@@ -2494,7 +2595,10 @@ function init(){
   document.addEventListener("click",function(e){var sig=$("sig");if(!sig.contains(e.target))return;
     if(window.innerWidth<=760&&!TEST&&!MOVE&&S.useCode&&String(S.code||"").trim()&&!e.target.closest(".codenote")&&!e.target.closest("#codeEdit")){}
     if(window.innerWidth<=760&&!TEST&&!MOVE&&!(S.useCode&&String(S.code||"").trim())){var t0=e.target.closest("[data-edit]");if(t0){e.preventDefault();KEYPART=t0.dataset.edit;placeGrab();return}}if(TEST){if(e.target.closest("a[href]"))return;if(!e.target.closest(".lt-list button"))e.preventDefault();return}e.preventDefault();if(MOVE)return;var t=e.target.closest("[data-edit]");if(!t)return;openItem(t.dataset.edit);if(t.classList.contains("sig-line"))setTimeout(lineCtl,150);else if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
-  $("logoFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;readImg(f,function(r){var im=new Image();im.onload=function(){
+  $("logoFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;
+    /* a moving GIF keeps moving: the GIF itself is used in the email, a still copy for colours and the dark mode logo */
+    S.logoAnim=false;S.logoAnimData="";S.logoAnimUrl="";
+    if(/gif/i.test(f.type)){var gr=new FileReader();gr.onload=function(){var bin=atob(String(gr.result).split(",")[1]||"");if(bin.split("\x21\xF9\x04").length>2){if(bin.length>800*1024){toast("That moving GIF is large. Emails load faster with a GIF under 800 KB.")}S.logoAnimData=gr.result;S.logoAnimUrl="";S.logoAnim=true;var ai=new Image();ai.onload=function(){S.logoAnimRatio=ai.naturalHeight/ai.naturalWidth;save();update()};ai.src=gr.result}};gr.readAsDataURL(f)}readImg(f,function(r){var im=new Image();im.onload=function(){
       var c=document.createElement("canvas"),w=Math.min(400,im.naturalWidth);c.width=w;c.height=Math.round(w*im.naturalHeight/im.naturalWidth);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
       S.logoData=c.toDataURL("image/png");S.logoRatio=im.naturalHeight/im.naturalWidth;S.logoShow=true;
       var lc=logoColours(im);applyLogoCols(lc);
@@ -2516,7 +2620,7 @@ function init(){
   $("bigPv").addEventListener("click",function(){var on=document.querySelector(".app").classList.toggle("big");this.setAttribute("aria-pressed",String(on));this.textContent=on?"Smaller preview":"Bigger preview";setTimeout(fitPhone,60)});
   (function(){var stg=document.querySelector(".pv-col .stage");if(stg&&window.ResizeObserver){var lh=0;new ResizeObserver(function(){var hh=stg.clientHeight;if(Math.abs(hh-lh)>4){lh=hh;clearTimeout(window._fp);window._fp=setTimeout(fitPhone,80)}}).observe(stg)}})();
   $("copySig").addEventListener("click",function(){copySig(this)});$("copyCode").addEventListener("click",function(){copyCode(this)});
-  $("prevStep").addEventListener("click",function(){go(STEP-1)});$("nextStep").addEventListener("click",function(){if(STEPS[STEP].id==="details"){histPush(true);save();toast("Details confirmed. Now pick a look.")}go(STEP+1);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
+  $("prevStep").addEventListener("click",function(){go(STEP-1)});$("skipStep").addEventListener("click",function(){histPush(true);save();go(stepId("copy"))});$("nextStep").addEventListener("click",function(){if(STEPS[STEP].id==="details"){histPush(true);save();toast("Details confirmed. Now pick a look.")}go(STEP+1);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
   update();go(0);
 }
 function toast(t){var el=document.createElement("div");el.className="toast";el.setAttribute("role","status");el.textContent=t;document.body.appendChild(el);setTimeout(function(){el.remove()},2000)}
@@ -2533,7 +2637,9 @@ function edToken(){var x=edSession();if(!x||!x.s||!x.s.access)return Promise.rej
 function offline(){var out=[];
   if(inOrder("banner")&&inOrder("banner")[1]&&!url(S.bannerUrl)&&uploaded.banner)out.push({k:"banner",label:"banner",src:uploaded.banner.src,set:function(u){S.bannerUrl=u}});
   if(S.photoShow&&!url(S.photoUrl)&&S.photoData)out.push({k:"photo",label:"photo",src:S.photoData,set:function(u){S.photoUrl=u}});
-  if(S.logoShow&&S.logoData&&(!url(S.logoUrl)||(url(S.logoUrl)==="https://ambs.co.nz/logo-400.png"&&!/ambs/i.test(S.company||""))))out.push({k:"logo",label:"logo",src:S.logoData,set:function(u){S.logoUrl=u}});
+  if(S.logoShow&&S.logoAnim&&S.logoAnimData&&!url(S.logoAnimUrl))out.push({k:"logo-animated",label:"moving logo",src:S.logoAnimData,set:function(u){S.logoAnimUrl=u}});
+  if(S.logoShow&&!(S.logoAnim&&hasAnim())&&S.logoData&&(!url(S.logoUrl)||(url(S.logoUrl)==="https://ambs.co.nz/logo-400.png"&&!/ambs/i.test(S.company||""))))out.push({k:"logo",label:"logo",src:S.logoData,set:function(u){S.logoUrl=u}});
+  if(S.darkOn&&S.logoShow&&S.logoDarkData&&!url(S.logoDarkUrl))out.push({k:"logo-dark",label:"dark mode logo",src:S.logoDarkData,set:function(u){S.logoDarkUrl=u}});
   var lk=logoEmbKey();if(S.logoShow&&lk&&S.logoData&&S.logoEmbKey!==lk&&LOGO_EMB[lk])out.push({k:"logo-embossed",label:"embossed logo",src:LOGO_EMB[lk],set:function(u){S.logoEmbUrl=u;S.logoEmbKey=lk}});
   return out}
 function putOnline(btn,done){var list=offline();if(!list.length){if(done)done();return}
