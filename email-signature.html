@@ -90,6 +90,9 @@ header.top .hbtn{min-width:38px;justify-content:center;font-size:1.05rem!importa
 .pguide{position:absolute;z-index:3;pointer-events:none;border-right:2px dashed #e5352b;box-sizing:border-box}.pguide.fits{border-right-color:#24b328}.pguide .pg-l{position:absolute;right:4px;top:4px;white-space:nowrap;background:#e5352b;color:#fff;font:600 10px/1 system-ui,sans-serif;padding:3px 6px;border-radius:6px}.pguide.fits .pg-l{background:#24b328}.pguide .pg-over{position:absolute;left:100%;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(229,53,43,.10) 0 6px,rgba(229,53,43,.03) 6px 12px)}.pguide[hidden],.pguide .pg-over[hidden]{display:none}
 #pgBtn[aria-pressed=true]{background:#14172b;color:#fff;border-color:#14172b}
 .scaleall .sa-row{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
+.mobbar{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;background:#eef4ff;border:1px solid #b9cdf5;color:#1d3b74;border-radius:12px;padding:8px 12px;font-size:.82rem;line-height:1.35;margin:10px 10px 0}.mobbar.on{background:#eafbea;border-color:#9fdca3;color:#14532d}.mobbar[hidden]{display:none!important}.mobbar .pw-b{display:flex;gap:6px;flex-wrap:wrap}
+.pwarn .sh,.mobbar .sh{display:none}
+@media (max-width:760px){.pwarn .lg,.mobbar .lg{display:none}.pwarn .sh,.mobbar .sh{display:inline}.pwarn,.mobbar{padding:6px 8px!important;margin:6px 6px 0!important;font-size:.74rem!important;flex-wrap:nowrap!important}.pwarn .pw-b,.mobbar .pw-b{flex-wrap:nowrap}.pwarn .btn,.mobbar .btn{padding:5px 9px!important;font-size:.72rem!important;white-space:nowrap}.pwarn [data-pw="see"]{display:none}}
 .mytpl{border:1px dashed #cbd5e1;border-radius:14px;padding:10px 12px;margin:0 0 12px}.mytpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.mytpl .note{margin:0}.tcard.mine{position:relative;cursor:pointer}.tdel{position:absolute;top:6px;right:6px;border:0;border-radius:999px;background:rgba(15,23,42,.72);color:#fff;font:600 12px/1 inherit;padding:5px 8px;cursor:pointer}.tdel.on{background:#dc2626}
 .panel .mytpl .tpl-grid{max-height:none!important}
 .tcard{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
@@ -631,6 +634,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
         </div>
       </div>
       <div class="mail">
+        <div class="mobbar" id="mobBar" hidden></div>
         <div class="pwarn" id="phoneWarn" hidden></div>
         <div class="mail-h"><b>Your free automation session</b><span>From: <span id="fromLine"></span> · To: Sam Patel</span></div>
         <div class="stage"><div class="inbox" id="inbox">
@@ -1087,7 +1091,25 @@ function signatureInner(mode){var side=content(mode,"side",true),under=content(m
   var sp0=Math.max(0,+S.sigPad||0);if(sp0)out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td style="padding:'+sp0+'px;">'+out+'</td></tr></table>';
   if(S.card!=="none")out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td bgcolor="'+S.colors.cardBg+'" style="background:'+S.colors.cardBg+';border-radius:12px;padding:18px 20px;'+ebCard()+'">'+out+'</td></tr></table>';
   return out}
-function builtHtml(){return slim(keepPicSizes(signature("email").replace(/ data-measure="1"/g,"")))}
+function builtOne(){return slim(keepPicSizes(signature("email").replace(/ data-measure="1"/g,"")))}
+/* a separate phone layout: arrangement, sizes and spacing for phones; colours, fonts and words stay shared */
+var MOB_KEYS=["order","st","contactLayout","logoSize","logoPos","logoShow","logoMatch","nameSize","textSize","iconSize","btnPadX","btnFont","btnGap","pieceGap","iconGap","contactGap","gap","lineGapL","lineGapR","dividerW","lineLen","photoSize","photoShow","align","mainValign","signoffSize","bannerW","rainbowW","sigPad"];
+function pickMob(src){var o={};MOB_KEYS.forEach(function(k){if(src[k]!==undefined)o[k]=JSON.parse(JSON.stringify(src[k]))});return o}
+/* the stored form: laptop layout in the main settings, phone layout in .mob */
+function canonical(src){var c=JSON.parse(JSON.stringify(src));if(c._active==="mob"&&c._lap){c.mob=pickMob(c);Object.assign(c,c._lap)}delete c._lap;delete c._active;return c}
+function syncActive(){var want=S.mob&&S.pvWidth==="phone"?"mob":"lap",cur=S._active||"lap";if(cur===want)return;
+  if(want==="mob"){S._lap=pickMob(S);Object.assign(S,JSON.parse(JSON.stringify(S.mob)));S._active="mob"}
+  else{S.mob=pickMob(S);Object.assign(S,S._lap);delete S._lap;delete S._active}}
+/* build one layout without disturbing what's on screen; the stripe length is measured for that layout */
+function withLayout(which,fn){var keep=S,kb=barH;S=canonical(keep);if(which==="mob"&&S.mob)Object.assign(S,JSON.parse(JSON.stringify(S.mob)));
+  try{var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+(which==="mob"?PHONE_W+"px":"max-content");document.body.appendChild(d);
+    for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh}}d.remove();
+    return fn()}finally{S=keep;barH=kb}}
+var COPY_GMAIL=false;
+function builtHtml(){if(!S.mob||COPY_GMAIL)return S.mob?withLayout("lap",builtOne):builtOne();
+  var lap=withLayout("lap",builtOne),mob=withLayout("mob",builtOne);
+  return'<style>@media only screen and (max-width:480px){.sgd{display:none!important;max-height:0!important;overflow:hidden!important}.sgm{display:block!important;max-height:none!important;overflow:visible!important}}</style>'+
+    '<div class="sgd">'+lap+'</div><!--[if !mso]><!--><div class="sgm" style="display:none;max-height:0;overflow:hidden;">'+mob+'</div><!--<![endif]-->'}
 /* the Outlook phone app squeezes small pictures inside table columns (logo, icons) to almost nothing:
    give them and the cell holding them a minimum width; wide pictures like the banner may still shrink to fit */
 function keepPicSizes(h){
@@ -1478,7 +1500,7 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
     else if(t==="replay"){el=h2('<div class="wide"><button type="button" class="btn sec small">▶ Watch it write again</button></div>');el.querySelector("button").addEventListener("click",function(){document.querySelectorAll("#sig img.so-img").forEach(function(im){im.src=im.src.replace(/([?&])r=\d+/,"").replace(/\?.*$/,function(q){return q})+"&r="+Date.now()})})}
     else if(t==="place"){el=placeCtl(k)}
     else if(t==="scaleall"){el=h2('<div class="wide scaleall"><div class="lbl">All sizes</div><div class="sa-row"><button type="button" class="btn sec small" data-sa="0.95">− Smaller</button><button type="button" class="btn sec small" data-sa="1.05">+ Bigger</button><button type="button" class="btn small" data-sa="fit">📱 Fit to phone</button></div><p class="note">Makes the logo, text, icons, buttons and spacing smaller or bigger together, keeping the same layout.</p></div>');
-      el.querySelectorAll("[data-sa]").forEach(function(b){b.addEventListener("click",function(){if(b.dataset.sa==="fit"){shrinkToFit();return}scaleAll(+b.dataset.sa);changed();toast(b.dataset.sa<1?"Everything a little smaller":"Everything a little bigger")})})}
+      el.querySelectorAll("[data-sa]").forEach(function(b){b.addEventListener("click",function(){if(b.dataset.sa==="fit"){fitPhone2();return}scaleAll(+b.dataset.sa);changed();toast(b.dataset.sa<1?"Everything a little smaller":"Everything a little bigger")})})}
     else if(t==="linebox"){el=S.divider==="none"?null:lineCtlBox()}
     else if(t==="note"){el=h2('<p class="note wide">'+esc(k)+'</p>')}
     else if(t==="color"){var cur=C(getP(k)||f[5]||"")||"#14172b";el=h2('<div class="cl"><label for="'+id2+'">'+esc(f[2])+'</label><div class="pick"><input type="color" id="'+id2+'" value="'+cur+'">'+swatches().map(function(s){return'<button type="button" class="sw" style="background:'+s+'" data-c="'+s+'" aria-label="'+s+'"></button>'}).join("")+'</div></div>');
@@ -1507,9 +1529,9 @@ function drawParts(){drawFlow()}
 var TPL_FILTERS=[["all","All templates"],["business","Business"],["personal","Personal"],["marketing","Marketing"],["law","Law and finance"],["creative","Creative"],["photo","With photo"],["banner","With banner"],["c1","1 column"],["c2","2 columns"],["c3","3 columns"]];
 var tplFilter="all";
 /* your own templates: the look of a customised signature (layout, styles, spacing, your added parts), without the person's details */
-var TPL_KEYS=LOOK.concat(["emb","emboss","pieceGap","iconGap","btnGap","contactGap","btnPadX","btnFont","mainValign","dividerW","lineGapL","lineGapR","lineLen","sigPad","rainbowW","bannerW","signoffSize","disclaimerJustify","custom"]);
+var TPL_KEYS=LOOK.concat(["mob","emb","emboss","pieceGap","iconGap","btnGap","contactGap","btnPadX","btnFont","mainValign","dividerW","lineGapL","lineGapR","lineLen","sigPad","rainbowW","bannerW","signoffSize","disclaimerJustify","custom"]);
 var MYTPL=null;
-function lookOf(src){var o={};TPL_KEYS.forEach(function(k){if(src[k]!==undefined)o[k]=JSON.parse(JSON.stringify(src[k]))});return o}
+function lookOf(src){src=canonical(src);var o={};TPL_KEYS.forEach(function(k){if(src[k]!==undefined)o[k]=JSON.parse(JSON.stringify(src[k]))});return o}
 function useMyTpl(t,into){var d=into||S;Object.assign(d,JSON.parse(JSON.stringify(t.state||{})));d.template=t.name;fixOrder(d);return d}
 function loadMyTpl(){return sigApi({action:"list"}).then(function(j){MYTPL=(j.signatures||[]).filter(function(x){return x.kind==="template"});return MYTPL})}
 function saveMyTpl(name,btn){if(S.useCode&&String(S.code||"").trim()){toast("Press ✨ Make it editable first, so the look can be saved.");return Promise.resolve()}
@@ -1688,7 +1710,7 @@ function sigApi(body){
       if(body.action==="get"){var g=d.signatures.filter(function(x){return x.id===body.id})[0];if(!g)throw new Error("That signature isn’t saved any more.");return ok(g)}
       if(body.action==="save"){var now=new Date().toISOString(),x=body.id&&d.signatures.filter(function(y){return y.id===body.id})[0];if(x){x.name=body.name;x.state=body.state;x.updated=now}else{x={id:Date.now().toString(36),name:body.name,state:body.state,updated:now};if(body.kind==="template")x.kind="template";d.signatures.push(x)}put();return ok({id:x.id,name:x.name})}
       if(body.action==="delete"){d.signatures=d.signatures.filter(function(y){return y.id!==body.id});put();return ok({ok:true})}}catch(e){no(e)}})}
-function sigState(){var st=JSON.parse(JSON.stringify(S));delete st._lw;delete st._sigId;delete st._sigName;return st}
+function sigState(){var st=canonical(S);delete st._lw;delete st._sigId;delete st._sigName;return st}
 function saveSig(asNew,btn,name){
   if(!asNew&&!S._sigId){openSigs(true);return}
   var nm=(name||S._sigName||"My signature").trim(),warn=uploaded.banner&&!url(S.bannerUrl)&&!S.bannerMade?" Your uploaded banner isn’t online yet, so it’s saved without it.":"";
@@ -1698,6 +1720,8 @@ function saveSig(asNew,btn,name){
 function openSig(id){return sigApi({action:"get",id:id}).then(function(j){var d=defaults(),o=j.state||{};d.maker=null;d.custom=[];
     mergeState(d,o);delete d._sigId;delete d._sigName;
     fixOrder(d);
+    /* the preview view is this screen's choice, not part of the signature */
+    d.pvWidth=S.pvChosen?S.pvWidth:(window.innerWidth<=760?"phone":"desktop");d.pvChosen=S.pvChosen;d.pvMode=S.pvMode;
     S=d;["logo","photo"].forEach(function(k){var o=inOrder(k);if(o&&(o[2]==="left"||o[2]==="right"))colNorm(k)});if(!S.maker)S.maker=mkDefaults();S._sigId=j.id;S._sigName=j.name;uploaded={logo:null,photo:null,banner:null};
     if(S.bannerMade&&!url(S.bannerUrl))mkRender(true);HIST=[];HI=-1;save();histPush(true);update();drawFlow();sigTitle();
     if(S.useCode&&String(S.code||"").trim()){go(STEPS.length-1);setTimeout(function(){var b=document.querySelector(".cfields");if(b)b.scrollIntoView({block:"start",behavior:"smooth"})},80);toast("Opened “"+j.name+"”. It’s HTML code: press ✨ Make it editable to change icons, spacing and layout, or change its words here.")}
@@ -1731,10 +1755,20 @@ function useHtmlFile(f){if(f.size>2*1024*1024){toast("That file is over 2 MB. Is
     toast("Opened "+f.name+". Click any text in the preview to change it."+(local.length?" "+local.length+" picture"+(local.length>1?"s point":" points")+" to a file on your computer, so it won’t show in emails. Put it online and change its address in the code.":""))};r.readAsText(f)}
 /* on a phone the signature is shrunk to fit the preview card (it's still sent full size) */
 /* shrink the preview so the whole signature fits the preview box, across and down (Bigger preview shows it full size) */
-var PHONE_W=336;
+var PHONE_W=350;
+function mobBar(){var cg=$("copyGm");if(cg)cg.hidden=!S.mob;var pgb=$("pgBtn");if(pgb)pgb.hidden=!!S.mob;var b=$("mobBar");if(!b)return;if(S.useCode&&String(S.code||"").trim()){b.hidden=true;return}
+  if(S.pvWidth==="phone"){b.hidden=false;b.className="mobbar "+(S.mob?"on":"");
+    b.innerHTML=S.mob?'<span class="lg">📱 <b>Editing the phone layout.</b> Changes here only affect phones. Colours, fonts and words are shared.</span><span class="sh">📱 <b>Phone layout</b></span><span class="pw-b"><button type="button" class="btn sec small" data-mb="lap">Edit laptop layout</button><button type="button" class="btn sec small" data-mb="off">Remove phone layout</button></span>'
+      :'<span>📱 Phones use your laptop layout, moving parts onto the next line where needed.</span><span class="pw-b"><button type="button" class="btn small" data-mb="on">Make a separate phone layout</button></span>';if(!S.mob&&$("phoneWarn")&&!$("phoneWarn").hidden){b.hidden=true;return}}
+  else if(S.mob){b.hidden=false;b.className="mobbar";b.innerHTML='<span class="lg">💻 <b>Laptop layout.</b> This signature also has a phone layout.</span><span class="sh">💻 <b>Laptop layout</b></span><span class="pw-b"><button type="button" class="btn sec small" data-mb="phone">Edit phone layout</button></span>'}
+  else{b.hidden=true;return}
+  b.querySelectorAll("[data-mb]").forEach(function(x){x.addEventListener("click",function(){var k=x.dataset.mb;
+    if(k==="on"){S.mob=pickMob(S);S._lap=pickMob(S);S._active="mob";save();update();toast("Phone layout made. Change it here; your laptop layout stays the same.")}
+    else if(k==="off"){if(S._active==="mob"){Object.assign(S,S._lap);delete S._lap;delete S._active}delete S.mob;save();update();toast("Phone layout removed. Phones use the laptop layout again.")}
+    else if(k==="lap"){S.pvWidth="desktop";update()}else if(k==="phone"){S.pvWidth="phone";update()}})})}
 /* laptop preview: a dashed line where a phone screen ends; anything shaded past it moves down on phones */
 function phoneGuide(){var box=$("inbox"),sig=$("sig");if(!box||!sig)return;var g=$("phoneGuide");
-  var on=S.phoneGuide!==false&&S.pvWidth!=="phone"&&!MOVE&&!TEST&&!(S.useCode&&String(S.code||"").trim());
+  var on=S.phoneGuide!==false&&!S.mob&&S.pvWidth!=="phone"&&!MOVE&&!TEST&&!(S.useCode&&String(S.code||"").trim());
   if(!on){if(g)g.hidden=true;return}
   if(!g){g=h2('<div id="phoneGuide" class="pguide" aria-hidden="true"><span class="pg-l">📱 Phone width</span><span class="pg-over"></span></div>');box.appendChild(g)}
   var z=+sig.style.zoom||1,r=sig.getBoundingClientRect(),b=box.getBoundingClientRect(),w=PHONE_W*z,nw=sigNaturalWidth(),over=Math.max(0,nw*z-w);
@@ -1750,10 +1784,10 @@ function sigNaturalWidth(){var d=document.createElement("div");d.style.cssText="
   d.remove();return Math.ceil(w)}
 var PW_T=0;
 function phoneCheck(){clearTimeout(PW_T);PW_T=setTimeout(function(){var box=$("phoneWarn");if(!box)return;if(S.useCode&&String(S.code||"").trim()){box.hidden=true;return}
-  var w=sigNaturalWidth();if(w<=PHONE_W+4){box.hidden=true;return}
-  box.hidden=false;box.innerHTML='<span>📱 <b>Too wide for phones</b> ('+w+'px; a phone shows about '+PHONE_W+'px). In the Outlook phone app some parts move onto the next line and the stripe won’t reach the bottom.</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="see">'+(S.pvWidth==="phone"?"Back to laptop view":"See it on a phone")+'</button><button type="button" class="btn small" data-pw="fix" title="Makes everything a little smaller, and moves parts onto their own lines only if that is not enough">📱 Fit to phone</button></span>';
+  var w=S.mob&&S._active!=="mob"?withLayout("mob",sigNaturalWidth):sigNaturalWidth();if(w<=PHONE_W+4){box.hidden=true;return}
+  box.hidden=false;box.innerHTML='<span class="lg">📱 <b>'+(S.mob?"Your phone layout is too wide":"Too wide for phones")+'</b> ('+w+'px; a phone shows about '+PHONE_W+'px). '+(S.mob?"Parts will move onto the next line on phones.":"On phones some parts move onto the next line. Fit to phone makes a separate phone layout and keeps your laptop one as it is.")+'</span><span class="sh">📱 <b>Too wide for phones</b> ('+w+'px)</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="see">'+(S.pvWidth==="phone"?"Back to laptop view":"See it on a phone")+'</button><button type="button" class="btn small" data-pw="fix" title="Makes everything a little smaller, and moves parts onto their own lines only if that is not enough">📱 Fit to phone</button></span>';
   box.querySelector('[data-pw="see"]').addEventListener("click",function(){S.pvWidth=S.pvWidth==="phone"?"desktop":"phone";save();update()});
-  box.querySelector('[data-pw="fix"]').addEventListener("click",shrinkToFit)},250)}
+  box.querySelector('[data-pw="fix"]').addEventListener("click",fitPhone2)},250)}
 
 /* make every part smaller (or bigger) by the same amount, so the layout stays the same */
 function scaleAll(f){var r=function(v,min,max){return Math.max(min,Math.min(max||999,Math.round(v*f)))};
@@ -1766,11 +1800,12 @@ function scaleAll(f){var r=function(v,min,max){return Math.max(min,Math.min(max|
   Object.keys(S.st||{}).forEach(function(k){var c=S.st[k];if(!c)return;if(+c.size)c.size=r(+c.size,10,40);["dx","dy","pad","padT","padR","padB","padL"].forEach(function(p){if(+c[p])c[p]=Math.round(+c[p]*f)})});
   (S.custom||[]).forEach(function(c){if(c.type==="image"&&+c.width)c.width=r(+c.width,30)})}
 /* the biggest size where it still fits a phone; if shrinking alone would make things too small, move the fewest parts down first */
-var MIN_SCALE=0.75;
+var MIN_SCALE=0.85;
 function bestScale(base){var lo=MIN_SCALE,hi=1,best=null;S=JSON.parse(base);if(sigNaturalWidth()<=PHONE_W+4)return 1;
   for(var i=0;i<8;i++){var m=(lo+hi)/2;S=JSON.parse(base);scaleAll(m);if(sigNaturalWidth()<=PHONE_W+4){best=m;lo=m}else hi=m}
   if(best==null){S=JSON.parse(base);scaleAll(MIN_SCALE);if(sigNaturalWidth()<=PHONE_W+4)best=MIN_SCALE}return best}
-function shrinkToFit(){var orig=JSON.stringify(S),keep={_sigId:S._sigId,_sigName:S._sigName};
+function fitPhone2(){if(!S.mob){S.mob=pickMob(S);toast("Made a separate phone layout. Your laptop layout stays the same.")}if(S.pvWidth!=="phone"){S.pvWidth="phone";syncActive();update()}setTimeout(shrinkToFit,80)}
+function shrinkToFit(){var orig=JSON.stringify(S),keep={_sigId:S._sigId,_sigName:S._sigName,_active:S._active,_lap:S._lap};
   if(sigNaturalWidth()<=PHONE_W+4){toast("It already fits a phone.");return}
   var moves=[["contact details one per line",function(){if(S.contactLayout!=="stack"){S.contactLayout="stack";return 1}}],["the buttons under the icons",function(){var o=inOrder("book");if(o&&o[1]&&o[3]){o[3]=0;return 1}}],["the review button on its own line",function(){var o=inOrder("review"),b=inOrder("book");if(o&&o[1]&&o[3]&&b&&b[1]){o[3]=0;return 1}}]];
   var base=orig,done=[],f=bestScale(base);
@@ -1778,7 +1813,7 @@ function shrinkToFit(){var orig=JSON.stringify(S),keep={_sigId:S._sigId,_sigName
   S=JSON.parse(base);Object.assign(S,keep);
   if(f==null){scaleAll(MIN_SCALE);changed();toast("Smaller and rearranged, but some parts are still wide. Try a shorter line of text or fewer parts on one line.");return}
   if(f<1)scaleAll(f);changed();var pc=Math.round(f*100),msg=(f<1?"Everything is "+pc+"% of its size before":"Same sizes")+(done.length?", and "+done.join(", "):", same layout")+".";
-  setTimeout(function(){var box=$("phoneWarn");if(!box)return;box.hidden=false;box.innerHTML='<span>✅ <b>Fits a phone now.</b> '+esc(msg)+'</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="undo">Undo</button><button type="button" class="btn sec small" data-pw="ok">OK</button></span>';
+  setTimeout(function(){var box=$("phoneWarn");if(!box)return;box.hidden=false;box.innerHTML='<span class="lg">✅ <b>Fits a phone now.</b> '+esc(msg)+'</span><span class="sh">✅ <b>Fits a phone now</b></span><span class="pw-b"><button type="button" class="btn sec small" data-pw="undo">Undo</button><button type="button" class="btn sec small" data-pw="ok">OK</button></span>';
     box.querySelector('[data-pw="undo"]').addEventListener("click",function(){S=JSON.parse(orig);Object.assign(S,keep);changed();toast("Back to how it was")});box.querySelector('[data-pw="ok"]').addEventListener("click",function(){box.hidden=true})},400)}
 /* narrow it step by step, stopping as soon as it fits */
 function phoneFix(){var before=JSON.stringify(S),steps=[
@@ -2025,7 +2060,7 @@ function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons()
   $("fromLine").textContent=(S.name||"You")+(S.email?" <"+S.email+">":"");
   var mi=missing(),w=$("iconWarn");
   w.textContent=mi.length?"Before you copy: "+mi.join(" and ")+(mi.length>1?" need":" needs")+" a web address, or the email will leave "+(mi.length>1?"them":"it")+" out. Put the picture on your website (or any image host) and paste its web address.":"Paste into Gmail: Settings → See all settings → Signature. Outlook: Settings → Mail → Compose and reply → Email signature."}
-var update0=update;update=function(){update0.apply(this,arguments);placeGrab();phoneCheck();setTimeout(phoneGuide,60)};
+var update0=update;update=function(){syncActive();update0.apply(this,arguments);mobBar();placeGrab();phoneCheck();setTimeout(phoneGuide,60)};
 function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
   if(square){var c=document.createElement("canvas"),s=Math.min(im.naturalWidth,im.naturalHeight),n=Math.min(s,400);c.width=c.height=n;c.getContext("2d").drawImage(im,(im.naturalWidth-s)/2,(im.naturalHeight-s)/2,s,s,0,0,n,n);cb(c.toDataURL("image/jpeg",.9))}
   else cb({src:r.result,w:im.naturalWidth,h:im.naturalHeight})};im.src=r.result};r.readAsDataURL(f)}
@@ -2035,6 +2070,7 @@ function tidyBar(){if(window.innerWidth<=760||document.querySelector(".bar.tidy"
   var r1=row(),r2=row("tb2"),l1=grp(),c1=grp(),v=grp(),t=grp();
   [$("kbHint"),bar.querySelector(".step")].forEach(function(x){if(x)l1.appendChild(x)});
   [$("copyCode"),$("copySig")].forEach(function(x){if(x){x.classList.add("small");c1.appendChild(x)}});
+  var cg=h2('<button type="button" class="btn sec small" id="copyGm" title="Laptop layout only: Gmail removes the phone layout and has a size limit" hidden>Copy for Gmail</button>');cg.addEventListener("click",function(){copyGmail(cg)});c1.insertBefore(cg,$("copySig"));
   bar.querySelectorAll(".seg[data-pv]").forEach(function(x){v.appendChild(x)});
   var pg=h2('<button type="button" class="bigbtn" id="pgBtn" title="Show where a phone screen ends">📱 Phone guide</button>');pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));
   pg.addEventListener("click",function(){S.phoneGuide=S.phoneGuide===false;pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));save();phoneGuide()});v.appendChild(pg);
@@ -2046,12 +2082,12 @@ function init(){
   $("undoBtn").addEventListener("click",function(){histGo(-1)});$("redoBtn").addEventListener("click",function(){histGo(1)});
   document.addEventListener("keydown",function(e){if(!(e.ctrlKey||e.metaKey))return;var t=e.target;if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.nodeName)||t.isContentEditable))return;var k=e.key.toLowerCase();
     if(k==="z"&&!e.shiftKey){e.preventDefault();histGo(-1)}else if(k==="y"||(k==="z"&&e.shiftKey)){e.preventDefault();histGo(1)}});
-  S=load();setTimeout(function(){histPush(true)},50);setTimeout(tidyBar,0);if(!S.maker)S.maker=mkDefaults();
+  S=load();if(window.innerWidth<=760&&!S.pvChosen)S.pvWidth="phone";setTimeout(function(){histPush(true)},50);setTimeout(tidyBar,0);if(!S.maker)S.maker=mkDefaults();
   /* you're on your own HTML code, then change a design option: go back to the design, so the preview follows (your code is kept) */
   var leaveCode=function(e){if(!S.useCode||!e.target.closest||e.target.closest("#codeBox"))return;if(!e.target.closest(".panel")||STEPS[STEP].id==="copy"||e.target.closest("#prevStep,#nextStep,.tpl-add,#tplFilter,label.f select,.codenote,.tab,.acc>summary"))return;if(e.type==="click"&&!e.target.closest("button,input,select,label,[role=button],.tcard,.vchip"))return;
     S.useCode=false;save();toast("Back to the builder’s design. Your HTML code is kept in Copy and use → HTML code.");setTimeout(update,0)};
   document.addEventListener("input",leaveCode,true);document.addEventListener("click",leaveCode,true);
-  document.querySelectorAll("[data-pv]").forEach(function(g){g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S[g.dataset.pv]=b.dataset.v;update()})});
+  document.querySelectorAll("[data-pv]").forEach(function(g){g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;S[g.dataset.pv]=b.dataset.v;if(g.dataset.pv==="pvWidth")S.pvChosen=true;update()})});
   document.addEventListener("click",function(e){var sig=$("sig");if(sig.contains(e.target)){var dp=e.target.closest("[data-edit]");KEYPART=dp?dp.dataset.edit:null;kbHint();setTimeout(placeGrab,30)}},true);
   document.addEventListener("keydown",function(e){if(!KEYPART||MOVE||TEST||(S.useCode&&String(S.code||"").trim()))return;var t=e.target;if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.nodeName)||t.isContentEditable))return;if(document.querySelector(".sdlg,.fpv"))return;
     var ak={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(ak){e.preventDefault();var n=e.shiftKey?10:1;moveBy(KEYPART,ak[0]*n,ak[1]*n);document.querySelectorAll(".movepad").forEach(function(){});syncLineRanges();return}
@@ -2121,6 +2157,7 @@ function checkPics(cb){var srcs=[];emailHtml().replace(/<img[^>]+src="([^"]+)"/g
   srcs.forEach(function(u){if(IMG_OK[u]===true){if(--left===0)cb(bad);return}var im=new Image(),done=function(ok){IMG_OK[u]=ok;if(!ok)bad.push(u);if(--left===0)cb(bad)};im.onload=function(){done(true)};im.onerror=function(){done(false)};im.src=u})}
 function picName(u){if(/signoff\//.test(u))return"handwritten sign-off";if(/banner/.test(u))return"banner";if(/logo/.test(u))return"logo";if(/\/made\//.test(u))return"picture";return"icons"}
 function warnPics(bad){var names=bad.map(picName).filter(function(v,i,a){return a.indexOf(v)===i});return"Your "+names.join(", ")+" "+(names.length>1||names[0]==="icons"?"aren’t":"isn’t")+" online yet, so email apps show a broken picture. "+(bad.some(function(u){return/-e[123]\.png$/.test(u)})?"Embossed pictures go online with the next website update; until then set Embossed to Off. ":"")}
+function copyGmail(b){COPY_GMAIL=true;try{copySig(b)}finally{COPY_GMAIL=false}}
 function copySig(b){b=b||$("copySig");var html=emailHtml(),clip=$("clip");var off=offline();checkPics(function(bad){if(bad.length)toast(warnPics(bad))});if(off.length)toast("Heads up: your "+off.map(function(i){return i.label}).join(" and ")+" isn’t online yet, so it’s left out. Go to Copy and use → Put it online.");
   var fallback=function(){clip.innerHTML=html;var r=document.createRange();r.selectNodeContents(clip);var s=getSelection();s.removeAllRanges();s.addRange(r);var ok=false;try{ok=document.execCommand("copy")}catch(e){}s.removeAllRanges();clip.innerHTML="";flash(b,ok?"Copied ✓":"Copy didn’t work. Try Copy HTML code")};
   try{if(!window.ClipboardItem||!navigator.clipboard||!navigator.clipboard.write)throw 0;var tmp=document.createElement("div");tmp.innerHTML=html;
