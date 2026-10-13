@@ -718,6 +718,9 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 .pvfull{display:none}
 @media (max-width:760px){.pvfull{display:block;position:absolute;top:6px;right:6px;z-index:4;border:0;border-radius:999px;padding:5px 10px;background:rgba(20,23,43,.82);color:#fff;font:700 .72rem system-ui,sans-serif;box-shadow:0 4px 12px -4px rgba(0,0,0,.5)}
 .fpv{background:var(--bg)!important}.fpv-bar{gap:6px 8px!important}.fpv-bar>b{flex:1 1 auto}.fpv-bar .fpv-x{order:-1;margin-left:0!important;margin-right:auto}.fpv-bar .seg{flex:1 1 140px;display:flex}.fpv-bar .seg button{flex:1}}
+
+.fbppl{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.fbppl small{width:100%;font-size:.78rem;color:var(--muted)}
+.fbp{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 .8rem system-ui,sans-serif;cursor:pointer}.fbp span{font-weight:500;color:var(--muted)}.fbp[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px rgba(36,179,40,.35)}
 </style>
 
 </head><body>
@@ -2266,6 +2269,7 @@ var update0=update;update=function(){syncActive();update0.apply(this,arguments);
 function foundBox(){var it=SITEFILL&&SITEFILL.items;if(!it||!it.length)return h2('<div class="wide foundbox">'+(SITEFILL&&SITEFILL.html?'<b>Found on '+esc(SITEFILL.site)+'</b>'+SITEFILL.html:'<span>Empty lines are left out of your signature.</span>')+'</div>');
   var on=function(x){if(x.k==="@logo"){var lo=inOrder("logo");return!!(lo&&lo[1]&&S.logoShow!==false)}return String(getP(x.k)||"")===String(x.v)};
   var el=h2('<div class="wide foundbox fb2"><b>Found on '+esc(SITEFILL.site)+'</b><p class="fbn">Untick anything you don’t want in your signature.</p><div class="fbl"></div></div>'),l=el.querySelector(".fbl");
+  var ppl=SITEFILL.people||[];if(ppl.length>1){var pc=h2('<div class="fbppl"><small>People on the website: tap one to use their name and role</small></div>');ppl.forEach(function(p){var b=h2('<button type="button" class="fbp" aria-pressed="'+(S.name===p.name)+'">'+esc(p.name)+(p.role?' <span>'+esc(p.role)+'</span>':'')+'</button>');b.addEventListener("click",function(){S.name=p.name;S.role=p.role||S.role;SITEFILL.items.forEach(function(x){if(x.k==="name")x.v=p.name;if(x.k==="role"&&p.role)x.v=p.role});save();var y=window.scrollY;changed();go(STEP);window.scrollTo(0,y);toast("Using "+p.name)});pc.appendChild(b)});el.insertBefore(pc,l)}
   it.forEach(function(x){var row=h2('<label class="fbi"><input type="checkbox"'+(on(x)?" checked":"")+'><span><b>'+esc(x.l)+'</b>'+(x.v===true?"":'<small>'+esc(String(x.v).slice(0,60))+'</small>')+'</span></label>');
     row.querySelector("input").addEventListener("change",function(e){var c=e.target.checked;
       if(x.k==="@logo"){var lo=inOrder("logo");if(lo)lo[1]=c?1:0;S.logoShow=c}else setP(x.k,c?x.v:"");
@@ -2288,13 +2292,13 @@ function siteFill(site,btn,out){var keep=btn.textContent;
   btn.disabled=true;btn.textContent="Reading your website…";out.innerHTML="";
   edToken().then(function(tok){return fetch("/api/siteinfo",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:JSON.stringify({url:site})})})
   .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Couldn’t read that website.");return j})})
-  .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Logo",found.logo],["Business name",d.name],["Website",d.website],["Office phone",d.phone],["Mobile",d.mobile],["Email",d.email],["Address",d.address]];
+  .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Name",d.person],["Logo",found.logo],["Business name",d.name],["Website",d.website],["Office phone",d.phone],["Mobile",d.mobile],["Email",d.email],["Address",d.address]];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])all.push([k==="x"?"X":k.charAt(0).toUpperCase()+k.slice(1),d.social[k]])});
       var got=all.filter(function(x){return x[1]}).length;
       var html='<ul>'+all.map(function(x){return'<li class="'+(x[1]?"":"no")+'">'+(x[1]?"✓ ":"– ")+'<b>'+esc(x[0])+'</b>'+(x[1]&&x[1]!==true?': '+esc(String(x[1]).slice(0,40)):x[1]?"":" not found")+'</li>'}).join("")+'</ul><p class="sfmsg">'+(got?"Filled in "+got+" things. Check them below, then press <b>Next</b>. Undo puts everything back.":"We couldn’t find details on that website. Fill them in below.")+'</p>';
-      var items=[{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
+      var items=[{l:"Your name",k:"name",v:d.person},{l:"Role",k:"role",v:d.prole},{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])items.push({l:({x:"X",tiktok:"TikTok",whatsapp:"WhatsApp",youtube:"YouTube",linkedin:"LinkedIn"})[k]||k.charAt(0).toUpperCase()+k.slice(1),k:"social."+k,v:d.social[k]})});
-      SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v})};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
+      SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
   .catch(function(e){out.innerHTML='<p class="sfmsg">'+esc(e.message==="signin"?"Please sign in to the website editor first.":e.message)+'</p>'})
   .then(function(){btn.disabled=false;btn.textContent=keep;var b2=document.querySelector(".sfill .btn");if(b2){b2.disabled=false;b2.textContent=keep}})}
 /* NZ and Australian mobiles start 02 / 04 (or +64 2 / +61 4); the rest count as the office phone */
@@ -2304,6 +2308,7 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
   /* a different business: the AMBS sample details go, whatever the website didn't give stays empty to fill in */
   if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram=""}
   var sp=splitPhones(d.phones&&d.phones.length?d.phones:(d.phone?[d.phone]:[]));d.phone=sp.office;d.mobile=sp.mobile;
+  var pp=(d.people||[])[0];if(pp&&pp.name){S.name=pp.name;if(pp.role)S.role=pp.role}d.person=pp?pp.name:"";d.prole=pp?pp.role||"":"";
   if(d.name)S.company=d.name;if(d.website)S.website=d.website;if(d.phone)S.phone=d.phone;if(d.mobile)S.mobile=d.mobile;if(d.email)S.email=d.email;if(d.address)S.location=d.address;
   var soc=d.social||{};if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
   var fin=function(gotLogo){save();changed();go(STEP,"brand");done({logo:gotLogo})};

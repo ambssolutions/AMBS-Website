@@ -82,7 +82,7 @@ function jsonLd(html) {
 const SOC = [
   ["instagram", /^https?:\/\/(?:www\.)?instagram\.com\/([A-Za-z0-9_.]{2,30})\/?(?:[?#].*)?$/i, ["p", "reel", "explore", "accounts", "stories", "tv"]],
   ["tiktok", /^https?:\/\/(?:www\.)?tiktok\.com\/@([A-Za-z0-9_.]{2,30})\/?(?:[?#].*)?$/i, []],
-  ["facebook", /^https?:\/\/(?:www\.|m\.|web\.)?(?:facebook|fb)\.com\/((?:profile\.php\?id=\d+)|[A-Za-z0-9.\-]{2,60})\/?(?:[?#].*)?$/i, ["sharer", "sharer.php", "share", "dialog", "plugins", "tr", "events", "groups", "watch", "login", "pages"]],
+  ["facebook", /^https?:\/\/(?:www\.|m\.|web\.)?(?:facebook|fb)\.com\/((?:profile\.php\?id=\d+)|(?:share\/(?!p\/|r\/|v\/)[A-Za-z0-9]{6,20})|[A-Za-z0-9.\-]{2,60})\/?(?:[?#].*)?$/i, ["sharer", "sharer.php", "share", "dialog", "plugins", "tr", "events", "groups", "watch", "login", "pages"]],
   ["linkedin", /^https?:\/\/(?:[a-z]{2,3}\.)?linkedin\.com\/((?:company|in|school)\/[A-Za-z0-9_\-%.]{2,100})\/?(?:[?#].*)?$/i, []],
   ["youtube", /^https?:\/\/(?:www\.|m\.)?youtube\.com\/((?:@[A-Za-z0-9_.\-]{2,60})|(?:channel|c|user)\/[A-Za-z0-9_\-]{2,60})\/?(?:[?#].*)?$/i, []],
   ["x", /^https?:\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/([A-Za-z0-9_]{2,15})\/?(?:[?#].*)?$/i, ["share", "intent", "home", "search", "hashtag", "i"]],
@@ -137,6 +137,7 @@ export function readPage(html, base) {
     const u = abs(h);
     socialFrom(u, r.social);
     if (!r.contact && /contact/i.test(h) && u.startsWith(new URL(base).origin)) r.contact = u;
+    if (!r.about && /(about|team|our-story|who-we-are|meet|people|staff)/i.test(h) && !/#/.test(h.replace(/^[^#]*$/, "")) && u.startsWith(new URL(base).origin) && u !== base) r.about = u;
   }
   if (!r.emails.length) for (const m of html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").matchAll(/[A-Za-z0-9._%+\-]+@[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/g)) r.emails.push(m[0]);
 
@@ -174,12 +175,44 @@ export function readPage(html, base) {
   if (touch) r.logos.push(touch);
   const og = meta(html, "og:image");
   r.ogImage = og ? abs(og) : "";
+  r.people = findPeople(html, ld, r.name);
   const byDigits = new Map();
   for (const p of r.phones.filter(okPhone)) { const d = p.replace(/\D/g, "").slice(-9), had = byDigits.get(d); if (!had || (/\s/.test(p) && !/\s/.test(had))) byDigits.set(d, p); }
   r.phones = [...byDigits.values()];
   r.emails = [...new Set(r.emails.map((e) => e.toLowerCase()).filter(okEmail))];
   r.logos = [...new Set(r.logos.filter(Boolean))];
   return r;
+}
+
+/* a director, owner or founder named on the page: from structured data first, then wording like
+   "Jane Smith, Director", "Director: Jane Smith", "Jane Smith (Owner)" or "Meet Jane Smith" */
+const ROLES = "Managing Director|Director|Co-?founder|Founder|Owner|Business Owner|Chief Executive Officer|CEO|Principal|General Manager|Operations Manager|Manager|Partner|Proprietor";
+const NAME = "([A-Z][a-z'’\\-]+(?:\\s+(?:[A-Z][a-z'’\\-]+|[A-Z]\\.)){1,2})";
+function findPeople(html, ld, biz) {
+  const out = [], seen = new Set(), bizWords = new Set(String(biz || "").toLowerCase().split(/\W+/).filter(Boolean));
+  const add = (name, role) => {
+    name = String(name || "").replace(/\s+/g, " ").trim(); role = String(role || "").replace(/\s+/g, " ").trim();
+    if (!name || name.length > 40 || !/\s/.test(name)) return;
+    const k = name.toLowerCase();
+    if (seen.has(k) || k.split(" ").some((w) => bizWords.has(w)) || /\b(the|our|your|and|with|for|from|about|team|services?|solutions?|limited|ltd|group|google|review|street|road)\b/i.test(name)) return;
+    seen.add(k); out.push({ name, role: role.replace(/^co-?founder$/i, "Co-founder") });
+  };
+  const people = [];
+  for (const x of ld) {
+    for (const key of ["founder", "employee", "member", "author", "contactPoint"]) for (const p of [].concat(x[key] || [])) if (p && typeof p === "object" && typeof p.name === "string") people.push({ name: p.name, role: p.jobTitle || (key === "founder" ? "Founder" : "") });
+    if (/Person/.test([].concat(x["@type"] || []).join(" ")) && typeof x.name === "string") people.push({ name: x.name, role: x.jobTitle || "" });
+  }
+  for (const p of people) if (p.role) add(p.name, typeof p.role === "string" ? p.role : "");
+  const text = ent(html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " | ")).replace(/\s+/g, " ");
+  const pats = [
+    new RegExp(NAME + "\\s*(?:\\||,|–|—|-|\\()\\s*(?:\\|\\s*)?(" + ROLES + ")\\b", "g"),
+    new RegExp("\\b(" + ROLES + ")\\s*(?::|\\||–|—|-)\\s*(?:\\|\\s*)?" + NAME, "g"),
+    new RegExp("\\b(?:Meet|meet)\\s+" + NAME + "(?:\\s*,\\s*(?:our\\s+)?(" + ROLES + "))?", "g"),
+  ];
+  for (const m of text.matchAll(pats[0])) add(m[1], m[2]);
+  for (const m of text.matchAll(pats[1])) add(m[2], m[1]);
+  for (const m of text.matchAll(pats[2])) add(m[1], m[2] || "");
+  return out.slice(0, 4);
 }
 
 export function normaliseSite(input) {
@@ -205,6 +238,17 @@ export async function siteInfo(input) {
       r.emails = [...new Set(r.emails.concat(rc.emails))];
       r.address = r.address || rc.address;
       for (const k in rc.social) r.social[k] = r.social[k] || rc.social[k];
+    } catch (e) {}
+  }
+  /* the about or team page usually names the director or owner */
+  if (r.about && r.about !== page.url) {
+    try {
+      const a = await grab(r.about, 1.2e6);
+      const ra = readPage(a.buf.toString("utf8"), a.url);
+      const have = new Set(r.people.map((p) => p.name.toLowerCase()));
+      for (const p of ra.people) if (!have.has(p.name.toLowerCase())) r.people.push(p);
+      for (const k in ra.social) r.social[k] = r.social[k] || ra.social[k];
+      r.phones = [...new Set(r.phones.concat(ra.phones))];
     } catch (e) {}
   }
   /* the logo, as a picture the builder can read colours from: the header's own logo first */
@@ -253,5 +297,5 @@ export async function siteInfo(input) {
       break;
     } catch (e) {}
   }
-  return { website: page.url.replace(/^https?:\/\//, "").replace(/\/$/, ""), name: r.name, phone: r.phones[0] || "", phones: r.phones.slice(0, 4), email: emails[0] || "", emails: emails.slice(0, 4), address: r.address.slice(0, 160), social: r.social, logo };
+  return { website: page.url.replace(/^https?:\/\//, "").replace(/\/$/, ""), name: r.name, phone: r.phones[0] || "", phones: r.phones.slice(0, 4), email: emails[0] || "", emails: emails.slice(0, 4), address: r.address.slice(0, 160), social: r.social, people: r.people.slice(0, 4), logo };
 }
