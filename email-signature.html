@@ -1522,9 +1522,12 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
       el.querySelector("[data-up]").addEventListener("click",function(){$("logoFile").click()});
       var ab=el.querySelector("[data-ambs]");if(ab)ab.addEventListener("click",function(){S.logoData="";S.logoUrl="https://ambs.co.nz/logo-400.png";S.logoRatio=0.365;var l=inOrder("logo");if(l)l[1]=1;S.logoShow=true;changed();go(STEP,"brand");toast("AMBS logo back in place")})}
     else if(t==="brandsets"){var cur=function(z){return S.brandP===z[1][0]&&S.brandS===z[1][1]&&S.brandA===z[1][2]};
-      el=h2('<div class="wide"><div class="lbl">Brand colours</div><div class="bsets">'+BRAND_SETS.map(function(z,i){return'<button type="button" data-i="'+i+'" aria-pressed="'+cur(z)+'"><i>'+z[2].map(function(c){return'<b style="background:'+c+'"></b>'}).join("")+'</i><span>'+esc(z[0])+'</span></button>'}).join("")+'</div><p class="note">Pick a set to colour the name, buttons, icons and stripe together. Fine-tune each colour below.'+(S.logoData?' <button type="button" class="linkbtn" data-fromlogo>Use my logo’s colours again</button>':'')+'</p></div>');
-      el.querySelectorAll(".bsets button").forEach(function(btn){btn.addEventListener("click",function(){var z=BRAND_SETS[+btn.dataset.i];S.brandP=z[1][0];S.brandS=z[1][1];S.brandA=z[1][2];S.palette=z[2].slice();if(z[3])S.colors.text=z[3];changed();go(STEP,"brand");toast("Brand colours: "+z[0])})});
-      var fl=el.querySelector("[data-fromlogo]");if(fl)fl.addEventListener("click",function(){var im=new Image();im.onload=function(){var lc=logoColours(im);if(lc.main.length){S.brandP=lc.main[0];S.brandS=lc.main[1]||lc.main[0];S.brandA=lc.main[2]||S.brandS;S.palette=lc.main.slice(0,6);changed();go(STEP,"brand");toast("Colours taken from your logo")}};im.src=S.logoData})}
+      var LC=S.logoCols&&S.logoCols.main&&S.logoCols.main.length?S.logoCols:null;
+      if(!LC&&(S.logoData||isAmbsLogo())&&!logoColsBusy){logoColsBusy=true;var li=new Image();li.onload=function(){var lc=logoColours(li);if(lc.main.length){var k={brandP:S.brandP,brandS:S.brandS,brandA:S.brandA,palette:S.palette,text:S.colors.text,link:S.colors.link};applyLogoCols(lc);S.brandP=k.brandP;S.brandS=k.brandS;S.brandA=k.brandA;S.palette=k.palette;S.colors.text=k.text;S.colors.link=k.link;save();if(STEPS[STEP].id==="edit")go(STEP,"brand")}};li.src=S.logoData||AMBS_LOGO}
+      var sets=(LC?[["Your logo",[LC.main[0],LC.main[1]||LC.main[0],LC.main[2]||LC.main[1]||LC.main[0]],LC.main,LC.dark||""]]:[]).concat(BRAND_SETS);
+      el=h2('<div class="wide"><div class="lbl">Brand colours</div><div class="bsets">'+sets.map(function(z,i){return'<button type="button" data-i="'+i+'" aria-pressed="'+cur(z)+'"><i>'+z[2].map(function(c){return'<b style="background:'+c+'"></b>'}).join("")+'</i><span>'+esc(z[0])+'</span></button>'}).join("")+'</div><p class="note">Pick a set to colour the name, buttons, icons and stripe together. Fine-tune each colour below.'+(S.logoData?' <button type="button" class="linkbtn" data-fromlogo>Use my logo’s colours again</button>':'')+'</p></div>');
+      el.querySelectorAll(".bsets button").forEach(function(btn){btn.addEventListener("click",function(){var z=sets[+btn.dataset.i];S.brandP=z[1][0];S.brandS=z[1][1];S.brandA=z[1][2];S.palette=z[2].slice();if(z[3])S.colors.text=z[3];changed();go(STEP,"brand");toast("Brand colours: "+z[0])})});
+      var fl=el.querySelector("[data-fromlogo]");if(fl)fl.addEventListener("click",function(){var im=new Image();im.onload=function(){if(applyLogoCols(logoColours(im))){changed();go(STEP,"brand");toast("Colours taken from your logo")}};im.src=S.logoData})}
     else if(t==="palette"){el=h2('<div class="wide"><div class="lbl">Stripe colours (the line beside the logo)</div><div class="palette"></div><p class="note">Click a colour to change it. Up to 6.</p></div>');var pw=el.querySelector(".palette");
       var drawPal=function(){pw.innerHTML="";S.palette.forEach(function(c,i){var w=h2('<span class="pchip"><input type="color" value="'+c+'" aria-label="Stripe colour '+(i+1)+'"><button type="button" aria-label="Remove colour '+(i+1)+'">✕</button></span>');
           w.querySelector("input").addEventListener("input",function(e){S.palette[i]=e.target.value;update()});w.querySelector("button").addEventListener("click",function(){if(S.palette.length>1){S.palette.splice(i,1);drawPal();update()}});pw.appendChild(w)});
@@ -2090,7 +2093,7 @@ function markSel(){document.querySelectorAll("#sig [data-edit]").forEach(functio
 
 /* ready-made brand colour sets: [name, [main, second, third], stripe colours, text colour] */
 var BRAND_SETS=[
-  ["AMBS rainbow",["#24b328","#1877E0","#7B2FBE"],["#E5352B","#FF8A00","#F5B800","#24b328","#1877E0","#7B2FBE"],"#14172b"],
+  ["Rainbow",["#24b328","#1877E0","#7B2FBE"],["#E5352B","#FF8A00","#F5B800","#24b328","#1877E0","#7B2FBE"],"#14172b"],
   ["Ocean",["#0369a1","#0891b2","#22d3ee"],["#0c4a6e","#0369a1","#0891b2","#22d3ee"],"#0f172a"],
   ["Forest",["#166534","#15803d","#84cc16"],["#14532d","#166534","#65a30d","#a3e635"],"#14231a"],
   ["Sunset",["#ea580c","#db2777","#f59e0b"],["#f59e0b","#ea580c","#e11d48","#db2777"],"#1f1720"],
@@ -2112,6 +2115,10 @@ function newBrand(){Object.assign(S,{company:"",website:"",logoUrl:"",logoData:"
   social:{instagram:"",tiktok:"",facebook:"",linkedin:"",whatsapp:"",youtube:"",x:"",google:""},
   disclaimer:"This email and any attachments are confidential and meant only for the person they are addressed to. If you received it by mistake, please let us know and delete it."})}
 /* the main colours in a logo: count pixels in colour buckets, skip white and see-through, keep ones that differ */
+/* the logo's own colours become the brand colours; a colour dark enough for white button text goes first */
+var logoColsBusy=false;
+function applyLogoCols(lc){if(!lc||!lc.main||!lc.main.length)return false;var m=lc.main.slice(),rd=m.filter(function(c){return relLum(c)<.3});if(rd.length&&relLum(m[0])>=.3)m=[rd[0]].concat(m.filter(function(c){return c!==rd[0]}));
+  S.logoCols={main:m.slice(0,6),dark:lc.dark||""};S.brandP=m[0];S.brandS=m[1]||m[0];S.brandA=m[2]||S.brandS;S.palette=m.slice(0,6);if(lc.dark){S.colors.text=lc.dark;S.colors.link=lc.dark}return true}
 function logoColours(img){var c=document.createElement("canvas"),n=80,r=img.naturalHeight/img.naturalWidth;c.width=n;c.height=Math.max(1,Math.round(n*r));var x=c.getContext("2d");x.drawImage(img,0,0,c.width,c.height);
   var d=x.getImageData(0,0,c.width,c.height).data,b={};
   for(var i=0;i<d.length;i+=4){if(d[i+3]<200)continue;var R0=d[i],G0=d[i+1],B0=d[i+2],mx=Math.max(R0,G0,B0),mn=Math.min(R0,G0,B0);if(mn>232)continue;
@@ -2187,7 +2194,7 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
     var mailOk=/^image\/(png|jpe?g|gif)$/.test(d.logo.type)&&/^https:\/\//.test(d.logo.url);
     if(mailOk){S.logoUrl=d.logo.url;S.logoData=""}else{try{S.logoData=c.toDataURL("image/png");S.logoUrl=""}catch(e){fin(false);return}}
     S.logoRatio=h0/w0;S.logoShow=true;var lo=inOrder("logo");if(lo)lo[1]=1;
-    try{var lc=logoColours(im);var rd=lc.main.filter(function(c){return relLum(c)<.3});if(rd.length&&relLum(lc.main[0])>=.3)lc.main=[rd[0]].concat(lc.main.filter(function(c){return c!==rd[0]}));if(lc.main.length){S.brandP=lc.main[0];S.brandS=lc.main[1]||lc.main[0];S.brandA=lc.main[2]||S.brandS;S.palette=lc.main.slice(0,6)}if(lc.dark){S.colors.text=lc.dark;S.colors.link=lc.dark}}catch(e){}
+    try{applyLogoCols(logoColours(im))}catch(e){}
     fin(true)};im.onerror=function(){fin(false)};im.src=d.logo.data}
 /* tabs left open for a while: notice when a newer builder is live and offer a refresh (your work is saved in this browser) */
 (function(){if(!onAmbs())return;var first=null,shown=false;
@@ -2231,7 +2238,7 @@ function init(){
   $("logoFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;readImg(f,function(r){var im=new Image();im.onload=function(){
       var c=document.createElement("canvas"),w=Math.min(400,im.naturalWidth);c.width=w;c.height=Math.round(w*im.naturalHeight/im.naturalWidth);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
       S.logoData=c.toDataURL("image/png");S.logoRatio=im.naturalHeight/im.naturalWidth;S.logoShow=true;
-      var lc=logoColours(im);if(lc.main.length){S.brandP=lc.main[0];S.brandS=lc.main[1]||lc.main[0];S.brandA=lc.main[2]||S.brandS;S.palette=lc.main.slice(0,6)}if(lc.dark){S.colors.text=lc.dark;S.colors.link=lc.dark}
+      var lc=logoColours(im);applyLogoCols(lc);
       changed();if(STEPS[STEP].id==="start")go(stepId("details"));else openItem("brand");toast(lc.main.length?"Logo added and "+lc.main.length+" brand colours picked from it":"Logo added")};im.src=r.src});e.target.value=""});
   $("photoFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){S.photoData=r;S.photoShow=true;var po=inOrder("photo");if(po)po[1]=1;changed();openItem("photo");toast("Photo previewed")},true)});
   $("bannerFile").addEventListener("change",function(e){var f=e.target.files[0];if(f)readImg(f,function(r){uploaded.banner=r;if(/\/assets\/email\/made\//.test(S.bannerUrl||""))S.bannerUrl="";inOrder("banner")[1]=1;changed();openItem("banner");toast("Banner previewed")})});
