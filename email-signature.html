@@ -737,6 +737,17 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 .sorti .st{flex:1;min-width:0}.sorti .st b{display:block;font-size:.86rem}.sorti .st small{display:block;font-size:.74rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sorti .sa{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--soft,#f3f6fc);color:var(--ink);cursor:pointer}.sorti .sa:disabled{opacity:.35;cursor:default}
 .reorderbox .ro-p{margin-top:12px}
+
+/* phones: a settings section as its own page */
+.spage{position:fixed;inset:0;z-index:46;display:flex;flex-direction:column;background:var(--bg);transform:translateX(100%);transition:transform .22s ease}
+.spage.in{transform:none}.spage.out{transform:translateX(100%)}
+.sp-h{display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:var(--panel);border-bottom:1px solid var(--line)}
+.sp-h b{flex:1;min-width:0;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.sp-back{border:0;background:none;color:var(--ink);font:700 .9rem system-ui,sans-serif;padding:8px 4px;cursor:pointer;white-space:nowrap}
+.sp-done{padding:6px 12px!important;min-height:0!important}
+.sp-b{flex:1;overflow:auto;padding:14px 14px calc(24px + env(safe-area-inset-bottom,0px));-webkit-overflow-scrolling:touch}
+.sp-b .part{max-height:none!important}
+body.spage-on{overflow:hidden}
 </style>
 
 </head><body>
@@ -1585,8 +1596,15 @@ function drawFlow(){var ol=$("flow");ol.innerHTML="";STEPS.forEach(function(s,i)
   b.innerHTML='<span class="n">'+(visited[i]&&i!==STEP?"✓":(i+1))+'</span><span class="tx"><b>'+esc(s.t)+'</b></span>';
   b.addEventListener("click",function(){go(i)});li.appendChild(b);ol.appendChild(li)});
   document.querySelectorAll(".tab[data-acc]").forEach(function(d){var s=d.querySelector(".sum");if(s)s.textContent=accSummary(d.dataset.acc)})}
-var MORESET=false;
-function go(i,part){if(window.innerWidth<=760)pvHandle();STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;var s=STEPS[STEP];document.body.setAttribute("data-step",s.id);setTimeout(fitPhone,30);
+var MORESET=false,SPAGE=null;
+function sPageClose(){SPAGE=null;var pg=document.querySelector(".spage");if(pg){pg.classList.add("out");setTimeout(function(){pg.remove()},200)}document.body.classList.remove("spage-on");var ms=document.querySelector(".moreset");if(ms)setTimeout(function(){ms.scrollIntoView({block:"start"})},10)}
+function sPageBody(id){var pg=document.querySelector(".spage:not(.out)"),keep=0;
+  if(!pg){pg=h2('<div class="spage" role="dialog" aria-modal="true"><div class="sp-h"><button type="button" class="sp-back">← All options</button><b></b><button type="button" class="btn small sp-done">Done</button></div><div class="sp-b"></div></div>');
+    pg.querySelector(".sp-back").addEventListener("click",sPageClose);pg.querySelector(".sp-done").addEventListener("click",sPageClose);document.body.appendChild(pg);requestAnimationFrame(function(){pg.classList.add("in")})}
+  else if(pg.dataset.id===id)keep=pg.querySelector(".sp-b").scrollTop;
+  pg.dataset.id=id;pg.querySelector(".sp-h b").textContent=ACC_NAMES[id]||"Settings";document.body.classList.add("spage-on");
+  var b=pg.querySelector(".sp-b");b.innerHTML="";setTimeout(function(){b.scrollTop=keep},0);return b}
+function go(i,part){if(window.innerWidth<=760)pvHandle();STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;var s=STEPS[STEP];var phoneEdit=s.id==="edit"&&window.innerWidth<=760;if(!phoneEdit&&document.querySelector(".spage")){SPAGE=null;document.querySelectorAll(".spage").forEach(function(x){x.remove()});document.body.classList.remove("spage-on")}document.body.setAttribute("data-step",s.id);setTimeout(fitPhone,30);
   if(window.innerWidth<=760&&!part)window.scrollTo(0,0);
   $("stepCount").textContent="Step "+(STEP+1)+" of "+STEPS.length;$("stepTitle").textContent=s.t;$("stepHint").textContent=s.d;
   var body=$("stepBody");body.innerHTML="";
@@ -1603,9 +1621,11 @@ function go(i,part){if(window.innerWidth<=760)pvHandle();STEP=Math.max(0,Math.mi
       var ms=h2('<details class="moreset"'+(part||MORESET?" open":"")+'><summary>More settings</summary></details>');ms.addEventListener("toggle",function(){MORESET=ms.open});body.appendChild(ms);host=ms}
     host.appendChild(tabs);host.appendChild(pane);
     s.acc.forEach(function(a){var t=h2('<button type="button" role="tab" class="tab" data-acc="'+a+'" aria-selected="'+(a===cur)+'"><b>'+esc(ACC_NAMES[a])+'</b><span class="sum">'+esc(accSummary(a))+'</span></button>');
-      t.addEventListener("click",function(){OPEN=a;go(STEP)});tabs.appendChild(t)});
-    if(cur==="tune"){var chips=h2('<div class="chips"></div>');TUNE_PARTS.forEach(function(p){var c=document.createElement("button");c.type="button";c.textContent=PARTS.filter(function(x){return x[0]===p})[0][1];c.setAttribute("aria-pressed",String(TUNE===p));c.addEventListener("click",function(){TUNE=p;go(STEP)});chips.appendChild(c)});pane.appendChild(chips);renderPart(TUNE,pane,true);SEL=TUNE}
-    else{renderPart(cur,pane);SEL=cur}}
+      t.addEventListener("click",function(){OPEN=a;if(phoneEdit)SPAGE=a;go(STEP)});tabs.appendChild(t)});
+    /* phones: each section opens as its own page; ← All options goes back to the list */
+    var tgt=pane;if(phoneEdit){pane.hidden=true;tgt=null;if(SPAGE||part){SPAGE=cur;tgt=sPageBody(cur)}}
+    if(tgt){if(cur==="tune"){var chips=h2('<div class="chips"></div>');TUNE_PARTS.forEach(function(p){var c=document.createElement("button");c.type="button";c.textContent=PARTS.filter(function(x){return x[0]===p})[0][1];c.setAttribute("aria-pressed",String(TUNE===p));c.addEventListener("click",function(){TUNE=p;go(STEP)});chips.appendChild(c)});tgt.appendChild(chips);renderPart(TUNE,tgt,true);SEL=TUNE}
+    else{renderPart(cur,tgt);SEL=cur}}}
   else{s.parts.forEach(function(p){renderPart(p,body,s.parts.length>1)});SEL=part||s.parts[0]}
   if(s.id==="template"||s.id==="copy")SEL=null;
   $("prevStep").disabled=STEP===0;var nx=STEPS[Math.min(STEP+1,STEPS.length-1)];$("nextStep").textContent=STEP===STEPS.length-1?"Done":s.id==="details"?"✓ Confirm details":"Next: "+(window.innerWidth<=760?nx.sh||nx.t:nx.t);$("nextStep").hidden=STEP===STEPS.length-1;
