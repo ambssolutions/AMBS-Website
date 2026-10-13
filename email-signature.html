@@ -55,7 +55,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 @media (max-width:760px){.pv-col>.bar .step{font-size:1rem!important;line-height:1.2}.pv-col>.bar .step small.tapnote{display:inline!important;margin-left:6px;font-size:.72rem!important}.pv-col>.bar .bigbtn{padding:6px 12px!important;font-size:.85rem!important}}
 .mksw{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px;margin:4px 0 8px}.mksw button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font:600 .72rem/1.1 inherit;color:inherit;cursor:pointer}.mksw button[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px #24b328}.mksw i{display:block;width:100%;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.08)}
 .mkpick{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}.mkc{display:flex;align-items:center;gap:6px;font-size:.8rem}.mkc input{width:34px;height:26px;padding:0;border:1px solid #cbd5e1;border-radius:6px;background:none}.mkc.auto input{opacity:.45}.mkpick .note{flex-basis:100%;margin:0}
-.bsets{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin:4px 0 6px}.bsets button{display:flex;flex-direction:column;gap:4px;padding:6px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font:600 .74rem/1.15 inherit;color:inherit;cursor:pointer;text-align:left}.bsets button[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px #24b328}.bsets i{display:flex;height:18px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,0,0,.06)}.bsets b{flex:1}
+.bsets{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin:4px 0 6px}.bsets button{display:flex;flex-direction:column;gap:4px;padding:6px;border:1px solid var(--line,#e2e8f0);border-radius:10px;background:var(--panel,#fff);font:600 .74rem/1.15 inherit;color:var(--ink,#14172b);cursor:pointer;text-align:left}.bsets button[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px #24b328}.bsets i{display:flex;height:18px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,0,0,.06)}.bsets b{flex:1}
 @media (max-width:760px){.bsets{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .sig-line{cursor:pointer;padding:0 3px;margin:0 -3px}
 .movepad{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin:6px 0 4px}.movepad>.lbl{flex-basis:100%;margin:0}.mp{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,34px);gap:4px}.mp button{border:1px solid #cbd5e1;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;color:inherit}.mp button:active{background:#e8f7ea}.mp .mpr{font-size:14px;color:#64748b}.mpside{flex:1;min-width:170px}.mpside .note{margin:4px 0 0;font-size:.74rem}.mpstep button{padding:4px 10px!important}.linebox{border:1px dashed #cbd5e1;border-radius:12px;padding:8px 12px;margin:6px 0}
@@ -641,10 +641,13 @@ header.top #menuBtn .tx{display:none!important}header.top #menuBtn{min-width:40p
 .edhint{padding:10px 12px;font-size:.86rem}.edh-b .btn{flex:1 1 auto}
 .pnav .btn,#nextStep,#prevStep{white-space:nowrap}
 }
+
+/* a newer builder is live: offer a refresh */
+.newver{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;border-radius:14px;background:#14172b;color:#fff;font:600 .9rem system-ui,sans-serif;box-shadow:0 10px 30px -10px rgba(0,0,0,.6);max-width:calc(100vw - 24px)}
+.newver button{border:0;border-radius:10px;padding:8px 14px;background:#24b328;color:#fff;font:700 .9rem system-ui,sans-serif;cursor:pointer}
+@media (max-width:760px){body[data-step="edit"] .pv-col{position:static!important;max-height:none!important}}
 </style>
 
-<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -2186,6 +2189,11 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
     S.logoRatio=h0/w0;S.logoShow=true;var lo=inOrder("logo");if(lo)lo[1]=1;
     try{var lc=logoColours(im);var rd=lc.main.filter(function(c){return relLum(c)<.3});if(rd.length&&relLum(lc.main[0])>=.3)lc.main=[rd[0]].concat(lc.main.filter(function(c){return c!==rd[0]}));if(lc.main.length){S.brandP=lc.main[0];S.brandS=lc.main[1]||lc.main[0];S.brandA=lc.main[2]||S.brandS;S.palette=lc.main.slice(0,6)}if(lc.dark){S.colors.text=lc.dark;S.colors.link=lc.dark}}catch(e){}
     fin(true)};im.onerror=function(){fin(false)};im.src=d.logo.data}
+/* tabs left open for a while: notice when a newer builder is live and offer a refresh (your work is saved in this browser) */
+(function(){if(!onAmbs())return;var first=null,shown=false;
+  var check=function(){fetch("/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){var b=String(d&&d.build||"");if(!b)return;if(first===null){first=b;return}
+    if(b!==first&&!shown){shown=true;var n=h2('<div class="newver" role="status"><span>A newer version of the builder is ready.</span><button type="button">Refresh</button></div>');n.querySelector("button").addEventListener("click",function(){try{save()}catch(e){}location.reload()});document.body.appendChild(n)}}).catch(function(){})};
+  check();document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});setInterval(check,10*60*1000)})();
 function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
   if(square){var c=document.createElement("canvas"),s=Math.min(im.naturalWidth,im.naturalHeight),n=Math.min(s,400);c.width=c.height=n;c.getContext("2d").drawImage(im,(im.naturalWidth-s)/2,(im.naturalHeight-s)/2,s,s,0,0,n,n);cb(c.toDataURL("image/jpeg",.9))}
   else cb({src:r.result,w:im.naturalWidth,h:im.naturalHeight})};im.src=r.result};r.readAsDataURL(f)}
