@@ -70,6 +70,18 @@ details.more{grid-column:1/-1;border:1px solid #e2e8f0;border-radius:12px;margin
 .qbar .qlink{width:150px}.qbar .wide2{white-space:nowrap}
 .qbar .qmv{display:inline-flex;gap:2px;background:rgba(255,255,255,.06);border-radius:9px;padding:0 2px}.qbar .qmv button{min-width:26px;padding:0 4px;font-size:12px}
 .pside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:6px}.qsd{display:flex;align-items:center;gap:4px;font-size:.78rem}.qsd small{flex:1}.qsd button{width:28px;height:26px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;cursor:pointer;color:inherit}.qsd b{min-width:34px;text-align:center;font-weight:600}
+@media (min-width:761px){
+  header.top #sigNew,header.top #htmlUp,header.top #reset{display:none!important}header.top #menuBtn{display:inline-flex!important}header.top #menuBtn .tx{display:inline}header.top #sigList{order:1}header.top #sigSave{order:2}header.top #menuBtn{order:3}
+  .pv-col>.bar.tidy{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;flex-wrap:nowrap!important;padding-bottom:4px}
+  .bar.tidy .tb-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;width:100%}
+  .bar.tidy .tb-grp{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .bar.tidy .tb-grp>*{position:static!important;margin:0!important;transform:none!important;order:0!important}
+  .bar.tidy .tb2{border-top:1px solid var(--line,#e2e8f0);padding-top:8px}
+  .bar.tidy .tb2 .bigbtn{padding:6px 11px!important;font-size:.8rem!important;border-radius:999px!important}
+  .bar.tidy .tb2 .seg button{padding:6px 12px!important;font-size:.8rem!important}
+  .bar.tidy .step{margin:0!important}.bar.tidy .kbhint{margin-right:8px}
+  .pv-col>.acts{display:none!important}
+}
 .mytpl{border:1px dashed #cbd5e1;border-radius:14px;padding:10px 12px;margin:0 0 12px}.mytpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.mytpl .note{margin:0}.tcard.mine{position:relative;cursor:pointer}.tdel{position:absolute;top:6px;right:6px;border:0;border-radius:999px;background:rgba(15,23,42,.72);color:#fff;font:600 12px/1 inherit;padding:5px 8px;cursor:pointer}.tdel.on{background:#dc2626}
 .panel .mytpl .tpl-grid{max-height:none!important}
 .tcard{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
@@ -851,8 +863,12 @@ function photoHtml(mode){var sz=S.photoSize,r=S.photoShape==="circle"?"50%":S.ph
   var ph=img(src,sz,sz,S.name||"Photo","border-radius:"+r+";object-fit:cover;"+ebBox());return mode==="email"?ph:'<div data-edit="photo">'+ph+'</div>'}
 function a(href,txt,col,bold){return'<a href="'+esc(href)+'" style="color:'+col+';text-decoration:none;'+(bold?"font-weight:bold;":"")+'">'+txt+'</a>'}
 function vbar(h){var w=S.dividerW,cols=S.divider==="rainbow"?pal():[S.colors.line],seg=Math.max(2,Math.round(h/cols.length));
+  /* in the copied signature the whole stripe is one stretched picture (short code, crisp colours); the first colour fills behind it */
+  var u=SIGMODE==="email"&&stripeUrl(cols,false,w,seg*cols.length);if(u)return T()+'<tr><td width="'+w+'" height="'+seg*cols.length+'" bgcolor="'+cols[0]+'" style="width:'+w+'px;min-width:'+w+'px;height:'+seg*cols.length+'px;padding:0;font-size:0;line-height:0;"><img src="'+u+'" width="'+w+'" height="'+seg*cols.length+'" alt="" style="display:block;border:0;width:'+w+'px;height:'+seg*cols.length+'px"></td></tr></table>';
   return T()+cols.map(function(c){return'<tr>'+barCell(c,w,seg)+'</tr>'}).join("")+'</table>'}
-function hbar(wd,hh,solid){var cols=solid?[S.colors.line]:pal(),seg=Math.round(wd/cols.length);
+function stripeUrl(cols,across,w,h){var hs=cols.map(function(c){var m=/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i.exec(String(c||"").trim());return m?m[1].toLowerCase():null});if(hs.some(function(x){return!x}))return"";return"https://ambs.co.nz/assets/email/px/"+(across&&hs.length>1?"h-":"")+hs.join("-")+(w&&h?"_"+Math.round(w)+"x"+Math.round(h):"")+".png"}
+function hbar(wd,hh,solid){var cols=solid?[S.colors.line]:pal(),seg=Math.round(wd/cols.length),u=SIGMODE==="email"&&stripeUrl(cols,true,seg*cols.length,hh);
+  if(u)return T(S.align==="center"?"margin:0 auto;":"")+'<tr><td width="'+seg*cols.length+'" height="'+hh+'" bgcolor="'+cols[0]+'" style="width:'+seg*cols.length+'px;height:'+hh+'px;padding:0;font-size:0;line-height:0;"><img src="'+u+'" width="'+seg*cols.length+'" height="'+hh+'" alt="" style="display:block;border:0;width:'+seg*cols.length+'px;height:'+hh+'px"></td></tr></table>';
   return T(S.align==="center"?"margin:0 auto;":"")+'<tr>'+cols.map(function(c){return barCell(c,seg,hh)}).join("")+'</tr></table>'}
 /* one coloured piece of a stripe. In the copied signature it holds a stretched one-colour picture, because some email apps
    (the Gmail app among them) drop cell backgrounds and borders but always show pictures; the cell colour stays as the fallback */
@@ -902,7 +918,7 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
     var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="middle" style="width:'+icw+'px;vertical-align:middle;padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
     var txCell=function(x){return'<td valign="middle" style="vertical-align:middle;padding:0;'+ts+'">'+x.tx+'</td>'};
     var g=contactGap(),vpad=Math.max(0,Math.round(g/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
-    if(S.contactLayout==="line")return TB+'<tr>'+it.map(function(x,i){return icCell(x)+txCell(x)+(i<it.length-1?'<td valign="middle" style="vertical-align:middle;padding:0 '+g+'px;color:'+c.muted+';'+ts+'">·</td>':'')}).join("")+'</tr></table>';
+    if(S.contactLayout==="line")return flowRow(it.map(function(x,i){return{h:T()+'<tr>'+icCell(x)+txCell(x)+(i<it.length-1?'<td valign="middle" style="vertical-align:middle;padding:0 '+g+'px;color:'+c.muted+';'+ts+'">·</td>':'')+'</tr></table>'}}),ctr?"center":"left");
     var per=S.contactLayout==="pairs"?2:1,rows=[];
     for(var i=0;i<it.length;i+=per){var r=it.slice(i,i+per),tds=[];r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:18px;font-size:0;">&nbsp;</td>')});
       if(r.length<per)tds.push('<td colspan="'+(icw?2:1)+'"></td>');rows.push('<tr>'+tds.join("")+'</tr>')}
@@ -928,11 +944,11 @@ function rows(mode,zone){var out=[],groups=[];
   S.order.forEach(function(o){if(!o[1]||o[2]!==zone)return;var hh=block(o[0],mode,zone==="under");if(!hh)return;var cell={id:o[0],h:mode==="email"?hh:'<div data-edit="'+o[0]+'">'+hh+'</div>'};
     if(o[3]&&groups.length)groups[groups.length-1].cells.push(cell);else groups.push({id:o[0],cells:[cell]})});
   groups.forEach(function(g,n){var gs=st(g.id),al=gs.align||S.align,pad=Math.max(0,basePad(g.id,n)+(+gs.dy||0));
-    var inner=g.cells.length===1?alignWrap(g.cells[0].h,al):T(boxAlign(al))+'<tr>'+g.cells.map(function(c,k){var cs=st(c.id),va=cs.valign||"middle",nx=g.cells[k+1];
+    var inner=g.cells.length===1?alignWrap(g.cells[0].h,al):flowRow(g.cells.map(function(c,k){var cs=st(c.id),va=cs.valign||"middle",nx=g.cells[k+1];
       /* the gap before a part on a shared line = the usual gap + that part's own adjustment (which can be negative) */
       var gr=nx?Math.max(0,sideGap(c.id,nx.id)+(+st(nx.id).dx||0)):0;
-      var one=g.cells.length>1;return'<td valign="'+va+'" style="vertical-align:'+va+';padding:'+((k>0?Math.max(0,+cs.dy||0):0)+(one?PS(c.id,"T"):0))+'px '+(gr+(one?PS(c.id,"R"):0))+'px '+(one?PS(c.id,"B"):0)+'px '+(one?PS(c.id,"L"):0)+'px;">'+c.h+'</td>'}).join("")+'</tr></table>';
-    var sg=g.cells.length===1,gq=function(sd){return sg?PS(g.id,sd):0};out.push('<tr><td align="'+al+'" style="padding:'+(pad+gq("T"))+'px '+gq("R")+'px '+gq("B")+'px '+(Math.max(0,+gs.dx||0)+gq("L"))+'px;text-align:'+al+';">'+inner+'</td></tr>')});
+      return{h:c.h,va:va,pad:((k>0?Math.max(0,+cs.dy||0):0)+PS(c.id,"T")+4)+'px '+(gr+PS(c.id,"R"))+'px '+PS(c.id,"B")+'px '+PS(c.id,"L")+'px'}}),al);
+    var sg=g.cells.length===1,gq=function(sd){return sg?PS(g.id,sd):0};out.push('<tr><td align="'+al+'" style="padding:'+(sg?pad+gq("T"):Math.max(0,pad-4))+'px '+gq("R")+'px '+gq("B")+'px '+(Math.max(0,+gs.dx||0)+gq("L"))+'px;text-align:'+al+';">'+inner+'</td></tr>')});
   return out}
 /* position: line a part up left, centre or right, and nudge it */
 function isBtn(id){return["book","review","extra"].indexOf(id)>=0||(String(id).indexOf("c-")===0&&(cget(id)||{}).type==="button")}
@@ -997,6 +1013,11 @@ function lineCtlBox(){var el=h2('<div class="wide linebox"><div class="lbl">The 
   el.appendChild(moveCtl("line","Move the line"));return el}
 function basePad(id,n){return n===0?0:(["book","review","extra","social","rainbow","disclaimer","banner"].indexOf(id)>=0?S.gap+6:id==="role"?Math.max(0,S.gap-4):S.gap)}
 function sideGap(a,b){return isBtn(a)&&isBtn(b)?btnGap():pieceGap()}
+/* parts sharing a line sit side by side, and move onto the next line when the screen is too narrow
+   (the Outlook phone app does not shrink emails to fit). Old Outlook on Windows ignores this, so it gets a table instead */
+function flowRow(items,al){if(!items.length)return"";var mso=function(x){return"<!--[if mso]>"+x+"<![endif]-->"};
+  var lead=al==="center"?'<div style="text-align:center;font-size:0;line-height:0;">':al==="right"?'<div style="text-align:right;font-size:0;line-height:0;">':'<div style="font-size:0;line-height:0;">';
+  return lead+mso('<table cellpadding="0" cellspacing="0" border="0" role="presentation"'+(al==="center"?' align="center"':'')+'><tr><td valign="middle">')+items.map(function(x,i){return(i?mso('</td><td valign="'+(x.va||"middle")+'">'):"")+'<div style="display:inline-block;vertical-align:'+(x.va||"middle")+';padding:'+(x.pad||"0")+';font-size:'+S.textSize+'px'+(al==="left"?'':';text-align:left')+'">'+x.h+'</div>'}).join("")+mso('</td></tr></table>')+'</div>'}
 function lineInfo(id){var o=inOrder(id);if(!o||!o[1])return null;var z=o[2];
   var vis=S.order.filter(function(x){return x[1]&&x[2]===z&&block(x[0],"email")}),i=vis.indexOf(o),joined=i>0&&!!o[3],line=0;for(var k=1;k<=i;k++)if(!vis[k][3])line++;return{o:o,zone:z,joined:joined,first:i===0,line:line,col:z==="left"||z==="right"}}
 /* keyboard spacing: Backspace pulls a part closer (and joins the line above), Enter pushes it away (and starts a new line) */
@@ -1916,8 +1937,19 @@ var update0=update;update=function(){update0.apply(this,arguments);placeGrab()};
 function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
   if(square){var c=document.createElement("canvas"),s=Math.min(im.naturalWidth,im.naturalHeight),n=Math.min(s,400);c.width=c.height=n;c.getContext("2d").drawImage(im,(im.naturalWidth-s)/2,(im.naturalHeight-s)/2,s,s,0,0,n,n);cb(c.toDataURL("image/jpeg",.9))}
   else cb({src:r.result,w:im.naturalWidth,h:im.naturalHeight})};im.src=r.result};r.readAsDataURL(f)}
+/* laptop: the preview's buttons in two tidy rows (title and copy; view switches and tools) */
+function tidyBar(){if(window.innerWidth<=760||document.querySelector(".bar.tidy"))return;var bar=document.querySelector(".pv-col>.bar");if(!bar)return;
+  var row=function(cls){var d=document.createElement("div");d.className="tb-row "+(cls||"");return d},grp=function(){var d=document.createElement("div");d.className="tb-grp";return d};
+  var r1=row(),r2=row("tb2"),l1=grp(),c1=grp(),v=grp(),t=grp();
+  [$("kbHint"),bar.querySelector(".step")].forEach(function(x){if(x)l1.appendChild(x)});
+  [$("copyCode"),$("copySig")].forEach(function(x){if(x){x.classList.add("small");c1.appendChild(x)}});
+  bar.querySelectorAll(".seg[data-pv]").forEach(function(x){v.appendChild(x)});
+  [["movePv","✥ Move or add","Drag parts around, or add buttons, icons and pictures"],["testPv","🔗 Test links","Click the links to check where they go"],["fullPv","👁 Full view","See it as it will look in an email"],["bigPv",null,"Show the preview bigger"]].forEach(function(x){var b=$(x[0]);if(!b)return;if(x[1])b.textContent=x[1];b.title=x[2];t.appendChild(b)});
+  var fold=$("foldPv");if(fold)fold.hidden=true;
+  r1.appendChild(l1);r1.appendChild(c1);r2.appendChild(v);r2.appendChild(t);bar.innerHTML="";bar.appendChild(r1);bar.appendChild(r2);if(fold)bar.appendChild(fold);bar.classList.add("tidy")}
+window.addEventListener("resize",function(){setTimeout(tidyBar,200)});
 function init(){
-  S=load();if(!S.maker)S.maker=mkDefaults();
+  S=load();setTimeout(tidyBar,0);if(!S.maker)S.maker=mkDefaults();
   /* you're on your own HTML code, then change a design option: go back to the design, so the preview follows (your code is kept) */
   var leaveCode=function(e){if(!S.useCode||!e.target.closest||e.target.closest("#codeBox"))return;if(!e.target.closest(".panel")||STEPS[STEP].id==="copy"||e.target.closest("#prevStep,#nextStep,.tpl-add,#tplFilter,label.f select,.codenote,.tab,.acc>summary"))return;if(e.type==="click"&&!e.target.closest("button,input,select,label,[role=button],.tcard,.vchip"))return;
     S.useCode=false;save();toast("Back to the builder’s design. Your HTML code is kept in Copy and use → HTML code.");setTimeout(update,0)};
