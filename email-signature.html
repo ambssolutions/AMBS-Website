@@ -646,6 +646,15 @@ header.top #menuBtn .tx{display:none!important}header.top #menuBtn{min-width:40p
 .newver{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;border-radius:14px;background:#14172b;color:#fff;font:600 .9rem system-ui,sans-serif;box-shadow:0 10px 30px -10px rgba(0,0,0,.6);max-width:calc(100vw - 24px)}
 .newver button{border:0;border-radius:10px;padding:8px 14px;background:#24b328;color:#fff;font:700 .9rem system-ui,sans-serif;cursor:pointer}
 @media (max-width:760px){body[data-step="edit"] .pv-col{position:static!important;max-height:none!important}}
+
+/* phone edit sheet: Quick edit and All options as tabs */
+.estabs{display:flex;gap:6px;padding:8px 14px 0;border-bottom:1px solid var(--line)}
+.estabs button{flex:1;border:0;background:none;color:var(--muted);font:700 .92rem system-ui,sans-serif;padding:10px 6px;border-bottom:3px solid transparent;cursor:pointer}
+.estabs button[aria-selected=true]{color:var(--ink);border-bottom-color:#24b328}
+.esheet[data-tab=quick] .esb,.esheet[data-tab=all] .esq{display:none}
+.esq{overflow:auto;padding:10px 12px 14px}
+.qbar.insheet{position:static!important;max-width:none!important;margin:0!important;box-shadow:none!important;border-radius:14px;width:auto}
+.qbar.insheet .qn,.qbar.insheet .qmore,.qbar.insheet [aria-label="Done"]{display:none!important}
 </style>
 
 </head><body>
@@ -1903,15 +1912,19 @@ window.addEventListener("resize",function(){clearTimeout(window._fp);window._fp=
 /* phones: tap a part of the signature and its settings slide up from the bottom; the preview stays in view */
 /* tapping or clicking the stripe jumps to its thickness and spacing controls */
 function lineCtl(){var r=[].filter.call(document.querySelectorAll(".esheet .rng,.panel .rng"),function(x){return/Thickness/.test(x.textContent)&&x.closest(".linebox")})[0];if(r){var dd=r.closest("details");if(dd)dd.open=true;r.scrollIntoView({block:"center",behavior:"smooth"});r.classList.add("flash");setTimeout(function(){r.classList.remove("flash")},1400)}}
-function editSheet(id){var key=partKey(id),isC=String(id).indexOf("c-")===0,has=PARTS.some(function(p){return p[0]===key})&&(ITEM[key]||inOrder(key));
-  if(!has||isC){openItem(id);var pn=document.querySelector(".panel");if(pn)pn.scrollIntoView({behavior:"smooth",block:"start"});return}
+/* phones: one sheet per part, with the quick toolbar and the full options as two tabs */
+function sheetTab(sh,t){sh.dataset.tab=t;sh.querySelectorAll(".estabs button").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.t===t))})}
+function editSheet(id,tab){var key=partKey(id),isC=String(id).indexOf("c-")===0,has=PARTS.some(function(p){return p[0]===key})&&(ITEM[key]||inOrder(key));tab=tab||"all";
+  var cur=document.querySelector(".esheet:not(.out)");if(cur&&cur.dataset.kp===String(id)){sheetTab(cur,has&&!isC?tab:"quick");return}
+  if((!has||isC)&&tab==="all"){openItem(id);var pn=document.querySelector(".panel");if(pn)pn.scrollIntoView({behavior:"smooth",block:"start"});return}
   var old=document.querySelector(".esheet");if(old)old.remove();
-  var name=(PARTS.filter(function(p){return p[0]===key})[0]||[0,"Part"])[1];
-  var sh=h2('<div class="esheet" role="dialog" aria-label="Edit '+esc(name)+'"><div class="esh"><span class="grab" aria-hidden="true"></span><b>'+esc(name)+'</b><button type="button" class="btn small edone">Done</button></div><div class="esb"></div></div>');
-  document.body.appendChild(sh);renderPart(key,sh.querySelector(".esb"),false);SEL=key;markSel();
+  var name=has?(PARTS.filter(function(p){return p[0]===key})[0]||[0,"Part"])[1]:(typeof qbName==="function"?qbName(id):"Part");
+  var sh=h2('<div class="esheet" role="dialog" aria-label="Edit '+esc(name)+'"><div class="esh"><span class="grab" aria-hidden="true"></span><b>'+esc(name)+'</b><button type="button" class="btn small edone">Done</button></div>'+(has&&!isC?'<div class="estabs" role="tablist"><button type="button" role="tab" data-t="quick">Quick edit</button><button type="button" role="tab" data-t="all">All options</button></div>':'')+'<div class="esq"></div><div class="esb"></div></div>');
+  sh.dataset.kp=String(id);document.body.appendChild(sh);if(has&&!isC)renderPart(key,sh.querySelector(".esb"),false);sheetTab(sh,has&&!isC?tab:"quick");SEL=key;markSel();
+  sh.querySelectorAll(".estabs button").forEach(function(b){b.addEventListener("click",function(){sheetTab(sh,b.dataset.t);if(b.dataset.t==="quick"&&!sh.querySelector(".esq .qbar")){KEYPART=id;placeGrab()}})});
   /* keep the signature in view above the sheet, so parts can be dragged and resized */
   setTimeout(function(){var m=document.querySelector(".pv-col .mail"),hd=document.querySelector("header.top");if(m){var top=m.getBoundingClientRect().top-((hd&&hd.getBoundingClientRect().bottom)||0)-6;if(Math.abs(top)>4)window.scrollBy({top:top,behavior:"smooth"})}setTimeout(placeGrab,350)},60);
-  var close=function(){sh.classList.add("out");setTimeout(function(){sh.remove()},180);SEL=null;markSel();drawFlow()};
+  var close=function(){sh.classList.add("out");var qq=sh.querySelector(".qbar");if(qq)qq.hidden=true;setTimeout(function(){sh.remove()},180);SEL=null;KEYPART=null;markSel();try{placeGrab()}catch(e){}drawFlow()};
   sh.querySelector(".edone").addEventListener("click",close);
   requestAnimationFrame(function(){sh.classList.add("in")})}
 /* ---------- start a new signature ---------- */
@@ -2049,8 +2062,10 @@ function drawQbar(force){var box=$("inbox"),q=$("qbar"),g=$("grabBox"),id=KEYPAR
     if(id!=="line"&&id!=="rainbow"){var pd=add('<span class="qs"><button type="button" aria-label="Less padding">−</button><small>Padding</small><button type="button" aria-label="More padding">+</button></span>');
       pd.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){S.st[id]=S.st[id]||{};var v=Math.max(0,Math.min(40,(+S.st[id].pad||0)+(i?2:-2)));if(v)S.st[id].pad=v;else delete S.st[id].pad;save();update();toast("Padding: "+v+"px")})})}
     if(inOrder(id)||id==="line")add('<button type="button" class="qb" aria-label="Hide" title="Hide">🗑</button>',function(){if(id==="line"){S.divider="none"}else{inOrder(id)[1]=0;if(id==="photo")S.photoShow=false}KEYPART=null;changed();toast("Hidden. Bring it back in Extras → Layout and order"+(id==="line"?" or Logo → Line beside it":"")+".")});
-    add('<button type="button" class="qb wide2 qmore">All options</button>',function(){var k=id;if(window.innerWidth<=760)editSheet(k);else{openItem(k);if(k==="line")setTimeout(lineCtl,150)}});add('<button type="button" class="qb" aria-label="Done" title="Done">✓</button>',function(){KEYPART=null;placeGrab();kbHint()})}
-  if(window.innerWidth<=760){if(q.parentNode!==document.body)document.body.appendChild(q);q.classList.add("dock");q.hidden=false;q.style.top="";q.style.left="";return}
+    add('<button type="button" class="qb wide2 qmore">All options</button>',function(){var k=id;if(window.innerWidth<=760)editSheet(k,"all");else{openItem(k);if(k==="line")setTimeout(lineCtl,150)}});add('<button type="button" class="qb" aria-label="Done" title="Done">✓</button>',function(){KEYPART=null;placeGrab();kbHint()})}
+  if(window.innerWidth<=760){var esh=document.querySelector(".esheet:not(.out)");if(!esh||esh.dataset.kp!==String(id)){editSheet(id,"quick");esh=document.querySelector(".esheet:not(.out)")}
+    if(esh){var qp=esh.querySelector(".esq");if(q.parentNode!==qp)qp.appendChild(q);q.classList.remove("dock");q.classList.add("insheet");q.hidden=false;q.style.top="";q.style.left="";return}
+    if(q.parentNode!==document.body)document.body.appendChild(q);q.classList.add("dock");q.hidden=false;q.style.top="";q.style.left="";return}
   if(q.parentNode!==box){box.appendChild(q);q.classList.remove("dock")}
   /* just under the whole signature, so it never covers a part you want to click next */
   var r=g.getBoundingClientRect(),sr=$("sig").getBoundingClientRect(),b=box.getBoundingClientRect(),top=Math.max(sr.bottom,r.bottom)-b.top+box.scrollTop+14,left=Math.max(4,Math.min(r.left-b.left+box.scrollLeft,box.clientWidth-q.offsetWidth-4));q.hidden=false;q.style.top=top+"px";q.style.left=left+"px"}
