@@ -261,6 +261,198 @@
    },
    "updated": "2026-10-13T03:31:54.103Z",
    "by": "hello@ambs.co.nz"
+  },
+  {
+   "id": "dc1f05cae894",
+   "name": "Custom",
+   "state": {
+    "logoMatch": false,
+    "signoff": "Kind regards,",
+    "logoBg": "none",
+    "st": {
+     "signoff": {
+      "bold": true
+     },
+     "contact": {
+      "size": 11,
+      "bold": false,
+      "italic": false,
+      "color": "#14172b",
+      "dy": -2
+     },
+     "disclaimer": {
+      "size": 14,
+      "align": "left",
+      "dy": -5,
+      "color": "#1f2023",
+      "dx": -21
+     },
+     "role": {
+      "size": 10,
+      "dy": -6
+     },
+     "book": {
+      "dx": 1,
+      "dy": -2
+     },
+     "logo": {
+      "dx": 8,
+      "dy": 3,
+      "align": "left"
+     },
+     "banner": {
+      "dy": -8,
+      "dx": -2
+     },
+     "social": {
+      "dy": -4,
+      "dx": -8
+     },
+     "review": {
+      "dx": -2
+     }
+    },
+    "signoffAnimColor": "dark",
+    "signoffFont": "elegant",
+    "logoShow": true,
+    "logoPos": "left",
+    "logoSize": 68,
+    "divider": "rainbow",
+    "dividerW": 3,
+    "order": [
+     [
+      "photo",
+      0,
+      "left",
+      0
+     ],
+     [
+      "logo",
+      1,
+      "left",
+      0
+     ],
+     [
+      "name",
+      1,
+      "side",
+      0
+     ],
+     [
+      "role",
+      1,
+      "side",
+      0
+     ],
+     [
+      "contact",
+      1,
+      "side",
+      0
+     ],
+     [
+      "social",
+      1,
+      "side",
+      0
+     ],
+     [
+      "book",
+      1,
+      "side",
+      1
+     ],
+     [
+      "review",
+      1,
+      "side",
+      1
+     ],
+     [
+      "extra",
+      1,
+      "side",
+      1
+     ],
+     [
+      "tagline",
+      0,
+      "side",
+      0
+     ],
+     [
+      "rainbow",
+      0,
+      "under",
+      0
+     ],
+     [
+      "banner",
+      1,
+      "under",
+      1
+     ],
+     [
+      "disclaimer",
+      1,
+      "under",
+      0
+     ]
+    ],
+    "contactLayout": "line",
+    "align": "left",
+    "gap": 6,
+    "card": "none",
+    "colors": {
+     "text": "#14172b",
+     "muted": "#5b6176",
+     "letters": "@a",
+     "link": "#14172b",
+     "button": "#4285F4",
+     "reviewBtn": "#24b328",
+     "extraBtn": "",
+     "line": "@a",
+     "cardBg": "#f4f6fb"
+    },
+    "contactLabels": false,
+    "nameSize": 17,
+    "textSize": 13,
+    "rainbowW": 220,
+    "iconStyle": "brand",
+    "iconSize": 34,
+    "contactIcons": "glyph-dark",
+    "btnStyle": "filled",
+    "btnRadius": 20,
+    "bookIcon": "calendar",
+    "signoffStyle": "plain",
+    "photoShow": false,
+    "photoShape": "rounded",
+    "photoSize": 96,
+    "font": "Arial, Helvetica, sans-serif",
+    "emb": {
+     "btn": "1",
+     "icons": "0",
+     "logo": "0",
+     "banner": "2"
+    },
+    "emboss": 0,
+    "pieceGap": 5,
+    "iconGap": 3,
+    "btnGap": 7,
+    "contactGap": 5,
+    "btnPadX": 8,
+    "btnFont": 12,
+    "lineGapL": 16,
+    "lineGapR": 9,
+    "lineLen": 89,
+    "bannerW": 486,
+    "signoffSize": 37,
+    "disclaimerJustify": true,
+    "custom": []
+   },
+   "updated": "2026-10-13T04:17:15.720Z",
+   "by": "hello@ambs.co.nz",
+   "kind": "template"
   }
  ]
 }
