@@ -285,6 +285,32 @@ export function normaliseSite(input) {
   try { const u = new URL(s); return u.href; } catch (e) { return ""; }
 }
 
+/* an animated logo (WebP, GIF, PNG) often starts or ends blank, and browsers only show a page the first
+   frame: keep the fullest frame as a still PNG. Returns null for still pictures or when sharp isn't available. */
+const isAnimated = (buf, type) =>
+  (/webp/.test(type) && buf.indexOf("ANIM", 12, "latin1") > 0 && buf.indexOf("ANIM", 12, "latin1") < 200) ||
+  (/png/.test(type) && buf.indexOf("acTL", 8, "latin1") > 0 && buf.indexOf("acTL", 8, "latin1") < buf.indexOf("IDAT", 8, "latin1")) ||
+  (/gif/.test(type) && buf.toString("latin1").split("\x21\xF9\x04").length > 2);
+async function stillFrame(buf, type) {
+  if (!isAnimated(buf, type)) return null;
+  let sharp;
+  try { sharp = (await import("sharp")).default; } catch (e) { return null; }
+  try {
+    const pages = Math.min((await sharp(buf, { animated: true }).metadata()).pages || 1, 400);
+    if (pages < 2) return null;
+    const step = Math.max(1, Math.floor(pages / 40));
+    let best = -1, bestPage = 0;
+    for (let k = 0; k < pages; k += step) {
+      const { data } = await sharp(buf, { page: k }).ensureAlpha().resize(80).raw().toBuffer({ resolveWithObject: true });
+      let n = 0; for (let i = 3; i < data.length; i += 4) if (data[i] > 40) n++;
+      if (n > best) { best = n; bestPage = k; }
+    }
+    const one = await sharp(buf, { page: bestPage }).png().toBuffer();
+    let trimmed = one; try { trimmed = await sharp(one).trim().toBuffer(); } catch (e) {}
+    return await sharp(trimmed).resize({ width: 800, withoutEnlargement: true }).png().toBuffer();
+  } catch (e) { return null; }
+}
+
 const sameUrl = (a, b) => a.replace(/\/(index\.html?)?(?=#|$)/i, "") === b.replace(/\/(index\.html?)?(?=#|$)/i, "");
 const addLinks = (r, o) => { for (const k of ["book", "review", "google", "extra"]) if (!r.links[k] && o.links[k]) r.links[k] = o.links[k]; };
 export async function siteInfo(input) {
@@ -361,6 +387,8 @@ export async function siteInfo(input) {
       const g = await grab(u, 1.5e6, "image/*");
       const type = /svg/.test(g.type) || /\.svg(\?|$)/i.test(u) ? "image/svg+xml" : (g.type.startsWith("image/") ? g.type : "");
       if (!type || g.buf.length < 200) continue;
+      const still = await stillFrame(g.buf, type);
+      if (still) { logo = { url: "", type: "image/png", data: "data:image/png;base64," + still.toString("base64"), fromOg: false, animated: true }; break; }
       logo = { url: g.url, type, data: "data:" + type + ";base64," + g.buf.toString("base64"), fromOg: u === r.ogImage && !r.logos.includes(u) };
       break;
     } catch (e) {}

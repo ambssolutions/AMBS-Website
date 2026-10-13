@@ -2492,6 +2492,19 @@ function siteFill(site,btn,out){var keep=btn.textContent;
 /* NZ and Australian mobiles start 02 / 04 (or +64 2 / +61 4); the rest count as the office phone */
 function isMobileNum(p){var x=String(p||"").replace(/[^\d+]/g,"");if(/^\+?64/.test(x))return/^\+?642/.test(x);if(/^\+?61/.test(x))return/^\+?614/.test(x);return/^0[24]/.test(x)&&!/^0800|^0508/.test(x)}
 function splitPhones(list){var o="",m="";(list||[]).forEach(function(p){if(isMobileNum(p)){if(!m)m=p}else if(!o)o=p});return{office:o,mobile:m}}
+/* an animated logo (WebP, GIF, APNG) can start or end blank: keep its fullest frame as a still picture
+   (the server does this too; this covers browsers that can read every frame) */
+function opaqueShare(src,w,h){var s=document.createElement("canvas");s.width=60;s.height=Math.max(1,Math.round(60*h/w));var x=s.getContext("2d");x.drawImage(src,0,0,s.width,s.height);var p=x.getImageData(0,0,s.width,s.height).data,n=0;for(var i=3;i<p.length;i+=4)if(p[i]>40)n++;return n/(p.length/4)}
+function stillLogo(src,cb){var done=false,fin=function(s,anim){if(!done){done=true;cb(s,anim)}};
+  var viaPage=function(){fin(src,false)};
+  var mt=(/^data:(image\/(?:webp|gif|png|apng|avif));base64,/i.exec(src)||[])[1];
+  if(!mt||typeof ImageDecoder==="undefined"){viaPage();return}
+  try{var bin=atob(src.slice(src.indexOf(",")+1)),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    ImageDecoder.isTypeSupported(mt).then(function(ok){if(!ok){viaPage();return}var dec=new ImageDecoder({data:u,type:mt});
+      return dec.tracks.ready.then(function(){var n=dec.tracks.selectedTrack?dec.tracks.selectedTrack.frameCount:1;if(n<=1){dec.close();viaPage();return}
+        var idx=[],step=Math.max(1,Math.floor(n/40));for(var k=0;k<n;k+=step)idx.push(k);var best=-1,bestUrl=null;
+        return idx.reduce(function(pr,k){return pr.then(function(){return dec.decode({frameIndex:k}).then(function(r){var f=r.image,w=f.displayWidth,h=f.displayHeight,c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(f,0,0);f.close();
+          var v=opaqueShare(c,w,h);if(v>best){best=v;bestUrl=c.toDataURL("image/png")}})})},Promise.resolve()).then(function(){dec.close();fin(bestUrl||src,!!bestUrl)})})}).catch(function(){viaPage()})}catch(e){viaPage()}}
 function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.website||"").split("/")[0]);
   /* a different business: the AMBS sample details go, whatever the website didn't give stays empty to fill in */
   if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram="";
@@ -2508,13 +2521,14 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
   var soc=Object.assign({},d.social||{});if(lk.google)soc.google=lk.google;if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
   var fin=function(gotLogo){save();changed();go(STEP,"brand");done({logo:gotLogo})};
   if(!d.logo||!d.logo.data){fin(false);return}
+  stillLogo(d.logo.data,function(src,anim){if(anim){d.logo.type="image/png";d.logo.url=""}
   var im=new Image();im.onload=function(){var w0=im.naturalWidth||400,h0=im.naturalHeight||Math.round(w0/2.7);if(!w0||!h0){fin(false);return}
     var c=document.createElement("canvas"),w=Math.min(400,w0>=40?w0:400);c.width=w;c.height=Math.max(1,Math.round(w*h0/w0));c.getContext("2d").drawImage(im,0,0,c.width,c.height);
     var mailOk=/^image\/(png|jpe?g|gif)$/.test(d.logo.type)&&/^https:\/\//.test(d.logo.url);
     if(mailOk){S.logoUrl=d.logo.url;S.logoData=""}else{try{S.logoData=c.toDataURL("image/png");S.logoUrl=""}catch(e){fin(false);return}}
     S.logoRatio=h0/w0;S.logoShow=true;var lo=inOrder("logo");if(lo)lo[1]=1;
     try{applyLogoCols(logoColours(im))}catch(e){}
-    fin(true)};im.onerror=function(){fin(false)};im.src=d.logo.data}
+    fin(true)};im.onerror=function(){fin(false)};im.src=src})}
 /* tabs left open for a while: notice when a newer builder is live and offer a refresh (your work is saved in this browser) */
 (function(){if(!onAmbs())return;var first=null,shown=false;
   var check=function(){fetch("/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){var b=String(d&&d.build||"");if(!b)return;if(first===null){first=b;return}
