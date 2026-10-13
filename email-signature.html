@@ -620,7 +620,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 .moreset{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:0 12px 12px}.moreset:not([open]){padding-bottom:0}.moreset>summary{cursor:pointer;padding:12px 0;font-weight:700;list-style:none}.moreset>summary::after{content:" ▾";opacity:.6}
 .tpl-add{display:none!important}
 body:not([data-step="edit"]) .pwarn,body:not([data-step="edit"]) .mobbar{display:none!important}
-@media (max-width:760px){body:not([data-step="edit"]) .pv-col>.bar{display:none!important}body:not([data-step="edit"]) .pv-col .mail{max-height:128px;overflow:hidden}body:not([data-step="edit"]) .pv-col .mail-h,body:not([data-step="edit"]) .pv-col .msg{display:none}
+@media (max-width:760px){body:not([data-step="edit"]) .pv-col>.bar{display:none!important}body:not([data-step="edit"]) .pv-col .mail-h,body:not([data-step="edit"]) .pv-col .msg{display:none}
 body:not([data-step="edit"]) .pwarn,body:not([data-step="edit"]) .mobbar{display:none!important}.sp-row{grid-template-columns:1fr}.sp-card{flex-direction:row;align-items:center;gap:10px}.sp-card small{display:block}}
 
 /* phones: compact top bar, roomy forms, one-line notices */
@@ -686,8 +686,8 @@ header.top #menuBtn .tx{display:none!important}header.top #menuBtn{min-width:40p
 
 /* phones: preview card is a fifth of the screen; compact bar and one-line notice */
 @media (max-width:760px){
-.pv-col .mail{max-height:20vh!important;overflow:hidden!important}
-body:not([data-step="edit"]) .pv-col .mail{max-height:20vh!important}
+.pv-col .mail{max-height:var(--pvh,12vh)!important;overflow:hidden!important}
+body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 .pv-col .stage{max-height:none!important;padding:4px!important;overflow:hidden!important}
 .pv-col .inbox{padding:6px 8px!important}
 .pv-col>.bar{padding:2px 0!important;margin:0 0 4px!important;min-height:0!important}
@@ -700,10 +700,13 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:20vh!important}
 .instbar{position:fixed;left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:58;display:flex;align-items:center;gap:8px;padding:8px 8px 8px 14px;border-radius:14px;background:#14172b;color:#fff;font:600 .85rem system-ui,sans-serif;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
 .instbar span{flex:1}.instbar .ib-go{border:0;border-radius:10px;padding:8px 14px;background:#24b328;color:#fff;font:700 .85rem system-ui,sans-serif}.instbar .ib-x{border:0;background:none;color:#fff;font-size:1rem;padding:6px 8px;opacity:.8}
 .iosteps{margin:6px 0 4px;padding-left:20px;line-height:1.5}.iosteps li{margin:6px 0}
+
+/* phones: handle under the preview to make it smaller or bigger */
+.pvresize{display:none}
+@media (max-width:760px){.pvresize{display:flex;align-items:center;justify-content:center;gap:8px;height:22px;margin:2px 0 4px;touch-action:none;cursor:ns-resize;color:var(--muted);font:600 .68rem system-ui,sans-serif;user-select:none;-webkit-user-select:none}
+.pvresize i{width:44px;height:5px;border-radius:3px;background:var(--line);display:block}.pvresize.on i{background:#24b328}.pvresize span{opacity:.8}}
 </style>
 
-<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -1540,7 +1543,7 @@ function drawFlow(){var ol=$("flow");ol.innerHTML="";STEPS.forEach(function(s,i)
   b.addEventListener("click",function(){go(i)});li.appendChild(b);ol.appendChild(li)});
   document.querySelectorAll(".tab[data-acc]").forEach(function(d){var s=d.querySelector(".sum");if(s)s.textContent=accSummary(d.dataset.acc)})}
 var MORESET=false;
-function go(i,part){STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;var s=STEPS[STEP];document.body.setAttribute("data-step",s.id);setTimeout(fitPhone,30);
+function go(i,part){if(window.innerWidth<=760)pvHandle();STEP=Math.max(0,Math.min(STEPS.length-1,i));visited[STEP]=1;var s=STEPS[STEP];document.body.setAttribute("data-step",s.id);setTimeout(fitPhone,30);
   if(window.innerWidth<=760&&!part)window.scrollTo(0,0);
   $("stepCount").textContent="Step "+(STEP+1)+" of "+STEPS.length;$("stepTitle").textContent=s.t;$("stepHint").textContent=s.d;
   var body=$("stepBody");body.innerHTML="";
@@ -1956,15 +1959,26 @@ function phoneFix(){var before=JSON.stringify(S),steps=[
     box.querySelector('[data-pw="ok"]').addEventListener("click",function(){box.hidden=true})},400)}
 
 /* phones: the whole preview card takes about a fifth of the screen */
-function pvRoom(){var w=$("phoneWarn"),wh=w&&!w.hidden&&w.offsetHeight?w.offsetHeight+6:0;return Math.max(60,window.innerHeight*.2-wh-14)}
+/* phones: the preview takes PV_PCT % of the screen; drag the handle under it to change that (kept on this device) */
+var PV_PCT=(function(){var v=12;try{var x=+localStorage.getItem("ambs-sig-pvpct");if(x>=8&&x<=60)v=x}catch(e){}return v})();
+function pvApply(){document.documentElement.style.setProperty("--pvh",PV_PCT+"vh")}
+function pvRoom(){var w=$("phoneWarn"),wh=w&&!w.hidden&&w.offsetHeight?w.offsetHeight+6:0;return Math.max(44,window.innerHeight*PV_PCT/100-wh-12)}
+function pvHandle(){var col=document.querySelector(".pv-col"),m=col&&col.querySelector(".mail");if(!m||col.querySelector(".pvresize"))return;pvApply();
+  var h=h2('<div class="pvresize" role="slider" tabindex="0" aria-label="Preview size" aria-valuemin="8" aria-valuemax="60"><i></i><span>Drag to resize preview</span></div>');m.parentNode.insertBefore(h,m.nextSibling);
+  var setPct=function(v,fit){PV_PCT=Math.max(8,Math.min(60,Math.round(v)));h.setAttribute("aria-valuenow",PV_PCT);pvApply();if(fit)fitPhone()};setPct(PV_PCT);
+  var save1=function(){try{localStorage.setItem("ambs-sig-pvpct",PV_PCT)}catch(e){}};
+  h.addEventListener("pointerdown",function(e){e.preventDefault();var y0=e.clientY,p0=PV_PCT;h.setPointerCapture(e.pointerId);h.classList.add("on");
+    var mv=function(ev){setPct(p0+(ev.clientY-y0)/window.innerHeight*100,true)},up=function(){h.classList.remove("on");h.removeEventListener("pointermove",mv);h.removeEventListener("pointerup",up);h.removeEventListener("pointercancel",up);save1();toast("Preview: "+PV_PCT+"% of the screen")};
+    h.addEventListener("pointermove",mv);h.addEventListener("pointerup",up);h.addEventListener("pointercancel",up)});
+  h.addEventListener("keydown",function(e){if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();setPct(PV_PCT+(e.key==="ArrowDown"?2:-2),true);save1()}})}
 function fitPhone(){var sig=$("sig");if(!sig)return;
-  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4,zp=bw>0&&bw<PHONE_W?bw/PHONE_W:1;if(window.innerWidth<=760){var hh=sig.offsetHeight;if(hh>0)zp=Math.min(zp,Math.max(.18,pvRoom()/hh))}if(zp<.995)sig.style.zoom=String(+zp.toFixed(3));return}
+  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4,zp=bw>0&&bw<PHONE_W?bw/PHONE_W:1;if(window.innerWidth<=760){var hh=sig.offsetHeight;if(hh>0)zp=Math.min(zp,Math.max(.1,pvRoom()/hh))}if(zp<.995)sig.style.zoom=String(+zp.toFixed(3));return}
   sig.style.width="";sig.style.zoom="";var ph=window.innerWidth<=760,big=$("bigPv")&&$("bigPv").getAttribute("aria-pressed")==="true";
   var box=sig.parentNode,stage=sig.closest(".stage"),w=sig.scrollWidth,h=sig.offsetHeight;if(!w||!h)return;
   var z=Math.min(ph?1:.62,(box.clientWidth-(ph?20:8))/w);
   if(!big)[box,stage].forEach(function(c){if(!c)return;var room=c.clientHeight-(c.scrollHeight-h)-10;if(room>80)z=Math.min(z,room/h)});
   if(big)z=Math.min(1,(box.clientWidth-8)/w);
-  z=Math.max(ph?.4:.55,z);if(ph)z=Math.min(z,Math.max(.18,pvRoom()/h));if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
+  z=Math.max(ph?.4:.55,z);if(ph)z=Math.min(z,Math.max(.1,pvRoom()/h));if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
 window.addEventListener("resize",function(){clearTimeout(window._fp);window._fp=setTimeout(fitPhone,150)});
 /* phones: tap a part of the signature and its settings slide up from the bottom; the preview stays in view */
 /* tapping or clicking the stripe jumps to its thickness and spacing controls */
