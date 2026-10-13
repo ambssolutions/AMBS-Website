@@ -155,15 +155,28 @@ export function readPage(html, base) {
     else if (first.length > 2 && alt.includes(first)) weak.push(abs(src));
   }
   /* header pictures named logo (or after the business) first, then the header's first picture */
-  r.logos.push(...inHdr.filter((x) => x.l).map((x) => x.u), ...inHdr.filter((x) => !x.l).slice(0, 1).map((x) => x.u), ...strong, ...(r.ldLogos || []), ...weak);
+  const hdrImgs = [...inHdr.filter((x) => x.l).map((x) => x.u), ...inHdr.filter((x) => !x.l).slice(0, 1).map((x) => x.u)];
+  r.logos.push(...hdrImgs, ...strong, ...(r.ldLogos || []), ...weak);
+  r.hdrCount = hdrImgs.length;
+  /* a header logo drawn without an <img>: as a background in the page's styles, or as an inline <svg> */
+  r.hdrClasses = [];
+  for (const m of hdr.matchAll(/<(?!img\b)[a-z][a-z0-9]*\b[^>]*>/gi)) {
+    const t = m[0], cls = attr(t, "class"), tags = [cls, attr(t, "id"), attr(t, "aria-label")].join(" ");
+    if (/logo/i.test(tags) || (/brand/i.test(cls) && /role\s*=\s*["']?img/i.test(t))) for (const c of cls.split(/\s+/)) if (c && /logo|brand/i.test(c)) r.hdrClasses.push(c);
+  }
+  r.hdrClasses = [...new Set(r.hdrClasses)].slice(0, 6);
+  const svgM = /<(?:a|div|span)\b[^>]*(?:class|id|aria-label)\s*=\s*["'][^"']*(?:logo|brand)[^"']*["'][^>]*>\s*(?:<[^>]+>\s*){0,2}(<svg\b[\s\S]*?<\/svg>)/i.exec(hdr) || /(<svg\b[^>]*(?:class|id|aria-label)\s*=\s*["'][^"']*logo[^"']*["'][^>]*>[\s\S]*?<\/svg>)/i.exec(hdr);
+  if (svgM && svgM[1].length > 300 && svgM[1].length < 300000) { let sv = svgM[1]; if (!/xmlns=/.test(sv)) sv = sv.replace(/<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"'); r.hdrSvg = "data:image/svg+xml;base64," + Buffer.from(sv).toString("base64"); }
+  r.styleUrls = [];
+  for (const m of html.matchAll(/<link\b[^>]*>/gi)) if (/stylesheet/i.test(attr(m[0], "rel")) && attr(m[0], "href")) r.styleUrls.push(abs(attr(m[0], "href")));
   const rel = (want) => { for (const m of html.matchAll(/<link\b[^>]*>/gi)) { const rl = attr(m[0], "rel").toLowerCase(); if (want.some((w) => rl.split(/\s+/).includes(w) || rl === w)) { const h = attr(m[0], "href"); if (h) return abs(h); } } return ""; };
   const touch = rel(["apple-touch-icon", "apple-touch-icon-precomposed"]);
   if (touch) r.logos.push(touch);
   const og = meta(html, "og:image");
   r.ogImage = og ? abs(og) : "";
-  const byDigits = {};
-  for (const p of r.phones.filter(okPhone)) { const d = p.replace(/\D/g, ""); if (!byDigits[d] || (/\s/.test(p) && !/\s/.test(byDigits[d]))) byDigits[d] = p; }
-  r.phones = Object.values(byDigits);
+  const byDigits = new Map();
+  for (const p of r.phones.filter(okPhone)) { const d = p.replace(/\D/g, "").slice(-9), had = byDigits.get(d); if (!had || (/\s/.test(p) && !/\s/.test(had))) byDigits.set(d, p); }
+  r.phones = [...byDigits.values()];
   r.emails = [...new Set(r.emails.map((e) => e.toLowerCase()).filter(okEmail))];
   r.logos = [...new Set(r.logos.filter(Boolean))];
   return r;
@@ -194,12 +207,45 @@ export async function siteInfo(input) {
       for (const k in rc.social) r.social[k] = r.social[k] || rc.social[k];
     } catch (e) {}
   }
-  /* the logo, as a picture the builder can read colours from */
+  /* the logo, as a picture the builder can read colours from: the header's own logo first */
   let logo = null;
+  let cands = r.logos;
+  if (!r.hdrCount && (r.hdrClasses.length || r.hdrSvg)) {
+    const found = [];
+    if (r.hdrClasses.length) {
+      const srcs = [{ text: html, base: page.url }];
+      for (const u of r.styleUrls.filter((u) => { try { return new URL(u).hostname === new URL(page.url).hostname; } catch (e) { return false; } }).slice(0, 3)) {
+        try { const g = await grab(u, 8e5, "text/css,*/*"); srcs.push({ text: g.buf.toString("utf8"), base: g.url }); } catch (e) {}
+      }
+      const urlIn = (txt, base) => { const m = /url\(\s*["']?([^"')]+)["']?\s*\)/i.exec(txt); if (!m) return ""; const u = m[1].trim(); if (/^data:image\//i.test(u)) return u; try { return new URL(u, base).href; } catch (e) { return ""; } };
+      const varUrl = (name) => { for (const s2 of srcs) { const m = new RegExp(name.replace(/[-]/g, "\\-") + "\\s*:\\s*(url\\((?:\"[^\"]*\"|'[^']*'|[^)]*)\\))", "i").exec(s2.text); if (m) { const u = urlIn(m[1], s2.base); if (u) return u; } } return ""; };
+      for (const c of r.hdrClasses) {
+        const re = new RegExp("\\." + c.replace(/[^\w-]/g, "") + "(?![\\w-])[^{}]*\\{([^}]*)\\}", "g");
+        for (const s2 of srcs) {
+          for (const m of s2.text.matchAll(re)) {
+            const body = m[1], bg = /background(?:-image)?\s*:([^;]*)/i.exec(body) || /(?:-webkit-)?mask(?:-image)?\s*:([^;]*)/i.exec(body);
+            if (!bg) continue;
+            const v = /var\(\s*(--[\w-]+)/.exec(bg[1]);
+            const u = v ? varUrl(v[1]) : urlIn(bg[1], s2.base);
+            if (u) found.push(u);
+          }
+        }
+      }
+    }
+    if (r.hdrSvg) found.push(r.hdrSvg);
+    cands = [...new Set(found.slice(0, 3).concat(r.logos))];
+  }
   const host = new URL(page.url).hostname.replace(/^www\./, "");
   const emails = r.emails.slice().sort((a, b) => (b.endsWith("@" + host) ? 1 : 0) - (a.endsWith("@" + host) ? 1 : 0));
-  for (const u of r.logos.concat(r.ogImage ? [r.ogImage] : []).slice(0, 5)) {
+  for (const u of cands.concat(r.ogImage ? [r.ogImage] : []).slice(0, 6)) {
     try {
+      const dm = /^data:(image\/[\w.+-]+)(;base64)?,(.*)$/is.exec(u);
+      if (dm) {
+        const buf = dm[2] ? Buffer.from(dm[3], "base64") : Buffer.from(decodeURIComponent(dm[3]));
+        if (buf.length < 200 || buf.length > 1.5e6) continue;
+        logo = { url: "", type: dm[1].toLowerCase(), data: "data:" + dm[1].toLowerCase() + ";base64," + buf.toString("base64"), fromOg: false };
+        break;
+      }
       const g = await grab(u, 1.5e6, "image/*");
       const type = /svg/.test(g.type) || /\.svg(\?|$)/i.test(u) ? "image/svg+xml" : (g.type.startsWith("image/") ? g.type : "");
       if (!type || g.buf.length < 200) continue;
