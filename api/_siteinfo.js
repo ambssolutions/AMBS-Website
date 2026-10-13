@@ -286,7 +286,8 @@ export function normaliseSite(input) {
 }
 
 /* an animated logo (WebP, GIF, PNG) often starts or ends blank, and browsers only show a page the first
-   frame: keep the fullest frame as a still PNG. Returns null for still pictures or when sharp isn't available. */
+   frame: keep the fullest frame as a still PNG, plus the animation as a GIF for email. Returns null for still pictures or when sharp
+   isn't available. */
 const isAnimated = (buf, type) =>
   (/webp/.test(type) && buf.indexOf("ANIM", 12, "latin1") > 0 && buf.indexOf("ANIM", 12, "latin1") < 200) ||
   (/png/.test(type) && buf.indexOf("acTL", 8, "latin1") > 0 && buf.indexOf("acTL", 8, "latin1") < buf.indexOf("IDAT", 8, "latin1")) ||
@@ -306,9 +307,34 @@ async function stillFrame(buf, type) {
       if (n > best) { best = n; bestPage = k; }
     }
     const one = await sharp(buf, { page: bestPage }).png().toBuffer();
-    let trimmed = one; try { trimmed = await sharp(one).trim().toBuffer(); } catch (e) {}
-    return await sharp(trimmed).resize({ width: 800, withoutEnlargement: true }).png().toBuffer();
+    let trimmed = one, box = null;
+    try { const t = await sharp(one).trim().toBuffer({ resolveWithObject: true }); trimmed = t.data; box = { left: -t.info.trimOffsetLeft, top: -t.info.trimOffsetTop, width: t.info.width, height: t.info.height }; } catch (e) {}
+    const png = await sharp(trimmed).resize({ width: 800, withoutEnlargement: true }).png().toBuffer();
+    let gif = null; try { gif = await animatedGif(sharp, buf, pages, bestPage, box); } catch (e) {}
+    return { png, gif };
   } catch (e) { return null; }
+}
+/* the same animation as a GIF for email (Gmail, Apple Mail and Outlook online play GIFs). It starts on the
+   fullest frame, because Outlook on Windows only shows the first frame. Kept small: about 40 frames, 300px wide. */
+async function animatedGif(sharp, buf, pages, bestPage, box) {
+  const meta = await sharp(buf, { animated: true }).metadata();
+  const delays = meta.delay || [];
+  for (const [width, maxFrames] of [[300, 40], [240, 28], [200, 18]]) {
+    const step = Math.max(1, Math.ceil(pages / maxFrames)), frames = [], delay = [];
+    const start = bestPage - (bestPage % step);
+    for (let n = 0; n < pages; n += step) {
+      const k = (start + n) % pages;
+      let img = sharp(buf, { page: k });
+      if (box) img = img.extract(box);
+      frames.push(await img.resize({ width, withoutEnlargement: true }).png().toBuffer());
+      let d = 0; for (let j = k; j < Math.min(k + step, pages); j++) d += delays[j] || 80;
+      delay.push(Math.max(20, Math.min(d, 5000)));
+    }
+    delay[0] = Math.max(delay[0], 1500); /* hold the full logo for a moment first */
+    const gif = await sharp(frames, { join: { animated: true } }).gif({ delay, loop: meta.loop || 0, effort: 7 }).toBuffer();
+    if (gif.length <= 450 * 1024) return gif;
+  }
+  return null;
 }
 
 const sameUrl = (a, b) => a.replace(/\/(index\.html?)?(?=#|$)/i, "") === b.replace(/\/(index\.html?)?(?=#|$)/i, "");
@@ -388,7 +414,13 @@ export async function siteInfo(input) {
       const type = /svg/.test(g.type) || /\.svg(\?|$)/i.test(u) ? "image/svg+xml" : (g.type.startsWith("image/") ? g.type : "");
       if (!type || g.buf.length < 200) continue;
       const still = await stillFrame(g.buf, type);
-      if (still) { logo = { url: "", type: "image/png", data: "data:image/png;base64," + still.toString("base64"), fromOg: false, animated: true }; break; }
+      if (still) {
+        logo = { url: "", type: "image/png", data: "data:image/png;base64," + still.png.toString("base64"), fromOg: false, animated: true };
+        /* a GIF logo is used as it is; other animations come as a GIF made for email */
+        if (/gif/.test(type) && g.buf.length <= 450 * 1024 && /^https:/.test(g.url)) logo.animUrl = g.url;
+        else if (still.gif) logo.anim = "data:image/gif;base64," + still.gif.toString("base64");
+        break;
+      }
       logo = { url: g.url, type, data: "data:" + type + ";base64," + g.buf.toString("base64"), fromOg: u === r.ogImage && !r.logos.includes(u) };
       break;
     } catch (e) {}
