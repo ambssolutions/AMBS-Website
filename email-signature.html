@@ -744,12 +744,23 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 .sp-h{display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:var(--panel);border-bottom:1px solid var(--line)}
 .sp-h b{flex:1;min-width:0;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 .sp-back{border:0;background:none;color:var(--ink);font:700 .9rem system-ui,sans-serif;padding:8px 4px;cursor:pointer;white-space:nowrap}
-.sp-done{padding:6px 12px!important;min-height:0!important}
+.sp-done{width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:var(--soft,#f3f6fc);color:var(--ink);font-size:1.1rem;line-height:1;cursor:pointer;flex:0 0 auto}
 .sp-b{flex:1;overflow:auto;padding:14px 14px calc(24px + env(safe-area-inset-bottom,0px));-webkit-overflow-scrolling:touch}
 .sp-b .part{max-height:none!important}
 body.spage-on{overflow:hidden}
 
 .phonecopy{border:1.5px solid #f5b800;background:rgba(245,184,0,.1);border-radius:12px;padding:12px;margin:0 0 12px;font-size:.86rem}.phonecopy p{margin:6px 0}.phonecopy .btn{margin-top:4px;display:inline-block;text-decoration:none}
+
+/* Copy and use: platform choice and steps */
+.copyfor h3{margin:0 0 8px;font-size:1rem}
+.cf-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.cf{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font:700 .82rem system-ui,sans-serif;cursor:pointer}
+.cf span{font-size:1.3rem;line-height:1}.cf.on{border-color:#24b328;box-shadow:0 0 0 2px rgba(36,179,40,.35)}
+.bigcopy{font-size:1rem!important;padding:12px 18px!important}
+.bigsteps{padding-left:22px;margin:6px 0 12px}.bigsteps li{margin:7px 0;line-height:1.45}
+.tipbox{border:1px solid var(--line);background:var(--soft,#f3f6fc);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:.86rem;line-height:1.45}
+.mailme{margin:10px 0;display:inline-block;text-decoration:none}
+@media (max-width:760px){.cf-row{grid-template-columns:repeat(2,1fr)}.bigcopy{width:100%}}
 </style>
 
 </head><body>
@@ -1603,7 +1614,7 @@ function drawFlow(){var ol=$("flow");ol.innerHTML="";STEPS.forEach(function(s,i)
 var MORESET=false,SPAGE=null;
 function sPageClose(){SPAGE=null;var pg=document.querySelector(".spage");if(pg){pg.classList.add("out");setTimeout(function(){pg.remove()},200)}document.body.classList.remove("spage-on");var ms=document.querySelector(".moreset");if(ms)setTimeout(function(){ms.scrollIntoView({block:"start"})},10)}
 function sPageBody(id){var pg=document.querySelector(".spage:not(.out)"),keep=0;
-  if(!pg){pg=h2('<div class="spage" role="dialog" aria-modal="true"><div class="sp-h"><button type="button" class="sp-back">← All options</button><b></b><button type="button" class="btn small sp-done">Done</button></div><div class="sp-b"></div></div>');
+  if(!pg){pg=h2('<div class="spage" role="dialog" aria-modal="true"><div class="sp-h"><button type="button" class="sp-back">← All options</button><b></b><button type="button" class="sp-done" aria-label="Close">✕</button></div><div class="sp-b"></div></div>');
     pg.querySelector(".sp-back").addEventListener("click",sPageClose);pg.querySelector(".sp-done").addEventListener("click",sPageClose);document.body.appendChild(pg);requestAnimationFrame(function(){pg.classList.add("in")})}
   else if(pg.dataset.id===id)keep=pg.querySelector(".sp-b").scrollTop;
   pg.dataset.id=id;pg.querySelector(".sp-h b").textContent=ACC_NAMES[id]||"Settings";document.body.classList.add("spage-on");
@@ -1834,18 +1845,52 @@ function codePanel(){var el=h2('<div class="codebox" id="codeBox"><div class="lb
   var td=el.querySelector('[data-k="todesign"]');if(td)td.addEventListener("click",function(){if(!codeToDesign())toast("Couldn’t read this code.")});
   var bk=el.querySelector('[data-k="back"]');if(bk)bk.addEventListener("click",function(){S.useCode=false;save();update();go(STEP);toast("Back to the builder’s design. Your code is kept: press Edit this code to see the builder’s version.")});
   return el}
+/* Copy and use: pick where the signature goes, then one copy button and clear steps for that app */
+var COPY_FOR=(function(){try{return localStorage.getItem("ambs-sig-copyfor")||""}catch(e){return""}})();
+var COPY_STEPS={
+  gmail:{n:"Gmail",ic:"✉️",btn:"Copy for Gmail",gm:true,html:
+    '<h3>Gmail on a computer</h3><ol class="bigsteps">'+
+    '<li>Press <b>Copy for Gmail</b> above.</li>'+
+    '<li>Open <b>mail.google.com</b> on your computer and sign in.</li>'+
+    '<li>Click the <b>⚙️ cog</b> at the top right, then <b>See all settings</b>.</li>'+
+    '<li>Stay on the <b>General</b> tab and scroll down to <b>Signature</b>.</li>'+
+    '<li>Click <b>+ Create new</b>, type a name (for example your first name) and press <b>Create</b>.</li>'+
+    '<li>Click inside the big box next to it and paste: <b>Ctrl + V</b> (Windows) or <b>⌘ + V</b> (Mac). Your logo, icons and colours appear.</li>'+
+    '<li>Under <b>Signature defaults</b>, choose it for <b>For new emails use</b> and <b>On reply/forward use</b>.</li>'+
+    '<li>Scroll to the very bottom and click <b>Save changes</b>.</li>'+
+    '<li>Send yourself a test email to check it.</li></ol>'+
+    '<h3>Only have a phone?</h3><ol class="bigsteps">'+
+    '<li>In <b>Chrome</b> on your phone, open this builder and press <b>Copy for Gmail</b>.</li>'+
+    '<li>In the same browser go to <b>mail.google.com</b>, tap <b>⋮</b> (top right) and tick <b>Desktop site</b>.</li>'+
+    '<li>Follow steps 3 to 8 above and paste into the signature box.</li></ol>'+
+    '<div class="tipbox"><b>The Gmail phone app</b> can only send a plain-text signature, and it can’t show logos or icons. Your full signature goes out when you send from Gmail in a browser (computer or phone). In the app: <b>Settings → your account → Mobile signature</b>: leave it empty, or type a short plain version.</div>'+
+    '<div class="tipbox"><b>“Signature is too long”?</b> Keep the size under 10,000 (the bar above). Turn off a part or shorten the disclaimer. <b>Pictures show as empty boxes?</b> Press <b>Put it online for me</b> first, then copy again.</div>'},
+  outlook:{n:"Outlook",ic:"📨",btn:"Copy signature",html:
+    '<h3>Outlook on the web and the new Outlook</h3><ol class="bigsteps"><li>Press <b>Copy signature</b> above.</li><li>Open Outlook, click <b>⚙️ Settings</b> → <b>Accounts</b> → <b>Signatures</b>.</li><li>Click <b>+ New signature</b>, give it a name and paste into the box.</li><li>Choose it for new messages and replies/forwards, then <b>Save</b>.</li></ol>'+
+    '<h3>Classic Outlook (Windows)</h3><ol class="bigsteps"><li><b>File</b> → <b>Options</b> → <b>Mail</b> → <b>Signatures…</b></li><li>Click <b>New</b>, name it, paste into the edit box, choose it as the default, then <b>OK</b>.</li></ol>'+
+    '<div class="tipbox">The Outlook phone app keeps only simple formatting. Set the signature up on a computer for the full design.</div>'},
+  apple:{n:"Apple Mail",ic:"🍎",btn:"Copy signature",html:
+    '<h3>Mac</h3><ol class="bigsteps"><li>Press <b>Copy signature</b> above.</li><li>In Mail, open <b>Mail → Settings → Signatures</b>.</li><li>Choose your account and click <b>+</b>.</li><li>Untick <b>Always match my default message font</b>.</li><li>Click in the right-hand box, paste (<b>⌘ + V</b>) and close the window.</li></ol>'+
+    '<h3>iPhone or iPad</h3><ol class="bigsteps"><li>Press <b>Copy signature</b> above (in Safari).</li><li>Open <b>Settings → Apps → Mail → Signature</b>.</li><li>Delete the old text and paste. If the layout looks plain, shake the phone and tap <b>Undo Change Attributes</b>.</li></ol>'},
+  other:{n:"Other",ic:"⋯",btn:"Copy signature",html:
+    '<ol class="bigsteps"><li>Press <b>Copy signature</b> and paste it into your email app’s signature setting.</li><li>If your app asks for <b>HTML code</b> instead, press <b>Copy HTML code</b> and paste that.</li></ol>'}};
 function drawCopy(body){var mi=missing(),off=offline(),full=emailHtml().length,len=gmailHtml().length,two=!!S.mob&&full!==len,pct=Math.min(100,Math.round(len/100));
   checkPics(function(bad){if(!bad.length)return;var box=body.querySelector(".copybox");if(!box||box.querySelector(".picwarn"))return;box.insertBefore(h2('<p class="warn picwarn">'+esc(warnPics(bad))+'</p>'),box.firstChild);var ok=box.querySelector(".okmsg");if(ok)ok.remove()});
-  if(window.innerWidth<=760){var ph=h2('<div class="phonecopy"><b>📱 On a phone?</b><p>The <b>Gmail app</b> (and the Outlook app) only keep plain text in a signature, so the logo, icons and colours are dropped. Set this signature up once on a computer: open <b>Gmail on a computer → ⚙️ Settings → See all settings → Signature</b> and paste it there.</p><p>Emails you send from Gmail on a computer will have the full signature. In the Gmail phone app, turn <b>Mobile signature</b> off so the plain one doesn’t go out instead.</p><a class="btn sec small" href="mailto:?subject='+encodeURIComponent("Set up my email signature")+'&body='+encodeURIComponent("Open this on a computer: https://ambs.co.nz/email-signature")+'">✉️ Email me the link for my computer</a></div>');body.appendChild(ph)}
+  var pf=COPY_STEPS[COPY_FOR]?COPY_FOR:"";
+  var pick=h2('<div class="copyfor"><h3>Where will you use this signature?</h3><div class="cf-row">'+Object.keys(COPY_STEPS).map(function(k){var x=COPY_STEPS[k];return'<button type="button" class="cf'+(k===pf?" on":"")+'" data-k="'+k+'" aria-pressed="'+(k===pf)+'"><span>'+x.ic+'</span>'+esc(x.n)+'</button>'}).join("")+'</div></div>');
+  pick.querySelectorAll(".cf").forEach(function(b){b.addEventListener("click",function(){COPY_FOR=b.dataset.k;try{localStorage.setItem("ambs-sig-copyfor",COPY_FOR)}catch(e){}go(STEP)})});
+  body.appendChild(pick);if(!pf)return;var P=COPY_STEPS[pf];
   body.appendChild(h2('<div class="copybox">'+(mi.length?'<div class="warn"><p>Before you copy: your '+esc(mi.join(" and "))+(mi.length>1?" need":" needs")+' to be online, or the email leaves '+(mi.length>1?"them":"it")+' out. Email apps can only show pictures that are on a website.</p>'+
-    (off.length?(onAmbs()?'<button type="button" class="btn small" data-c="online">Put '+(off.length>1?"them":"it")+' online for me</button><small>Uses your website editor sign-in. Takes about a minute.</small>':'<small>Open this builder at <b>ambs.co.nz/email-signature</b> (signed in to the website editor) to put '+(off.length>1?"them":"it")+' online with one click. Or download '+(off.length>1?"them":"it")+', put '+(off.length>1?"them":"it")+' on your website and paste the web address in.</small>'):'')+'</div>':'<p class="okmsg">Everything is ready to copy, including your pictures and animations.</p>')+
-  '<div class="sizebar'+(len>10000?" over":len>8500?" near":"")+'"><div><b>'+(two?"Gmail size":"Code size")+':</b> '+len.toLocaleString()+' of Gmail’s 10,000 characters'+(len>10000?" — too long for Gmail. Turn off a part, shorten the disclaimer, or use fewer icons.":len>8500?" — close to Gmail’s limit.":"")+'</div><i style="width:'+pct+'%"></i></div>'+
-  (two?'<p class="note">You have a phone layout, so <b>Copy signature</b> carries both layouts ('+full.toLocaleString()+' characters) for Outlook and Apple Mail, which have no limit. Gmail can’t switch layouts and stops at 10,000, so for Gmail press <b>Copy for Gmail</b>: it copies just the laptop layout.</p>':'')+
-  '<div class="acts">'+(two?'<button type="button" class="btn" data-c="gm">Copy for Gmail</button><button type="button" class="btn sec" data-c="sig">Copy signature (Outlook, Apple Mail)</button>':'<button type="button" class="btn" data-c="sig">Copy signature</button>')+'<button type="button" class="btn sec" data-c="code">Copy HTML code</button></div>'+
-  '<div class="how"><h3>Gmail</h3><ol><li>Open Settings (the cog), then <b>See all settings</b>.</li><li>Scroll to <b>Signature</b> and press <b>Create new</b>.</li><li>Paste, then <b>Save changes</b> at the bottom.</li></ol>'+
-  '<h3>Outlook (web and new Outlook)</h3><ol><li>Settings → <b>Mail</b> → <b>Compose and reply</b>.</li><li>Paste into <b>Email signature</b> and save.</li></ol>'+
-  '<h3>Apple Mail</h3><ol><li>Mail → Settings → <b>Signatures</b>, press +.</li><li>Untick “Always match my default message font”, paste, then close.</li></ol></div></div>'));
-  body.appendChild(codePanel());body.querySelector('[data-c="sig"]').addEventListener("click",function(){copySig(this)});var gb=body.querySelector('[data-c="gm"]');if(gb)gb.addEventListener("click",function(){copyGmail(gb)});var ob=body.querySelector('[data-c="online"]');if(ob)ob.addEventListener("click",function(){putOnline(ob)});body.querySelector('[data-c="code"]').addEventListener("click",function(){copyCode(this)})}
+    (off.length?(onAmbs()?'<button type="button" class="btn small" data-c="online">Put '+(off.length>1?"them":"it")+' online for me</button><small>Uses your website editor sign-in. Takes about a minute.</small>':'<small>Open this builder at <b>ambs.co.nz/email-signature</b> (signed in to the website editor) to put '+(off.length>1?"them":"it")+' online with one click. Or download '+(off.length>1?"them":"it")+', put '+(off.length>1?"them":"it")+' on your website and paste the web address in.</small>'):'')+'</div>':'<p class="okmsg">Everything is ready to copy, including your pictures.</p>')+
+  (pf==="gmail"?'<div class="sizebar'+(len>10000?" over":len>8500?" near":"")+'"><div><b>Gmail size:</b> '+len.toLocaleString()+' of 10,000 characters'+(len>10000?" — too long for Gmail. Turn off a part, shorten the disclaimer, or use fewer icons.":len>8500?" — close to Gmail’s limit.":"")+'</div><i style="width:'+pct+'%"></i></div>':'')+
+  '<div class="acts"><button type="button" class="btn bigcopy" data-c="main">📋 '+esc(P.btn)+'</button>'+(pf==="other"?'<button type="button" class="btn sec" data-c="code">Copy HTML code</button>':'')+'</div>'+
+  '<div class="how">'+P.html+'</div>'+
+  (pf!=="other"?'<p class="note">Your app asks for HTML code instead? <button type="button" class="linkbtn" data-c="code">Copy HTML code</button></p>':'')+'</div>'));
+  if(window.innerWidth<=760&&pf!=="apple")body.appendChild(h2('<a class="btn sec small mailme" href="mailto:?subject='+encodeURIComponent("Set up my email signature")+'&body='+encodeURIComponent("Open this on a computer: https://ambs.co.nz/email-signature")+'">✉️ Email me the link for my computer</a>'));
+  body.appendChild(codePanel());
+  body.querySelector('[data-c="main"]').addEventListener("click",function(){if(P.gm)copyGmail(this);else copySig(this)});
+  var ob=body.querySelector('[data-c="online"]');if(ob)ob.addEventListener("click",function(){putOnline(ob)});
+  body.querySelectorAll('[data-c="code"]').forEach(function(b){b.addEventListener("click",function(){copyCode(b)})})}
 
 /* arrange board: every line of the signature is a row; drop pieces into the same row to put them side by side */
 function arrangeBoard(){var el=h2('<div class="wide arr"><p class="note">Drag any piece, including your logo and photo. Put it on the left or right of your details, onto a line with other pieces to sit side by side, on <b>+ New line</b> for a line of its own, or on <b>Hidden</b> to take it out.</p><div class="abody"></div></div>'),body=el.querySelector(".abody");
