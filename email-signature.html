@@ -941,10 +941,10 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
     var icw=it[0].ic?(S.contactIcons==="letters"?Math.round(csz*1.1):Math.max(13,Math.round(csz*1.15)))+cIconGap():0;
     var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="middle" style="width:'+icw+'px;vertical-align:middle;padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
     var txCell=function(x){return'<td valign="middle" style="vertical-align:middle;padding:0;'+ts+'">'+x.tx+'</td>'};
-    var g=contactGap(),vpad=Math.max(0,Math.round(g/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
+    var g=contactGap(),vpad=Math.max(0,Math.round((S.contactLayout==="pairs"?Math.max(1,Math.round(csz*0.18)):g)/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
     if(S.contactLayout==="line")return flowRow(it.map(function(x,i){return{h:T()+'<tr>'+icCell(x)+txCell(x)+(i<it.length-1?(cSep()?'<td valign="middle" style="vertical-align:middle;padding:0 '+g+'px;color:'+c.muted+';'+ts+'">'+esc(cSep())+'</td>':'<td style="width:'+g+'px;font-size:0;line-height:0;">&nbsp;</td>'):'')+'</tr></table>'}}),ctr?"center":"left");
     var per=S.contactLayout==="pairs"?2:1,rows=[];
-    for(var i=0;i<it.length;i+=per){var r=it.slice(i,i+per),tds=[];r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:18px;font-size:0;">&nbsp;</td>')});
+    for(var i=0;i<it.length;i+=per){var r=it.slice(i,i+per),tds=[];r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:'+g+'px;min-width:'+g+'px;font-size:0;line-height:0;">&nbsp;</td>')});
       if(r.length<per)tds.push('<td colspan="'+(icw?2:1)+'"></td>');rows.push('<tr>'+tds.join("")+'</tr>')}
     return TB+rows.join("")+'</table>'}
   if(id==="tagline")return S.tagline?'<div style="'+fx("tagline",c.muted,S.textSize-1,false,false)+'">'+esc(S.tagline)+'</div>':"";
@@ -983,7 +983,7 @@ function iconGap(){return S.iconGap==null||S.iconGap===""?6:+S.iconGap}
 /* space between phone, email, website and address: across the line in "One line", between the lines otherwise */
 function cIconGap(){var v=S.contactIconGap;return v==null||v===""||isNaN(+v)?3:Math.max(0,Math.min(24,+v))}
 function cSep(){return S.contactSep==null?"·":String(S.contactSep).trim().slice(0,6)}
-function contactGap(){if(S.contactGap!=null&&S.contactGap!=="")return+S.contactGap;var csz=st("contact").size||S.textSize;return S.contactLayout==="line"?10:2*Math.max(1,Math.round(csz*0.18))}
+function contactGap(){if(S.contactGap!=null&&S.contactGap!=="")return+S.contactGap;var csz=st("contact").size||S.textSize;return S.contactLayout==="line"?10:S.contactLayout==="pairs"?18:2*Math.max(1,Math.round(csz*0.18))}
 /* the usual space above a line, and between two parts sharing a line */
 /* column parts (logo, photo, the stripe): up and down is padding above or below, so it works in every email app;
    sideways is handled by the gaps beside them. "pad" adds space on every side */
