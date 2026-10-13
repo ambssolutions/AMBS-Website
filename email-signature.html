@@ -89,6 +89,7 @@ header.top .hbtn{min-width:38px;justify-content:center;font-size:1.05rem!importa
 @media (max-width:760px){header.top #undoBtn,header.top #redoBtn{display:inline-flex!important}}
 .pguide{position:absolute;z-index:3;pointer-events:none;border-right:2px dashed #e5352b;box-sizing:border-box}.pguide.fits{border-right-color:#24b328}.pguide .pg-l{position:absolute;right:4px;top:4px;white-space:nowrap;background:#e5352b;color:#fff;font:600 10px/1 system-ui,sans-serif;padding:3px 6px;border-radius:6px}.pguide.fits .pg-l{background:#24b328}.pguide .pg-over{position:absolute;left:100%;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(229,53,43,.10) 0 6px,rgba(229,53,43,.03) 6px 12px)}.pguide[hidden],.pguide .pg-over[hidden]{display:none}
 #pgBtn[aria-pressed=true]{background:#14172b;color:#fff;border-color:#14172b}
+.scaleall .sa-row{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
 .mytpl{border:1px dashed #cbd5e1;border-radius:14px;padding:10px 12px;margin:0 0 12px}.mytpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.mytpl .note{margin:0}.tcard.mine{position:relative;cursor:pointer}.tdel{position:absolute;top:6px;right:6px;border:0;border-radius:999px;background:rgba(15,23,42,.72);color:#fff;font:600 12px/1 inherit;padding:5px 8px;cursor:pointer}.tdel.on{background:#dc2626}
 .panel .mytpl .tpl-grid{max-height:none!important}
 .tcard{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
@@ -1147,7 +1148,7 @@ var ITEM={
   banner:function(){return[["range","bannerW","Banner width in the email",200,640],["seg","emb.banner","Lift off the page (embossed)",EMB_OPTS],["blogo"],["maker"]].concat(S.company==="Ambs Solutions"||/ambs\.co\.nz/.test(S.website)?[["banners"]]:[]).concat([["file","bannerFile","Or upload a banner you already have"],["text","bannerUrl","Banner web address (used in the email)"],["text","bannerLink","Where it links to"],["note","Best size 1200 × 180 pixels. A GIF is fine and keeps its movement. It has to be online to show in emails: paste its web address above."]])},
   disclaimer:function(){return[["text","disclaimerLabel","Heading"],["area","disclaimer","Text"],["check","disclaimerJustify","Justify"],["color","st.disclaimer.color","Colour"],["range","st.disclaimer.size","Size",9,16,function(){return Math.max(10,S.textSize-2)}],["bi","disclaimer"]]},
   rainbow:function(){return[["range","rainbowW","Length",60,420]]},
-  layout:function(){return[["order"],["range","pieceGap","Space between parts on the same line",0,40,function(){return pieceGap()}],["seg","align","Line it up",[["left","Left"],["center","Centre"]]],["seg","mainValign","Details column, up and down (next to the logo or photo)",[["top","Top"],["middle","Middle"],["bottom","Bottom"]]],["range","gap","Space between lines",0,18],["range","sigPad","Space around the whole signature",0,40]]},
+  layout:function(){return[["scaleall"],["order"],["range","pieceGap","Space between parts on the same line",0,40,function(){return pieceGap()}],["seg","align","Line it up",[["left","Left"],["center","Centre"]]],["seg","mainValign","Details column, up and down (next to the logo or photo)",[["top","Top"],["middle","Middle"],["bottom","Bottom"]]],["range","gap","Space between lines",0,18],["range","sigPad","Space around the whole signature",0,40]]},
   style:function(){return[["seg","card","Background",[["none","None"],["light","Light card"],["dark","Dark card"]]],["range","emboss","Embossed text, photo and card",0,10],["seg","emb.btn","Embossed buttons",EMB_OPTS],["seg","emb.icons","Embossed icons",EMB_OPTS],["seg","emb.logo","Embossed logo",EMB_OPTS],["seg","emb.banner","Embossed banner",EMB_OPTS],["note","Icons and the logo are embossed into the picture itself, so they look raised in every email app. Text, buttons and the banner shadow show in Gmail, Apple Mail and the new Outlook; older Outlook shows them flat."],["select","font","Font",[["Arial, Helvetica, sans-serif","Arial"],["Helvetica, Arial, sans-serif","Helvetica"],["Verdana, Geneva, sans-serif","Verdana"],["Tahoma, Geneva, sans-serif","Tahoma"],["'Trebuchet MS', Arial, sans-serif","Trebuchet"],["Georgia, 'Times New Roman', serif","Georgia"]]],["range","nameSize","Name size",13,30],["range","textSize","Text size",11,16]].concat(COLOR_KEYS.map(function(c){return["color",c[0],c[1]]}))}
 };
 function inOrder(id){return S.order.filter(function(o){return o[0]===id})[0]}
@@ -1476,6 +1477,8 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
     else if(t==="htmlstart"){el=h2('<div class="wide hstart"><span>Already have a signature as an HTML file?</span><button type="button" class="btn sec small">📄 Upload HTML file</button></div>');el.querySelector("button").addEventListener("click",function(){$("htmlFile").click()})}
     else if(t==="replay"){el=h2('<div class="wide"><button type="button" class="btn sec small">▶ Watch it write again</button></div>');el.querySelector("button").addEventListener("click",function(){document.querySelectorAll("#sig img.so-img").forEach(function(im){im.src=im.src.replace(/([?&])r=\d+/,"").replace(/\?.*$/,function(q){return q})+"&r="+Date.now()})})}
     else if(t==="place"){el=placeCtl(k)}
+    else if(t==="scaleall"){el=h2('<div class="wide scaleall"><div class="lbl">All sizes</div><div class="sa-row"><button type="button" class="btn sec small" data-sa="0.95">− Smaller</button><button type="button" class="btn sec small" data-sa="1.05">+ Bigger</button><button type="button" class="btn small" data-sa="fit">📱 Fit to phone</button></div><p class="note">Makes the logo, text, icons, buttons and spacing smaller or bigger together, keeping the same layout.</p></div>');
+      el.querySelectorAll("[data-sa]").forEach(function(b){b.addEventListener("click",function(){if(b.dataset.sa==="fit"){shrinkToFit();return}scaleAll(+b.dataset.sa);changed();toast(b.dataset.sa<1?"Everything a little smaller":"Everything a little bigger")})})}
     else if(t==="linebox"){el=S.divider==="none"?null:lineCtlBox()}
     else if(t==="note"){el=h2('<p class="note wide">'+esc(k)+'</p>')}
     else if(t==="color"){var cur=C(getP(k)||f[5]||"")||"#14172b";el=h2('<div class="cl"><label for="'+id2+'">'+esc(f[2])+'</label><div class="pick"><input type="color" id="'+id2+'" value="'+cur+'">'+swatches().map(function(s){return'<button type="button" class="sw" style="background:'+s+'" data-c="'+s+'" aria-label="'+s+'"></button>'}).join("")+'</div></div>');
@@ -1748,9 +1751,35 @@ function sigNaturalWidth(){var d=document.createElement("div");d.style.cssText="
 var PW_T=0;
 function phoneCheck(){clearTimeout(PW_T);PW_T=setTimeout(function(){var box=$("phoneWarn");if(!box)return;if(S.useCode&&String(S.code||"").trim()){box.hidden=true;return}
   var w=sigNaturalWidth();if(w<=PHONE_W+4){box.hidden=true;return}
-  box.hidden=false;box.innerHTML='<span>📱 <b>Too wide for phones</b> ('+w+'px; a phone shows about '+PHONE_W+'px). In the Outlook phone app some parts move onto the next line and the stripe won’t reach the bottom.</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="see">'+(S.pvWidth==="phone"?"Back to laptop view":"See it on a phone")+'</button><button type="button" class="btn small" data-pw="fix">Make it phone-friendly</button></span>';
+  box.hidden=false;box.innerHTML='<span>📱 <b>Too wide for phones</b> ('+w+'px; a phone shows about '+PHONE_W+'px). In the Outlook phone app some parts move onto the next line and the stripe won’t reach the bottom.</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="see">'+(S.pvWidth==="phone"?"Back to laptop view":"See it on a phone")+'</button><button type="button" class="btn small" data-pw="fix" title="Makes everything a little smaller, and moves parts onto their own lines only if that is not enough">📱 Fit to phone</button></span>';
   box.querySelector('[data-pw="see"]').addEventListener("click",function(){S.pvWidth=S.pvWidth==="phone"?"desktop":"phone";save();update()});
-  box.querySelector('[data-pw="fix"]').addEventListener("click",phoneFix)},250)}
+  box.querySelector('[data-pw="fix"]').addEventListener("click",shrinkToFit)},250)}
+
+/* make every part smaller (or bigger) by the same amount, so the layout stays the same */
+function scaleAll(f){var r=function(v,min,max){return Math.max(min,Math.min(max||999,Math.round(v*f)))};
+  var cur={pg:pieceGap(),ig:iconGap(),bg:btnGap(),cg:contactGap(),bf:btnFs(),so:soPlainSize()};
+  S.nameSize=r(S.nameSize,12,40);S.textSize=r(S.textSize,10,22);S.iconSize=r(S.iconSize,14,48);S.logoSize=r(S.logoSize,40,260);S.logoMatch=false;
+  S.photoSize=r(S.photoSize,40,200);S.btnPadX=r(S.btnPadX==null?14:+S.btnPadX,4,40);S.btnFont=r(cur.bf,10,22);
+  S.pieceGap=r(cur.pg,0);S.iconGap=r(cur.ig,0);S.btnGap=r(cur.bg,0);S.contactGap=r(cur.cg,0);S.gap=r(S.gap,0);
+  S.lineGapL=r(S.lineGapL==null?18:+S.lineGapL,0);S.lineGapR=r(S.lineGapR==null?18:+S.lineGapR,0);S.dividerW=Math.max(1,Math.round(S.dividerW*f));
+  if(S.signoffSize)S.signoffSize=r(S.signoffSize,18,60);S.rainbowW=r(S.rainbowW||220,40);
+  Object.keys(S.st||{}).forEach(function(k){var c=S.st[k];if(!c)return;if(+c.size)c.size=r(+c.size,10,40);["dx","dy","pad","padT","padR","padB","padL"].forEach(function(p){if(+c[p])c[p]=Math.round(+c[p]*f)})});
+  (S.custom||[]).forEach(function(c){if(c.type==="image"&&+c.width)c.width=r(+c.width,30)})}
+/* the biggest size where it still fits a phone; if shrinking alone would make things too small, move the fewest parts down first */
+var MIN_SCALE=0.75;
+function bestScale(base){var lo=MIN_SCALE,hi=1,best=null;S=JSON.parse(base);if(sigNaturalWidth()<=PHONE_W+4)return 1;
+  for(var i=0;i<8;i++){var m=(lo+hi)/2;S=JSON.parse(base);scaleAll(m);if(sigNaturalWidth()<=PHONE_W+4){best=m;lo=m}else hi=m}
+  if(best==null){S=JSON.parse(base);scaleAll(MIN_SCALE);if(sigNaturalWidth()<=PHONE_W+4)best=MIN_SCALE}return best}
+function shrinkToFit(){var orig=JSON.stringify(S),keep={_sigId:S._sigId,_sigName:S._sigName};
+  if(sigNaturalWidth()<=PHONE_W+4){toast("It already fits a phone.");return}
+  var moves=[["contact details one per line",function(){if(S.contactLayout!=="stack"){S.contactLayout="stack";return 1}}],["the buttons under the icons",function(){var o=inOrder("book");if(o&&o[1]&&o[3]){o[3]=0;return 1}}],["the review button on its own line",function(){var o=inOrder("review"),b=inOrder("book");if(o&&o[1]&&o[3]&&b&&b[1]){o[3]=0;return 1}}]];
+  var base=orig,done=[],f=bestScale(base);
+  for(var i=0;f==null&&i<moves.length;i++){S=JSON.parse(base);if(moves[i][1]()){done.push(moves[i][0]);base=JSON.stringify(S);f=bestScale(base)}}
+  S=JSON.parse(base);Object.assign(S,keep);
+  if(f==null){scaleAll(MIN_SCALE);changed();toast("Smaller and rearranged, but some parts are still wide. Try a shorter line of text or fewer parts on one line.");return}
+  if(f<1)scaleAll(f);changed();var pc=Math.round(f*100),msg=(f<1?"Everything is "+pc+"% of its size before":"Same sizes")+(done.length?", and "+done.join(", "):", same layout")+".";
+  setTimeout(function(){var box=$("phoneWarn");if(!box)return;box.hidden=false;box.innerHTML='<span>✅ <b>Fits a phone now.</b> '+esc(msg)+'</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="undo">Undo</button><button type="button" class="btn sec small" data-pw="ok">OK</button></span>';
+    box.querySelector('[data-pw="undo"]').addEventListener("click",function(){S=JSON.parse(orig);Object.assign(S,keep);changed();toast("Back to how it was")});box.querySelector('[data-pw="ok"]').addEventListener("click",function(){box.hidden=true})},400)}
 /* narrow it step by step, stopping as soon as it fits */
 function phoneFix(){var before=JSON.stringify(S),steps=[
     function(){if(S.contactLayout!=="stack"){S.contactLayout="stack";return"contact details one per line"}},
