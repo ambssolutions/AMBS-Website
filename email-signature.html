@@ -721,10 +721,14 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 
 .fbppl{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.fbppl small{width:100%;font-size:.78rem;color:var(--muted)}
 .fbp{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 .8rem system-ui,sans-serif;cursor:pointer}.fbp span{font-weight:500;color:var(--muted)}.fbp[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px rgba(36,179,40,.35)}
+
+/* stripe colour sets */
+.setcol{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;width:100%}.setcol small{width:100%;font-size:.74rem;color:var(--muted)}.setcol.mini small{color:inherit;opacity:.8}
+.scsw{display:flex;flex-direction:column;gap:3px;padding:5px;border:1px solid var(--line,#cbd5e1);border-radius:9px;background:var(--panel,#fff);color:var(--ink,#14172b);cursor:pointer;min-width:78px;font:600 .68rem system-ui,sans-serif;text-align:left}
+.scsw i{display:flex;height:12px;border-radius:4px;overflow:hidden}.scsw i b{flex:1}.scsw[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px #24b328}
+.qbar.insheet .setcol{grid-column:1/-1;display:grid!important;grid-template-columns:repeat(3,1fr);gap:6px}.qbar.insheet .setcol small{grid-column:1/-1}.qbar .scsw{background:var(--soft,#f3f6fc)!important;border:1px solid var(--line)!important;color:var(--ink)!important;padding:6px!important;height:auto!important;min-width:0!important;width:auto!important;border-radius:10px!important;display:flex!important;flex-direction:column;gap:4px}.qbar .scsw span{display:block!important;font:600 .7rem system-ui,sans-serif;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qbar .scsw i{width:100%}.qbar:not(.insheet) .scsw{min-width:64px}
 </style>
 
-<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -1153,7 +1157,16 @@ function lineColours(box,mini){box.innerHTML="";var pick=function(val,on,lbl,rm)
     var RB=["#E5352B","#FF8A00","#F5B800","#24b328","#1877E0","#7B2FBE"];if(S.palette.join()!==RB.join()){var rb=h2('<button type="button" class="'+(mini?"qb wide2":"btn sec small")+'" title="Use all six rainbow colours">🌈'+(mini?"":" Full rainbow")+'</button>');rb.addEventListener("click",function(e){e.preventDefault();S.palette=RB.slice();S.divider="rainbow";save();update();lineColours(box,mini);toast("Rainbow stripe")});box.appendChild(rb)}
     if(S.palette.length<6){var ad=h2('<button type="button" class="'+(mini?"qb":"btn sec small")+'" aria-label="Add a colour">+</button>');ad.addEventListener("click",function(e){e.preventDefault();S.palette.push(S.brandP);save();update();lineColours(box,mini)});box.appendChild(ad)}}
   else{pick(S.colors.line||"@a",function(v){S.colors.line=v},"Line colour");if(!mini){var rb2=h2('<button type="button" class="'+(mini?"qb wide2":"btn sec small")+'" title="Use several colours">🌈 Several colours</button>');rb2.addEventListener("click",function(e){e.preventDefault();S.divider="rainbow";save();update();lineColours(box,mini)});box.appendChild(rb2)}}
-  oneColRow(box,mini,function(){if(mini)drawQbar(true);else lineColours(box,mini)})}
+  setColRow(box,mini,function(){if(mini)drawQbar(true);else lineColours(box,mini)});oneColRow(box,mini,function(){if(mini)drawQbar(true);else lineColours(box,mini)})}
+/* stripe colour sets: the logo's colours, the brand colours, then the usual colour sets */
+function stripeSets(){var out=[],seen={},add=function(n,c){c=(c||[]).filter(Boolean).slice(0,6);if(c.length<2)return;var k=c.join().toLowerCase();if(seen[k])return;seen[k]=1;out.push([n,c])};
+  if(S.logoCols&&S.logoCols.main)add("Your logo",S.logoCols.main);add("Brand colours",[S.brandP,S.brandS,S.brandA]);
+  BRAND_SETS.forEach(function(z){add(z[0],z[2])});return out}
+function setColRow(box,mini,after){var cur=S.divider==="rainbow"?(S.palette||[]).join().toLowerCase():"";
+  var row=h2('<span class="setcol'+(mini?" mini":"")+'"><small>Colour sets</small></span>');
+  stripeSets().slice(0,mini?6:20).forEach(function(z){var b=h2('<button type="button" class="scsw" aria-pressed="'+(cur===z[1].join().toLowerCase())+'" title="'+esc(z[0])+'"><i>'+z[1].map(function(c){return'<b style="background:'+c+'"></b>'}).join("")+'</i><span>'+esc(z[0])+'</span></button>');
+    b.addEventListener("click",function(e){e.preventDefault();S.divider="rainbow";S.palette=z[1].slice();save();update();if(after)after();toast("Stripe: "+z[0])});row.appendChild(b)});
+  box.appendChild(row)}
 /* one-colour stripe: the logo's and brand colours, one tap each */
 function oneColRow(box,mini,after){var seen={},cols=[S.brandP,S.brandS,S.brandA].concat((S.logoCols&&S.logoCols.main)||[],S.palette||[],["#14172b","#64748b"]).map(function(c){return toHex(C(c))}).filter(function(c){c=String(c).toLowerCase();if(!c||seen[c])return false;seen[c]=1;return true}).slice(0,9);
   var cur=S.divider==="solid"?String(toHex(C(S.colors.line||"@a"))).toLowerCase():"";
@@ -1616,7 +1629,7 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
       var drawPal=function(){pw.innerHTML="";S.palette.forEach(function(c,i){var w=h2('<span class="pchip"><input type="color" value="'+c+'" aria-label="Stripe colour '+(i+1)+'"><button type="button" aria-label="Remove colour '+(i+1)+'">✕</button></span>');
           w.querySelector("input").addEventListener("input",function(e){S.palette[i]=e.target.value;update()});w.querySelector("button").addEventListener("click",function(){if(S.palette.length>1){S.palette.splice(i,1);drawPal();update()}});pw.appendChild(w)});
         if(S.palette.length<6){var ad=h2('<button type="button" class="padd">+ Add</button>');ad.addEventListener("click",function(){S.palette.push(S.brandP);drawPal();update()});pw.appendChild(ad)}
-        var oc=h2('<div class="ocwrap"></div>');pw.appendChild(oc);oneColRow(oc,false,function(){go(STEP,"brand")});if(S.divider==="solid"){var bk=h2('<button type="button" class="padd">🌈 Use these colours</button>');bk.addEventListener("click",function(){S.divider="rainbow";save();update();go(STEP,"brand")});oc.appendChild(bk)}};drawPal()}
+        var oc=h2('<div class="ocwrap"></div>');pw.appendChild(oc);setColRow(oc,false,function(){go(STEP,"brand")});oneColRow(oc,false,function(){go(STEP,"brand")});if(S.divider==="solid"){var bk=h2('<button type="button" class="padd">🌈 Use these colours</button>');bk.addEventListener("click",function(){S.divider="rainbow";save();update();go(STEP,"brand")});oc.appendChild(bk)}};drawPal()}
     else if(t==="newbrand"){el=h2('<div class="wide nb"><button type="button" class="btn sec small">Start a new brand</button><p class="note">Clears the logo, colours, details and links so you can set up a different business.</p></div>');
       el.querySelector("button").addEventListener("click",function(){newBrand();changed();openItem("brand");toast("Ready for a new brand. Upload the logo first.")})}
     else if(t==="hand"){el=h2('<div class="wide"><div class="lbl">Handwriting</div><div class="hands"></div></div>');var hw=el.querySelector(".hands");
