@@ -619,7 +619,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
 .moreset{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:0 12px 12px}.moreset:not([open]){padding-bottom:0}.moreset>summary{cursor:pointer;padding:12px 0;font-weight:700;list-style:none}.moreset>summary::after{content:" ▾";opacity:.6}
 .tpl-add{display:none!important}
 body:not([data-step="edit"]) .pwarn,body:not([data-step="edit"]) .mobbar{display:none!important}
-@media (max-width:760px){body:not([data-step="edit"]) .pv-col>.bar{display:none!important}body:not([data-step="edit"]) .pv-col .mail{max-height:150px;overflow:hidden}body:not([data-step="edit"]) .pv-col .mail-h,body:not([data-step="edit"]) .pv-col .msg{display:none}
+@media (max-width:760px){body:not([data-step="edit"]) .pv-col>.bar{display:none!important}body:not([data-step="edit"]) .pv-col .mail{max-height:128px;overflow:hidden}body:not([data-step="edit"]) .pv-col .mail-h,body:not([data-step="edit"]) .pv-col .msg{display:none}
 body:not([data-step="edit"]) .pwarn,body:not([data-step="edit"]) .mobbar{display:none!important}.sp-row{grid-template-columns:1fr}.sp-card{flex-direction:row;align-items:center;gap:10px}.sp-card small{display:block}}
 
 /* phones: compact top bar, roomy forms, one-line notices */
@@ -648,9 +648,12 @@ header.top #menuBtn .tx{display:none!important}header.top #menuBtn{min-width:40p
 @media (max-width:760px){body[data-step="edit"] .pv-col{position:static!important;max-height:none!important}}
 
 /* phone edit sheet: Quick edit and All options as tabs */
-.estabs{display:flex;gap:6px;padding:8px 14px 0;border-bottom:1px solid var(--line)}
-.estabs button{flex:1;border:0;background:none;color:var(--muted);font:700 .92rem system-ui,sans-serif;padding:10px 6px;border-bottom:3px solid transparent;cursor:pointer}
-.estabs button[aria-selected=true]{color:var(--ink);border-bottom-color:#24b328}
+.esheet .esh{padding:8px 12px!important;gap:8px!important}.esheet .esh b{font-size:.95rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.estabs{display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:var(--soft,#eef2f8);border:1px solid var(--line);flex:0 0 auto}
+.estabs button{border:0;background:none;color:var(--muted);font:700 .78rem system-ui,sans-serif;padding:6px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.estabs button[aria-selected=true]{color:var(--ink);background:var(--panel);box-shadow:0 1px 3px rgba(13,17,34,.18)}
+.esheet .edone{padding:6px 12px!important;min-height:0!important;font-size:.85rem!important}
+.esheet .esq{padding:8px 10px 12px}
 .esheet[data-tab=quick] .esb,.esheet[data-tab=all] .esq{display:none}
 .esq{overflow:auto;padding:10px 12px 14px}
 .qbar.insheet{position:static!important;max-width:none!important;margin:0!important;box-shadow:none!important;border-radius:14px;width:auto}
@@ -661,21 +664,24 @@ header.top #menuBtn .tx{display:none!important}header.top #menuBtn{min-width:40p
 .ocsw{width:28px;height:28px;border-radius:50%;border:2px solid var(--panel,#fff);box-shadow:0 0 0 1px var(--line,#cbd5e1);cursor:pointer;padding:0}.ocsw[aria-pressed=true]{box-shadow:0 0 0 2px #24b328}
 .ocwrap{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 /* Quick edit inside the phone sheet: big, tidy rows */
-.qbar.insheet{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;background:transparent!important;color:var(--ink)!important;padding:2px 0 6px!important}
+.qbar.insheet{display:grid!important;grid-template-columns:1fr 1fr;gap:6px;background:transparent!important;color:var(--ink)!important;padding:2px 0 6px!important}
 .qbar.insheet>*{min-width:0}
-.qbar.insheet .qt{grid-column:1/-1;width:100%!important;height:46px!important;font-size:16px!important;border:1px solid var(--line)!important;background:var(--soft,#f3f6fc)!important;color:var(--ink)!important;border-radius:12px!important;padding:0 12px!important}
+.qbar.insheet .qt{grid-column:1/-1;width:100%!important;height:40px!important;font-size:16px!important;border:1px solid var(--line)!important;background:var(--soft,#f3f6fc)!important;color:var(--ink)!important;border-radius:12px!important;padding:0 12px!important}
 .qbar.insheet .qs{display:flex;align-items:center;justify-content:space-between;gap:4px;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:4px}
-.qbar.insheet .qs button{width:40px!important;height:40px!important;min-width:40px!important;border-radius:10px!important;background:var(--panel)!important;color:var(--ink)!important;border:1px solid var(--line)!important;font-size:1.1rem!important}
+.qbar.insheet .qs button{width:34px!important;height:34px!important;min-width:34px!important;border-radius:10px!important;background:var(--panel)!important;color:var(--ink)!important;border:1px solid var(--line)!important;font-size:1.1rem!important}
 .qbar.insheet .qs small{font-size:.8rem;opacity:1;color:var(--ink);text-align:center;flex:1}
-.qbar.insheet .qb{height:46px!important;min-width:0!important;width:100%;border-radius:12px!important;background:var(--soft,#f3f6fc)!important;color:var(--ink)!important;border:1px solid var(--line)!important;font-size:.95rem!important}
+.qbar.insheet .qb{height:40px!important;min-width:0!important;width:100%;border-radius:12px!important;background:var(--soft,#f3f6fc)!important;color:var(--ink)!important;border:1px solid var(--line)!important;font-size:.95rem!important}
 .qbar.insheet .qb.wide2{grid-column:1/-1}
-.qbar.insheet .qc{width:100%!important;height:46px!important;border-radius:12px!important;border:1px solid var(--line)!important;background:var(--soft,#f3f6fc)!important;display:flex;align-items:center;justify-content:center}
-.qbar.insheet .qc input{width:34px!important;height:34px!important}
+.qbar.insheet .qc{width:100%!important;height:40px!important;border-radius:12px!important;border:1px solid var(--line)!important;background:var(--soft,#f3f6fc)!important;display:flex;align-items:center;justify-content:center}
+.qbar.insheet .qc input{width:28px!important;height:28px!important}
 .qbar.insheet .qmv{grid-column:1/-1;display:grid!important;grid-template-columns:repeat(4,1fr);gap:6px}
-.qbar.insheet .qmv button{height:44px!important;width:100%!important;border-radius:12px!important;background:var(--soft,#f3f6fc)!important;color:var(--ink)!important;border:1px solid var(--line)!important;font-size:1rem!important}
+.qbar.insheet .qmv button{height:38px!important;width:100%!important;border-radius:12px!important;background:var(--soft,#f3f6fc)!important;color:var(--ink)!important;border:1px solid var(--line)!important;font-size:1rem!important}
 .qbar.insheet .qcols,.qbar.insheet .onecol{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
 .qbar.insheet .qcols .qc{width:46px!important}
-.qbar.insheet .ocsw{width:34px;height:34px}
+.qbar.insheet .ocsw{width:30px;height:30px}
+
+/* laptops: the preview card sizes to the signature instead of filling the column */
+@media (min-width:761px){.pv-col .mail{flex:0 0 auto!important}.pv-col .stage{flex:0 0 auto!important;padding:12px!important}.pv-col .inbox{max-width:600px!important}#inbox{padding-bottom:64px!important}}
 </style>
 
 </head><body>
@@ -1930,13 +1936,13 @@ function phoneFix(){var before=JSON.stringify(S),steps=[
     box.querySelector('[data-pw="ok"]').addEventListener("click",function(){box.hidden=true})},400)}
 
 function fitPhone(){var sig=$("sig");if(!sig)return;
-  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4,zp=bw>0&&bw<PHONE_W?bw/PHONE_W:1;if(window.innerWidth<=760&&STEPS[STEP]){var hh=sig.offsetHeight;if(STEPS[STEP].id!=="edit")zp=Math.min(zp,.45,hh>0?120/hh:1);else if(hh>0)zp=Math.min(zp,Math.max(.35,window.innerHeight*.24/hh))}if(zp<.995)sig.style.zoom=String(+zp.toFixed(3));return}
+  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4,zp=bw>0&&bw<PHONE_W?bw/PHONE_W:1;if(window.innerWidth<=760&&STEPS[STEP]){var hh=sig.offsetHeight;if(STEPS[STEP].id!=="edit")zp=Math.min(zp,.4,hh>0?100/hh:1);else if(hh>0)zp=Math.min(zp,Math.max(.3,window.innerHeight*.19/hh))}if(zp<.995)sig.style.zoom=String(+zp.toFixed(3));return}
   sig.style.width="";sig.style.zoom="";var ph=window.innerWidth<=760,big=$("bigPv")&&$("bigPv").getAttribute("aria-pressed")==="true";
   var box=sig.parentNode,stage=sig.closest(".stage"),w=sig.scrollWidth,h=sig.offsetHeight;if(!w||!h)return;
-  var z=Math.min(ph?1:.75,(box.clientWidth-(ph?20:8))/w);
+  var z=Math.min(ph?1:.62,(box.clientWidth-(ph?20:8))/w);
   if(!big)[box,stage].forEach(function(c){if(!c)return;var room=c.clientHeight-(c.scrollHeight-h)-10;if(room>80)z=Math.min(z,room/h)});
   if(big)z=Math.min(1,(box.clientWidth-8)/w);
-  z=Math.max(ph?.4:.55,z);if(ph&&STEPS[STEP]&&STEPS[STEP].id!=="edit")z=Math.min(z,.45,120/h);else if(ph)z=Math.min(z,Math.max(.35,window.innerHeight*.24/h));if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
+  z=Math.max(ph?.4:.55,z);if(ph&&STEPS[STEP]&&STEPS[STEP].id!=="edit")z=Math.min(z,.4,100/h);else if(ph)z=Math.min(z,Math.max(.3,window.innerHeight*.19/h));if(z<.995)sig.style.zoom=String(+z.toFixed(3))}
 window.addEventListener("resize",function(){clearTimeout(window._fp);window._fp=setTimeout(fitPhone,150)});
 /* phones: tap a part of the signature and its settings slide up from the bottom; the preview stays in view */
 /* tapping or clicking the stripe jumps to its thickness and spacing controls */
@@ -1948,7 +1954,7 @@ function editSheet(id,tab){var key=partKey(id),isC=String(id).indexOf("c-")===0,
   if((!has||isC)&&tab==="all"){openItem(id);var pn=document.querySelector(".panel");if(pn)pn.scrollIntoView({behavior:"smooth",block:"start"});return}
   var old=document.querySelector(".esheet");if(old)old.remove();
   var name=has?(PARTS.filter(function(p){return p[0]===key})[0]||[0,"Part"])[1]:(typeof qbName==="function"?qbName(id):"Part");
-  var sh=h2('<div class="esheet" role="dialog" aria-label="Edit '+esc(name)+'"><div class="esh"><span class="grab" aria-hidden="true"></span><b>'+esc(name)+'</b><button type="button" class="btn small edone">Done</button></div>'+(has&&!isC?'<div class="estabs" role="tablist"><button type="button" role="tab" data-t="quick">Quick edit</button><button type="button" role="tab" data-t="all">All options</button></div>':'')+'<div class="esq"></div><div class="esb"></div></div>');
+  var sh=h2('<div class="esheet" role="dialog" aria-label="Edit '+esc(name)+'"><div class="esh"><span class="grab" aria-hidden="true"></span><b>'+esc(name)+'</b>'+(has&&!isC?'<span class="estabs" role="tablist"><button type="button" role="tab" data-t="quick">Quick</button><button type="button" role="tab" data-t="all">All options</button></span>':'')+'<button type="button" class="btn small edone">Done</button></div><div class="esq"></div><div class="esb"></div></div>');
   sh.dataset.kp=String(id);document.body.appendChild(sh);if(has&&!isC)renderPart(key,sh.querySelector(".esb"),false);sheetTab(sh,has&&!isC?tab:"quick");SEL=key;markSel();
   sh.querySelectorAll(".estabs button").forEach(function(b){b.addEventListener("click",function(){sheetTab(sh,b.dataset.t);if(b.dataset.t==="quick"&&!sh.querySelector(".esq .qbar")){KEYPART=id;placeGrab()}})});
   /* keep the signature in view above the sheet, so parts can be dragged and resized */
