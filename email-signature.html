@@ -1711,8 +1711,8 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
     else if(t==="sitefill"){el=siteFillCard()}
     else if(t==="reorderbox"){el=reorderBox()}
     else if(t==="darkbox"){el=darkBox()}
-    else if(t==="animlogo"){if(!hasAnim())return;el=h2('<div class="wide animlogo"><label class="check"><input type="checkbox"'+(S.logoAnim?" checked":"")+'> Moving logo (GIF)</label><p class="note">Your logo moves in Gmail, Apple Mail and Outlook online. Outlook on Windows shows it still. Untick to use a still logo.</p></div>');
-      el.querySelector("input").addEventListener("change",function(e){S.logoAnim=e.target.checked;save();update();drawFlow();toast(S.logoAnim?"Moving logo on":"Still logo")})}
+    else if(t==="animlogo"){if(!hasAnim())return;el=h2('<div class="wide animlogo"><div class="lbl">Your logo moves</div><div class="seg" role="group" aria-label="Moving or still logo"><button type="button" data-v="1" aria-pressed="'+!!S.logoAnim+'">▶ Moving</button><button type="button" data-v="0" aria-pressed="'+!S.logoAnim+'">⏸ Still</button></div><p class="note">Moving: it plays in Gmail, Apple Mail and Outlook online (Outlook on Windows shows it still). Still: the full logo, never moving.</p></div>');
+      el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){S.logoAnim=b.dataset.v==="1";el.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});save();update();drawFlow();toast(S.logoAnim?"Moving logo":"Still logo")})})}
     else if(t==="startpick"){el=startPick()}
     else if(t==="foundbox"){el=foundBox()}
     else if(t==="confirm"){el=h2('<div class="wide confirmbox"><span>Everything right?</span><button type="button" class="btn">✓ Confirm details</button></div>');el.querySelector("button").addEventListener("click",function(){histPush(true);save();go(stepId("template"));toast("Details confirmed. Now pick a look.")})}
@@ -2242,6 +2242,7 @@ function drawQbar(force){var box=$("inbox"),q=$("qbar"),g=$("grabBox"),id=KEYPAR
     if(id==="line"){add('<button type="button" class="qb wide2">'+(S.divider==="rainbow"?"Rainbow":"One colour")+' ⇄</button>',function(){S.divider=S.divider==="rainbow"?"solid":"rainbow";changed();drawQbar(true)});
       var lc=add('<span class="qcols" title="Line colours"></span>');lineColours(lc,true)}
     if(id==="logo")add('<button type="button" class="qb wide2">Change</button>',function(){$("logoFile").click()});
+    if(id==="logo"&&hasAnim())add('<button type="button" class="qb wide2">'+(S.logoAnim?"⏸ Make it still":"▶ Make it move")+'</button>',function(e,el){S.logoAnim=!S.logoAnim;save();update();el.textContent=S.logoAnim?"⏸ Make it still":"▶ Make it move";toast(S.logoAnim?"Moving logo":"Still logo")});
     /* the choices that belong to this part, one tap to switch */
     var cyc=function(lbl,key,opts){var cur=getP(key),i=Math.max(0,opts.map(function(o){return o[0]}).indexOf(cur));add('<button type="button" class="qb wide2" title="'+esc(lbl)+': tap to change">'+esc(lbl)+': '+esc(opts[i][1])+' ⇄</button>',function(){var nx=opts[(i+1)%opts.length][0];setP(key,nx);changed();drawQbar(true)})};
     var lnk=function(key,ph){var li=add('<input class="qt qlink" type="url" aria-label="'+esc(ph)+'" placeholder="'+esc(ph)+'">',function(e,el){setP(key,el.value);save();update()},"input");li.value=getP(key)||""};
@@ -2490,7 +2491,7 @@ function siteFill(site,btn,out){var keep=btn.textContent;
       var html='<ul>'+all.map(function(x){return'<li class="'+(x[1]?"":"no")+'">'+(x[1]?"✓ ":"– ")+'<b>'+esc(x[0])+'</b>'+(x[1]&&x[1]!==true?': '+esc(String(x[1]).slice(0,40)):x[1]?"":" not found")+'</li>'}).join("")+'</ul><p class="sfmsg">'+(got?"Filled in "+got+" things. Check them below, then press <b>Next</b>. Undo puts everything back.":"We couldn’t find details on that website. Fill them in below.")+'</p>';
       var items=[{l:"Your name",k:"name",v:d.person},{l:"Role",k:"role",v:d.prole},{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])items.push({l:({x:"X",tiktok:"TikTok",whatsapp:"WhatsApp",youtube:"YouTube",linkedin:"LinkedIn"})[k]||k.charAt(0).toUpperCase()+k.slice(1),k:"social."+k,v:d.social[k]})});
-      if(d.animLogo)items.splice(3,0,{l:"Moving logo (GIF)",k:"logoAnim",v:true});
+      if(d.animLogo)items.splice(3,0,{l:"Moving logo (untick for a still logo)",k:"logoAnim",v:true});
       if(lk.book)items.push({l:"Booking button: "+lk.book.label,k:"bookUrl",v:lk.book.url,b:"book"});if(lk.review)items.push({l:"Google review button",k:"reviewUrl",v:lk.review,b:"review"});
       if(lk.google)items.push({l:"Google profile icon",k:"social.google",v:lk.google});if(lk.extra)items.push({l:"Extra button: "+lk.extra.label,k:"extraUrl",v:lk.extra.url,b:"extra"});
       SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
