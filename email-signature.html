@@ -82,6 +82,8 @@ details.more{grid-column:1/-1;border:1px solid #e2e8f0;border-radius:12px;margin
   .bar.tidy .step{margin:0!important}.bar.tidy .kbhint{margin-right:8px}
   .pv-col>.acts{display:none!important}
 }
+.pwarn{margin:10px 10px 0!important;display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;background:#fff7e6;border:1px solid #f5c26b;color:#5b3b00;border-radius:12px;padding:8px 12px;font-size:.82rem;line-height:1.35;margin:0 0 8px}.pwarn[hidden]{display:none!important}.pwarn .pw-b{display:flex;gap:6px;flex-wrap:wrap}
+.inbox.phone #sig [data-edit="banner"] img{max-width:100%!important;height:auto!important}.inbox.phone #sig [data-edit="banner"] table{max-width:100%}
 .mytpl{border:1px dashed #cbd5e1;border-radius:14px;padding:10px 12px;margin:0 0 12px}.mytpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.mytpl .note{margin:0}.tcard.mine{position:relative;cursor:pointer}.tdel{position:absolute;top:6px;right:6px;border:0;border-radius:999px;background:rgba(15,23,42,.72);color:#fff;font:600 12px/1 inherit;padding:5px 8px;cursor:pointer}.tdel.on{background:#dc2626}
 .panel .mytpl .tpl-grid{max-height:none!important}
 .tcard{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
@@ -623,6 +625,7 @@ details.more[open]{display:flex;flex-direction:column;gap:10px}
         </div>
       </div>
       <div class="mail">
+        <div class="pwarn" id="phoneWarn" hidden></div>
         <div class="mail-h"><b>Your free automation session</b><span>From: <span id="fromLine"></span> · To: Sam Patel</span></div>
         <div class="stage"><div class="inbox" id="inbox">
           <p class="msg">Kia ora Sam,</p>
@@ -1708,7 +1711,38 @@ function useHtmlFile(f){if(f.size>2*1024*1024){toast("That file is over 2 MB. Is
     toast("Opened "+f.name+". Click any text in the preview to change it."+(local.length?" "+local.length+" picture"+(local.length>1?"s point":" points")+" to a file on your computer, so it won’t show in emails. Put it online and change its address in the code.":""))};r.readAsText(f)}
 /* on a phone the signature is shrunk to fit the preview card (it's still sent full size) */
 /* shrink the preview so the whole signature fits the preview box, across and down (Bigger preview shows it full size) */
-function fitPhone(){var sig=$("sig");if(!sig)return;sig.style.zoom="";var ph=window.innerWidth<=760,big=$("bigPv")&&$("bigPv").getAttribute("aria-pressed")==="true";
+var PHONE_W=336;
+/* how wide the signature is when nothing wraps; wider than a phone means lines move down in the Outlook phone app */
+function sigNaturalWidth(){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;";d.innerHTML=signature("preview");document.body.appendChild(d);
+  /* only the parts that can't shrink: the banner, disclaimer and other parts underneath already fit a phone */
+  var under=S.order.filter(function(o){return o[2]==="under"}).map(function(o){return o[0]}),L=d.getBoundingClientRect().left,w=0;
+  d.querySelectorAll("[data-edit]").forEach(function(e){if(under.indexOf(e.dataset.edit)>=0||e.closest('[data-edit="signoff"]'))return;var inU=under.some(function(u){return e.closest('[data-edit="'+u+'"]')});if(inU)return;w=Math.max(w,e.getBoundingClientRect().right-L)});
+  d.remove();return Math.ceil(w)}
+var PW_T=0;
+function phoneCheck(){clearTimeout(PW_T);PW_T=setTimeout(function(){var box=$("phoneWarn");if(!box)return;if(S.useCode&&String(S.code||"").trim()){box.hidden=true;return}
+  var w=sigNaturalWidth();if(w<=PHONE_W+4){box.hidden=true;return}
+  box.hidden=false;box.innerHTML='<span>📱 <b>Too wide for phones</b> ('+w+'px; a phone shows about '+PHONE_W+'px). In the Outlook phone app some parts move onto the next line and the stripe won’t reach the bottom.</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="see">'+(S.pvWidth==="phone"?"Back to laptop view":"See it on a phone")+'</button><button type="button" class="btn small" data-pw="fix">Make it phone-friendly</button></span>';
+  box.querySelector('[data-pw="see"]').addEventListener("click",function(){S.pvWidth=S.pvWidth==="phone"?"desktop":"phone";save();update()});
+  box.querySelector('[data-pw="fix"]').addEventListener("click",phoneFix)},250)}
+/* narrow it step by step, stopping as soon as it fits */
+function phoneFix(){var before=JSON.stringify(S),steps=[
+    function(){if(S.contactLayout!=="stack"){S.contactLayout="stack";return"contact details one per line"}},
+    function(){if(inOrder("logo")&&inOrder("logo")[1]&&/left|right/.test(inOrder("logo")[2])&&S.logoSize>100){S.logoSize=100;S.logoMatch=false;return"a smaller logo"}},
+    function(){var c=0;if((S.btnPadX==null?14:+S.btnPadX)>10){S.btnPadX=10;c=1}if(!(+S.btnFont)||+S.btnFont>12){S.btnFont=12;c=1}if(c)return"smaller buttons"},
+    function(){if(S.photoShow&&S.photoSize>80){S.photoSize=80;return"a smaller photo"}},
+    function(){var o=inOrder("book");if(o&&o[1]&&o[3]){o[3]=0;return"the buttons under the icons"}},
+    function(){var o=inOrder("review"),b=inOrder("book");if(o&&o[1]&&o[3]&&b&&b[1]){o[3]=0;return"the review button on its own line"}}],done=[];
+  for(var i=0;i<steps.length;i++){var r=steps[i]();if(r){done.push(r);if(sigNaturalWidth()<=PHONE_W+4)break}}
+  if(!done.length){toast("Nothing more to shrink automatically. Try a smaller name or fewer parts on one line.");return}
+  var undo=before;changed();var w=sigNaturalWidth();
+  toast((w<=PHONE_W+4?"Now fits a phone: ":"Narrower now ("+w+"px): ")+done.join(", ")+". Press Undo in the warning to go back.");
+  setTimeout(function(){var box=$("phoneWarn");if(!box)return;box.hidden=false;box.innerHTML='<span>'+(w<=PHONE_W+4?"✅ <b>Fits a phone now.</b>":"📱 <b>Narrower</b> ("+w+"px).")+' Changed: '+esc(done.join(", "))+'.</span><span class="pw-b"><button type="button" class="btn sec small" data-pw="undo">Undo</button><button type="button" class="btn sec small" data-pw="ok">OK</button></span>';
+    box.querySelector('[data-pw="undo"]').addEventListener("click",function(){var keep={_sigId:S._sigId,_sigName:S._sigName};S=JSON.parse(undo);Object.assign(S,keep);changed();toast("Changes undone")});
+    box.querySelector('[data-pw="ok"]').addEventListener("click",function(){box.hidden=true})},400)}
+
+function fitPhone(){var sig=$("sig");if(!sig)return;
+  if(S.pvWidth==="phone"&&!(S.useCode&&String(S.code||"").trim())){sig.style.zoom="";sig.style.width=PHONE_W+"px";var bw=sig.parentNode.clientWidth-4;if(bw>0&&bw<PHONE_W)sig.style.zoom=String(+(bw/PHONE_W).toFixed(3));return}
+  sig.style.width="";sig.style.zoom="";var ph=window.innerWidth<=760,big=$("bigPv")&&$("bigPv").getAttribute("aria-pressed")==="true";
   var box=sig.parentNode,stage=sig.closest(".stage"),w=sig.scrollWidth,h=sig.offsetHeight;if(!w||!h)return;
   var z=Math.min(ph?1:.9,(box.clientWidth-(ph?20:8))/w);
   if(!big)[box,stage].forEach(function(c){if(!c)return;var room=c.clientHeight-(c.scrollHeight-h)-10;if(room>80)z=Math.min(z,room/h)});
@@ -1933,7 +1967,7 @@ function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons()
   $("fromLine").textContent=(S.name||"You")+(S.email?" <"+S.email+">":"");
   var mi=missing(),w=$("iconWarn");
   w.textContent=mi.length?"Before you copy: "+mi.join(" and ")+(mi.length>1?" need":" needs")+" a web address, or the email will leave "+(mi.length>1?"them":"it")+" out. Put the picture on your website (or any image host) and paste its web address.":"Paste into Gmail: Settings → See all settings → Signature. Outlook: Settings → Mail → Compose and reply → Email signature."}
-var update0=update;update=function(){update0.apply(this,arguments);placeGrab()};
+var update0=update;update=function(){update0.apply(this,arguments);placeGrab();phoneCheck()};
 function readImg(f,cb,square){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
   if(square){var c=document.createElement("canvas"),s=Math.min(im.naturalWidth,im.naturalHeight),n=Math.min(s,400);c.width=c.height=n;c.getContext("2d").drawImage(im,(im.naturalWidth-s)/2,(im.naturalHeight-s)/2,s,s,0,0,n,n);cb(c.toDataURL("image/jpeg",.9))}
   else cb({src:r.result,w:im.naturalWidth,h:im.naturalHeight})};im.src=r.result};r.readAsDataURL(f)}
