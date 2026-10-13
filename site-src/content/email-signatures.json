@@ -170,7 +170,7 @@
     "rainbowW": 220,
     "iconStyle": "brand",
     "iconSize": 34,
-    "contactIcons": "none",
+    "contactIcons": "glyph-dark",
     "btnStyle": "filled",
     "btnRadius": 20,
     "btnPadX": 32,
@@ -253,7 +253,7 @@
      "styleChosen": true,
      "emboss": 5,
      "anim": "slide",
-     "h": 130,
+     "h": 160,
      "cbg2": "#00ffff",
      "chi": "#00f51d"
     },
@@ -419,11 +419,11 @@
      "photoShow": false,
      "align": "left",
      "signoffSize": 37,
-     "bannerW": 446,
+     "bannerW": 486,
      "rainbowW": 220
     }
    },
-   "updated": "2026-10-13T08:47:06.336Z",
+   "updated": "2026-10-13T08:49:01.163Z",
    "by": "hello@ambs.co.nz"
   },
   {
