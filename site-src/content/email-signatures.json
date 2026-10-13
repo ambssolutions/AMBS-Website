@@ -12,7 +12,7 @@
     "phone": "+64 22 099 9578",
     "email": "",
     "website": "www.ambs.co.nz",
-    "tagline": "",
+    "tagline": "ffffffffff",
     "disclaimerLabel": "Disclaimer:",
     "disclaimerJustify": true,
     "disclaimer": "The contents of this email, including any attachments, are confidential and may be privileged. If you have received it by mistake, please let us know on +64 22 099 9578 and delete it. AMBS Solutions accepts no responsibility for changes made to this email or its attachments after it was sent.",
@@ -170,7 +170,7 @@
     "rainbowW": 220,
     "iconStyle": "brand",
     "iconSize": 34,
-    "contactIcons": "letters",
+    "contactIcons": "none",
     "btnStyle": "filled",
     "btnRadius": 20,
     "btnPadX": 32,
@@ -358,7 +358,7 @@
        "bold": true,
        "italic": false,
        "color": "#18191b",
-       "dy": 0
+       "dy": -2
       },
       "disclaimer": {
        "size": 9,
@@ -374,7 +374,7 @@
       },
       "book": {
        "dx": -1,
-       "dy": -2
+       "dy": -6
       },
       "logo": {
        "dx": 8,
@@ -386,7 +386,7 @@
        "dx": -2
       },
       "social": {
-       "dy": -4,
+       "dy": -6,
        "dx": -22
       },
       "review": {
@@ -409,7 +409,7 @@
      "btnGap": 7,
      "pieceGap": 5,
      "iconGap": 3,
-     "contactGap": 1,
+     "contactGap": 3,
      "gap": 6,
      "lineGapL": 16,
      "lineGapR": 5,
@@ -423,7 +423,7 @@
      "rainbowW": 220
     }
    },
-   "updated": "2026-10-13T08:43:13.788Z",
+   "updated": "2026-10-13T08:47:06.336Z",
    "by": "hello@ambs.co.nz"
   },
   {
