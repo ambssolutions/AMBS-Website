@@ -10,7 +10,7 @@
     "location": "",
     "mobile": "",
     "phone": "+64 22 099 9578",
-    "email": "hello@ambs.co.nz",
+    "email": "",
     "website": "www.ambs.co.nz",
     "tagline": "",
     "disclaimerLabel": "Disclaimer:",
@@ -27,10 +27,10 @@
     "photoUrl": "",
     "bannerUrl": "",
     "bannerLink": "https://ambs.co.nz/#book",
-    "bannerW": 486,
-    "bookLabel": "Book a free session",
+    "bannerW": 346,
+    "bookLabel": "Book",
     "bookUrl": "https://ambs.co.nz/#book",
-    "reviewLabel": "Review us on Google",
+    "reviewLabel": "Rate Us",
     "reviewUrl": "https://g.page/r/Cayst76Z-_hGEBM/review",
     "extraLabel": "",
     "extraUrl": "",
@@ -187,7 +187,7 @@
     },
     "pvWidth": "desktop",
     "pvMode": "light",
-    "template": "Purple accent",
+    "template": "Custom",
     "st": {
      "signoff": {
       "bold": true
@@ -200,18 +200,18 @@
       "dy": -2
      },
      "disclaimer": {
-      "size": 14,
+      "size": 9,
       "align": "left",
-      "dy": -5,
+      "dy": -6,
       "color": "#1f2023",
-      "dx": -21
+      "dx": -80
      },
      "role": {
       "size": 10,
       "dy": -6
      },
      "book": {
-      "dx": 1,
+      "dx": -1,
       "dy": -2
      },
      "logo": {
@@ -225,10 +225,10 @@
      },
      "social": {
       "dy": -4,
-      "dx": -8
+      "dx": -22
      },
      "review": {
-      "dx": -2
+      "dx": -4
      }
     },
     "maker": {
@@ -259,7 +259,7 @@
     "bannerMade": true,
     "lineLen": 89
    },
-   "updated": "2026-10-13T03:31:54.103Z",
+   "updated": "2026-10-13T08:15:30.387Z",
    "by": "hello@ambs.co.nz"
   },
   {
