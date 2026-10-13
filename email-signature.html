@@ -705,10 +705,16 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 .pvresize{display:none}
 @media (max-width:760px){.pvresize{display:flex;align-items:center;justify-content:center;gap:8px;height:22px;margin:2px 0 4px;touch-action:none;cursor:ns-resize;color:var(--muted);font:600 .68rem system-ui,sans-serif;user-select:none;-webkit-user-select:none}
 .pvresize i{width:44px;height:5px;border-radius:3px;background:var(--line);display:block}.pvresize.on i{background:#24b328}.pvresize span{opacity:.8}}
+
+/* found-on-website tick list */
+.fb2 .fbn{margin:2px 0 8px;font-size:.8rem;color:var(--muted)}
+.fb2 .fbl{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px}
+.fbi{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);cursor:pointer;min-width:0}
+.fbi input{width:20px;height:20px;margin:1px 0 0;accent-color:#24b328;flex:0 0 auto}
+.fbi span{min-width:0}.fbi b{display:block;font-size:.82rem}.fbi small{display:block;font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fbi:has(input:not(:checked)){opacity:.6}
 </style>
 
-<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -1621,7 +1627,7 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
         x.addEventListener("click",function(){S.bannerUrl=lg?bn.url:bn.urlNo;S.bannerLink=bn.link;uploaded.banner=null;inOrder("banner")[1]=1;bw0.querySelectorAll("button").forEach(function(y){y.setAttribute("aria-pressed",String(y===x))});changed();go(STEP,"banner")});bw0.appendChild(x)})}
     else if(t==="sitefill"){el=siteFillCard()}
     else if(t==="startpick"){el=startPick()}
-    else if(t==="foundbox"){el=h2('<div class="wide foundbox">'+(SITEFILL&&SITEFILL.html?'<b>Found on '+esc(SITEFILL.site)+'</b>'+SITEFILL.html:'<span>Empty lines are left out of your signature.</span>')+'</div>')}
+    else if(t==="foundbox"){el=foundBox()}
     else if(t==="confirm"){el=h2('<div class="wide confirmbox"><span>Everything right?</span><button type="button" class="btn">✓ Confirm details</button></div>');el.querySelector("button").addEventListener("click",function(){histPush(true);save();go(stepId("template"));toast("Details confirmed. Now pick a look.")})}
     else if(t==="htmlstart"){el=h2('<div class="wide hstart"><span>Already have a signature as an HTML file?</span><button type="button" class="btn sec small">📄 Upload HTML file</button></div>');el.querySelector("button").addEventListener("click",function(){$("htmlFile").click()})}
     else if(t==="replay"){el=h2('<div class="wide"><button type="button" class="btn sec small">▶ Watch it write again</button></div>');el.querySelector("button").addEventListener("click",function(){document.querySelectorAll("#sig img.so-img").forEach(function(im){im.src=im.src.replace(/([?&])r=\d+/,"").replace(/\?.*$/,function(q){return q})+"&r="+Date.now()})})}
@@ -2247,6 +2253,16 @@ function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons()
   w.textContent=mi.length?"Before you copy: "+mi.join(" and ")+(mi.length>1?" need":" needs")+" a web address, or the email will leave "+(mi.length>1?"them":"it")+" out. Put the picture on your website (or any image host) and paste its web address.":"Paste into Gmail: Settings → See all settings → Signature. Outlook: Settings → Mail → Compose and reply → Email signature."}
 var update0=update;update=function(){syncActive();update0.apply(this,arguments);mobBar();placeGrab();phoneCheck();setTimeout(phoneGuide,60)};
 /* step 1: three ways in — website, logo, or an HTML signature */
+/* Check details: everything found on the website, each with a tick box to use it or leave it out */
+function foundBox(){var it=SITEFILL&&SITEFILL.items;if(!it||!it.length)return h2('<div class="wide foundbox">'+(SITEFILL&&SITEFILL.html?'<b>Found on '+esc(SITEFILL.site)+'</b>'+SITEFILL.html:'<span>Empty lines are left out of your signature.</span>')+'</div>');
+  var on=function(x){if(x.k==="@logo"){var lo=inOrder("logo");return!!(lo&&lo[1]&&S.logoShow!==false)}return String(getP(x.k)||"")===String(x.v)};
+  var el=h2('<div class="wide foundbox fb2"><b>Found on '+esc(SITEFILL.site)+'</b><p class="fbn">Untick anything you don’t want in your signature.</p><div class="fbl"></div></div>'),l=el.querySelector(".fbl");
+  it.forEach(function(x){var row=h2('<label class="fbi"><input type="checkbox"'+(on(x)?" checked":"")+'><span><b>'+esc(x.l)+'</b>'+(x.v===true?"":'<small>'+esc(String(x.v).slice(0,60))+'</small>')+'</span></label>');
+    row.querySelector("input").addEventListener("change",function(e){var c=e.target.checked;
+      if(x.k==="@logo"){var lo=inOrder("logo");if(lo)lo[1]=c?1:0;S.logoShow=c}else setP(x.k,c?x.v:"");
+      if(x.k.indexOf("social.")===0&&c){var so=inOrder("social");if(so)so[1]=1}
+      save();var y=window.scrollY;changed();go(STEP);window.scrollTo(0,y);toast((c?"Using ":"Left out: ")+x.l)});l.appendChild(row)});
+  return el}
 function startPick(){var w=h2('<div class="wide startpick"></div>');w.appendChild(siteFillCard());
   var row=h2('<div class="sp-row"><button type="button" class="sp-card" data-sp="logo"><span class="sp-ic">🖼️</span><span><b>Upload your logo</b><small>We pick your brand colours from it</small></span></button><button type="button" class="sp-card" data-sp="html"><span class="sp-ic">📄</span><span><b>Use an HTML signature</b><small>Open one you already have</small></span></button></div>');
   row.querySelector('[data-sp="logo"]').addEventListener("click",function(){$("logoFile").click()});row.querySelector('[data-sp="html"]').addEventListener("click",function(){$("htmlFile").click()});w.appendChild(row);
@@ -2263,17 +2279,23 @@ function siteFill(site,btn,out){var keep=btn.textContent;
   btn.disabled=true;btn.textContent="Reading your website…";out.innerHTML="";
   edToken().then(function(tok){return fetch("/api/siteinfo",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:JSON.stringify({url:site})})})
   .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Couldn’t read that website.");return j})})
-  .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Logo",found.logo],["Business name",d.name],["Website",d.website],["Phone",d.phone],["Email",d.email],["Address",d.address]];
+  .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Logo",found.logo],["Business name",d.name],["Website",d.website],["Office phone",d.phone],["Mobile",d.mobile],["Email",d.email],["Address",d.address]];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])all.push([k==="x"?"X":k.charAt(0).toUpperCase()+k.slice(1),d.social[k]])});
       var got=all.filter(function(x){return x[1]}).length;
       var html='<ul>'+all.map(function(x){return'<li class="'+(x[1]?"":"no")+'">'+(x[1]?"✓ ":"– ")+'<b>'+esc(x[0])+'</b>'+(x[1]&&x[1]!==true?': '+esc(String(x[1]).slice(0,40)):x[1]?"":" not found")+'</li>'}).join("")+'</ul><p class="sfmsg">'+(got?"Filled in "+got+" things. Check them below, then press <b>Next</b>. Undo puts everything back.":"We couldn’t find details on that website. Fill them in below.")+'</p>';
-      SITEFILL={site:site,html:html};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
+      var items=[{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
+      SOCIAL.forEach(function(k){if(d.social&&d.social[k])items.push({l:({x:"X",tiktok:"TikTok",whatsapp:"WhatsApp",youtube:"YouTube",linkedin:"LinkedIn"})[k]||k.charAt(0).toUpperCase()+k.slice(1),k:"social."+k,v:d.social[k]})});
+      SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v})};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
   .catch(function(e){out.innerHTML='<p class="sfmsg">'+esc(e.message==="signin"?"Please sign in to the website editor first.":e.message)+'</p>'})
   .then(function(){btn.disabled=false;btn.textContent=keep;var b2=document.querySelector(".sfill .btn");if(b2){b2.disabled=false;b2.textContent=keep}})}
+/* NZ and Australian mobiles start 02 / 04 (or +64 2 / +61 4); the rest count as the office phone */
+function isMobileNum(p){var x=String(p||"").replace(/[^\d+]/g,"");if(/^\+?64/.test(x))return/^\+?642/.test(x);if(/^\+?61/.test(x))return/^\+?614/.test(x);return/^0[24]/.test(x)&&!/^0800|^0508/.test(x)}
+function splitPhones(list){var o="",m="";(list||[]).forEach(function(p){if(isMobileNum(p)){if(!m)m=p}else if(!o)o=p});return{office:o,mobile:m}}
 function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.website||"").split("/")[0]);
   /* a different business: the AMBS sample details go, whatever the website didn't give stays empty to fill in */
   if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram=""}
-  if(d.name)S.company=d.name;if(d.website)S.website=d.website;if(d.phone)S.phone=d.phone;if(d.email)S.email=d.email;if(d.address)S.location=d.address;
+  var sp=splitPhones(d.phones&&d.phones.length?d.phones:(d.phone?[d.phone]:[]));d.phone=sp.office;d.mobile=sp.mobile;
+  if(d.name)S.company=d.name;if(d.website)S.website=d.website;if(d.phone)S.phone=d.phone;if(d.mobile)S.mobile=d.mobile;if(d.email)S.email=d.email;if(d.address)S.location=d.address;
   var soc=d.social||{};if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
   var fin=function(gotLogo){save();changed();go(STEP,"brand");done({logo:gotLogo})};
   if(!d.logo||!d.logo.data){fin(false);return}
