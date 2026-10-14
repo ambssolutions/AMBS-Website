@@ -964,7 +964,7 @@ function matchLogoToIcons(){S.logoSize=Math.max(30,Math.round(rowHeight()/(S.log
 function syncMedia(){var l=inOrder("logo"),p=inOrder("photo");if(p)S.photoShow=!!p[1];if(!l)return;S.logoShow=!!l[1];
   if(l[2]==="left"||l[2]==="right"){S.logoPos=l[2];return}var i=S.order.indexOf(l),nx=S.order[i+1];if(nx&&nx[0]==="social"&&nx[3]&&nx[2]===l[2]){S.logoPos="social";return}
   var same=S.order.filter(function(x){return x[2]===l[2]&&x[1]});S.logoPos=same[0]===l?"top":same[same.length-1]===l?"bottom":"flow"}
-var LOOK=["socialWithLogo","logoMatch","signoff","logoBg","st","signoffAnimColor","signoffFont","logoShow","logoPos","logoSize","divider","dividerW","order","contactLayout","align","gap","card","colors","contactLabels","nameSize","textSize","rainbowW","iconStyle","iconSize","contactIcons","btnStyle","btnRadius","bookIcon","signoffStyle","photoShow","photoShape","photoSize","font"];
+var LOOK=["autoFit","fitBase","fitLock","_fit","socialWithLogo","logoMatch","signoff","logoBg","st","signoffAnimColor","signoffFont","logoShow","logoPos","logoSize","divider","dividerW","order","contactLayout","align","gap","card","colors","contactLabels","nameSize","textSize","rainbowW","iconStyle","iconSize","contactIcons","btnStyle","btnRadius","bookIcon","signoffStyle","photoShow","photoShape","photoSize","font"];
 var PRESETS=[
   ["Brand stripe","Logo, stripe, details",{},["business", "c2"]],
   ["Photo and banner","Like a big-firm signature",{photoShow:true,photoShape:"square",photoSize:120,logoPos:"social",logoSize:120,divider:"none",contactLayout:"pairs",contactIcons:"letters",contactLabels:true,iconStyle:"square",iconSize:30,btnStyle:"filled",btnRadius:3,nameSize:20,colors:{text:"#14172b",muted:"#3d4255",letters:"@s",link:"#14172b",button:"@s",line:"@s",cardBg:"#f4f6fb"},
@@ -1304,6 +1304,11 @@ function boxAlign(al){return al==="center"?"margin:0 auto;":al==="right"?"margin
 function alignWrap(h,al){if(al===S.align)return h;return'<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;'+boxAlign(al)+'"><tr><td align="'+al+'" style="text-align:'+al+';padding:0;">'+h+'</td></tr></table>'}
 function content(mode,zone,measure){var r=rows(mode,zone);if(!r.length)return"";
   return'<table cellpadding="0" cellspacing="0" border="0" role="presentation"'+(measure?' data-measure="1"':'')+' style="border-collapse:collapse;font-family:'+S.font+';font-size:'+S.textSize+'px;line-height:'+Math.round(S.textSize*1.45)+'px;color:'+S.colors.text+';'+(S.align==="center"?"margin:0 auto;":"")+'">'+r.join("")+'</table>'}
+/* how tall the strip should be: the tallest of the details and the columns beside them (logo, photo, icons),
+   so it always runs the full height of the signature body */
+function barMeasure(root){var m=root.querySelector("[data-measure]");if(!m)return 0;var h=m.offsetHeight,td=m.parentNode;while(td&&td.tagName!=="TD")td=td.parentNode;
+  var tr=td&&td.parentNode;if(tr)[].forEach.call(tr.children,function(c){if(c===td||c.querySelector(".sig-line"))return;var lo=1e9,hi=-1e9;[].forEach.call(c.children,function(e){lo=Math.min(lo,e.offsetTop);hi=Math.max(hi,e.offsetTop+e.offsetHeight)});if(hi>lo)h=Math.max(h,hi-lo)});
+  return Math.max(36,Math.round(h))}
 var barH=96;
 function C(v){return v&&v.charAt(0)==="@"?({"@p":S.brandP,"@s":S.brandS,"@a":S.brandA}[v]||"#14172b"):v}
 function pal(){return(S.palette&&S.palette.length)?S.palette:[S.brandP]}
@@ -1359,7 +1364,7 @@ function syncActive(){var want=S.mob&&S.pvWidth==="phone"?"mob":"lap",cur=S._act
 /* build one layout without disturbing what's on screen; the stripe length is measured for that layout */
 function withLayout(which,fn){var keep=S,kb=barH;S=canonical(keep);if(which==="mob"&&S.mob)Object.assign(S,JSON.parse(JSON.stringify(S.mob)));
   try{var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+(which==="mob"?PHONE_W+"px":"max-content");document.body.appendChild(d);
-    for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh}}d.remove();
+    for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=barMeasure(d);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh}}d.remove();
     return fn()}finally{S=keep;barH=kb}}
 var COPY_GMAIL=false;
 function builtHtml(){return darkStyle()+builtHtml2()}
@@ -2433,36 +2438,55 @@ function addrLines(v,ok){v=String(v||"").trim();if(!ok||v.length<=28||v.indexOf(
   for(var i=0;i<v.length;i++)if(v[i]===","&&(best<0||Math.abs(i-mid)<Math.abs(best-mid)))best=i;
   return best<0?[v]:[v.slice(0,best+1).trim(),v.slice(best+1).trim()].filter(Boolean)}
 var PHONE_RULES={gap:6,pieceGap:5,iconGap:4,btnGap:7,btnPadX:12,btnPadY:8,btnFont:12,contactGap:4,contactIconGap:5,lineGapL:14,lineGapR:12,bannerW:340,discW:340,tagW:240};
-var PF_CACHE={},PF_N=0,PF_KEYS=["name","role","company","mobile","phone","email","website","location","tagline","bookLabel","bookUrl","reviewLabel","reviewUrl","extraLabel","extraUrl","social","hideC","hideS","logoRatio","logoShow","logoData","logoUrl","photoShow","disclaimer","custom","contactOrder","socialOrder"];
-function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));o.darkOn=true;if(o.socialWithLogo==null)o.socialWithLogo=o.logoPos==="left"||o.logoPos==="right";
-  o.textSize=Math.min(+o.textSize||13,13);o.nameSize=Math.max(16,Math.min(+o.nameSize||17,20));o.logoSize=Math.min(+o.logoSize||100,90);o.photoSize=Math.min(+o.photoSize||96,88);
-  o.iconSize=Math.max(18,Math.min(+o.iconSize||26,28));o.dividerW=Math.min(+o.dividerW||3,4);o.rainbowW=Math.min(+o.rainbowW||220,220);
-  if(typeof document==="undefined")return o;
-  /* then try the sensible arrangements and keep the most compact one that fits a phone: contacts one, two or all
-     per line, buttons side by side or stacked, social icons under the logo or with the details. Shrinking the
-     logo, or moving it above the details, happens only when nothing else fits */
-  var key=JSON.stringify([o,PF_KEYS.map(function(k){var v=S[k];return k==="logoData"&&v?String(v).length:v})]);if(PF_CACHE[key]){Object.assign(o,JSON.parse(PF_CACHE[key]));return o}
-  var keep=S,kb=barH,base=Object.assign(JSON.parse(JSON.stringify(S)),JSON.parse(JSON.stringify(o)));base.mob=null;
+var PF_CACHE={},PF_N=0,FIT_FIELDS=["socialWithLogo","contactLayout","logoSize","photoSize","logoPos","order"];
+function fitKey(t,lock){return JSON.stringify([t,lock||{}],function(k,v){return/^(logoData|photoData|bannerData|code|mob|_lap|fitBase|_fit|fitLock)$/.test(k)?(v?String(v).length:v):v})}
+/* the parts the auto-fit looks after, as one comparable record */
+function fitSnap(t){var j={};(t.order||[]).forEach(function(x){if(/^(review|extra|social)$/.test(x[0]))j[x[0]]=x[3]?1:0});
+  return{contactLayout:t.contactLayout,socialWithLogo:!!t.socialWithLogo,logoPos:t.logoPos,logoSize:+t.logoSize||0,photoSize:+t.photoSize||0,joins:JSON.stringify(j)}}
+/* try the sensible arrangements and keep the most compact one that fits a phone: contacts one, two or all per line,
+   buttons side by side or stacked, social icons under the logo or with the details. Shrinking the logo, or moving it
+   above the details, happens only when nothing else fits. Anything in lock was chosen by hand and is left alone */
+function fitLayout(base,lock,bigLogo){lock=lock||{};var key=fitKey(base,lock);if(PF_CACHE[key])return JSON.parse(PF_CACHE[key]);
+  var keep=S,kb=barH;base=JSON.parse(JSON.stringify(base));base.mob=null;
   var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:max-content";document.body.appendChild(d);
   var size=function(t){S=t;barH=36;try{d.innerHTML=signature("preview");var m=d.firstElementChild;return[d.scrollWidth,m?m.offsetHeight:0]}finally{S=keep;barH=kb}};
-  var btns=function(t){return t.order.filter(function(x){return/^(book|review|extra)$/.test(x[0])&&x[1]&&block(x[0],"preview")}).length},
+  var btns=function(t){var S0=S;S=t;try{return t.order.filter(function(x){return/^(book|review|extra)$/.test(x[0])&&x[1]&&block(x[0],"preview")}).length}finally{S=S0}},
     sideLogo=function(t){var lo=t.order.filter(function(x){return x[0]==="logo"})[0];return t.logoShow!==false&&lo&&lo[1]&&(lo[2]==="left"||lo[2]==="right")};
-  var search=function(t0){var cl0=t0.contactLayout,best=null,cls=cl0==="line"?["line","pairs","stack"]:["pairs","stack"];if(cls.indexOf(cl0)<0)cls.unshift(cl0);
-    var S0=S;S=t0;var nb=btns(t0),sl=sideLogo(t0);S=S0;var so0=t0.order.filter(function(x){return x[0]==="social"})[0],sj=so0&&so0[3]?[1,0]:[null];
-    cls.forEach(function(cl){(nb>1?[1,0]:[null]).forEach(function(j){(sl?[true,false]:[t0.socialWithLogo]).forEach(function(sw){sj.forEach(function(k){
+  var search=function(t0){var cl0=t0.contactLayout,best=null,cls=lock.contactLayout?[cl0]:cl0==="line"?["line","pairs","stack"]:["pairs","stack"];if(cls.indexOf(cl0)<0)cls.unshift(cl0);
+    var nb=btns(t0),sl=sideLogo(t0),so0=t0.order.filter(function(x){return x[0]==="social"})[0],sj=so0&&so0[3]&&!lock.joins?[1,0]:[null];
+    cls.forEach(function(cl){(nb>1&&!lock.joins?[1,0]:[null]).forEach(function(j){(sl&&!lock.socialWithLogo?[true,false]:[t0.socialWithLogo]).forEach(function(sw){sj.forEach(function(k){
       var t=JSON.parse(JSON.stringify(t0));t.contactLayout=cl;t.socialWithLogo=sw;t.order.forEach(function(x){if(j!=null&&/^(review|extra)$/.test(x[0]))x[3]=j;if(k!=null&&x[0]==="social")x[3]=k});
       var z=size(t);if(z[0]>PHONE_W)return;var sc=z[1]+(cl!==cl0?6:0)+(j===0?4:0)+(k===0?3:0)+(sw?0:2);if(!best||sc<best.sc)best={sc:sc,t:t}})})})});
     return best&&best.t};
   try{var stages=[function(t){return t},
-      function(t){t.logoSize=Math.min(t.logoSize,70);if(t.photoShow)t.photoSize=Math.min(t.photoSize,72);return t},
-      function(t){if(t.logoShow!==false&&t.logoPos==="social"){t.logoPos="bottom";placeMedia(t,"logo",true)}return t},
-      function(t){if(t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";t.logoSize=Math.max(110,Math.min(+o.logoSize||110,120));placeMedia(t,"logo",true)}return t}];
+      function(t){if(!lock.logoSize)t.logoSize=Math.min(t.logoSize,70);if(t.photoShow&&!lock.photoSize)t.photoSize=Math.min(t.photoSize,72);return t},
+      function(t){if(!lock.logoPos&&t.logoShow!==false&&t.logoPos==="social"){t.logoPos="bottom";placeMedia(t,"logo",true)}return t},
+      function(t){if(!lock.logoPos&&t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";if(!lock.logoSize)t.logoSize=Math.max(110,Math.min(+bigLogo||110,120));placeMedia(t,"logo",true)}return t}];
     var cur=base,win=null;for(var k=0;k<stages.length&&!win;k++){cur=stages[k](JSON.parse(JSON.stringify(cur)));win=search(cur)}
-    if(!win){cur.contactLayout="stack";cur.order.forEach(function(x){if(/^(review|extra|social)$/.test(x[0]))x[3]=0});win=cur}
-    var res={};["socialWithLogo","contactLayout","logoSize","photoSize","logoPos","order"].forEach(function(key){res[key]=JSON.parse(JSON.stringify(win[key]))});
-    Object.assign(o,res);PF_CACHE[key]=JSON.stringify(res);if(++PF_N>400){PF_CACHE={};PF_N=0}}
-  finally{d.remove()}
+    if(!win){if(!lock.contactLayout)cur.contactLayout="stack";if(!lock.joins)cur.order.forEach(function(x){if(/^(review|extra|social)$/.test(x[0]))x[3]=0});win=cur}
+    var res={};FIT_FIELDS.forEach(function(f){res[f]=JSON.parse(JSON.stringify(win[f]))});
+    PF_CACHE[key]=JSON.stringify(res);if(++PF_N>400){PF_CACHE={};PF_N=0}return res}
+  finally{d.remove()}}
+function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));o.darkOn=true;if(o.socialWithLogo==null)o.socialWithLogo=o.logoPos==="left"||o.logoPos==="right";
+  o.textSize=Math.min(+o.textSize||13,13);o.nameSize=Math.max(16,Math.min(+o.nameSize||17,20));o.logoSize=Math.min(+o.logoSize||100,90);o.photoSize=Math.min(+o.photoSize||96,88);
+  o.iconSize=Math.max(18,Math.min(+o.iconSize||26,28));o.dividerW=Math.min(+o.dividerW||3,4);o.rainbowW=Math.min(+o.rainbowW||220,220);
+  /* the template's own arrangement is remembered, so later changes can be fitted again from it */
+  var pre={};FIT_FIELDS.forEach(function(f){pre[f]=JSON.parse(JSON.stringify(o[f]))});pre.bigLogo=+o.logoSize||110;o.fitBase=pre;o.fitLock={};o.autoFit=true;
+  if(typeof document==="undefined")return o;
+  Object.assign(o,fitLayout(Object.assign(JSON.parse(JSON.stringify(S)),JSON.parse(JSON.stringify(o))),{},pre.bigLogo));o._fit=fitSnap(o);
   return o}
+/* after any change, a template that came from the gallery is fitted again: anything changed by hand since the last fit
+   is kept as it is (and stays that way), everything else goes back to the template's choice and is folded to fit */
+function refit(){if(!S.autoFit||!S.fitBase||!S._fit||S.mob||(S.useCode&&String(S.code||"").trim()))return false;
+  var now=fitSnap(S),lock=Object.assign({},S.fitLock||{});Object.keys(now).forEach(function(k){if(now[k]!==S._fit[k])lock[k==="joins"?"joins":k]=1});S.fitLock=lock;
+  var b=JSON.parse(JSON.stringify(S)),fb=S.fitBase;
+  if(!lock.contactLayout)b.contactLayout=fb.contactLayout;if(!lock.socialWithLogo)b.socialWithLogo=fb.socialWithLogo;if(!lock.logoSize)b.logoSize=fb.logoSize;if(!lock.photoSize)b.photoSize=fb.photoSize;
+  if(!lock.joins){var jb={};(fb.order||[]).forEach(function(x){jb[x[0]]=x[3]});b.order.forEach(function(x){if(/^(review|extra|social)$/.test(x[0])&&jb[x[0]]!=null)x[3]=jb[x[0]]})}
+  if(!lock.logoPos&&b.logoPos!==fb.logoPos&&S.logoShow!==false){b.logoPos=fb.logoPos;placeMedia(b,"logo",true)}
+  var res=fitLayout(b,lock,fb.bigLogo),diff=false;FIT_FIELDS.forEach(function(f){if(JSON.stringify(res[f])!==JSON.stringify(S[f])){S[f]=res[f];diff=true}});
+  S._fit=fitSnap(S);return diff}
+var REFIT_T=0;
+function refitSoon(){clearTimeout(REFIT_T);if(!S.autoFit)return;REFIT_T=setTimeout(function(){var y=window.scrollY;if(refit())update();else save()},350)}
 var thumbT=0;
 function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard"))return;thumbT=setTimeout(function(){var keep=S,kb=barH;
   [].forEach.call(document.querySelectorAll(".tcard"),function(card){var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=exampleInto(JSON.parse(JSON.stringify(keep)));S=keep;barH=kb;if(u)useMyTpl(u,t);else if(p){Object.assign(t,presetLook(p));wizLookKeep(t)}else return;
@@ -2470,15 +2494,15 @@ function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard
     if(t.signoffStyle==="animated")t.signoffStyle="still";
     S=t;barH=t.photoShow?Math.max(110,t.photoSize):110;t.useCode=false;var ts=card.querySelector(".ts");ts.innerHTML=signature("preview");
     /* the strip beside the details is as tall as the details, the same as in the preview */
-    for(var r=0;r<2;r++){var m=ts.querySelector("[data-measure]");if(!m)break;var hh=Math.max(36,Math.round(m.offsetHeight));if(t.photoShow)hh=Math.max(hh,t.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh;ts.innerHTML=signature("preview")}card.setAttribute("aria-pressed",String(keep.template===(u?u.name:p[0])))});
+    for(var r=0;r<2;r++){var m=ts.querySelector("[data-measure]");if(!m)break;var hh=barMeasure(ts);if(t.photoShow)hh=Math.max(hh,t.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh;ts.innerHTML=signature("preview")}card.setAttribute("aria-pressed",String(keep.template===(u?u.name:p[0])))});
   S=keep;barH=kb},now?0:150)}
-function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML='<div id="codeEdit" contenteditable="true" spellcheck="true">'+cleanCode(S.code,true)+'</div>';
+function update(){syncMedia();refitSoon();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML='<div id="codeEdit" contenteditable="true" spellcheck="true">'+cleanCode(S.code,true)+'</div>';
     var ce=$("codeEdit");ce.addEventListener("input",function(){var keep=(String(S.code).match(/<style[\s\S]*?<\/style>/gi)||[]).join("");S.code=keep+ce.innerHTML;save();var ta=document.querySelector("#codeBox textarea");if(ta)ta.value=S.code});var ibc=$("inbox");ibc.classList.toggle("phone",S.pvWidth==="phone");ibc.classList.toggle("dark",S.pvMode==="dark");
     document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});$("iconWarn").textContent="Showing your own HTML code. Go to Copy and use → HTML code to change it, or go back to the builder’s design.";
     var nb=h2('<div class="codenote" contenteditable="false"><span>This signature is HTML code, so icons, spacing and layout can’t be changed. Make it editable to change everything.</span><button type="button" class="btn small">✨ Make it editable</button></div>');nb.querySelector("button").addEventListener("click",function(){if(!codeToDesign())toast("Couldn’t read this code. Use Copy and use → HTML code → Back to the builder’s design.")});pv.insertBefore(nb,pv.firstChild);return}
   if(TEST){testView(pv);var ibt=$("inbox");ibt.classList.toggle("phone",S.pvWidth==="phone");ibt.classList.toggle("dark",S.pvMode==="dark");return}
   if(MOVE){visualBoard(pv);var ib0=$("inbox");ib0.classList.toggle("phone",S.pvWidth==="phone");ib0.classList.toggle("dark",S.pvMode==="dark");return}pv.innerHTML=signature("preview");
-  var m=pv.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
+  var m=pv.querySelector("[data-measure]");if(m){var hh=barMeasure(pv);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
   markSel();
   /* if the hosted sign-off picture can't load here, draw it with the font instead */
   pv.querySelectorAll("img.so-img").forEach(function(im){var fb=function(){im.remove();var s=pv.querySelector(".so-fb");if(s)s.hidden=false};if(im.complete&&im.naturalWidth===0&&im.src)fb();else im.addEventListener("error",fb)});
@@ -2785,7 +2809,7 @@ function wizHtml(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" 
 /* the preview at the top of every screen: the whole signature, scaled to fit */
 function wizPv(){if(!WIZ_ON)return;var box=document.querySelector(".wiz .wz-pv"),inner=box&&box.querySelector(".wz-pvi");if(!inner)return;
   inner.style.transform="none";inner.innerHTML=signature("preview");
-  var m=inner.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;inner.innerHTML=signature("preview")}}
+  var m=inner.querySelector("[data-measure]");if(m){var hh=barMeasure(inner);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;inner.innerHTML=signature("preview")}}
   var w=inner.scrollWidth||1,h=inner.scrollHeight||1,aw=box.clientWidth-24,ah=Math.round(window.innerHeight*(window.innerWidth<=760?.24:.34)),k=Math.min(1,aw/w,ah/h);
   inner.style.transform="scale("+k+")";box.style.height=Math.ceil(h*k+24)+"px"}
 (function(){var u0=update;update=function(){var r=u0.apply(this,arguments);try{wizPv()}catch(e){}return r}})();
