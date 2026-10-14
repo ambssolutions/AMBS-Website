@@ -1155,13 +1155,13 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
       if(k==="phone"&&S.phone)add("phone",a(tel(S.phone),esc(S.phone),c.link));
       if(k==="email"&&S.email)add("email",a("mailto:"+S.email,esc(S.email),c.link));
       if(k==="web"&&S.website)add("web",a(url(S.website),esc(S.website.replace(/^https?:\/\//,"").replace(/\/$/,"")),c.link));
-      if(k==="location"&&S.location)add("location",'<span style="color:'+c.text+';">'+esc(S.location)+'</span>')});
+      if(k==="location"&&S.location){var al=addrLines(S.location,S.contactLayout!=="line");add("location",'<span style="color:'+c.text+';">'+al.map(esc).join("<br>")+'</span>');if(al.length>1)it[it.length-1].two=true}});
     if(!it.length)return"";
     /* icon and words sit in their own table cells, both centred on the same line, so they line up in every inbox */
     var ts='font-size:'+csz+'px;line-height:'+Math.round(csz*1.35)+'px;white-space:nowrap;'+(cs0.bold?"font-weight:bold;":"")+(cs0.italic?"font-style:italic;":"");
     /* the same space between every label and its text: letters are narrower than icons, so their cell is narrower too */
     var icw=it[0].ic?(S.contactIcons==="letters"?Math.round(csz*0.95):Math.max(13,Math.round(csz*1.15)))+cIconGap():0;
-    var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="middle" style="width:'+icw+'px;vertical-align:middle;padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
+    var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="'+(x.two?"top":"middle")+'" style="width:'+icw+'px;vertical-align:'+(x.two?"top":"middle")+';padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
     var txCell=function(x){return'<td valign="middle" style="vertical-align:middle;padding:0;'+ts+'">'+x.tx+'</td>'};
     var g=contactGap(),vpad=Math.max(0,Math.round((S.contactLayout==="pairs"?Math.max(1,Math.round(csz*0.18)):g)/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
     if(S.contactLayout==="line")return flowRow(it.map(function(x,i){return{h:T()+'<tr>'+icCell(x)+txCell(x)+(i<it.length-1?(cSep()?'<td valign="middle" style="vertical-align:middle;padding:0 '+g+'px;color:'+c.muted+';'+ts+'">'+esc(cSep())+'</td>':'<td style="width:'+g+'px;font-size:0;line-height:0;">&nbsp;</td>'):'')+'</tr></table>'}}),ctr?"center":"left");
@@ -1169,7 +1169,7 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
     for(var i=0;i<it.length;i+=per){var r=it.slice(i,i+per),tds=[];r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:'+g+'px;min-width:'+g+'px;font-size:0;line-height:0;">&nbsp;</td>')});
       if(r.length<per)tds.push('<td colspan="'+(icw?2:1)+'"></td>');rows.push('<tr>'+tds.join("")+'</tr>')}
     return TB+rows.join("")+'</table>'}
-  if(id==="tagline")return S.tagline?'<div style="'+fx("tagline",c.muted,S.textSize-1,false,false)+'">'+esc(S.tagline)+'</div>':"";
+  if(id==="tagline")return S.tagline?'<div style="'+fx("tagline",c.muted,S.textSize-1,false,false)+(+S.tagW?'max-width:'+(+S.tagW)+'px;':'')+'">'+esc(S.tagline)+'</div>':"";
   if(id==="rainbow")return hbar(S.rainbowW,3);
   if(id==="book")return S.bookLabel&&S.bookUrl?btnWrap(button(url(S.bookUrl),esc(S.bookLabel),S.bookIcon==="calendar"?"calendar":null,mode,c.button)):"";
   if(id==="review"){if(!(S.reviewLabel&&S.reviewUrl))return"";var rc=c.reviewBtn||c.button,star='<span style="color:'+(S.btnStyle==="filled"&&/^#?f5b800$/i.test(rc)?"#ffffff":"#F5B800")+';">★</span>&nbsp;';return btnWrap(button(url(S.reviewUrl),star+esc(S.reviewLabel),null,mode,rc))}
@@ -2421,7 +2421,11 @@ function presetLook(p){var d=defaults(),o={};LOOK.forEach(function(k){if(k==="si
 /* every template starts phone-friendly: the compact spacing of a well-made phone signature (small gaps, 13px text,
    rounded buttons), then anything still wider than a phone is folded: contacts onto two lines, then one per line,
    a smaller logo, and finally the logo above the details */
-var PHONE_RULES={gap:6,pieceGap:5,iconGap:4,btnGap:7,btnPadX:12,btnPadY:8,btnFont:12,contactGap:4,contactIconGap:5,lineGapL:14,lineGapR:12,bannerW:340,discW:340};
+/* a long street address goes onto two lines at the comma nearest the middle, so it never forces the whole signature wider than a phone */
+function addrLines(v,ok){v=String(v||"").trim();if(!ok||v.length<=28||v.indexOf(",")<0)return[v];var best=-1,mid=v.length/2;
+  for(var i=0;i<v.length;i++)if(v[i]===","&&(best<0||Math.abs(i-mid)<Math.abs(best-mid)))best=i;
+  return best<0?[v]:[v.slice(0,best+1).trim(),v.slice(best+1).trim()].filter(Boolean)}
+var PHONE_RULES={gap:6,pieceGap:5,iconGap:4,btnGap:7,btnPadX:12,btnPadY:8,btnFont:12,contactGap:4,contactIconGap:5,lineGapL:14,lineGapR:12,bannerW:340,discW:340,tagW:240};
 function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));o.darkOn=true;
   o.textSize=Math.min(+o.textSize||13,13);o.nameSize=Math.max(16,Math.min(+o.nameSize||17,20));o.logoSize=Math.min(+o.logoSize||100,90);o.photoSize=Math.min(+o.photoSize||96,88);
   o.iconSize=Math.max(18,Math.min(+o.iconSize||26,28));o.dividerW=Math.min(+o.dividerW||3,4);o.rainbowW=Math.min(+o.rainbowW||220,220);
@@ -2435,6 +2439,7 @@ function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));
       function(){if(t.contactLayout==="pairs"){t.contactLayout="stack";return true}},
       function(){if(t.logoSize>70){t.logoSize=70;return true}},
       function(){if(t.photoShow&&t.photoSize>72){t.photoSize=72;return true}},
+      function(){if(t.logoShow!==false&&t.logoPos==="social"){t.logoPos="bottom";placeMedia(t,"logo",true);return true}},
       function(){if(t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";t.logoSize=Math.max(110,Math.min(+o.logoSize||110,120));placeMedia(t,"logo",true);return true}}];
     for(var k=0;k<steps.length&&width()>PHONE_W;k++)steps[k]();
     ["contactLayout","logoSize","photoSize","logoPos","order"].forEach(function(key){o[key]=JSON.parse(JSON.stringify(t[key]))})}
@@ -2442,7 +2447,7 @@ function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));
   return o}
 var thumbT=0;
 function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard"))return;thumbT=setTimeout(function(){var keep=S,kb=barH;
-  [].forEach.call(document.querySelectorAll(".tcard"),function(card){var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=exampleInto(JSON.parse(JSON.stringify(keep)));if(u)useMyTpl(u,t);else if(p){Object.assign(t,presetLook(p));wizLookKeep(t)}else return;
+  [].forEach.call(document.querySelectorAll(".tcard"),function(card){var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=exampleInto(JSON.parse(JSON.stringify(keep)));S=keep;barH=kb;if(u)useMyTpl(u,t);else if(p){Object.assign(t,presetLook(p));wizLookKeep(t)}else return;
     if(!SOCIAL.some(function(k){return t.social[k]}))t.social={facebook:"x",tiktok:"x",linkedin:"x",instagram:"x"};
     if(t.signoffStyle==="animated")t.signoffStyle="still";
     S=t;barH=t.photoShow?Math.max(110,t.photoSize):110;t.useCode=false;card.querySelector(".ts").innerHTML=signature("preview");card.setAttribute("aria-pressed",String(keep.template===(u?u.name:p[0])))});
