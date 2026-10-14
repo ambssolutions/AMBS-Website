@@ -767,6 +767,30 @@ body.spage-on{overflow:hidden}
 .tipbox{border:1px solid var(--line);background:var(--soft,#f3f6fc);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:.86rem;line-height:1.45}
 .mailme{margin:10px 0;display:inline-block;text-decoration:none}
 @media (max-width:760px){.cf-row{grid-template-columns:repeat(2,1fr)}.bigcopy{width:100%}}
+
+/* ===== simple mode ===== */
+body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidden}body.wiz-on .instbar{display:none}
+.wiz{position:fixed;inset:0;z-index:35;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);padding-top:env(safe-area-inset-top,0px)}.wiz[hidden]{display:none}
+.wz-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px 6px;max-width:760px;width:100%;margin:0 auto;box-sizing:border-box}
+.wz-tl{display:flex;flex-direction:column;min-width:0}.wz-tl b{font-family:var(--display);font-size:1.05rem}.wz-count{font-size:.75rem;color:var(--muted);font-weight:600}
+.wz-tr{display:flex;gap:6px;align-items:center}.wz-ic{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1rem;cursor:pointer}
+.wz-adv{height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 .82rem var(--body);padding:0 12px;cursor:pointer}
+.wz-dots{display:flex;gap:6px;max-width:760px;width:100%;margin:0 auto;padding:0 16px 8px;box-sizing:border-box}.wz-dots i{flex:1;height:4px;border-radius:2px;background:var(--line)}.wz-dots i.done{background:#24b328;opacity:.55}.wz-dots i.on{background:#24b328}
+.wz-pv{position:relative;flex:none;max-width:728px;width:calc(100% - 32px);margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-sizing:border-box;padding:12px;box-shadow:var(--shadow)}
+.wz-pvi{transform-origin:0 0;width:max-content;pointer-events:none;font-family:Arial,Helvetica,sans-serif;color:#14172b}
+.wz-full{position:absolute;top:6px;right:6px;width:32px;height:32px;border-radius:999px;border:0;background:rgba(20,23,43,.75);color:#fff;font-size:.95rem;cursor:pointer}
+.wz-body{flex:1;min-height:0;overflow:auto;max-width:728px;width:100%;margin:0 auto;padding:16px 16px 24px;box-sizing:border-box;-webkit-overflow-scrolling:touch}
+.wz-h{font-family:var(--display);font-size:1.45rem;font-weight:800;margin:0 0 4px;text-wrap:balance}.wz-d{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+.wz-c .ied-b{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))!important}.wz-c .part{border:0!important;padding:0!important}
+.wz-c .sfill{padding:0;border:0;background:none}.wz-c .sfill .row{display:flex;flex-direction:column;gap:10px}.wz-c .sfill input{font-size:1.05rem;padding:14px;border-radius:12px}.wz-c .sfill .btn{width:100%;padding:14px;font-size:1rem}
+.wz-alt{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.wz-ppl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.wz-ppl small{flex-basis:100%;color:var(--muted)}.wz-ppl .chip[aria-pressed=true]{background:var(--ink);color:var(--panel)}
+.wz-tpl{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))!important;grid-auto-flow:row!important;overflow:visible!important;max-height:none!important}
+.wz-more{margin-top:14px}.wz-save{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}.wz-save .btn{padding:13px}
+.wz-nav{flex:none;display:flex;gap:10px;max-width:728px;width:100%;margin:0 auto;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));box-sizing:border-box;border-top:1px solid var(--line);background:var(--panel)}
+.wz-nav .btn{flex:1;min-height:50px;font-size:1rem;border-radius:12px}.wz-nav .wz-back{flex:0 0 30%}.wz-nav [hidden]{display:none}
+@media (min-width:761px){.wz-nav{border:1px solid var(--line);border-radius:14px;margin-bottom:14px}}
+.wz-back2{margin-right:6px}.toast{z-index:90}
 </style>
 
 <!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
@@ -2521,7 +2545,7 @@ function siteFill(site,btn,out){var keep=btn.textContent;
       if(d.animLogo)items.splice(3,0,{l:"Moving logo (untick for a still logo)",k:"logoAnim",v:true});
       if(lk.book)items.push({l:"Booking button: "+lk.book.label,k:"bookUrl",v:lk.book.url,b:"book"});if(lk.review)items.push({l:"Google review button",k:"reviewUrl",v:lk.review,b:"review"});
       if(lk.google)items.push({l:"Google profile icon",k:"social.google",v:lk.google});if(lk.extra)items.push({l:"Extra button: "+lk.extra.label,k:"extraUrl",v:lk.extra.url,b:"extra"});
-      SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
+      SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website");if(WIZ_ON&&WZ===0&&got)wizGo(1)})})
   .catch(function(e){out.innerHTML='<p class="sfmsg">'+esc(e.message==="signin"?"Please sign in to the website editor first.":e.message)+'</p>'})
   .then(function(){btn.disabled=false;btn.textContent=keep;var b2=document.querySelector(".sfill .btn");if(b2){b2.disabled=false;b2.textContent=keep}})}
 /* NZ and Australian mobiles start 02 / 04 (or +64 2 / +61 4); the rest count as the office phone */
@@ -2566,6 +2590,69 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
     S.logoRatio=h0/w0;S.logoShow=true;var lo=inOrder("logo");if(lo)lo[1]=1;
     try{applyLogoCols(logoColours(im))}catch(e){}
     fin(true)};im.onerror=function(){fin(false)};im.src=src})}
+
+/* ===== Simple mode: one question per screen, the preview always on top, one big Next button.
+   The full editor stays one tap away ("Advanced") and both share the same signature. ===== */
+var WIZ_ON=false,WZ=0;
+var WZ_SCREENS=[
+  {id:"site",t:"What’s your website?",d:"We fill in your logo, colours and contact details from it."},
+  {id:"you",t:"Check your details",d:"Fix anything that’s wrong. Empty lines are left out."},
+  {id:"look",t:"Pick a look",d:"Tap a design. Your details and colours go straight into it."},
+  {id:"brand",t:"Logo and colours",d:"Change your logo or pick different colours."},
+  {id:"parts",t:"What to show",d:"Tick what appears in your signature and put it in order."},
+  {id:"done",t:"Save and use it",d:"Save it, then copy it into your email."}];
+ITEM.wzYou=function(){return[["text","name","Your name"],["text","role","Role"],["text","company","Business name"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"]]};
+ITEM.wzBrand=function(){return[["logoUp"],["animlogo"],["brandsets"]]};
+function wizPref(){try{return localStorage.getItem("ambs-sig-wiz")!=="0"}catch(e){return true}}
+function wizSet(on){try{localStorage.setItem("ambs-sig-wiz",on?"1":"0")}catch(e){}}
+function wizInit(){
+  var w=h2('<div class="wiz" role="main" aria-label="Email signature builder"><header class="wz-top"><div class="wz-tl"><b>Email signature</b><span class="wz-count"></span></div><div class="wz-tr"><button type="button" class="wz-ic" data-w="list" title="My signatures" aria-label="My signatures">📂</button><button type="button" class="wz-ic" data-w="menu" title="Menu" aria-label="Menu">☰</button><button type="button" class="wz-adv" data-w="adv">Advanced</button></div></header>'+
+    '<div class="wz-dots" aria-hidden="true"></div><div class="wz-pv"><div class="wz-pvi"></div><button type="button" class="wz-full" aria-label="Full-screen preview">⛶</button></div>'+
+    '<div class="wz-body"><h2 class="wz-h"></h2><p class="wz-d"></p><div class="wz-c"></div></div>'+
+    '<footer class="wz-nav"><button type="button" class="btn sec wz-back">Back</button><button type="button" class="btn wz-next">Next</button></footer></div>');
+  document.body.appendChild(w);
+  w.querySelector('[data-w="list"]').addEventListener("click",function(){openSigs()});
+  w.querySelector('[data-w="menu"]').addEventListener("click",function(){openMenu()});
+  w.querySelector('[data-w="adv"]').addEventListener("click",function(){wizOff(true)});
+  w.querySelector(".wz-full").addEventListener("click",function(){openPreview()});
+  w.querySelector(".wz-back").addEventListener("click",function(){wizGo(WZ-1)});
+  w.querySelector(".wz-next").addEventListener("click",function(){if(WZ===WZ_SCREENS.length-1){var sb=document.querySelector(".wiz .wz-save .btn");if(sb)sb.click();return}histPush(true);save();wizGo(WZ+1)});
+  var hb=h2('<button type="button" class="btn small wz-back2" id="wizBack">✨ Simple mode</button>');hb.addEventListener("click",function(){wizOn()});var hd=document.querySelector("header.top");if(hd)hd.insertBefore(hb,hd.querySelector("#undoBtn"));
+  var keep=0;try{keep=+localStorage.getItem("ambs-sig-wz")||0}catch(e){}
+  window.addEventListener("resize",function(){if(WIZ_ON)wizPv()});
+  if(wizPref())wizOn(keep);else wizOff(false)}
+function wizOn(at){WIZ_ON=true;wizSet(true);document.body.classList.add("wiz-on");var w=document.querySelector(".wiz");if(w)w.hidden=false;var b=$("wizBack");if(b)b.hidden=true;wizGo(at==null?WZ:at)}
+function wizOff(go2){WIZ_ON=false;wizSet(false);document.body.classList.remove("wiz-on");var w=document.querySelector(".wiz");if(w)w.hidden=true;var b=$("wizBack");if(b)b.hidden=false;
+  if(go2){var map={site:"start",you:"details",look:"template",brand:"edit",parts:"edit",done:"copy"};go(stepId(map[WZ_SCREENS[WZ].id]||"edit"));window.scrollTo(0,0);toast("Advanced editor. Tap ✨ Simple mode to go back.")}}
+function wizGo(i){var w=document.querySelector(".wiz");if(!w)return;WZ=Math.max(0,Math.min(WZ_SCREENS.length-1,i));try{localStorage.setItem("ambs-sig-wz",String(WZ))}catch(e){}
+  var sc=WZ_SCREENS[WZ],c=w.querySelector(".wz-c");w.dataset.screen=sc.id;
+  w.querySelector(".wz-count").textContent="Step "+(WZ+1)+" of "+WZ_SCREENS.length;
+  w.querySelector(".wz-dots").innerHTML=WZ_SCREENS.map(function(x,k){return'<i class="'+(k<WZ?"done":k===WZ?"on":"")+'"></i>'}).join("");
+  w.querySelector(".wz-h").textContent=sc.t;w.querySelector(".wz-d").textContent=sc.d;
+  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;
+  nx.textContent=WZ===WZ_SCREENS.length-1?"✓ Save and finish":WZ===0?"Skip, I’ll type my details":"Next: "+WZ_SCREENS[WZ+1].t;nx.classList.toggle("sec",WZ===0);
+  c.innerHTML="";wizBody(sc.id,c);w.querySelector(".wz-body").scrollTop=0;wizPv()}
+function wizBody(id,c){
+  if(id==="site"){c.appendChild(siteFillCard());var h=c.querySelector(".sfill h3");if(h)h.remove();var p=c.querySelector(".sfill>p");if(p)p.remove();
+    var alt=h2('<div class="wz-alt"><button type="button" class="linkbtn" data-k="open">📂 Open a saved signature</button><button type="button" class="linkbtn" data-k="new">＋ Start a new blank signature</button></div>');
+    alt.querySelector('[data-k="open"]').addEventListener("click",function(){openSigs()});alt.querySelector('[data-k="new"]').addEventListener("click",function(){askNew()});c.appendChild(alt);
+    setTimeout(function(){var i=c.querySelector("input");if(i&&window.innerWidth>760)i.focus()},50);return}
+  if(id==="you"){var ppl=SITEFILL&&SITEFILL.people||[];if(ppl.length>1){var pc=h2('<div class="wz-ppl"><small>People on your website: tap one</small></div>');ppl.forEach(function(pp){var b=h2('<button type="button" class="chip" aria-pressed="'+(S.name===pp.name)+'">'+esc(pp.name)+(pp.role?' · '+esc(pp.role):'')+'</button>');b.addEventListener("click",function(){S.name=pp.name;if(pp.role)S.role=pp.role;changed();wizGo(WZ)});pc.appendChild(b)});c.appendChild(pc)}
+    renderPart("wzYou",c,false);return}
+  if(id==="look"){var g=h2('<div class="tpl-grid wz-tpl"></div>');PRESETS.forEach(function(pr,i){var b=document.createElement("button");b.type="button";b.className="tcard";b.dataset.i=i;b.setAttribute("aria-pressed",String(S.template===pr[0]));
+      b.innerHTML='<span class="tthumb" aria-hidden="true"><span class="ts"></span></span><span class="tname"><b>'+esc(pr[0])+'</b><small>'+esc(pr[1])+'</small></span>';
+      b.addEventListener("click",function(){Object.assign(S,presetLook(pr));S.template=pr[0];changed();g.querySelectorAll(".tcard").forEach(function(y){y.setAttribute("aria-pressed",String(y===b))})});g.appendChild(b)});c.appendChild(g);drawThumbs(true);return}
+  if(id==="brand"){renderPart("wzBrand",c,false);var more=h2('<button type="button" class="linkbtn wz-more">More: dark mode, fonts, sizes and buttons → Advanced</button>');more.addEventListener("click",function(){wizOff(false);openItem("dark")});c.appendChild(more);return}
+  if(id==="parts"){var draw=function(){c.innerHTML="";c.appendChild(partsBody(draw))};draw();return}
+  if(id==="done"){var sv=h2('<div class="wz-save"><button type="button" class="btn">💾 Save this signature</button><span class="note"></span></div>');var nt=sv.querySelector(".note");nt.textContent=S._sigId?"Saved as “"+S._sigName+"”. Saving again updates it.":"Save it so you can change it later.";
+    sv.querySelector("button").addEventListener("click",function(){saveSig(false,this)});c.appendChild(sv);var cb=h2('<div class="wz-copy"></div>');c.appendChild(cb);drawCopy(cb);return}}
+/* the preview at the top of every screen: the whole signature, scaled to fit */
+function wizPv(){if(!WIZ_ON)return;var box=document.querySelector(".wiz .wz-pv"),inner=box&&box.querySelector(".wz-pvi");if(!inner)return;
+  inner.style.transform="none";inner.innerHTML=signature("preview");
+  var m=inner.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;inner.innerHTML=signature("preview")}}
+  var w=inner.scrollWidth||1,h=inner.scrollHeight||1,aw=box.clientWidth-24,ah=Math.round(window.innerHeight*(window.innerWidth<=760?.24:.34)),k=Math.min(1,aw/w,ah/h);
+  inner.style.transform="scale("+k+")";box.style.height=Math.ceil(h*k+24)+"px"}
+(function(){var u0=update;update=function(){var r=u0.apply(this,arguments);try{wizPv()}catch(e){}return r}})();
 /* tabs left open for a while: notice when a newer builder is live and offer a refresh (your work is saved in this browser) */
 (function(){if(!onAmbs())return;var first=null,shown=false;
   var check=function(){fetch("/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){var b=String(d&&d.build||"");if(!b)return;if(first===null){first=b;return}
@@ -2646,7 +2733,7 @@ function init(){
   (function(){var stg=document.querySelector(".pv-col .stage");if(stg&&window.ResizeObserver){var lh=0;new ResizeObserver(function(){var hh=stg.clientHeight;if(Math.abs(hh-lh)>4){lh=hh;clearTimeout(window._fp);window._fp=setTimeout(fitPhone,80)}}).observe(stg)}})();
   $("copySig").addEventListener("click",function(){copySig(this)});$("copyCode").addEventListener("click",function(){copyCode(this)});
   $("partsPv").addEventListener("click",openParts);$("prevStep").addEventListener("click",function(){go(STEP-1)});$("skipStep").addEventListener("click",function(){histPush(true);save();go(stepId("copy"))});$("nextStep").addEventListener("click",function(){if(STEPS[STEP].id==="details"){histPush(true);save();toast("Details confirmed. Now pick a look.")}go(STEP+1);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
-  update();go(0);
+  update();go(0);wizInit();
 }
 function toast(t){var el=document.createElement("div");el.className="toast";el.setAttribute("role","status");el.textContent=t;document.body.appendChild(el);setTimeout(function(){el.remove()},2000)}
 function flash(b,t){var o=b.dataset.label||(b.dataset.label=b.textContent);b.textContent=t;b.classList.add("done");setTimeout(function(){b.textContent=o;b.classList.remove("done")},2200)}
