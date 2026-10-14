@@ -729,6 +729,10 @@ body:not([data-step="edit"]) .pv-col .mail{max-height:var(--pvh,12vh)!important}
 .qbar.insheet .setcol{grid-column:1/-1;display:grid!important;grid-template-columns:repeat(3,1fr);gap:6px}.qbar.insheet .setcol small{grid-column:1/-1}.qbar .scsw{background:var(--soft,#f3f6fc)!important;border:1px solid var(--line)!important;color:var(--ink)!important;padding:6px!important;height:auto!important;min-width:0!important;width:auto!important;border-radius:10px!important;display:flex!important;flex-direction:column;gap:4px}.qbar .scsw span{display:block!important;font:600 .7rem system-ui,sans-serif;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qbar .scsw i{width:100%}.qbar:not(.insheet) .scsw{min-width:64px}
 
 /* reorder lists */
+.pvchips{display:none}
+@media (max-width:760px){.pvchips{display:flex;gap:6px;position:absolute;top:6px;right:6px;z-index:4}.pvchips .pvfull{position:static!important}.pvparts{border:0;border-radius:999px;padding:5px 10px;background:#24b328;color:#fff;font:700 .72rem system-ui,sans-serif;box-shadow:0 4px 12px -4px rgba(0,0,0,.5)}}
+.partsdlg .sbox{max-height:88vh;overflow:auto}@media (max-width:760px){.partsdlg{background:rgba(13,17,34,.25)!important}.partsdlg .sbox{max-height:62vh}}.partsdlg .sbox>.sh{position:sticky;top:0;background:var(--panel);z-index:2;padding-bottom:6px}.partsbody h4{margin:14px 0 4px;font-size:.9rem}.partsbody .note{margin:0 0 6px}
+.pchecks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}.pchk{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--soft);font-size:.86rem;font-weight:600;cursor:pointer}.pchk input,.sorti .sc{width:18px;height:18px;accent-color:#24b328;flex:none}
 .darkbox h4{margin:12px 0 6px;font-size:.88rem}.darkbox .dk-on{font-size:.95rem}.dk-logos{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dk-th{margin:0;border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:96px;justify-content:center}.dk-th.lt{background:#fff;color:#5b6176}.dk-th.dk{background:#1f1f1f;color:#bdc1c6}.dk-th img{max-width:100%;max-height:64px}.dk-th figcaption{font-size:.74rem;font-weight:600}.dk-acts{margin-top:8px;flex-wrap:wrap}.dk-cols{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.dk-c{display:flex;align-items:center;gap:8px}.dk-c span{flex:1;font-size:.84rem;font-weight:600}.dk-c input{width:40px;height:30px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff}.dk-c .chip[aria-pressed=true]{background:var(--ink);color:var(--panel)}
 .skipcopy{display:inline-block;margin-top:4px;font-size:.82rem}.skipcopy[hidden]{display:none}
 .reorderbox h4{margin:12px 0 6px;font-size:.88rem}
@@ -763,6 +767,30 @@ body.spage-on{overflow:hidden}
 .tipbox{border:1px solid var(--line);background:var(--soft,#f3f6fc);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:.86rem;line-height:1.45}
 .mailme{margin:10px 0;display:inline-block;text-decoration:none}
 @media (max-width:760px){.cf-row{grid-template-columns:repeat(2,1fr)}.bigcopy{width:100%}}
+
+/* ===== simple mode ===== */
+body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidden}body.wiz-on .instbar{display:none}
+.wiz{position:fixed;inset:0;z-index:35;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);padding-top:env(safe-area-inset-top,0px)}.wiz[hidden]{display:none}
+.wz-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px 6px;max-width:760px;width:100%;margin:0 auto;box-sizing:border-box}
+.wz-tl{display:flex;flex-direction:column;min-width:0}.wz-tl b{font-family:var(--display);font-size:1.05rem}.wz-count{font-size:.75rem;color:var(--muted);font-weight:600}
+.wz-tr{display:flex;gap:6px;align-items:center}.wz-ic{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1rem;cursor:pointer}
+.wz-adv{height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 .82rem var(--body);padding:0 12px;cursor:pointer}
+.wz-dots{display:flex;gap:6px;max-width:760px;width:100%;margin:0 auto;padding:0 16px 8px;box-sizing:border-box}.wz-dots i{flex:1;height:4px;border-radius:2px;background:var(--line)}.wz-dots i.done{background:#24b328;opacity:.55}.wz-dots i.on{background:#24b328}
+.wz-pv{position:relative;flex:none;max-width:728px;width:calc(100% - 32px);margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-sizing:border-box;padding:12px;box-shadow:var(--shadow)}
+.wz-pvi{transform-origin:0 0;width:max-content;pointer-events:none;font-family:Arial,Helvetica,sans-serif;color:#14172b}
+.wz-full{position:absolute;top:6px;right:6px;width:32px;height:32px;border-radius:999px;border:0;background:rgba(20,23,43,.75);color:#fff;font-size:.95rem;cursor:pointer}
+.wz-body{flex:1;min-height:0;overflow:auto;max-width:728px;width:100%;margin:0 auto;padding:16px 16px 24px;box-sizing:border-box;-webkit-overflow-scrolling:touch}
+.wz-h{font-family:var(--display);font-size:1.45rem;font-weight:800;margin:0 0 4px;text-wrap:balance}.wz-d{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+.wz-c .ied-b{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))!important}.wz-c .part{border:0!important;padding:0!important}
+.wz-c .sfill{padding:0;border:0;background:none}.wz-c .sfill .row{display:flex;flex-direction:column;gap:10px}.wz-c .sfill input{font-size:1.05rem;padding:14px;border-radius:12px}.wz-c .sfill .btn{width:100%;padding:14px;font-size:1rem}
+.wz-alt{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.wz-ppl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.wz-ppl small{flex-basis:100%;color:var(--muted)}.wz-ppl .chip[aria-pressed=true]{background:var(--ink);color:var(--panel)}
+.wz-tpl{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))!important;grid-auto-flow:row!important;overflow:visible!important;max-height:none!important}
+.wz-more{margin-top:14px}.wz-save{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}.wz-save .btn{padding:13px}
+.wz-nav{flex:none;display:flex;gap:10px;max-width:728px;width:100%;margin:0 auto;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));box-sizing:border-box;border-top:1px solid var(--line);background:var(--panel)}
+.wz-nav .btn{flex:1;min-height:50px;font-size:1rem;border-radius:12px}.wz-nav .wz-back{flex:0 0 30%}.wz-nav [hidden]{display:none}
+@media (min-width:761px){.wz-nav{border:1px solid var(--line);border-radius:14px;margin-bottom:14px}}
+.wz-back2{margin-right:6px}.toast{z-index:90}
 </style>
 
 <!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
@@ -788,7 +816,7 @@ body.spage-on{overflow:hidden}
 
     <section class="pv-col" aria-label="Preview">
       <div class="bar">
-        <span class="kbhint" id="kbHint" hidden></span><span class="step">Preview <small>click any part to change it</small><small class="tapnote">tap any part to change it</small></span><button type="button" class="bigbtn pvfold" id="foldPv" aria-expanded="true">Hide</button><button type="button" class="bigbtn movebtn" id="movePv" aria-pressed="false">✥ Move or add</button><button type="button" class="bigbtn movebtn" id="testPv" aria-pressed="false">🔗 Test links</button><button type="button" class="bigbtn pvopen" id="fullPv">👁 Preview</button><button type="button" class="bigbtn" id="bigPv" aria-pressed="false">Bigger preview</button>
+        <span class="kbhint" id="kbHint" hidden></span><span class="step">Preview <small>click any part to change it</small><small class="tapnote">tap any part to change it</small></span><button type="button" class="bigbtn pvfold" id="foldPv" aria-expanded="true">Hide</button><button type="button" class="bigbtn" id="partsPv">☰ Parts</button><button type="button" class="bigbtn movebtn" id="movePv" aria-pressed="false">✥ Move or add</button><button type="button" class="bigbtn movebtn" id="testPv" aria-pressed="false">🔗 Test links</button><button type="button" class="bigbtn pvopen" id="fullPv">👁 Preview</button><button type="button" class="bigbtn" id="bigPv" aria-pressed="false">Bigger preview</button>
         <div class="bar-r">
           <div class="seg" data-pv="pvWidth"><button type="button" data-v="desktop">Laptop</button><button type="button" data-v="phone">Phone</button></div>
           <div class="seg" data-pv="pvMode"><button type="button" data-v="light">Light</button><button type="button" data-v="dark">Dark</button></div>
@@ -1096,7 +1124,7 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="role"){var t=[S.role,S.company].filter(Boolean).map(esc).join(" · ");return t?'<div style="'+fx("role",S.contactLabels?c.letters:c.muted,S.textSize,S.contactLabels,false)+'">'+t+'</div>':""}
   if(id==="contact"){var it=[],cs0=st("contact"),csz=cs0.size||S.textSize;c=Object.assign({},c);if(cs0.color)c.link=cs0.color;
     var add=function(kind,html){it.push({ic:contactIcon(kind,mode,csz),tx:html})};
-    contactOrder().forEach(function(k){
+    contactOrder().filter(function(k){return(S.hideC||[]).indexOf(k)<0}).forEach(function(k){
       if(k==="mobile"&&S.mobile)add("mobile",a(tel(S.mobile),esc(S.mobile),c.link));
       if(k==="phone"&&S.phone)add("phone",a(tel(S.phone),esc(S.phone),c.link));
       if(k==="email"&&S.email)add("email",a("mailto:"+S.email,esc(S.email),c.link));
@@ -1119,7 +1147,7 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="book")return S.bookLabel&&S.bookUrl?btnWrap(button(url(S.bookUrl),esc(S.bookLabel),S.bookIcon==="calendar"?"calendar":null,mode,c.button)):"";
   if(id==="review"){if(!(S.reviewLabel&&S.reviewUrl))return"";var rc=c.reviewBtn||c.button,star='<span style="color:'+(S.btnStyle==="filled"&&/^#?f5b800$/i.test(rc)?"#ffffff":"#F5B800")+';">★</span>&nbsp;';return btnWrap(button(url(S.reviewUrl),star+esc(S.reviewLabel),null,mode,rc))}
   if(id==="extra")return S.extraLabel&&S.extraUrl?btnWrap(button(url(S.extraUrl),esc(S.extraLabel),null,mode,c.extraBtn||c.button)):"";
-  if(id==="social"){var sz=S.iconSize,cs=socialOrder().filter(function(k){return S.social[k]}).map(function(k){return'<a href="'+esc(socialUrl(k,S.social[k]))+'" style="text-decoration:none;">'+img(iconSrc(k,S.iconStyle,mode,embL("icons")),sz,sz,SOCIAL_NAME[k])+'</a>'});
+  if(id==="social"){var sz=S.iconSize,cs=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).map(function(k){return'<a href="'+esc(socialUrl(k,S.social[k]))+'" style="text-decoration:none;">'+img(iconSrc(k,S.iconStyle,mode,embL("icons")),sz,sz,SOCIAL_NAME[k])+'</a>'});
 
     if(mode!=="email"&&!cs.length)return'<div style="font-size:11px;color:#8a90a3;border:1px dashed #c9cfe0;border-radius:6px;padding:6px 10px;display:inline-block;">Add an Instagram or TikTok username to show icons here</div>';
     return cs.length?inlineTable(cs.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<cs.length-1?iconGap():0)+'px 0 0;">'+x+'</td>'}),ctr):""}
@@ -1390,9 +1418,9 @@ var STEPS=[
   {id:"edit",sh:"Edit",t:"Edit and save",d:"Tap any part of your signature to change it, then save.",acc:["brand","dark","reorder","signoff","photo","logo","actions","social","custom","banner","disclaimer","style","layout","tune"]},
   {id:"copy",sh:"Copy",t:"Copy and use",d:"Copy the signature and paste it into your email."}
 ];
-var ACC_NAMES={brand:"Logo and colours",dark:"Dark mode",reorder:"Reorder",custom:"Add your own parts",signoff:"Sign-off",photo:"Photo",logo:"Logo",actions:"Buttons",social:"Social icons",banner:"Banner",disclaimer:"Disclaimer",style:"Colours and fonts",layout:"Layout and order",tune:"Fine-tune text"};
+var ACC_NAMES={brand:"Logo and colours",dark:"Dark mode",reorder:"Parts and order",custom:"Add your own parts",signoff:"Sign-off",photo:"Photo",logo:"Logo",actions:"Buttons",social:"Social icons",banner:"Banner",disclaimer:"Disclaimer",style:"Colours and fonts",layout:"Layout and order",tune:"Fine-tune text"};
 var TUNE_PARTS=["name","role","contact","tagline","rainbow"];
-function accSummary(id){var on=function(b){return b?"On":"Off"};if(id==="brand")return S.company||"Logo, brand colours";if(id==="reorder")return"Contact lines, social icons";if(id==="dark")return S.darkOn?"On"+(darkLogoSrc(false)?" · own logo":""):"Off";
+function accSummary(id){var on=function(b){return b?"On":"Off"};if(id==="brand")return S.company||"Logo, brand colours";if(id==="reorder")return"Show, hide and reorder";if(id==="dark")return S.darkOn?"On"+(darkLogoSrc(false)?" · own logo":""):"Off";
   if(id==="signoff")return S.signoffStyle==="none"?"Off":(S.signoffStyle==="animated"?"Writes itself":S.signoffStyle==="still"?"Handwritten":S.signoffStyle==="script"?"Own words":"Plain")+" · "+(S.signoff||"");
   if(id==="photo")return on(S.photoShow);if(id==="logo")return S.logoShow?({left:"Left",right:"Right",top:"Above",bottom:"Below",social:"By the icons"})[S.logoPos]:"Off";
   if(id==="actions")return(shown("book")||shown("review")||shown("extra"))?({filled:"Filled buttons",outline:"Outline buttons",link:"Text links"})[S.btnStyle]:"Off";
@@ -2099,7 +2127,8 @@ var PV_PCT=(function(){var v=12;try{var x=+localStorage.getItem("ambs-sig-pvpct"
 function pvApply(){document.documentElement.style.setProperty("--pvh",PV_PCT+"vh")}
 function pvRoom(){var w=$("phoneWarn"),wh=w&&!w.hidden&&w.offsetHeight?w.offsetHeight+6:0;return Math.max(44,window.innerHeight*PV_PCT/100-wh-12)}
 function pvHandle(){var col=document.querySelector(".pv-col"),m=col&&col.querySelector(".mail");if(!m||col.querySelector(".pvresize"))return;pvApply();
-  var fs=h2('<button type="button" class="pvfull" aria-label="Full-screen preview" title="Full-screen preview">⛶ Full screen</button>');fs.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();openPreview()});m.style.position="relative";m.appendChild(fs);
+  var fs=h2('<button type="button" class="pvfull" aria-label="Full-screen preview" title="Full-screen preview">⛶ Full screen</button>');fs.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();openPreview()});m.style.position="relative";
+  var chips=h2('<div class="pvchips"></div>'),pt=h2('<button type="button" class="pvparts" aria-label="Parts: show, hide and reorder">☰ Parts</button>');pt.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();openParts()});chips.appendChild(pt);chips.appendChild(fs);m.appendChild(chips);
   var h=h2('<div class="pvresize" role="slider" tabindex="0" aria-label="Preview size" aria-valuemin="8" aria-valuemax="60"><i></i><span>Drag to resize preview</span></div>');m.parentNode.insertBefore(h,m.nextSibling);
   var setPct=function(v,fit){PV_PCT=Math.max(8,Math.min(60,Math.round(v)));h.setAttribute("aria-valuenow",PV_PCT);pvApply();if(fit)fitPhone()};setPct(PV_PCT);
   var save1=function(){try{localStorage.setItem("ambs-sig-pvpct",PV_PCT)}catch(e){}};
@@ -2457,19 +2486,39 @@ var CONTACT_KINDS=["mobile","phone","email","web","location"],CONTACT_NAME={mobi
 function contactOrder(){var o=(Array.isArray(S.contactOrder)?S.contactOrder:[]).filter(function(k){return CONTACT_KINDS.indexOf(k)>=0});CONTACT_KINDS.forEach(function(k){if(o.indexOf(k)<0)o.push(k)});return o}
 function socialOrder(){var o=(Array.isArray(S.socialOrder)?S.socialOrder:[]).filter(function(k){return SOCIAL.indexOf(k)>=0});SOCIAL.forEach(function(k){if(o.indexOf(k)<0)o.push(k)});return o}
 /* a list you can reorder: drag the ⠿ handle, or use the arrows */
-function sortList(rows,onMove){var ul=h2('<ul class="sortl"></ul>');
-  rows.forEach(function(r,i){var li=h2('<li class="sorti'+(r.off?" off":"")+'" data-i="'+i+'"><span class="sh" aria-hidden="true">⠿</span><span class="st"><b>'+esc(r.label)+'</b>'+(r.sub?'<small>'+esc(r.sub)+'</small>':'')+'</span><button type="button" class="sa" aria-label="Move '+esc(r.label)+' up"'+(i===0?" disabled":"")+'>▲</button><button type="button" class="sa" aria-label="Move '+esc(r.label)+' down"'+(i===rows.length-1?" disabled":"")+'>▼</button></li>');
+function sortList(rows,onMove,onCheck){var ul=h2('<ul class="sortl"></ul>');
+  rows.forEach(function(r,i){var li=h2('<li class="sorti'+(r.off?" off":"")+'" data-i="'+i+'"><span class="sh" aria-hidden="true">⠿</span>'+(onCheck?'<input type="checkbox" class="sc" aria-label="Show '+esc(r.label)+'"'+(r.chk?" checked":"")+(r.dis?" disabled":"")+'>':'')+'<span class="st"><b>'+esc(r.label)+'</b>'+(r.sub?'<small>'+esc(r.sub)+'</small>':'')+'</span><button type="button" class="sa" aria-label="Move '+esc(r.label)+' up"'+(i===0?" disabled":"")+'>▲</button><button type="button" class="sa" aria-label="Move '+esc(r.label)+' down"'+(i===rows.length-1?" disabled":"")+'>▼</button></li>');
+    if(onCheck)li.querySelector(".sc").addEventListener("change",function(e){onCheck(i,e.target.checked)});
     var bs=li.querySelectorAll(".sa");bs[0].addEventListener("click",function(){onMove(i,i-1)});bs[1].addEventListener("click",function(){onMove(i,i+1)});
     li.querySelector(".sh").addEventListener("pointerdown",function(e){e.preventDefault();var h=e.currentTarget;h.setPointerCapture(e.pointerId);li.classList.add("drag");var to=i;
       var mv=function(ev){var items=[].slice.call(ul.children);to=items.length-1;for(var k=0;k<items.length;k++){var b=items[k].getBoundingClientRect();if(ev.clientY<b.top+b.height/2){to=k;break}}items.forEach(function(x,k){x.classList.toggle("dropb",k===to&&to!==i)})},
         up=function(){h.removeEventListener("pointermove",mv);h.removeEventListener("pointerup",up);h.removeEventListener("pointercancel",up);li.classList.remove("drag");if(to>i)to--;if(to!==i)onMove(i,to);else[].forEach.call(ul.children,function(x){x.classList.remove("dropb")})};
       h.addEventListener("pointermove",mv);h.addEventListener("pointerup",up);h.addEventListener("pointercancel",up)});
     ul.appendChild(li)});return ul}
-function reorderBox(){var el=h2('<div class="wide reorderbox"><p class="note">Drag the ⠿ handle, or use the arrows. The signature updates as you go.</p><h4>Phone, email, website and address</h4><div class="ro-c"></div><h4>Social icons</h4><div class="ro-s"></div><button type="button" class="btn sec small ro-p">Move whole parts (name, buttons, banner…) → Layout and order</button></div>');
-  var redraw=function(){var y=window.scrollY;go(STEP,"reorder");window.scrollTo(0,y)};
-  var co=contactOrder();el.querySelector(".ro-c").appendChild(sortList(co.map(function(k){var v=S[CONTACT_KEY[k]];return{label:CONTACT_NAME[k],sub:v||"Empty: not shown",off:!v}}),function(a,b){var o=contactOrder(),x=o.splice(a,1)[0];o.splice(b,0,x);S.contactOrder=o;save();update();redraw()}));
-  var so=socialOrder();el.querySelector(".ro-s").appendChild(sortList(so.map(function(k){var v=S.social[k];return{label:SOCIAL_NAME[k]||k,sub:v||"No account: not shown",off:!v}}),function(a,b){var o=socialOrder(),x=o.splice(a,1)[0];o.splice(b,0,x);S.socialOrder=o;save();update();redraw()}));
-  el.querySelector(".ro-p").addEventListener("click",function(){OPEN="layout";go(STEP,"layout")});return el}
+/* one place to switch parts on and off and put contact lines and social icons in order:
+   the ☰ Parts button next to the preview, and Edit and save → Reorder */
+var PART_SKIP=["c-"];
+function partsBody(redraw){var el=h2('<div class="partsbody"><h4>Parts of your signature</h4><p class="note">Tick what shows. Unticked parts keep their details, so you can bring them back.</p><div class="pb-p"></div><h4>Phone, email, website and address</h4><p class="note">Tick to show, drag ⠿ or use the arrows to reorder.</p><div class="pb-c"></div><h4>Social icons</h4><div class="pb-s"></div></div>');
+  var done=function(){save();update();drawFlow();redraw()};
+  var parts=[{id:"signoff",label:"Sign-off",chk:S.signoffStyle!=="none"}].concat(S.order.map(function(o){return{id:o[0],label:blockLabel(o[0]),chk:!!o[1]&&(o[0]!=="logo"||S.logoShow!==false)&&(o[0]!=="photo"||!!S.photoShow)}}));
+  var pl=h2('<div class="pchecks"></div>');parts.forEach(function(x){var r=h2('<label class="pchk"><input type="checkbox"'+(x.chk?" checked":"")+'><span>'+esc(x.label)+'</span></label>');
+    r.querySelector("input").addEventListener("change",function(e){var c=e.target.checked;
+      if(x.id==="signoff"){if(c){S.signoffStyle=S.soPrev&&S.soPrev!=="none"?S.soPrev:"animated"}else{S.soPrev=S.signoffStyle;S.signoffStyle="none"}}
+      else{var o=inOrder(x.id);if(o)o[1]=c?1:0;if(x.id==="logo")S.logoShow=c;if(x.id==="photo")S.photoShow=c}
+      toast((c?"Showing: ":"Hidden: ")+x.label);done()});pl.appendChild(r)});el.querySelector(".pb-p").appendChild(pl);
+  var hc=S.hideC||(S.hideC=[]),hs=S.hideS||(S.hideS=[]);
+  var co=contactOrder();el.querySelector(".pb-c").appendChild(sortList(co.map(function(k){var v=S[CONTACT_KEY[k]];return{label:CONTACT_NAME[k],sub:v||"Empty: add it in Check details",off:!v||hc.indexOf(k)>=0,chk:!!v&&hc.indexOf(k)<0,dis:!v}}),
+    function(a,b){var o=contactOrder(),x=o.splice(a,1)[0];o.splice(b,0,x);S.contactOrder=o;done()},
+    function(i,c){var k=co[i],at=hc.indexOf(k);if(c&&at>=0)hc.splice(at,1);if(!c&&at<0)hc.push(k);done()}));
+  var so=socialOrder();el.querySelector(".pb-s").appendChild(sortList(so.map(function(k){var v=S.social[k];return{label:SOCIAL_NAME[k]||k,sub:v||"No account yet",off:!v||hs.indexOf(k)>=0,chk:!!v&&hs.indexOf(k)<0,dis:!v}}),
+    function(a,b){var o=socialOrder(),x=o.splice(a,1)[0];o.splice(b,0,x);S.socialOrder=o;done()},
+    function(i,c){var k=so[i],at=hs.indexOf(k);if(c&&at>=0)hs.splice(at,1);if(!c&&at<0)hs.push(k);if(c){var sp=inOrder("social");if(sp)sp[1]=1}done()}));
+  return el}
+function reorderBox(){var el=h2('<div class="wide reorderbox"></div>');el.appendChild(partsBody(function(){var y=window.scrollY;go(STEP,"reorder");window.scrollTo(0,y)}));return el}
+function openParts(){var old=document.querySelector(".partsdlg");if(old)old.remove();
+  var ov=h2('<div class="sdlg msheet partsdlg" role="dialog" aria-modal="true" aria-label="Parts and order"><div class="sbox"><div class="sh"><b>☰ Parts and order</b><button type="button" class="btn small sx">Done</button></div><div class="pdb"></div></div></div>');
+  var body=ov.querySelector(".pdb"),draw=function(){var y=body.scrollTop;body.innerHTML="";body.appendChild(partsBody(draw));body.scrollTop=y};draw();
+  document.body.appendChild(ov);var cl=function(){ov.remove();if(STEPS[STEP].id==="edit"||STEPS[STEP].id==="details")go(STEP)};ov.querySelector(".sx").addEventListener("click",cl);ov.addEventListener("click",function(e){if(e.target===ov)cl()})}
 function startPick(){var w=h2('<div class="wide startpick"></div>');w.appendChild(siteFillCard());
   var row=h2('<div class="sp-row"><button type="button" class="sp-card" data-sp="logo"><span class="sp-ic">🖼️</span><span><b>Upload your logo</b><small>We pick your brand colours from it</small></span></button><button type="button" class="sp-card" data-sp="html"><span class="sp-ic">📄</span><span><b>Use an HTML signature</b><small>Open one you already have</small></span></button></div>');
   row.querySelector('[data-sp="logo"]').addEventListener("click",function(){$("logoFile").click()});row.querySelector('[data-sp="html"]').addEventListener("click",function(){$("htmlFile").click()});w.appendChild(row);
@@ -2496,7 +2545,7 @@ function siteFill(site,btn,out){var keep=btn.textContent;
       if(d.animLogo)items.splice(3,0,{l:"Moving logo (untick for a still logo)",k:"logoAnim",v:true});
       if(lk.book)items.push({l:"Booking button: "+lk.book.label,k:"bookUrl",v:lk.book.url,b:"book"});if(lk.review)items.push({l:"Google review button",k:"reviewUrl",v:lk.review,b:"review"});
       if(lk.google)items.push({l:"Google profile icon",k:"social.google",v:lk.google});if(lk.extra)items.push({l:"Extra button: "+lk.extra.label,k:"extraUrl",v:lk.extra.url,b:"extra"});
-      SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website")})})
+      SITEFILL={site:site,html:html,items:items.filter(function(x){return x.v}),people:d.people||[]};out=document.querySelector(".sfill .sfout")||out;out.innerHTML=html;if(STEPS[STEP].id==="start"&&got)go(stepId("details"));toast(got?"Filled in from "+d.website:"Nothing found on that website");if(WIZ_ON&&WZ===0&&got)wizGo(1)})})
   .catch(function(e){out.innerHTML='<p class="sfmsg">'+esc(e.message==="signin"?"Please sign in to the website editor first.":e.message)+'</p>'})
   .then(function(){btn.disabled=false;btn.textContent=keep;var b2=document.querySelector(".sfill .btn");if(b2){b2.disabled=false;b2.textContent=keep}})}
 /* NZ and Australian mobiles start 02 / 04 (or +64 2 / +61 4); the rest count as the office phone */
@@ -2541,6 +2590,69 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
     S.logoRatio=h0/w0;S.logoShow=true;var lo=inOrder("logo");if(lo)lo[1]=1;
     try{applyLogoCols(logoColours(im))}catch(e){}
     fin(true)};im.onerror=function(){fin(false)};im.src=src})}
+
+/* ===== Simple mode: one question per screen, the preview always on top, one big Next button.
+   The full editor stays one tap away ("Advanced") and both share the same signature. ===== */
+var WIZ_ON=false,WZ=0;
+var WZ_SCREENS=[
+  {id:"site",t:"What’s your website?",d:"We fill in your logo, colours and contact details from it."},
+  {id:"you",t:"Check your details",d:"Fix anything that’s wrong. Empty lines are left out."},
+  {id:"look",t:"Pick a look",d:"Tap a design. Your details and colours go straight into it."},
+  {id:"brand",t:"Logo and colours",d:"Change your logo or pick different colours."},
+  {id:"parts",t:"What to show",d:"Tick what appears in your signature and put it in order."},
+  {id:"done",t:"Save and use it",d:"Save it, then copy it into your email."}];
+ITEM.wzYou=function(){return[["text","name","Your name"],["text","role","Role"],["text","company","Business name"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"]]};
+ITEM.wzBrand=function(){return[["logoUp"],["animlogo"],["brandsets"]]};
+function wizPref(){try{return localStorage.getItem("ambs-sig-wiz")!=="0"}catch(e){return true}}
+function wizSet(on){try{localStorage.setItem("ambs-sig-wiz",on?"1":"0")}catch(e){}}
+function wizInit(){
+  var w=h2('<div class="wiz" role="main" aria-label="Email signature builder"><header class="wz-top"><div class="wz-tl"><b>Email signature</b><span class="wz-count"></span></div><div class="wz-tr"><button type="button" class="wz-ic" data-w="list" title="My signatures" aria-label="My signatures">📂</button><button type="button" class="wz-ic" data-w="menu" title="Menu" aria-label="Menu">☰</button><button type="button" class="wz-adv" data-w="adv">Advanced</button></div></header>'+
+    '<div class="wz-dots" aria-hidden="true"></div><div class="wz-pv"><div class="wz-pvi"></div><button type="button" class="wz-full" aria-label="Full-screen preview">⛶</button></div>'+
+    '<div class="wz-body"><h2 class="wz-h"></h2><p class="wz-d"></p><div class="wz-c"></div></div>'+
+    '<footer class="wz-nav"><button type="button" class="btn sec wz-back">Back</button><button type="button" class="btn wz-next">Next</button></footer></div>');
+  document.body.appendChild(w);
+  w.querySelector('[data-w="list"]').addEventListener("click",function(){openSigs()});
+  w.querySelector('[data-w="menu"]').addEventListener("click",function(){openMenu()});
+  w.querySelector('[data-w="adv"]').addEventListener("click",function(){wizOff(true)});
+  w.querySelector(".wz-full").addEventListener("click",function(){openPreview()});
+  w.querySelector(".wz-back").addEventListener("click",function(){wizGo(WZ-1)});
+  w.querySelector(".wz-next").addEventListener("click",function(){if(WZ===WZ_SCREENS.length-1){var sb=document.querySelector(".wiz .wz-save .btn");if(sb)sb.click();return}histPush(true);save();wizGo(WZ+1)});
+  var hb=h2('<button type="button" class="btn small wz-back2" id="wizBack">✨ Simple mode</button>');hb.addEventListener("click",function(){wizOn()});var hd=document.querySelector("header.top");if(hd)hd.insertBefore(hb,hd.querySelector("#undoBtn"));
+  var keep=0;try{keep=+localStorage.getItem("ambs-sig-wz")||0}catch(e){}
+  window.addEventListener("resize",function(){if(WIZ_ON)wizPv()});
+  if(wizPref())wizOn(keep);else wizOff(false)}
+function wizOn(at){WIZ_ON=true;wizSet(true);document.body.classList.add("wiz-on");var w=document.querySelector(".wiz");if(w)w.hidden=false;var b=$("wizBack");if(b)b.hidden=true;wizGo(at==null?WZ:at)}
+function wizOff(go2){WIZ_ON=false;wizSet(false);document.body.classList.remove("wiz-on");var w=document.querySelector(".wiz");if(w)w.hidden=true;var b=$("wizBack");if(b)b.hidden=false;
+  if(go2){var map={site:"start",you:"details",look:"template",brand:"edit",parts:"edit",done:"copy"};go(stepId(map[WZ_SCREENS[WZ].id]||"edit"));window.scrollTo(0,0);toast("Advanced editor. Tap ✨ Simple mode to go back.")}}
+function wizGo(i){var w=document.querySelector(".wiz");if(!w)return;WZ=Math.max(0,Math.min(WZ_SCREENS.length-1,i));try{localStorage.setItem("ambs-sig-wz",String(WZ))}catch(e){}
+  var sc=WZ_SCREENS[WZ],c=w.querySelector(".wz-c");w.dataset.screen=sc.id;
+  w.querySelector(".wz-count").textContent="Step "+(WZ+1)+" of "+WZ_SCREENS.length;
+  w.querySelector(".wz-dots").innerHTML=WZ_SCREENS.map(function(x,k){return'<i class="'+(k<WZ?"done":k===WZ?"on":"")+'"></i>'}).join("");
+  w.querySelector(".wz-h").textContent=sc.t;w.querySelector(".wz-d").textContent=sc.d;
+  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;
+  nx.textContent=WZ===WZ_SCREENS.length-1?"✓ Save and finish":WZ===0?"Skip, I’ll type my details":"Next: "+WZ_SCREENS[WZ+1].t;nx.classList.toggle("sec",WZ===0);
+  c.innerHTML="";wizBody(sc.id,c);w.querySelector(".wz-body").scrollTop=0;wizPv()}
+function wizBody(id,c){
+  if(id==="site"){c.appendChild(siteFillCard());var h=c.querySelector(".sfill h3");if(h)h.remove();var p=c.querySelector(".sfill>p");if(p)p.remove();
+    var alt=h2('<div class="wz-alt"><button type="button" class="linkbtn" data-k="open">📂 Open a saved signature</button><button type="button" class="linkbtn" data-k="new">＋ Start a new blank signature</button></div>');
+    alt.querySelector('[data-k="open"]').addEventListener("click",function(){openSigs()});alt.querySelector('[data-k="new"]').addEventListener("click",function(){askNew()});c.appendChild(alt);
+    setTimeout(function(){var i=c.querySelector("input");if(i&&window.innerWidth>760)i.focus()},50);return}
+  if(id==="you"){var ppl=SITEFILL&&SITEFILL.people||[];if(ppl.length>1){var pc=h2('<div class="wz-ppl"><small>People on your website: tap one</small></div>');ppl.forEach(function(pp){var b=h2('<button type="button" class="chip" aria-pressed="'+(S.name===pp.name)+'">'+esc(pp.name)+(pp.role?' · '+esc(pp.role):'')+'</button>');b.addEventListener("click",function(){S.name=pp.name;if(pp.role)S.role=pp.role;changed();wizGo(WZ)});pc.appendChild(b)});c.appendChild(pc)}
+    renderPart("wzYou",c,false);return}
+  if(id==="look"){var g=h2('<div class="tpl-grid wz-tpl"></div>');PRESETS.forEach(function(pr,i){var b=document.createElement("button");b.type="button";b.className="tcard";b.dataset.i=i;b.setAttribute("aria-pressed",String(S.template===pr[0]));
+      b.innerHTML='<span class="tthumb" aria-hidden="true"><span class="ts"></span></span><span class="tname"><b>'+esc(pr[0])+'</b><small>'+esc(pr[1])+'</small></span>';
+      b.addEventListener("click",function(){Object.assign(S,presetLook(pr));S.template=pr[0];changed();g.querySelectorAll(".tcard").forEach(function(y){y.setAttribute("aria-pressed",String(y===b))})});g.appendChild(b)});c.appendChild(g);drawThumbs(true);return}
+  if(id==="brand"){renderPart("wzBrand",c,false);var more=h2('<button type="button" class="linkbtn wz-more">More: dark mode, fonts, sizes and buttons → Advanced</button>');more.addEventListener("click",function(){wizOff(false);openItem("dark")});c.appendChild(more);return}
+  if(id==="parts"){var draw=function(){c.innerHTML="";c.appendChild(partsBody(draw))};draw();return}
+  if(id==="done"){var sv=h2('<div class="wz-save"><button type="button" class="btn">💾 Save this signature</button><span class="note"></span></div>');var nt=sv.querySelector(".note");nt.textContent=S._sigId?"Saved as “"+S._sigName+"”. Saving again updates it.":"Save it so you can change it later.";
+    sv.querySelector("button").addEventListener("click",function(){saveSig(false,this)});c.appendChild(sv);var cb=h2('<div class="wz-copy"></div>');c.appendChild(cb);drawCopy(cb);return}}
+/* the preview at the top of every screen: the whole signature, scaled to fit */
+function wizPv(){if(!WIZ_ON)return;var box=document.querySelector(".wiz .wz-pv"),inner=box&&box.querySelector(".wz-pvi");if(!inner)return;
+  inner.style.transform="none";inner.innerHTML=signature("preview");
+  var m=inner.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;inner.innerHTML=signature("preview")}}
+  var w=inner.scrollWidth||1,h=inner.scrollHeight||1,aw=box.clientWidth-24,ah=Math.round(window.innerHeight*(window.innerWidth<=760?.24:.34)),k=Math.min(1,aw/w,ah/h);
+  inner.style.transform="scale("+k+")";box.style.height=Math.ceil(h*k+24)+"px"}
+(function(){var u0=update;update=function(){var r=u0.apply(this,arguments);try{wizPv()}catch(e){}return r}})();
 /* tabs left open for a while: notice when a newer builder is live and offer a refresh (your work is saved in this browser) */
 (function(){if(!onAmbs())return;var first=null,shown=false;
   var check=function(){fetch("/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){var b=String(d&&d.build||"");if(!b)return;if(first===null){first=b;return}
@@ -2574,7 +2686,7 @@ function tidyBar(){if(window.innerWidth<=760||document.querySelector(".bar.tidy"
   bar.querySelectorAll(".seg[data-pv]").forEach(function(x){v.appendChild(x)});
   var pg=h2('<button type="button" class="bigbtn" id="pgBtn" title="Show where a phone screen ends">📱 Phone guide</button>');pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));
   pg.addEventListener("click",function(){S.phoneGuide=S.phoneGuide===false;pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));save();phoneGuide()});v.appendChild(pg);
-  [["movePv","✥ Move or add","Drag parts around, or add buttons, icons and pictures"],["testPv","🔗 Test links","Click the links to check where they go"],["fullPv","👁 Full view","See it as it will look in an email"],["bigPv",null,"Show the preview bigger"]].forEach(function(x){var b=$(x[0]);if(!b)return;if(x[1])b.textContent=x[1];b.title=x[2];t.appendChild(b)});
+  [["partsPv","☰ Parts","Show or hide parts, reorder contact lines and social icons"],["movePv","✥ Move or add","Drag parts around, or add buttons, icons and pictures"],["testPv","🔗 Test links","Click the links to check where they go"],["fullPv","👁 Full view","See it as it will look in an email"],["bigPv",null,"Show the preview bigger"]].forEach(function(x){var b=$(x[0]);if(!b)return;if(x[1])b.textContent=x[1];b.title=x[2];t.appendChild(b)});
   var fold=$("foldPv");if(fold)fold.hidden=true;
   r1.appendChild(l1);r1.appendChild(c1);r2.appendChild(v);r2.appendChild(t);bar.innerHTML="";bar.appendChild(r1);bar.appendChild(r2);if(fold)bar.appendChild(fold);bar.classList.add("tidy")}
 window.addEventListener("resize",function(){setTimeout(tidyBar,200)});
@@ -2620,8 +2732,8 @@ function init(){
   $("bigPv").addEventListener("click",function(){var on=document.querySelector(".app").classList.toggle("big");this.setAttribute("aria-pressed",String(on));this.textContent=on?"Smaller preview":"Bigger preview";setTimeout(fitPhone,60)});
   (function(){var stg=document.querySelector(".pv-col .stage");if(stg&&window.ResizeObserver){var lh=0;new ResizeObserver(function(){var hh=stg.clientHeight;if(Math.abs(hh-lh)>4){lh=hh;clearTimeout(window._fp);window._fp=setTimeout(fitPhone,80)}}).observe(stg)}})();
   $("copySig").addEventListener("click",function(){copySig(this)});$("copyCode").addEventListener("click",function(){copyCode(this)});
-  $("prevStep").addEventListener("click",function(){go(STEP-1)});$("skipStep").addEventListener("click",function(){histPush(true);save();go(stepId("copy"))});$("nextStep").addEventListener("click",function(){if(STEPS[STEP].id==="details"){histPush(true);save();toast("Details confirmed. Now pick a look.")}go(STEP+1);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
-  update();go(0);
+  $("partsPv").addEventListener("click",openParts);$("prevStep").addEventListener("click",function(){go(STEP-1)});$("skipStep").addEventListener("click",function(){histPush(true);save();go(stepId("copy"))});$("nextStep").addEventListener("click",function(){if(STEPS[STEP].id==="details"){histPush(true);save();toast("Details confirmed. Now pick a look.")}go(STEP+1);if(window.innerWidth<=1100)document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"})});
+  update();go(0);wizInit();
 }
 function toast(t){var el=document.createElement("div");el.className="toast";el.setAttribute("role","status");el.textContent=t;document.body.appendChild(el);setTimeout(function(){el.remove()},2000)}
 function flash(b,t){var o=b.dataset.label||(b.dataset.label=b.textContent);b.textContent=t;b.classList.add("done");setTimeout(function(){b.textContent=o;b.classList.remove("done")},2200)}
