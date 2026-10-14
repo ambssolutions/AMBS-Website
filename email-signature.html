@@ -794,6 +794,7 @@ body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidde
 .wz-web{margin-top:12px}.wz-web .sfill{padding:0;border:0;background:none}.wz-c .sfill .row{flex-direction:row!important;flex-wrap:nowrap}.wz-c .sfill input{flex:1 1 auto!important;height:50px!important;padding:0 14px!important}.wz-c .sfill .btn{width:auto!important;flex:none;height:50px;padding:0 18px!important}
 .wz-open{margin-top:18px}.wz-code{width:100%;box-sizing:border-box;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;background:var(--soft);color:var(--ink)}.wiz .wz-nav[hidden],.wiz .wz-pv[hidden]{display:none}
 @media (max-width:420px){.wz-opt{padding:12px}.wz-opt small{font-size:.76rem}}
+.wz-c .foundbox{margin-top:14px}.wz-edit{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.wz-edit summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:.9rem}.wz-edit>div{padding:0 14px 12px}
 .wz-back2{margin-right:6px}.toast{z-index:90}
 </style>
 
@@ -2605,6 +2606,8 @@ var WZ_SCREENS=[
   {id:"brand",t:"Logo and colours",d:"Change your logo or pick different colours."},
   {id:"parts",t:"What to show",d:"Tick what appears in your signature and put it in order."},
   {id:"done",t:"Save and use it",d:"Save it, then copy it into your email."}];
+ITEM.wzName=function(){return[["text","name","Your name"],["text","role","Role"]]};
+ITEM.wzRest=function(){return[["text","company","Business name"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"]]};
 ITEM.wzYou=function(){return[["text","name","Your name"],["text","role","Role"],["text","company","Business name"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"]]};
 ITEM.wzBrand=function(){return[["logoUp"],["animlogo"],["brandsets"]]};
 function wizPref(){try{return localStorage.getItem("ambs-sig-wiz")!=="0"}catch(e){return true}}
@@ -2633,7 +2636,7 @@ function wizGo(i){var w=document.querySelector(".wiz");if(!w)return;WZ=Math.max(
   w.querySelector(".wz-count").textContent="Step "+(WZ+1)+" of "+WZ_SCREENS.length;
   w.querySelector(".wz-dots").innerHTML=WZ_SCREENS.map(function(x,k){return'<i class="'+(k<WZ?"done":k===WZ?"on":"")+'"></i>'}).join("");
   w.querySelector(".wz-h").textContent=sc.t;w.querySelector(".wz-d").textContent=sc.d;
-  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;w.querySelector(".wz-nav").hidden=WZ===0;w.querySelector(".wz-pv").hidden=sc.id==="site";
+  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;w.querySelector(".wz-nav").hidden=WZ===0;w.querySelector(".wz-pv").hidden=sc.id==="site"||sc.id==="you";
   nx.textContent=WZ_TPL&&sc.id==="look"?"Next: Add your details":WZ===WZ_SCREENS.length-1?"✓ Save and finish":WZ===0?"Skip, I’ll type my details":"Next: "+WZ_SCREENS[WZ+1].t;nx.classList.toggle("sec",WZ===0);
   c.innerHTML="";wizBody(sc.id,c);w.querySelector(".wz-body").scrollTop=0;wizPv()}
 function wizBody(id,c){
@@ -2652,7 +2655,13 @@ function wizBody(id,c){
     opts.querySelector('[data-o="html"]').addEventListener("click",wizHtml);
     var sv=h2('<button type="button" class="linkbtn wz-open">📂 Open a saved signature</button>');sv.addEventListener("click",function(){openSigs()});c.appendChild(sv);return}
   if(id==="you"){var ppl=SITEFILL&&SITEFILL.people||[];if(ppl.length){var pc=h2('<div class="wz-ppl"><small>Suggested from your website. Is one of these you? Tap to add.</small></div>');ppl.forEach(function(pp){var b=h2('<button type="button" class="chip" aria-pressed="'+(S.name===pp.name)+'">'+(S.name===pp.name?"✓ ":"＋ ")+esc(pp.name)+(pp.role?' · '+esc(pp.role):'')+'</button>');b.addEventListener("click",function(){S.name=pp.name;if(pp.role)S.role=pp.role;changed();wizGo(WZ)});pc.appendChild(b)});c.appendChild(pc)}
-    renderPart("wzYou",c,false);var ks=ITEM.wzYou().map(function(f){return f[1]});c.querySelectorAll(".ied-b input").forEach(function(inp,n){var k=ks[n];if(k)inp.placeholder=k==="name"?"Your name":k==="role"?"Your role":"e.g. "+EXAMPLE[k]});return}
+    var ph=function(part,box){var ks=ITEM[part]().map(function(f){return f[1]});box.querySelectorAll(".ied-b input").forEach(function(inp,n){var k=ks[n];if(k)inp.placeholder=k==="name"?"Your name":k==="role"?"Your role":"e.g. "+EXAMPLE[k]})};
+    var it=SITEFILL&&SITEFILL.items||[];
+    if(!it.length){renderPart("wzYou",c,false);ph("wzYou",c);return}
+    /* filled from a website: your name, then a simple list of what we found to untick */
+    var nm=h2('<div></div>');c.appendChild(nm);renderPart("wzName",nm,false);ph("wzName",nm);
+    var fb=foundBox();var pp=fb.querySelector(".fbppl");if(pp)pp.remove();var hb=fb.querySelector("b");if(hb)hb.textContent="Pulled from "+SITEFILL.site;c.appendChild(fb);
+    var ed=h2('<details class="wz-edit"><summary>Something wrong? Edit the details</summary><div></div></details>');c.appendChild(ed);renderPart("wzRest",ed.querySelector("div"),false);ph("wzRest",ed);return}
   if(id==="look"){var g=h2('<div class="tpl-grid wz-tpl"></div>');PRESETS.forEach(function(pr,i){var b=document.createElement("button");b.type="button";b.className="tcard";b.dataset.i=i;b.setAttribute("aria-pressed",String(S.template===pr[0]));
       b.innerHTML='<span class="tthumb" aria-hidden="true"><span class="ts"></span></span><span class="tname"><b>'+esc(pr[0])+'</b><small>'+esc(pr[1])+'</small></span>';
       b.addEventListener("click",function(){Object.assign(S,presetLook(pr));S.template=pr[0];changed();g.querySelectorAll(".tcard").forEach(function(y){y.setAttribute("aria-pressed",String(y===b))})});g.appendChild(b)});c.appendChild(g);drawThumbs(true);return}
