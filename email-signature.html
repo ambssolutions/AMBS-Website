@@ -2171,7 +2171,7 @@ function editSheet(id,tab){var key=partKey(id),isC=String(id).indexOf("c-")===0,
 function newSig(keepBrand){var old=S,d=defaults();d.maker=mkDefaults();
   if(keepBrand){["company","website","location","phone","logoUrl","logoData","logoRatio","logoShow","logoPos","logoBg","logoSize","logoMatch","brandP","brandS","brandA","palette","social","tagline","bookLabel","bookUrl","reviewLabel","reviewUrl","extraLabel","extraUrl","bannerUrl","bannerLink","bannerW","bannerMade","maker","disclaimer","disclaimerLabel","disclaimerJustify","emb","emboss"].concat(LOOK).forEach(function(k){if(old[k]!==undefined)d[k]=JSON.parse(JSON.stringify(old[k]))});d.custom=JSON.parse(JSON.stringify(old.custom||[]));d.template=old.template}
   else{Object.assign(d,{company:"",website:"",location:"",phone:"",logoUrl:"",logoData:"",logoShow:false,brandP:"#2563eb",brandS:"#0f766e",brandA:"#f59e0b",palette:["#2563eb","#0f766e","#f59e0b"],bookLabel:"",bookUrl:"",reviewLabel:"",reviewUrl:"",extraLabel:"",extraUrl:"",bannerUrl:"",bannerLink:"",tagline:"",social:{instagram:"",tiktok:"",facebook:"",linkedin:"",whatsapp:"",youtube:"",x:"",google:""},disclaimer:"This email and any attachments are confidential and meant only for the person they are addressed to. If you received it by mistake, please let us know and delete it."});placeMedia(d,"both",true)}
-  d.name="Your Name";d.role="Your role";d.mobile="";d.email="";d.photoUrl="";d.photoData="";d.useCode=false;d.code="";
+  d.name="";d.role="";d.mobile="";d.email="";d.photoUrl="";d.photoData="";d.useCode=false;d.code="";
   if(keepBrand&&old.bannerMade&&!url(old.bannerUrl)&&uploaded.banner){}else uploaded={logo:null,photo:null,banner:null};
   S=d;visited={0:1};HIST=[];HI=-1;save();histPush(true);update();drawFlow();sigTitle();go(keepBrand?2:0);
   toast(keepBrand?"New signature with the same brand. Add the person’s details, then press 💾 Save.":"New signature. Start with your brand, then press 💾 Save.")}
@@ -2392,7 +2392,7 @@ function presetLook(p){var d=defaults(),o={};LOOK.forEach(function(k){if(k==="si
   var mine=(S.order||[]).filter(function(x){return String(x[0]).indexOf("c-")===0});mine.forEach(function(m){var z=o.order.filter(function(x){return x[2]===m[2]}).length?null:null;var at=m[2]==="side"?o.order.filter(function(x){return x[2]==="side"}).length:o.order.length;o.order.splice(at,0,m.slice())});return o}
 var thumbT=0;
 function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard"))return;thumbT=setTimeout(function(){var keep=S,kb=barH;
-  [].forEach.call(document.querySelectorAll(".tcard"),function(card){var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=JSON.parse(JSON.stringify(keep));if(u)useMyTpl(u,t);else if(p)Object.assign(t,presetLook(p));else return;
+  [].forEach.call(document.querySelectorAll(".tcard"),function(card){var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=exampleInto(JSON.parse(JSON.stringify(keep)));if(u)useMyTpl(u,t);else if(p)Object.assign(t,presetLook(p));else return;
     if(!SOCIAL.some(function(k){return t.social[k]}))t.social={facebook:"x",tiktok:"x",linkedin:"x",instagram:"x"};
     if(t.signoffStyle==="animated")t.signoffStyle="still";
     S=t;barH=t.photoShow?Math.max(110,t.photoSize):110;t.useCode=false;card.querySelector(".ts").innerHTML=signature("preview");card.setAttribute("aria-pressed",String(keep.template===(u?u.name:p[0])))});
@@ -2570,7 +2570,7 @@ function stillLogo(src,cb){var done=false,fin=function(s,anim){if(!done){done=tr
           var v=opaqueShare(c,w,h);if(v>best){best=v;bestUrl=c.toDataURL("image/png")}})})},Promise.resolve()).then(function(){dec.close();fin(bestUrl||src,!!bestUrl)})})}).catch(function(){viaPage()})}catch(e){viaPage()}}
 function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.website||"").split("/")[0]);
   /* a different business: the AMBS sample details go, whatever the website didn't give stays empty to fill in */
-  if(other){if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram="";
+  if(other){S.name="";S.role="";if(S.phone==="+64 22 099 9578")S.phone="";if(String(S.mobile||"").replace(/\D/g,"")==="64220999578")S.mobile="";if(S.email==="hello@ambs.co.nz")S.email="";if(S.location==="Auckland, NZ")S.location="";if(S.social.instagram==="ambssolutions")S.social.instagram="";
     /* AMBS's own booking and review links never go on another business's buttons */
     if(/ambs\.co\.nz/i.test(S.bookUrl||""))S.bookUrl="";if(/Cayst76Z-_hGEBM/.test(S.reviewUrl||""))S.reviewUrl="";if(/ambs\.co\.nz/i.test(S.extraUrl||""))S.extraUrl="";if(/ambs\.co\.nz/i.test(S.bannerLink||""))S.bannerLink=""}
   /* booking, Google review, Google profile and a main call-to-action from the website */
@@ -2620,7 +2620,7 @@ function wizInit(){
   w.querySelector('[data-w="adv"]').addEventListener("click",function(){wizOff(true)});
   w.querySelector(".wz-full").addEventListener("click",function(){openPreview()});
   w.querySelector(".wz-back").addEventListener("click",function(){wizGo(WZ-1)});
-  w.querySelector(".wz-next").addEventListener("click",function(){if(WZ===WZ_SCREENS.length-1){var sb=document.querySelector(".wiz .wz-save .btn");if(sb)sb.click();return}histPush(true);save();wizGo(WZ+1)});
+  w.querySelector(".wz-next").addEventListener("click",function(){if(WZ_TPL&&WZ_SCREENS[WZ].id==="look"){clearExample();histPush(true);wizGo(1);return}if(WZ_TPL&&WZ_SCREENS[WZ].id==="you"){WZ_TPL=false;histPush(true);wizGo(3);return}if(WZ===WZ_SCREENS.length-1){var sb=document.querySelector(".wiz .wz-save .btn");if(sb)sb.click();return}histPush(true);save();wizGo(WZ+1)});
   var hb=h2('<button type="button" class="btn small wz-back2" id="wizBack">✨ Simple mode</button>');hb.addEventListener("click",function(){wizOn()});var hd=document.querySelector("header.top");if(hd)hd.insertBefore(hb,hd.querySelector("#undoBtn"));
   var keep=0;try{keep=+localStorage.getItem("ambs-sig-wz")||0}catch(e){}
   window.addEventListener("resize",function(){if(WIZ_ON)wizPv()});
@@ -2634,7 +2634,7 @@ function wizGo(i){var w=document.querySelector(".wiz");if(!w)return;WZ=Math.max(
   w.querySelector(".wz-dots").innerHTML=WZ_SCREENS.map(function(x,k){return'<i class="'+(k<WZ?"done":k===WZ?"on":"")+'"></i>'}).join("");
   w.querySelector(".wz-h").textContent=sc.t;w.querySelector(".wz-d").textContent=sc.d;
   var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;w.querySelector(".wz-nav").hidden=WZ===0;w.querySelector(".wz-pv").hidden=sc.id==="site";
-  nx.textContent=WZ===WZ_SCREENS.length-1?"✓ Save and finish":WZ===0?"Skip, I’ll type my details":"Next: "+WZ_SCREENS[WZ+1].t;nx.classList.toggle("sec",WZ===0);
+  nx.textContent=WZ_TPL&&sc.id==="look"?"Next: Add your details":WZ===WZ_SCREENS.length-1?"✓ Save and finish":WZ===0?"Skip, I’ll type my details":"Next: "+WZ_SCREENS[WZ+1].t;nx.classList.toggle("sec",WZ===0);
   c.innerHTML="";wizBody(sc.id,c);w.querySelector(".wz-body").scrollTop=0;wizPv()}
 function wizBody(id,c){
   if(id==="site"){
@@ -2647,12 +2647,12 @@ function wizBody(id,c){
     var fc=siteFillCard();fc.querySelectorAll("h3,p").forEach(function(x){if(!x.classList.contains("sfmsg"))x.remove()});web.appendChild(fc);
     var pick=function(o){opts.querySelectorAll(".wz-opt").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.o===o))})};
     opts.querySelector('[data-o="web"]').addEventListener("click",function(){pick("web");web.hidden=false;var i2=web.querySelector("input");if(i2)i2.focus()});
-    opts.querySelector('[data-o="tpl"]').addEventListener("click",function(){wizGo(2)});
-    opts.querySelector('[data-o="new"]').addEventListener("click",function(){newSig(false);wizGo(1);toast("New blank signature")});
+    opts.querySelector('[data-o="tpl"]').addEventListener("click",function(){startFromTemplate();wizGo(2)});
+    opts.querySelector('[data-o="new"]').addEventListener("click",function(){WZ_TPL=false;newSig(false);wizGo(1);toast("New blank signature")});
     opts.querySelector('[data-o="html"]').addEventListener("click",wizHtml);
     var sv=h2('<button type="button" class="linkbtn wz-open">📂 Open a saved signature</button>');sv.addEventListener("click",function(){openSigs()});c.appendChild(sv);return}
   if(id==="you"){var ppl=SITEFILL&&SITEFILL.people||[];if(ppl.length){var pc=h2('<div class="wz-ppl"><small>Suggested from your website. Is one of these you? Tap to add.</small></div>');ppl.forEach(function(pp){var b=h2('<button type="button" class="chip" aria-pressed="'+(S.name===pp.name)+'">'+(S.name===pp.name?"✓ ":"＋ ")+esc(pp.name)+(pp.role?' · '+esc(pp.role):'')+'</button>');b.addEventListener("click",function(){S.name=pp.name;if(pp.role)S.role=pp.role;changed();wizGo(WZ)});pc.appendChild(b)});c.appendChild(pc)}
-    renderPart("wzYou",c,false);return}
+    renderPart("wzYou",c,false);var ks=ITEM.wzYou().map(function(f){return f[1]});c.querySelectorAll(".ied-b input").forEach(function(inp,n){var k=ks[n];if(k)inp.placeholder=k==="name"?"Your name":k==="role"?"Your role":"e.g. "+EXAMPLE[k]});return}
   if(id==="look"){var g=h2('<div class="tpl-grid wz-tpl"></div>');PRESETS.forEach(function(pr,i){var b=document.createElement("button");b.type="button";b.className="tcard";b.dataset.i=i;b.setAttribute("aria-pressed",String(S.template===pr[0]));
       b.innerHTML='<span class="tthumb" aria-hidden="true"><span class="ts"></span></span><span class="tname"><b>'+esc(pr[0])+'</b><small>'+esc(pr[1])+'</small></span>';
       b.addEventListener("click",function(){Object.assign(S,presetLook(pr));S.template=pr[0];changed();g.querySelectorAll(".tcard").forEach(function(y){y.setAttribute("aria-pressed",String(y===b))})});g.appendChild(b)});c.appendChild(g);drawThumbs(true);return}
@@ -2660,6 +2660,16 @@ function wizBody(id,c){
   if(id==="parts"){var draw=function(){c.innerHTML="";c.appendChild(partsBody(draw))};draw();return}
   if(id==="done"){var sv=h2('<div class="wz-save"><button type="button" class="btn">💾 Save this signature</button><span class="note"></span></div>');var nt=sv.querySelector(".note");nt.textContent=S._sigId?"Saved as “"+S._sigName+"”. Saving again updates it.":"Save it so you can change it later.";
     sv.querySelector("button").addEventListener("click",function(){saveSig(false,this)});c.appendChild(sv);var cb=h2('<div class="wz-copy"></div>');c.appendChild(cb);drawCopy(cb);return}}
+/* made-up details for trying templates: nobody's real name, number or address */
+function exampleLogo(){var svg='<svg xmlns="http://www.w3.org/2000/svg" width="400" height="140" viewBox="0 0 400 140"><rect x="4" y="4" width="392" height="132" rx="20" fill="#eef2ff" stroke="#2563eb" stroke-width="4" stroke-dasharray="14 10"/><text x="200" y="88" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="46" font-weight="700" fill="#2563eb">YOUR LOGO</text></svg>';return"data:image/svg+xml;base64,"+btoa(svg)}
+var EXAMPLE={name:"Alex Taylor",role:"Director",company:"Example Co",mobile:"021 123 4567",phone:"09 123 4567",email:"alex@example.co.nz",website:"example.co.nz",location:"Auckland, NZ",
+  tagline:"Helping local businesses grow.",bookLabel:"Book a meeting",bookUrl:"https://example.co.nz/book",reviewLabel:"Review us on Google",reviewUrl:"https://example.co.nz/review",extraLabel:"",extraUrl:"",
+  social:{facebook:"example",instagram:"example",linkedin:"example",tiktok:"",whatsapp:"",youtube:"",x:"",google:""}};
+function exampleInto(t){Object.assign(t,JSON.parse(JSON.stringify(EXAMPLE)));t.logoData=exampleLogo();t.logoUrl="";t.logoRatio=0.35;t.logoShow=true;t.logoAnim=false;t.photoData="";t.photoUrl="";t.useCode=false;t.hideC=[];t.hideS=[];return t}
+var WZ_TPL=false;
+function startFromTemplate(){WZ_TPL=true;newSig(false);exampleInto(S);S.brandP="#2563eb";S.brandS="#0f766e";S.brandA="#f59e0b";S.palette=["#2563eb","#0f766e","#f59e0b"];var lo=inOrder("logo");if(lo)lo[1]=1;save();changed();toast("Example details shown. Pick a look, then add your own details.")}
+function clearExample(){["name","role","company","mobile","phone","email","website","location","tagline"].forEach(function(k){if(S[k]===EXAMPLE[k])S[k]=""});
+  ["book","review"].forEach(function(k){if(S[k+"Url"]===EXAMPLE[k+"Url"]){S[k+"Url"]="";}});SOCIAL.forEach(function(k){if(S.social[k]==="example")S.social[k]=""});save();changed()}
 function wizHtml(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" aria-label="Paste HTML code"><div class="sbox"><div class="sh"><b>Paste your HTML code</b><button type="button" class="btn sec small sx">Cancel</button></div><textarea class="wz-code" rows="8" placeholder="<table>…</table>"></textarea><div class="acts"><button type="button" class="btn wz-use">Use this code</button><button type="button" class="btn sec wz-file">Upload an .html file</button></div></div></div>');
   document.body.appendChild(ov);var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);var ta=ov.querySelector("textarea");ta.focus();
   ov.querySelector(".wz-file").addEventListener("click",function(){close();$("htmlFile").click();setTimeout(function(){wizGo(5)},400)});
