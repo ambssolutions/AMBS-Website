@@ -782,7 +782,7 @@ body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidde
 .wz-body{flex:1;min-height:0;overflow:auto;max-width:728px;width:100%;margin:0 auto;padding:16px 16px 24px;box-sizing:border-box;-webkit-overflow-scrolling:touch}
 .wz-h{font-family:var(--display);font-size:1.45rem;font-weight:800;margin:0 0 4px;text-wrap:balance}.wz-d{margin:0 0 14px;color:var(--muted);font-size:.92rem}
 .wz-c .ied-b{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))!important}.wz-c .part{border:0!important;padding:0!important}
-.wz-c .sfill{padding:0;border:0;background:none}.wz-c .sfill .row{display:flex;flex-direction:column;gap:10px}.wz-c .sfill input{font-size:1.05rem;padding:14px;border-radius:12px}.wz-c .sfill .btn{width:100%;padding:14px;font-size:1rem}
+.wz-c .sfill{padding:0;border:0;background:none}
 .wz-alt{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
 .wz-ppl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.wz-ppl small{flex-basis:100%;color:var(--muted)}.wz-ppl .chip[aria-pressed=true]{background:var(--ink);color:var(--panel)}
 .wz-tpl{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))!important;grid-auto-flow:row!important;overflow:visible!important;max-height:none!important}
@@ -790,11 +790,13 @@ body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidde
 .wz-nav{flex:none;display:flex;gap:10px;max-width:728px;width:100%;margin:0 auto;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));box-sizing:border-box;border-top:1px solid var(--line);background:var(--panel)}
 .wz-nav .btn{flex:1;min-height:50px;font-size:1rem;border-radius:12px}.wz-nav .wz-back{flex:0 0 30%}.wz-nav [hidden]{display:none}
 @media (min-width:761px){.wz-nav{border:1px solid var(--line);border-radius:14px;margin-bottom:14px}}
+.wz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wz-opt{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px;border:1.5px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}.wz-opt span{font-size:1.4rem;line-height:1;font-weight:800}.wz-opt b{font-size:.98rem}.wz-opt small{color:var(--muted);font-size:.8rem;line-height:1.3}.wz-opt:hover,.wz-opt[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px rgba(36,179,40,.35)}
+.wz-web{margin-top:12px}.wz-web .sfill{padding:0;border:0;background:none}.wz-c .sfill .row{flex-direction:row!important;flex-wrap:nowrap}.wz-c .sfill input{flex:1 1 auto!important;height:50px!important;padding:0 14px!important}.wz-c .sfill .btn{width:auto!important;flex:none;height:50px;padding:0 18px!important}
+.wz-open{margin-top:18px}.wz-code{width:100%;box-sizing:border-box;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;background:var(--soft);color:var(--ink)}.wiz .wz-nav[hidden]{display:none}
+@media (max-width:420px){.wz-opt{padding:12px}.wz-opt small{font-size:.76rem}}
 .wz-back2{margin-right:6px}.toast{z-index:90}
 </style>
 
-<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
 </head><body>
 <div class="wrap">
   <header class="top">
@@ -2595,7 +2597,7 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
    The full editor stays one tap away ("Advanced") and both share the same signature. ===== */
 var WIZ_ON=false,WZ=0;
 var WZ_SCREENS=[
-  {id:"site",t:"What’s your website?",d:"We fill in your logo, colours and contact details from it."},
+  {id:"site",t:"How do you want to start?",d:"Pick one. You can change everything after."},
   {id:"you",t:"Check your details",d:"Fix anything that’s wrong. Empty lines are left out."},
   {id:"look",t:"Pick a look",d:"Tap a design. Your details and colours go straight into it."},
   {id:"brand",t:"Logo and colours",d:"Change your logo or pick different colours."},
@@ -2629,14 +2631,24 @@ function wizGo(i){var w=document.querySelector(".wiz");if(!w)return;WZ=Math.max(
   w.querySelector(".wz-count").textContent="Step "+(WZ+1)+" of "+WZ_SCREENS.length;
   w.querySelector(".wz-dots").innerHTML=WZ_SCREENS.map(function(x,k){return'<i class="'+(k<WZ?"done":k===WZ?"on":"")+'"></i>'}).join("");
   w.querySelector(".wz-h").textContent=sc.t;w.querySelector(".wz-d").textContent=sc.d;
-  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;
+  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;w.querySelector(".wz-nav").hidden=WZ===0;
   nx.textContent=WZ===WZ_SCREENS.length-1?"✓ Save and finish":WZ===0?"Skip, I’ll type my details":"Next: "+WZ_SCREENS[WZ+1].t;nx.classList.toggle("sec",WZ===0);
   c.innerHTML="";wizBody(sc.id,c);w.querySelector(".wz-body").scrollTop=0;wizPv()}
 function wizBody(id,c){
-  if(id==="site"){c.appendChild(siteFillCard());var h=c.querySelector(".sfill h3");if(h)h.remove();var p=c.querySelector(".sfill>p");if(p)p.remove();
-    var alt=h2('<div class="wz-alt"><button type="button" class="linkbtn" data-k="open">📂 Open a saved signature</button><button type="button" class="linkbtn" data-k="new">＋ Start a new blank signature</button></div>');
-    alt.querySelector('[data-k="open"]').addEventListener("click",function(){openSigs()});alt.querySelector('[data-k="new"]').addEventListener("click",function(){askNew()});c.appendChild(alt);
-    setTimeout(function(){var i=c.querySelector("input");if(i&&window.innerWidth>760)i.focus()},50);return}
+  if(id==="site"){
+    var opts=h2('<div class="wz-opts">'+
+      '<button type="button" class="wz-opt" data-o="web"><span>🌐</span><b>Enter your website</b><small>We fill in your logo, colours and details</small></button>'+
+      '<button type="button" class="wz-opt" data-o="tpl"><span>🎨</span><b>Use a template</b><small>Pick a ready-made design</small></button>'+
+      '<button type="button" class="wz-opt" data-o="new"><span>✏️</span><b>Start from scratch</b><small>A blank signature to fill in</small></button>'+
+      '<button type="button" class="wz-opt" data-o="html"><span>&lt;/&gt;</span><b>Paste HTML code</b><small>Use a signature you already have</small></button></div>');
+    c.appendChild(opts);var web=h2('<div class="wz-web" hidden></div>');c.appendChild(web);
+    var fc=siteFillCard();fc.querySelectorAll("h3,p").forEach(function(x){if(!x.classList.contains("sfmsg"))x.remove()});web.appendChild(fc);
+    var pick=function(o){opts.querySelectorAll(".wz-opt").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.o===o))})};
+    opts.querySelector('[data-o="web"]').addEventListener("click",function(){pick("web");web.hidden=false;var i2=web.querySelector("input");if(i2)i2.focus()});
+    opts.querySelector('[data-o="tpl"]').addEventListener("click",function(){wizGo(2)});
+    opts.querySelector('[data-o="new"]').addEventListener("click",function(){newSig(false);wizGo(1);toast("New blank signature")});
+    opts.querySelector('[data-o="html"]').addEventListener("click",wizHtml);
+    var sv=h2('<button type="button" class="linkbtn wz-open">📂 Open a saved signature</button>');sv.addEventListener("click",function(){openSigs()});c.appendChild(sv);return}
   if(id==="you"){var ppl=SITEFILL&&SITEFILL.people||[];if(ppl.length>1){var pc=h2('<div class="wz-ppl"><small>People on your website: tap one</small></div>');ppl.forEach(function(pp){var b=h2('<button type="button" class="chip" aria-pressed="'+(S.name===pp.name)+'">'+esc(pp.name)+(pp.role?' · '+esc(pp.role):'')+'</button>');b.addEventListener("click",function(){S.name=pp.name;if(pp.role)S.role=pp.role;changed();wizGo(WZ)});pc.appendChild(b)});c.appendChild(pc)}
     renderPart("wzYou",c,false);return}
   if(id==="look"){var g=h2('<div class="tpl-grid wz-tpl"></div>');PRESETS.forEach(function(pr,i){var b=document.createElement("button");b.type="button";b.className="tcard";b.dataset.i=i;b.setAttribute("aria-pressed",String(S.template===pr[0]));
@@ -2646,6 +2658,10 @@ function wizBody(id,c){
   if(id==="parts"){var draw=function(){c.innerHTML="";c.appendChild(partsBody(draw))};draw();return}
   if(id==="done"){var sv=h2('<div class="wz-save"><button type="button" class="btn">💾 Save this signature</button><span class="note"></span></div>');var nt=sv.querySelector(".note");nt.textContent=S._sigId?"Saved as “"+S._sigName+"”. Saving again updates it.":"Save it so you can change it later.";
     sv.querySelector("button").addEventListener("click",function(){saveSig(false,this)});c.appendChild(sv);var cb=h2('<div class="wz-copy"></div>');c.appendChild(cb);drawCopy(cb);return}}
+function wizHtml(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" aria-label="Paste HTML code"><div class="sbox"><div class="sh"><b>Paste your HTML code</b><button type="button" class="btn sec small sx">Cancel</button></div><textarea class="wz-code" rows="8" placeholder="<table>…</table>"></textarea><div class="acts"><button type="button" class="btn wz-use">Use this code</button><button type="button" class="btn sec wz-file">Upload an .html file</button></div></div></div>');
+  document.body.appendChild(ov);var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);var ta=ov.querySelector("textarea");ta.focus();
+  ov.querySelector(".wz-file").addEventListener("click",function(){close();$("htmlFile").click();setTimeout(function(){wizGo(5)},400)});
+  ov.querySelector(".wz-use").addEventListener("click",function(){var code=ta.value.trim();if(!/<[a-z][\s\S]*>/i.test(code)){toast("That doesn’t look like HTML code.");return}close();S.code=code;S.useCode=true;save();update();wizGo(5);toast("Your code is in. Save it, then copy it.")})}
 /* the preview at the top of every screen: the whole signature, scaled to fit */
 function wizPv(){if(!WIZ_ON)return;var box=document.querySelector(".wiz .wz-pv"),inner=box&&box.querySelector(".wz-pvi");if(!inner)return;
   inner.style.transform="none";inner.innerHTML=signature("preview");
