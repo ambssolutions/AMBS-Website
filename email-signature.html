@@ -797,6 +797,7 @@ body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidde
 .wz-c .foundbox{margin-top:14px}.wz-edit{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.wz-edit summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:.9rem}.wz-edit>div{padding:0 14px 12px}
 .wz-seg,.wz-cat{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;margin-bottom:10px}.wz-seg>span,.wz-cat>span{font-weight:700;font-size:.86rem;min-width:110px}.wz-seg .seg button{padding:7px 12px}
 .wz-cat .wz-filt{flex:1 1 220px;min-width:0;display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:thin}.wz-filt .chip{flex:none;white-space:nowrap}.wz-filt .chip small{opacity:.6;font-weight:600}.wz-filt .chip[aria-pressed=true]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.wz-h4{margin:16px 0 4px;font-size:.92rem}
 .wz-back2{margin-right:6px}.toast{z-index:90}
 </style>
 
@@ -2607,6 +2608,7 @@ var WZ_SCREENS=[
   {id:"site",t:"How do you want to start?",d:"Pick one. You can change everything after."},
   {id:"you",t:"Check your details",d:"Fix anything that’s wrong. Empty lines are left out."},
   {id:"look",t:"Pick a look",d:"Tap a design. Your details and colours go straight into it."},
+  {id:"arrange",t:"Move things around",d:"Put your logo where you like and change the order of the parts."},
   {id:"brand",t:"Logo and colours",d:"Change your logo or pick different colours."},
   {id:"parts",t:"What to show",d:"Tick what appears in your signature and put it in order."},
   {id:"done",t:"Save and use it",d:"Save it, then copy it into your email."}];
@@ -2614,6 +2616,7 @@ ITEM.wzName=function(){return[["text","name","Your name"],["text","role","Role"]
 ITEM.wzRest=function(){return[["text","company","Business name"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"]]};
 ITEM.wzYou=function(){return[["text","name","Your name"],["text","role","Role"],["text","company","Business name"],["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"]]};
 ITEM.wzBrand=function(){return[["logoUp"],["animlogo"],["brandsets"]]};
+function stepWz(id){for(var i=0;i<WZ_SCREENS.length;i++)if(WZ_SCREENS[i].id===id)return i;return 0}
 function wizPref(){try{return localStorage.getItem("ambs-sig-wiz")!=="0"}catch(e){return true}}
 function wizSet(on){try{localStorage.setItem("ambs-sig-wiz",on?"1":"0")}catch(e){}}
 function wizInit(){
@@ -2627,7 +2630,7 @@ function wizInit(){
   w.querySelector('[data-w="adv"]').addEventListener("click",function(){wizOff(true)});
   w.querySelector(".wz-full").addEventListener("click",function(){openPreview()});
   w.querySelector(".wz-back").addEventListener("click",function(){wizGo(WZ-1)});
-  w.querySelector(".wz-next").addEventListener("click",function(){if(WZ_TPL&&WZ_SCREENS[WZ].id==="look"){clearExample();histPush(true);wizGo(1);return}if(WZ_TPL&&WZ_SCREENS[WZ].id==="you"){WZ_TPL=false;histPush(true);wizGo(3);return}if(WZ===WZ_SCREENS.length-1){var sb=document.querySelector(".wiz .wz-save .btn");if(sb)sb.click();return}histPush(true);save();wizGo(WZ+1)});
+  w.querySelector(".wz-next").addEventListener("click",function(){if(WZ_TPL&&WZ_SCREENS[WZ].id==="look"){clearExample();histPush(true);wizGo(1);return}if(WZ_TPL&&WZ_SCREENS[WZ].id==="you"){WZ_TPL=false;histPush(true);wizGo(stepWz("arrange"));return}if(WZ===WZ_SCREENS.length-1){var sb=document.querySelector(".wiz .wz-save .btn");if(sb)sb.click();return}histPush(true);save();wizGo(WZ+1)});
   var hb=h2('<button type="button" class="btn small wz-back2" id="wizBack">✨ Simple mode</button>');hb.addEventListener("click",function(){wizOn()});var hd=document.querySelector("header.top");if(hd)hd.insertBefore(hb,hd.querySelector("#undoBtn"));
   var keep=0;try{keep=+localStorage.getItem("ambs-sig-wz")||0}catch(e){}
   window.addEventListener("resize",function(){if(WIZ_ON)wizPv()});
@@ -2676,6 +2679,15 @@ function wizBody(id,c){
       b.innerHTML='<span class="tthumb" aria-hidden="true"><span class="ts"></span></span><span class="tname"><b>'+esc(pr[0])+'</b><small>'+esc(pr[1])+'</small></span>';
       b.addEventListener("click",function(){Object.assign(S,presetLook(pr));wizLookKeep(S);S.template=pr[0];changed();g.querySelectorAll(".tcard").forEach(function(y){y.setAttribute("aria-pressed",String(y===b))})});g.appendChild(b)});
     c.appendChild(g);drawThumbs(true);return}
+  if(id==="arrange"){var redraw=function(){var y=w0.scrollTop;wizGo(WZ);w0.scrollTop=y},w0=document.querySelector(".wiz .wz-body");
+    var lw=h2('<div class="wz-seg"><span>Logo</span><div class="seg" role="group" aria-label="Logo position"></div></div>'),cur=getP("logoWhere");
+    [["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"],["off","No logo"]].forEach(function(o){var b=h2('<button type="button" aria-pressed="'+(cur===o[0])+'">'+o[1]+'</button>');b.addEventListener("click",function(){setP("logoWhere",o[0]);save();changed();redraw()});lw.querySelector(".seg").appendChild(b)});c.appendChild(lw);
+    /* the parts in order: pieces that share a line (like the buttons) move together */
+    var groups=[];S.order.forEach(function(x){if(x[3]&&groups.length)groups[groups.length-1].push(x);else groups.push([x])});
+    var shownG=groups.filter(function(g){return g.some(function(x){return x[1]&&!/^(logo|photo)$/.test(x[0])})}),hidG=groups.filter(function(g){return shownG.indexOf(g)<0});
+    c.appendChild(h2('<h4 class="wz-h4">Order of the parts</h4><p class="note">Drag ⠿ or use the arrows. The preview updates as you go.</p>'));
+    c.appendChild(sortList(shownG.map(function(g){var vis=g.filter(function(x){if(!x[1])return false;if(x[0]==="book")return!!(S.bookLabel&&S.bookUrl);if(x[0]==="review")return!!(S.reviewLabel&&S.reviewUrl);if(x[0]==="extra")return!!(S.extraLabel&&S.extraUrl);return true});var isBtns=g.some(function(x){return/^(book|review|extra)$/.test(x[0])});return{label:vis.length?vis.map(function(x){return blockLabel(x[0])}).join(" + "):isBtns?"Buttons (none added yet)":blockLabel(g[0][0]),sub:g[0][2]==="under"?"Under everything":""}}),function(a,b){var x=shownG.splice(a,1)[0];shownG.splice(b,0,x);S.order=[].concat.apply([],shownG.concat(hidG));save();changed();redraw()}));
+    var mv=h2('<button type="button" class="linkbtn wz-more">✥ Drag things in the preview instead (Advanced)</button>');mv.addEventListener("click",function(){wizOff(false);go(stepId("edit"));setMove(true)});c.appendChild(mv);return}
   if(id==="brand"){renderPart("wzBrand",c,false);var more=h2('<button type="button" class="linkbtn wz-more">More: dark mode, fonts, sizes and buttons → Advanced</button>');more.addEventListener("click",function(){wizOff(false);openItem("dark")});c.appendChild(more);return}
   if(id==="parts"){var draw=function(){c.innerHTML="";c.appendChild(partsBody(draw))};draw();return}
   if(id==="done"){var sv=h2('<div class="wz-save"><button type="button" class="btn">💾 Save this signature</button><span class="note"></span></div>');var nt=sv.querySelector(".note");nt.textContent=S._sigId?"Saved as “"+S._sigName+"”. Saving again updates it.":"Save it so you can change it later.";
@@ -2692,8 +2704,8 @@ function clearExample(){["name","role","company","mobile","phone","email","websi
   ["book","review"].forEach(function(k){if(S[k+"Url"]===EXAMPLE[k+"Url"]){S[k+"Url"]="";}});SOCIAL.forEach(function(k){if(S.social[k]==="example")S.social[k]=""});save();changed()}
 function wizHtml(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" aria-label="Paste HTML code"><div class="sbox"><div class="sh"><b>Paste your HTML code</b><button type="button" class="btn sec small sx">Cancel</button></div><textarea class="wz-code" rows="8" placeholder="<table>…</table>"></textarea><div class="acts"><button type="button" class="btn wz-use">Use this code</button><button type="button" class="btn sec wz-file">Upload an .html file</button></div></div></div>');
   document.body.appendChild(ov);var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);var ta=ov.querySelector("textarea");ta.focus();
-  ov.querySelector(".wz-file").addEventListener("click",function(){close();$("htmlFile").click();setTimeout(function(){wizGo(5)},400)});
-  ov.querySelector(".wz-use").addEventListener("click",function(){var code=ta.value.trim();if(!/<[a-z][\s\S]*>/i.test(code)){toast("That doesn’t look like HTML code.");return}close();S.code=code;S.useCode=true;save();update();wizGo(5);toast("Your code is in. Save it, then copy it.")})}
+  ov.querySelector(".wz-file").addEventListener("click",function(){close();$("htmlFile").click();setTimeout(function(){wizGo(stepWz("done"))},400)});
+  ov.querySelector(".wz-use").addEventListener("click",function(){var code=ta.value.trim();if(!/<[a-z][\s\S]*>/i.test(code)){toast("That doesn’t look like HTML code.");return}close();S.code=code;S.useCode=true;save();update();wizGo(stepWz("done"));toast("Your code is in. Save it, then copy it.")})}
 /* the preview at the top of every screen: the whole signature, scaled to fit */
 function wizPv(){if(!WIZ_ON)return;var box=document.querySelector(".wiz .wz-pv"),inner=box&&box.querySelector(".wz-pvi");if(!inner)return;
   inner.style.transform="none";inner.innerHTML=signature("preview");
