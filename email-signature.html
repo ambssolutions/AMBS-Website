@@ -1313,7 +1313,7 @@ function signature(mode){SIGMODE=mode;var raw=S.colors,rawSt=S.st;S.colors={};fo
 /* social icons can sit under the logo, filling the space beside a tall column of details */
 function socialUnderLogo(){var so=inOrder("social"),lo=inOrder("logo");return!!(S.socialWithLogo&&so&&so[1]&&so[2]==="side"&&lo&&lo[1]&&S.logoShow!==false&&(lo[2]==="left"||lo[2]==="right"))}
 var SOC_COLS=0;
-function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){SOC_COLS=Math.max(2,Math.floor(((+S.logoSize||90)+8)/((+S.iconSize||24)+iconGap())));try{socH=block("social",mode)}finally{SOC_COLS=0}so[1]=0}
+function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";SOC_COLS=Math.max(2,Math.floor(((+S.logoSize||90)+8)/((+S.iconSize||24)+iconGap())));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
   try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1}
   var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
@@ -2433,24 +2433,34 @@ function addrLines(v,ok){v=String(v||"").trim();if(!ok||v.length<=28||v.indexOf(
   for(var i=0;i<v.length;i++)if(v[i]===","&&(best<0||Math.abs(i-mid)<Math.abs(best-mid)))best=i;
   return best<0?[v]:[v.slice(0,best+1).trim(),v.slice(best+1).trim()].filter(Boolean)}
 var PHONE_RULES={gap:6,pieceGap:5,iconGap:4,btnGap:7,btnPadX:12,btnPadY:8,btnFont:12,contactGap:4,contactIconGap:5,lineGapL:14,lineGapR:12,bannerW:340,discW:340,tagW:240};
+var PF_CACHE={},PF_N=0,PF_KEYS=["name","role","company","mobile","phone","email","website","location","tagline","bookLabel","bookUrl","reviewLabel","reviewUrl","extraLabel","extraUrl","social","hideC","hideS","logoRatio","logoShow","logoData","logoUrl","photoShow","disclaimer","custom","contactOrder","socialOrder"];
 function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));o.darkOn=true;if(o.socialWithLogo==null)o.socialWithLogo=o.logoPos==="left"||o.logoPos==="right";
   o.textSize=Math.min(+o.textSize||13,13);o.nameSize=Math.max(16,Math.min(+o.nameSize||17,20));o.logoSize=Math.min(+o.logoSize||100,90);o.photoSize=Math.min(+o.photoSize||96,88);
   o.iconSize=Math.max(18,Math.min(+o.iconSize||26,28));o.dividerW=Math.min(+o.dividerW||3,4);o.rainbowW=Math.min(+o.rainbowW||220,220);
   if(typeof document==="undefined")return o;
-  var keep=S,kb=barH,t=Object.assign(JSON.parse(JSON.stringify(S)),JSON.parse(JSON.stringify(o)));t.mob=null;
+  /* then try the sensible arrangements and keep the most compact one that fits a phone: contacts one, two or all
+     per line, buttons side by side or stacked, social icons under the logo or with the details. Shrinking the
+     logo, or moving it above the details, happens only when nothing else fits */
+  var key=JSON.stringify([o,PF_KEYS.map(function(k){var v=S[k];return k==="logoData"&&v?String(v).length:v})]);if(PF_CACHE[key]){Object.assign(o,JSON.parse(PF_CACHE[key]));return o}
+  var keep=S,kb=barH,base=Object.assign(JSON.parse(JSON.stringify(S)),JSON.parse(JSON.stringify(o)));base.mob=null;
   var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:max-content";document.body.appendChild(d);
-  var width=function(){S=t;try{for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(Math.abs(hh-barH)<=3)break;barH=hh}}return d.scrollWidth}finally{S=keep;barH=kb}};
-  try{var steps=[
-      function(){if(t.contactLayout==="line"){t.contactLayout="pairs";return true}},
-      function(){var hit=false;t.order.forEach(function(x){if(/^(review|extra)$/.test(x[0])&&x[3]){x[3]=0;hit=true}});return hit},
-      function(){if(t.contactLayout==="pairs"){t.contactLayout="stack";return true}},
-      function(){if(t.socialWithLogo){t.socialWithLogo=false;return true}},
-      function(){if(t.logoSize>70){t.logoSize=70;return true}},
-      function(){if(t.photoShow&&t.photoSize>72){t.photoSize=72;return true}},
-      function(){if(t.logoShow!==false&&t.logoPos==="social"){t.logoPos="bottom";placeMedia(t,"logo",true);return true}},
-      function(){if(t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";t.logoSize=Math.max(110,Math.min(+o.logoSize||110,120));placeMedia(t,"logo",true);return true}}];
-    for(var k=0;k<steps.length&&width()>PHONE_W;k++)steps[k]();
-    ["socialWithLogo","contactLayout","logoSize","photoSize","logoPos","order"].forEach(function(key){o[key]=JSON.parse(JSON.stringify(t[key]))})}
+  var size=function(t){S=t;barH=36;try{d.innerHTML=signature("preview");var m=d.firstElementChild;return[d.scrollWidth,m?m.offsetHeight:0]}finally{S=keep;barH=kb}};
+  var btns=function(t){return t.order.filter(function(x){return/^(book|review|extra)$/.test(x[0])&&x[1]&&block(x[0],"preview")}).length},
+    sideLogo=function(t){var lo=t.order.filter(function(x){return x[0]==="logo"})[0];return t.logoShow!==false&&lo&&lo[1]&&(lo[2]==="left"||lo[2]==="right")};
+  var search=function(t0){var cl0=t0.contactLayout,best=null,cls=cl0==="line"?["line","pairs","stack"]:["pairs","stack"];if(cls.indexOf(cl0)<0)cls.unshift(cl0);
+    var S0=S;S=t0;var nb=btns(t0),sl=sideLogo(t0);S=S0;var so0=t0.order.filter(function(x){return x[0]==="social"})[0],sj=so0&&so0[3]?[1,0]:[null];
+    cls.forEach(function(cl){(nb>1?[1,0]:[null]).forEach(function(j){(sl?[true,false]:[t0.socialWithLogo]).forEach(function(sw){sj.forEach(function(k){
+      var t=JSON.parse(JSON.stringify(t0));t.contactLayout=cl;t.socialWithLogo=sw;t.order.forEach(function(x){if(j!=null&&/^(review|extra)$/.test(x[0]))x[3]=j;if(k!=null&&x[0]==="social")x[3]=k});
+      var z=size(t);if(z[0]>PHONE_W)return;var sc=z[1]+(cl!==cl0?6:0)+(j===0?4:0)+(k===0?3:0)+(sw?0:2);if(!best||sc<best.sc)best={sc:sc,t:t}})})})});
+    return best&&best.t};
+  try{var stages=[function(t){return t},
+      function(t){t.logoSize=Math.min(t.logoSize,70);if(t.photoShow)t.photoSize=Math.min(t.photoSize,72);return t},
+      function(t){if(t.logoShow!==false&&t.logoPos==="social"){t.logoPos="bottom";placeMedia(t,"logo",true)}return t},
+      function(t){if(t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";t.logoSize=Math.max(110,Math.min(+o.logoSize||110,120));placeMedia(t,"logo",true)}return t}];
+    var cur=base,win=null;for(var k=0;k<stages.length&&!win;k++){cur=stages[k](JSON.parse(JSON.stringify(cur)));win=search(cur)}
+    if(!win){cur.contactLayout="stack";cur.order.forEach(function(x){if(/^(review|extra|social)$/.test(x[0]))x[3]=0});win=cur}
+    var res={};["socialWithLogo","contactLayout","logoSize","photoSize","logoPos","order"].forEach(function(key){res[key]=JSON.parse(JSON.stringify(win[key]))});
+    Object.assign(o,res);PF_CACHE[key]=JSON.stringify(res);if(++PF_N>400){PF_CACHE={};PF_N=0}}
   finally{d.remove()}
   return o}
 var thumbT=0;
