@@ -1159,7 +1159,8 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
     if(!it.length)return"";
     /* icon and words sit in their own table cells, both centred on the same line, so they line up in every inbox */
     var ts='font-size:'+csz+'px;line-height:'+Math.round(csz*1.35)+'px;white-space:nowrap;'+(cs0.bold?"font-weight:bold;":"")+(cs0.italic?"font-style:italic;":"");
-    var icw=it[0].ic?(S.contactIcons==="letters"?Math.round(csz*1.1):Math.max(13,Math.round(csz*1.15)))+cIconGap():0;
+    /* the same space between every label and its text: letters are narrower than icons, so their cell is narrower too */
+    var icw=it[0].ic?(S.contactIcons==="letters"?Math.round(csz*0.95):Math.max(13,Math.round(csz*1.15)))+cIconGap():0;
     var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="middle" style="width:'+icw+'px;vertical-align:middle;padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
     var txCell=function(x){return'<td valign="middle" style="vertical-align:middle;padding:0;'+ts+'">'+x.tx+'</td>'};
     var g=contactGap(),vpad=Math.max(0,Math.round((S.contactLayout==="pairs"?Math.max(1,Math.round(csz*0.18)):g)/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
@@ -1202,7 +1203,7 @@ function btnGap(){return S.btnGap==null?14:+S.btnGap}
 function pieceGap(){return S.pieceGap==null||S.pieceGap===""?14:+S.pieceGap}
 function iconGap(){return S.iconGap==null||S.iconGap===""?6:+S.iconGap}
 /* space between phone, email, website and address: across the line in "One line", between the lines otherwise */
-function cIconGap(){var v=S.contactIconGap;return v==null||v===""||isNaN(+v)?3:Math.max(0,Math.min(24,+v))}
+function cIconGap(){var v=S.contactIconGap;return v==null||v===""||isNaN(+v)?7:Math.max(0,Math.min(24,+v))}
 function cSep(){return S.contactSep==null?"·":String(S.contactSep).trim().slice(0,6)}
 function contactGap(){if(S.contactGap!=null&&S.contactGap!=="")return+S.contactGap;var csz=st("contact").size||S.textSize;return S.contactLayout==="line"?10:S.contactLayout==="pairs"?18:2*Math.max(1,Math.round(csz*0.18))}
 /* the usual space above a line, and between two parts sharing a line */
@@ -1320,7 +1321,10 @@ function signatureInner(mode){var side=content(mode,"side",true),under=content(m
   /* the gap beside a column part; moving a part sideways takes space from one side and gives it to the other */
   var pad=function(td,side,px,id){if(px==null)px=18;if(id){var mx=+st(id).dx||0,pd=PS(id,side==="right"?"R":"L");px=Math.max(0,px-mx)+pd}return td.replace(/style="([^"]*)"/,function(_,st){return'style="'+st.replace(/;?$/,";")+'padding-'+side+':'+px+'px;"'})};
   var Lid=S.order.filter(function(o){return o[1]&&o[2]==="left"&&(o[0]==="logo"||block(o[0],mode))}).map(function(o){return o[0]}),Rid=S.order.filter(function(o){return o[1]&&o[2]==="right"&&(o[0]==="logo"||block(o[0],mode))}).map(function(o){return o[0]});
-  var parts=[];L.forEach(function(c,i){parts.push(pad(c,"right",hasBar&&i===L.length-1?gL:18,Lid[i]))});if(L.length&&hasBar)parts.push(pad(bar,"right",gR));parts.push(main);if(Rr.length){if(hasBar)parts.push(pad(bar,"left",gR));Rr.forEach(function(c,i){parts.push(pad(c,"left",hasBar&&i===0?gL:18,Rid[i]))})}
+  /* a logo on a colour tile keeps its own even padding inside; the gap to the details goes on the details side */
+  var tileL=!!lbg&&!hasBar&&Lid[Lid.length-1]==="logo",tileR=!!lbg&&!hasBar&&Rid[0]==="logo";
+  if(tileL)main=pad(main,"left",18);if(tileR)main=pad(main,"right",18);
+  var parts=[];L.forEach(function(c,i){parts.push(pad(c,"right",tileL&&i===L.length-1?16:hasBar&&i===L.length-1?gL:18,Lid[i]))});if(L.length&&hasBar)parts.push(pad(bar,"right",gR));parts.push(main);if(Rr.length){if(hasBar)parts.push(pad(bar,"left",gR));Rr.forEach(function(c,i){parts.push(pad(c,"left",tileR&&i===0?16:hasBar&&i===0?gL:18,Rid[i]))})}
   out=T("font-family:"+S.font+";"+(ctr?"margin:0 auto;":""))+'<tr>'+parts.join("")+'</tr></table>';
   var top="";
   if(S.signoffStyle==="animated"||S.signoffStyle==="still"){var sl=soSlug(S.signoff)||"kind-regards",fo=soFont(),sz0=SO.size[fo.key][sl],k0=S.signoffSize/30,w0=Math.round(sz0[0]*k0),h0=Math.round(sz0[1]*k0),anim=S.signoffStyle==="animated";
