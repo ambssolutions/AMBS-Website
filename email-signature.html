@@ -979,7 +979,7 @@ var PRESETS=[
   ["Social first","Icons up front",{logoSize:120,divider:"rainbow",contactLayout:"stack",contactIcons:"none",btnStyle:"outline",iconSize:30,order:O([["name",1],["role",1],["social",1],["contact",1],["actions",1],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["marketing", "personal", "c2"]],
   ["Purple accent","One brand colour",{logoSize:120,divider:"solid",dividerW:3,contactIcons:"circle",btnStyle:"filled",btnRadius:20,iconStyle:"outline",iconSize:24,colors:{text:"#14172b",muted:"#5b6176",letters:"@a",link:"#14172b",button:"@a",line:"@a",cardBg:"#f4f6fb"}},["creative", "c2"]],
   ["Photo card","You, front and centre",{photoShow:true,photoShape:"circle",photoSize:96,logoPos:"social",logoSize:100,card:"light",divider:"rainbow",contactLayout:"stack",contactIcons:"glyph",btnStyle:"filled",iconSize:24,colors:{text:"#14172b",muted:"#5b6176",letters:"@s",link:"#14172b",button:"@p",line:"@p",cardBg:"#f4f6fb"}},["personal", "photo", "c3"]],
-  ["Light card","Soft panel",{logoPos:"right",logoSize:110,card:"light",contactIcons:"circle",btnStyle:"outline",iconStyle:"dark",iconSize:22,colors:{text:"#14172b",muted:"#5b6176",letters:"@a",link:"#14172b",button:"@a",line:"@a",cardBg:"#f4f6fb"}},["business", "c2"]],
+  ["Light card","Soft panel",{logoPos:"right",logoSize:110,card:"light",contactIcons:"circle",btnStyle:"outline",iconStyle:"glyph-grey",iconSize:22,colors:{text:"#14172b",muted:"#5b6176",letters:"@a",link:"#14172b",button:"@a",line:"@a",cardBg:"#f4f6fb"}},["business", "c2"]],
   ["Executive","Serif name, quiet and smart",{font:"Georgia, 'Times New Roman', serif",nameSize:21,logoPos:"bottom",logoSize:90,divider:"solid",dividerW:1,contactLayout:"line",contactIcons:"none",btnStyle:"link",iconStyle:"glyph-grey",iconSize:16,signoffStyle:"still",signoffFont:"classic",
     colors:{text:"#1d2433",muted:"#6b7184",letters:"@p",link:"#1d2433",button:"@p",line:"#d0d4de",cardBg:"#f4f6fb"},st:{role:{italic:true}},order:O([["name",1],["role",1],["contact",1],["actions",1],["social",1],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["business", "law", "c1"]],
   ["Bold brand","Name in your main colour",{logoSize:120,divider:"none",nameSize:22,contactLayout:"stack",contactIcons:"brand",btnStyle:"filled",btnRadius:20,iconStyle:"brand",iconSize:26,signoffFont:"retro",
@@ -988,7 +988,7 @@ var PRESETS=[
     order:O([["rainbow",1],["name",1],["role",1],["contact",1],["actions",1],["social",1],["tagline",0],["banner",0,"under"],["disclaimer",0,"under"]])},["business", "c2"]],
   ["Real estate","Big photo, call first",{photoShow:true,photoShape:"rounded",photoSize:130,logoPos:"bottom",logoSize:110,divider:"rainbow",nameSize:20,contactLayout:"stack",contactIcons:"brand",btnStyle:"filled",btnRadius:4,bookIcon:"calendar",iconStyle:"brand",iconSize:24,signoffFont:"friendly",
     colors:{text:"#14172b",muted:"#5b6176",letters:"@p",link:"#14172b",button:"@p",line:"@p",cardBg:"#f4f6fb"},order:O([["name",1],["role",1],["contact",1],["actions",1],["social",1],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["business", "photo", "c2"]],
-  ["Legal and finance","Formal, with disclaimer",{font:"Georgia, 'Times New Roman', serif",logoPos:"left",logoSize:110,divider:"solid",dividerW:2,contactLayout:"stack",contactIcons:"letters",contactLabels:true,btnStyle:"link",iconStyle:"glyph-dark",iconSize:18,signoffStyle:"plain",
+  ["Legal and finance","Formal, with disclaimer",{font:"Georgia, 'Times New Roman', serif",logoPos:"left",logoSize:110,divider:"solid",dividerW:2,contactLayout:"stack",contactIcons:"letters",contactLabels:true,btnStyle:"link",iconStyle:"glyph-grey",iconSize:18,signoffStyle:"plain",
     colors:{text:"#1b2a41",muted:"#4a5568",letters:"#1b2a41",link:"#1b2a41",button:"#1b2a41",line:"#1b2a41",cardBg:"#f4f6fb"},order:O([["name",1],["role",1],["contact",1],["social",1],["actions",0],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",1,"under"]])},["law", "c2"]],
   ["Hospitality","Friendly and centred",{logoPos:"top",logoSize:110,align:"center",divider:"rainbow",contactLayout:"line",contactIcons:"glyph",btnStyle:"filled",btnRadius:20,iconStyle:"brand",iconSize:28,signoffFont:"casual",signoffSize:34,
     order:O([["name",1],["role",1],["contact",1],["tagline",1],["actions",1],["social",1],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["marketing", "c1"]],
@@ -1183,7 +1183,7 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
     var bh=uploaded.banner&&mode!=="email"?Math.round(bw*uploaded.banner.h/uploaded.banner.w):(ab?Math.round(bw*0.15):Math.round(bw/6));
     var im=uploaded.banner||mode==="email"||ab?'<img src="'+esc(src)+'" width="'+bw+'" alt="'+esc(S.company||"Banner")+'" style="display:block;border:0;width:'+bw+'px;max-width:100%;height:auto;'+ebBanner()+'">':img(src,bw,bh,"Banner",ebBanner());
     return S.bannerLink?'<a href="'+esc(url(S.bannerLink))+'" style="text-decoration:none;">'+im+'</a>':im}
-  if(id==="disclaimer")return S.disclaimer?'<div style="'+fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'max-width:'+(wide?560:440)+'px;'+(S.disclaimerJustify?"text-align:justify;":"")+'">'+(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer)+'</div>':"";
+  if(id==="disclaimer")return S.disclaimer?'<div style="'+fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'max-width:'+(+S.discW||(wide?560:440))+'px;'+(S.disclaimerJustify?"text-align:justify;":"")+'">'+(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer)+'</div>':"";
   return""}
 function rows(mode,zone){var out=[],groups=[];
   /* parts marked "join" sit on the same line as the part above them */
@@ -1310,7 +1310,7 @@ function signature(mode){SIGMODE=mode;var raw=S.colors,rawSt=S.st;S.colors={};fo
   try{return signatureInner(mode)}finally{S.colors=raw;S.st=rawSt}}
 function signatureInner(mode){var side=content(mode,"side",true),under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -1328,13 +1328,15 @@ function signatureInner(mode){var side=content(mode,"side",true),under=content(m
   out=T("font-family:"+S.font+";"+(ctr?"margin:0 auto;":""))+'<tr>'+parts.join("")+'</tr></table>';
   var top="";
   if(S.signoffStyle==="animated"||S.signoffStyle==="still"){var sl=soSlug(S.signoff)||"kind-regards",fo=soFont(),sz0=SO.size[fo.key][sl],k0=S.signoffSize/30,w0=Math.round(sz0[0]*k0),h0=Math.round(sz0[1]*k0),anim=S.signoffStyle==="animated";
-    var inner=mode==="email"?'<img src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+S.signoffAnimColor+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'">'
-      :'<img class="so-img" data-fb="1" src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+S.signoffAnimColor+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'"><span class="'+(anim?"writing":"still")+' so-fb" hidden style="font-family:\''+fo.google+'\',cursive;font-size:'+Math.round(fo.px/2*k0)+'px;line-height:'+h0+'px;color:'+ANIM_INK[S.signoffAnimColor]+';">'+esc(SIGNOFFS[sl].text)+'</span>';
+    /* dark mode: a white-ink copy swaps in where the email app supports it; the preview shows it too */
+    var ink=mode!=="email"&&S.darkOn&&S.pvMode==="dark"&&S.signoffAnimColor!=="white"?"white":S.signoffAnimColor,soSwap=mode==="email"&&darkExtras()&&S.signoffAnimColor!=="white";
+    var inner=mode==="email"?'<img'+(soSwap?' class="dsl"':'')+' src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+S.signoffAnimColor+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'">'+(soSwap?'<!--[if !mso]><!--><img class="dsd" src="'+HOST+'signoff/'+fo.key+'/'+sl+'-white'+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:none;border:0;width:'+w0+'px;height:'+h0+'px;max-height:0;overflow:hidden;mso-hide:all;'+(S.align==="center"?"margin:0 auto;":"")+'"><!--<![endif]-->':'')
+      :'<img class="so-img" data-fb="1" src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+ink+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'"><span class="'+(anim?"writing":"still")+' so-fb" hidden style="font-family:\''+fo.google+'\',cursive;font-size:'+Math.round(fo.px/2*k0)+'px;line-height:'+h0+'px;color:'+ANIM_INK[S.signoffAnimColor]+';">'+esc(SIGNOFFS[sl].text)+'</span>';
     var sal=st("signoff").align||S.align;top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+sal+'" style="padding:'+(+st("signoff").dy||0)+'px 0 8px '+(+st("signoff").dx||0)+'px;text-align:'+sal+';">'+alignWrap(inner,sal)+'</td></tr>'}
   else if(S.signoffStyle!=="none"&&S.signoff){var so=st("signoff"),sz=+so.size||soPlainSize();top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+S.align+'" style="padding:0 0 10px 0;text-align:'+S.align+';font-family:'+(S.signoffStyle==="script"?SCRIPT:S.font)+';font-size:'+sz+'px;line-height:'+Math.round(sz*1.25)+'px;color:'+(so.color||S.colors.text)+';'+(so.bold?"font-weight:bold;":"")+(so.italic?"font-style:italic;":"")+'">'+esc(S.signoff)+'</td></tr>'}
   out=T("font-family:"+S.font+";"+ebText())+top+'<tr><td align="'+S.align+'" style="padding:0;">'+out+'</td></tr>'+(under?'<tr><td align="'+S.align+'" style="padding:'+underGap()+'px 0 0 0;">'+under+'</td></tr>':"")+'</table>';
   var sp0=Math.max(0,+S.sigPad||0);if(sp0)out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td style="padding:'+sp0+'px;">'+out+'</td></tr></table>';
-  if(S.card!=="none")out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td bgcolor="'+S.colors.cardBg+'" style="background:'+S.colors.cardBg+';border-radius:12px;padding:18px 20px;'+ebCard()+'">'+out+'</td></tr></table>';
+  if(S.card!=="none")out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td'+(darkExtras()&&hexL(S.colors.cardBg)>0.75?' class="dkb"':'')+' bgcolor="'+S.colors.cardBg+'" style="background:'+S.colors.cardBg+';border-radius:12px;padding:18px 20px;'+ebCard()+'">'+out+'</td></tr></table>';
   return out}
 /* pictures that aren't online yet are left out of the copied signature completely (an empty picture can upset Gmail) */
 function dropEmptyPics(h){return h.replace(/<a\b[^>]*>\s*<img\b[^>]*\bsrc=""[^>]*>\s*<\/a>/g,"").replace(/<img\b[^>]*\bsrc=""[^>]*>/g,"")}
@@ -2415,7 +2417,29 @@ function logoColours(img){var c=document.createElement("canvas"),n=80,r=img.natu
 function presetLook(p){var d=defaults(),o={};LOOK.forEach(function(k){if(k==="signoff"){if(p[2].signoff)o.signoff=p[2].signoff;return}var v=p[2][k]!==undefined?p[2][k]:d[k];if(v===undefined)return;o[k]=JSON.parse(JSON.stringify(v))});
   /* keep the parts you added, in the same group */
   placeMedia(o,"both",true);o.logoMatch=true;
-  var mine=(S.order||[]).filter(function(x){return String(x[0]).indexOf("c-")===0});mine.forEach(function(m){var z=o.order.filter(function(x){return x[2]===m[2]}).length?null:null;var at=m[2]==="side"?o.order.filter(function(x){return x[2]==="side"}).length:o.order.length;o.order.splice(at,0,m.slice())});return o}
+  var mine=(S.order||[]).filter(function(x){return String(x[0]).indexOf("c-")===0});mine.forEach(function(m){var z=o.order.filter(function(x){return x[2]===m[2]}).length?null:null;var at=m[2]==="side"?o.order.filter(function(x){return x[2]==="side"}).length:o.order.length;o.order.splice(at,0,m.slice())});phoneFirst(o);return o}
+/* every template starts phone-friendly: the compact spacing of a well-made phone signature (small gaps, 13px text,
+   rounded buttons), then anything still wider than a phone is folded: contacts onto two lines, then one per line,
+   a smaller logo, and finally the logo above the details */
+var PHONE_RULES={gap:6,pieceGap:5,iconGap:4,btnGap:7,btnPadX:12,btnPadY:8,btnFont:12,contactGap:4,contactIconGap:5,lineGapL:14,lineGapR:12,bannerW:340,discW:340};
+function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));o.darkOn=true;
+  o.textSize=Math.min(+o.textSize||13,13);o.nameSize=Math.max(16,Math.min(+o.nameSize||17,20));o.logoSize=Math.min(+o.logoSize||100,90);o.photoSize=Math.min(+o.photoSize||96,88);
+  o.iconSize=Math.max(18,Math.min(+o.iconSize||26,28));o.dividerW=Math.min(+o.dividerW||3,4);o.rainbowW=Math.min(+o.rainbowW||220,220);
+  if(typeof document==="undefined")return o;
+  var keep=S,kb=barH,t=Object.assign(JSON.parse(JSON.stringify(S)),JSON.parse(JSON.stringify(o)));t.mob=null;
+  var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:max-content";document.body.appendChild(d);
+  var width=function(){S=t;try{for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(Math.abs(hh-barH)<=3)break;barH=hh}}return d.scrollWidth}finally{S=keep;barH=kb}};
+  try{var steps=[
+      function(){if(t.contactLayout==="line"){t.contactLayout="pairs";return true}},
+      function(){var hit=false;t.order.forEach(function(x){if(/^(review|extra)$/.test(x[0])&&x[3]){x[3]=0;hit=true}});return hit},
+      function(){if(t.contactLayout==="pairs"){t.contactLayout="stack";return true}},
+      function(){if(t.logoSize>70){t.logoSize=70;return true}},
+      function(){if(t.photoShow&&t.photoSize>72){t.photoSize=72;return true}},
+      function(){if(t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";t.logoSize=Math.max(110,Math.min(+o.logoSize||110,120));placeMedia(t,"logo",true);return true}}];
+    for(var k=0;k<steps.length&&width()>PHONE_W;k++)steps[k]();
+    ["contactLayout","logoSize","photoSize","logoPos","order"].forEach(function(key){o[key]=JSON.parse(JSON.stringify(t[key]))})}
+  finally{d.remove()}
+  return o}
 var thumbT=0;
 function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard"))return;thumbT=setTimeout(function(){var keep=S,kb=barH;
   [].forEach.call(document.querySelectorAll(".tcard"),function(card){var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=exampleInto(JSON.parse(JSON.stringify(keep)));if(u)useMyTpl(u,t);else if(p){Object.assign(t,presetLook(p));wizLookKeep(t)}else return;
@@ -2437,6 +2461,7 @@ function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons()
   var ib=$("inbox");ib.classList.toggle("phone",S.pvWidth==="phone");ib.classList.toggle("dark",S.pvMode==="dark");
   /* dark inbox: like Gmail and Outlook, dark text becomes light; coloured text, buttons and pictures stay as they are */
   var dmap=S.pvMode==="dark"&&S.darkOn?darkMap():null;
+  if(S.pvMode==="dark")pv.querySelectorAll("[bgcolor]").forEach(function(el){if(hexL(el.getAttribute("bgcolor"))>0.75)el.style.background="#262a33"});
   if(S.pvMode==="dark")pv.querySelectorAll("[style*='color']").forEach(function(el){var c=getComputedStyle(el).color.match(/\d+/g);if(!c)return;
     if(dmap){var hx="#"+c.slice(0,3).map(function(v){return("0"+(+v).toString(16)).slice(-2)}).join("");var to=dmap[hx];if(to!==undefined){if(to)el.style.color=to;return}}var L=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255;var sat=Math.max(c[0],c[1],c[2])-Math.min(c[0],c[1],c[2]);if(L<0.42&&sat<60)el.style.color=L<0.25?"#e8eaed":"#bdc1c6"});
   document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});
@@ -2473,7 +2498,9 @@ function darkTag(h){var cols=darkCols().filter(function(x){return x.to});if(!col
     attrs=/ class="/.test(attrs)?attrs.replace(/ class="/,' class="'+hit.cls+' '):' class="'+hit.cls+'"'+attrs;return"<"+name+attrs+">"})}
 function darkStyle(){if(!darkExtras())return"";var r=[];darkCols().forEach(function(x){if(x.to)r.push(["."+x.cls,"color:"+x.to+"!important"])});
   if(S.logoShow&&url(S.logoDarkUrl))r.push([".dkl","display:none!important"],[".dkd","display:block!important;max-height:none!important"]);
-  if(!r.length)return"";return"<style>@media (prefers-color-scheme:dark){"+r.map(function(x){return x[0]+"{"+x[1]+"}"}).join("")+"}"+r.map(function(x){return"[data-ogsc] "+x[0]+"{"+x[1]+"}"}).join("")+"</style>"}
+  if((S.signoffStyle==="animated"||S.signoffStyle==="still")&&S.signoffAnimColor!=="white")r.push([".dsl","display:none!important"],[".dsd","display:block!important;max-height:none!important"]);
+  var bgR=(S.card!=="none"&&hexL(S.colors.cardBg)>0.75)||S.logoBg==="light";if(bgR)r.push([".dkb","background:#262a33!important"]);
+  if(!r.length)return"";return"<style>@media (prefers-color-scheme:dark){"+r.map(function(x){return x[0]+"{"+x[1]+"}"}).join("")+"}"+r.map(function(x){return(x[0]===".dkb"?"[data-ogsb] ":"[data-ogsc] ")+x[0]+"{"+x[1]+"}"}).join("")+"</style>"}
 /* a dark colour made bright enough for a dark background, keeping its hue and richness */
 function liftCol(r,g,b){r/=255;g/=255;b/=255;var mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,h=0,s=0,d=mx-mn;
   if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d+6)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}
