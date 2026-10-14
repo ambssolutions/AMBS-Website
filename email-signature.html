@@ -964,7 +964,7 @@ function matchLogoToIcons(){S.logoSize=Math.max(30,Math.round(rowHeight()/(S.log
 function syncMedia(){var l=inOrder("logo"),p=inOrder("photo");if(p)S.photoShow=!!p[1];if(!l)return;S.logoShow=!!l[1];
   if(l[2]==="left"||l[2]==="right"){S.logoPos=l[2];return}var i=S.order.indexOf(l),nx=S.order[i+1];if(nx&&nx[0]==="social"&&nx[3]&&nx[2]===l[2]){S.logoPos="social";return}
   var same=S.order.filter(function(x){return x[2]===l[2]&&x[1]});S.logoPos=same[0]===l?"top":same[same.length-1]===l?"bottom":"flow"}
-var LOOK=["logoMatch","signoff","logoBg","st","signoffAnimColor","signoffFont","logoShow","logoPos","logoSize","divider","dividerW","order","contactLayout","align","gap","card","colors","contactLabels","nameSize","textSize","rainbowW","iconStyle","iconSize","contactIcons","btnStyle","btnRadius","bookIcon","signoffStyle","photoShow","photoShape","photoSize","font"];
+var LOOK=["btnSide","autoFit","fitBase","fitLock","_fit","socialWithLogo","logoMatch","signoff","logoBg","st","signoffAnimColor","signoffFont","logoShow","logoPos","logoSize","divider","dividerW","order","contactLayout","align","gap","card","colors","contactLabels","nameSize","textSize","rainbowW","iconStyle","iconSize","contactIcons","btnStyle","btnRadius","bookIcon","signoffStyle","photoShow","photoShape","photoSize","font"];
 var PRESETS=[
   ["Brand stripe","Logo, stripe, details",{},["business", "c2"]],
   ["Photo and banner","Like a big-firm signature",{photoShow:true,photoShape:"square",photoSize:120,logoPos:"social",logoSize:120,divider:"none",contactLayout:"pairs",contactIcons:"letters",contactLabels:true,iconStyle:"square",iconSize:30,btnStyle:"filled",btnRadius:3,nameSize:20,colors:{text:"#14172b",muted:"#3d4255",letters:"@s",link:"#14172b",button:"@s",line:"@s",cardBg:"#f4f6fb"},
@@ -1149,27 +1149,33 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="name")return S.name?'<div style="'+fx("name",c.text,S.nameSize,true,false)+'">'+esc(S.name)+'</div>':"";
   if(id==="role"){var t=[S.role,S.company].filter(Boolean).map(esc).join(" · ");return t?'<div style="'+fx("role",S.contactLabels?c.letters:c.muted,S.textSize,S.contactLabels,false)+'">'+t+'</div>':""}
   if(id==="contact"){var it=[],cs0=st("contact"),csz=cs0.size||S.textSize;c=Object.assign({},c);if(cs0.color)c.link=cs0.color;
-    var add=function(kind,html){it.push({ic:contactIcon(kind,mode,csz),tx:html})};
+    var add=function(kind,html){it.push({ic:contactIcon(kind,mode,csz),tx:html,k:kind})};
     contactOrder().filter(function(k){return(S.hideC||[]).indexOf(k)<0}).forEach(function(k){
       if(k==="mobile"&&S.mobile)add("mobile",a(tel(S.mobile),esc(S.mobile),c.link));
       if(k==="phone"&&S.phone)add("phone",a(tel(S.phone),esc(S.phone),c.link));
       if(k==="email"&&S.email)add("email",a("mailto:"+S.email,esc(S.email),c.link));
       if(k==="web"&&S.website)add("web",a(url(S.website),esc(S.website.replace(/^https?:\/\//,"").replace(/\/$/,"")),c.link));
-      if(k==="location"&&S.location)add("location",'<span style="color:'+c.text+';">'+esc(S.location)+'</span>')});
+      if(k==="location"&&S.location){var al=addrLines(S.location,S.contactLayout!=="line");add("location",'<span style="color:'+c.text+';">'+al.map(esc).join("<br>")+'</span>');if(al.length>1)it[it.length-1].two=true}});
     if(!it.length)return"";
     /* icon and words sit in their own table cells, both centred on the same line, so they line up in every inbox */
     var ts='font-size:'+csz+'px;line-height:'+Math.round(csz*1.35)+'px;white-space:nowrap;'+(cs0.bold?"font-weight:bold;":"")+(cs0.italic?"font-style:italic;":"");
     /* the same space between every label and its text: letters are narrower than icons, so their cell is narrower too */
     var icw=it[0].ic?(S.contactIcons==="letters"?Math.round(csz*0.95):Math.max(13,Math.round(csz*1.15)))+cIconGap():0;
-    var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="middle" style="width:'+icw+'px;vertical-align:middle;padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
+    var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="'+(x.two?"top":"middle")+'" style="width:'+icw+'px;vertical-align:'+(x.two?"top":"middle")+';padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
     var txCell=function(x){return'<td valign="middle" style="vertical-align:middle;padding:0;'+ts+'">'+x.tx+'</td>'};
-    var g=contactGap(),vpad=Math.max(0,Math.round((S.contactLayout==="pairs"?Math.max(1,Math.round(csz*0.18)):g)/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
+    var g=contactGap(),vpad=Math.max(0,Math.round((S.contactLayout==="pairs"||S.contactLayout==="smart"?Math.max(1,Math.round(csz*0.18)):g)/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
     if(S.contactLayout==="line")return flowRow(it.map(function(x,i){return{h:T()+'<tr>'+icCell(x)+txCell(x)+(i<it.length-1?(cSep()?'<td valign="middle" style="vertical-align:middle;padding:0 '+g+'px;color:'+c.muted+';'+ts+'">'+esc(cSep())+'</td>':'<td style="width:'+g+'px;font-size:0;line-height:0;">&nbsp;</td>'):'')+'</tr></table>'}}),ctr?"center":"left");
-    var per=S.contactLayout==="pairs"?2:1,rows=[];
-    for(var i=0;i<it.length;i+=per){var r=it.slice(i,i+per),tds=[];r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:'+g+'px;min-width:'+g+'px;font-size:0;line-height:0;">&nbsp;</td>')});
+    var per=S.contactLayout==="pairs"||S.contactLayout==="smart"?2:1,rows=[],grp=[];
+    /* "mixed": short details share a line (like two phone numbers), long ones (email, address) get their own */
+    if(S.contactLayout==="smart"){var plen=function(x){return x.tx.replace(/<[^>]+>/g,"").length};for(var q=0;q<it.length;q++){var x1=it[q],x2=it[q+1];
+        if(x2&&x1.k!=="location"&&x2.k!=="location"&&plen(x1)+plen(x2)<=30){grp.push([x1,x2]);q++}else grp.push([x1])}}
+    else for(var q=0;q<it.length;q+=per)grp.push(it.slice(q,q+per));
+    var allCols=per===2?2*(icw?2:1)+1:0;
+    for(var gi=0;gi<grp.length;gi++){var r=grp[gi],tds=[];
+      if(S.contactLayout==="smart"&&r.length===1){rows.push('<tr>'+icCell(r[0]).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(r[0]).replace('<td ','<td colspan="'+(allCols-(icw?1:0))+'" ').replace('padding:0;','padding:'+vpad+'px 0;')+'</tr>');continue}r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:'+Math.max(g,14)+'px;min-width:'+Math.max(g,14)+'px;font-size:0;line-height:0;">&nbsp;</td>')});
       if(r.length<per)tds.push('<td colspan="'+(icw?2:1)+'"></td>');rows.push('<tr>'+tds.join("")+'</tr>')}
     return TB+rows.join("")+'</table>'}
-  if(id==="tagline")return S.tagline?'<div style="'+fx("tagline",c.muted,S.textSize-1,false,false)+'">'+esc(S.tagline)+'</div>':"";
+  if(id==="tagline")return S.tagline?'<div style="'+fx("tagline",c.muted,S.textSize-1,false,false)+(+S.tagW?'max-width:'+(+S.tagW)+'px;':'')+'">'+esc(S.tagline)+'</div>':"";
   if(id==="rainbow")return hbar(S.rainbowW,3);
   if(id==="book")return S.bookLabel&&S.bookUrl?btnWrap(button(url(S.bookUrl),esc(S.bookLabel),S.bookIcon==="calendar"?"calendar":null,mode,c.button)):"";
   if(id==="review"){if(!(S.reviewLabel&&S.reviewUrl))return"";var rc=c.reviewBtn||c.button,star='<span style="color:'+(S.btnStyle==="filled"&&/^#?f5b800$/i.test(rc)?"#ffffff":"#F5B800")+';">★</span>&nbsp;';return btnWrap(button(url(S.reviewUrl),star+esc(S.reviewLabel),null,mode,rc))}
@@ -1177,6 +1183,8 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="social"){var sz=S.iconSize,cs=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).map(function(k){return'<a href="'+esc(socialUrl(k,S.social[k]))+'" style="text-decoration:none;">'+img(iconSrc(k,S.iconStyle,mode,embL("icons")),sz,sz,SOCIAL_NAME[k])+'</a>'});
 
     if(mode!=="email"&&!cs.length)return'<div style="font-size:11px;color:#8a90a3;border:1px dashed #c9cfe0;border-radius:6px;padding:6px 10px;display:inline-block;">Add an Instagram or TikTok username to show icons here</div>';
+    if(cs.length&&SOC_COLS){var rws=[];for(var j=0;j<cs.length;j+=SOC_COLS)rws.push(cs.slice(j,j+SOC_COLS));
+      return T("margin:0 auto;")+rws.map(function(rw,ri){return'<tr><td align="center" style="text-align:center;padding:'+(ri?iconGap():0)+'px 0 0 0;">'+inlineTable(rw.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<rw.length-1?iconGap():0)+'px 0 0;">'+x+'</td>'}),true)+'</td></tr>'}).join("")+'</table>'}
     return cs.length?inlineTable(cs.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<cs.length-1?iconGap():0)+'px 0 0;">'+x+'</td>'}),ctr):""}
   if(id==="banner"){var bw=S.bannerW,ab=AMBS_BANNERS.filter(function(x){return x.url===S.bannerUrl||x.urlNo===S.bannerUrl})[0],src=mode==="email"?url(S.bannerUrl):(uploaded.banner?uploaded.banner.src:(ab?(ab.urlNo===S.bannerUrl?ab.previewNo:ab.preview):url(S.bannerUrl)));
     if(!src)return mode==="email"?"":'<div style="width:'+bw+'px;max-width:100%;height:'+Math.round(bw/6)+'px;border:1.5px dashed #c9cfe0;border-radius:8px;color:#8a90a3;font:12px Arial;display:flex;align-items:center;justify-content:center;">Your banner (choose one in the Banner section)</div>';
@@ -1205,7 +1213,7 @@ function iconGap(){return S.iconGap==null||S.iconGap===""?6:+S.iconGap}
 /* space between phone, email, website and address: across the line in "One line", between the lines otherwise */
 function cIconGap(){var v=S.contactIconGap;return v==null||v===""||isNaN(+v)?7:Math.max(0,Math.min(24,+v))}
 function cSep(){return S.contactSep==null?"·":String(S.contactSep).trim().slice(0,6)}
-function contactGap(){if(S.contactGap!=null&&S.contactGap!=="")return+S.contactGap;var csz=st("contact").size||S.textSize;return S.contactLayout==="line"?10:S.contactLayout==="pairs"?18:2*Math.max(1,Math.round(csz*0.18))}
+function contactGap(){if(S.contactGap!=null&&S.contactGap!=="")return+S.contactGap;var csz=st("contact").size||S.textSize;return S.contactLayout==="line"?10:S.contactLayout==="pairs"||S.contactLayout==="smart"?18:2*Math.max(1,Math.round(csz*0.18))}
 /* the usual space above a line, and between two parts sharing a line */
 /* column parts (logo, photo, the stripe): up and down is padding above or below, so it works in every email app;
    sideways is handled by the gaps beside them. "pad" adds space on every side */
@@ -1302,15 +1310,29 @@ function boxAlign(al){return al==="center"?"margin:0 auto;":al==="right"?"margin
 function alignWrap(h,al){if(al===S.align)return h;return'<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;'+boxAlign(al)+'"><tr><td align="'+al+'" style="text-align:'+al+';padding:0;">'+h+'</td></tr></table>'}
 function content(mode,zone,measure){var r=rows(mode,zone);if(!r.length)return"";
   return'<table cellpadding="0" cellspacing="0" border="0" role="presentation"'+(measure?' data-measure="1"':'')+' style="border-collapse:collapse;font-family:'+S.font+';font-size:'+S.textSize+'px;line-height:'+Math.round(S.textSize*1.45)+'px;color:'+S.colors.text+';'+(S.align==="center"?"margin:0 auto;":"")+'">'+r.join("")+'</table>'}
+/* how tall the strip should be: the tallest of the details and the columns beside them (logo, photo, icons),
+   so it always runs the full height of the signature body */
+function barMeasure(root){var m=root.querySelector("[data-measure]");if(!m)return 0;var h=m.offsetHeight,td=m.parentNode;while(td&&td.tagName!=="TD")td=td.parentNode;
+  var tr=td&&td.parentNode;if(tr)[].forEach.call(tr.children,function(c){if(c===td||c.querySelector(".sig-line"))return;var lo=1e9,hi=-1e9;[].forEach.call(c.children,function(e){lo=Math.min(lo,e.offsetTop);hi=Math.max(hi,e.offsetTop+e.offsetHeight)});if(hi>lo)h=Math.max(h,hi-lo)});
+  return Math.max(36,Math.round(h))}
 var barH=96;
 function C(v){return v&&v.charAt(0)==="@"?({"@p":S.brandP,"@s":S.brandS,"@a":S.brandA}[v]||"#14172b"):v}
 function pal(){return(S.palette&&S.palette.length)?S.palette:[S.brandP]}
 var SIGMODE="preview";
 function signature(mode){SIGMODE=mode;var raw=S.colors,rawSt=S.st;S.colors={};for(var k in raw)S.colors[k]=C(raw[k]);S.st={};for(var k2 in rawSt){S.st[k2]=Object.assign({},rawSt[k2]);if(S.st[k2].color)S.st[k2].color=C(S.st[k2].color)}
   try{return signatureInner(mode)}finally{S.colors=raw;S.st=rawSt}}
-function signatureInner(mode){var side=content(mode,"side",true),under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
+/* social icons can sit under the logo, filling the space beside a tall column of details */
+function socialUnderLogo(){var so=inOrder("social"),lo=inOrder("logo");return!!(S.socialWithLogo&&so&&so[1]&&so[2]==="side"&&lo&&lo[1]&&S.logoShow!==false&&(lo[2]==="left"||lo[2]==="right"))}
+var SOC_COLS=0;
+function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";SOC_COLS=Math.max(2,Math.floor(((+S.logoSize||90)+8)/((+S.iconSize||24)+iconGap())));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
+  /* buttons can stand in their own column to the right of the details, so a long signature gets shorter */
+  var bR=S.btnSide==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="right"}),bOff=[],btnH="";
+  if(bR){var bl=S.order.filter(function(o){return o[1]&&o[2]==="side"&&/^(book|review|extra)$/.test(o[0])}),bh=bl.map(function(o){return block(o[0],mode)}).filter(Boolean);
+    if(bh.length){btnH=T()+bh.map(function(h,i){return'<tr><td style="padding:'+(i?Math.max(6,+S.btnGap||8):0)+'px 0 0 0;">'+(mode==="email"?h:'<div data-edit="'+bl[i][0]+'">'+h+'</div>')+'</td></tr>'}).join("")+'</table>';bl.forEach(function(o){o[1]=0;bOff.push(o)})}}
+  try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1;bOff.forEach(function(o){o[1]=1})}
+  var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="center" style="padding:'+Math.max(8,+S.gap||10)+'px 0 0 0;text-align:center;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -1324,7 +1346,7 @@ function signatureInner(mode){var side=content(mode,"side",true),under=content(m
   /* a logo on a colour tile keeps its own even padding inside; the gap to the details goes on the details side */
   var tileL=!!lbg&&!hasBar&&Lid[Lid.length-1]==="logo",tileR=!!lbg&&!hasBar&&Rid[0]==="logo";
   if(tileL)main=pad(main,"left",18);if(tileR)main=pad(main,"right",18);
-  var parts=[];L.forEach(function(c,i){parts.push(pad(c,"right",tileL&&i===L.length-1?16:hasBar&&i===L.length-1?gL:18,Lid[i]))});if(L.length&&hasBar)parts.push(pad(bar,"right",gR));parts.push(main);if(Rr.length){if(hasBar)parts.push(pad(bar,"left",gR));Rr.forEach(function(c,i){parts.push(pad(c,"left",tileR&&i===0?16:hasBar&&i===0?gL:18,Rid[i]))})}
+  var parts=[];L.forEach(function(c,i){parts.push(pad(c,"right",tileL&&i===L.length-1?16:hasBar&&i===L.length-1?gL:18,Lid[i]))});if(L.length&&hasBar)parts.push(pad(bar,"right",gR));parts.push(main);if(btnH)parts.push('<td valign="middle" style="vertical-align:middle;padding:0 0 0 16px;">'+btnH+'</td>');if(Rr.length){if(hasBar)parts.push(pad(bar,"left",gR));Rr.forEach(function(c,i){parts.push(pad(c,"left",tileR&&i===0?16:hasBar&&i===0?gL:18,Rid[i]))})}
   out=T("font-family:"+S.font+";"+(ctr?"margin:0 auto;":""))+'<tr>'+parts.join("")+'</tr></table>';
   var top="";
   if(S.signoffStyle==="animated"||S.signoffStyle==="still"){var sl=soSlug(S.signoff)||"kind-regards",fo=soFont(),sz0=SO.size[fo.key][sl],k0=S.signoffSize/30,w0=Math.round(sz0[0]*k0),h0=Math.round(sz0[1]*k0),anim=S.signoffStyle==="animated";
@@ -1342,7 +1364,7 @@ function signatureInner(mode){var side=content(mode,"side",true),under=content(m
 function dropEmptyPics(h){return h.replace(/<a\b[^>]*>\s*<img\b[^>]*\bsrc=""[^>]*>\s*<\/a>/g,"").replace(/<img\b[^>]*\bsrc=""[^>]*>/g,"")}
 function builtOne(){var h=dropEmptyPics(signature("email").replace(/ data-measure="1"/g,""));if(darkExtras())h=darkTag(h);return slim(keepPicSizes(h))}
 /* a separate phone layout: arrangement, sizes and spacing for phones; colours, fonts and words stay shared */
-var MOB_KEYS=["order","st","contactLayout","logoSize","logoPos","logoShow","logoMatch","nameSize","textSize","iconSize","btnPadX","btnPadY","btnFont","btnGap","pieceGap","iconGap","contactGap","contactIconGap","gap","lineGapL","lineGapR","dividerW","lineLen","photoSize","photoShow","align","mainValign","signoffSize","bannerW","rainbowW","sigPad"];
+var MOB_KEYS=["btnSide","socialWithLogo","order","st","contactLayout","logoSize","logoPos","logoShow","logoMatch","nameSize","textSize","iconSize","btnPadX","btnPadY","btnFont","btnGap","pieceGap","iconGap","contactGap","contactIconGap","gap","lineGapL","lineGapR","dividerW","lineLen","photoSize","photoShow","align","mainValign","signoffSize","bannerW","rainbowW","sigPad"];
 function pickMob(src){var o={};MOB_KEYS.forEach(function(k){if(src[k]!==undefined)o[k]=JSON.parse(JSON.stringify(src[k]))});return o}
 /* the stored form: laptop layout in the main settings, phone layout in .mob */
 function canonical(src){var c=JSON.parse(JSON.stringify(src));if(c._active==="mob"&&c._lap){c.mob=pickMob(c);Object.assign(c,c._lap)}delete c._lap;delete c._active;return c}
@@ -1352,7 +1374,7 @@ function syncActive(){var want=S.mob&&S.pvWidth==="phone"?"mob":"lap",cur=S._act
 /* build one layout without disturbing what's on screen; the stripe length is measured for that layout */
 function withLayout(which,fn){var keep=S,kb=barH;S=canonical(keep);if(which==="mob"&&S.mob)Object.assign(S,JSON.parse(JSON.stringify(S.mob)));
   try{var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+(which==="mob"?PHONE_W+"px":"max-content");document.body.appendChild(d);
-    for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh}}d.remove();
+    for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=barMeasure(d);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh}}d.remove();
     return fn()}finally{S=keep;barH=kb}}
 var COPY_GMAIL=false;
 function builtHtml(){return darkStyle()+builtHtml2()}
@@ -1419,7 +1441,7 @@ var ITEM={
   logo:function(){return[["animlogo"],["logomatch"],["seg","logoWhere","Where",[["off","No logo"],["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"]]],["range","logoSize","Size",30,220],["seg","emb.logo","Embossed",EMB_OPTS],["seg","logoBg","Behind the logo",[["none","Nothing"],["brand","Brand colour tile"],["light","Grey tile"]]],["seg","divider","Line beside it",[["rainbow","Brand stripe"],["solid","One colour"],["none","None"]]],["linebox"],["file","logoFile","Try a different logo"],["text","logoUrl","Logo web address"]]},
   name:function(){return[["text","name","Name"],["color","st.name.color","Colour"],["range","st.name.size","Size",12,32,function(){return S.nameSize}],["bi","name"]]},
   role:function(){return[["text","role","Role"],["text","company","Business"],["color","st.role.color","Colour"],["range","st.role.size","Size",10,22,function(){return S.textSize}],["bi","role"]]},
-  contact:function(){return[["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["seg","contactLayout","Layout",[["stack","One per line"],["pairs","Two per line"],["line","One line"]]],["range","contactGap","Gap between phone, email and website",0,24,function(){return contactGap()}],["range","contactIconGap","Gap between each icon and its words",0,24,function(){return cIconGap()}],["text","contactSep","Mark between them on one line (· | / or leave empty)"],["select","contactIcons","Icons",[["none","None"],["letters","Letters (M, P, E, W, A)"],["brand","Colour circles"],["glyph","Colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["glyph-white","White"],["outline","Outline"]]],["check","contactLabels","Letters in one colour"],["color","st.contact.color","Text colour"],["range","st.contact.size","Size",10,20,function(){return S.textSize}],["bi","contact"]]},
+  contact:function(){return[["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["seg","contactLayout","Layout",[["stack","One per line"],["pairs","Two per line"],["smart","Mixed"],["line","One line"]]],["range","contactGap","Gap between phone, email and website",0,24,function(){return contactGap()}],["range","contactIconGap","Gap between each icon and its words",0,24,function(){return cIconGap()}],["text","contactSep","Mark between them on one line (· | / or leave empty)"],["select","contactIcons","Icons",[["none","None"],["letters","Letters (M, P, E, W, A)"],["brand","Colour circles"],["glyph","Colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["glyph-white","White"],["outline","Outline"]]],["check","contactLabels","Letters in one colour"],["color","st.contact.color","Text colour"],["range","st.contact.size","Size",10,20,function(){return S.textSize}],["bi","contact"]]},
   tagline:function(){return[["area","tagline","Tagline"],["color","st.tagline.color","Colour"],["range","st.tagline.size","Size",10,20,function(){return S.textSize-1}],["bi","tagline"]]},
   actions:function(){return[["text","bookLabel","Booking button"],["text","bookUrl","Booking link"],["text","reviewLabel","Review button"],["text","reviewUrl","Review link"],["text","extraLabel","Extra button"],["text","extraUrl","Extra link"],["seg","btnStyle","Look",[["filled","Filled"],["outline","Outline"],["link","Text links"]]],["range","btnPadX","Button width (space either side of the words)",2,32],["range","btnPadY","Button height (space above and below the words)",1,16,function(){return btnPadY()}],["range","btnGap","Space between buttons",0,48,function(){return btnGap()}],["range","pieceGap","Space next to other parts on the same line (like social icons)",0,40,function(){return pieceGap()}],["seg","emb.btn","Embossed",EMB_OPTS],["range","btnFont","Button text size",9,18,function(){return btnFs()}],["seg","bookIcon","Booking icon",[["none","None"],["calendar","Calendar"]]],["color","colors.button","Booking button colour"],["color","colors.reviewBtn","Review button colour",null,null,"@p"],["color","colors.extraBtn","Extra button colour",null,null,"@p"],["range","btnRadius","Corners",0,20]]},
   social:function(){return[["icons","iconStyle","Icon style"],["range","iconSize","Size",16,36],["range","iconGap","Space between icons",0,24,function(){return iconGap()}],["range","pieceGap","Space next to buttons on the same line",0,40,function(){return pieceGap()}],["seg","emb.icons","Embossed",EMB_OPTS],["text","social.facebook","Facebook"],["text","social.tiktok","TikTok"],["text","social.instagram","Instagram"],["text","social.linkedin","LinkedIn"],["text","social.youtube","YouTube"],["text","social.whatsapp","WhatsApp"],["text","social.x","X"],["text","social.google","Google profile"],["note","A username like @ambssolutions is fine. Icons show only for the ones you fill in."]]},
@@ -2317,7 +2339,7 @@ function drawQbar(force){var box=$("inbox"),q=$("qbar"),g=$("grabBox"),id=KEYPAR
       w.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){var v=set(get()+(i?step:-step));w.querySelector(".qv").textContent=v;save();update();toast(lbl+": "+v+(unit||"px"))})})};
     if(id==="contact"){stp("Gap",contactGap,function(v){S.contactGap=Math.max(0,Math.min(24,v));return S.contactGap},1);stp("Icon gap",cIconGap,function(v){S.contactIconGap=Math.max(0,Math.min(24,v));return S.contactIconGap},1);
       var sp2=add('<input class="qt qsep" type="text" maxlength="6" aria-label="Mark between items" title="Mark between items on one line (· | / or empty)" placeholder="none">',function(e,el){S.contactSep=el.value;save();update()},"input");sp2.value=cSep();
-      cyc("Layout","contactLayout",[["stack","One per line"],["pairs","Two per line"],["line","One line"]]);cyc("Icons","contactIcons",[["letters","Letters"],["glyph","Colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["brand","Circles"],["outline","Outline"],["none","None"]])}
+      cyc("Layout","contactLayout",[["stack","One per line"],["pairs","Two per line"],["smart","Mixed"],["line","One line"]]);cyc("Icons","contactIcons",[["letters","Letters"],["glyph","Colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["brand","Circles"],["outline","Outline"],["none","None"]])}
     if(id==="social"){if(window.ICON_STYLES)cyc("Style","iconStyle",ICON_STYLES.map(function(x){return[x[0],x[1]]}));opts("Accounts",more);opts("⇅ Reorder",reorderGo)}
     if(id==="contact")opts("⇅ Reorder",reorderGo);
     if(isBtn(id)&&String(id).indexOf("c-")<0){cyc("Look","btnStyle",[["filled","Filled"],["outline","Outline"],["link","Text link"]]);lnk(id+"Url","Link")}
@@ -2421,39 +2443,83 @@ function presetLook(p){var d=defaults(),o={};LOOK.forEach(function(k){if(k==="si
 /* every template starts phone-friendly: the compact spacing of a well-made phone signature (small gaps, 13px text,
    rounded buttons), then anything still wider than a phone is folded: contacts onto two lines, then one per line,
    a smaller logo, and finally the logo above the details */
-var PHONE_RULES={gap:6,pieceGap:5,iconGap:4,btnGap:7,btnPadX:12,btnPadY:8,btnFont:12,contactGap:4,contactIconGap:5,lineGapL:14,lineGapR:12,bannerW:340,discW:340};
-function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));o.darkOn=true;
+/* a long street address goes onto two lines at the comma nearest the middle, so it never forces the whole signature wider than a phone */
+function addrLines(v,ok){v=String(v||"").trim();if(!ok||v.length<=28||v.indexOf(",")<0)return[v];var best=-1,mid=v.length/2;
+  for(var i=0;i<v.length;i++)if(v[i]===","&&(best<0||Math.abs(i-mid)<Math.abs(best-mid)))best=i;
+  return best<0?[v]:[v.slice(0,best+1).trim(),v.slice(best+1).trim()].filter(Boolean)}
+var PHONE_RULES={gap:6,pieceGap:5,iconGap:4,btnGap:7,btnPadX:12,btnPadY:8,btnFont:12,contactGap:4,contactIconGap:5,lineGapL:14,lineGapR:12,bannerW:340,discW:340,tagW:240};
+var PF_CACHE={},PF_N=0,FIT_FIELDS=["btnSide","socialWithLogo","contactLayout","logoSize","photoSize","logoPos","order"];
+function fitKey(t,lock){return JSON.stringify([t,lock||{}],function(k,v){return/^(logoData|photoData|bannerData|code|mob|_lap|fitBase|_fit|fitLock)$/.test(k)?(v?String(v).length:v):v})}
+/* the parts the auto-fit looks after, as one comparable record */
+function fitSnap(t){var j={};(t.order||[]).forEach(function(x){if(/^(review|extra|social)$/.test(x[0]))j[x[0]]=x[3]?1:0});
+  return{btnSide:t.btnSide||"",contactLayout:t.contactLayout,socialWithLogo:!!t.socialWithLogo,logoPos:t.logoPos,logoSize:+t.logoSize||0,photoSize:+t.photoSize||0,joins:JSON.stringify(j)}}
+/* try the sensible arrangements and keep the most compact one that fits a phone: contacts one, two or all per line,
+   buttons side by side or stacked, social icons under the logo or with the details. Shrinking the logo, or moving it
+   above the details, happens only when nothing else fits. Anything in lock was chosen by hand and is left alone */
+function fitLayout(base,lock,bigLogo){lock=lock||{};var key=fitKey(base,lock);if(PF_CACHE[key])return JSON.parse(PF_CACHE[key]);
+  var keep=S,kb=barH;base=JSON.parse(JSON.stringify(base));base.mob=null;
+  var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:max-content";document.body.appendChild(d);
+  var size=function(t){S=t;barH=36;try{d.innerHTML=signature("preview");var m=d.firstElementChild;return[d.scrollWidth,m?m.offsetHeight:0]}finally{S=keep;barH=kb}};
+  var btns=function(t){var S0=S;S=t;try{return t.order.filter(function(x){return/^(book|review|extra)$/.test(x[0])&&x[1]&&block(x[0],"preview")}).length}finally{S=S0}},
+    sideLogo=function(t){var lo=t.order.filter(function(x){return x[0]==="logo"})[0];return t.logoShow!==false&&lo&&lo[1]&&(lo[2]==="left"||lo[2]==="right")};
+  var search=function(t0){var cl0=t0.contactLayout,best=null,cls=lock.contactLayout?[cl0]:cl0==="line"?["line","pairs","smart","stack"]:["pairs","smart","stack"];if(cls.indexOf(cl0)<0)cls.unshift(cl0);
+    var nb=btns(t0),sl=sideLogo(t0),so0=t0.order.filter(function(x){return x[0]==="social"})[0],sj=so0&&so0[3]&&!lock.joins?[1,0]:[null];
+    var rcol=t0.order.some(function(x){return x[1]&&x[2]==="right"}),bss=lock.btnSide||!nb||rcol||t0.align==="center"?[t0.btnSide||""]:["","right"];
+    cls.forEach(function(cl){(nb>1&&!lock.joins?[1,0]:[null]).forEach(function(j){(sl&&!lock.socialWithLogo?[true,false]:[t0.socialWithLogo]).forEach(function(sw){sj.forEach(function(k){bss.forEach(function(bs){
+      if(bs==="right"&&j===1)return;
+      var t=JSON.parse(JSON.stringify(t0));t.contactLayout=cl;t.socialWithLogo=sw;t.btnSide=bs;t.order.forEach(function(x){if(j!=null&&/^(review|extra)$/.test(x[0]))x[3]=j;if(k!=null&&x[0]==="social")x[3]=k});
+      var z=size(t);if(z[0]>PHONE_W)return;var sc=z[1]+(cl!==cl0?6:0)+(cl==="smart"?2:0)+(j===0?4:0)+(k===0?3:0)+(sw?0:2)+(bs?6:0);if(!best||sc<best.sc)best={sc:sc,t:t}})})})})});
+    return best&&best.t};
+  try{var stages=[function(t){return t},
+      function(t){if(!lock.logoSize)t.logoSize=Math.min(t.logoSize,70);if(t.photoShow&&!lock.photoSize)t.photoSize=Math.min(t.photoSize,72);return t},
+      function(t){if(!lock.logoPos&&t.logoShow!==false&&t.logoPos==="social"){t.logoPos="bottom";placeMedia(t,"logo",true)}return t},
+      function(t){if(!lock.logoPos&&t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";if(!lock.logoSize)t.logoSize=Math.max(110,Math.min(+bigLogo||110,120));placeMedia(t,"logo",true)}return t}];
+    var cur=base,win=null;for(var k=0;k<stages.length&&!win;k++){cur=stages[k](JSON.parse(JSON.stringify(cur)));win=search(cur)}
+    if(!win){if(!lock.contactLayout)cur.contactLayout="stack";if(!lock.joins)cur.order.forEach(function(x){if(/^(review|extra|social)$/.test(x[0]))x[3]=0});win=cur}
+    var res={};FIT_FIELDS.forEach(function(f){res[f]=win[f]===undefined?"":JSON.parse(JSON.stringify(win[f]))});
+    PF_CACHE[key]=JSON.stringify(res);if(++PF_N>400){PF_CACHE={};PF_N=0}return res}
+  finally{d.remove()}}
+function phoneFirst(o){Object.assign(o,JSON.parse(JSON.stringify(PHONE_RULES)));o.darkOn=true;o.btnSide=o.btnSide||"";if(o.socialWithLogo==null)o.socialWithLogo=o.logoPos==="left"||o.logoPos==="right";
   o.textSize=Math.min(+o.textSize||13,13);o.nameSize=Math.max(16,Math.min(+o.nameSize||17,20));o.logoSize=Math.min(+o.logoSize||100,90);o.photoSize=Math.min(+o.photoSize||96,88);
   o.iconSize=Math.max(18,Math.min(+o.iconSize||26,28));o.dividerW=Math.min(+o.dividerW||3,4);o.rainbowW=Math.min(+o.rainbowW||220,220);
+  /* the template's own arrangement is remembered, so later changes can be fitted again from it */
+  var pre={};FIT_FIELDS.forEach(function(f){pre[f]=JSON.parse(JSON.stringify(o[f]))});pre.bigLogo=+o.logoSize||110;o.fitBase=pre;o.fitLock={};o.autoFit=true;
   if(typeof document==="undefined")return o;
-  var keep=S,kb=barH,t=Object.assign(JSON.parse(JSON.stringify(S)),JSON.parse(JSON.stringify(o)));t.mob=null;
-  var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:max-content";document.body.appendChild(d);
-  var width=function(){S=t;try{for(var i=0;i<2;i++){d.innerHTML=signature("preview");var m=d.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(Math.abs(hh-barH)<=3)break;barH=hh}}return d.scrollWidth}finally{S=keep;barH=kb}};
-  try{var steps=[
-      function(){if(t.contactLayout==="line"){t.contactLayout="pairs";return true}},
-      function(){var hit=false;t.order.forEach(function(x){if(/^(review|extra)$/.test(x[0])&&x[3]){x[3]=0;hit=true}});return hit},
-      function(){if(t.contactLayout==="pairs"){t.contactLayout="stack";return true}},
-      function(){if(t.logoSize>70){t.logoSize=70;return true}},
-      function(){if(t.photoShow&&t.photoSize>72){t.photoSize=72;return true}},
-      function(){if(t.logoShow!==false&&(t.logoPos==="left"||t.logoPos==="right")){t.logoPos="top";t.logoSize=Math.max(110,Math.min(+o.logoSize||110,120));placeMedia(t,"logo",true);return true}}];
-    for(var k=0;k<steps.length&&width()>PHONE_W;k++)steps[k]();
-    ["contactLayout","logoSize","photoSize","logoPos","order"].forEach(function(key){o[key]=JSON.parse(JSON.stringify(t[key]))})}
-  finally{d.remove()}
+  Object.assign(o,fitLayout(Object.assign(JSON.parse(JSON.stringify(S)),JSON.parse(JSON.stringify(o))),{},pre.bigLogo));o._fit=fitSnap(o);
   return o}
+/* after any change, a template that came from the gallery is fitted again: anything changed by hand since the last fit
+   is kept as it is (and stays that way), everything else goes back to the template's choice and is folded to fit */
+function refit(){if(!S.autoFit||!S.fitBase||!S._fit||S.mob||(S.useCode&&String(S.code||"").trim()))return false;
+  var now=fitSnap(S),lock=Object.assign({},S.fitLock||{});Object.keys(now).forEach(function(k){if(now[k]!==S._fit[k])lock[k==="joins"?"joins":k]=1});S.fitLock=lock;
+  var b=JSON.parse(JSON.stringify(S)),fb=S.fitBase;
+  if(!lock.contactLayout)b.contactLayout=fb.contactLayout;if(!lock.btnSide)b.btnSide=fb.btnSide||"";if(!lock.socialWithLogo)b.socialWithLogo=fb.socialWithLogo;if(!lock.logoSize)b.logoSize=fb.logoSize;if(!lock.photoSize)b.photoSize=fb.photoSize;
+  if(!lock.joins){var jb={};(fb.order||[]).forEach(function(x){jb[x[0]]=x[3]});b.order.forEach(function(x){if(/^(review|extra|social)$/.test(x[0])&&jb[x[0]]!=null)x[3]=jb[x[0]]})}
+  if(!lock.logoPos&&b.logoPos!==fb.logoPos&&S.logoShow!==false){b.logoPos=fb.logoPos;placeMedia(b,"logo",true)}
+  var res=fitLayout(b,lock,fb.bigLogo),diff=false;FIT_FIELDS.forEach(function(f){if(JSON.stringify(res[f])!==JSON.stringify(S[f])){S[f]=res[f];diff=true}});
+  S._fit=fitSnap(S);return diff}
+var REFIT_T=0;
+function refitSoon(){clearTimeout(REFIT_T);if(!S.autoFit)return;REFIT_T=setTimeout(function(){var y=window.scrollY;if(refit())update();else save()},350)}
 var thumbT=0;
-function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard"))return;thumbT=setTimeout(function(){var keep=S,kb=barH;
-  [].forEach.call(document.querySelectorAll(".tcard"),function(card){var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=exampleInto(JSON.parse(JSON.stringify(keep)));if(u)useMyTpl(u,t);else if(p){Object.assign(t,presetLook(p));wizLookKeep(t)}else return;
+/* template cards are drawn a few at a time, the ones on screen first, so typing and tapping never stall */
+var THUMB_RUN=0;
+function drawThumbs(now){clearTimeout(thumbT);if(!document.querySelector(".tcard"))return;var run=++THUMB_RUN;thumbT=setTimeout(function(){
+  var vh=window.innerHeight||800,q=[].slice.call(document.querySelectorAll(".tcard")).map(function(c){var r=c.getBoundingClientRect();return{c:c,d:r.bottom<0?-r.bottom:r.top>vh?r.top-vh:0}}).sort(function(a,b){return a.d-b.d}).map(function(x){return x.c});
+  var step=function(){if(run!==THUMB_RUN)return;var t0=performance.now();while(q.length&&performance.now()-t0<24)drawThumb(q.shift());if(q.length)setTimeout(step,0)};step()},now?0:250)}
+function drawThumb(card){if(!card.isConnected)return;var keep=S,kb=barH;try{
+    var u=card.dataset.u!=null&&MYTPL?MYTPL[+card.dataset.u]:card.dataset.s?SAVEDLOOK[card.dataset.s]:null,p=u||card.dataset.s?null:PRESETS[+card.dataset.i],t=exampleInto(JSON.parse(JSON.stringify(keep)));if(u)useMyTpl(u,t);else if(p){Object.assign(t,presetLook(p));wizLookKeep(t)}else return;
     if(!SOCIAL.some(function(k){return t.social[k]}))t.social={facebook:"x",tiktok:"x",linkedin:"x",instagram:"x"};
     if(t.signoffStyle==="animated")t.signoffStyle="still";
-    S=t;barH=t.photoShow?Math.max(110,t.photoSize):110;t.useCode=false;card.querySelector(".ts").innerHTML=signature("preview");card.setAttribute("aria-pressed",String(keep.template===(u?u.name:p[0])))});
-  S=keep;barH=kb},now?0:150)}
-function update(){syncMedia();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML='<div id="codeEdit" contenteditable="true" spellcheck="true">'+cleanCode(S.code,true)+'</div>';
+    S=t;barH=t.photoShow?Math.max(110,t.photoSize):110;t.useCode=false;var ts=card.querySelector(".ts");ts.innerHTML=signature("preview");
+    /* the strip runs the full height of the tallest column, the same as in the preview */
+    for(var r=0;r<2;r++){var m=ts.querySelector("[data-measure]");if(!m)break;var hh=barMeasure(ts);if(t.photoShow)hh=Math.max(hh,t.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh;ts.innerHTML=signature("preview")}card.setAttribute("aria-pressed",String(keep.template===(u?u.name:p[0])))}
+  finally{S=keep;barH=kb}}
+function update(){syncMedia();refitSoon();if(S.logoMatch&&logoWithIcons())matchLogoToIcons();save();drawThumbs();var pv=$("sig");if(S.useCode&&String(S.code||"").trim()){pv.innerHTML='<div id="codeEdit" contenteditable="true" spellcheck="true">'+cleanCode(S.code,true)+'</div>';
     var ce=$("codeEdit");ce.addEventListener("input",function(){var keep=(String(S.code).match(/<style[\s\S]*?<\/style>/gi)||[]).join("");S.code=keep+ce.innerHTML;save();var ta=document.querySelector("#codeBox textarea");if(ta)ta.value=S.code});var ibc=$("inbox");ibc.classList.toggle("phone",S.pvWidth==="phone");ibc.classList.toggle("dark",S.pvMode==="dark");
     document.querySelectorAll("[data-pv]").forEach(function(g){g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(S[g.dataset.pv]===b.dataset.v))})});$("iconWarn").textContent="Showing your own HTML code. Go to Copy and use → HTML code to change it, or go back to the builder’s design.";
     var nb=h2('<div class="codenote" contenteditable="false"><span>This signature is HTML code, so icons, spacing and layout can’t be changed. Make it editable to change everything.</span><button type="button" class="btn small">✨ Make it editable</button></div>');nb.querySelector("button").addEventListener("click",function(){if(!codeToDesign())toast("Couldn’t read this code. Use Copy and use → HTML code → Back to the builder’s design.")});pv.insertBefore(nb,pv.firstChild);return}
   if(TEST){testView(pv);var ibt=$("inbox");ibt.classList.toggle("phone",S.pvWidth==="phone");ibt.classList.toggle("dark",S.pvMode==="dark");return}
   if(MOVE){visualBoard(pv);var ib0=$("inbox");ib0.classList.toggle("phone",S.pvWidth==="phone");ib0.classList.toggle("dark",S.pvMode==="dark");return}pv.innerHTML=signature("preview");
-  var m=pv.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
+  var m=pv.querySelector("[data-measure]");if(m){var hh=barMeasure(pv);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;pv.innerHTML=signature("preview")}}
   markSel();
   /* if the hosted sign-off picture can't load here, draw it with the font instead */
   pv.querySelectorAll("img.so-img").forEach(function(im){var fb=function(){im.remove();var s=pv.querySelector(".so-fb");if(s)s.hidden=false};if(im.complete&&im.naturalWidth===0&&im.src)fb();else im.addEventListener("error",fb)});
@@ -2722,7 +2788,7 @@ function wizBody(id,c){
     var seg=function(label,key,opts){var r=h2('<div class="wz-seg"><span>'+label+'</span><div class="seg" role="group" aria-label="'+label+'"></div></div>');var bx=r.querySelector(".seg");
       opts.forEach(function(o){var b=h2('<button type="button" aria-pressed="'+(WZ_LOOK[key]===o[0])+'">'+o[1]+'</button>');b.addEventListener("click",function(){WZ_LOOK[key]=WZ_LOOK[key]===o[0]?"":o[0];if(WZ_LOOK[key])S[key]=o[0];save();changed();wizGo(WZ)});bx.appendChild(b)});return r};
     var fl=h2('<div class="wz-cat"><span>Category</span><div class="wz-filt"></div></div>'),fx=fl.querySelector(".wz-filt");TPL_FILTERS.forEach(function(f){var n=PRESETS.filter(function(pr){return(pr[3]||[]).concat(["all"]).indexOf(f[0])>=0}).length;if(!n)return;var b=h2('<button type="button" class="chip" aria-pressed="'+(tplFilter===f[0])+'">'+esc(f[0]==="all"?"All":f[1])+' <small>'+n+'</small></button>');b.addEventListener("click",function(){tplFilter=f[0];wizGo(WZ)});fx.appendChild(b)});c.appendChild(fl);
-    c.appendChild(seg("Contact details","contactLayout",[["stack","One per line"],["pairs","Two per line"],["line","All on one line"]]));
+    c.appendChild(seg("Contact details","contactLayout",[["stack","One per line"],["pairs","Two per line"],["smart","Mixed"],["line","All on one line"]]));
     c.appendChild(seg("Labels","contactIcons",[["letters","Letters"],["glyph","Icons"],["none","None"]]));
     var g=h2('<div class="tpl-grid wz-tpl"></div>');PRESETS.forEach(function(pr,i){var tags=(pr[3]||[]).concat(["all"]);if(tags.indexOf(tplFilter)<0)return;var b=document.createElement("button");b.type="button";b.className="tcard";b.dataset.i=i;b.setAttribute("aria-pressed",String(S.template===pr[0]));
       b.innerHTML='<span class="tthumb" aria-hidden="true"><span class="ts"></span></span><span class="tname"><b>'+esc(pr[0])+'</b><small>'+esc(pr[1])+'</small></span>';
@@ -2731,6 +2797,10 @@ function wizBody(id,c){
   if(id==="arrange"){var redraw=function(){var y=w0.scrollTop;wizGo(WZ);w0.scrollTop=y},w0=document.querySelector(".wiz .wz-body");
     var lw=h2('<div class="wz-seg"><span>Logo</span><div class="seg" role="group" aria-label="Logo position"></div></div>'),cur=getP("logoWhere");
     [["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"],["off","No logo"]].forEach(function(o){var b=h2('<button type="button" aria-pressed="'+(cur===o[0])+'">'+o[1]+'</button>');b.addEventListener("click",function(){setP("logoWhere",o[0]);save();changed();redraw()});lw.querySelector(".seg").appendChild(b)});c.appendChild(lw);
+    var lo=inOrder("logo"),so=inOrder("social");if(S.logoShow!==false&&lo&&lo[1]&&(lo[2]==="left"||lo[2]==="right")&&so&&so[1]){var sw=h2('<div class="wz-seg"><span>Social icons</span><div class="seg" role="group" aria-label="Where the social icons go"></div></div>');
+      [[true,"Under the logo"],[false,"With your details"]].forEach(function(o){var b=h2('<button type="button" aria-pressed="'+(!!S.socialWithLogo===o[0])+'">'+o[1]+'</button>');b.addEventListener("click",function(){S.socialWithLogo=o[0];save();changed();redraw()});sw.querySelector(".seg").appendChild(b)});c.appendChild(sw)}
+    if(S.order.some(function(o){return o[1]&&/^(book|review|extra)$/.test(o[0])&&block(o[0],"preview")})&&!S.order.some(function(o){return o[1]&&o[2]==="right"})){var bw=h2('<div class="wz-seg"><span>Buttons</span><div class="seg" role="group" aria-label="Where the buttons go"></div></div>');
+      [["","Under your details"],["right","On the right"]].forEach(function(o){var b=h2('<button type="button" aria-pressed="'+((S.btnSide||"")===o[0])+'">'+o[1]+'</button>');b.addEventListener("click",function(){S.btnSide=o[0];save();changed();redraw()});bw.querySelector(".seg").appendChild(b)});c.appendChild(bw)}
     /* the parts in order: pieces that share a line (like the buttons) move together */
     var groups=[];S.order.forEach(function(x){if(x[3]&&groups.length)groups[groups.length-1].push(x);else groups.push([x])});
     var shownG=groups.filter(function(g){return g.some(function(x){return x[1]&&!/^(logo|photo)$/.test(x[0])})}),hidG=groups.filter(function(g){return shownG.indexOf(g)<0});
@@ -2758,7 +2828,7 @@ function wizHtml(){var ov=h2('<div class="sdlg" role="dialog" aria-modal="true" 
 /* the preview at the top of every screen: the whole signature, scaled to fit */
 function wizPv(){if(!WIZ_ON)return;var box=document.querySelector(".wiz .wz-pv"),inner=box&&box.querySelector(".wz-pvi");if(!inner)return;
   inner.style.transform="none";inner.innerHTML=signature("preview");
-  var m=inner.querySelector("[data-measure]");if(m){var hh=Math.max(36,Math.round(m.offsetHeight));if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;inner.innerHTML=signature("preview")}}
+  var m=inner.querySelector("[data-measure]");if(m){var hh=barMeasure(inner);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)>3){barH=hh;inner.innerHTML=signature("preview")}}
   var w=inner.scrollWidth||1,h=inner.scrollHeight||1,aw=box.clientWidth-24,ah=Math.round(window.innerHeight*(window.innerWidth<=760?.24:.34)),k=Math.min(1,aw/w,ah/h);
   inner.style.transform="scale("+k+")";box.style.height=Math.ceil(h*k+24)+"px"}
 (function(){var u0=update;update=function(){var r=u0.apply(this,arguments);try{wizPv()}catch(e){}return r}})();
