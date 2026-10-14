@@ -792,7 +792,7 @@ body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidde
 @media (min-width:761px){.wz-nav{border:1px solid var(--line);border-radius:14px;margin-bottom:14px}}
 .wz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wz-opt{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px;border:1.5px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}.wz-opt span{font-size:1.4rem;line-height:1;font-weight:800}.wz-opt b{font-size:.98rem}.wz-opt small{color:var(--muted);font-size:.8rem;line-height:1.3}.wz-opt:hover,.wz-opt[aria-pressed=true]{border-color:#24b328;box-shadow:0 0 0 2px rgba(36,179,40,.35)}
 .wz-web{margin-top:12px}.wz-web .sfill{padding:0;border:0;background:none}.wz-c .sfill .row{flex-direction:row!important;flex-wrap:nowrap}.wz-c .sfill input{flex:1 1 auto!important;height:50px!important;padding:0 14px!important}.wz-c .sfill .btn{width:auto!important;flex:none;height:50px;padding:0 18px!important}
-.wz-open{margin-top:18px}.wz-code{width:100%;box-sizing:border-box;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;background:var(--soft);color:var(--ink)}.wiz .wz-nav[hidden]{display:none}
+.wz-open{margin-top:18px}.wz-code{width:100%;box-sizing:border-box;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;background:var(--soft);color:var(--ink)}.wiz .wz-nav[hidden],.wiz .wz-pv[hidden]{display:none}
 @media (max-width:420px){.wz-opt{padding:12px}.wz-opt small{font-size:.76rem}}
 .wz-back2{margin-right:6px}.toast{z-index:90}
 </style>
@@ -2423,7 +2423,7 @@ var update0=update;update=function(){syncActive();update0.apply(this,arguments);
 function foundBox(){var it=SITEFILL&&SITEFILL.items;if(!it||!it.length)return h2('<div class="wide foundbox">'+(SITEFILL&&SITEFILL.html?'<b>Found on '+esc(SITEFILL.site)+'</b>'+SITEFILL.html:'<span>Empty lines are left out of your signature.</span>')+'</div>');
   var on=function(x){if(x.k==="@logo"){var lo=inOrder("logo");return!!(lo&&lo[1]&&S.logoShow!==false)}return String(getP(x.k)||"")===String(x.v)};
   var el=h2('<div class="wide foundbox fb2"><b>Found on '+esc(SITEFILL.site)+'</b><p class="fbn">Untick anything you don’t want in your signature.</p><div class="fbl"></div></div>'),l=el.querySelector(".fbl");
-  var ppl=SITEFILL.people||[];if(ppl.length>1){var pc=h2('<div class="fbppl"><small>People on the website: tap one to use their name and role</small></div>');ppl.forEach(function(p){var b=h2('<button type="button" class="fbp" aria-pressed="'+(S.name===p.name)+'">'+esc(p.name)+(p.role?' <span>'+esc(p.role)+'</span>':'')+'</button>');b.addEventListener("click",function(){S.name=p.name;S.role=p.role||S.role;SITEFILL.items.forEach(function(x){if(x.k==="name")x.v=p.name;if(x.k==="role"&&p.role)x.v=p.role});save();var y=window.scrollY;changed();go(STEP);window.scrollTo(0,y);toast("Using "+p.name)});pc.appendChild(b)});el.insertBefore(pc,l)}
+  var ppl=SITEFILL.people||[];if(ppl.length){var pc=h2('<div class="fbppl"><small>Suggested from the website. Is one of these you? Tap to add.</small></div>');ppl.forEach(function(p){var b=h2('<button type="button" class="fbp" aria-pressed="'+(S.name===p.name)+'">'+(S.name===p.name?"✓ ":"＋ ")+esc(p.name)+(p.role?' <span>'+esc(p.role)+'</span>':'')+'</button>');b.addEventListener("click",function(){S.name=p.name;S.role=p.role||S.role;SITEFILL.items.forEach(function(x){if(x.k==="name")x.v=p.name;if(x.k==="role"&&p.role)x.v=p.role});save();var y=window.scrollY;changed();go(STEP);window.scrollTo(0,y);toast("Using "+p.name)});pc.appendChild(b)});el.insertBefore(pc,l)}
   it.forEach(function(x){var row=h2('<label class="fbi"><input type="checkbox"'+(on(x)?" checked":"")+'><span><b>'+esc(x.l)+'</b>'+(x.v===true?"":'<small>'+esc(String(x.v).slice(0,60))+'</small>')+'</span></label>');
     row.querySelector("input").addEventListener("change",function(e){var c=e.target.checked;
       if(x.k==="@logo"){var lo=inOrder("logo");if(lo)lo[1]=c?1:0;S.logoShow=c}else setP(x.k,c?x.v:"");
@@ -2539,12 +2539,12 @@ function siteFill(site,btn,out){var keep=btn.textContent;
   btn.disabled=true;btn.textContent="Reading your website…";out.innerHTML="";
   edToken().then(function(tok){return fetch("/api/siteinfo",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:JSON.stringify({url:site})})})
   .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Couldn’t read that website.");return j})})
-  .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Name",d.person],["Logo",found.logo],["Business name",d.name],["Website",d.website],["Office phone",d.phone],["Mobile",d.mobile],["Email",d.email],["Address",d.address]];
+  .then(function(d){histPush(true);SITEFILL={site:site,html:""};applySite(d,function(found){var all=[["Logo",found.logo],["Business name",d.name],["Website",d.website],["Office phone",d.phone],["Mobile",d.mobile],["Email",d.email],["Address",d.address]];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])all.push([k==="x"?"X":k.charAt(0).toUpperCase()+k.slice(1),d.social[k]])});
       var lk=d.links||{};all.push(["Booking link",lk.book?lk.book.url:""],["Google review link",lk.review||""],["Google profile",lk.google||""]);if(lk.extra)all.push(["Extra button",lk.extra.label+" → "+lk.extra.url]);
       var got=all.filter(function(x){return x[1]}).length;
       var html='<ul>'+all.map(function(x){return'<li class="'+(x[1]?"":"no")+'">'+(x[1]?"✓ ":"– ")+'<b>'+esc(x[0])+'</b>'+(x[1]&&x[1]!==true?': '+esc(String(x[1]).slice(0,40)):x[1]?"":" not found")+'</li>'}).join("")+'</ul><p class="sfmsg">'+(got?"Filled in "+got+" things. Check them below, then press <b>Next</b>. Undo puts everything back.":"We couldn’t find details on that website. Fill them in below.")+'</p>';
-      var items=[{l:"Your name",k:"name",v:d.person},{l:"Role",k:"role",v:d.prole},{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
+      var items=[{l:"Logo",k:"@logo",v:found.logo?true:""},{l:"Business name",k:"company",v:d.name},{l:"Website",k:"website",v:d.website},{l:"Office phone",k:"phone",v:d.phone},{l:"Mobile",k:"mobile",v:d.mobile},{l:"Email",k:"email",v:d.email},{l:"Address",k:"location",v:d.address}];
       SOCIAL.forEach(function(k){if(d.social&&d.social[k])items.push({l:({x:"X",tiktok:"TikTok",whatsapp:"WhatsApp",youtube:"YouTube",linkedin:"LinkedIn"})[k]||k.charAt(0).toUpperCase()+k.slice(1),k:"social."+k,v:d.social[k]})});
       if(d.animLogo)items.splice(3,0,{l:"Moving logo (untick for a still logo)",k:"logoAnim",v:true});
       if(lk.book)items.push({l:"Booking button: "+lk.book.label,k:"bookUrl",v:lk.book.url,b:"book"});if(lk.review)items.push({l:"Google review button",k:"reviewUrl",v:lk.review,b:"review"});
@@ -2579,7 +2579,7 @@ function applySite(d,done){var other=!/(^|\.)ambs\.co\.nz$/i.test(String(d.websi
   if(lk.review){S.reviewUrl=lk.review;if(!S.reviewLabel)S.reviewLabel="Review us on Google";onB("review")}
   if(lk.extra&&lk.extra.url){S.extraUrl=lk.extra.url;S.extraLabel=lk.extra.label||"Find out more";onB("extra")}
   var sp=splitPhones(d.phones&&d.phones.length?d.phones:(d.phone?[d.phone]:[]));d.phone=sp.office;d.mobile=sp.mobile;
-  var pp=(d.people||[])[0];if(pp&&pp.name){S.name=pp.name;if(pp.role)S.role=pp.role}d.person=pp?pp.name:"";d.prole=pp?pp.role||"":"";
+  /* people named on the website are only suggestions: nothing goes in until you tap one */d.person="";d.prole="";
   if(d.name)S.company=d.name;if(d.website)S.website=d.website;if(d.phone)S.phone=d.phone;if(d.mobile)S.mobile=d.mobile;if(d.email)S.email=d.email;if(d.address)S.location=d.address;
   var soc=Object.assign({},d.social||{});if(lk.google)soc.google=lk.google;if(SOCIAL.some(function(k){return soc[k]})){SOCIAL.forEach(function(k){S.social[k]=soc[k]||""});var so=inOrder("social");if(so)so[1]=1}
   var fin=function(gotLogo){save();changed();go(STEP,"brand");done({logo:gotLogo})};
@@ -2633,7 +2633,7 @@ function wizGo(i){var w=document.querySelector(".wiz");if(!w)return;WZ=Math.max(
   w.querySelector(".wz-count").textContent="Step "+(WZ+1)+" of "+WZ_SCREENS.length;
   w.querySelector(".wz-dots").innerHTML=WZ_SCREENS.map(function(x,k){return'<i class="'+(k<WZ?"done":k===WZ?"on":"")+'"></i>'}).join("");
   w.querySelector(".wz-h").textContent=sc.t;w.querySelector(".wz-d").textContent=sc.d;
-  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;w.querySelector(".wz-nav").hidden=WZ===0;
+  var bk=w.querySelector(".wz-back"),nx=w.querySelector(".wz-next");bk.hidden=WZ===0;w.querySelector(".wz-nav").hidden=WZ===0;w.querySelector(".wz-pv").hidden=sc.id==="site";
   nx.textContent=WZ===WZ_SCREENS.length-1?"✓ Save and finish":WZ===0?"Skip, I’ll type my details":"Next: "+WZ_SCREENS[WZ+1].t;nx.classList.toggle("sec",WZ===0);
   c.innerHTML="";wizBody(sc.id,c);w.querySelector(".wz-body").scrollTop=0;wizPv()}
 function wizBody(id,c){
@@ -2651,7 +2651,7 @@ function wizBody(id,c){
     opts.querySelector('[data-o="new"]').addEventListener("click",function(){newSig(false);wizGo(1);toast("New blank signature")});
     opts.querySelector('[data-o="html"]').addEventListener("click",wizHtml);
     var sv=h2('<button type="button" class="linkbtn wz-open">📂 Open a saved signature</button>');sv.addEventListener("click",function(){openSigs()});c.appendChild(sv);return}
-  if(id==="you"){var ppl=SITEFILL&&SITEFILL.people||[];if(ppl.length>1){var pc=h2('<div class="wz-ppl"><small>People on your website: tap one</small></div>');ppl.forEach(function(pp){var b=h2('<button type="button" class="chip" aria-pressed="'+(S.name===pp.name)+'">'+esc(pp.name)+(pp.role?' · '+esc(pp.role):'')+'</button>');b.addEventListener("click",function(){S.name=pp.name;if(pp.role)S.role=pp.role;changed();wizGo(WZ)});pc.appendChild(b)});c.appendChild(pc)}
+  if(id==="you"){var ppl=SITEFILL&&SITEFILL.people||[];if(ppl.length){var pc=h2('<div class="wz-ppl"><small>Suggested from your website. Is one of these you? Tap to add.</small></div>');ppl.forEach(function(pp){var b=h2('<button type="button" class="chip" aria-pressed="'+(S.name===pp.name)+'">'+(S.name===pp.name?"✓ ":"＋ ")+esc(pp.name)+(pp.role?' · '+esc(pp.role):'')+'</button>');b.addEventListener("click",function(){S.name=pp.name;if(pp.role)S.role=pp.role;changed();wizGo(WZ)});pc.appendChild(b)});c.appendChild(pc)}
     renderPart("wzYou",c,false);return}
   if(id==="look"){var g=h2('<div class="tpl-grid wz-tpl"></div>');PRESETS.forEach(function(pr,i){var b=document.createElement("button");b.type="button";b.className="tcard";b.dataset.i=i;b.setAttribute("aria-pressed",String(S.template===pr[0]));
       b.innerHTML='<span class="tthumb" aria-hidden="true"><span class="ts"></span></span><span class="tname"><b>'+esc(pr[0])+'</b><small>'+esc(pr[1])+'</small></span>';
