@@ -1017,7 +1017,25 @@ var PRESETS=[
     order:O([["name",1],["role",1],["contact",1],["tagline",1],["social",1],["actions",1],["banner",1,"under"],["rainbow",0,"under"],["disclaimer",0,"under"]])},["marketing","banner","c1"]],
   ["Seasonal","Warm wishes with a banner",{logoPos:"top",logoSize:100,align:"center",divider:"none",contactLayout:"line",contactIcons:"none",btnStyle:"filled",btnRadius:20,iconStyle:"circle",iconSize:22,signoff:"Warm regards,",signoffFont:"brush",signoffSize:36,
     order:O([["name",1],["role",1],["contact",1],["social",1],["actions",0],["tagline",0],["rainbow",1,"under"],["banner",1,"under"],["disclaimer",0,"under"]])},["marketing","banner","c1"]]
-];
+,
+  ["Classic photo","Round photo, line, icons",{photoShow:true,photoShape:"circle",photoSize:100,logoPos:"social",logoSize:90,divider:"solid",dividerW:2,contactLayout:"stack",contactIcons:"circle",iconStyle:"brand",iconSize:24,btnStyle:"outline",btnRadius:6,nameSize:20,
+    order:O([["name",1],["role",1],["contact",1],["social",1],["actions",0],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["popular","business","photo","c2"]],
+  ["Logo header","Logo on top, line, details",{logoPos:"top",logoSize:130,align:"left",divider:"none",contactLayout:"pairs",contactIcons:"letters",iconStyle:"square",iconSize:24,btnStyle:"filled",btnRadius:4,
+    order:O([["name",1],["role",1],["rainbow",1],["contact",1],["actions",1],["social",1],["tagline",0],["banner",0,"under"],["disclaimer",0,"under"]])},["popular","business","c1"]],
+  ["Colour sidebar","Logo on a brand tile",{logoBg:"brand",logoPos:"left",logoSize:110,divider:"none",contactLayout:"stack",contactIcons:"glyph",iconStyle:"outline",iconSize:24,btnStyle:"outline",btnRadius:6,nameSize:20,
+    order:O([["name",1],["role",1],["contact",1],["social",1],["actions",1],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["popular","creative","c2"]],
+  ["Call to action","Buttons first, banner below",{logoSize:110,divider:"rainbow",contactLayout:"line",contactIcons:"glyph",btnStyle:"filled",btnRadius:20,iconStyle:"brand",iconSize:24,
+    order:O([["name",1],["role",1],["actions",1],["contact",1],["social",1],["tagline",0],["banner",1,"under"],["rainbow",0,"under"],["disclaimer",0,"under"]])},["popular","marketing","banner","c2"]],
+  ["Name in colour","Soft card, logo right",{card:"light",logoPos:"right",logoSize:100,divider:"none",nameSize:22,contactLayout:"pairs",contactIcons:"outline",iconStyle:"outline",iconSize:24,btnStyle:"outline",btnRadius:6,st:{name:{color:"@p"},role:{italic:true}},
+    order:O([["name",1],["role",1],["contact",1],["social",1],["actions",1],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["popular","personal","c2"]],
+  ["Corporate grey","Quiet greys and a disclaimer",{logoPos:"bottom",logoSize:110,divider:"solid",dividerW:1,contactLayout:"line",contactIcons:"letters",btnStyle:"link",iconStyle:"glyph-grey",iconSize:18,
+    colors:{text:"#222222",muted:"#666666",letters:"#666666",link:"#222222",button:"#444444",line:"#cccccc",cardBg:"#f4f6fb"},
+    order:O([["name",1],["role",1],["contact",1],["social",1],["actions",0],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",1,"under"]])},["popular","law","business","c1"]],
+  ["Square photo card","Photo, details and logo",{photoShow:true,photoShape:"square",photoSize:110,card:"light",logoPos:"social",logoSize:90,divider:"none",contactLayout:"stack",contactIcons:"brand",iconStyle:"brand",iconSize:24,btnStyle:"filled",btnRadius:4,nameSize:20,
+    order:O([["name",1],["role",1],["contact",1],["social",1],["actions",1],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["popular","photo","c2"]],
+  ["Dark compact","Small, dark and neat",{signoffAnimColor:"white",card:"dark",logoSize:80,divider:"none",nameSize:16,textSize:12,contactLayout:"line",contactIcons:"glyph-white",iconStyle:"glyph-white",iconSize:18,btnStyle:"link",
+    colors:{text:"#ffffff",muted:"#a3abc4",letters:"#ffffff",link:"#ffffff",button:"@p",line:"@p",cardBg:"#14172b"},
+    order:O([["name",1],["role",1],["contact",1],["social",1],["actions",0],["tagline",0],["rainbow",0,"under"],["banner",0,"under"],["disclaimer",0,"under"]])},["popular","creative","c2"]]];
 
 var S;
 /* a layout is usable if every entry is a known part in a known area (left, middle, right, underneath) */
@@ -1784,7 +1802,7 @@ function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).con
     if(a==="toggle"){o[1]=o[1]?0:1;changed();go(STEP,id);return}
     move(id,a==="up"?-1:1);changed()})})}
 function drawParts(){drawFlow()}
-var TPL_FILTERS=[["all","All templates"],["business","Business"],["personal","Personal"],["marketing","Marketing"],["law","Law and finance"],["creative","Creative"],["photo","With photo"],["banner","With banner"],["c1","1 column"],["c2","2 columns"],["c3","3 columns"]];
+var TPL_FILTERS=[["all","All templates"],["popular","Popular"],["business","Business"],["personal","Personal"],["marketing","Marketing"],["law","Law and finance"],["creative","Creative"],["photo","With photo"],["banner","With banner"],["c1","1 column"],["c2","2 columns"],["c3","3 columns"]];
 var tplFilter="all";
 /* your own templates: the look of a customised signature (layout, styles, spacing, your added parts), without the person's details */
 var TPL_KEYS=LOOK.concat(["mob","emb","emboss","pieceGap","iconGap","btnGap","contactGap","contactIconGap","contactSep","contactOrder","socialOrder","btnPadX","btnPadY","btnFont","mainValign","dividerW","lineGapL","lineGapR","lineLen","sigPad","rainbowW","bannerW","signoffSize","disclaimerJustify","custom"]);
