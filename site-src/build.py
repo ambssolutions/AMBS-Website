@@ -690,6 +690,10 @@ def build_chat_index():
     for sec in ('services','industries','guides','news'):
         if sec in HUB and any(p[0]==sec for p in PAGES): add('page',HUB[sec].get('h1',sec),HUB[sec].get('lead',''),url(sec),'',sec)
     bot={k:v for k,v in CHAT.items() if k!='qa'}
+    # the questions visitors type are kept in the AMBS Supabase project (table chat_questions) for /admin -> Chat helper -> Questions visitors asked
+    bot.pop('log',None)
+    if CHAT.get('log',True)!=False:
+        bot['log']={'u':'https://onunconxcvkwowtgalxn.supabase.co/rest/v1/rpc/chat_log','k':'sb_publishable_xahs0OqyRaBptSTSvR3Vgg_ZtvsFX2U'}
     # the chat's wording in each language (only lines that have been translated)
     bot_tr={}
     for lang,tr in TRL.items():

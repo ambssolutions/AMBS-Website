@@ -4,9 +4,11 @@
    { action: "calculator", hours: { cafe: [3, 2.5, 1.5], ... } }
    { action: "analytics", id: "G-XXXXXXX" }   the Google Analytics measurement ID (empty turns it off)
    { action: "sitetext", text: { "cta.h": "...", ... } }   the wording on every page other than the homepage
-   { action: "chatget" } / { action: "chatbot", data: {...} }   the "Ask us" chat helper (site-src/content/chatbot.json) */
+   { action: "chatget" } / { action: "chatbot", data: {...} }   the "Ask us" chat helper (site-src/content/chatbot.json)
+   { action: "chatlog", limit } / { action: "chatlogset", ids: [...], done: true|false, del: true }
+       the questions visitors typed into the chat (Supabase table chat_questions, read through admin-only functions) */
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
-import { requireEditor, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
+import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
 
 const SITE_JSON = "site-src/content/site.json";
 const CHAT_JSON = "site-src/content/chatbot.json";
@@ -95,6 +97,17 @@ export default async function handler(req, res) {
       return send(res, 200, { ok: true });
     }
 
+    if (b.action === "chatlog") {
+      const rows = await sbRpc(who.token, "chat_questions_list", { p_limit: Math.min(2000, Math.max(1, Number(b.limit) || 500)) });
+      return send(res, 200, { rows: rows || [] });
+    }
+    if (b.action === "chatlogset") {
+      const ids = (Array.isArray(b.ids) ? b.ids : []).map(Number).filter((n) => Number.isInteger(n) && n > 0).slice(0, 2000);
+      if (!ids.length) return send(res, 400, { error: "Nothing chosen" });
+      const n = await sbRpc(who.token, "chat_questions_update", { p_ids: ids, p_done: b.del ? null : !!b.done, p_delete: !!b.del });
+      return send(res, 200, { ok: true, changed: n });
+    }
+
     if (b.action === "chatget") {
       const f = await readFile(CHAT_JSON, head);
       return send(res, 200, { chat: f ? JSON.parse(f.text) : {} });
@@ -110,8 +123,8 @@ export default async function handler(req, res) {
       for (const [k, v] of Object.entries(old.labels || {})) labels[k] = str(d.labels && typeof d.labels[k] === "string" ? d.labels[k] : v, 200) || v;
       const link = (v) => { v = str(v, 300); return /^(\/|https?:\/\/|mailto:|tel:|#)/.test(v) || !v ? v : "/" + v.replace(/^\/+/, ""); };
       const qa = (Array.isArray(d.qa) ? d.qa : []).map((x, i) => ({
-        id: str(x.id, 40) || "q" + Date.now().toString(36) + i, q: str(x.q, 200), also: str(x.also, 400), a: str(x.a, 1500), link: link(x.link), link_label: str(x.link_label, 60),
-      })).filter((x) => x.q && x.a).slice(0, 80);
+        id: str(x.id, 40) || "q" + Date.now().toString(36) + i, q: str(x.q, 200), also: str(x.also, 2000), a: str(x.a, 1500), link: link(x.link), link_label: str(x.link_label, 60),
+      })).filter((x) => x.q && x.a).slice(0, 250);
       const next = {
         enabled: d.enabled !== false, name: str(d.name, 60) || old.name || "Ambs helper",
         greeting: str(d.greeting, 400) || old.greeting, suggestions: (Array.isArray(d.suggestions) ? d.suggestions : []).map((x) => str(x, 80)).filter(Boolean).slice(0, 6),
@@ -119,6 +132,10 @@ export default async function handler(req, res) {
         nudge: { enabled: !(d.nudge && d.nudge.enabled === false), open: !(d.nudge && d.nudge.open === false), delay: Math.min(600, Math.max(5, Math.round(Number(d.nudge && d.nudge.delay) || 15))), text: str(d.nudge && d.nudge.text, 200) || (old.nudge && old.nudge.text) || "" },
         chat, labels, qa,
       };
+      /* keep a list of the questions visitors ask (on unless switched off) */
+      if (d.log === false || old.log === false) next.log = d.log !== false;
+      /* "People also ask" buttons after an answer (on unless switched off) */
+      if (d.related === false || old.related === false) next.related = d.related !== false;
       if (JSON.stringify(next) === JSON.stringify(old)) return send(res, 400, { error: "Nothing has changed" });
       await commitFiles(head, { [CHAT_JSON]: JSON.stringify(next, null, 1) + "\n" }, "Editor source: chat helper" + by);
       return send(res, 200, { ok: true });
