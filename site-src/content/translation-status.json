@@ -384,7 +384,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today"
+  "_en": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today, talk to someone, talk to a person, speak to someone"
  },
  "ed.chat.qa.book.ll": {
   "hi": "auto",
@@ -412,7 +412,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "what do you do, services, what can you help with, what do you offer, automate, automation ideas, examples, what do you guys do, what do you actually do, what is it you do, which bits can you take off me, admin, what work can you do, what work do you do, what kind of work do you do, what jobs can you do, what can you do for me, what can you do for my business, what things can you do, what do you offer, what services do you offer, what do you provide"
+  "_en": "what do you do, services, what can you help with, what do you offer, automate, automation ideas, examples, what do you guys do, what do you actually do, what is it you do, which bits can you take off me, admin, what work can you do, what work do you do, what kind of work do you do, what jobs can you do, what can you do for me, what can you do for my business, what things can you do, what do you offer, what services do you offer, what do you provide, what exactly do you guys do, what exactly do you do, what is it you guys do, what you guys do"
  },
  "ed.chat.qa.what.ll": {
   "hi": "auto",
@@ -468,7 +468,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "how it works, process, steps, what happens, get started, next steps, onboarding, process, first chat, where do i start, how do i start, what happens after i book, next step"
+  "_en": "how it works, process, steps, what happens, get started, next steps, onboarding, process, first chat, where do i start, how do i start, what happens after i book, next step, what are the steps, steps once i say yes, what happens next, what happens once i say yes"
  },
  "ed.chat.qa.how.ll": {
   "hi": "auto",
@@ -601,7 +601,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "ownership, logins, accounts, lock in, contract, cancel, stop working with you, who owns, own the website, own the code, if you go out of business, what happens to my systems"
+  "_en": "ownership, logins, accounts, lock in, contract, cancel, stop working with you, who owns, own the website, own the code, if you go out of business, what happens to my systems, keep everything, stay mine, stays mine, will it stay mine, owner of the website"
  },
  "ed.chat.qa.data.q": {
   "hi": "auto",
@@ -622,7 +622,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential, where is my data stored, privacy act, compliant, patient records, health information, train ai"
+  "_en": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential, where is my data stored, privacy act, compliant, patient records, health information, train ai, data secure, data stay safe, data safe stay"
  },
  "ed.chat.qa.data.ll": {
   "hi": "auto",
@@ -727,7 +727,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software, google workspace, outlook, teams, excel, accounting software, software we already have, myob, pos, move data between apps, apps talk to each other, data entry, typing the same info, retyping, three systems, google calendar"
+  "_en": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software, google workspace, outlook, teams, excel, accounting software, software we already have, myob, pos, move data between apps, apps talk to each other, data entry, typing the same info, retyping, three systems, google calendar, xero connect, connect xero, connect to xero, connect with xero, works with xero"
  },
  "ed.chat.qa.tools.ll": {
   "hi": "auto",
@@ -755,7 +755,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty, breaks, broken, goes down, who do i call, ongoing support, fix stuff, maintain, maintenance, care plan, website care, look after it, breaks in the first month, first month, first 30 days, after it is finished, what support do i get, automation breaks, if it breaks"
+  "_en": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty, breaks, broken, goes down, who do i call, ongoing support, fix stuff, maintain, maintenance, care plan, website care, look after it, breaks in the first month, first month, first 30 days, after it is finished, what support do i get, automation breaks, if it breaks, problem later, fix later, who fixes it"
  },
  "ed.chat.qa.support.ll": {
   "hi": "auto",
@@ -783,7 +783,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "who will i deal with, contact person, account manager, team, ticket, reach you, response, new zealand hours, how many people"
+  "_en": "who will i deal with, contact person, account manager, team, ticket, reach you, response, new zealand hours, how many people, passed around, different people, will i deal with the same person, same person, who will i talk to, who do i talk to, contact person, who deals with me"
  },
  "ed.chat.qa.team.ll": {
   "hi": "auto",
@@ -811,7 +811,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "industries, industry, sectors, cafe, takeaway, trades, builder, plumber, electrician, clinic, salon, shop, dairy, retail, adviser, accountant, transport, delivery, my type of business, accounting practice, trucking, transport company, physio, beauty salon, builders, cafes, my industry, relevant to us, trucking, trucks, courier, freight, builders"
+  "_en": "industries, industry, sectors, cafe, takeaway, trades, builder, plumber, electrician, clinic, salon, shop, dairy, retail, adviser, accountant, transport, delivery, my type of business, accounting practice, trucking, transport company, physio, beauty salon, builders, cafes, my industry, relevant to us, trucking, trucks, courier, freight, builders, accountant firm, accounting firm, accountants, suit us, suit my business, right for us, good fit for us, might suit"
  },
  "ed.chat.qa.industries.ll": {
   "hi": "auto",
@@ -839,7 +839,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "too small, small business, sole trader, one person, solo, how small, worth it, size, am i too small, just me, me and a ute, sole trader, bigger companies, large business, worth it for me"
+  "_en": "too small, small business, sole trader, one person, solo, how small, worth it, size, am i too small, just me, me and a ute, sole trader, bigger companies, large business, worth it for me, one man band, overkill, just me, too small for this, small, only me, one person only"
  },
  "ed.chat.qa.size.ll": {
   "hi": "auto",
@@ -937,7 +937,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms, text reminders, sms reminders, booking reminders, online bookings"
+  "_en": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms, text reminders, sms reminders, booking reminders, online bookings, clients keep not showing up, no showing, dont turn up, customers not showing up"
  },
  "ed.chat.qa.noshow.ll": {
   "hi": "auto",
@@ -972,7 +972,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts, unpaid invoices, overdue, chasing, quote to invoice, invoice when job done, plumbing quotes at night, writing quotes, quotes at night, spend every night writing quotes"
+  "_en": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts, unpaid invoices, overdue, chasing, quote to invoice, invoice when job done, plumbing quotes at night, writing quotes, quotes at night, spend every night writing quotes, invoices automatically, automatic invoices, invoice automatic"
  },
  "ed.chat.qa.invoices.ll": {
   "hi": "auto",
@@ -1007,7 +1007,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books, are you an accountant, do you do bookkeeping"
+  "_en": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books, are you an accountant, do you do bookkeeping, income tax, file my tax, tax file, file tax"
  },
  "ed.chat.qa.dashboards.q": {
   "hi": "auto",
@@ -1028,7 +1028,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts, numbers in one place, weekly numbers, power bi, revenue"
+  "_en": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts, numbers in one place, weekly numbers, power bi, revenue, see my numbers, without opening apps, numbers in one place, all my numbers"
  },
  "ed.chat.qa.dashboards.ll": {
   "hi": "auto",
@@ -1119,7 +1119,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use"
+  "_en": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, cheaper than staff, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use, part timer, worth the coin, is it worth it"
  },
  "ed.chat.qa.value.ll": {
   "hi": "auto",
@@ -1147,7 +1147,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "payment, payments, deposit, upfront, instalments, payment plan, pay you, bank transfer, credit card, when do i pay you, payment options, when do i pay, how do i pay"
+  "_en": "payment, payments, deposit, upfront, instalments, payment plan, pay you, bank transfer, credit card, when do i pay you, payment options, when do i pay, how do i pay, full payment, pay before, pay upfront, advance payment, payment upfront"
  },
  "ed.chat.qa.pay.ll": {
   "hi": "auto",
@@ -1175,7 +1175,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "contract, long contract, minimum period, lock in, locked in, cancel, cancel anytime, leave, notice period, agreement, sign"
+  "_en": "contract, long contract, minimum period, lock in, locked in, cancel, cancel anytime, leave, notice period, agreement, sign, locked in for 12 months, 12 months, minimum months, how many months"
  },
  "ed.chat.qa.contract.ll": {
   "hi": "auto",
@@ -1203,7 +1203,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "doesn't work, does not work, guarantee, money back, refund, not happy, goes wrong, risk, warranty, what if it fails"
+  "_en": "doesn't work, does not work, guarantee, money back, refund, not happy, goes wrong, risk, warranty, what if it fails, what you promised, doesnt do what you promised, not what i expected"
  },
  "ed.chat.qa.works.ll": {
   "hi": "auto",
@@ -1259,7 +1259,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "edit my website, update the site myself, change text myself, make changes, who updates the site, cms, content management"
+  "_en": "edit my website, update the site myself, change text myself, make changes, who updates the site, cms, content management, change the website later, change it myself, change website"
  },
  "ed.chat.qa.edit.ll": {
   "hi": "auto",
@@ -1315,7 +1315,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "your hours, what are your hours, open, weekends, how quickly do you reply, respond, response time, after 5, after hours, how fast do you reply, how fast do you respond, how soon will you reply, open saturday, open on saturday, open sunday, open on weekends"
+  "_en": "your hours, what are your hours, open, weekends, how quickly do you reply, respond, response time, after 5, after hours, how fast do you reply, how fast do you respond, how soon will you reply, open saturday, open on saturday, open sunday, open on weekends, get back to me, get back to people, how fast do you get back"
  },
  "ed.chat.qa.examples.q": {
   "hi": "auto",
@@ -1336,7 +1336,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "examples, portfolio, case studies, past work, websites you built, show me, previous clients, references, client list"
+  "_en": "examples, portfolio, case studies, past work, websites you built, show me, previous clients, references, client list, any examples, examples of stuff, stuff youve built, show me your work"
  },
  "ed.chat.qa.examples.ll": {
   "hi": "auto",
@@ -1623,7 +1623,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "australia, overseas, outside new zealand, international, uk, usa, other countries, another country, abroad"
+  "_en": "australia, overseas, outside new zealand, international, uk, usa, other countries, another country, abroad, based in india, i am in india, india, fiji, samoa, tonga, cook islands, canada, america, us, united states, england, united kingdom, ireland, singapore, malaysia, philippines, pakistan, nepal, sri lanka, bangladesh, dubai, uae, south africa, can you work from overseas, do you work remotely, work for someone in another country, sydney, melbourne, brisbane, perth, adelaide, gold coast"
  },
  "ed.chat.qa.overseas.ll": {
   "hi": "auto",

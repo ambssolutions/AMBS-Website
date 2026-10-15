@@ -32,8 +32,8 @@
     if(/[āēīōū]/i.test(t)||/\b(tena koe|tēnā koe|ka pai|nga mihi|ngā mihi|he aha|kei hea|e hia|me pehea|me pēhea)\b/i.test(t))return"mi";
     if(/^[\x00-\x7F’‘“”…–—]+$/.test(t)&&/[a-z]{3,}/i.test(t))return"en";return""}
   /* Punjabi, Hindi, te reo Māori or Chinese typed in English letters ("kinna kharcha hai", "aap kya karte ho", "kei te pehea koe", "nihao") */
-  var RW={pa:"tusi tussi tusin tuhada tuhadi tuhade tuhanu tuhannu sanu saanu mainu kinna kinne kinni kida kidda kiddan kive kiwe kiven kivein kithe kitthe kado kadon karde kardi karda hunda hundi hega haige dasso daso dasdo chahida lagda lagu vich naal hor changa vadhiya vadiya sasriakal skde skda skdi sakde sakda sakdi krde krdi krda kehra kehre kiddan",
-    hi:"aap aapka aapki aapke aapko kya kyaa kaise kaisa kaisi kitna kitne kitni kahan kahaan kab kaun kyun kyon mujhe mera meri humein hame karte karta karti sakte skte sakta skta krte krta krti chahiye nahi nahin accha acha theek thik namaste namaskar dhanyavad dhanyawad shukriya bataiye bataye batao kijiye liye lagega lagta",
+  var RW={pa:"tusi tussi tusin tuhada tuhadi tuhade tuhanu tuhannu sanu saanu mainu kinna kinne kinni kida kidda kiddan kive kiwe kiven kivein kithe kitthe kado kadon karde kardi karda hunda hundi hega haige dasso daso dasdo chahida lagda lagu vich naal hor changa vadhiya vadiya sasriakal skde skda skdi sakde sakda sakdi krde krdi krda kehra kehre kiddan di da nu ne nal naal lyi layi aa ae hega nhi kuj kise sada sadi sade mainu veer paji chahidi chahida nwi navi doge kroge hovegi hovega rahu rahega pau lgnge lagnge jaoogi hunda dikhdi hoya kita dikhao sikha jud vrtde chlu kharab gya fer je apni ohnu ohde jisch hun kidan kinni kithon kda dso haal chaal hal chal tuc tuci ta ni pena painda pauga lgnge lgda jande rahu kro",
+    hi:"aap aapka aapki aapke aapko kya kyaa kaise kaisa kaisi kitna kitne kitni kahan kahaan kab kaun kyun kyon mujhe mera meri humein hame karte karta karti sakte skte sakta skta krte krta krti chahiye ka ke hai hoga hogi mujhe hamari hamara humara liye kuch toh bhi kaun dekhega sakti paunga jayega chalega bhai agar milega aati karwana karke iska banwane banana karna karni batao bataiye nahi nahin accha acha theek thik namaste namaskar dhanyavad dhanyawad shukriya bataiye bataye batao kijiye liye lagega lagta",
     mi:"kia ora kei pehea koe korua koutou ahau tino rawe mahi utu whare hea tena tenei aroha whanau pakihi rorohiko paetukutuku taupanga watea whakaaro korero patai awhina ingoa kaimahi haere hia aha morena",
     zh:"nihao xiexie duoshao zenme shenme nimen women keyi gongsi wangzhan jiage yuyue zaijian haode"},RWM={};
   Object.keys(RW).forEach(function(g){RW[g].split(" ").forEach(function(w){RWM[w]=g})});
@@ -45,20 +45,29 @@
     if(n.pa&&n.pa>=n.hi)return"pa";if(n.hi)return"hi";return""}
   /* what those words mean, so the search can find the answer */
   var RMEAN=[[/\b(kharcha|kharch|kharche|kimat|keemat|kemat|daam|paisa|paise|fees?|utu|jiage|qian|duoshao)\b/,"cost price"],
-    [/\b(samay|samaa|time|waqt|wakt|din|dina|hafte|hafta|mahina|lagda|lagega|lagenge|lagange|lagta|lagegi|lagu|kado|kadon|kab|jaldi)\b/,"how long time weeks"],
+    [/\b(samay|samaa|time|waqt|wakt|din|dina|hafte|hafta|mahina|lagange|lagta|lagegi|lagu|kado|kadon|kab|jaldi|ready)\b/,"how long time weeks"],
     [/\b(milna|milo|mil|mulakat|mulaqat|appointment|meeting|hui|yuyue|book|booking)\b/,"book session"],
     [/\b(kahan|kahaan|kithe|kitthe|hea)\b/,"where based location"],[/\b(kaise|kive|kiven|kiwe|kivein|kiwein|kiwen|kivven|pehea|zenme)\b/,"how work process"],[/\b(shuru|suru|aarambh|shuruat)\b/,"how do i get started first step"],
     [/\b(karte|karde|karda|kardi|krte|krde|krda|krdi|krti|kr|mahi|zuo)\b/,"what automate services"],[/\b(paetukutuku|wangzhan)\b/,"website"],[/\b(taupanga|yingyong)\b/,"app portal"],
     [/\b(madad|maddad|awhina|bangzhu)\b/,"help"],[/\b(surakshit|surakhit|surakhiyat)\b/,"data safe privacy"],[/\b(waea|dianhua)\b/,"contact phone"],
     [/\b(malik|maalik)\b/,"own"],[/\b(dukan|dukaan|kaarobar|karobar|pakihi)\b/,"business"],[/\b(kaimahi|karamchari|mulazam)\b/,"staff"]];
   /* the question for the search: what the words mean, plus any English words in it ("website", "app", "Xero"); the rest are left out */
-  var RSTOP={};("hai hain ho hoga hovega ji ki ka ke da di de nu nun te ne se mein me vich to toh bhi vi sakte sakde sakda sakdi skde bana banana banao banaunde kar karo kam kaam aa e o haan han nahi na koi kuch kujh sab ek ik apna apne sada sade tuhada saada mai main menu mainu ko wala wale vala vale te i a he ki ko ka nei mo ma ne de le ba").split(" ").forEach(function(w){RSTOP[w]=1});
-  function romanMeaning(t){var w=norm(t),out=[],cost=RMEAN[0][0].test(w),time=RMEAN[1][0].test(w)&&!(cost&&!/\b(din|dina|hafte|hafta|mahina|samay|waqt|wakt|kab|kado|kadon)\b/.test(w)),start=/\b(shuru|suru|aarambh|shuruat)\b/.test(w);
+  var RSTOP={};("main mai hi aayi aaya aagyi aa gyi gya gayi o eh ye mera meri mere mainu mujhe mujhko sada sadi sade saada hamara hamari hamare humara tuhada tuhadi tuhade aapka aapki asi assi apa sanu saanu bilkul koi log nu o jande jaande pena painda pauga kro karo jhanjat jhanjhat jhanjht doge dogge kroge karoge krdo kardo kr kar krna karna krni karni dena deyo do lyo lo plz pls ji veer paji bhai bro sir jo jisch ohnu ohde oh eh ih ye yeh v vi bhi sab sara sari kuj kuch lyi layi liye vaste wala wali sku skda skde skdi skte sakte sakda sakdi sakta ho skda ja jave jaye jayega jaoge karwana karke ch c vich wich hai hain ho hoga hovega ji ki ka ke da di de nu nun te ne se mein me vich to toh bhi vi sakte sakde sakda sakdi skde bana banana banao banaunde kar karo kam kaam aa e o haan han nahi na koi kuch kujh sab ek ik apna apne sada sade tuhada saada mai main menu mainu ko wala wale vala vale te i a he ki ko ka nei mo ma ne de le ba").split(" ").forEach(function(w){RSTOP[w]=1});
+  /* everyday Punjabi and Hindi words typed in English letters, and what they mean ("nwi website chahidi" = "new website need") */
+  var ROMAN={};"bna=build|bnaa=build|bana=build|banana=build|banao=build|bnao=build|bnaun=build|banaun=build|banwana=build|banwane=build|banwani=build|banani=build|bnani=build|banate=build|banta=build|bnn=build|banne=build|bnega=build|banega=build|bnu=build|banwa=build|bnwa=build|bnwana=build|bnwani=build|banaoge=build|bnaoge=build|chahida=need|chahidi=need|chahide=need|chahiye=need|chahte=need|chahta=need|chahti=need|chaida=need|chaidi=need|nwi=new|nwa=new|navi=new|nava=new|nayi=new|naya=new|naye=new|nvi=new|nva=new|apni=own|apna=own|apne=own|malik=own|maalik=own|malki=own|surakhit=safe|surakshit=safe|info=information data|jankari=information data|jaankari=information data|dikhdi=see show|dikhti=see show|dikh=see show|dikhe=see show|dikhega=see show|dikhju=see show|dikhaao=see show|dikhao=see show|dikha=see show|vekh=see show|dekh=see show|muft=free|mufat=free|mupht=free|hunda=happens|hota=happens|hoga=happens|jud=connect|judd=connect|jod=connect|jodna=connect|jodd=connect|judna=connect|jodoge=connect|jud=connect|skda=connect|vrtde=use|vartde=use|vartna=use|istemal=use|chlu=works with|chalega=works with|chalu=works with|chalda=works with|chlda=works with|kharab=breaks problem fix|kharaab=breaks problem fix|kharaabi=breaks problem fix|dikkat=breaks problem fix|kaun=person|kon=person|dekhega=deal with|dekhuga=deal with|dekhugi=deal with|gal=talk|galbaat=talk|baat=talk|chhota=small size|chota=small size|chotta=small size|chhoti=small size|choti=small size|akela=sole trader one person|akeli=sole trader one person|matlab=what is meaning|sikha=train training|sikhana=train training|sikhao=train training|sikhaoge=train training|samjha=train training|samjhana=train training|samjhao=train training|sikhlai=train training|sikhaunge=train training|workers=staff|kamme=staff|karamchari=staff|hisab=reports numbers|hisaab=reports numbers|jwab=reply|jawab=reply|layak=worth value|laik=worth value|faida=worth value|fayda=worth value|sasta=cheaper|saste=cheaper|advance=deposit upfront|peshgi=deposit upfront|kisht=instalments payment plan|kishton=instalments payment plan|kiste=instalments payment plan|kistan=instalments payment plan|kishtan=instalments payment plan|lamba=long|lambi=long|wapis=refund|wapas=refund|badal=change edit|badalna=change edit|badli=change edit|purana=past work examples|puraana=past work examples|purani=past work examples|kita=past work examples|kiya=past work examples|hoya=past work examples|naukri=replace staff jobs|jaoogi=replace staff jobs|jaugi=replace staff jobs|jagah=replace staff jobs|samajh=understand technical|samjh=understand technical|lena=buy|leni=buy|khareedna=buy|khareed=buy|vechan=sell online|vechna=sell online|bechna=sell online|bechne=sell online|vech=sell online|bech=sell online|samaan=products|saman=products|maal=products|khatam=running low|milne=visit in person|milna=visit in person|ghar=visit in person|dukaan=business|dukan=business|yaad=reminders|kis=contact person deal|pehli=first|pehla=first|pehle=before|auto=automatic|rahu=stay mine|rahega=stay|rahuga=stay mine|sirf=only|sath=with|kaha=location based|kahan=location based|kithe=location based|kitthe=location based|theek=fix|thik=fix|baad=later|ready=ready|full=full|pura=full|poora=full".split("|").forEach(function(x){var i=x.indexOf("=");ROMAN[x.slice(0,i)]=x.slice(i+1)});
+  var RPHRASE=[[/\b(nahi|nhi|ni|na) (aunde|aande|aate|aati|aaunde)\b/g," noshow "],[/\b(paise?|paisa) (wapis|wapas)\b/g," refund "],[/\b(kinni|kitni|kinne|kitne) (puraani|purani|saal)\b/g," how long in business "],
+    [/\b(kinne|kitne) (log|bande|lok|jane)\b/g," team size how many people "],[/\b(kdo|kado|kab|kadon) (tak|tk)\b(?=.*\b(reply|jwab|jawab|jawaab)\b)/g," how quickly "],[/\b(ni|nahi|nhi) (aati|aaundi|aundi|samajh)\b/g," not technical "],
+    [/\b(gal|baat) (krni|karni|karna|krna|kr|kar)\b/g," talk to someone "],[/\b(sale|sales) (da|di|ki|ka) report\b/g," sales dashboard report "],[/\b(ni|nahi|nhi|na) (dikhdi|dikhti|dikhda|dikhta|dikhegi)\b/g," private privacy confidential "],[/\b(ki|kya) (cheez|chiz|cheej|hai|aa|h)\b/g," what is "],[/\b(kinne|kitne) din\b/g," how long "]];
+  function romanMeaning(t){t=String(t);RPHRASE.forEach(function(r){t=norm(t).replace(r[0],r[1])});var w=norm(t),out=[],cost=RMEAN[0][0].test(w),time=RMEAN[1][0].test(w)&&!(cost&&!/\b(din|dina|hafte|hafta|mahina|samay|waqt|wakt|kab|kado|kadon)\b/.test(w)),start=/\b(shuru|suru|aarambh|shuruat)\b/.test(w);
     /* "kitna paisa lagega" asks the cost, not the time; "kiwein shuru karde haan" asks how to start, not what we do */
     RMEAN.forEach(function(m,i){if(i===1&&!time)return;if(start&&m[1]==="what automate services")return;if(m[0].test(w))out.push(m[1])});
     if(!time&&/\b(kitna|kitne|kitni|kinna|kinne|kinni|hia)\b/.test(w))out.push("cost price");
     if(/\b(bana|banana|banao|banaunde|banande|banate|bnaa)\b/.test(w))out.push("build");
-    w.split(" ").forEach(function(x){if(x&&!RWM[x]&&!RSTOP[x]&&!RMEAN.some(function(m){return m[0].test(x)}))out.push(x)});
+    var content=0;w.split(" ").forEach(function(x){if(!x)return;if(ROMAN[x]){out.push(ROMAN[x]);content++;return}
+      if(!RWM[x]&&!RSTOP[x]&&!RMEAN.some(function(m){return m[0].test(x)})){out.push(x);if(!/^(help|madad|kam|kaam|work)$/.test(x))content++}});
+    /* "ki kam kr skde ho": only "do / can" and no subject, so it's "what do you do" */
+    var i=out.indexOf("what automate services");if(i>=0&&content>0)out.splice(i,1);
+    if(i<0&&!content&&/\b(skde|sakde|skte|sakte|skda|sakda|skta|sakta|kroge|karoge|doge)\b/.test(w))out.push("what automate services");
     return out.join(" ")}
   function sugg(){var b=BT();return((lang()!=="en"&&b.suggestions)||(DATA&&DATA.bot&&DATA.bot.suggestions)||[]).slice(0,6)}
   function BT(){return DATA&&DATA.bot_tr&&DATA.bot_tr[lang()]||{}}
@@ -82,7 +91,7 @@
     ["where","location","based","office","address","auckland","nationwide","zealand","nz"],["contact","phone","email","call","reach","talk","speak","number"],["portal","dashboard","app"],["mobile","app","iphone","android","phone"],["build","make","create","develop","design","set"],["start","begin","process","step","work"],
     ["long","time","week","weeks","quick","fast","timeline"],["support","help","fix","broke","break","maintenance"],["own","ownership","login","contract","cancel"],["small","size","solo","sole"]];
   var SYNMAP={};SYN.forEach(function(g){g.forEach(function(w){var s=stem(w);(SYNMAP[s]=SYNMAP[s]||[]);g.forEach(function(o){var so=stem(o);if(so!==s&&SYNMAP[s].indexOf(so)<0)SYNMAP[s].push(so)})})});
-  function norm(s){return String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/no[- ]shows?/g,"noshow").replace(/[^\p{L}\p{N}\p{M}$]+/gu," ")}
+  function norm(s){return String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/\bno[- ]?show(s|ing|ed)?\b/g,"noshow").replace(/[^\p{L}\p{N}\p{M}$]+/gu," ")}
   var STOPX={};("的 了 吗 呢 吧 是 我 你 您 们 和 在 有 这 那 也 就 都 要 会 可以 能 请 问 一下 है हैं क्या के की का में को से और मैं आप हम यह वह तो भी पर एक हो ਹੈ ਹਨ ਕੀ ਦੇ ਦੀ ਦਾ ਨੂੰ ਵਿੱਚ ਤੋਂ ਅਤੇ ਮੈਂ ਤੁਸੀਂ ਅਸੀਂ ਇਹ ਉਹ ਤਾਂ ਵੀ ਤੇ ਇੱਕ ਹੋ ko te ngā nga he i ki a e o mō mo me kei ka au koe tēnei tenei").split(" ").forEach(function(w){STOPX[w.normalize("NFKD").replace(/[\u0300-\u036f]/g,"")]=1});
   function stem(w){if(w.length<=3)return w;if(/ies$/.test(w)&&w.length>4)return w.slice(0,-3)+"y";if(/(ss|us|is)$/.test(w))return w;if(/(ches|shes|xes|sses)$/.test(w))return w.slice(0,-2);if(/s$/.test(w))w=w.slice(0,-1);
     if(/ing$/.test(w)&&w.length>5)w=w.slice(0,-3);else if(/ed$/.test(w)&&w.length>4)w=w.slice(0,-2);if(/ion$/.test(w)&&w.length>6)w=w.slice(0,-3);if(/e$/.test(w)&&w.length>4)w=w.slice(0,-1);return w}
@@ -334,15 +343,15 @@
     sorry:"No problem at all. What would you like to know?",test:"I'm here and working! Ask me anything about Ambs Solutions."};
   var TALK=[["greet",/^(hi+|hello+|hey+|heya|hiya|yo|kia ora|gday|g day|good (morning|afternoon|evening|day)|namaste|ni hao|sat sri akal|tena koe|morena|greetings)( there| team| everyone| ambs)?( (is )?(anyone|anybody|someone) (there|here|home))?$|^(is )?(anyone|anybody|someone) (there|here|home)$/],
     ["how_are_you",/\b(how are (you|u|ya)|how r u|hows it going|how is it going|how you doing|how are things|whats up|sup|how have you been)\b/],
-    ["human",/\b(are (you|u) (a |an )?(human|real|person|robot|bot|ai|machine|chatbot|computer))\b|\b(am i (talking|chatting|speaking) (to|with) (a )?(human|person|bot|robot|real))/],
+    ["human",/\b((are|r) (you|u) (a |an )?(human|real(?= person| human| one|$)|person|robot|bot|ai|machine|chatbot|computer))\b|\b(am i (talking|chatting|speaking) (to|with) (a )?(human|person|bot|robot|real))/],
     ["who",/^(who are (you|u)|what are (you|u)|whats your name|what is your name|your name|introduce yourself|what can you do|what do you do here)$/],
     ["thanks",/^(thanks?|thanks? (and |)bye|cheers (and |)bye|thank (you|u)|thanks (a lot|heaps|so much|mate)|thank you so much|thx|ty|cheers|ka pai|nga mihi|much appreciated|appreciate it)( mate| heaps)?$/],
     ["ok",/^(lol|haha+|lol ok|ok lol|haha ok|ok+|okay|k|cool|nice|great|awesome|perfect|sweet|sounds good|got it|alright|all good|good to know|noted|interesting|wow|amazing|fair enough|right|sure|yes|yep|yeah|no|nope|nah)$/],
-    ["bye",/^(bye+|goodbye|good bye|see (you|ya)|later|catch you later|have a (good|great|nice) (day|one|night)|ka kite|ka kite ano|good night|gotta go|thats all|that is all|nothing else|im done)$/],
+    ["bye",/^(bye+|goodbye|good bye|see (you|ya)|later|catch you later|have a (good|great|nice) (day|one|night)|ka kite|ka kite ano|good night|gotta go|thats all|that is all|nothing else|im done|ok bye|okay bye|ok thanks bye|bye bye|bye for now|cya)$/],
     ["good",/^(im |i am )?(so |really |very |pretty |all )?(good|great|fine|well|not bad|doing well|all good|pretty good|very good)( thanks| thank you| thx)?( and you| you| how about you)?$/],
     ["bad",/^(im |i am |feeling |im feeling )?(so |really |very |a bit |pretty |super |too )?(not (good|great|well)|bad|tired|stressed|busy|exhausted|sad|overwhelmed|swamped|flat out|run off my feet)( today| at the moment| right now)?$/],
     ["joke",/\b(tell me a joke|joke|make me laugh|something funny)\b/],
-    ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast)\b/],
+    ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast|mausam|mosam)\b/],
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
     ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
     /* questions about the bot itself: "do you have any knowledge?", "what do you know?" */
@@ -350,7 +359,7 @@
     ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
   var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|u|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|(your|any) reviews|(do|have) you (have|got) (any )?(reviews|testimonials)|reviews (of|about|for) (you|ambs)|testimonials?|(your|any) results|^(are you|is ambs) worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
   /* "what's your phone number?" is about contacting us; "can I see my numbers on my phone?" isn't */
-  var CONTACT_US=/\b(your|ur|ambs|you guys) (phone|email|e mail|contact|number|mobile|address)|\b(contact|call|ring|reach|email|phone|text) (you|u|ambs|someone|somebody)\b|\b(talk|speak|chat) (to|with) (a |an )?(someone|somebody|person|human|real|team|staff)|\breal person\b|\bhuman\b|\bcall me( back)?\b/;
+  var CONTACT_US=/\b(your|ur|ambs|you guys) (phone|email|e mail|contact|number|mobile|address)|\b(contact|call|ring|reach|email|phone|text) (you|u|ambs|someone|somebody)\b|\b(talk|speak|chat) (to|with) (a |an )?(someone|somebody|person|human|real|team|staff)|\breal person\b|\bhuman\b|\bcall me( back)?\b|\b(ring|call) (me|us) back\b|\bsomeone (call|ring)\b|\bcall (kr|kar|karo|krdo|kardo)\b|\b(number|phone|email|mail) (do|dena|dedo|deyo|ki aa|kya hai|ki hai|ki h)\b|\b(tuhada|aapka|tumhara|apna) (number|phone|email)\b|\b(number|email|email address|phone number) (ki|kya)\b/;
   var ABOUT_US=/\b(you|u|your|ur|yours|ambs|my|mine|me|i|im|we|our|us|ours|automation|automate|automations|website|websites|site|app|apps|portal|business|price|cost|ai|chatbot|software|xero|myob|payroll|invoice|invoices|quote|quotes|staff|roster|rosters|booking|bookings|customers|clients|wordpress|wix|squarespace|shopify)\b/;
   var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person|waea|īmēra|imera|whakapā)\b|电话|邮箱|邮件|联系|फ़ोन|फोन|ईमेल|संपर्क|नंबर|ਫ਼ੋਨ|ਫੋਨ|ਈਮੇਲ|ਸੰਪਰਕ|ਨੰਬਰ/i;
   var TALKX=[["greet",/^(你好|您好|嗨|哈喽|早上好|下午好|晚上好|नमस्ते|नमस्कार|हैलो|हेलो|राम राम|सत श्री अकाल|ਸਤ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਸਤਿ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਹੈਲੋ|ਨਮਸਤੇ|kia ora|tēnā koe|tena koe|mōrena|morena)[!！。.\s]*$/i],
@@ -361,20 +370,22 @@
     ["bye",/^(再见|拜拜|अलविदा|फिर मिलेंगे|बाय|ਅਲਵਿਦਾ|ਫਿਰ ਮਿਲਾਂਗੇ|ਬਾਏ|ka kite|ka kite anō|ka kite ano|haere rā)[!！。.\s]*$/i],
     ["ok",/^(好|好的|行|嗯|ठीक है|अच्छा|हाँ|ओके|ਠੀਕ ਹੈ|ਵਧੀਆ|ਹਾਂ|ਓਕੇ|āe|ae|ka pai)[!！。.\s]*$/i],
     /* the same, typed in English letters */
-    ["greet",/^(namaste|namaskar|sat s(h)?ri akal|ssa|ni ?hao|salaam)( ji)?[!.\s]*$/i],
+    ["greet",/^(namaste|namaskar|sat s(h)?ri akal|ssa|ni ?hao|salaam)( (ji|veer|paji|bhai|bro|sir|ji veer))?[!.\s]*$/i],
+    ["weather",/\b(mausam|mosam|baarish|barish)\b/i],["offtopic",/\b(cricket|rugby|football|match (da|ka|di|ki)? ?score|score (of|in) the (match|game)|who won the)\b/i],
     ["how_are_you",/\b(kaise ho|kaise hain|kaisa hai|kya haal|ki haal|kidda|kiddan|kida|kive ho|kiven ho|ni hao ma|nihao ma)\b/i],
     ["human",/\b(insaan|insan|banda) (ho|aa|hai)|\b(bot|robot) (ho|aa|hai)\b|\bzhen ?ren\b/i],
     ["who",/^(aap kaun (ho|hain)|tusi kaun (ho|o)|ni shi shei)[?!\s]*$/i],
-    ["thanks",/^((bahut |bohat )?(dhanyavad|dhanyawad|shukriya|thanks ji)|xie ?xie)( ji)?[!.\s]*$/i],
+    ["thanks",/^((bahut |bohat |bhut )?(dhanyavad|dhanyawad|dhanwad|dhanwaad|dhanvaad|shukriya|shukria|thanks ji)|xie ?xie)( ji)?[!.\s]*$/i],
     ["bye",/^(alvida|phir milenge|fir milange|phir milange|zai ?jian)( ji)?[!.\s]*$/i],
     ["ok",/^(theek hai|thik hai|thik aa|theek aa|acha|accha|achha|haan|ok|hao ?de)( ji)?[!.\s]*$/i]];
   function talkKey(q){var raw=String(q||"").trim().toLowerCase();for(var j=0;j<TALKX.length;j++)if(TALKX[j][1].test(raw))return TALKX[j][0];var t=norm(q).replace(/\s+/g," ").trim().replace(/\b(i|what|it|how|that|you|there|who|we|they) (m|s|re|ll|ve|d)\b/g,"$1$2").replace(/^(um+|so|well|oh|ok so|hey) /,"");if(!t)return"";
     /* a greeting with a question after it is a question, unless it's just "how are you" */
     var g=t.replace(/^(hi+|hello+|hey+|kia ora|gday|good (morning|afternoon|evening)) (there |team )?/,"");
+    if(g!==t&&g&&/^(there|team|everyone|all|bro|mate|guys|ji|veer|paji|bhai|sir|whanau|e hoa)$/.test(g))return"greet";
     if(g!==t&&g&&!/^(how are|how r|hows|whats up|how you)/.test(g))t=g;
     for(var i=0;i<TALK.length;i++){var k=TALK[i];if(k[1].test(t)){
       /* long messages that also mention a real question go to the search, e.g. "thanks, and how much does it cost?" */
-      if(t.split(" ").length>7&&k[0]!=="how_are_you")return"";if((k[0]==="who"||k[0]==="human")&&t.split(" ").length>6)return"";return k[0]}}return""}
+      if(t.split(" ").length>7&&k[0]!=="how_are_you"&&!(k[0]==="human"&&t.split(" ").length<=9))return"";if(k[0]==="who"&&t.split(" ").length>6)return"";if(k[0]==="human"&&t.split(" ").length>9)return"";return k[0]}}return""}
   function talk(k){var b=(DATA&&DATA.bot&&DATA.bot.chat)||{},v=b[k]||TALK_DEF[k]||"",bt=(BT().chat||{})[k];if(lang()!=="en"&&bt)v=bt;
     if(k==="thanks"&&lang()!=="en"&&!b.thanks&&TR[lang()])v=TR[lang()].thanks;
     if(k==="time"){try{v=v.replace("{time}",new Date().toLocaleString({zh:"zh-CN",hi:"hi-IN",pa:"pa-IN",mi:"mi-NZ"}[lang()]||"en-NZ",{timeZone:"Pacific/Auckland",weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"}))}catch(e){v=v.replace("{time}",new Date().toLocaleString())}}
@@ -399,13 +410,16 @@
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
     var t=typing();load().then(function(){setTimeout(function(){t.remove();CAP=[];LASTD=null;try{answer(q)}finally{var got=CAP;CAP=null;logQ(q,got);related(q,got)}},1800+Math.min(600,q.length*6))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
   /* "Sat Shrine akal" (a phone's autocorrect), "sat sri akaal", "sasriakal": all the Punjabi greeting */
-  function fixGreet(t){return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsasri\s*akaa?l\b/gi,"sat sri akal")}
+  function fixGreet(t){return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsa?t?\s*sri\s*akaa?l\b/gi,"sat sri akal")}
   function answer(q){q=fixGreet(q);var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
     /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
     sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
     /* still understood after "Reply in English"; only the reply language stays English */
     if(rl0){sq=romanMeaning(sq)||sq;if(rl)sl=rl}
     /* "invocies", "webiste": a word the website never uses becomes the closest one it does */
+    /* a place name the website never uses ("I run a takeaway in Otahuhu"): leave it out */
+    if(DOCS.length){var nm={};(s.match(/\b(?:in|at|from|near|around|based in|out of)\s+([A-Z][a-z\u00C0-\u017F]{2,})/g)||[]).forEach(function(m){var w=m.trim().split(/\s+/).pop().toLowerCase();if(DF[stem(w)]==null&&!SYNMAP[stem(w)])nm[w]=1});
+      if(Object.keys(nm).length)sq=sq.split(/\s+/).filter(function(w){return !nm[w.toLowerCase().replace(/[^a-z\u00C0-\u017F]/g,"")]}).join(" ")||sq}
     if(!sl||sl==="en")sq=spell(sq);
     if(sl&&sl!==lang()&&!(sl==="en"&&state.noRoman&&lang()==="en")){state.lang=sl===pageLang()?"":sl;save();labels()}
     /* the "Reply in English" button follows the latest answer */
@@ -457,9 +471,11 @@
       function pri(r){var k=r.D.d.k;return k==="qa"?(inQ(r.D)?0:.5):KP[k]+(inQ(r.D)?0:2)}res.filter(function(r){var k=r.D.d.k;return (k==="qa"||k==="home"||(k==="page"&&/^\/(services|industries)\//.test(r.D.d.u||"")))&&r.cov>=.3&&(k!=="qa"||(r.cov>=top.cov-.5&&r.s>=top.s*.3))&&asksAbout(r.D)&&hitsRare(r)&&qaAbout(r.D)})
         .sort(function(a,b){return pri(a)-pri(b)||b.s-a.s}).slice(0,1).forEach(function(r){yours=r})}
     if(yours)top=yours;
+    /* Punjabi or Hindi typed in English letters: an owner's answer close behind beats a page's sentence */
+    if(!yours&&rl0&&top&&top.D.d.k!=="qa"){var qa1=res.slice(1,8).filter(function(r){return r.D.d.k==="qa"&&r.cov>=top.cov-.3})[0];if(qa1)top=qa1}
     /* "how much to automate my invoicing?": a question about cost gets an owner's answer about cost, not the invoicing one */
     var COSTQ=/\b(how much|cost|costs|price|prices|pricing|charge|fees?|rates|budget)\b/;
-    if(eng&&top&&COSTQ.test(norm(sq))&&!(top.D.d.k==="qa"&&COSTQ.test(norm(top.D.d.q)))){var cq=res.slice(0,10).filter(function(r){return r.D.d.k==="qa"&&COSTQ.test(norm(r.D.d.q))});
+    if((eng||rl0)&&top&&COSTQ.test(norm(sq))&&!/\b(worth|value|cheaper|deposit|upfront|instalments?|installments?|advance|refund|free|muft)\b/.test(norm(sq))&&!(top.D.d.k==="qa"&&COSTQ.test(norm(top.D.d.q)))){var cq=res.slice(0,10).filter(function(r){return r.D.d.k==="qa"&&COSTQ.test(norm(r.D.d.q))});
       cq.sort(function(a,b){return (inQx(b)-inQx(a))||b.s-a.s});if(cq[0])top=cq[0]}
     function inQx(r){var t=r.D.tf;return Object.keys(IWm).filter(function(w){return !GEN[w]&&t.q[w]&&!COSTQ.test(w)}).length}
     /* "how quickly do you reply?": the owner's answer whose question is about it, not the one that only mentions "quickly" */
@@ -468,8 +484,8 @@
     /* a yes/no question with a clear answer starts with "Yes." — never for a page's own Q&A (it says yes or no itself where it means it), and never when the answer says "not", "don't", "only"… */
     /* "how long for a website?" or "Power BI or something simpler?" isn't a yes/no question: an answer written "Yes. We build…" loses its "Yes." */
     /* "I spend hours on invoices, can you help?": the question is the last part */
-    var YNW=/^(can|could|do|does|did|is|are|will|would|should|have|has)\b/,lastPart=(sq.split(/[,.;!?]+/).map(function(x){return norm(x).trim()}).filter(Boolean).pop()||"");
-    var YN=(YNW.test(norm(sq).trim())||YNW.test(lastPart))&&!/\bor\b/.test(norm(sq));
+    var YNW=/^(can|could|do|does|did|is|are|will|would|should|have|has)\b/,lastPart=(s.split(/[,.;!?]+/).map(function(x){return norm(x).trim()}).filter(Boolean).pop()||"");
+    var YN=(YNW.test(norm(sq).trim())||YNW.test(lastPart))&&!/\bor\b/.test(norm(sq))&&!/\b(problem|issue|risk|risky|dangerous|bad|wrong|catch|illegal|a scam)\b/.test(lastPart||norm(sq));
     function noYes(ax){if(YN||!eng)return ax;var y=L("yes")||"Yes.";if(ax.indexOf(y+" ")===0)return ax.slice(y.length+1);return ax.replace(/^Yes[.:]\s+(?=\S)/,"")}
     function yesLead(ax,d,sure){if(!sure||d.k==="faq"||!YN)return ax;
       if(/^(yes|no|not|nope|usually|often|only|partly|mostly|sometimes|it depends|that depends|it can|it could|not always|in most|generally)\b/i.test(ax.trim()))return ax;
@@ -493,7 +509,8 @@
       if(wantsContact)addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(wantsContact){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     /* nothing about us in the question at all: a general question we can't answer, so say so and suggest topics */
-    var off=eng?(!top||top.cov<=.5||(unknown&&top.D.d.k!=="qa"))&&!ABOUT_US.test(norm(sq)):(!top||top.cov<=.5);
+    /* Punjabi or Hindi typed in English letters that we can't match is almost always about us: "couldn't find", not off-topic */
+    var off=eng?(!top||top.cov<=.5||(unknown&&top.D.d.k!=="qa"))&&!ABOUT_US.test(norm(sq)):(!top||top.cov<=.5)&&!rl0;
     if(off){addBot({t:"text",x:talk("offtopic")});addBot({t:"actions",q:s});return}
     var some=res.filter(function(r){return r.cov>=.34&&r.D.d.u}).slice(0,6);some.forEach(function(r){var x=r.D.d;if(links.length>=3||used[x.u])return;used[x.u]=1;links.push({t:x.k==="sec"?x.t.split(": ").pop():x.t,u:x.u,s:snippet(x,s,110)})});
     addBot({t:"text",x:L("not_found"),links:links});addBot({t:"actions",q:s})}
