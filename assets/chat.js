@@ -290,7 +290,7 @@
   function typing(){var t=el("div","ac-m ac-bot ac-type");t.innerHTML="<i></i><i></i><i></i>";t.setAttribute("aria-label",L("typing"));log.appendChild(t);scroll();return t}
   /* everyday conversation: answered like a person would, before searching the website. The answers can be changed
      in the website editor (Chat helper → Everyday conversation); these are the defaults */
-  var TALK_DEF={offtopic:"I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",how_are_you:"I'm doing well, thanks for asking! How can I help you today?",
+  var TALK_DEF={knowledge:"Yes. I know Ambs Solutions well: our services, prices, how we work, the software we connect, the industries we work with, data and privacy, and the guides on our website. Ask me anything, or tap one of these to start.",offtopic:"I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",how_are_you:"I'm doing well, thanks for asking! How can I help you today?",
     who:"I'm the Ambs Solutions helper. I answer questions using our website, any time of day. For anything I can't answer, a real person from our team is happy to help.",
     human:"I'm an automated helper, not a person. If you'd like to talk to someone from our team, you can book a free session, leave a message or call us.",
     thanks:"You're welcome! Is there anything else I can help with?",ok:"Great! Anything else I can help with?",bye:"Thanks for stopping by. Have a great day!",
@@ -312,6 +312,8 @@
     ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast)\b/],
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
     ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
+    /* questions about the bot itself: "do you have any knowledge?", "what do you know?" */
+    ["knowledge",/\b(do you (have|know|got) (any |much |a lot of |enough )?(knowledge|info|information|idea|clue)|(have you )?got (any )?(knowledge|info)|what do you know|how much do you know|what (all )?(can|could) (you|i) (answer|ask|tell)|what (questions|things) can (you|i)|are you (smart|clever|intelligent|trained|knowledgeable|any use|useful)|how (smart|clever|intelligent) are you|do you know (anything|much|a lot|stuff|things|everything)|are you (well )?informed)\b/],
     ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
   var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|(your|any) reviews|(do|have) you (have|got) (any )?(reviews|testimonials)|reviews (of|about|for) (you|ambs)|testimonials?|(your|any) results|^(are you|is ambs) worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
   var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person|waea|īmēra|imera|whakapā)\b|电话|邮箱|邮件|联系|फ़ोन|फोन|ईमेल|संपर्क|नंबर|ਫ਼ੋਨ|ਫੋਨ|ਈਮੇਲ|ਸੰਪਰਕ|ਨੰਬਰ/i;
@@ -353,15 +355,18 @@
     if(rl){state.msgs=state.msgs.filter(function(m){return m.t!=="english"});save();if(log)[].forEach.call(log.querySelectorAll(".ac-enrow"),function(x){x.remove()});setTimeout(function(){addBot({t:"english"})},0)}
     var tk=talkKey(s);
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"});return}
-    if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
+    if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="knowledge"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
       else if(tk==="human")addBot({t:"actions",q:""});return}
     if(QUALITY.test(s)){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
         var lines=w.why.map(function(x){return"✓ "+x.replace(/\.$/,"")}).concat((w.trust||[]).map(function(t){return"✓ "+t[0]+(t[1]?": "+(t[1].match(/^[^.!?。।]*[.!?。।]?/)||[t[1]])[0]:"")}));
         addBot({t:"answer",x:talk("quality")+"\n\n"+lines.join("\n")+"\n\n"+talk("quality_end"),u:"/#why",l:""});addBot({t:"actions",q:s});return}}
     var df=lang()==="en"&&define(sq);if(df){addBot({t:"answer",x:df.x,src:df.d.u&&df.d.u!==location.pathname?{t:df.d.t.split(": ")[0],u:df.d.u}:null});addBot({t:"actions",q:s});return}
-    var res=search(sq),top=res[0],wantsContact=CONTACT.test(s);
+    var res=search(sq),top=res[0],wantsContact=CONTACT.test(s),yours=null;
+    /* "can you make a website for a real estate agent?": a question about what we do gets our own answer to it, not a guide's paragraph */
+    if(top&&top.D.d.k!=="qa"&&/^(can|could|do|will|would) (you|u|ambs|your team)\b/.test(norm(s).trim()))res.some(function(r){if(r.D.d.k==="qa"&&r.cov>=.3&&r.cov>=top.cov-.35&&r.s>=top.s*.6){yours=r;return true}});
+    if(yours)top=yours;
     /* half a two-word question matching one rare word isn't an answer ("capital of France") */
-    var nq=toks(sq).length,good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8))))),links=[],used={};
+    var nq=toks(sq).length,good=top&&(!!yours||top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8))))),links=[],used={};
     if(wantsContact&&!(good&&top.D.d.k==="qa"&&top.cov>=.67)){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(good){var d=top.D.d;used[d.u||"_"]=1;
       /* matched in English: give the same answer in the visitor's language when we have it */

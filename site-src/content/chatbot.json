@@ -30,6 +30,7 @@
   "joke": "Why did the spreadsheet feel tired? It had been working in too many cells all week. That's the kind of job we like to automate! What can I help you with?",
   "weather": "I can't check the weather, sorry. I can help with anything about Ambs Solutions though: what we automate, prices, or booking a free session.",
   "time": "It's {time} in New Zealand right now.",
+  "knowledge": "Yes. I know Ambs Solutions well: our services, prices, how we work, the software we connect, the industries we work with, data and privacy, and the guides on our website. Ask me anything, or tap one of these to start.",
   "help": "I can help with our services, pricing, how we work, the software we connect, your industry and booking a free session. Ask me anything, or tap one of these to get started.",
   "sorry": "No problem at all. What would you like to know?",
   "test": "I'm here and working. Ask me anything about Ambs Solutions.",
@@ -216,6 +217,14 @@
    "a": "Yes. We set up confirmation, reminder and rebooking texts that cut down no-shows without anyone chasing. They work with the booking system you already use, cancelled spots can be offered to people on a waitlist, and a follow-up text after the visit can ask for a review.",
    "link": "/guides/reduce-no-shows-with-booking-reminders",
    "link_label": "How to reduce no-shows"
+  },
+  {
+   "id": "invoices",
+   "q": "Can you automate quotes and invoices?",
+   "also": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts",
+   "a": "Yes. Site notes or a voice memo become a draft quote in your own prices and wording, and approved jobs become an invoice ready to check and send. Invoices land in your accounting app with nothing retyped, and polite payment reminders go out on time.",
+   "link": "/guides/automate-quotes-and-invoices",
+   "link_label": "How to automate quotes and invoices"
   }
  ]
 }

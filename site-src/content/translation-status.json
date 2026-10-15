@@ -945,5 +945,40 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "How to reduce no-shows"
+ },
+ "ed.chat.talk.knowledge": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. I know Ambs Solutions well: our services, prices, how we work, the software we connect, the industries we work with, data and privacy, and the guides on our website. Ask me anything, or tap one of these to start."
+ },
+ "ed.chat.qa.invoices.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can you automate quotes and invoices?"
+ },
+ "ed.chat.qa.invoices.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. Site notes or a voice memo become a draft quote in your own prices and wording, and approved jobs become an invoice ready to check and send. Invoices land in your accounting app with nothing retyped, and polite payment reminders go out on time."
+ },
+ "ed.chat.qa.invoices.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts"
+ },
+ "ed.chat.qa.invoices.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "How to automate quotes and invoices"
  }
 }
