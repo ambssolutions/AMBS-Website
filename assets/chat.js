@@ -291,7 +291,8 @@
   /* ---- offering help after a while: once per visit, counted across pages while the page is on screen ---- */
   var nudgeEl=null;
   function sget(k){try{return sessionStorage.getItem(k)}catch(e){return null}}function sset(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}
-  function quiet(){try{return localStorage.getItem("ambs:chat-quiet")==="1"}catch(e){return false}}function beQuiet(){try{localStorage.setItem("ambs:chat-quiet","1")}catch(e){}}
+  /* closed by the visitor: it doesn't open by itself again during this visit; next time they open the website it starts again */
+  function quiet(){return sget("ambs:chat-quiet")==="1"}function beQuiet(){sset("ambs:chat-quiet","1")}
   function nudgeTimer(){if(!NUDGE||quiet()||sget("ambs:nudged")||state.msgs.length||/^\/booking-confirmed/.test(location.pathname))return;
     var here=0,iv=setInterval(function(){if(document.hidden)return;here++;
       if(state.open||sget("ambs:nudged")||quiet()){clearInterval(iv);return}
@@ -313,7 +314,7 @@
   function hideNudge(){if(!nudgeEl)return;var n=nudgeEl;nudgeEl=null;n.classList.remove("on");setTimeout(function(){n.remove()},450)}
 
   /* ---- the button that opens it ---- */
-  function start(){if(/[?&]chat=reset\b/.test(location.search)){try{localStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged");sessionStorage.removeItem("ambs:chat")}catch(e){}}
+  function start(){if(/[?&]chat=reset\b/.test(location.search)){try{localStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged");sessionStorage.removeItem("ambs:chat")}catch(e){}}
     restore();css();
     openBtn=el("button","ac-launch");openBtn.type="button";openBtn.innerHTML='<span class="ac-dot" aria-hidden="true"></span>'+ICO.chat.replace("<svg",'<svg style="display:none"')+'<span></span>';openBtn.querySelector("span:last-child").textContent=L("launcher");
     openBtn.setAttribute("aria-haspopup","dialog");openBtn.addEventListener("click",open);document.body.appendChild(openBtn);document.body.classList.add("ac-has");
