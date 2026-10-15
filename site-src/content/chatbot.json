@@ -1,0 +1,116 @@
+{
+ "enabled": true,
+ "name": "Ambs helper",
+ "greeting": "Kia ora! Ask me anything about Ambs Solutions: what we automate, how it works, prices, or booking a free session.",
+ "suggestions": [
+  "What can you automate?",
+  "How much does it cost?",
+  "How does it work?",
+  "Do you work outside Auckland?"
+ ],
+ "not_found": "Sorry, I couldn't find an answer to that on our website. You can book a free call, leave your question for the team, or contact us directly.",
+ "labels": {
+  "launcher": "Ask us",
+  "title": "Ask Ambs Solutions",
+  "subtitle": "Answers from our website, any time",
+  "placeholder": "Type your question…",
+  "send": "Send",
+  "book": "Book a free session",
+  "message": "Leave a message",
+  "contact": "Call or email",
+  "read": "Read more",
+  "related": "These pages might help:",
+  "name": "Your name",
+  "email": "Your email",
+  "phone": "Phone (optional)",
+  "question": "Your question",
+  "send_msg": "Send message",
+  "sent": "Thanks! Your message is with the team. We'll get back to you soon.",
+  "error": "Sorry, that didn't send. Please try again, or email us.",
+  "helpful": "Anything else I can help with?",
+  "restart": "Start again",
+  "close": "Close"
+ },
+ "qa": [
+  {
+   "id": "book",
+   "q": "How do I book a free session?",
+   "also": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone",
+   "a": "Book a free session and we look at how your work really happens. You leave with a written plan and an hours estimate, yours to keep. There is no cost and no jargon.",
+   "link": "/#book",
+   "link_label": "Book a free session"
+  },
+  {
+   "id": "what",
+   "q": "What can you automate?",
+   "also": "what do you do, services, what can you help with, what do you offer, automate, automation ideas, examples",
+   "a": "Two ways we help. Automations that clear the repetitive work: quotes and invoices, customer replies, bookings and reminders, moving data between apps, your numbers every week, and records you can show. And digital tools built around your business: websites that win trust, staff and customer portals, and live dashboards.",
+   "link": "/services",
+   "link_label": "See our services"
+  },
+  {
+   "id": "time",
+   "q": "How long does it take?",
+   "also": "how long, timeline, how quickly, how soon, weeks, turnaround, when will it be ready",
+   "a": "We start with one automation, usually built in one to two weeks depending on the job. You see it run on your real jobs, checked alongside the way you do it now, before it goes live.",
+   "link": "/#how",
+   "link_label": "How it works"
+  },
+  {
+   "id": "how",
+   "q": "How does it work?",
+   "also": "how it works, process, steps, what happens, get started, next steps, onboarding",
+   "a": "Three steps. We watch the work and leave you with a written plan and an hours estimate, yours to keep. We build one automation first, usually in one to two weeks, and you see it run on your real jobs. Then you own it: we hand over the logins, train your team, and fix or tweak anything free for the first 30 days.",
+   "link": "/#how",
+   "link_label": "How it works"
+  },
+  {
+   "id": "app",
+   "q": "Do you build apps or portals?",
+   "also": "app, mobile app, phone app, portal, staff portal, customer portal, client login, dashboard, iphone, android",
+   "a": "Yes: staff and customer portals. Job tracking, photos, invoices and approvals in your own app on every phone. Each person sees only what they need, with your logo and colours and a secure sign-in, and it installs on the home screen like a normal app.",
+   "link": "/services/websites-and-portals",
+   "link_label": "Websites and portals"
+  },
+  {
+   "id": "web",
+   "q": "Can you build me a website?",
+   "also": "website, new website, web design, rebuild my site, redesign, seo, google, multilingual, landing page",
+   "a": "Yes. We build fast, multilingual websites that win trust and turn visitors into calls. They are easy for you to update with no developer needed, set up so Google understands what you offer, with enquiry forms that come straight to your inbox.",
+   "link": "/services/websites-and-portals",
+   "link_label": "Websites and portals"
+  },
+  {
+   "id": "price",
+   "q": "How much does it cost?",
+   "also": "price, pricing, cost, fees, charge, quote, expensive, cheap, budget, rates",
+   "a": "It depends on the task and the tools involved, so we don't publish a price list. The first session is free. After it you get a written plan, and the scope and price are agreed in writing before any work starts. Fixes and tweaks are free for the first 30 days after launch.",
+   "link": "/#book",
+   "link_label": "Book a free session"
+  },
+  {
+   "id": "where",
+   "q": "Where are you based?",
+   "also": "location, address, office, auckland, wellington, christchurch, nationwide, new zealand, remote, outside auckland",
+   "a": "We're based in Auckland and work right across New Zealand. Most of the work happens remotely, and we travel for the first walkthrough when it helps.",
+   "link": "",
+   "link_label": ""
+  },
+  {
+   "id": "own",
+   "q": "Do I own what you build?",
+   "also": "ownership, logins, accounts, lock in, contract, cancel, stop working with you",
+   "a": "Yes. Systems are set up in your own accounts, so you keep them if you stop working with us. We hand over the logins and train your team.",
+   "link": "",
+   "link_label": ""
+  },
+  {
+   "id": "data",
+   "q": "Is my data safe?",
+   "also": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential",
+   "a": "Your data stays yours. We handle it under the Privacy Act 2020, keep what we store for you in New Zealand or Australia, and never use it to train anyone's AI model.",
+   "link": "/privacy",
+   "link_label": "Read our privacy policy"
+  }
+ ]
+}

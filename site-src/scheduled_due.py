@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Used by the hourly GitHub workflow: prints "yes" when a page scheduled in the website editor
-   has reached its time (New Zealand time) and is not on the website yet, otherwise "no"."""
+   has reached its time (New Zealand time) and is not on the website yet, or when the homepage wording changed
+   since the chat helper's answers were last gathered; otherwise "no"."""
 import json, os, datetime, zoneinfo
 SRC=os.path.dirname(os.path.abspath(__file__)); ROOT=os.path.dirname(SRC)
 now=os.environ.get('AMBS_NOW') or datetime.datetime.now(zoneinfo.ZoneInfo('Pacific/Auckland')).strftime('%Y-%m-%dT%H:%M')
@@ -12,4 +13,11 @@ cdir=os.path.join(SRC,'content','custom')
 if os.path.isdir(cdir):
     for f in os.listdir(cdir):
         if f.endswith('.json') and due(json.load(open(os.path.join(cdir,f),encoding='utf8'))): out.append(os.path.join(ROOT,f[:-5]+'.html'))
-print('yes' if any(not os.path.exists(x) for x in out) else 'no')
+# the chat helper answers from the homepage wording too; homepage edits publish without a rebuild, so check it here
+import hashlib
+stale=False
+try:
+    idx=json.load(open(os.path.join(ROOT,'assets','chat-index.json'),encoding='utf8'))
+    stale=idx.get('src')!=hashlib.md5(open(os.path.join(SRC,'assets','home.js'),'rb').read()).hexdigest()[:8]
+except Exception: pass
+print('yes' if stale or any(not os.path.exists(x) for x in out) else 'no')

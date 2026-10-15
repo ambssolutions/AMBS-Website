@@ -366,6 +366,7 @@ header.top .who{margin-left:4px}
     <button type="button" role="tab" data-tab="menus" aria-selected="false">Menus</button>
     <button type="button" role="tab" data-tab="photos" aria-selected="false">Photos &amp; logo</button>
     <button type="button" role="tab" data-tab="business" aria-selected="false">Business details</button>
+    <button type="button" role="tab" data-tab="chat" aria-selected="false">Chat helper</button>
     <button type="button" role="tab" data-tab="calc" aria-selected="false">Hours calculator</button>
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
   </nav>
@@ -397,6 +398,7 @@ header.top .who{margin-left:4px}
   </section>
 
   <section id="tab-photos" class="tab hidden"><div class="wrap narrow" id="phMain"><p class="empty"><span class="spin"></span> Loading the photos…</p></div></section>
+  <section id="tab-chat" class="tab hidden"><div class="wrap narrow" id="chMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-business" class="tab hidden"><div class="wrap narrow" id="bzMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-sections" class="tab hidden"><div class="wrap narrow" id="hsMain"></div></section>
   <section id="tab-menus" class="tab hidden"><div class="wrap narrow" id="mnMain"></div></section>
@@ -852,7 +854,7 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit})[name]()}
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
 /* ---------- phones ---------- */
@@ -886,7 +888,7 @@ function whenSite(fn,n){n=n||0;if(site)fn();else if(n<50)setTimeout(function(){w
 function goFind(r,q){
   if(r.kind==="wording"){show("wording");if(current!=="wording")return;window.edOpenWording(q);return}
   if(r.kind==="sitetext")r={kind:"business"};
-  if(r.kind==="menus"||r.kind==="business"){show(r.kind);if(current!==r.kind)return;findHighlight(q,r.kind==="menus"?"mnMain":"bzMain");return}
+  if(r.kind==="menus"||r.kind==="business"||r.kind==="chat"){show(r.kind);if(current!==r.kind)return;findHighlight(q,{menus:"mnMain",business:"bzMain",chat:"chMain"}[r.kind]);return}
   if(current==="pages"){if(!leaveOk())return;dirty=false}else{var was=loaded.pages;show("pages");if(current!=="pages")return;if(!was){if(r.kind==="page")open={section:r.section,slug:r.slug};else whenSite(openHubs);findHighlight(q,"pgMain");return}}
   if(r.kind==="hubs")openHubs();else openPage(r.section,r.slug);
   findHighlight(q,"pgMain")}
@@ -1347,6 +1349,38 @@ function businessInit(){
   }).catch(fail);
 }
 
+
+/* ======================= CHAT HELPER ======================= */
+/* The "Ask us" helper on every page. It answers from the website's own wording (every page, post, question and the
+   homepage), plus the answers written here. Saved to site-src/content/chatbot.json; the pages are rebuilt after saving. */
+var CH_LABELS=[["launcher","Button"],["title","Window title"],["subtitle","Line under the title"],["placeholder","Typing box"],["book","Booking button"],["message","Leave a message button"],["contact","Call or email button"],["read","Link under an answer"],["related","Above other pages that might help"],["name","Message form: name"],["email","Message form: email"],["phone","Message form: phone"],["question","Message form: question"],["send_msg","Message form: send button"],["sent","After a message is sent"],["error","If a message can't be sent"],["restart","Start again button"],["close","Close button"],["send","Send button (for screen readers)"],["helpful","Anything else?"]];
+function chatInit(){
+  var m=$("chMain");api("settings",{action:"chatget"}).then(function(j){var c=j.chat||{};m.innerHTML="";
+    var top=h('<div class="panel"><h3>Chat helper</h3><p class="help">The “Ask us” button on every page. It answers visitors from your own website: every page, guide, news post, question and the homepage. It is free to run and uses no AI service. When it can’t answer, it offers to book a session, take a message (it arrives in your email and portal Leads like the contact forms), or shows your phone and email.</p><label class="chk" style="display:flex;gap:8px;align-items:center;margin:4px 0 12px"><input type="checkbox" id="chOn"> Show the chat helper on the website</label></div>');
+    top.querySelector("#chOn").checked=c.enabled!==false;top.querySelector("#chOn").addEventListener("change",markDirty);
+    top.appendChild(fld("chGreet","Greeting",c.greeting,{area:true,rows:2,help:"The first message visitors see."}));
+    top.appendChild(fld("chMiss","When it can’t find an answer",c.not_found,{area:true,rows:2,help:"Shown with the Book, Leave a message and Call or email buttons."}));
+    m.appendChild(top);top.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
+    var sug=listEditor("Quick questions","Buttons under the greeting, so visitors can start with one tap. Up to 6.",c.suggestions||[],"Add a quick question");m.appendChild(sug);
+    /* answers written here come first when a question matches */
+    var qp=h('<div class="panel"><h3>Your own answers</h3><p class="help">Answers for questions people often ask. These win over the website’s wording when a question matches. Add other ways people might ask it, separated by commas, so it matches more questions.</p><div class="items"></div><button type="button" class="add">+ Add an answer</button></div>'),qbox=qp.querySelector(".items");
+    function qrow(x){x=x||{};var r=h('<div class="qa ch-qa" style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px"><div class="li"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><textarea class="t" rows="1" placeholder="Question, for example: Do you work weekends?" data-k="q"></textarea><button type="button" class="x" aria-label="Remove this answer">✕</button></div>'+
+        '<textarea class="t" rows="1" placeholder="Other ways people ask (optional), for example: saturday, after hours, evenings" data-k="also" style="width:100%;margin-top:6px"></textarea>'+
+        '<textarea class="t" rows="3" placeholder="Answer" data-k="a" style="width:100%;margin-top:6px"></textarea>'+
+        '<div class="grid2" style="margin-top:6px"><input class="t" placeholder="Link (optional), for example /#book" data-k="link"><input class="t" placeholder="Link wording, for example Book a free session" data-k="link_label"></div></div>');
+      r.dataset.id=x.id||"";r.querySelectorAll("[data-k]").forEach(function(t){t.value=x[t.dataset.k]||"";t.addEventListener("input",function(){markDirty();if(t.tagName==="TEXTAREA")ED.autosize(t)});if(t.tagName==="TEXTAREA")requestAnimationFrame(function(){ED.autosize(t)})});
+      r.querySelector(".x").addEventListener("click",function(){if(r.querySelector('[data-k="q"]').value&&!confirm("Remove this answer?"))return;r.remove();markDirty()});qbox.appendChild(r);return r}
+    (c.qa||[]).forEach(qrow);sortable(qbox,".ch-qa",markDirty);qp.querySelector(".add").addEventListener("click",function(){qrow({}).querySelector("textarea").focus();markDirty()});m.appendChild(qp);
+    var lb=h('<div class="panel"><details class="st-grp"><summary>Wording in the chat window <span class="sum">'+CH_LABELS.length+' lines</span></summary><div class="st-box"></div></details><p class="help" style="margin-top:8px">Visitors who chose Chinese, Hindi, Punjabi or te reo Māori on the homepage see this wording in their language while it is unchanged. Answers are shown in English.</p></div>'),lbox=lb.querySelector(".st-box"),labs=c.labels||{};
+    CH_LABELS.forEach(function(x){if(labs[x[0]]==null)return;var f=fld("chL-"+x[0],x[1],labs[x[0]],x[0]==="sent"||x[0]==="error"?{area:true,rows:2}:{});f.querySelector("input,textarea").dataset.lab=x[0];lbox.appendChild(f)});m.appendChild(lb);
+    var act=h('<div class="actions"><a class="btn" href="/#ask" target="_blank" rel="noopener">Try it on the website</a><span class="sp"></span><button type="button" class="btn primary" id="chSave">Save &amp; publish</button></div>');m.appendChild(act);
+    $("chSave").addEventListener("click",function(){var btn=this,labels={};lb.querySelectorAll("[data-lab]").forEach(function(x){labels[x.dataset.lab]=x.value});
+      var qa=Array.prototype.map.call(qbox.querySelectorAll(".ch-qa"),function(r){var o={id:r.dataset.id};r.querySelectorAll("[data-k]").forEach(function(t){o[t.dataset.k]=t.value.trim()});return o});
+      var half=qa.filter(function(x){return(x.q&&!x.a)||(!x.q&&x.a)});if(half.length){toast("Each answer needs both a question and an answer.",true);return}
+      var data={enabled:$("chOn").checked,name:c.name,greeting:$("chGreet").value,not_found:$("chMiss").value,suggestions:sug.values(),labels:labels,qa:qa};
+      busy(btn,true);api("settings",{action:"chatbot",data:data}).then(function(){dirty=false;busy(btn,false);toast("Saved. The chat helper is being updated. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
+  }).catch(fail);
+}
 
 /* ======================= BLOCKS (pages and homepage sections) ======================= */
 var BT={text:"Text",media:"Text with photo",photo:"Photo",gallery:"Photo gallery",cards:"Cards",buttons:"Buttons",faq:"Questions and answers",cta:"Call to action",quote:"Quote or testimonial",video:"Video",columns:"Two columns",form:"Contact form"};

@@ -167,6 +167,13 @@ export default async function handler(req, res) {
         const t = JSON.parse(tf.text);
         for (const g of SITE_TEXT_GROUPS) for (const [k, label] of g.items) look({ kind: "sitetext", title: g.name, key: "sitetext:" + k }, "Wording on every page · " + label, t[k] || "");
       }
+      const cf = await readFile("site-src/content/chatbot.json", head);
+      if (cf) {
+        const c = JSON.parse(cf.text), base = { kind: "chat", title: "Chat helper", key: "chat" };
+        look(base, "Greeting and quick questions", [c.greeting, ...(c.suggestions || []), c.not_found].join(" · "));
+        for (const x of c.qa || []) look(base, "Answer · " + x.q, [x.q, x.also, x.a].join(" · "));
+        look(base, "Chat wording", Object.values(c.labels || {}).join(" · "));
+      }
       const sf = await readFile("site-src/content/site.json", head);
       if (sf) look({ kind: "business", title: "Business details", key: "business" }, "Phone, email and location", Object.values(JSON.parse(sf.text)).join(" · "));
       return send(res, 200, { results: results.slice(0, 80) });
