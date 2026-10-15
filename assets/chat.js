@@ -231,7 +231,11 @@
     load().then(function(){if(!log.children.length){if(state.msgs.length)state.msgs.forEach(function(m){render(m,true)});else welcome()}scroll()}).catch(function(){if(!log.children.length)addBot({t:"text",x:L("not_found")}),addBot({t:"actions"})});
     if(!auto)setTimeout(function(){if(window.matchMedia("(min-width:641px)").matches)input.focus()},60)}
   function close(){if(!root)return;beQuiet();stopVoice();state.open=false;save();root.classList.remove("on");root._shade.classList.remove("on");document.body.classList.remove("ac-on");if(openBtn)openBtn.focus({preventScroll:true})}
-  function scroll(){log.scrollTop=log.scrollHeight}
+  /* keep the start of the newest reply in view: the visitor's last question at the top, the answer below it.
+     Before anything is asked (the greeting or the 15-second message), show the top. Short replies just sit at the bottom. */
+  function scroll(){var me=log.querySelectorAll(".ac-me"),a=me.length?me[me.length-1]:null;
+    if(!a){log.scrollTop=0;return}
+    var y=a.getBoundingClientRect().top-log.getBoundingClientRect().top+log.scrollTop-10;log.scrollTop=Math.min(y,log.scrollHeight)}
   /* only the newest row of buttons stays, so the conversation doesn't fill up with repeats */
   function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"&&x.t!=="langs"});[].forEach.call(log.querySelectorAll(".ac-chips,.ac-langs"),function(x){x.remove()})}
     state.msgs.push(m);save();render(m)}
@@ -274,7 +278,8 @@
       f.name.placeholder=L("name");f.email.placeholder=L("email");f.phone.placeholder=L("phone");f.question.placeholder=L("question");f.question.value=m.q||"";
       ["name","email","phone","question"].forEach(function(k){f[k].setAttribute("aria-label",f[k].placeholder)});f.querySelector("button").textContent=L("send_msg");
       f.addEventListener("submit",function(ev){ev.preventDefault();sendMsg(f,m,b)});b.appendChild(f);log.appendChild(b);if(!quiet)setTimeout(function(){f.name.focus()},50)}
-    if(!quiet)scroll()}
+    /* a contact card or message form opened from a button shows itself; everything else keeps the newest reply in view */
+    if(!quiet){if((m.t==="contact"||m.t==="form")&&b&&b.scrollIntoView)b.scrollIntoView({block:"nearest"});else scroll()}}
   function nav(ev){var h=this.getAttribute("href")||"";if(h.charAt(0)==="/"&&h.indexOf("#")>0&&location.pathname===h.split("#")[0]){close()}
     else if(h.indexOf("/#")===0&&location.pathname==="/"){close()}else if(window.matchMedia("(max-width:640px)").matches){state.open=false;save()}}
   function sendMsg(f,m,box){var v=function(k){return String(f[k].value||"").trim()},ok=true;
