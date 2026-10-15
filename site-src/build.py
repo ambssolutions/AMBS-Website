@@ -603,7 +603,7 @@ def chat_strings():
     for k,v in (c.get('chat') or {}).items():
         if v: out['ed.chat.talk.'+k]=v
     for k,v in (c.get('labels') or {}).items():
-        if v: out['ed.chat.label.'+k]=v
+        if v and k!='in_english': out['ed.chat.label.'+k]=v
     for it in c.get('qa',[]):
         if not (it.get('id') and it.get('q') and it.get('a')): continue
         for f,src in (('q','q'),('a','a'),('also','also'),('ll','link_label')):
@@ -616,44 +616,45 @@ def build_chat_index():
     site=_load('site.json',{})
     TRL=_tr_files()
     docs=[]
-    def add(kind,title,text,u,q='',extra='',lang=''):
+    # i: the same answer in every language shares an id, so a question matched in English can be answered in the visitor's language
+    def add(kind,title,text,u,q='',extra='',lang='',i=''):
         text=_txt(text);title=_txt(title)
-        if text or q: docs.append({k:v for k,v in dict(k=kind,t=title,q=_txt(q),a=text,u=u,x=extra,g=lang).items() if v})
+        if text or q: docs.append({k:v for k,v in dict(k=kind,t=title,q=_txt(q),a=text,u=u,x=extra,g=lang,i=i).items() if v})
     # the owner's own answers, in English and in every language they have been translated into
     for it in CHAT.get('qa',[]):
         if not (it.get('q') and it.get('a')): continue
-        docs.append({k:v for k,v in dict(k='qa',t=it['q'],q=it['q'],a=it['a'],u=it.get('link',''),l=it.get('link_label',''),x=it.get('also','')).items() if v})
+        docs.append({k:v for k,v in dict(k='qa',t=it['q'],q=it['q'],a=it['a'],u=it.get('link',''),l=it.get('link_label',''),x=it.get('also',''),i='qa.'+str(it.get('id',''))).items() if v})
         for lang,tr in TRL.items():
             key=f'ed.chat.qa.{it.get("id")}.'
             if tr.get(key+'q') and tr.get(key+'a'):
-                docs.append({k:v for k,v in dict(k='qa',t=tr[key+'q'],q=tr[key+'q'],a=tr[key+'a'],u=it.get('link',''),l=tr.get(key+'ll') or it.get('link_label',''),x=tr.get(key+'also',''),g=lang).items() if v})
+                docs.append({k:v for k,v in dict(k='qa',t=tr[key+'q'],q=tr[key+'q'],a=tr[key+'a'],u=it.get('link',''),l=tr.get(key+'ll') or it.get('link_label',''),x=tr.get(key+'also',''),g=lang,i='qa.'+str(it.get('id',''))).items() if v})
     # the homepage, in English and in each translated language
     def home(g,lang):
         A=lambda *a,**k:add(*a,lang=lang,**k)
-        A('page',g('hero.h1'),g('hero.sub')+' '+g('hero.note'),'/')
+        A('page',g('hero.h1'),g('hero.sub')+' '+g('hero.note'),'/',i='hero')
         for i in range(1,30):
             q,a=g(f'faq.q{i}'),g(f'faq.a{i}')
-            if q and a: A('faq',q,a,'/#faq',q)
+            if q and a: A('faq',q,a,'/#faq',q,i=f'faq{i}')
         for i in range(1,30):
             t,d=g(f'auto.c{i}t'),g(f'auto.c{i}d')
             if not t: continue
             pts=' '.join(g(f'auto.c{i}p{j}') for j in range(1,8) if g(f'auto.c{i}p{j}'))
-            A('home',t,d+' '+pts,'/services/websites-and-portals' if i>=7 else '/services/ai-automation','',g('auto.title'))
+            A('home',t,d+' '+pts,'/services/websites-and-portals' if i>=7 else '/services/ai-automation','',g('auto.title'),i=f'auto{i}')
         steps=' '.join(f"{g(f'how.s{i}t')}: {g(f'how.s{i}d')}" for i in range(1,12) if g(f'how.s{i}t'))
-        if steps: A('home',g('how.title'),steps,'/#how','','process steps how it works what happens next' if lang=='' else '')
+        if steps: A('home',g('how.title'),steps,'/#how','','process steps how it works what happens next' if lang=='' else '',i='how')
         why=' '.join(g(f'why.n{i}')+'.' for i in range(1,12) if g(f'why.n{i}'))
-        if why: A('home',g('why.t'),why,'/#why','','why choose you different' if lang=='' else '')
+        if why: A('home',g('why.t'),why,'/#why','','why choose you different' if lang=='' else '',i='why')
         about=' '.join(g(k) for k in EN if k.startswith('about.') and k!='about.title' and g(k))
-        if about: A('home',g('about.title'),about,'/#about','','about who are you company team' if lang=='' else '')
+        if about: A('home',g('about.title'),about,'/#about','','about who are you company team' if lang=='' else '',i='about')
         for i in range(1,12):
             t,d=g(f'trust.u{i}t'),g(f'trust.u{i}d')
-            if t: A('home',t,d,'/#how')
-        if g('trust.title'): A('home',g('trust.title'),g('trust.lead'),'/','','tools software apps' if lang=='' else '')
+            if t: A('home',t,d,'/#how',i=f'trust{i}')
+        if g('trust.title'): A('home',g('trust.title'),g('trust.lead'),'/','','tools software apps' if lang=='' else '',i='tools')
         for b in ('cafe','trades','clinic','retail','adviser','transport','other'):
             tasks=[g(f't.{b}{j}') for j in range(1,8) if g(f't.{b}{j}')]
             if g('biz.'+b) and tasks:
                 ind={'cafe':'cafes-and-takeaways','trades':'trades-and-building','clinic':'clinics-and-salons','retail':'shops-and-dairies','adviser':'advisers-and-accountants','transport':'transport-and-delivery'}.get(b)
-                A('home',g('biz.'+b)+': '+g('card.handled'),'. '.join(tasks)+'.','/industries/'+ind if ind else '/#automate')
+                A('home',g('biz.'+b)+': '+g('card.handled'),'. '.join(tasks)+'.','/industries/'+ind if ind else '/#automate',i='biz.'+b)
         for k,v in HOMESEC.get('custom',{}).items():
             out=[];_block_text(v.get('blocks',[]),out)
             if lang=='': A('home',v.get('title') or v.get('name') or 'Ambs Solutions',' '.join(out),'/#'+k)
