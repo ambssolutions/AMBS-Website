@@ -336,8 +336,8 @@
   {
    "id": "about",
    "q": "Who is behind Ambs Solutions?",
-   "also": "about you, about ambs, who owns ambs, owner, founder, how long in business, company, who are you guys, background, one guy, just one guy, real company, one person business",
-   "a": "Ambs Solutions is an Auckland business that helps small and growing New Zealand businesses with automation, websites and portals. You deal directly with the person who builds it: one named contact who knows your business. Only our own team works on your data.",
+   "also": "about you, about ambs, who owns ambs, owner, founder, how long in business, company, who are you guys, background, one guy, just one guy, real company, one person business, team size, how big is your team, how many staff",
+   "a": "Ambs Solutions is a small Auckland team that helps small and growing New Zealand businesses with automation, websites and portals. You deal directly with the people who build it: one named contact who knows your business. Only our own team works on your data.",
    "link": "/#about",
    "link_label": "About us"
   },
@@ -396,6 +396,30 @@
    "a": "Yes. Each morning you can get yesterday's sales and a weekly view of what's running low, so reorders happen before the shelf is empty. Suggested orders come to you to approve first. We work from your point-of-sale or inventory system's exports to Excel or Google Sheets, rather than connecting to it directly.",
    "link": "/industries/shops-and-dairies",
    "link_label": "Shops and dairies"
+  },
+  {
+   "id": "marketing",
+   "q": "Do you run ads or social media?",
+   "also": "google ads, facebook ads, instagram ads, social media, social media management, advertising, ads, ppc, meta ads, marketing, run my ads, manage my social media",
+   "a": "Only through a partner. We don't run ads or social media ourselves, but we can arrange Google Ads, Facebook and Instagram ads or social media management through a partner, alongside the website and automations we build. Ask us about it in your free session.",
+   "link": "/#book",
+   "link_label": "Book a free session"
+  },
+  {
+   "id": "overseas",
+   "q": "Do you work with businesses outside New Zealand?",
+   "also": "australia, overseas, outside new zealand, international, uk, usa, other countries, another country, abroad",
+   "a": "Yes. We work with businesses anywhere, mostly remotely. Our team is in Auckland and works in New Zealand hours.",
+   "link": "/#book",
+   "link_label": "Book a free session"
+  },
+  {
+   "id": "nda",
+   "q": "Will you sign an NDA?",
+   "also": "nda, non disclosure, non-disclosure agreement, confidentiality, keep it confidential, business secrets, keep my information private",
+   "a": "Confidentiality is covered in the written agreement we both sign before any work starts, and only our own team works on your information.",
+   "link": "/terms",
+   "link_label": "Terms"
   }
  ]
 }
