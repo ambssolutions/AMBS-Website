@@ -1120,11 +1120,16 @@ html:not([data-theme=dark]).sky-night .foot-contact a:hover,html:not([data-theme
 html:not([data-theme=dark]).sky-night .foot-legal{border-top-color:rgba(237,239,248,.16)!important}
 html:not([data-theme=dark]).sky-night .foot-fine{border-top-color:rgba(237,239,248,.14)!important}
 html:not([data-theme=dark]).sky-night .fc-social .fc-soc svg path[fill="#010101"]{fill:#f2f4fa}
-/* the whole hero, heading included, starts hidden and appears once: the heading used to show for a moment, vanish when its words were split for the animation, then type in again */
-.hero .docket,.hero .greet,.hero .hero-cta,.hero .hero-note,.hero .hero-sub,.hero h1{opacity:0}
+/* the whole hero starts hidden and appears once. The heading's own text stays hidden until the page script has split it into words
+   (it then gets .tx-accent-host): before, it showed for a moment in plain black, vanished, then typed in again */
+.hero .docket,.hero .greet,.hero .hero-cta,.hero .hero-note,.hero .hero-sub{opacity:0}
+.hero h1:not(.tx-accent-host){visibility:hidden}
+@keyframes hero-vis{to{visibility:visible}}
+.hero h1:not(.tx-accent-host){animation:hero-vis 0s linear 3s forwards}
+.tx-keep{white-space:nowrap}
 /* safety net if the page script never runs */
 @keyframes hero-safe{to{opacity:1;transform:none}}
-.hero:not(.entered) .docket,.hero:not(.entered) .greet,.hero:not(.entered) .hero-cta,.hero:not(.entered) .hero-note,.hero:not(.entered) .hero-sub,.hero:not(.entered) h1{animation:hero-safe .6s ease 3s forwards}
+.hero:not(.entered) .docket,.hero:not(.entered) .greet,.hero:not(.entered) .hero-cta,.hero:not(.entered) .hero-note,.hero:not(.entered) .hero-sub{animation:hero-safe .6s ease 3s forwards}
 .hero .docket,.hero .greet,.hero .hero-cta,.hero .hero-note,.hero .hero-sub,.hero h1{transform:translateY(22px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
 .hero.entered .greet,.hero.entered h1{opacity:1;transform:none;transition-delay:.05s}
 .hero.entered h1{transition-delay:.16s}
@@ -2212,6 +2217,9 @@ footer.f2 .f2-grid>.f2-col .f2-h{font-size:.6rem!important;letter-spacing:.1em!i
 .hero .hero-copy{max-width:none!important}
 .hero #docket{margin:0!important;justify-self:end;max-width:560px;align-self:stretch!important;height:auto!important;display:flex!important;flex-direction:column;justify-content:center}
 .hero .hero-copy h1{font-size:clamp(1.85rem,min(4.6vw,calc(var(--vh,1svh)*6.6)),4.6rem)!important}
+/* on big screens the heading grew faster than its card and broke into five short lines: keep it to the card's width (three lines, like on laptops) */
+.hero .hero-copy{container-type:inline-size}
+.hero .hero-copy h1{font-size:clamp(1.85rem,min(4.6vw,calc(var(--vh,1svh)*6.6),8.9cqi),4.6rem)!important}
 .hero .wrap{min-height:calc(var(--vh,1svh)*100 - var(--hc-top,120px));align-items:stretch!important;align-content:center!important}
 .hero .hero-copy{min-height:0!important}}
 @media (max-width:767px){.qbar.shine a span{animation:qb-shine 1.5s ease-in-out 1 both}

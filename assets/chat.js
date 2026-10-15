@@ -32,8 +32,8 @@
     if(/[āēīōū]/i.test(t)||/\b(tena koe|tēnā koe|ka pai|nga mihi|ngā mihi|he aha|kei hea|e hia|me pehea|me pēhea)\b/i.test(t))return"mi";
     if(/^[\x00-\x7F’‘“”…–—]+$/.test(t)&&/[a-z]{3,}/i.test(t))return"en";return""}
   /* Punjabi, Hindi, te reo Māori or Chinese typed in English letters ("kinna kharcha hai", "aap kya karte ho", "kei te pehea koe", "nihao") */
-  var RW={pa:"tusi tussi tusin tuhada tuhadi tuhade tuhanu tuhannu sanu saanu mainu kinna kinne kinni kida kidda kiddan kive kiwe kiven kivein kithe kitthe kado kadon karde kardi karda hunda hundi hega haige dasso daso dasdo chahida lagda lagu vich naal hor changa vadhiya vadiya sasriakal",
-    hi:"aap aapka aapki aapke aapko kya kyaa kaise kaisa kaisi kitna kitne kitni kahan kahaan kab kaun kyun kyon mujhe mera meri humein hame karte karta karti sakte chahiye nahi nahin accha acha theek thik namaste namaskar dhanyavad dhanyawad shukriya bataiye bataye batao kijiye liye lagega lagta",
+  var RW={pa:"tusi tussi tusin tuhada tuhadi tuhade tuhanu tuhannu sanu saanu mainu kinna kinne kinni kida kidda kiddan kive kiwe kiven kivein kithe kitthe kado kadon karde kardi karda hunda hundi hega haige dasso daso dasdo chahida lagda lagu vich naal hor changa vadhiya vadiya sasriakal skde skda skdi sakde sakda sakdi krde krdi krda kehra kehre kiddan",
+    hi:"aap aapka aapki aapke aapko kya kyaa kaise kaisa kaisi kitna kitne kitni kahan kahaan kab kaun kyun kyon mujhe mera meri humein hame karte karta karti sakte skte sakta skta krte krta krti chahiye nahi nahin accha acha theek thik namaste namaskar dhanyavad dhanyawad shukriya bataiye bataye batao kijiye liye lagega lagta",
     mi:"kia ora kei pehea koe korua koutou ahau tino rawe mahi utu whare hea tena tenei aroha whanau pakihi rorohiko paetukutuku taupanga watea whakaaro korero patai awhina ingoa kaimahi haere hia aha morena",
     zh:"nihao xiexie duoshao zenme shenme nimen women keyi gongsi wangzhan jiage yuyue zaijian haode"},RWM={};
   Object.keys(RW).forEach(function(g){RW[g].split(" ").forEach(function(w){RWM[w]=g})});
@@ -48,7 +48,7 @@
     [/\b(samay|samaa|time|waqt|wakt|din|dina|hafte|hafta|mahina|lagda|lagega|lagenge|lagange|lagta|lagegi|lagu|kado|kadon|kab|jaldi)\b/,"how long time weeks"],
     [/\b(milna|milo|mil|mulakat|mulaqat|appointment|meeting|hui|yuyue|book|booking)\b/,"book session"],
     [/\b(kahan|kahaan|kithe|kitthe|hea)\b/,"where based location"],[/\b(kaise|kive|kiven|kiwe|kivein|kiwein|kiwen|kivven|pehea|zenme)\b/,"how work process"],[/\b(shuru|suru|aarambh|shuruat)\b/,"how do i get started first step"],
-    [/\b(karte|karde|karda|kardi|mahi|zuo)\b/,"what automate services"],[/\b(paetukutuku|wangzhan)\b/,"website"],[/\b(taupanga|yingyong)\b/,"app portal"],
+    [/\b(karte|karde|karda|kardi|krte|krde|krda|krdi|krti|kr|mahi|zuo)\b/,"what automate services"],[/\b(paetukutuku|wangzhan)\b/,"website"],[/\b(taupanga|yingyong)\b/,"app portal"],
     [/\b(madad|maddad|awhina|bangzhu)\b/,"help"],[/\b(surakshit|surakhit|surakhiyat)\b/,"data safe privacy"],[/\b(waea|dianhua)\b/,"contact phone"],
     [/\b(malik|maalik)\b/,"own"],[/\b(dukan|dukaan|kaarobar|karobar|pakihi)\b/,"business"],[/\b(kaimahi|karamchari|mulazam)\b/,"staff"]];
   /* the question for the search: what the words mean, plus any English words in it ("website", "app", "Xero"); the rest are left out */
@@ -398,7 +398,9 @@
     try{fetch(lg.u,{method:"POST",keepalive:true,headers:{"Content-Type":"application/json",apikey:lg.k},body:JSON.stringify({p_q:clean,p_lang:lang(),p_page:location.pathname,p_result:res,p_answer:String(ans).slice(0,300)})}).catch(function(){})}catch(e){}}
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
     var t=typing();load().then(function(){setTimeout(function(){t.remove();CAP=[];LASTD=null;try{answer(q)}finally{var got=CAP;CAP=null;logQ(q,got);related(q,got)}},1800+Math.min(600,q.length*6))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
-  function answer(q){var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
+  /* "Sat Shrine akal" (a phone's autocorrect), "sat sri akaal", "sasriakal": all the Punjabi greeting */
+  function fixGreet(t){return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsasri\s*akaa?l\b/gi,"sat sri akal")}
+  function answer(q){q=fixGreet(q);var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
     /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
     sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
     /* still understood after "Reply in English"; only the reply language stays English */

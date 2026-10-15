@@ -1216,10 +1216,14 @@ try{
     lines.forEach(function(line,li){
       if(li)html+="<br>";
       var parts=/[\u3400-\u9fff]/.test(line)?Array.from(line):line.split(/(\s+)/);
+      /* the hero heading's last two words stay together, so a short last word ("AI.") never sits alone on a line */
+      var words=parts.filter(function(w){return w&&!/^\s+$/.test(w);}),keepFrom=(accent&&li===lines.length-1&&words.length>=3&&!/[\u3400-\u9fff]/.test(line))?words.length-2:-1,wn=0;
       parts.forEach(function(w){
         if(!w)return;
         if(/^\s+$/.test(w)){html+=" ";return;}
+        if(wn===keepFrom)html+='<span class="tx-keep">';
         html+='<span class="tx-w'+(accent&&li===lines.length-1?" tx-accent":"")+'" style="--wi:'+(n++)+'">'+esc(w)+'</span>';
+        wn++;if(keepFrom>=0&&wn===words.length)html+='</span>';
       });
     });
     el.innerHTML=html;
