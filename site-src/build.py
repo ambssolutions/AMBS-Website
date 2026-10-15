@@ -581,6 +581,10 @@ def stamp_home(custom_html=None,strings=None):
 # assets/chat-index.json, and assets/chat.js finds the best answer in the visitor's browser.
 CHAT=_load('chatbot.json',{})
 def _txt(h): return re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>',' ',h))).strip()
+# page text for the chat: headings, list items and paragraphs end as sentences, so answers can be picked sentence by sentence
+def _txts(h):
+    parts=[_txt(x) for x in re.split(r'</(?:h[1-6]|li|p|td|dt|dd|blockquote)>|<br\s*/?>',h)]
+    return ' '.join(x if re.search(r'[.!?:;。।]$',x) else x+'.' for x in parts if x)
 def _block_text(x,out):
     if isinstance(x,dict):
         for k,v in x.items():
@@ -671,7 +675,7 @@ def build_chat_index():
         for q,a in meta.get('faq',[]): add('faq',q,a,u,q,h1)
         for part in re.split(r'(?=<h2[\s>])',body):
             hm=re.match(r'<h2[^>]*>(.*?)</h2>',part,re.S)
-            if hm: add('sec',h1+': '+_txt(hm.group(1)),part[hm.end():],u,'',p[2])
+            if hm: add('sec',h1+': '+_txt(hm.group(1)),_txts(part[hm.end():]),u,'',p[2])
     for slug in ('privacy','terms'):
         f=os.path.join(SRC,'content','legal',slug+'.html')
         if not os.path.exists(f): continue
@@ -679,7 +683,7 @@ def build_chat_index():
         meta=json.loads(m.group(1))
         for part in re.split(r'(?=<h2[\s>])',m.group(2)):
             hm=re.match(r'<h2[^>]*>(.*?)</h2>',part,re.S)
-            add('sec',meta['h1']+(': '+_txt(hm.group(1)) if hm else ''),part[hm.end():] if hm else part,'/'+slug,'',slug)
+            add('sec',meta['h1']+(': '+_txt(hm.group(1)) if hm else ''),_txts(part[hm.end():] if hm else part),'/'+slug,'',slug)
     for slug,d in CUSTOM.items():
         out=[];_block_text(d.get('blocks',[]),out)
         add('page',d.get('title',slug),' '.join(out),'/'+slug)

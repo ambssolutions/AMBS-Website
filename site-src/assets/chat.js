@@ -22,7 +22,7 @@
       greeting:"Kia ora! Pātaihia mai he aha te aha mō Ambs Solutions: ngā mahi ka whakaaunoatia e mātou, te āhua o te mahi, ngā utu, te tono rānei i tētahi wā kore utu.",not_found:"Aroha mai, kāore au i kite i tētahi whakautu i tō mātou paetukutuku. Ka taea e koe te tono waea kore utu, te waiho pātai mā te tīma, te whakapā tōtika mai rānei.",en:"Kei te reo Pākehā ngā whakautu.",thanks:"Kei te pai!",typing:"E rapu ana…",where:"Wāhi",callus:"Waea mai",emailus:"Īmēra mai"}
   };
   var EN_EXTRA={en:"",thanks:"You're welcome! Anything else?",typing:"Looking…",where:"Where",callus:"Call",emailus:"Email"};
-  var DEF={launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
+  var DEF={more_on:"More on this:",langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
   var LANGS=["en","zh","hi","pa","mi"];
   function pageLang(){var l=(document.documentElement.lang||"en").slice(0,2).toLowerCase();return LANGS.indexOf(l)>=0?l:"en"}
   /* the chat speaks the page's language, or the language the visitor writes in (Chinese, Hindi or Punjabi script switch it) */
@@ -108,6 +108,25 @@
       var cov=0;uniq.forEach(function(w){cov+=hit[w]||0});cov/=uniq.length;return{D:D,s:sc*(KIND[D.d.k]||1)*(.2+cov)*(.2+cov)*1.8*((D.d.g||"en")===cl&&cl!=="en"?1.3:1)*(D.d.k==="qa"&&uniq.length<=2?1.6:1),cov:cov}}).filter(function(r){return r.s>0});
     /* an answer that covers clearly more of the question wins, then the stronger match */
     res.sort(function(a,b){return Math.abs(b.cov-a.cov)>=.3?b.cov-a.cov:b.s-a.s});return res}
+  /* a direct answer: the sentences that answer the question, kept in their order on the page */
+  function answerText(d,text,max){max=max||380;var qs=toks(text),sents=(String(d.a||"").match(/[^\s].*?(?:[.!?。।]+(?=\s|$)|$)/g)||[d.a||""]).map(function(x){return x.trim()}).filter(Boolean);
+    var sc=sents.map(function(s,i){var t=toks(s),v=0;qs.forEach(function(w){if(t.indexOf(w)>=0)v+=1;else (SYNMAP[w]||[]).forEach(function(y){if(t.indexOf(y)>=0)v+=.5})});
+      /* a heading-like scrap ("Know if it's working.") says little on its own */
+      if(s.split(" ").length<5)v*=.4;return{i:i,v:v}});
+    var best=sc.slice().sort(function(a,b){return b.v-a.v||a.i-b.i}),pick={},len=0;
+    if(!best.length||best[0].v<=0){best=sc.slice(0,3)}
+    /* the best sentence, the one after it when it adds context, then other matching sentences while there's room */
+    var first=best[0].i;pick[first]=1;len=sents[first].length;
+    if(sents[first+1]&&len+sents[first+1].length<=max&&sents[first].split(" ").length<14){pick[first+1]=1;len+=sents[first+1].length}
+    best.slice(1).forEach(function(b){if(b.v>=best[0].v*.5&&b.v>0&&sents[b.i].split(" ").length>=5&&!pick[b.i]&&len+sents[b.i].length<=max){pick[b.i]=1;len+=sents[b.i].length}});
+    var out=sents.filter(function(s,i){return pick[i]&&s.split(" ").length>=3}).join(" ");
+    if(!out)out=sents[first];if(out.length>max+120)out=out.slice(0,max).replace(/\s+\S*$/,"")+"…";return out}
+  function define(q){var m=String(q).trim().match(/^(?:what(?:'s| is| are|s)|define|meaning of|explain)\s+(?:an?\s+|the\s+)?(.{2,40}?)(?:\s+mean)?\s*\??$/i)||String(q).trim().match(/^what does\s+(?:an?\s+|the\s+)?(.{2,40}?)\s+mean\s*\??$/i);if(!m)return null;
+    var term=norm(m[1]).trim(),alt=term.replace(/s$/,"");if(!term)return null;
+    for(var j=0;j<DOCS.length;j++){var d=DOCS[j].d;if(d.k!=="sec"||(d.g&&d.g!==lang()&&d.g!=="en"))continue;var ss=(String(d.a).match(/[^\s].*?(?:[.!?]+(?=\s|$)|$)/g)||[]).map(function(x){return x.trim()});
+      for(var i=0;i<ss.length-1;i++){var h=norm(ss[i]).trim();if(h!==term&&h!==alt&&h.replace(/s$/,"")!==alt)continue;
+        var out="";for(var k=i+1;k<ss.length&&out.length<330;k++){if(ss[k].split(" ").length<=4&&k>i+1)break;out+=(out?" ":"")+ss[k]}
+        if(out)return{d:d,x:ss[i].replace(/\.$/,"")+": "+out}}}return null}
   function snippet(d,text,max){var qs=toks(text),sents=String(d.a||"").match(/[^.!?]+[.!?]*/g)||[d.a||""],best=[];
     sents.forEach(function(s,i){var t=toks(s),sc=0;qs.forEach(function(w){if(t.indexOf(w)>=0)sc+=1;else (SYNMAP[w]||[]).forEach(function(y){if(t.indexOf(y)>=0)sc+=.5})});best.push({i:i,s:sc})});
     best.sort(function(a,b){return b.s-a.s||a.i-b.i});var start=best.length&&best[0].s>0?best[0].i:0,out="";
@@ -159,6 +178,9 @@
     ".ac-chip{border:1px solid var(--ac-line2);background:var(--ac-chip);color:var(--ac-ink);border-radius:999px;padding:7px 12px;font:600 13.5px/1.2 var(--body,'Instrument Sans',Arial,sans-serif);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}",
     ".ac-chip:hover{border-color:#1877e0;color:#1877e0}.ac-chip.go{background:linear-gradient(180deg,#b7f4b9,#7ee282);border-color:transparent;color:#14301a}.ac-chip.go:hover{color:#14301a;filter:brightness(1.03)}",
     ".ac-note{font-size:12px;color:var(--ac-muted);align-self:center}",
+    ".ac-src{margin-top:8px;font-size:12.5px;color:var(--ac-muted)}.ac-m .ac-src a{font-weight:600;color:var(--ac-muted);text-decoration:underline;text-underline-offset:2px}",
+    ".ac-langs{align-self:flex-start;max-width:100%;animation:ac-in .35s cubic-bezier(.16,1,.3,1) both}.ac-langs p{margin:0 0 7px;font-size:13px;color:var(--ac-muted);line-height:1.45}",
+    ".ac-langs .ac-chips{gap:6px}.ac-langs .ac-chip{padding:6px 11px;font-size:13px}.ac-langs .ac-chip.on{background:#1877e0;border-color:#1877e0;color:#fff;cursor:default}",
     ".ac-form{display:grid;gap:8px;margin-top:8px}.ac-form input,.ac-form textarea{width:100%;box-sizing:border-box;border:1px solid var(--ac-line2);background:var(--ac-soft);color:var(--ac-ink);border-radius:10px;padding:9px 11px;font:15px/1.4 var(--body,'Instrument Sans',Arial,sans-serif)}",
     ".ac-form textarea{min-height:70px;resize:vertical}.ac-form .bad{border-color:#e5352b}.ac-form button{justify-self:start}.ac-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}",
     ".ac-type{display:flex;gap:4px;padding:12px 14px}.ac-type i{width:7px;height:7px;border-radius:50%;background:var(--ac-muted);opacity:.5;animation:ac-b 1s infinite}.ac-type i:nth-child(2){animation-delay:.15s}.ac-type i:nth-child(3){animation-delay:.3s}@keyframes ac-b{50%{opacity:1;transform:translateY(-3px)}}",
@@ -211,17 +233,31 @@
   function close(){if(!root)return;beQuiet();stopVoice();state.open=false;save();root.classList.remove("on");root._shade.classList.remove("on");document.body.classList.remove("ac-on");if(openBtn)openBtn.focus({preventScroll:true})}
   function scroll(){log.scrollTop=log.scrollHeight}
   /* only the newest row of buttons stays, so the conversation doesn't fill up with repeats */
-  function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"});[].forEach.call(log.querySelectorAll(".ac-chips"),function(x){x.remove()})}
+  function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"&&x.t!=="langs"});[].forEach.call(log.querySelectorAll(".ac-chips,.ac-langs"),function(x){x.remove()})}
     state.msgs.push(m);save();render(m)}
   function addBot(m){m.who="bot";push(m)}
-  function welcome(){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()})}
+  function welcome(){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"})}
+  /* the languages the chat speaks, each written in its own script */
+  var LNAME={en:"English",zh:"中文",hi:"हिन्दी",pa:"ਪੰਜਾਬੀ",mi:"te reo Māori"};
+  function chatLangs(){return LANGS.filter(function(l){return l==="en"||(DATA&&DATA.bot_tr&&DATA.bot_tr[l])})}
+  /* switching with the buttons: the chat says hello again in that language */
+  function setLang(l){state.lang=l===pageLang()?"":l;state.noRoman=l==="en"?1:0;save();labels();
+    if(!state.msgs.some(function(m){return m.who==="me"})){state.msgs=[];save();log.innerHTML="";welcome()}
+    else{state.msgs=state.msgs.filter(function(m){return m.t!=="langs"});[].forEach.call(log.querySelectorAll(".ac-langs"),function(x){x.remove()});welcome()}}
   function render(m,quiet){var b;
     if(m.who==="me"){b=el("div","ac-m ac-me",m.x);log.appendChild(b);scroll();return}
     if(m.t==="text"||m.t==="answer"){b=el("div","ac-m ac-bot");if(m.title){b.appendChild(el("b","ac-t",m.title))}b.appendChild(document.createTextNode(m.x||""));
       if(m.u){var a=el("a",null,(m.l||L("read"))+" →");a.href=m.u;a.addEventListener("click",nav);var p=el("div");p.style.marginTop="6px";p.appendChild(a);b.appendChild(p)}
+      if(m.src){var sp=el("div","ac-src");sp.appendChild(document.createTextNode(L("more_on")+" "));var sa=el("a",null,m.src.t);sa.href=m.src.u;sa.addEventListener("click",nav);sp.appendChild(sa);b.appendChild(sp)}
       if(m.links&&m.links.length){b.appendChild(el("div","ac-note",L("related"))).style.marginTop="8px";var box=el("div","ac-links");m.links.forEach(function(k){var a=el("a",null,k.t);a.href=k.u;if(k.s)a.appendChild(el("small",null,k.s));a.addEventListener("click",nav);box.appendChild(a)});b.appendChild(box)}
       log.appendChild(b)}
     else if(m.t==="note"){log.appendChild(el("div","ac-note",m.x))}
+    else if(m.t==="langs"){var ls=chatLangs();if(ls.length<2)return;var cur=lang();b=el("div","ac-langs");
+      var others=ls.filter(function(l){return l!==cur}).map(function(l){return LNAME[l]}).join(" · ");
+      b.appendChild(el("p",null,"🌐 "+L("langs_line").replace("{langs}",others)));
+      var row=el("div","ac-chips");ls.forEach(function(l){var c=el("button","ac-chip"+(l===cur?" on":""),LNAME[l]);c.type="button";c.lang=l;
+        if(l===cur)c.setAttribute("aria-pressed","true");else c.addEventListener("click",function(){setLang(l)});row.appendChild(c)});
+      b.appendChild(row);log.appendChild(b)}
     else if(m.t==="english"){if(m.done)return;b=el("div","ac-chips ac-enrow");var en=el("button","ac-chip","🔤 "+((DATA&&DATA.bot&&DATA.bot.labels&&DATA.bot.labels.in_english)||"Reply in English"));en.type="button";
       en.addEventListener("click",function(){m.done=true;state.noRoman=true;state.lang="en";save();labels();b.remove();if(lastQ){var t=typing();setTimeout(function(){t.remove();answer(lastQ)},900)}});b.appendChild(en);log.appendChild(b)}
     else if(m.t==="chips"){b=el("div","ac-chips");(m.items||[]).forEach(function(q){var c=el("button","ac-chip",q);c.type="button";c.addEventListener("click",function(){ask(q)});b.appendChild(c)});log.appendChild(b)}
@@ -277,7 +313,7 @@
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
     ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
     ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
-  var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|reviews?|testimonials?|(your|any) results|^(are you|is ambs) worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
+  var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|(your|any) reviews|(do|have) you (have|got) (any )?(reviews|testimonials)|reviews (of|about|for) (you|ambs)|testimonials?|(your|any) results|^(are you|is ambs) worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
   var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person|waea|īmēra|imera|whakapā)\b|电话|邮箱|邮件|联系|फ़ोन|फोन|ईमेल|संपर्क|नंबर|ਫ਼ੋਨ|ਫੋਨ|ਈਮੇਲ|ਸੰਪਰਕ|ਨੰਬਰ/i;
   var TALKX=[["greet",/^(你好|您好|嗨|哈喽|早上好|下午好|晚上好|नमस्ते|नमस्कार|हैलो|हेलो|राम राम|सत श्री अकाल|ਸਤ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਸਤਿ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਹੈਲੋ|ਨਮਸਤੇ|kia ora|tēnā koe|tena koe|mōrena|morena)[!！。.\s]*$/i],
     ["how_are_you",/(你好吗|您好吗|最近怎么样|आप कैसे हैं|कैसे हो|क्या हाल|ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ|ਕੀ ਹਾਲ|ਕਿਵੇਂ ਹੋ|kei te pēhea koe|kei te pehea koe)/i],
@@ -316,12 +352,13 @@
     /* the "Reply in English" button follows the latest answer */
     if(rl){state.msgs=state.msgs.filter(function(m){return m.t!=="english"});save();if(log)[].forEach.call(log.querySelectorAll(".ac-enrow"),function(x){x.remove()});setTimeout(function(){addBot({t:"english"})},0)}
     var tk=talkKey(s);
-    if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});return}
+    if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
       else if(tk==="human")addBot({t:"actions",q:""});return}
     if(QUALITY.test(s)){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
         var lines=w.why.map(function(x){return"✓ "+x.replace(/\.$/,"")}).concat((w.trust||[]).map(function(t){return"✓ "+t[0]+(t[1]?": "+(t[1].match(/^[^.!?。।]*[.!?。।]?/)||[t[1]])[0]:"")}));
         addBot({t:"answer",x:talk("quality")+"\n\n"+lines.join("\n")+"\n\n"+talk("quality_end"),u:"/#why",l:""});addBot({t:"actions",q:s});return}}
+    var df=lang()==="en"&&define(sq);if(df){addBot({t:"answer",x:df.x,src:df.d.u&&df.d.u!==location.pathname?{t:df.d.t.split(": ")[0],u:df.d.u}:null});addBot({t:"actions",q:s});return}
     var res=search(sq),top=res[0],wantsContact=CONTACT.test(s);
     /* half a two-word question matching one rare word isn't an answer ("capital of France") */
     var nq=toks(sq).length,good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8))))),links=[],used={};
@@ -329,11 +366,12 @@
     if(good){var d=top.D.d;used[d.u||"_"]=1;
       /* matched in English: give the same answer in the visitor's language when we have it */
       if(lang()!=="en"&&(d.g||"en")==="en"&&d.i){for(var j=0;j<DOCS.length;j++){var o=DOCS[j].d;if(o.i===d.i&&o.g===lang()){d=o;break}}}
-      if(d.k==="qa"||d.k==="faq"){addBot({t:"answer",title:d.k==="faq"?d.q:"",x:d.a,u:d.u&&d.u!==location.pathname?d.u:"",l:d.l||""})}
-      else addBot({t:"answer",title:d.t,x:snippet(d,sq,320),u:d.u,l:""});
+      if(d.k==="qa"){addBot({t:"answer",x:d.a,u:d.u&&d.u!==location.pathname?d.u:"",l:d.l||""})}
+      else{var from=d.u&&d.u!==location.pathname&&d.u.indexOf("/#")!==0?{t:(d.k==="sec"?d.t.split(": ")[0]:d.k==="faq"?"":d.t),u:d.u}:null;
+        if(from&&!from.t){for(var j2=0;j2<DOCS.length;j2++){var pg=DOCS[j2].d;if(pg.k==="page"&&pg.u===d.u){from.t=pg.t;break}}}
+        var close=1;if(d.k==="faq"&&top.D.qset){var qt=toks(sq),hit=0;qt.forEach(function(w){if(top.D.qset[w])hit++});close=hit/Math.max(1,qt.length+top.D.qn-hit)}
+        addBot({t:"answer",x:d.k==="faq"&&close>=.3?d.a:answerText(d,sq),src:from&&from.t?from:null})}
       if(lang()!=="en"&&(d.g||"en")==="en"&&L("en"))addBot({t:"note",x:L("en")});
-      res.slice(1,12).forEach(function(r){var x=r.D.d;if(links.length>=2||used[x.u]||!x.u||r.s<top.s*.45||r.cov<.34)return;used[x.u]=1;links.push({t:x.k==="sec"?x.t.split(": ").pop():x.t,u:x.u,s:x.k==="faq"||x.k==="qa"?"":snippet(x,s,110)})});
-      if(links.length)addBot({t:"text",x:"",links:links});
       if(wantsContact)addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(wantsContact){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     /* nothing about us in the question at all: a general question we can't answer, so say so and suggest topics */
@@ -356,7 +394,7 @@
     if(NUDGE_OPEN&&!state.msgs.length){if(!root)build();state.auto=true;
       /* on a phone it opens as a short window at the bottom, so most of the page stays in view; tapping it opens it fully */
       if(window.matchMedia("(max-width:640px)").matches){root.classList.add("peek");root._shade.classList.add("peek")}
-      load().then(function(){if(state.msgs.length)return;addBot({t:"text",x:L("nudge")});addBot({t:"chips",items:sugg()})}).catch(function(){});
+      load().then(function(){if(state.msgs.length)return;addBot({t:"text",x:L("nudge")});addBot({t:"chips",items:sugg()});addBot({t:"langs"})}).catch(function(){});
       open(true);if(window.gtag)gtag("event","chat_auto_open");return}
     showNudge()}
   function showNudge(){sset("ambs:nudged","1");css();nudgeEl=el("div","ac-nudge");nudgeEl.setAttribute("role","status");
