@@ -11,8 +11,9 @@
  "not_found": "Sorry, I couldn't find an answer to that on our website. You can book a free call, leave your question for the team, or contact us directly.",
  "nudge": {
   "enabled": true,
-  "delay": 40,
-  "text": "Need a hand? I can answer questions about what we automate, prices, or booking a free session."
+  "delay": 15,
+  "text": "Need a hand? I can answer questions about what we automate, prices, or booking a free session.",
+  "open": true
  },
  "chat": {
   "offtopic": "I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",
@@ -29,7 +30,9 @@
   "time": "It's {time} in New Zealand right now.",
   "help": "Ask me anything about Ambs Solutions, or tap one of these to get started.",
   "sorry": "No problem at all. What would you like to know?",
-  "test": "I'm here and working! Ask me anything about Ambs Solutions."
+  "test": "I'm here and working! Ask me anything about Ambs Solutions.",
+  "quality": "Here's what you can expect when you work with us, straight from how we work:",
+  "quality_end": "The easiest way to judge us is the free session: we look at how your work really happens and you keep the written plan, even if you don't hire us."
  },
  "labels": {
   "launcher": "Ask us",
@@ -51,7 +54,10 @@
   "error": "Sorry, that didn't send. Please try again, or email us.",
   "helpful": "Anything else I can help with?",
   "restart": "Start again",
-  "close": "Close"
+  "close": "Close",
+  "voice": "Speak your question",
+  "listening": "Listening… speak now",
+  "mic_blocked": "To speak your question, allow the microphone in your browser, or type it instead."
  },
  "qa": [
   {

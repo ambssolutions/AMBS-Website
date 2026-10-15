@@ -697,7 +697,14 @@ def build_chat_index():
         lb={k:g('label.'+k) for k in (CHAT.get('labels') or {}) if g('label.'+k)}
         if lb: t['labels']=lb
         if t: bot_tr[lang]=t
-    data={'src':hashlib.md5(open(os.path.join(SRC,'assets','home.js'),'rb').read()).hexdigest()[:8],'bot':bot,'bot_tr':bot_tr,'biz':{'phone':site.get('phone',''),'email':site.get('email',''),'location':site.get('location',''),'book':'/#book'},'docs':docs}
+    # "how good are you?": the chat builds its reply from the homepage's Why us list and promises, in each language
+    def why_for(g):
+        return {'why':[g(f'why.n{i}') for i in range(1,12) if g(f'why.n{i}')],'trust':[[g(f'trust.u{i}t'),g(f'trust.u{i}d')] for i in range(1,12) if g(f'trust.u{i}t')]}
+    why={'en':why_for(lambda k:EN.get(k,''))}
+    for lang,tr in TRL.items():
+        w=why_for(lambda k,tr=tr:tr.get(k,''))
+        if w['why']: why[lang]=w
+    data={'why':why,'src':hashlib.md5(open(os.path.join(SRC,'assets','home.js'),'rb').read()).hexdigest()[:8],'bot':bot,'bot_tr':bot_tr,'biz':{'phone':site.get('phone',''),'email':site.get('email',''),'location':site.get('location',''),'book':'/#book'},'docs':docs}
     js=json.dumps(data,ensure_ascii=False,separators=(',',':'))
     open(os.path.join(OUT,'assets','chat-index.json'),'w',encoding='utf8').write(js)
     return hashlib.md5(js.encode()).hexdigest()[:8],len(docs)
@@ -706,7 +713,7 @@ def chat_tag(iv):
     lab=(CHAT.get('labels') or {}).get('launcher','Ask us')
     nu=CHAT.get('nudge') or {}
     ntr={l:t['ed.chat.nudge'] for l,t in _tr_files().items() if t.get('ed.chat.nudge')}
-    nudge=(f' data-nudge="{e(nu.get("text",""))}" data-nudge-after="{int(nu.get("delay",40) or 40)}"'+(f' data-nudge-tr="{e(json.dumps(ntr,ensure_ascii=False))}"' if ntr else '')) if nu.get('enabled',True) and nu.get('text') else ''
+    nudge=(f' data-nudge="{e(nu.get("text",""))}" data-nudge-after="{int(nu.get("delay",15) or 15)}"'+(' data-nudge-open="1"' if nu.get('open',True) else '')+(f' data-nudge-tr="{e(json.dumps(ntr,ensure_ascii=False))}"' if ntr else '')) if nu.get('enabled',True) and nu.get('text') else ''
     return f'<!--chat--><script src="/assets/chat.js?v={_v("chat.js")}" data-index="/assets/chat-index.json?v={iv}" data-label="{e(lab)}"{nudge} defer></script><!--/chat-->'
 def stamp_chat(path,tag):
     if not os.path.exists(path): return

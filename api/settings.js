@@ -116,7 +116,7 @@ export default async function handler(req, res) {
         enabled: d.enabled !== false, name: str(d.name, 60) || old.name || "Ambs helper",
         greeting: str(d.greeting, 400) || old.greeting, suggestions: (Array.isArray(d.suggestions) ? d.suggestions : []).map((x) => str(x, 80)).filter(Boolean).slice(0, 6),
         not_found: str(d.not_found, 400) || old.not_found,
-        nudge: { enabled: !(d.nudge && d.nudge.enabled === false), delay: Math.min(600, Math.max(5, Math.round(Number(d.nudge && d.nudge.delay) || 40))), text: str(d.nudge && d.nudge.text, 200) || (old.nudge && old.nudge.text) || "" },
+        nudge: { enabled: !(d.nudge && d.nudge.enabled === false), open: !(d.nudge && d.nudge.open === false), delay: Math.min(600, Math.max(5, Math.round(Number(d.nudge && d.nudge.delay) || 15))), text: str(d.nudge && d.nudge.text, 200) || (old.nudge && old.nudge.text) || "" },
         chat, labels, qa,
       };
       if (JSON.stringify(next) === JSON.stringify(old)) return send(res, 400, { error: "Nothing has changed" });

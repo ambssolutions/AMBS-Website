@@ -6,7 +6,7 @@
 (function(){
   if(window.AMBS_CHAT)return;window.AMBS_CHAT=1;
   var me=document.currentScript||document.querySelector('script[src*="/assets/chat.js"]');
-  var INDEX=me&&me.dataset.index||"/assets/chat-index.json",LAUNCH=me&&me.dataset.label||"Ask us",NUDGE=me&&me.dataset.nudge||"",NUDGE_TR=(function(){try{return JSON.parse(me&&me.dataset.nudgeTr||"{}")}catch(e){return{}}})(),NUDGE_AFTER=+(me&&me.dataset.nudgeAfter)||40;
+  var INDEX=me&&me.dataset.index||"/assets/chat-index.json",LAUNCH=me&&me.dataset.label||"Ask us",NUDGE=me&&me.dataset.nudge||"",NUDGE_TR=(function(){try{return JSON.parse(me&&me.dataset.nudgeTr||"{}")}catch(e){return{}}})(),NUDGE_AFTER=+(me&&me.dataset.nudgeAfter)||15,NUDGE_OPEN=!!(me&&me.dataset.nudgeOpen);
   var FORM_KEY="b26ce370-6383-473e-926e-ceb49a91e7fd",PORTAL_LEAD_URL="https://portal.ambs.co.nz/api/app?action=lead";
   var DATA=null,LOADING=null,DOCS=[],DF={},AVG={t:1,q:1,x:1,a:1},N=0;
 
@@ -22,7 +22,7 @@
       greeting:"Kia ora! Pātaihia mai he aha te aha mō Ambs Solutions: ngā mahi ka whakaaunoatia e mātou, te āhua o te mahi, ngā utu, te tono rānei i tētahi wā kore utu.",not_found:"Aroha mai, kāore au i kite i tētahi whakautu i tō mātou paetukutuku. Ka taea e koe te tono waea kore utu, te waiho pātai mā te tīma, te whakapā tōtika mai rānei.",en:"Kei te reo Pākehā ngā whakautu.",thanks:"Kei te pai!",typing:"E rapu ana…",where:"Wāhi",callus:"Waea mai",emailus:"Īmēra mai"}
   };
   var EN_EXTRA={en:"",thanks:"You're welcome! Anything else?",typing:"Looking…",where:"Where",callus:"Call",emailus:"Email"};
-  var DEF={launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close"};
+  var DEF={launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
   var LANGS=["en","zh","hi","pa","mi"];
   function pageLang(){var l=(document.documentElement.lang||"en").slice(0,2).toLowerCase();return LANGS.indexOf(l)>=0?l:"en"}
   /* the chat speaks the page's language, or the language the visitor writes in (Chinese, Hindi or Punjabi script switch it) */
@@ -129,6 +129,7 @@
     ".ac-type{display:flex;gap:4px;padding:12px 14px}.ac-type i{width:7px;height:7px;border-radius:50%;background:var(--ac-muted);opacity:.5;animation:ac-b 1s infinite}.ac-type i:nth-child(2){animation-delay:.15s}.ac-type i:nth-child(3){animation-delay:.3s}@keyframes ac-b{50%{opacity:1;transform:translateY(-3px)}}",
     ".ac-in{display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ac-line);background:var(--ac-head)}.ac-panel ::placeholder{color:var(--ac-muted);opacity:.85}",
     ".ac-in input{flex:1;min-width:0;border:1px solid var(--ac-line2);background:var(--ac-soft);color:var(--ac-ink);border-radius:999px;padding:11px 16px;font:16px/1.2 var(--body,'Instrument Sans',Arial,sans-serif);outline:none}.ac-in input:focus{border-color:#1877e0;box-shadow:0 0 0 3px rgba(24,119,224,.18)}",
+    ".ac-in .ac-mic{background:var(--ac-chip);color:var(--ac-ink);border:1px solid var(--ac-line2)!important}.ac-in .ac-mic[hidden]{display:none}.ac-in .ac-mic.on{background:#e5352b;color:#fff;border-color:#e5352b!important;animation:ac-pulse 1.2s ease-in-out infinite}@keyframes ac-pulse{0%,100%{box-shadow:0 0 0 0 rgba(229,53,43,.45)}50%{box-shadow:0 0 0 8px rgba(229,53,43,0)}}",
     ".ac-in button{flex:none;width:46px;height:46px;border:0;border-radius:50%;background:#1877e0;color:#fff;cursor:pointer;display:grid;place-items:center}.ac-in button svg{width:20px;height:20px}.ac-in button:disabled{opacity:.45;cursor:default}",
     ".ac-nudge{position:fixed;right:calc(env(safe-area-inset-right,0px) + 20px);bottom:calc(env(safe-area-inset-bottom,0px) + 84px);z-index:97;max-width:min(300px,calc(100vw - 40px));display:flex;gap:10px;align-items:flex-start;padding:13px 12px 13px 15px;border-radius:18px 18px 6px 18px;background:var(--ac-bg);color:var(--ac-ink);border:1px solid var(--ac-line);box-shadow:0 18px 40px -16px rgba(10,14,30,.5);font:500 14.5px/1.45 var(--body,'Instrument Sans',Arial,sans-serif);cursor:pointer;opacity:0;transform:translateY(10px) scale(.97);transform-origin:bottom right;transition:opacity .4s ease,transform .5s cubic-bezier(.16,1,.3,1)}",
     ".ac-nudge.on{opacity:1;transform:none}.ac-nudge p{margin:0;flex:1}.ac-nudge .ac-nx{flex:none;border:0;background:transparent;color:var(--ac-muted);width:26px;height:26px;margin:-4px -4px 0 0;border-radius:8px;cursor:pointer;display:grid;place-items:center}.ac-nudge .ac-nx svg{width:14px;height:14px}.ac-nudge .ac-nx:hover{background:rgba(120,130,160,.14)}",
@@ -138,27 +139,39 @@
   var ICO={chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5z"/><path d="M8.5 9.5h7M8.5 12.5h4"/></svg>',
     x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
     send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>',
+    mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>',
     re:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 4v4.5h4.5"/></svg>',
     bot:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5z"/><circle cx="9" cy="10" r=".6" fill="#fff"/><circle cx="12" cy="10" r=".6" fill="#fff"/><circle cx="15" cy="10" r=".6" fill="#fff"/></svg>'};
   function build(){css();
     var shade=el("div","ac-shade");root=el("div","ac-panel");root.setAttribute("role","dialog");root.setAttribute("aria-modal","false");root.setAttribute("aria-labelledby","acTitle");
-    root.innerHTML='<div class="ac-head"><span class="ac-av">'+ICO.bot+'</span><div class="ac-hd"><b id="acTitle"></b><span class="ac-sub"></span></div><button type="button" class="ac-re">'+ICO.re+'</button><button type="button" class="ac-x">'+ICO.x+'</button></div><div class="ac-log" aria-live="polite"></div><form class="ac-in" autocomplete="off"><input type="text" enterkeyhint="send" maxlength="300"><button type="submit">'+ICO.send+'</button></form>';
+    root.innerHTML='<div class="ac-head"><span class="ac-av">'+ICO.bot+'</span><div class="ac-hd"><b id="acTitle"></b><span class="ac-sub"></span></div><button type="button" class="ac-re">'+ICO.re+'</button><button type="button" class="ac-x">'+ICO.x+'</button></div><div class="ac-log" aria-live="polite"></div><form class="ac-in" autocomplete="off"><input type="text" enterkeyhint="send" maxlength="300"><button type="button" class="ac-mic" hidden>'+ICO.mic+'</button><button type="submit">'+ICO.send+'</button></form>';
     document.body.appendChild(shade);document.body.appendChild(root);log=root.querySelector(".ac-log");input=root.querySelector("input");
     root.querySelector(".ac-x").addEventListener("click",close);shade.addEventListener("click",close);
     root.querySelector(".ac-re").addEventListener("click",function(){state.msgs=[];state.lang="";save();labels();log.innerHTML="";welcome();input.focus()});
     root.querySelector("form").addEventListener("submit",function(ev){ev.preventDefault();var v=input.value.trim();if(!v)return;input.value="";ask(v)});
     document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&state.open)close()});
-    root._shade=shade;labels()}
+    root._shade=shade;voiceSetup();labels()}
+  /* speaking a question: the browser turns speech into text (Chrome, Edge and Safari; the button is hidden elsewhere) */
+  var REC=null,recOn=false;
+  function voiceSetup(){var SR=window.SpeechRecognition||window.webkitSpeechRecognition,b=root.querySelector(".ac-mic");if(!SR||!b)return;b.hidden=false;
+    b.addEventListener("click",function(){if(recOn){stopVoice();return}
+      try{REC=new SR()}catch(e){return}REC.lang={en:"en-NZ",zh:"zh-CN",hi:"hi-IN",pa:"pa-IN",mi:"en-NZ"}[lang()]||"en-NZ";REC.interimResults=true;REC.maxAlternatives=1;REC.continuous=false;
+      var said="",before=input.value;
+      REC.onresult=function(ev){var t="";for(var i=0;i<ev.results.length;i++)t+=ev.results[i][0].transcript;said=t;input.value=t};
+      REC.onerror=function(ev){if(ev.error==="not-allowed"||ev.error==="service-not-allowed")addBot({t:"note",x:L("mic_blocked")})};
+      REC.onend=function(){recOn=false;b.classList.remove("on");input.placeholder=L("placeholder");var v=said.trim();if(v){input.value="";ask(v)}else input.value=before};
+      try{REC.start();recOn=true;b.classList.add("on");input.placeholder=L("listening");if(window.gtag)gtag("event","chat_voice")}catch(e){recOn=false}})}
+  function stopVoice(){if(REC&&recOn)try{REC.stop()}catch(e){}}
   function labels(){if(!root)return;root.querySelector("#acTitle").textContent=L("title");root.querySelector(".ac-sub").textContent=L("subtitle");input.placeholder=L("placeholder");
-    root.querySelector(".ac-in button").setAttribute("aria-label",L("send"));root.querySelector(".ac-x").setAttribute("aria-label",L("close"));root.querySelector(".ac-re").setAttribute("aria-label",L("restart"));root.querySelector(".ac-re").title=L("restart");
+    root.querySelector('.ac-in button[type="submit"]').setAttribute("aria-label",L("send"));var mb=root.querySelector(".ac-mic");if(mb){mb.setAttribute("aria-label",L("voice"));mb.title=L("voice")}root.querySelector(".ac-x").setAttribute("aria-label",L("close"));root.querySelector(".ac-re").setAttribute("aria-label",L("restart"));root.querySelector(".ac-re").title=L("restart");
     if(openBtn)openBtn.querySelector("span:last-child").textContent=L("launcher");var qa=document.querySelector(".qbar .qb-ask span");if(qa)qa.textContent=L("launcher")}
   function load(){if(DATA)return Promise.resolve(DATA);if(LOADING)return LOADING;
     LOADING=fetch(INDEX).then(function(r){return r.json()}).then(function(d){DATA=d;prep();labels();return d});return LOADING}
-  function open(){hideNudge();sset("ambs:nudged","1");if(!root)build();state.open=true;save();root.classList.add("on");root._shade.classList.add("on");document.body.classList.add("ac-on");
+  function open(auto){auto=auto===true;hideNudge();sset("ambs:nudged","1");if(!root)build();state.open=true;save();root.classList.add("on");root._shade.classList.add("on");document.body.classList.add("ac-on");
     if(window.gtag)gtag("event","chat_open");
     load().then(function(){if(!log.children.length){if(state.msgs.length)state.msgs.forEach(function(m){render(m,true)});else welcome()}scroll()}).catch(function(){if(!log.children.length)addBot({t:"text",x:L("not_found")}),addBot({t:"actions"})});
-    setTimeout(function(){if(window.matchMedia("(min-width:641px)").matches)input.focus()},60)}
-  function close(){if(!root)return;state.open=false;save();root.classList.remove("on");root._shade.classList.remove("on");document.body.classList.remove("ac-on");if(openBtn)openBtn.focus({preventScroll:true})}
+    if(!auto)setTimeout(function(){if(window.matchMedia("(min-width:641px)").matches)input.focus()},60)}
+  function close(){if(!root)return;beQuiet();stopVoice();state.open=false;save();root.classList.remove("on");root._shade.classList.remove("on");document.body.classList.remove("ac-on");if(openBtn)openBtn.focus({preventScroll:true})}
   function scroll(){log.scrollTop=log.scrollHeight}
   /* only the newest row of buttons stays, so the conversation doesn't fill up with repeats */
   function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"});[].forEach.call(log.querySelectorAll(".ac-chips"),function(x){x.remove()})}
@@ -209,7 +222,7 @@
     good:"Glad to hear it! What can I help you with?",bad:"Sorry to hear that. If something's getting in the way, tell me about it and I'll see if we can help.",
     joke:"Why did the spreadsheet feel tired? It had been working in too many cells all week. That's the kind of job we like to automate! What can I help you with?",
     weather:"I can't check the weather, sorry. I can help with anything about Ambs Solutions though: what we automate, prices, or booking a free session.",
-    time:"It's {time} in New Zealand right now.",help:"Ask me anything about Ambs Solutions, or tap one of these to get started.",
+    time:"It's {time} in New Zealand right now.",quality:"Here's what you can expect when you work with us, straight from how we work:",quality_end:"The easiest way to judge us is the free session: we look at how your work really happens and you keep the written plan, even if you don't hire us.",help:"Ask me anything about Ambs Solutions, or tap one of these to get started.",
     sorry:"No problem at all. What would you like to know?",test:"I'm here and working! Ask me anything about Ambs Solutions."};
   var TALK=[["greet",/^(hi+|hello+|hey+|heya|hiya|yo|kia ora|gday|g day|good (morning|afternoon|evening|day)|namaste|ni hao|sat sri akal|tena koe|morena|greetings)( there| team| everyone| ambs)?$/],
     ["how_are_you",/\b(how are (you|u|ya)|how r u|hows it going|how is it going|how you doing|how are things|whats up|sup|how have you been)\b/],
@@ -225,6 +238,7 @@
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
     ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
     ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
+  var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|reviews?|testimonials?|(your|any) results|worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
   var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person|waea|īmēra|imera|whakapā)\b|电话|邮箱|邮件|联系|फ़ोन|फोन|ईमेल|संपर्क|नंबर|ਫ਼ੋਨ|ਫੋਨ|ਈਮੇਲ|ਸੰਪਰਕ|ਨੰਬਰ/i;
   var TALKX=[["greet",/^(你好|您好|嗨|哈喽|早上好|下午好|晚上好|नमस्ते|नमस्कार|हैलो|हेलो|राम राम|सत श्री अकाल|ਸਤ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਸਤਿ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਹੈਲੋ|ਨਮਸਤੇ|kia ora|tēnā koe|tena koe|mōrena|morena)[!！。.\s]*$/i],
     ["how_are_you",/(你好吗|您好吗|最近怎么样|आप कैसे हैं|कैसे हो|क्या हाल|ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ|ਕੀ ਹਾਲ|ਕਿਵੇਂ ਹੋ|kei te pēhea koe|kei te pehea koe)/i],
@@ -252,6 +266,9 @@
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
       else if(tk==="human")addBot({t:"actions",q:""});return}
+    if(QUALITY.test(s)){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
+        var lines=w.why.map(function(x){return"✓ "+x.replace(/\.$/,"")}).concat((w.trust||[]).map(function(t){return"✓ "+t[0]+(t[1]?": "+(t[1].match(/^[^.!?。।]*[.!?。।]?/)||[t[1]])[0]:"")}));
+        addBot({t:"answer",x:talk("quality")+"\n\n"+lines.join("\n")+"\n\n"+talk("quality_end"),u:"/#why",l:""});addBot({t:"actions",q:s});return}}
     var res=search(s),top=res[0],wantsContact=CONTACT.test(s);
     var good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||top.D.d.k==="faq"||top.s>8))),links=[],used={};
     if(wantsContact&&!(good&&top.D.d.k==="qa"&&top.cov>=.67)){addBot({t:"contact"});addBot({t:"actions",q:s});return}
@@ -271,13 +288,21 @@
   /* ---- offering help after a while: once per visit, counted across pages while the page is on screen ---- */
   var nudgeEl=null;
   function sget(k){try{return sessionStorage.getItem(k)}catch(e){return null}}function sset(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}
-  function nudgeTimer(){if(!NUDGE||sget("ambs:nudged")||state.msgs.length||/^\/booking-confirmed/.test(location.pathname))return;
-    var spent=+(sget("ambs:time")||0),here=0,iv=setInterval(function(){if(document.hidden)return;spent++;here++;sset("ambs:time",spent);
-      if(state.open||sget("ambs:nudged")){clearInterval(iv);return}
-      if(spent>=NUDGE_AFTER&&here>=8){clearInterval(iv);showNudge()}},1000)}
+  function quiet(){try{return localStorage.getItem("ambs:chat-quiet")==="1"}catch(e){return false}}function beQuiet(){try{localStorage.setItem("ambs:chat-quiet","1")}catch(e){}}
+  function nudgeTimer(){if(!NUDGE||quiet()||sget("ambs:nudged")||state.msgs.length||/^\/booking-confirmed/.test(location.pathname))return;
+    var here=0,iv=setInterval(function(){if(document.hidden)return;here++;
+      if(state.open||sget("ambs:nudged")||quiet()){clearInterval(iv);return}
+      if(here>=NUDGE_AFTER){clearInterval(iv);initiate()}},1000)}
+  /* the chat starts the conversation: on a computer the window opens with a hello; on a phone a small message
+     appears instead, so the page isn't covered */
+  function initiate(){sset("ambs:nudged","1");
+    if(NUDGE_OPEN&&window.matchMedia("(min-width:900px)").matches&&!state.msgs.length){if(!root)build();state.auto=true;
+      load().then(function(){if(state.msgs.length)return;addBot({t:"text",x:L("nudge")});addBot({t:"chips",items:sugg()})}).catch(function(){});
+      open(true);if(window.gtag)gtag("event","chat_auto_open");return}
+    showNudge()}
   function showNudge(){sset("ambs:nudged","1");css();nudgeEl=el("div","ac-nudge");nudgeEl.setAttribute("role","status");
     nudgeEl.innerHTML='<p></p><button type="button" class="ac-nx">'+ICO.x+'</button>';nudgeEl.querySelector("p").textContent=L("nudge");nudgeEl.querySelector(".ac-nx").setAttribute("aria-label",L("close"));
-    nudgeEl.addEventListener("click",function(ev){if(ev.target.closest(".ac-nx")){hideNudge();return}hideNudge();open();if(window.gtag)gtag("event","chat_nudge_open")});
+    nudgeEl.addEventListener("click",function(ev){if(ev.target.closest(".ac-nx")){hideNudge();beQuiet();return}hideNudge();open();if(window.gtag)gtag("event","chat_nudge_open")});
     document.body.appendChild(nudgeEl);requestAnimationFrame(function(){requestAnimationFrame(function(){nudgeEl&&nudgeEl.classList.add("on")})});
     if(window.gtag)gtag("event","chat_nudge_shown");setTimeout(hideNudge,30000)}
   function hideNudge(){if(!nudgeEl)return;var n=nudgeEl;nudgeEl=null;n.classList.remove("on");setTimeout(function(){n.remove()},450)}
