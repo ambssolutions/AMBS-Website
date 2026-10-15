@@ -172,15 +172,52 @@
       .then(function(r){return r.json()}).then(function(d){if(!d||!d.success)throw 0;if(window.gtag)gtag("event","generate_lead",{form:"Website chat"});m.done=true;save();box.textContent=L("sent");scroll()})
       .catch(function(){btn.disabled=false;btn.textContent=L("send_msg");var er=f.querySelector(".ac-err")||el("div","ac-note ac-err");er.textContent=L("error");f.appendChild(er)})}
   function typing(){var t=el("div","ac-m ac-bot ac-type");t.innerHTML="<i></i><i></i><i></i>";t.setAttribute("aria-label",L("typing"));log.appendChild(t);scroll();return t}
-  var GREET=/^(hi+|hello+|hey+|kia ora|gday|g day|good (morning|afternoon|evening)|namaste|ni hao|sat sri akal|tena koe|morena)[!. ]*$/i,THANKS=/^(thanks?|thank you|thx|cheers|ka pai|ngā mihi|nga mihi|great|awesome|perfect|ok|okay)[!. ]*$/i,
-    CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person)\b/i;
+  /* everyday conversation: answered like a person would, before searching the website. The answers can be changed
+     in the website editor (Chat helper → Everyday conversation); these are the defaults */
+  var TALK_DEF={offtopic:"I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",how_are_you:"I'm doing well, thanks for asking! How can I help you today?",
+    who:"I'm the Ambs Solutions helper. I answer questions using our website, any time of day. For anything I can't answer, a real person from our team is happy to help.",
+    human:"I'm an automated helper, not a person. If you'd like to talk to someone from our team, you can book a free session, leave a message or call us.",
+    thanks:"You're welcome! Is there anything else I can help with?",ok:"Great! Anything else I can help with?",bye:"Thanks for stopping by. Have a great day!",
+    good:"Glad to hear it! What can I help you with?",bad:"Sorry to hear that. If something's getting in the way, tell me about it and I'll see if we can help.",
+    joke:"Why did the spreadsheet feel tired? It had been working in too many cells all week. That's the kind of job we like to automate! What can I help you with?",
+    weather:"I can't check the weather, sorry. I can help with anything about Ambs Solutions though: what we automate, prices, or booking a free session.",
+    time:"It's {time} in New Zealand right now.",help:"Ask me anything about Ambs Solutions, or tap one of these to get started.",
+    sorry:"No problem at all. What would you like to know?",test:"I'm here and working! Ask me anything about Ambs Solutions."};
+  var TALK=[["greet",/^(hi+|hello+|hey+|heya|hiya|yo|kia ora|gday|g day|good (morning|afternoon|evening|day)|namaste|ni hao|sat sri akal|tena koe|morena|greetings)( there| team| everyone| ambs)?$/],
+    ["how_are_you",/\b(how are (you|u|ya)|how r u|hows it going|how is it going|how you doing|how are things|whats up|sup|how have you been)\b/],
+    ["human",/\b(are (you|u) (a |an )?(human|real|person|robot|bot|ai|machine|chatbot|computer))\b|\b(am i (talking|chatting|speaking) (to|with) (a )?(human|person|bot|robot|real))/],
+    ["who",/^(who are (you|u)|what are (you|u)|whats your name|what is your name|your name|introduce yourself|what can you do|what do you do here)$/],
+    ["thanks",/^(thanks?|thank (you|u)|thanks (a lot|heaps|so much|mate)|thank you so much|thx|ty|cheers|ka pai|nga mihi|much appreciated|appreciate it)( mate| heaps)?$/],
+    ["ok",/^(ok+|okay|k|cool|nice|great|awesome|perfect|sweet|sounds good|got it|alright|all good|good to know|noted|interesting|wow|amazing|fair enough|right|sure|yes|yep|yeah|no|nope|nah)$/],
+    ["bye",/^(bye+|goodbye|good bye|see (you|ya)|later|catch you later|have a (good|great|nice) (day|one|night)|ka kite|ka kite ano|good night|gotta go|thats all|that is all|nothing else|im done)$/],
+    ["good",/^(im |i am )?(so |really |very |pretty |all )?(good|great|fine|well|not bad|doing well|all good|pretty good|very good)( thanks| thank you| thx)?( and you| you| how about you)?$/],
+    ["bad",/^(im |i am |feeling |im feeling )?(so |really |very |a bit |pretty |super |too )?(not (good|great|well)|bad|tired|stressed|busy|exhausted|sad|overwhelmed|swamped|flat out|run off my feet)( today| at the moment| right now)?$/],
+    ["joke",/\b(tell me a joke|joke|make me laugh|something funny)\b/],
+    ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast)\b/],
+    ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
+    ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
+    ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
+  var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person)\b/i;
+  function talkKey(q){var t=norm(q).replace(/\s+/g," ").trim().replace(/\b(i|what|it|how|that|you|there|who|we|they) (m|s|re|ll|ve|d)\b/g,"$1$2").replace(/^(um+|so|well|oh|ok so|hey) /,"");if(!t)return"";
+    /* a greeting with a question after it is a question, unless it's just "how are you" */
+    var g=t.replace(/^(hi+|hello+|hey+|kia ora|gday|good (morning|afternoon|evening)) (there |team )?/,"");
+    if(g!==t&&g&&!/^(how are|how r|hows|whats up|how you)/.test(g))t=g;
+    for(var i=0;i<TALK.length;i++){var k=TALK[i];if(k[1].test(t)){
+      /* long messages that also mention a real question go to the search, e.g. "thanks, and how much does it cost?" */
+      if(t.split(" ").length>7&&k[0]!=="how_are_you")return"";if((k[0]==="who"||k[0]==="human")&&t.split(" ").length>6)return"";return k[0]}}return""}
+  function talk(k){var b=(DATA&&DATA.bot&&DATA.bot.chat)||{},v=b[k]||TALK_DEF[k]||"";
+    if(k==="thanks"&&lang()!=="en"&&!b.thanks&&TR[lang()])v=TR[lang()].thanks;
+    if(k==="time"){try{v=v.replace("{time}",new Date().toLocaleString("en-NZ",{timeZone:"Pacific/Auckland",weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"}))}catch(e){v=v.replace("{time}",new Date().toLocaleString())}}
+    return v}
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
     var t=typing();load().then(function(){setTimeout(function(){t.remove();answer(q)},280+Math.min(500,q.length*8))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
   function answer(q){var s=q.trim();
-    if(GREET.test(s)){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:(DATA.bot.suggestions||[]).slice(0,6)});return}
-    if(THANKS.test(s)){addBot({t:"text",x:L("thanks")});return}
+    var tk=talkKey(s);
+    if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:(DATA.bot.suggestions||[]).slice(0,6)});return}
+    if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:(DATA.bot.suggestions||[]).slice(0,6)});
+      else if(tk==="human")addBot({t:"actions",q:""});return}
     var res=search(s),top=res[0],wantsContact=CONTACT.test(s);
-    var good=top&&(top.cov>=.5||(top.cov>=.34&&top.s>4)),links=[],used={};
+    var good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||top.D.d.k==="faq"||top.s>8))),links=[],used={};
     if(wantsContact&&!(good&&top.D.d.k==="qa"&&top.cov>=.67)){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(good){var d=top.D.d;used[d.u||"_"]=1;
       if(d.k==="qa"||d.k==="faq"){addBot({t:"answer",title:d.k==="faq"?d.q:"",x:d.a,u:d.u&&d.u!==location.pathname?d.u:"",l:d.l||""})}
@@ -189,6 +226,8 @@
       if(links.length)addBot({t:"text",x:"",links:links});
       if(wantsContact)addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(wantsContact){addBot({t:"contact"});addBot({t:"actions",q:s});return}
+    /* nothing about us in the question at all: a general question we can't answer, so say so and suggest topics */
+    if(!top||top.cov<=.5){addBot({t:"text",x:talk("offtopic")});addBot({t:"actions",q:s});return}
     var some=res.filter(function(r){return r.cov>=.34&&r.D.d.u}).slice(0,6);some.forEach(function(r){var x=r.D.d;if(links.length>=3||used[x.u])return;used[x.u]=1;links.push({t:x.k==="sec"?x.t.split(": ").pop():x.t,u:x.u,s:snippet(x,s,110)})});
     addBot({t:"text",x:L("not_found"),links:links});addBot({t:"actions",q:s})}
 

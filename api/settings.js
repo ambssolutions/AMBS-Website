@@ -105,7 +105,8 @@ export default async function handler(req, res) {
       const old = f ? JSON.parse(f.text) : {};
       const d = b.data || {};
       const str = (v, max) => String(v == null ? "" : v).replace(/\s+/g, " ").trim().slice(0, max);
-      const labels = {};
+      const labels = {}, chat = {};
+      for (const [k, v] of Object.entries(old.chat || {})) chat[k] = str(d.chat && typeof d.chat[k] === "string" ? d.chat[k] : v, 400) || v;
       for (const [k, v] of Object.entries(old.labels || {})) labels[k] = str(d.labels && typeof d.labels[k] === "string" ? d.labels[k] : v, 200) || v;
       const link = (v) => { v = str(v, 300); return /^(\/|https?:\/\/|mailto:|tel:|#)/.test(v) || !v ? v : "/" + v.replace(/^\/+/, ""); };
       const qa = (Array.isArray(d.qa) ? d.qa : []).map((x, i) => ({
@@ -114,7 +115,7 @@ export default async function handler(req, res) {
       const next = {
         enabled: d.enabled !== false, name: str(d.name, 60) || old.name || "Ambs helper",
         greeting: str(d.greeting, 400) || old.greeting, suggestions: (Array.isArray(d.suggestions) ? d.suggestions : []).map((x) => str(x, 80)).filter(Boolean).slice(0, 6),
-        not_found: str(d.not_found, 400) || old.not_found, labels, qa,
+        not_found: str(d.not_found, 400) || old.not_found, chat, labels, qa,
       };
       if (JSON.stringify(next) === JSON.stringify(old)) return send(res, 400, { error: "Nothing has changed" });
       await commitFiles(head, { [CHAT_JSON]: JSON.stringify(next, null, 1) + "\n" }, "Editor source: chat helper" + by);

@@ -173,6 +173,7 @@ export default async function handler(req, res) {
         look(base, "Greeting and quick questions", [c.greeting, ...(c.suggestions || []), c.not_found].join(" · "));
         for (const x of c.qa || []) look(base, "Answer · " + x.q, [x.q, x.also, x.a].join(" · "));
         look(base, "Chat wording", Object.values(c.labels || {}).join(" · "));
+        look(base, "Everyday conversation", Object.values(c.chat || {}).join(" · "));
       }
       const sf = await readFile("site-src/content/site.json", head);
       if (sf) look({ kind: "business", title: "Business details", key: "business" }, "Phone, email and location", Object.values(JSON.parse(sf.text)).join(" · "));
