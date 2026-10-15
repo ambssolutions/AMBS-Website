@@ -1,5 +1,6 @@
 {
  "ed.chat.greeting": "Kia ora! I'm Ambs Bot, the Ambs Solutions assistant. I can answer your questions about our services, pricing, how we work and booking a free session. How can I help you today?",
+ "ed.chat.label.also_ask": "People also ask:",
  "ed.chat.label.book": "Book a free session",
  "ed.chat.label.close": "Close",
  "ed.chat.label.contact": "Call or email",

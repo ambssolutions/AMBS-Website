@@ -22,7 +22,7 @@
       greeting:"Kia ora! Pātaihia mai he aha te aha mō Ambs Solutions: ngā mahi ka whakaaunoatia e mātou, te āhua o te mahi, ngā utu, te tono rānei i tētahi wā kore utu.",not_found:"Aroha mai, kāore au i kite i tētahi whakautu i tō mātou paetukutuku. Ka taea e koe te tono waea kore utu, te waiho pātai mā te tīma, te whakapā tōtika mai rānei.",en:"Kei te reo Pākehā ngā whakautu.",thanks:"Kei te pai!",typing:"E rapu ana…",where:"Wāhi",callus:"Waea mai",emailus:"Īmēra mai"}
   };
   var EN_EXTRA={en:"",thanks:"You're welcome! Anything else?",typing:"Looking…",where:"Where",callus:"Call",emailus:"Email"};
-  var DEF={languages:"Change language",yes:"Yes.",more_on:"More on this:",langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
+  var DEF={languages:"Change language",yes:"Yes.",more_on:"More on this:",also_ask:"People also ask:",langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
   var LANGS=["en","zh","hi","pa","mi"];
   function pageLang(){var l=(document.documentElement.lang||"en").slice(0,2).toLowerCase();return LANGS.indexOf(l)>=0?l:"en"}
   /* the chat speaks the page's language, or the language the visitor writes in (Chinese, Hindi or Punjabi script switch it) */
@@ -199,6 +199,7 @@
     ".ac-links{display:flex;flex-direction:column;gap:6px;margin-top:8px}.ac-links a{display:block;padding:8px 11px;border-radius:12px;background:var(--ac-card);border:1px solid var(--ac-line);text-decoration:none;color:var(--ac-ink)!important;font-weight:600;font-size:14px}",
     ".ac-links a small{display:block;font-weight:400;color:var(--ac-muted);font-size:12.5px;margin-top:2px;white-space:normal}.ac-links a:hover{border-color:#1877e0}",
     ".ac-chips{display:flex;flex-wrap:wrap;gap:7px;align-self:flex-start;max-width:100%;animation:ac-in .35s cubic-bezier(.16,1,.3,1) both}",
+    ".ac-rel .ac-relh{flex-basis:100%;margin:2px 0 0;font-size:12.5px;opacity:.75}.ac-rel .ac-chip{text-align:left}",
     ".ac-chip{border:1px solid var(--ac-line2);background:var(--ac-chip);color:var(--ac-ink);border-radius:999px;padding:7px 12px;font:600 13.5px/1.2 var(--body,'Instrument Sans',Arial,sans-serif);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}",
     ".ac-chip:hover{border-color:#1877e0;color:#1877e0}.ac-chip.go{background:linear-gradient(180deg,#b7f4b9,#7ee282);border-color:transparent;color:#14301a}.ac-chip.go:hover{color:#14301a;filter:brightness(1.03)}",
     ".ac-note{font-size:12px;color:var(--ac-muted);align-self:center}",
@@ -263,7 +264,7 @@
     if(!a){log.scrollTop=0;return}
     var y=a.getBoundingClientRect().top-log.getBoundingClientRect().top+log.scrollTop-10;log.scrollTop=Math.min(y,log.scrollHeight)}
   /* only the newest row of buttons stays, so the conversation doesn't fill up with repeats */
-  function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"&&x.t!=="langs"});[].forEach.call(log.querySelectorAll(".ac-chips,.ac-langs"),function(x){x.remove()})}
+  function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"&&x.t!=="langs"&&(x.t!=="related"||m.who!=="me")});[].forEach.call(log.querySelectorAll(".ac-chips,.ac-langs"),function(x){x.remove()})}
     state.msgs.push(m);save();render(m)}
   function addBot(m){if(CAP)CAP.push(m);m.who="bot";push(m)}
   function welcome(){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"})}
@@ -290,6 +291,7 @@
       b.appendChild(row);log.appendChild(b)}
     else if(m.t==="english"){if(m.done)return;b=el("div","ac-chips ac-enrow");var en=el("button","ac-chip","🔤 "+((DATA&&DATA.bot&&DATA.bot.labels&&DATA.bot.labels.in_english)||"Reply in English"));en.type="button";
       en.addEventListener("click",function(){m.done=true;state.noRoman=true;state.lang="en";save();labels();b.remove();if(lastQ){var t=typing();setTimeout(function(){t.remove();answer(lastQ)},900)}});b.appendChild(en);log.appendChild(b)}
+    else if(m.t==="related"){b=el("div","ac-chips ac-rel");b.appendChild(el("p","ac-relh",L("also_ask")));(m.items||[]).forEach(function(q){var c=el("button","ac-chip",q);c.type="button";c.addEventListener("click",function(){ask(q)});b.appendChild(c)});log.appendChild(b)}
     else if(m.t==="chips"){b=el("div","ac-chips");(m.items||[]).forEach(function(q){var c=el("button","ac-chip",q);c.type="button";c.addEventListener("click",function(){ask(q)});b.appendChild(c)});log.appendChild(b)}
     else if(m.t==="actions"){b=el("div","ac-chips");var bk=el("a","ac-chip go","📅 "+L("book"));bk.href=(DATA&&DATA.biz&&DATA.biz.book)||"/#book";bk.addEventListener("click",nav);b.appendChild(bk);
       var ms=el("button","ac-chip","✉️ "+L("message"));ms.type="button";ms.addEventListener("click",function(){addBot({t:"form",q:m.q||lastQ})});b.appendChild(ms);
@@ -378,14 +380,24 @@
     if(k==="time"){try{v=v.replace("{time}",new Date().toLocaleString({zh:"zh-CN",hi:"hi-IN",pa:"pa-IN",mi:"mi-NZ"}[lang()]||"en-NZ",{timeZone:"Pacific/Auckland",weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"}))}catch(e){v=v.replace("{time}",new Date().toLocaleString())}}
     return v}
   /* the owner sees what visitors ask (/admin → Chat helper → Questions visitors asked); email addresses and numbers are masked first */
-  var CAP=null;
+  var CAP=null,LASTD=null,LASTRES=null;
+  /* after an answer: up to 3 of the owner's questions on the same topic ("People also ask"), in the chat's language, not ones already asked */
+  function related(q,got){var b=DATA&&DATA.bot;if(!b||b.related===false||!LASTD||!got.some(function(m){return m.t==="answer"}))return;
+    function topic(D){if(!D.topic){var m={};toks(D.d.q+" "+(D.d.x||"")+(D.d.k!=="qa"?" "+D.d.t:"")).forEach(function(w){if(!GENW[w])m[w]=1});D.topic=m}return D.topic}
+    var A=topic(LASTD),an=Object.keys(A).length,cl=lang(),asked={};state.msgs.forEach(function(m){if(m.who==="me")asked[qnorm(m.x)]=1});asked[qnorm(q)]=1;
+    var inRes={};(LASTRES||[]).slice(0,12).forEach(function(r){if(r.D.d.k==="qa")inRes[r.D.d.i||r.D.d.q]=r.cov});
+    var seen={},out=[];DOCS.filter(function(D){return D.d.k==="qa"&&(D.d.g||"en")==="en"&&D.d.i!==LASTD.d.i}).map(function(D){var B=topic(D),n=0,bn=Object.keys(B).length;Object.keys(B).forEach(function(w){if(A[w])n++});
+        var sim=n/Math.max(1,an+bn-n);return{D:D,s:sim+.5*(inRes[D.d.i||D.d.q]||0)}}).filter(function(r){return r.s>=.06}).sort(function(a,b){return b.s-a.s})
+      .forEach(function(r){if(out.length>=3)return;var d=r.D.d;if(cl!=="en"&&d.i){for(var j=0;j<DOCS.length;j++){var o=DOCS[j].d;if(o.i===d.i&&o.g===cl){d=o;break}}}
+        var k=qnorm(d.q);if(seen[k]||asked[k])return;seen[k]=1;out.push(d.q)});
+    if(out.length)addBot({t:"related",items:out})}
   function logQ(q,got){var lg=DATA&&DATA.bot&&DATA.bot.log;var lh=/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(location.hostname);if(!lg||!lg.u||/[?&]chat=nolog\b/.test(location.search)||(lh&&!/[?&]chat=log\b/.test(location.search)))return;
     var res="answered",ans="";got.forEach(function(m){if(!ans&&(m.t==="answer"||m.t==="text"))ans=m.x||""});
     var f=got[0]||{};if(f.t==="contact")res="contact";else if(f.t==="langs")res="language";else if(f.t==="text"&&f.x===L("not_found"))res="not found";else if(f.t==="text"&&f.x===talk("offtopic"))res="off topic";else if(f.t==="text")res="small talk";
     var clean=String(q).replace(/[^\s@]+@[^\s@]+\.[^\s@]+/g,"[email]").replace(/\+?\d[\d\s()-]{5,}\d/g,"[number]").slice(0,300);
     try{fetch(lg.u,{method:"POST",keepalive:true,headers:{"Content-Type":"application/json",apikey:lg.k},body:JSON.stringify({p_q:clean,p_lang:lang(),p_page:location.pathname,p_result:res,p_answer:String(ans).slice(0,300)})}).catch(function(){})}catch(e){}}
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
-    var t=typing();load().then(function(){setTimeout(function(){t.remove();CAP=[];try{answer(q)}finally{var got=CAP;CAP=null;logQ(q,got)}},1800+Math.min(600,q.length*6))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
+    var t=typing();load().then(function(){setTimeout(function(){t.remove();CAP=[];LASTD=null;try{answer(q)}finally{var got=CAP;CAP=null;logQ(q,got);related(q,got)}},1800+Math.min(600,q.length*6))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
   function answer(q){var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
     /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
     sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
@@ -464,7 +476,7 @@
     if(!eng&&top&&top.D.d.k==="qa"&&top.altIn&&top.cov>=.3)top.cov=Math.max(top.cov,.6);
     var nq=toks(sq).length,good=top&&known>0&&(!!yours||top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8)))))&&(!!yours||(top.D.d.k==="qa"&&qaAbout(top.D))||(top.D.d.k!=="qa"&&!CAN_YOU.test(norm(sq).trim())&&!(eng&&unknown))),links=[],used={};
     if(wantsContact&&(CONTACT_US.test(norm(s))||!(good&&top.D.d.k==="qa"&&top.cov>=.67))){addBot({t:"contact"});addBot({t:"actions",q:s});return}
-    if(good){var d=top.D.d;used[d.u||"_"]=1;
+    if(good){var d=top.D.d;LASTD=top.D;LASTRES=res;used[d.u||"_"]=1;
       /* matched in English: give the same answer in the visitor's language when we have it */
       if(lang()!=="en"&&(d.g||"en")==="en"&&d.i){for(var j=0;j<DOCS.length;j++){var o=DOCS[j].d;if(o.i===d.i&&o.g===lang()){d=o;break}}}
       if(d.k==="qa"){addBot({t:"answer",x:yesLead(noYes(d.a),d,true),u:d.u&&d.u!==location.pathname?d.u:"",l:d.l||""})}

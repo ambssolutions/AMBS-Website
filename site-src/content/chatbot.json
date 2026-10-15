@@ -65,7 +65,8 @@
   "close": "Close",
   "voice": "Speak your question",
   "listening": "Listening… speak now",
-  "mic_blocked": "To speak your question, allow the microphone in your browser, or type it instead."
+  "mic_blocked": "To speak your question, allow the microphone in your browser, or type it instead.",
+  "also_ask": "People also ask:"
  },
  "qa": [
   {

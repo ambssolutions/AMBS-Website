@@ -134,6 +134,8 @@ export default async function handler(req, res) {
       };
       /* keep a list of the questions visitors ask (on unless switched off) */
       if (d.log === false || old.log === false) next.log = d.log !== false;
+      /* "People also ask" buttons after an answer (on unless switched off) */
+      if (d.related === false || old.related === false) next.related = d.related !== false;
       if (JSON.stringify(next) === JSON.stringify(old)) return send(res, 400, { error: "Nothing has changed" });
       await commitFiles(head, { [CHAT_JSON]: JSON.stringify(next, null, 1) + "\n" }, "Editor source: chat helper" + by);
       return send(res, 200, { ok: true });

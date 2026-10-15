@@ -1568,5 +1568,12 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "Shops and dairies"
+ },
+ "ed.chat.label.also_ask": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "People also ask:"
  }
 }
