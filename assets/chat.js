@@ -269,7 +269,7 @@
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
     var t=typing();load().then(function(){setTimeout(function(){t.remove();answer(q)},280+Math.min(500,q.length*8))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
   function answer(q){var s=q.trim(),sl=scriptLang(s);
-    if(sl&&sl!==lang()&&(sl!=="en"||state.lang)){state.lang=sl==="en"&&pageLang()==="en"?"":sl;save();labels()}
+    if(sl&&sl!==lang()){state.lang=sl===pageLang()?"":sl;save();labels()}
     var tk=talkKey(s);
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
@@ -329,7 +329,8 @@
       new MutationObserver(sync).observe(qb,{attributes:true,attributeFilter:["class","style"]});addEventListener("resize",sync);sync()}
     if(location.hash==="#ask")open();else if(state.open)open();
     /* the homepage switches language without reloading: follow it */
-    new MutationObserver(function(){if(state.lang){state.lang="";save()}labels();if(root&&DATA&&state.msgs.length===0&&log.children.length){log.innerHTML="";welcome()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+    new MutationObserver(function(){if(state.lang){state.lang="";save()}labels();
+      if(root&&DATA&&!state.msgs.some(function(m){return m.who==="me"})){state.msgs=[];save();log.innerHTML="";welcome()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
     nudgeTimer();
     window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2)]})})};
     document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a){ev.preventDefault();open()}})}
