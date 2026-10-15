@@ -440,7 +440,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "how long, timeline, how quickly, how soon, weeks, turnaround, when will it be ready, how quickly, how fast, first automation, timeframe, before christmas, deadline, first automation running, how quickly could you, how long until, up and running, how long till, how soon can it be running, before christmas rush, next week"
+  "_en": "how long, timeline, how quickly, how soon, weeks, turnaround, when will it be ready, how quickly, how fast, first automation, timeframe, before christmas, deadline, first automation running, how quickly could you, how long until, up and running, how long till, how soon can it be running, before christmas rush, next week, how many weeks, weeks to set up"
  },
  "ed.chat.qa.time.ll": {
   "hi": "auto",
@@ -468,7 +468,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "how it works, process, steps, what happens, get started, next steps, onboarding, process, first chat, where do i start, how do i start, what happens after i book, next step, what are the steps, steps once i say yes, what happens next, what happens once i say yes"
+  "_en": "how it works, process, steps, what happens, get started, next steps, onboarding, process, first chat, where do i start, how do i start, what happens after i book, next step, what are the steps, steps once i say yes, what happens next, what happens once i say yes, process from start to finish, whats the process"
  },
  "ed.chat.qa.how.ll": {
   "hi": "auto",
@@ -496,7 +496,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "app, mobile app, phone app, portal, staff portal, customer portal, client login, iphone, android, app for my staff, tick off jobs, checklist app, app our staff use, little app, custom software, bespoke software, custom app, build an app, app for my business, track jobs, job tracking"
+  "_en": "app, mobile app, phone app, portal, staff portal, customer portal, client login, iphone, android, app for my staff, tick off jobs, checklist app, app our staff use, little app, custom software, bespoke software, custom app, build an app, app for my business, track jobs, job tracking, customers check their job, customers can check job status"
  },
  "ed.chat.qa.app.ll": {
   "hi": "auto",
@@ -524,7 +524,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "website, new website, web design, rebuild my site, redesign, seo, google, multilingual, landing page, need a website, make me a site, simple site, contact form, new business site, get me found, redesign, freshen up, dated, slow website, chinese and english, other languages, site in chinese, site in hindi, another language, website for my business, i need a website, redo my website, redo it, old website, looks old, outdated website, website looks old, help with our website, help with my website, website help"
+  "_en": "website, new website, web design, rebuild my site, redesign, seo, google, multilingual, landing page, need a website, make me a site, simple site, contact form, new business site, get me found, redesign, freshen up, dated, slow website, chinese and english, other languages, site in chinese, site in hindi, another language, website for my business, i need a website, redo my website, redo it, old website, looks old, outdated website, website looks old, help with our website, help with my website, website help, nothing fancy, simple website, website is broken"
  },
  "ed.chat.qa.web.ll": {
   "hi": "auto",
@@ -552,7 +552,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "price, pricing, cost, fees, charge, quote, expensive, cheap, budget, rates, how much, how much do your services cost, cost roughly, price list, packages, tight budget, cheapest, one off fee, ongoing fee, per month, automation cost, cost of an automation, one automation cost, how much to automate, ballpark cost, rough price, rough cost, how much would it cost"
+  "_en": "price, pricing, cost, fees, charge, quote, expensive, cheap, budget, rates, how much, how much do your services cost, cost roughly, price list, packages, tight budget, cheapest, one off fee, ongoing fee, per month, automation cost, cost of an automation, one automation cost, how much to automate, ballpark cost, rough price, rough cost, how much would it cost, cost of an ai setup, ai setup cost, cost to set up, ballpark figure, how much will this cost me"
  },
  "ed.chat.qa.price.ll": {
   "hi": "auto",
@@ -622,7 +622,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential, where is my data stored, privacy act, compliant, patient records, health information, train ai, data secure, data stay safe, data safe stay, sent overseas, where does my data end up"
+  "_en": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential, where is my data stored, privacy act, compliant, patient records, health information, train ai, data secure, data stay safe, data safe stay, sent overseas, where does my data end up, where is my data stored, data kept in nz, stored in new zealand"
  },
  "ed.chat.qa.data.ll": {
   "hi": "auto",
@@ -727,7 +727,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software, google workspace, outlook, teams, excel, accounting software, software we already have, myob, pos, move data between apps, apps talk to each other, data entry, typing the same info, retyping, three systems, google calendar, xero connect, connect xero, connect to xero, connect with xero, works with xero, myob not xero, excel to xero, connect excel, live in excel, excel spreadsheets"
+  "_en": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software, google workspace, outlook, teams, excel, accounting software, software we already have, myob, pos, move data between apps, apps talk to each other, data entry, typing the same info, retyping, three systems, google calendar, xero connect, connect xero, connect to xero, connect with xero, works with xero, myob not xero, excel to xero, connect excel, live in excel, excel spreadsheets, quickbooks, works with quickbooks, myob not xero, does that matter"
  },
  "ed.chat.qa.tools.ll": {
   "hi": "auto",
@@ -755,7 +755,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty, breaks, broken, goes down, who do i call, ongoing support, fix stuff, maintain, maintenance, care plan, website care, look after it, breaks in the first month, first month, first 30 days, after it is finished, what support do i get, automation breaks, if it breaks, problem later, fix later, who fixes it, when it breaks, on a weekend, who do i ring, something goes wrong, if something goes wrong"
+  "_en": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty, breaks, broken, goes down, who do i call, ongoing support, fix stuff, maintain, maintenance, care plan, website care, look after it, breaks in the first month, first month, first 30 days, after it is finished, what support do i get, automation breaks, if it breaks, problem later, fix later, who fixes it, when it breaks, on a weekend, who do i ring, something goes wrong, if something goes wrong, stops working, something stops working, when it breaks, what happens when it breaks, breaks on a saturday"
  },
  "ed.chat.qa.support.ll": {
   "hi": "auto",
@@ -839,7 +839,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "too small, small business, sole trader, one person, solo, how small, worth it, size, am i too small, just me, me and a ute, sole trader, bigger companies, large business, worth it for me, one man band, overkill, just me, too small for this, small, only me, one person only, only 3 people, few people, only a few staff, tiny business"
+  "_en": "too small, small business, sole trader, one person, solo, how small, worth it, size, am i too small, just me, me and a ute, sole trader, bigger companies, large business, worth it for me, one man band, overkill, just me, too small for this, small, only me, one person only, only 3 people, few people, only a few staff, tiny business, would this make sense, does this make sense for me, just me and a ute"
  },
  "ed.chat.qa.size.ll": {
   "hi": "auto",
@@ -867,7 +867,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "ai, artificial intelligence, automation meaning, what does automation mean, how does ai help, explain, what can ai do, what can ai do for my business, ai for small business, is ai automation a thing, is that a thing, ai automation for my business, use ai in my business"
+  "_en": "ai, artificial intelligence, automation meaning, what does automation mean, how does ai help, explain, what can ai do, what can ai do for my business, ai for small business, is ai automation a thing, is that a thing, ai automation for my business, use ai in my business, is this just chatgpt, chatgpt, like chatgpt"
  },
  "ed.chat.qa.ai.ll": {
   "hi": "auto",
@@ -972,7 +972,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts, unpaid invoices, overdue, chasing, quote to invoice, invoice when job done, plumbing quotes at night, writing quotes, quotes at night, spend every night writing quotes, invoices automatically, automatic invoices, invoice automatic, quotes take ages, quotes take me, writing quotes takes, invoices take ages, sort my invoices"
+  "_en": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts, unpaid invoices, overdue, chasing, quote to invoice, invoice when job done, plumbing quotes at night, writing quotes, quotes at night, spend every night writing quotes, invoices automatically, automatic invoices, invoice automatic, quotes take ages, quotes take me, writing quotes takes, invoices take ages, sort my invoices, quotes into invoices, quote turns into an invoice, approved quote becomes an invoice, quotes turn into invoices automatically, speed up my quoting"
  },
  "ed.chat.qa.invoices.ll": {
   "hi": "auto",
@@ -1028,7 +1028,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts, numbers in one place, weekly numbers, power bi, revenue, see my numbers, without opening apps, numbers in one place, all my numbers, report emailed, monday report, weekly report, last weeks numbers, report every monday, sales numbers in one place"
+  "_en": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts, numbers in one place, weekly numbers, power bi, revenue, see my numbers, without opening apps, numbers in one place, all my numbers, report emailed, monday report, weekly report, last weeks numbers, report every monday, sales numbers in one place, numbers every monday, numbers on my phone, weekly numbers in one place, my weekly numbers in one place"
  },
  "ed.chat.qa.dashboards.ll": {
   "hi": "auto",
@@ -1119,7 +1119,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, cheaper than staff, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use, part timer, worth the coin, is it worth it, how many hours will it save, save me hours, how much time will it save"
+  "_en": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, cheaper than staff, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use, part timer, worth the coin, is it worth it, how many hours will it save, save me hours, how much time will it save, why would i pay you, cheaper tools"
  },
  "ed.chat.qa.value.ll": {
   "hi": "auto",
@@ -1147,7 +1147,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "payment, payments, deposit, upfront, instalments, payment plan, pay you, bank transfer, when do i pay you, payment options, when do i pay, how do i pay, full payment, pay before, pay upfront, advance payment, payment upfront, pay monthly, monthly payments, all upfront, payment monthly"
+  "_en": "payment, payments, deposit, upfront, instalments, payment plan, pay you, bank transfer, when do i pay you, payment options, when do i pay, how do i pay, full payment, pay before, pay upfront, advance payment, payment upfront, pay monthly, monthly payments, all upfront, payment monthly, when do i get invoiced, invoiced before or after, before or after the work"
  },
  "ed.chat.qa.pay.ll": {
   "hi": "auto",
@@ -1231,7 +1231,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "hosting, host my website, domain, domain name, co.nz, register a domain, move my domain, who hosts"
+  "_en": "hosting, host my website, domain, domain name, co.nz, register a domain, move my domain, who hosts, hosting cost, what does hosting cost, who hosts the site"
  },
  "ed.chat.qa.hosting.ll": {
   "hi": "auto",
@@ -1259,7 +1259,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "edit my website, update the site myself, change text myself, make changes, who updates the site, cms, content management, change the website later, change it myself, change website, change the prices on my site, change prices myself, update my site myself"
+  "_en": "edit my website, update the site myself, change text myself, make changes, who updates the site, cms, content management, change the website later, change it myself, change website, change the prices on my site, change prices myself, update my site myself, change the prices on my site myself, change prices myself"
  },
  "ed.chat.qa.edit.ll": {
   "hi": "auto",
@@ -1336,7 +1336,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "examples, portfolio, case studies, past work, websites you built, show me, previous clients, references, client list, any examples, examples of stuff, stuff youve built, show me your work"
+  "_en": "examples, portfolio, case studies, past work, websites you built, show me, previous clients, references, client list, any examples, examples of stuff, stuff youve built, show me your work, talk to one of your clients, speak to a client, done this before, done this for others"
  },
  "ed.chat.qa.examples.ll": {
   "hi": "auto",
@@ -1392,7 +1392,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "chatbot, chat bot, chat helper, chat widget, bot for my website, answer customers after hours, live chat, chat thing, like this one, chat like this, a bot like you"
+  "_en": "chatbot, chat bot, chat helper, chat widget, bot for my website, answer customers after hours, live chat, chat thing, like this one, chat like this, a bot like you, how much for a chatbot, chatbot cost"
  },
  "ed.chat.qa.chatbot.ll": {
   "hi": "auto",
@@ -1420,7 +1420,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "replace staff, sack, fire staff, cut staff, lose their jobs, receptionist, job losses, redundant, let staff go, lay off"
+  "_en": "replace staff, sack, fire staff, cut staff, lose their jobs, job losses, redundant, let staff go, lay off, receptionist's job, receptionist out of a job, replace my receptionist, fewer staff, need fewer staff"
  },
  "ed.chat.qa.staff.ll": {
   "hi": "auto",
@@ -1448,7 +1448,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "not technical, not techy, hopeless with tech, good with computers, tech skills, computer skills, not good with technology"
+  "_en": "not technical, not techy, hopeless with tech, good with computers, tech skills, computer skills, not good with technology, useless with computers, not good with computers"
  },
  "ed.chat.qa.techy.ll": {
   "hi": "auto",
@@ -1560,7 +1560,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "stock, stock control, inventory, reorders, running low, low stock, supplier orders, stock take, stocktake, stock count, running out, run out of stock, keep running out, stocktake takes"
+  "_en": "stock, stock control, inventory, reorders, running low, low stock, supplier orders, stock take, stocktake, stock count, running out, run out of stock, keep running out, stocktake takes, stock count takes, stocktake, stock take"
  },
  "ed.chat.qa.stock.ll": {
   "hi": "auto",
