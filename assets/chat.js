@@ -85,7 +85,7 @@
   var STOPX={};("的 了 吗 呢 吧 是 我 你 您 们 和 在 有 这 那 也 就 都 要 会 可以 能 请 问 一下 है हैं क्या के की का में को से और मैं आप हम यह वह तो भी पर एक हो ਹੈ ਹਨ ਕੀ ਦੇ ਦੀ ਦਾ ਨੂੰ ਵਿੱਚ ਤੋਂ ਅਤੇ ਮੈਂ ਤੁਸੀਂ ਅਸੀਂ ਇਹ ਉਹ ਤਾਂ ਵੀ ਤੇ ਇੱਕ ਹੋ ko te ngā nga he i ki a e o mō mo me kei ka au koe tēnei tenei").split(" ").forEach(function(w){STOPX[w.normalize("NFKD").replace(/[\u0300-\u036f]/g,"")]=1});
   function stem(w){if(w.length<=3)return w;if(/ies$/.test(w)&&w.length>4)return w.slice(0,-3)+"y";if(/(ss|us|is)$/.test(w))return w;if(/(ches|shes|xes|sses)$/.test(w))return w.slice(0,-2);if(/s$/.test(w))w=w.slice(0,-1);
     if(/ing$/.test(w)&&w.length>5)w=w.slice(0,-3);else if(/ed$/.test(w)&&w.length>4)w=w.slice(0,-2);if(/ion$/.test(w)&&w.length>6)w=w.slice(0,-3);if(/e$/.test(w)&&w.length>4)w=w.slice(0,-1);return w}
-  function toks(s,keepStop){var out=[];norm(s).split(" ").forEach(function(w){if(!w||(!keepStop&&(STOP[w]||STOPX[w])))return;
+  function toks(s,keepStop){var out=[];norm(s).split(" ").forEach(function(w){if(!w||(!keepStop&&(STOP[w]||STOPX[w]||/^[a-z]$/.test(w))))return;
       if(/[\u3400-\u9FFF]/.test(w)){var c=w.replace(/[的了吗呢吧是我你您们和在有这那也就都要会请问]/g," ").split(" ");c.forEach(function(x){if(!x)return;if(x.length===1)out.push(x);for(var i=0;i<x.length-1;i++)out.push(x.slice(i,i+2))});return}
       out.push(/^[a-z0-9$]+$/.test(w)?stem(w):w)});return out}
   function prep(){DOCS=(DATA.docs||[]).map(function(d){var f={t:toks(d.t),q:toks(d.q),x:toks(d.x),a:toks(d.a)},tf={};
@@ -105,7 +105,7 @@
       var sc=0;Object.keys(best).forEach(function(k){sc+=best[k]});
       /* a stored question worded like the visitor's gets a lift */
       if(D.qset){var inter=0;uniq.forEach(function(w){if(D.qset[w])inter++});var uni=uniq.length+D.qn-inter;if(uni)sc+=12*inter/uni}
-      var cov=0;uniq.forEach(function(w){cov+=hit[w]||0});cov/=uniq.length;return{D:D,s:sc*(KIND[D.d.k]||1)*(.2+cov)*(.2+cov)*1.8*((D.d.g||"en")===cl&&cl!=="en"?1.3:1),cov:cov}}).filter(function(r){return r.s>0});
+      var cov=0;uniq.forEach(function(w){cov+=hit[w]||0});cov/=uniq.length;return{D:D,s:sc*(KIND[D.d.k]||1)*(.2+cov)*(.2+cov)*1.8*((D.d.g||"en")===cl&&cl!=="en"?1.3:1)*(D.d.k==="qa"&&uniq.length<=2?1.6:1),cov:cov}}).filter(function(r){return r.s>0});
     /* an answer that covers clearly more of the question wins, then the stronger match */
     res.sort(function(a,b){return Math.abs(b.cov-a.cov)>=.3?b.cov-a.cov:b.s-a.s});return res}
   function snippet(d,text,max){var qs=toks(text),sents=String(d.a||"").match(/[^.!?]+[.!?]*/g)||[d.a||""],best=[];
@@ -277,7 +277,7 @@
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
     ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
     ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
-  var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|reviews?|testimonials?|(your|any) results|worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
+  var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|reviews?|testimonials?|(your|any) results|^(are you|is ambs) worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
   var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person|waea|īmēra|imera|whakapā)\b|电话|邮箱|邮件|联系|फ़ोन|फोन|ईमेल|संपर्क|नंबर|ਫ਼ੋਨ|ਫੋਨ|ਈਮੇਲ|ਸੰਪਰਕ|ਨੰਬਰ/i;
   var TALKX=[["greet",/^(你好|您好|嗨|哈喽|早上好|下午好|晚上好|नमस्ते|नमस्कार|हैलो|हेलो|राम राम|सत श्री अकाल|ਸਤ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਸਤਿ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਹੈਲੋ|ਨਮਸਤੇ|kia ora|tēnā koe|tena koe|mōrena|morena)[!！。.\s]*$/i],
     ["how_are_you",/(你好吗|您好吗|最近怎么样|आप कैसे हैं|कैसे हो|क्या हाल|ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ|ਕੀ ਹਾਲ|ਕਿਵੇਂ ਹੋ|kei te pēhea koe|kei te pehea koe)/i],
@@ -323,7 +323,8 @@
         var lines=w.why.map(function(x){return"✓ "+x.replace(/\.$/,"")}).concat((w.trust||[]).map(function(t){return"✓ "+t[0]+(t[1]?": "+(t[1].match(/^[^.!?。।]*[.!?。।]?/)||[t[1]])[0]:"")}));
         addBot({t:"answer",x:talk("quality")+"\n\n"+lines.join("\n")+"\n\n"+talk("quality_end"),u:"/#why",l:""});addBot({t:"actions",q:s});return}}
     var res=search(sq),top=res[0],wantsContact=CONTACT.test(s);
-    var good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||top.D.d.k==="faq"||top.s>8))),links=[],used={};
+    /* half a two-word question matching one rare word isn't an answer ("capital of France") */
+    var nq=toks(sq).length,good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8))))),links=[],used={};
     if(wantsContact&&!(good&&top.D.d.k==="qa"&&top.cov>=.67)){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(good){var d=top.D.d;used[d.u||"_"]=1;
       /* matched in English: give the same answer in the visitor's language when we have it */

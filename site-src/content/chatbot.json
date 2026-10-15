@@ -1,25 +1,27 @@
 {
  "enabled": true,
- "name": "Ambs helper",
- "greeting": "Kia ora! Ask me anything about Ambs Solutions: what we automate, how it works, prices, or booking a free session.",
+ "name": "Ambs Bot",
+ "greeting": "Kia ora! I'm Ambs Bot, the Ambs Solutions assistant. I can answer your questions about our services, pricing, how we work and booking a free session. How can I help you today?",
  "suggestions": [
   "What can you automate?",
   "How much does it cost?",
   "How does it work?",
+  "What happens in the free session?",
+  "Which software do you work with?",
   "Do you work outside Auckland?"
  ],
- "not_found": "Sorry, I couldn't find an answer to that on our website. You can book a free call, leave your question for the team, or contact us directly.",
+ "not_found": "I couldn't find a precise answer to that on our website. Our team can answer it properly: book a free session, leave your question for us, or contact us directly.",
  "nudge": {
   "enabled": true,
   "delay": 15,
-  "text": "Need a hand? I can answer questions about what we automate, prices, or booking a free session.",
+  "text": "Kia ora! I'm Ambs Bot, and I can answer your questions about automation, websites, pricing and our free session. Can I help you with anything?",
   "open": true
  },
  "chat": {
-  "offtopic": "I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",
+  "offtopic": "That's outside what I can help with. I'm here for questions about Ambs Solutions: our services, pricing, process and free sessions. If it's about your business, our team is happy to help:",
   "how_are_you": "I'm doing well, thanks for asking! How can I help you today?",
-  "who": "I'm the Ambs Solutions helper. I answer questions using our website, any time of day. For anything I can't answer, a real person from our team is happy to help.",
-  "human": "I'm an automated helper, not a person. If you'd like to talk to someone from our team, you can book a free session, leave a message or call us.",
+  "who": "I'm Ambs Bot, the Ambs Solutions assistant. I know our services, pricing, process and the industries we work with, and I'm here any time of day. For anything I can't answer, a real person from our team is happy to help.",
+  "human": "I'm Ambs Bot, an automated assistant rather than a person. If you'd like to speak with our team, you can book a free session, leave a message or call us.",
   "thanks": "You're welcome! Is there anything else I can help with?",
   "ok": "Great! Anything else I can help with?",
   "bye": "Thanks for stopping by. Have a great day!",
@@ -28,16 +30,16 @@
   "joke": "Why did the spreadsheet feel tired? It had been working in too many cells all week. That's the kind of job we like to automate! What can I help you with?",
   "weather": "I can't check the weather, sorry. I can help with anything about Ambs Solutions though: what we automate, prices, or booking a free session.",
   "time": "It's {time} in New Zealand right now.",
-  "help": "Ask me anything about Ambs Solutions, or tap one of these to get started.",
+  "help": "I can help with our services, pricing, how we work, the software we connect, your industry and booking a free session. Ask me anything, or tap one of these to get started.",
   "sorry": "No problem at all. What would you like to know?",
-  "test": "I'm here and working! Ask me anything about Ambs Solutions.",
+  "test": "I'm here and working. Ask me anything about Ambs Solutions.",
   "quality": "Here's what you can expect when you work with us, straight from how we work:",
   "quality_end": "The easiest way to judge us is the free session: we look at how your work really happens and you keep the written plan, even if you don't hire us."
  },
  "labels": {
   "launcher": "Ask us",
-  "title": "Ask Ambs Solutions",
-  "subtitle": "Answers from our website, any time",
+  "title": "Ambs Bot",
+  "subtitle": "Ambs Solutions assistant",
   "placeholder": "Type your question…",
   "send": "Send",
   "book": "Book a free session",
@@ -140,6 +142,70 @@
    "a": "Your data stays yours. We handle it under the Privacy Act 2020, keep what we store for you in New Zealand or Australia, and never use it to train anyone's AI model.",
    "link": "/privacy",
    "link_label": "Read our privacy policy"
+  },
+  {
+   "id": "free",
+   "q": "What happens in the free session?",
+   "also": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step",
+   "a": "We sit with whoever actually does the job and look at how the work really happens today. You leave with a written plan and an hours estimate, yours to keep even if you don't hire us. There is no cost and no jargon, and it can happen on site or remotely.",
+   "link": "/#book",
+   "link_label": "Book a free session"
+  },
+  {
+   "id": "tools",
+   "q": "Which software do you work with?",
+   "also": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software",
+   "a": "Most automations connect the tools you already pay for: Microsoft 365 (Outlook, Excel, Teams, OneDrive and SharePoint), Google Workspace (Gmail, Calendar, Sheets and Drive) and Xero. Where your booking, point-of-sale or job software can export to Excel or Google Sheets, or sends you emails, we work from that. Most of the time you won't need new software.",
+   "link": "/services/ai-automation",
+   "link_label": "AI automation"
+  },
+  {
+   "id": "support",
+   "q": "What support do you offer after launch?",
+   "also": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty",
+   "a": "We set up monitoring where the tools allow, so most problems are caught early. Fixes and tweaks are free for the first 30 days after launch. After that, support is a monthly plan or pay as you go, whichever suits you, with one named contact reachable in New Zealand hours.",
+   "link": "/#faq",
+   "link_label": "Common questions"
+  },
+  {
+   "id": "team",
+   "q": "Who will I work with?",
+   "also": "who will i deal with, contact person, account manager, team, developer, builder, ticket, reach you, response, new zealand hours",
+   "a": "You deal directly with the person who builds it: one named contact who knows your business, reachable in New Zealand hours. No ticket queue and no hand-offs.",
+   "link": "/#why",
+   "link_label": "Why partner with us"
+  },
+  {
+   "id": "industries",
+   "q": "Which industries do you work with?",
+   "also": "industries, industry, sectors, cafe, takeaway, trades, builder, plumber, electrician, clinic, salon, shop, dairy, retail, adviser, accountant, transport, delivery, my type of business",
+   "a": "We work with small and growing New Zealand businesses, including cafés and takeaways, trades and building, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery. If your business isn't on that list, we look at the repetitive work you do every week and start there.",
+   "link": "/industries",
+   "link_label": "See industries"
+  },
+  {
+   "id": "size",
+   "q": "Is my business too small?",
+   "also": "too small, small business, sole trader, one person, solo, how small, worth it, size",
+   "a": "If you spend more than about three hours a week on the same task, it's usually worth a look, whether you have one van or forty staff. Sole traders are very welcome.",
+   "link": "/#book",
+   "link_label": "Book a free session"
+  },
+  {
+   "id": "ai",
+   "q": "What is AI automation?",
+   "also": "ai, artificial intelligence, automation meaning, what does automation mean, chatgpt, how does ai help, explain",
+   "a": "It means taking the jobs your team does the same way every week, like quotes, reminders, retyping and reports, and building systems that do them for you. You keep the final say: anything involving money, complaints or judgement can be sent to you to check first.",
+   "link": "/services/ai-automation",
+   "link_label": "AI automation"
+  },
+  {
+   "id": "training",
+   "q": "Do you train my team?",
+   "also": "training, train staff, teach, handover, show my team, language, hindi, punjabi, learn",
+   "a": "Yes. When an automation goes live we hand over the logins and train your team to use it, in plain words. Training can be in English, Hindi or Punjabi, whichever your team prefers.",
+   "link": "/#how",
+   "link_label": "How it works"
   }
  ]
 }
