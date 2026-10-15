@@ -574,6 +574,103 @@ def stamp_home(custom_html=None,strings=None):
         h=re.sub(r'data-i18nv="[A-Za-z0-9]*"','data-i18nv="'+lv+'"',h)
     open(idx,'w',encoding='utf8').write(h)
 
+
+# ---- website chat bot ----------------------------------------------------------------------------------------------
+# A free, no-AI helper: the build collects the site's own wording (homepage, every live page and post, their questions,
+# business details and the questions and answers in site-src/content/chatbot.json, edited in the website editor) into
+# assets/chat-index.json, and assets/chat.js finds the best answer in the visitor's browser.
+CHAT=_load('chatbot.json',{})
+def _txt(h): return re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>',' ',h))).strip()
+def _block_text(x,out):
+    if isinstance(x,dict):
+        for k,v in x.items():
+            if k in ('id','type','href','url','src','img','photo','image','icon','style','layout','align','kind','name') : continue
+            _block_text(v,out)
+    elif isinstance(x,list):
+        for v in x: _block_text(v,out)
+    elif isinstance(x,str):
+        t=_txt(x)
+        if len(t)>2 and not re.match(r'^(https?:|/|#|mailto:|tel:)',t): out.append(t)
+def build_chat_index():
+    site=_load('site.json',{})
+    docs=[]
+    def add(kind,title,text,u,q='',extra=''):
+        text=_txt(text);title=_txt(title)
+        if text or q: docs.append({k:v for k,v in dict(k=kind,t=title,q=_txt(q),a=text,u=u,x=extra).items() if v})
+    for it in CHAT.get('qa',[]):
+        if it.get('q') and it.get('a'): docs.append({k:v for k,v in dict(k='qa',t=it['q'],q=it['q'],a=it['a'],u=it.get('link',''),l=it.get('link_label',''),x=it.get('also','')).items() if v})
+    # homepage
+    g=lambda k:EN.get(k,'')
+    hid=lambda h:'/'+h
+    add('page',g('hero.h1'),g('hero.sub')+' '+g('hero.note'),'/')
+    for i in range(1,30):
+        q,a=g(f'faq.q{i}'),g(f'faq.a{i}')
+        if q and a: add('faq',q,a,'/#faq',q)
+    for i in range(1,30):
+        t,d=g(f'auto.c{i}t'),g(f'auto.c{i}d')
+        if not t: continue
+        pts=' '.join(g(f'auto.c{i}p{j}') for j in range(1,8) if g(f'auto.c{i}p{j}'))
+        add('home',t,d+' '+pts,'/services/websites-and-portals' if i>=7 else '/services/ai-automation','', g('auto.title'))
+    steps=' '.join(f"{g(f'how.s{i}t')}: {g(f'how.s{i}d')}" for i in range(1,12) if g(f'how.s{i}t'))
+    if steps: add('home',g('how.title'),steps,'/#how','','process steps how it works what happens next')
+    why=' '.join(g(f'why.n{i}')+'.' for i in range(1,12) if g(f'why.n{i}'))
+    if why: add('home',g('why.t'),why,'/#why','','why choose you different')
+    about=' '.join(g(k) for k in EN if k.startswith('about.') and k!='about.title')
+    if about: add('home',g('about.title'),about,'/#about','','about who are you company team')
+    for i in range(1,12):
+        t,d=g(f'trust.u{i}t'),g(f'trust.u{i}d')
+        if t: add('home',t,d,'/#how')
+    if g('trust.title'): add('home',g('trust.title'),g('trust.lead'),'/','','tools software apps')
+    for b in ('cafe','trades','clinic','retail','adviser','transport','other'):
+        tasks=[g(f't.{b}{j}') for j in range(1,8) if g(f't.{b}{j}')]
+        if g('biz.'+b) and tasks:
+            ind={'cafe':'cafes-and-takeaways','trades':'trades-and-building','clinic':'clinics-and-salons','retail':'shops-and-dairies','adviser':'advisers-and-accountants','transport':'transport-and-delivery'}.get(b)
+            add('home',g('biz.'+b)+': '+g('card.handled'),'. '.join(tasks)+'.','/industries/'+ind if ind else '/#automate')
+    # every live page and post
+    for p in PAGES:
+        f=os.path.join(SRC,'content',p[0],p[1]+'.html')
+        if not os.path.exists(f): continue
+        raw=open(f,encoding='utf8').read();m=re.match(r'\s*<!--META\s*(\{.*?\})\s*-->\s*(.*)',raw,re.S)
+        if not m: continue
+        meta=json.loads(m.group(1));body=m.group(2);u=url(p[0],p[1]);h1=meta.get('h1',p[2])
+        add('page',h1,meta.get('lead','')+' '+' '.join(meta.get('takeaways',[])),u,'',p[2]+' '+p[4]+' '+p[3])
+        for q,a in meta.get('faq',[]): add('faq',q,a,u,q,h1)
+        for part in re.split(r'(?=<h2[\s>])',body):
+            hm=re.match(r'<h2[^>]*>(.*?)</h2>',part,re.S)
+            if hm: add('sec',h1+': '+_txt(hm.group(1)),part[hm.end():],u,'',p[2])
+    for slug in ('privacy','terms'):
+        f=os.path.join(SRC,'content','legal',slug+'.html')
+        if not os.path.exists(f): continue
+        raw=open(f,encoding='utf8').read();m=re.match(r'\s*<!--META\s*(\{.*?\})\s*-->\s*(.*)',raw,re.S)
+        meta=json.loads(m.group(1))
+        for part in re.split(r'(?=<h2[\s>])',m.group(2)):
+            hm=re.match(r'<h2[^>]*>(.*?)</h2>',part,re.S)
+            add('sec',meta['h1']+(': '+_txt(hm.group(1)) if hm else ''),part[hm.end():] if hm else part,'/'+slug,'',slug)
+    for slug,d in CUSTOM.items():
+        out=[];_block_text(d.get('blocks',[]),out)
+        add('page',d.get('title',slug),' '.join(out),'/'+slug)
+    for k,v in HOMESEC.get('custom',{}).items():
+        out=[];_block_text(v.get('blocks',[]),out)
+        add('home',v.get('title') or v.get('name') or 'Ambs Solutions',' '.join(out),'/#'+k)
+    for sec in ('services','industries','guides','news'):
+        if sec in HUB and any(p[0]==sec for p in PAGES): add('page',HUB[sec].get('h1',sec),HUB[sec].get('lead',''),url(sec),'',sec)
+    bot={k:v for k,v in CHAT.items() if k!='qa'}
+    data={'src':hashlib.md5(open(os.path.join(SRC,'assets','home.js'),'rb').read()).hexdigest()[:8],'bot':bot,'biz':{'phone':site.get('phone',''),'email':site.get('email',''),'location':site.get('location',''),'book':'/#book'},'docs':docs}
+    js=json.dumps(data,ensure_ascii=False,separators=(',',':'))
+    open(os.path.join(OUT,'assets','chat-index.json'),'w',encoding='utf8').write(js)
+    return hashlib.md5(js.encode()).hexdigest()[:8],len(docs)
+def chat_tag(iv):
+    if not CHAT.get('enabled',True): return ''
+    lab=(CHAT.get('labels') or {}).get('launcher','Ask us')
+    nu=CHAT.get('nudge') or {}
+    nudge=f' data-nudge="{e(nu.get("text",""))}" data-nudge-after="{int(nu.get("delay",40) or 40)}"' if nu.get('enabled',True) and nu.get('text') else ''
+    return f'<!--chat--><script src="/assets/chat.js?v={_v("chat.js")}" data-index="/assets/chat-index.json?v={iv}" data-label="{e(lab)}"{nudge} defer></script><!--/chat-->'
+def stamp_chat(path,tag):
+    if not os.path.exists(path): return
+    h=open(path,encoding='utf8').read();h=re.sub(r'<!--chat-->.*?<!--/chat-->\n?','',h,flags=re.S)
+    if tag: h=h.replace('</body>',tag+'\n</body>',1)
+    open(path,'w',encoding='utf8').write(h)
+
 if __name__=='__main__':
     os.makedirs(os.path.join(OUT,'assets'),exist_ok=True)
     for f in ('pages.css','pages.js','blocks.css','blocks.mjs','forms.js'): open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
@@ -591,4 +688,12 @@ if __name__=='__main__':
     for slug,d in CUSTOM.items(): build_custom(slug,d,rb['pages'].get(slug,''))
     build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap()
     for f in ('index.html','email-signature.html'): stamp_ga(os.path.join(OUT,f))
+    open(os.path.join(OUT,'assets','chat.js'),'w',encoding='utf8').write(open(os.path.join(SRC,'assets','chat.js'),encoding='utf8').read())
+    iv,nd=build_chat_index();tag=chat_tag(iv)
+    # the chat helper goes on every public page (not the editor or the email signature builder)
+    for root,dirs,files in os.walk(OUT):
+        dirs[:]=[d for d in dirs if d not in ('node_modules','site-src','api','assets','.git','.github','invoice')]
+        for f in files:
+            if f.endswith('.html') and f not in ('admin.html','email-signature.html'): stamp_chat(os.path.join(root,f),tag)
+    print('chat helper:',nd,'answers indexed')
     print('done, total words',total)

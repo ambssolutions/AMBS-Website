@@ -3,11 +3,13 @@
    { action: "business", phone, email, location }   changes them everywhere on the site
    { action: "calculator", hours: { cafe: [3, 2.5, 1.5], ... } }
    { action: "analytics", id: "G-XXXXXXX" }   the Google Analytics measurement ID (empty turns it off)
-   { action: "sitetext", text: { "cta.h": "...", ... } }   the wording on every page other than the homepage */
+   { action: "sitetext", text: { "cta.h": "...", ... } }   the wording on every page other than the homepage
+   { action: "chatget" } / { action: "chatbot", data: {...} }   the "Ask us" chat helper (site-src/content/chatbot.json) */
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
 import { requireEditor, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
 
 const SITE_JSON = "site-src/content/site.json";
+const CHAT_JSON = "site-src/content/chatbot.json";
 const TEXT = /\.(html|js|json|py|xml|txt|webmanifest|css|md)$/i;
 const SKIP = /^(api\/|\.github\/|node_modules\/|package(-lock)?\.json$|version\.json$|admin\.html$|CLAUDE\.md$|README\.md$|site-src\/content\/site\.json$|site-src\/content\/translation-status\.json$)/;
 const BIZ_RE = /\{id:"([a-z]+)",\s*tasks:\[((?:\["[^"]+",[0-9.]+\],?)+)\]\}/g;
@@ -90,6 +92,35 @@ export default async function handler(req, res) {
       }
       if (JSON.stringify(next) === JSON.stringify(text)) return send(res, 400, { error: "Nothing has changed" });
       await commitFiles(head, { [SITE_TEXT_JSON]: JSON.stringify(next, null, 1) + "\n" }, "Editor source: wording on every page" + by);
+      return send(res, 200, { ok: true });
+    }
+
+    if (b.action === "chatget") {
+      const f = await readFile(CHAT_JSON, head);
+      return send(res, 200, { chat: f ? JSON.parse(f.text) : {} });
+    }
+
+    if (b.action === "chatbot") {
+      const f = await readFile(CHAT_JSON, head);
+      const old = f ? JSON.parse(f.text) : {};
+      const d = b.data || {};
+      const str = (v, max) => String(v == null ? "" : v).replace(/\s+/g, " ").trim().slice(0, max);
+      const labels = {}, chat = {};
+      for (const [k, v] of Object.entries(old.chat || {})) chat[k] = str(d.chat && typeof d.chat[k] === "string" ? d.chat[k] : v, 400) || v;
+      for (const [k, v] of Object.entries(old.labels || {})) labels[k] = str(d.labels && typeof d.labels[k] === "string" ? d.labels[k] : v, 200) || v;
+      const link = (v) => { v = str(v, 300); return /^(\/|https?:\/\/|mailto:|tel:|#)/.test(v) || !v ? v : "/" + v.replace(/^\/+/, ""); };
+      const qa = (Array.isArray(d.qa) ? d.qa : []).map((x, i) => ({
+        id: str(x.id, 40) || "q" + Date.now().toString(36) + i, q: str(x.q, 200), also: str(x.also, 400), a: str(x.a, 1500), link: link(x.link), link_label: str(x.link_label, 60),
+      })).filter((x) => x.q && x.a).slice(0, 80);
+      const next = {
+        enabled: d.enabled !== false, name: str(d.name, 60) || old.name || "Ambs helper",
+        greeting: str(d.greeting, 400) || old.greeting, suggestions: (Array.isArray(d.suggestions) ? d.suggestions : []).map((x) => str(x, 80)).filter(Boolean).slice(0, 6),
+        not_found: str(d.not_found, 400) || old.not_found,
+        nudge: { enabled: !(d.nudge && d.nudge.enabled === false), delay: Math.min(600, Math.max(5, Math.round(Number(d.nudge && d.nudge.delay) || 40))), text: str(d.nudge && d.nudge.text, 200) || (old.nudge && old.nudge.text) || "" },
+        chat, labels, qa,
+      };
+      if (JSON.stringify(next) === JSON.stringify(old)) return send(res, 400, { error: "Nothing has changed" });
+      await commitFiles(head, { [CHAT_JSON]: JSON.stringify(next, null, 1) + "\n" }, "Editor source: chat helper" + by);
       return send(res, 200, { ok: true });
     }
 
