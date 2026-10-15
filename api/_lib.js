@@ -37,7 +37,19 @@ export async function requireEditor(req, res) {
   const allowed = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
   const email = String(user.email || "").toLowerCase();
   if (!allowed.includes(email)) { send(res, 403, { error: "This account is not allowed to edit the website." }); return null; }
-  return { email };
+  return { email, token };
+}
+
+/* A database function in the AMBS Supabase project, called as the signed-in person (it checks they're an admin). */
+export async function sbRpc(token, fn, args) {
+  const r = await fetch(SUPABASE_URL + "/rest/v1/rpc/" + fn, {
+    method: "POST",
+    headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify(args || {}),
+  });
+  const t = await r.text();
+  if (!r.ok) throw new Error("Couldn't load the questions (" + r.status + "): " + t.slice(0, 200));
+  return t ? JSON.parse(t) : null;
 }
 
 async function gh(path, init = {}) {

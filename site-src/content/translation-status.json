@@ -384,7 +384,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone"
+  "_en": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today"
  },
  "ed.chat.qa.book.ll": {
   "hi": "auto",
@@ -412,7 +412,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "what do you do, services, what can you help with, what do you offer, automate, automation ideas, examples"
+  "_en": "what do you do, services, what can you help with, what do you offer, automate, automation ideas, examples, what do you guys do, what do you actually do, what is it you do, which bits can you take off me, admin"
  },
  "ed.chat.qa.what.ll": {
   "hi": "auto",
@@ -440,7 +440,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "how long, timeline, how quickly, how soon, weeks, turnaround, when will it be ready"
+  "_en": "how long, timeline, how quickly, how soon, weeks, turnaround, when will it be ready, how quickly, how fast, first automation, timeframe, before christmas, deadline, first automation running, how quickly could you, how long until"
  },
  "ed.chat.qa.time.ll": {
   "hi": "auto",
@@ -468,7 +468,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "how it works, process, steps, what happens, get started, next steps, onboarding"
+  "_en": "how it works, process, steps, what happens, get started, next steps, onboarding, process, first chat, where do i start, how do i start, what happens after i book, next step"
  },
  "ed.chat.qa.how.ll": {
   "hi": "auto",
@@ -524,7 +524,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "website, new website, web design, rebuild my site, redesign, seo, google, multilingual, landing page"
+  "_en": "website, new website, web design, rebuild my site, redesign, seo, google, multilingual, landing page, need a website, make me a site, simple site, contact form, new business site, get me found, redesign, freshen up, dated, slow website, chinese and english, other languages, site in chinese, site in hindi, another language, website for my business, i need a website"
  },
  "ed.chat.qa.web.ll": {
   "hi": "auto",
@@ -552,7 +552,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "price, pricing, cost, fees, charge, quote, expensive, cheap, budget, rates"
+  "_en": "price, pricing, cost, fees, charge, quote, expensive, cheap, budget, rates, how much, how much do your services cost, cost roughly, price list, packages, tight budget, cheapest, one off fee, ongoing fee, per month, automation cost, cost of an automation, one automation cost, how much to automate"
  },
  "ed.chat.qa.price.ll": {
   "hi": "auto",
@@ -580,7 +580,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "location, address, office, auckland, wellington, christchurch, nationwide, new zealand, remote, outside auckland"
+  "_en": "location, address, office, auckland, wellington, christchurch, nationwide, new zealand, remote, outside auckland, hamilton, south auckland, north shore, tauranga, wellington, christchurch, dunedin, my town, outside auckland, regional, where are you, where are you from, where r u"
  },
  "ed.chat.qa.own.q": {
   "hi": "auto",
@@ -601,7 +601,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "ownership, logins, accounts, lock in, contract, cancel, stop working with you"
+  "_en": "ownership, logins, accounts, lock in, contract, cancel, stop working with you, who owns, own the website, own the code, if you go out of business, what happens to my systems"
  },
  "ed.chat.qa.data.q": {
   "hi": "auto",
@@ -622,7 +622,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential"
+  "_en": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential, where is my data stored, privacy act, compliant, patient records, health information, train ai"
  },
  "ed.chat.qa.data.ll": {
   "hi": "auto",
@@ -699,7 +699,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step"
+  "_en": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step, catch, whats the catch, really free, how long is the free session, what do we cover, written plan"
  },
  "ed.chat.qa.free.ll": {
   "hi": "auto",
@@ -727,7 +727,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software"
+  "_en": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software, google workspace, outlook, teams, excel, accounting software, software we already have, myob, pos, move data between apps, apps talk to each other, data entry, typing the same info, retyping, three systems, google calendar"
  },
  "ed.chat.qa.tools.ll": {
   "hi": "auto",
@@ -755,7 +755,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty"
+  "_en": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty, breaks, broken, goes down, who do i call, ongoing support, fix stuff, maintain, maintenance, care plan, website care, look after it, breaks in the first month, first month, first 30 days, after it is finished, what support do i get, automation breaks, if it breaks"
  },
  "ed.chat.qa.support.ll": {
   "hi": "auto",
@@ -783,7 +783,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "who will i deal with, contact person, account manager, team, developer, builder, ticket, reach you, response, new zealand hours"
+  "_en": "who will i deal with, contact person, account manager, team, ticket, reach you, response, new zealand hours, how many people"
  },
  "ed.chat.qa.team.ll": {
   "hi": "auto",
@@ -811,7 +811,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "industries, industry, sectors, cafe, takeaway, trades, builder, plumber, electrician, clinic, salon, shop, dairy, retail, adviser, accountant, transport, delivery, my type of business"
+  "_en": "industries, industry, sectors, cafe, takeaway, trades, builder, plumber, electrician, clinic, salon, shop, dairy, retail, adviser, accountant, transport, delivery, my type of business, accounting practice, trucking, transport company, physio, beauty salon, builders, cafes, my industry, relevant to us, trucking, trucks, courier, freight, builders"
  },
  "ed.chat.qa.industries.ll": {
   "hi": "auto",
@@ -839,7 +839,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "too small, small business, sole trader, one person, solo, how small, worth it, size"
+  "_en": "too small, small business, sole trader, one person, solo, how small, worth it, size, am i too small, just me, me and a ute, sole trader, bigger companies, large business, worth it for me"
  },
  "ed.chat.qa.size.ll": {
   "hi": "auto",
@@ -867,7 +867,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "ai, artificial intelligence, automation meaning, what does automation mean, chatgpt, how does ai help, explain"
+  "_en": "ai, artificial intelligence, automation meaning, what does automation mean, how does ai help, explain, what can ai do, what can ai do for my business, ai for small business"
  },
  "ed.chat.qa.ai.ll": {
   "hi": "auto",
@@ -895,7 +895,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "training, train staff, teach, handover, show my team, language, hindi, punjabi, learn"
+  "_en": "training, train staff, teach, handover, show my team, language, hindi, punjabi, learn, show my team, staff not techy, cope, will they cope"
  },
  "ed.chat.qa.training.ll": {
   "hi": "auto",
@@ -937,7 +937,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms"
+  "_en": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms, text reminders, sms reminders, booking reminders, online bookings"
  },
  "ed.chat.qa.noshow.ll": {
   "hi": "auto",
@@ -972,7 +972,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts"
+  "_en": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts, unpaid invoices, overdue, chasing, quote to invoice, invoice when job done, plumbing quotes at night, writing quotes, quotes at night, spend every night writing quotes"
  },
  "ed.chat.qa.invoices.ll": {
   "hi": "auto",
@@ -1007,7 +1007,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books"
+  "_en": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books, are you an accountant, do you do bookkeeping"
  },
  "ed.chat.qa.dashboards.q": {
   "hi": "auto",
@@ -1028,7 +1028,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts"
+  "_en": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts, numbers in one place, weekly numbers, power bi, revenue"
  },
  "ed.chat.qa.dashboards.ll": {
   "hi": "auto",
@@ -1056,7 +1056,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "google reviews, reviews, review replies, customer replies, enquiries, emails, messages, answer customers, faq, opening hours questions"
+  "_en": "google reviews, reviews, review replies, customer replies, enquiries, emails, messages, answer customers, faq, opening hours questions, same questions, inbox, auto reply, answer enquiries, sound like me, draft replies, same questions every day, same questions by email"
  },
  "ed.chat.qa.replies.ll": {
   "hi": "auto",
@@ -1071,5 +1071,502 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "Change language"
+ },
+ "ed.chat.qa.web_price.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "How much does a website cost?"
+ },
+ "ed.chat.qa.web_price.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "It depends on the pages, languages and features you need, so we don't publish a website price list. After the free session you get a written plan, and the scope and price are agreed in writing before any work starts."
+ },
+ "ed.chat.qa.web_price.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "website price, website cost, how much for a website, cost of a site, 5 page site, website quote, site price, new website cost, incl gst, rough cost, set me back, cost for a basic site, new website for my business cost"
+ },
+ "ed.chat.qa.web_price.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Websites and portals"
+ },
+ "ed.chat.qa.value.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Is it worth the money?"
+ },
+ "ed.chat.qa.value.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "It depends on the job. As a rule of thumb, a task that takes three hours or more a week, every week, is worth a look. In the free session we measure your own week and leave you an hours estimate, so you can weigh the cost against the time it saves before you spend anything."
+ },
+ "ed.chat.qa.value.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use"
+ },
+ "ed.chat.qa.value.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Book a free session"
+ },
+ "ed.chat.qa.pay.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "How do payments work?"
+ },
+ "ed.chat.qa.pay.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "It depends on the job. Payment terms are agreed in writing with the scope and price before any work starts, so you know what you pay and when. Our team can talk you through the options in your free session."
+ },
+ "ed.chat.qa.pay.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "payment, payments, deposit, upfront, instalments, payment plan, pay you, bank transfer, credit card, when do i pay you, payment options, when do i pay, how do i pay"
+ },
+ "ed.chat.qa.pay.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Book a free session"
+ },
+ "ed.chat.qa.contract.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Do I have to sign a long contract?"
+ },
+ "ed.chat.qa.contract.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "It depends on the job. Work starts only when we both sign a written agreement setting out the scope, price and timeframes. After launch, support is a monthly plan or pay as you go, and your systems are set up in your own accounts, so you keep them if you stop working with us."
+ },
+ "ed.chat.qa.contract.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "contract, long contract, minimum period, lock in, locked in, cancel, cancel anytime, leave, notice period, agreement, sign"
+ },
+ "ed.chat.qa.contract.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Terms"
+ },
+ "ed.chat.qa.works.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "What if it doesn't work?"
+ },
+ "ed.chat.qa.works.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "The hours we estimate are not a guarantee, but you don't have to take them on trust. We build one automation first and you see it run on your real jobs, checked alongside the way you do it now, before you rely on it. Fixes and tweaks are free for the first 30 days after launch, and we set up monitoring where the tools allow, so most problems are caught early. For anything else, such as refunds, our team will answer you directly."
+ },
+ "ed.chat.qa.works.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "doesn't work, does not work, guarantee, money back, refund, not happy, goes wrong, risk, warranty, what if it fails"
+ },
+ "ed.chat.qa.works.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "How it works"
+ },
+ "ed.chat.qa.hosting.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Do you look after hosting and domain names?"
+ },
+ "ed.chat.qa.hosting.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "That depends on your site: our team can go through hosting and domain names with you in the free session. Your website and its accounts are set up in your own name, so you keep them if you stop working with us."
+ },
+ "ed.chat.qa.hosting.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "hosting, host my website, domain, domain name, co.nz, register a domain, move my domain, who hosts"
+ },
+ "ed.chat.qa.hosting.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Websites and portals"
+ },
+ "ed.chat.qa.edit.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can I edit my website myself?"
+ },
+ "ed.chat.qa.edit.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. Our websites are easy for you to update, with no developer needed. Where the tools allow, we set things up so you can make simple changes yourself, like editing text or adding a staff member."
+ },
+ "ed.chat.qa.edit.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "edit my website, update the site myself, change text myself, make changes, who updates the site, cms, content management"
+ },
+ "ed.chat.qa.edit.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Websites and portals"
+ },
+ "ed.chat.qa.inperson.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Do you meet in person?"
+ },
+ "ed.chat.qa.inperson.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes, when it helps. The free session can happen on site or remotely. Most of the work happens remotely, and we travel for the first walkthrough when being on site makes a real difference."
+ },
+ "ed.chat.qa.inperson.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "in person, face to face, come to my shop, visit, on site, online, remote, remotely, zoom, video call, come and see, come to my shop, come to my office"
+ },
+ "ed.chat.qa.inperson.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Book a free session"
+ },
+ "ed.chat.qa.hours.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "When can I reach you?"
+ },
+ "ed.chat.qa.hours.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "We're reachable in New Zealand hours, and you deal with one named contact who knows your business, with no ticket queue. You can leave a message here at any time."
+ },
+ "ed.chat.qa.hours.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "your hours, what are your hours, open, weekends, how quickly do you reply, respond, response time, after 5, after hours, how fast do you reply, how fast do you respond, how soon will you reply, open saturday, open on saturday, open sunday, open on weekends"
+ },
+ "ed.chat.qa.examples.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can I see examples of your work?"
+ },
+ "ed.chat.qa.examples.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "This website is one: it's in five languages, and this chat helper was built by us too. Each service and industry page shows a typical example of how an automation works. Ask our team for examples closest to your business."
+ },
+ "ed.chat.qa.examples.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "examples, portfolio, case studies, past work, websites you built, show me, previous clients, references, client list"
+ },
+ "ed.chat.qa.examples.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "AI automation"
+ },
+ "ed.chat.qa.about.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Who is behind Ambs Solutions?"
+ },
+ "ed.chat.qa.about.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Ambs Solutions is an Auckland business that helps small and growing New Zealand businesses with automation, websites and portals. You deal directly with the person who builds it: one named contact who knows your business. Only our own team works on your data."
+ },
+ "ed.chat.qa.about.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "about you, about ambs, who owns ambs, owner, founder, how long in business, company, who are you guys, background, one guy, just one guy, real company, one person business"
+ },
+ "ed.chat.qa.about.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "About us"
+ },
+ "ed.chat.qa.chatbot.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can you put a chat bot like this on my website?"
+ },
+ "ed.chat.qa.chatbot.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. This chat helper was built by us. It answers visitors' questions from your own website in their language, and offers booking or a message when it can't. Our team can talk you through one for your site."
+ },
+ "ed.chat.qa.chatbot.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "chatbot, chat bot, chat helper, chat widget, bot for my website, answer customers after hours, live chat"
+ },
+ "ed.chat.qa.chatbot.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Websites and portals"
+ },
+ "ed.chat.qa.staff.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Will this replace my staff?"
+ },
+ "ed.chat.qa.staff.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "No. It clears the repetitive work so your people can do the parts that need judgement, hands or a friendly face. The aim is to free up hours for more work, not to cut staff."
+ },
+ "ed.chat.qa.staff.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "replace staff, sack, fire staff, cut staff, lose their jobs, receptionist, job losses, redundant"
+ },
+ "ed.chat.qa.staff.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Common questions"
+ },
+ "ed.chat.qa.techy.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Do I need to be good with technology?"
+ },
+ "ed.chat.qa.techy.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "No. If you can show us how the job gets done today, that is everything we need. We handle the rest, explain it in plain words with no jargon, and train your team when it goes live."
+ },
+ "ed.chat.qa.techy.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "not technical, not techy, hopeless with tech, good with computers, tech skills, computer skills, not good with technology"
+ },
+ "ed.chat.qa.techy.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Common questions"
+ },
+ "ed.chat.qa.software.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Do I need to buy new software?"
+ },
+ "ed.chat.qa.software.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Usually not. Most automations connect the tools you already pay for, and we build around how your business already works."
+ },
+ "ed.chat.qa.software.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "buy software, new software, new computers, new system, replace my software, extra software"
+ },
+ "ed.chat.qa.software.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Connect your business apps"
+ },
+ "ed.chat.qa.shop_online.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Do you build online shops?"
+ },
+ "ed.chat.qa.shop_online.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Online shops aren't covered on our website, so please ask our team about yours. What we do for shops is the admin behind them: stock counts and reorders, price and listing updates, and a daily sales summary."
+ },
+ "ed.chat.qa.shop_online.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "online shop, online store, ecommerce, e-commerce, shopify, sell online, sell my products online, take payments online, woocommerce, pay online, customers pay online, online payments"
+ },
+ "ed.chat.qa.shop_online.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Shops and dairies"
+ },
+ "ed.chat.qa.rosters.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can you help with rosters and timesheets?"
+ },
+ "ed.chat.qa.rosters.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. A staff portal can show the roster, opening and closing steps and today's deliveries, and timesheets can be totalled from the roster ready for payroll. Many cafés run their roster in a spreadsheet, and we can work with that."
+ },
+ "ed.chat.qa.rosters.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "roster, rosters, staff rosters, timesheets, payroll, shifts, who is working, staff hours, roster keeps changing, staff roster"
+ },
+ "ed.chat.qa.rosters.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Cafés and takeaways"
+ },
+ "ed.chat.qa.stock.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can you help with stock and reorders?"
+ },
+ "ed.chat.qa.stock.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. Each morning you can get yesterday's sales and a weekly view of what's running low, so reorders happen before the shelf is empty. Suggested orders come to you to approve first. We work from your point-of-sale or inventory system's exports to Excel or Google Sheets, rather than connecting to it directly."
+ },
+ "ed.chat.qa.stock.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "stock, stock control, inventory, reorders, running low, low stock, supplier orders, stock take, stocktake"
+ },
+ "ed.chat.qa.stock.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Shops and dairies"
  }
 }
