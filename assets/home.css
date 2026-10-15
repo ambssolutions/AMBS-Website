@@ -1120,7 +1120,11 @@ html:not([data-theme=dark]).sky-night .foot-contact a:hover,html:not([data-theme
 html:not([data-theme=dark]).sky-night .foot-legal{border-top-color:rgba(237,239,248,.16)!important}
 html:not([data-theme=dark]).sky-night .foot-fine{border-top-color:rgba(237,239,248,.14)!important}
 html:not([data-theme=dark]).sky-night .fc-social .fc-soc svg path[fill="#010101"]{fill:#f2f4fa}
-.hero .docket,.hero .greet,.hero .hero-cta,.hero .hero-note,.hero .hero-sub{opacity:0}
+/* the whole hero, heading included, starts hidden and appears once: the heading used to show for a moment, vanish when its words were split for the animation, then type in again */
+.hero .docket,.hero .greet,.hero .hero-cta,.hero .hero-note,.hero .hero-sub,.hero h1{opacity:0}
+/* safety net if the page script never runs */
+@keyframes hero-safe{to{opacity:1;transform:none}}
+.hero:not(.entered) .docket,.hero:not(.entered) .greet,.hero:not(.entered) .hero-cta,.hero:not(.entered) .hero-note,.hero:not(.entered) .hero-sub,.hero:not(.entered) h1{animation:hero-safe .6s ease 3s forwards}
 .hero .docket,.hero .greet,.hero .hero-cta,.hero .hero-note,.hero .hero-sub,.hero h1{transform:translateY(22px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
 .hero.entered .greet,.hero.entered h1{opacity:1;transform:none;transition-delay:.05s}
 .hero.entered h1{transition-delay:.16s}
