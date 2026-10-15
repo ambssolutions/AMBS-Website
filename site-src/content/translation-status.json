@@ -630,5 +630,40 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "Read our privacy policy"
+ },
+ "ed.chat.talk.quality": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Here's what you can expect when you work with us, straight from how we work:"
+ },
+ "ed.chat.talk.quality_end": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "The easiest way to judge us is the free session: we look at how your work really happens and you keep the written plan, even if you don't hire us."
+ },
+ "ed.chat.label.voice": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Speak your question"
+ },
+ "ed.chat.label.listening": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Listening… speak now"
+ },
+ "ed.chat.label.mic_blocked": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "To speak your question, allow the microphone in your browser, or type it instead."
  }
 }
