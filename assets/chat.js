@@ -22,7 +22,7 @@
       greeting:"Kia ora! Pātaihia mai he aha te aha mō Ambs Solutions: ngā mahi ka whakaaunoatia e mātou, te āhua o te mahi, ngā utu, te tono rānei i tētahi wā kore utu.",not_found:"Aroha mai, kāore au i kite i tētahi whakautu i tō mātou paetukutuku. Ka taea e koe te tono waea kore utu, te waiho pātai mā te tīma, te whakapā tōtika mai rānei.",en:"Kei te reo Pākehā ngā whakautu.",thanks:"Kei te pai!",typing:"E rapu ana…",where:"Wāhi",callus:"Waea mai",emailus:"Īmēra mai"}
   };
   var EN_EXTRA={en:"",thanks:"You're welcome! Anything else?",typing:"Looking…",where:"Where",callus:"Call",emailus:"Email"};
-  var DEF={yes:"Yes.",more_on:"More on this:",langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
+  var DEF={languages:"Change language",yes:"Yes.",more_on:"More on this:",langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
   var LANGS=["en","zh","hi","pa","mi"];
   function pageLang(){var l=(document.documentElement.lang||"en").slice(0,2).toLowerCase();return LANGS.indexOf(l)>=0?l:"en"}
   /* the chat speaks the page's language, or the language the visitor writes in (Chinese, Hindi or Punjabi script switch it) */
@@ -151,8 +151,10 @@
     "body.ac-on .ac-launch{opacity:0;pointer-events:none;transform:scale(.9)}body.ac-has .totop{bottom:calc(env(safe-area-inset-bottom,0px) + 84px)!important}",
     "@media (max-width:1120px){body.ac-qbar-on .ac-launch{bottom:calc(env(safe-area-inset-bottom,0px) + 86px)}body.ac-qbar-on .totop{bottom:calc(env(safe-area-inset-bottom,0px) + 150px)!important}}",
     /* flashing, to catch the eye: a soft ring pulses out every few seconds and the green dot blinks */
-    ".ac-launch::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(36,179,40,.55);animation:ac-ring 2.4s ease-out infinite;pointer-events:none}",
-    "@keyframes ac-ring{0%{box-shadow:0 0 0 0 rgba(36,179,40,.55)}70%{box-shadow:0 0 0 14px rgba(36,179,40,0)}100%{box-shadow:0 0 0 0 rgba(36,179,40,0)}}",
+    ".ac-launch::after{content:'';position:absolute;inset:-1px;border-radius:inherit;border:2px solid rgba(36,179,40,.6);opacity:0;animation:ac-ring 2.4s ease-out infinite;pointer-events:none;will-change:transform,opacity}",
+    /* the pulse only grows and fades (no repainting), and everything holds still while the page is scrolling */
+    "@keyframes ac-ring{0%{opacity:.8;transform:scale(1)}70%{opacity:0;transform:scale(1.14,1.5)}100%{opacity:0;transform:scale(1.14,1.5)}}",
+    ".ac-launch.ac-still,.ac-launch.ac-still::after,.ac-launch.ac-still .ac-dot{animation-play-state:paused}",
     ".ac-launch .ac-dot{animation:ac-blink 1.2s ease-in-out infinite}@keyframes ac-blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}",
     ".ac-launch{animation:ac-nod 4.8s ease-in-out 3s infinite}@keyframes ac-nod{0%,86%,100%{transform:none}90%{transform:translateY(-3px) scale(1.04)}94%{transform:none}97%{transform:translateY(-2px) scale(1.02)}}",
     "@media (prefers-reduced-motion:reduce){.ac-launch,.ac-launch::after,.ac-launch .ac-dot{animation:none}}",
@@ -164,6 +166,7 @@
     ".ac-head::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:3px;background:linear-gradient(90deg,#E5352B,#F58220,#FFC21A,#24b328,#1877E0,#7B2FBE);opacity:.85}",
     ".ac-av{width:38px;height:38px;border-radius:12px;background:var(--ac-av);display:grid;place-items:center;flex:none}.ac-av svg{width:21px;height:21px}",
     ".ac-hd{flex:1;min-width:0}.ac-hd b{display:block;font:700 16px/1.2 var(--display,inherit);color:var(--ac-ink)}.ac-hd span{font-size:12.5px;color:var(--ac-muted)}",
+    ".ac-lg{border:0;background:transparent;color:var(--ac-muted);width:36px;height:36px;border-radius:10px;cursor:pointer;display:grid;place-items:center}.ac-lg[hidden]{display:none}.ac-lg:hover{background:rgba(120,130,160,.12);color:var(--ac-ink)}.ac-lg svg{width:19px;height:19px}",
     ".ac-x,.ac-re{border:0;background:transparent;color:var(--ac-muted);width:36px;height:36px;border-radius:10px;cursor:pointer;display:grid;place-items:center}.ac-x:hover,.ac-re:hover{background:rgba(120,130,160,.12);color:var(--ac-ink)}.ac-x svg,.ac-re svg{width:18px;height:18px}",
     ".ac-log{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}",
     ".ac-m{max-width:88%;padding:10px 13px;border-radius:16px;white-space:pre-line;word-wrap:break-word;animation:ac-in .35s cubic-bezier(.16,1,.3,1) both}",
@@ -197,13 +200,15 @@
     x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
     send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>',
     mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>',
+    globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z"/></svg>',
     re:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 4v4.5h4.5"/></svg>',
     bot:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5z"/><circle cx="9" cy="10" r=".6" fill="#fff"/><circle cx="12" cy="10" r=".6" fill="#fff"/><circle cx="15" cy="10" r=".6" fill="#fff"/></svg>'};
   function build(){css();
     var shade=el("div","ac-shade");root=el("div","ac-panel");root.setAttribute("role","dialog");root.setAttribute("aria-modal","false");root.setAttribute("aria-labelledby","acTitle");
-    root.innerHTML='<div class="ac-head"><span class="ac-av">'+ICO.bot+'</span><div class="ac-hd"><b id="acTitle"></b><span class="ac-sub"></span></div><button type="button" class="ac-re">'+ICO.re+'</button><button type="button" class="ac-x">'+ICO.x+'</button></div><div class="ac-log" aria-live="polite"></div><form class="ac-in" autocomplete="off"><input type="text" enterkeyhint="send" maxlength="300"><button type="button" class="ac-mic" hidden>'+ICO.mic+'</button><button type="submit">'+ICO.send+'</button></form>';
+    root.innerHTML='<div class="ac-head"><span class="ac-av">'+ICO.bot+'</span><div class="ac-hd"><b id="acTitle"></b><span class="ac-sub"></span></div><button type="button" class="ac-lg" hidden>'+ICO.globe+'</button><button type="button" class="ac-re">'+ICO.re+'</button><button type="button" class="ac-x">'+ICO.x+'</button></div><div class="ac-log" aria-live="polite"></div><form class="ac-in" autocomplete="off"><input type="text" enterkeyhint="send" maxlength="300"><button type="button" class="ac-mic" hidden>'+ICO.mic+'</button><button type="submit">'+ICO.send+'</button></form>';
     document.body.appendChild(shade);document.body.appendChild(root);log=root.querySelector(".ac-log");input=root.querySelector("input");
     root.querySelector(".ac-x").addEventListener("click",close);shade.addEventListener("click",close);
+    root.querySelector(".ac-lg").addEventListener("click",function(){state.msgs=state.msgs.filter(function(m){return m.t!=="langs"});[].forEach.call(log.querySelectorAll(".ac-langs"),function(x){x.remove()});addBot({t:"langs"});var lg=log.querySelector(".ac-langs");if(lg&&lg.scrollIntoView)lg.scrollIntoView({block:"nearest"})});
     root.querySelector(".ac-re").addEventListener("click",function(){state.msgs=[];state.lang="";state.noRoman=0;save();labels();log.innerHTML="";welcome();input.focus()});
     root.querySelector("form").addEventListener("submit",function(ev){ev.preventDefault();var v=input.value.trim();if(!v)return;input.value="";ask(v)});
     document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&state.open)close()});
@@ -222,7 +227,7 @@
       try{REC.start();recOn=true;b.classList.add("on");input.placeholder=L("listening");if(window.gtag)gtag("event","chat_voice")}catch(e){recOn=false}})}
   function stopVoice(){if(REC&&recOn)try{REC.stop()}catch(e){}}
   function labels(){if(!root)return;root.querySelector("#acTitle").textContent=L("title");root.querySelector(".ac-sub").textContent=L("subtitle");input.placeholder=L("placeholder");
-    root.querySelector('.ac-in button[type="submit"]').setAttribute("aria-label",L("send"));var mb=root.querySelector(".ac-mic");if(mb){mb.setAttribute("aria-label",L("voice"));mb.title=L("voice")}root.querySelector(".ac-x").setAttribute("aria-label",L("close"));root.querySelector(".ac-re").setAttribute("aria-label",L("restart"));root.querySelector(".ac-re").title=L("restart");
+    root.querySelector('.ac-in button[type="submit"]').setAttribute("aria-label",L("send"));var mb=root.querySelector(".ac-mic");if(mb){mb.setAttribute("aria-label",L("voice"));mb.title=L("voice")}root.querySelector(".ac-x").setAttribute("aria-label",L("close"));root.querySelector(".ac-re").setAttribute("aria-label",L("restart"));var lgb=root.querySelector(".ac-lg");lgb.hidden=!(DATA&&chatLangs().length>1);lgb.setAttribute("aria-label",L("languages"));lgb.title=L("languages");root.querySelector(".ac-re").title=L("restart");
     if(openBtn)openBtn.querySelector("span:last-child").textContent=L("launcher");}
   function load(){if(DATA)return Promise.resolve(DATA);if(LOADING)return LOADING;
     LOADING=fetch(INDEX).then(function(r){return r.json()}).then(function(d){DATA=d;prep();labels();return d});return LOADING}
@@ -360,6 +365,10 @@
     if(rl){state.msgs=state.msgs.filter(function(m){return m.t!=="english"});save();if(log)[].forEach.call(log.querySelectorAll(".ac-enrow"),function(x){x.remove()});setTimeout(function(){addBot({t:"english"})},0)}
     var tk=talkKey(s);
     /* "do you speak Hindi?": show the languages, with the buttons to switch */
+    var LWORD={hi:/^(hindi|हिन्दी|हिंदी)$/,pa:/^(punjabi|panjabi|ਪੰਜਾਬੀ|पंजाबी)$/,zh:/^(chinese|mandarin|中文|普通话|汉语|華語)$/,mi:/^(maori|te reo|te reo maori|reo maori)$/,en:/^(english|angrezi|अंग्रेज़ी|अंग्रेजी|ਅੰਗਰੇਜ਼ੀ|英文|英语)$/};
+    var lw=norm(s).replace(/\s+/g," ").trim().replace(/^(in|speak|talk in|reply in|chat in|answer in|can you speak|do you speak|can we talk in|can you reply in)\s+/,"").replace(/\s+(please|plz|pls|ji|language|bhasha|ma)$/,"").trim(),lpick="";
+    Object.keys(LWORD).forEach(function(c){if(LWORD[c].test(lw))lpick=c});
+    if(lpick&&chatLangs().indexOf(lpick)>=0){setLang(lpick);return}
     if(/\b(do|can|could) (you|u) (speak|talk|chat|understand|reply|answer|write)( in)? (hindi|punjabi|panjabi|chinese|mandarin|maori|te reo|english|other languages|my language|languages)\b|\bwhat languages\b/.test(norm(s))){if(/^(do|can|could)\b/.test(norm(s).trim()))addBot({t:"text",x:L("yes")});addBot({t:"langs"});return}
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="knowledge"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
@@ -444,8 +453,10 @@
     openBtn.setAttribute("aria-haspopup","dialog");openBtn.addEventListener("click",open);document.body.appendChild(openBtn);document.body.classList.add("ac-has");
     /* the chat button always stands on its own; on phones it moves up above the Call / Book bar while that bar shows */
     var qb=document.querySelector(".qbar");if(qb){
-      var sync=function(){var on=getComputedStyle(qb).display!=="none"&&!qb.classList.contains("away");document.body.classList.toggle("ac-qbar-on",on)};
-      new MutationObserver(sync).observe(qb,{attributes:true,attributeFilter:["class","style"]});addEventListener("resize",sync);sync()}
+      /* whether the bar is shown at this screen width is checked on resize only, never while scrolling */
+      var shown=getComputedStyle(qb).display!=="none",sync=function(){var on=shown&&!qb.classList.contains("away");if(document.body.classList.contains("ac-qbar-on")!==on)document.body.classList.toggle("ac-qbar-on",on)};
+      new MutationObserver(sync).observe(qb,{attributes:true,attributeFilter:["class"]});addEventListener("resize",function(){shown=getComputedStyle(qb).display!=="none";sync()});sync()}
+    var stillT;addEventListener("scroll",function(){if(!openBtn.classList.contains("ac-still"))openBtn.classList.add("ac-still");clearTimeout(stillT);stillT=setTimeout(function(){openBtn.classList.remove("ac-still")},300)},{passive:true});
     if(location.hash==="#ask")open();else if(state.open)open();
     /* the homepage switches language without reloading: follow it */
     new MutationObserver(function(){if(state.lang){state.lang="";save()}labels();

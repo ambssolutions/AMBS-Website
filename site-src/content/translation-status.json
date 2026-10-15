@@ -1064,5 +1064,12 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "AI automation"
+ },
+ "ed.chat.label.languages": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Change language"
  }
 }

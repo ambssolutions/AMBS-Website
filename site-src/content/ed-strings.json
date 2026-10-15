@@ -7,6 +7,7 @@
  "ed.chat.label.error": "Sorry, that didn't send. Please try again, or email us.",
  "ed.chat.label.helpful": "Anything else I can help with?",
  "ed.chat.label.langs_line": "I also speak {langs}. Just type in your language, or tap one below.",
+ "ed.chat.label.languages": "Change language",
  "ed.chat.label.launcher": "Ask us",
  "ed.chat.label.listening": "Listening… speak now",
  "ed.chat.label.message": "Leave a message",
