@@ -72,7 +72,7 @@
   {
    "id": "book",
    "q": "How do I book a free session?",
-   "also": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today, talk to someone, talk to a person, speak to someone, arrange a meeting, set up a meeting, meet with you, talk tomorrow, call tomorrow",
+   "also": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today, talk to someone, talk to a person, speak to someone, meet with you, talk tomorrow, call tomorrow, arrange a meeting, set up a meeting",
    "a": "Book a free session and we look at how your work really happens. You leave with a written plan and an hours estimate, yours to keep. There is no cost and no jargon.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -152,7 +152,7 @@
   {
    "id": "free",
    "q": "What happens in the free session?",
-   "also": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step, catch, whats the catch, really free, how long is the free session, what do we cover, written plan, free consultation, is the consultation free",
+   "also": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step, catch, whats the catch, really free, how long is the free session, what do we cover, written plan, free consultation, is the consultation free, get ready before our first meeting",
    "a": "We sit with whoever actually does the job and look at how the work really happens today. You leave with a written plan and an hours estimate, yours to keep even if you don't hire us. There is no cost and no jargon, and it can happen on site or remotely.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -258,6 +258,14 @@
    "q": "How much does a website cost?",
    "also": "website price, website cost, how much for a website, cost of a site, 5 page site, website quote, site price, new website cost, incl gst, rough cost, set me back, cost for a basic site, new website for my business cost",
    "a": "It depends on the pages, languages and features you need, so we don't publish a website price list. After the free session you get a written plan, and the scope and price are agreed in writing before any work starts.",
+   "link": "/services/websites-and-portals",
+   "link_label": "Websites and portals"
+  },
+  {
+   "id": "web_time",
+   "q": "How long does a website take?",
+   "also": "how long for a website, website timeline, how long to build a website, how long does a website take, when will my website be ready, how many weeks for a website, website ready, time to build a website, how quickly can you build a website",
+   "a": "Usually two to four weeks, depending on the pages, languages and features you need.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites and portals"
   },

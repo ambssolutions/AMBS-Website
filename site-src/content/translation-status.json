@@ -384,7 +384,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today, talk to someone, talk to a person, speak to someone, arrange a meeting, set up a meeting, meet with you, talk tomorrow, call tomorrow"
+  "_en": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today, talk to someone, talk to a person, speak to someone, meet with you, talk tomorrow, call tomorrow, arrange a meeting, set up a meeting"
  },
  "ed.chat.qa.book.ll": {
   "hi": "auto",
@@ -699,7 +699,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step, catch, whats the catch, really free, how long is the free session, what do we cover, written plan, free consultation, is the consultation free"
+  "_en": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step, catch, whats the catch, really free, how long is the free session, what do we cover, written plan, free consultation, is the consultation free, get ready before our first meeting"
  },
  "ed.chat.qa.free.ll": {
   "hi": "auto",
@@ -1659,5 +1659,33 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "Terms"
+ },
+ "ed.chat.qa.web_time.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "How long does a website take?"
+ },
+ "ed.chat.qa.web_time.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Usually two to four weeks, depending on the pages, languages and features you need."
+ },
+ "ed.chat.qa.web_time.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "how long for a website, website timeline, how long to build a website, how long does a website take, when will my website be ready, how many weeks for a website, website ready, time to build a website, how quickly can you build a website"
+ },
+ "ed.chat.qa.web_time.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Websites and portals"
  }
 }
