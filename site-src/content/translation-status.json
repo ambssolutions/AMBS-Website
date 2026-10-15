@@ -496,7 +496,7 @@
   "mi": "auto",
   "pa": "auto",
   "zh": "auto",
-  "_en": "app, mobile app, phone app, portal, staff portal, customer portal, client login, dashboard, iphone, android"
+  "_en": "app, mobile app, phone app, portal, staff portal, customer portal, client login, iphone, android"
  },
  "ed.chat.qa.app.ll": {
   "hi": "auto",
@@ -980,5 +980,89 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "How to automate quotes and invoices"
+ },
+ "ed.chat.label.yes": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes."
+ },
+ "ed.chat.qa.tax.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can you do my taxes or accounts?"
+ },
+ "ed.chat.qa.tax.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "No, we don't do tax returns or give tax advice. That's a job for your accountant. What we can do is make the records behind it tidier: invoices going straight into Xero, receipts filed as the work happens, and fuel and mileage logs kept for you, so they're easier to hand over."
+ },
+ "ed.chat.qa.tax.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books"
+ },
+ "ed.chat.qa.dashboards.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Do you build dashboards?"
+ },
+ "ed.chat.qa.dashboards.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. A live dashboard shows sales, jobs and cash in one view that updates itself, wherever you are. It's built around the numbers you care about, alerts you when a number moves outside your normal range, and is easy to share with your team or accountant."
+ },
+ "ed.chat.qa.dashboards.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts"
+ },
+ "ed.chat.qa.dashboards.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Websites, portals and dashboards"
+ },
+ "ed.chat.qa.replies.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can you help with customer replies and Google reviews?"
+ },
+ "ed.chat.qa.replies.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. Opening hours, pricing and directions are answered quickly on your website and by email, and replies to Google reviews are drafted in your own tone for you to approve. Urgent messages are flagged to you straight away."
+ },
+ "ed.chat.qa.replies.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "google reviews, reviews, review replies, customer replies, enquiries, emails, messages, answer customers, faq, opening hours questions"
+ },
+ "ed.chat.qa.replies.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "AI automation"
  }
 }
