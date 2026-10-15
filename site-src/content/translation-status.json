@@ -910,5 +910,40 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "I also speak {langs}. Just type in your language, or tap one below."
+ },
+ "ed.chat.label.more_on": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "More on this:"
+ },
+ "ed.chat.qa.noshow.q": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Can you help reduce no-shows?"
+ },
+ "ed.chat.qa.noshow.a": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "Yes. We set up confirmation, reminder and rebooking texts that cut down no-shows without anyone chasing. They work with the booking system you already use, cancelled spots can be offered to people on a waitlist, and a follow-up text after the visit can ask for a review."
+ },
+ "ed.chat.qa.noshow.also": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms"
+ },
+ "ed.chat.qa.noshow.ll": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "How to reduce no-shows"
  }
 }

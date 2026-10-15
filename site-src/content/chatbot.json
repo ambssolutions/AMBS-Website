@@ -56,6 +56,7 @@
   "error": "Sorry, that didn't send. Please try again, or email us.",
   "helpful": "Anything else I can help with?",
   "in_english": "Reply in English",
+  "more_on": "More on this:",
   "langs_line": "I also speak {langs}. Just type in your language, or tap one below.",
   "restart": "Start again",
   "close": "Close",
@@ -207,6 +208,14 @@
    "a": "Yes. When an automation goes live we hand over the logins and train your team to use it, in plain words. Training can be in English, Hindi or Punjabi, whichever your team prefers.",
    "link": "/#how",
    "link_label": "How it works"
+  },
+  {
+   "id": "noshow",
+   "q": "Can you help reduce no-shows?",
+   "also": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms",
+   "a": "Yes. We set up confirmation, reminder and rebooking texts that cut down no-shows without anyone chasing. They work with the booking system you already use, cancelled spots can be offered to people on a waitlist, and a follow-up text after the visit can ask for a review.",
+   "link": "/guides/reduce-no-shows-with-booking-reminders",
+   "link_label": "How to reduce no-shows"
   }
  ]
 }
