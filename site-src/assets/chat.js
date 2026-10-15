@@ -104,6 +104,7 @@
     ".qbar a.qb-ask{background:linear-gradient(180deg,#d9e9ff,#b5d3ff);color:#0d2a55}html[data-theme=dark] .qbar a.qb-ask{color:#0d2a55}",
     "@media (max-width:1120px){body.ac-qbar-on .ac-launch{opacity:0;pointer-events:none;transform:translateY(12px)}.qbar a{min-width:92px!important;padding:0 .8rem!important}}",
     ".ac-panel{position:fixed;right:calc(env(safe-area-inset-right,0px) + 20px);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);z-index:300;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100dvh - 40px));display:flex;flex-direction:column;background:var(--ac-bg);color:var(--ac-ink);border:1px solid var(--ac-line);border-radius:22px;box-shadow:0 30px 70px -24px rgba(10,14,30,.55);overflow:hidden;font:15px/1.5 var(--body,'Instrument Sans',Arial,sans-serif);opacity:0;visibility:hidden;transform:translateY(16px) scale(.98);transform-origin:bottom right;transition:opacity .3s ease,transform .45s cubic-bezier(.16,1,.3,1),visibility 0s linear .45s}",
+    "@media (max-width:640px){.ac-panel.peek{height:auto;max-height:min(58dvh,460px)}.ac-shade.peek{display:none}}",
     ".ac-panel.on{opacity:1;visibility:visible;transform:none;transition:opacity .3s ease,transform .45s cubic-bezier(.16,1,.3,1),visibility 0s}",
     "@media (max-width:640px){.ac-panel{right:0;left:0;bottom:0;width:100%;height:min(88dvh,720px);border-radius:22px 22px 0 0;border-bottom:0}}",
     ".ac-head{display:flex;align-items:center;gap:12px;padding:14px 14px 12px 18px;border-bottom:1px solid var(--ac-line);position:relative;background:var(--ac-head)}",
@@ -150,6 +151,8 @@
     root.querySelector(".ac-re").addEventListener("click",function(){state.msgs=[];state.lang="";save();labels();log.innerHTML="";welcome();input.focus()});
     root.querySelector("form").addEventListener("submit",function(ev){ev.preventDefault();var v=input.value.trim();if(!v)return;input.value="";ask(v)});
     document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&state.open)close()});
+    var unpeek=function(){if(root.classList.contains("peek")){root.classList.remove("peek");shade.classList.remove("peek");scroll()}};
+    root.addEventListener("click",function(ev){if(!ev.target.closest(".ac-x"))unpeek()});input.addEventListener("focus",unpeek);
     root._shade=shade;voiceSetup();labels()}
   /* speaking a question: the browser turns speech into text (Chrome, Edge and Safari; the button is hidden elsewhere) */
   var REC=null,recOn=false;
@@ -296,7 +299,9 @@
   /* the chat starts the conversation: on a computer the window opens with a hello; on a phone a small message
      appears instead, so the page isn't covered */
   function initiate(){sset("ambs:nudged","1");
-    if(NUDGE_OPEN&&window.matchMedia("(min-width:900px)").matches&&!state.msgs.length){if(!root)build();state.auto=true;
+    if(NUDGE_OPEN&&!state.msgs.length){if(!root)build();state.auto=true;
+      /* on a phone it opens as a short window at the bottom, so most of the page stays in view; tapping it opens it fully */
+      if(window.matchMedia("(max-width:640px)").matches){root.classList.add("peek");root._shade.classList.add("peek")}
       load().then(function(){if(state.msgs.length)return;addBot({t:"text",x:L("nudge")});addBot({t:"chips",items:sugg()})}).catch(function(){});
       open(true);if(window.gtag)gtag("event","chat_auto_open");return}
     showNudge()}
@@ -308,7 +313,8 @@
   function hideNudge(){if(!nudgeEl)return;var n=nudgeEl;nudgeEl=null;n.classList.remove("on");setTimeout(function(){n.remove()},450)}
 
   /* ---- the button that opens it ---- */
-  function start(){restore();css();
+  function start(){if(/[?&]chat=reset\b/.test(location.search)){try{localStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged");sessionStorage.removeItem("ambs:chat")}catch(e){}}
+    restore();css();
     openBtn=el("button","ac-launch");openBtn.type="button";openBtn.innerHTML='<span class="ac-dot" aria-hidden="true"></span>'+ICO.chat.replace("<svg",'<svg style="display:none"')+'<span></span>';openBtn.querySelector("span:last-child").textContent=L("launcher");
     openBtn.setAttribute("aria-haspopup","dialog");openBtn.addEventListener("click",open);document.body.appendChild(openBtn);document.body.classList.add("ac-has");
     var qb=document.querySelector(".qbar");if(qb&&!qb.querySelector(".qb-ask")){var a=el("a","qb-ask");a.href="#ask";a.innerHTML=ICO.chat+"<span></span>";a.querySelector("span").textContent=L("launcher");
