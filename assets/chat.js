@@ -28,8 +28,37 @@
   /* the chat speaks the page's language, or the language the visitor writes in (Chinese, Hindi or Punjabi script switch it) */
   function lang(){return (state&&state.lang)||pageLang()}
   function scriptLang(t){if(/[\u0A00-\u0A7F]/.test(t))return"pa";if(/[\u0900-\u097F]/.test(t))return"hi";if(/[\u3400-\u9FFF]/.test(t))return"zh";
-    if(/[āēīōū]/i.test(t)||/\b(kia ora|tena koe|tēnā koe|ka pai|nga mihi|ngā mihi|he aha|kei hea|e hia|me pehea|me pēhea|morena|mōrena)\b/i.test(t))return"mi";
+    /* "kia ora" on its own is everyday New Zealand English too, so it doesn't switch the language */
+    if(/[āēīōū]/i.test(t)||/\b(tena koe|tēnā koe|ka pai|nga mihi|ngā mihi|he aha|kei hea|e hia|me pehea|me pēhea)\b/i.test(t))return"mi";
     if(/^[\x00-\x7F’‘“”…–—]+$/.test(t)&&/[a-z]{3,}/i.test(t))return"en";return""}
+  /* Punjabi, Hindi, te reo Māori or Chinese typed in English letters ("kinna kharcha hai", "aap kya karte ho", "kei te pehea koe", "nihao") */
+  var RW={pa:"tusi tussi tusin tuhada tuhadi tuhade tuhanu tuhannu sanu saanu mainu kinna kinne kinni kida kidda kiddan kive kiwe kiven kivein kithe kitthe kado kadon karde kardi karda hunda hundi hega haige dasso daso dasdo chahida lagda lagu vich naal hor changa vadhiya vadiya sasriakal",
+    hi:"aap aapka aapki aapke aapko kya kyaa kaise kaisa kaisi kitna kitne kitni kahan kahaan kab kaun kyun kyon mujhe mera meri humein hame karte karta karti sakte chahiye nahi nahin accha acha theek thik namaste namaskar dhanyavad dhanyawad shukriya bataiye bataye batao kijiye liye lagega lagta",
+    mi:"kia ora kei pehea koe korua koutou ahau tino rawe mahi utu whare hea tena tenei aroha whanau pakihi rorohiko paetukutuku taupanga watea whakaaro korero patai awhina ingoa kaimahi haere hia aha morena",
+    zh:"nihao xiexie duoshao zenme shenme nimen women keyi gongsi wangzhan jiage yuyue zaijian haode"},RWM={};
+  Object.keys(RW).forEach(function(g){RW[g].split(" ").forEach(function(w){RWM[w]=g})});
+  function romanLang(t){if(!/^[\x00-\x7F’‘“”…–—āēīōūĀĒĪŌŪ]+$/.test(t))return"";var n={pa:0,hi:0,mi:0,zh:0},w=norm(t).replace(/sat s(h)?ri akal/g,"sasriakal").replace(/ni hao/g,"nihao").replace(/xie xie/g,"xiexie").split(" ");
+    var en=0;w.forEach(function(x){if(RWM[x]&&!/^(kia|ora|morena)$/.test(x))n[RWM[x]]++;else if(STOP[x]&&x!=="hi")en++});
+    /* mostly English words: it's English (e.g. "Kia ora, how much does it cost?") */
+    if(en>n.pa+n.hi+n.mi+n.zh)return"";
+    if(n.mi>=2||/\b(e hia|awhina|pakihi|ka kite)\b/.test(w.join(" ")))return"mi";if(n.zh)return"zh";
+    if(n.pa&&n.pa>=n.hi)return"pa";if(n.hi)return"hi";return""}
+  /* what those words mean, so the search can find the answer */
+  var RMEAN=[[/\b(kharcha|kharch|kharche|kimat|keemat|kemat|daam|paisa|paise|fees?|utu|jiage|qian|duoshao)\b/,"cost price"],
+    [/\b(samay|samaa|time|waqt|wakt|din|hafte|hafta|mahina|lagda|lagega|lagta|lagegi|lagu|kado|kadon|kab)\b/,"how long time weeks"],
+    [/\b(milna|milo|mil|mulakat|mulaqat|appointment|meeting|hui|yuyue|book|booking)\b/,"book session"],
+    [/\b(kahan|kahaan|kithe|kitthe|hea)\b/,"where based location"],[/\b(kaise|kive|kiven|kiwe|kivein|pehea|zenme)\b/,"how work process"],
+    [/\b(karte|karde|karda|kardi|mahi|zuo)\b/,"what automate services"],[/\b(paetukutuku|wangzhan)\b/,"website"],[/\b(taupanga|yingyong)\b/,"app portal"],
+    [/\b(madad|maddad|awhina|bangzhu)\b/,"help"],[/\b(surakshit|surakhit|surakhiyat)\b/,"data safe privacy"],[/\b(waea|dianhua)\b/,"contact phone"],
+    [/\b(malik|maalik)\b/,"own"],[/\b(dukan|dukaan|kaarobar|karobar|pakihi)\b/,"business"],[/\b(kaimahi|karamchari|mulazam)\b/,"staff"]];
+  /* the question for the search: what the words mean, plus any English words in it ("website", "app", "Xero"); the rest are left out */
+  var RSTOP={};("hai hain ho hoga hovega ji ki ka ke da di de nu nun te ne se mein me vich to toh bhi vi sakte sakde sakda sakdi skde bana banana banao banaunde kar karo kam kaam aa e o haan han nahi na koi kuch kujh sab ek ik apna apne sada sade tuhada saada mai main menu mainu ko wala wale vala vale te i a he ki ko ka nei mo ma ne de le ba").split(" ").forEach(function(w){RSTOP[w]=1});
+  function romanMeaning(t){var w=norm(t),out=[],time=RMEAN[1][0].test(w);
+    RMEAN.forEach(function(m){if(m[0].test(w))out.push(m[1])});
+    if(!time&&/\b(kitna|kitne|kitni|kinna|kinne|kinni|hia)\b/.test(w))out.push("cost price");
+    if(/\b(bana|banana|banao|banaunde|banande|banate|bnaa)\b/.test(w))out.push("build");
+    w.split(" ").forEach(function(x){if(x&&!RWM[x]&&!RSTOP[x]&&!RMEAN.some(function(m){return m[0].test(x)}))out.push(x)});
+    return out.join(" ")}
   function sugg(){var b=BT();return((lang()!=="en"&&b.suggestions)||(DATA&&DATA.bot&&DATA.bot.suggestions)||[]).slice(0,6)}
   function BT(){return DATA&&DATA.bot_tr&&DATA.bot_tr[lang()]||{}}
   function L(k){var b=DATA&&DATA.bot||{},lab=b.labels||{},v=k==="greeting"||k==="not_found"?b[k]:lab[k],tr=TR[lang()],bt=BT();
@@ -87,7 +116,7 @@
   /* ---- the window ---- */
   var root,log,input,openBtn,state={open:false,msgs:[]},lastQ="";
   function el(tag,cls,txt){var x=document.createElement(tag);if(cls)x.className=cls;if(txt!=null)x.textContent=txt;return x}
-  function save(){try{sessionStorage.setItem("ambs:chat",JSON.stringify({open:state.open,lang:state.lang||"",msgs:state.msgs.slice(-40)}))}catch(e){}}
+  function save(){try{sessionStorage.setItem("ambs:chat",JSON.stringify({open:state.open,lang:state.lang||"",noRoman:state.noRoman||0,msgs:state.msgs.slice(-40)}))}catch(e){}}
   function restore(){try{var s=JSON.parse(sessionStorage.getItem("ambs:chat")||"null");if(s&&s.msgs)state=s}catch(e){}}
   function css(){if(document.getElementById("ambs-chat-css"))return;var s=document.createElement("style");s.id="ambs-chat-css";s.textContent=[
     ".ac-panel,.ac-nudge{--ac-bg:#fff;--ac-head:#fff;--ac-ink:#14172b;--ac-muted:#5b6479;--ac-line:rgba(30,45,80,.11);--ac-line2:rgba(30,45,80,.18);--ac-soft:#f4f7fc;--ac-bot:#f1f5fc;--ac-card:#fff;--ac-chip:#fff;--ac-link:#1877e0;--ac-av:#14172b;color-scheme:light}",
@@ -153,7 +182,7 @@
     root.innerHTML='<div class="ac-head"><span class="ac-av">'+ICO.bot+'</span><div class="ac-hd"><b id="acTitle"></b><span class="ac-sub"></span></div><button type="button" class="ac-re">'+ICO.re+'</button><button type="button" class="ac-x">'+ICO.x+'</button></div><div class="ac-log" aria-live="polite"></div><form class="ac-in" autocomplete="off"><input type="text" enterkeyhint="send" maxlength="300"><button type="button" class="ac-mic" hidden>'+ICO.mic+'</button><button type="submit">'+ICO.send+'</button></form>';
     document.body.appendChild(shade);document.body.appendChild(root);log=root.querySelector(".ac-log");input=root.querySelector("input");
     root.querySelector(".ac-x").addEventListener("click",close);shade.addEventListener("click",close);
-    root.querySelector(".ac-re").addEventListener("click",function(){state.msgs=[];state.lang="";save();labels();log.innerHTML="";welcome();input.focus()});
+    root.querySelector(".ac-re").addEventListener("click",function(){state.msgs=[];state.lang="";state.noRoman=0;save();labels();log.innerHTML="";welcome();input.focus()});
     root.querySelector("form").addEventListener("submit",function(ev){ev.preventDefault();var v=input.value.trim();if(!v)return;input.value="";ask(v)});
     document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&state.open)close()});
     var unpeek=function(){if(root.classList.contains("peek")){root.classList.remove("peek");shade.classList.remove("peek");scroll()}};
@@ -193,6 +222,8 @@
       if(m.links&&m.links.length){b.appendChild(el("div","ac-note",L("related"))).style.marginTop="8px";var box=el("div","ac-links");m.links.forEach(function(k){var a=el("a",null,k.t);a.href=k.u;if(k.s)a.appendChild(el("small",null,k.s));a.addEventListener("click",nav);box.appendChild(a)});b.appendChild(box)}
       log.appendChild(b)}
     else if(m.t==="note"){log.appendChild(el("div","ac-note",m.x))}
+    else if(m.t==="english"){if(m.done)return;b=el("div","ac-chips ac-enrow");var en=el("button","ac-chip","🔤 "+((DATA&&DATA.bot&&DATA.bot.labels&&DATA.bot.labels.in_english)||"Reply in English"));en.type="button";
+      en.addEventListener("click",function(){m.done=true;state.noRoman=true;state.lang="en";save();labels();b.remove();if(lastQ){var t=typing();setTimeout(function(){t.remove();answer(lastQ)},900)}});b.appendChild(en);log.appendChild(b)}
     else if(m.t==="chips"){b=el("div","ac-chips");(m.items||[]).forEach(function(q){var c=el("button","ac-chip",q);c.type="button";c.addEventListener("click",function(){ask(q)});b.appendChild(c)});log.appendChild(b)}
     else if(m.t==="actions"){b=el("div","ac-chips");var bk=el("a","ac-chip go","📅 "+L("book"));bk.href=(DATA&&DATA.biz&&DATA.biz.book)||"/#book";bk.addEventListener("click",nav);b.appendChild(bk);
       var ms=el("button","ac-chip","✉️ "+L("message"));ms.type="button";ms.addEventListener("click",function(){addBot({t:"form",q:m.q||lastQ})});b.appendChild(ms);
@@ -254,7 +285,15 @@
     ["who",/^(你是谁|您是谁|你叫什么|आप कौन हैं|तुम कौन हो|आपका नाम|ਤੁਸੀਂ ਕੌਣ ਹੋ|ਤੁਹਾਡਾ ਨਾਮ|ko wai koe)[?？!\s]*$/i],
     ["thanks",/^(谢谢|多谢|感谢|谢了|धन्यवाद|शुक्रिया|थैंक्स|ਧੰਨਵਾਦ|ਸ਼ੁਕਰੀਆ|ਸ਼ੁਕਰੀਆ ਜੀ|ਥੈਂਕਸ|ngā mihi|nga mihi|kia ora rawa)[!！。.\s]*$/i],
     ["bye",/^(再见|拜拜|अलविदा|फिर मिलेंगे|बाय|ਅਲਵਿਦਾ|ਫਿਰ ਮਿਲਾਂਗੇ|ਬਾਏ|ka kite|ka kite anō|ka kite ano|haere rā)[!！。.\s]*$/i],
-    ["ok",/^(好|好的|行|嗯|ठीक है|अच्छा|हाँ|ओके|ਠੀਕ ਹੈ|ਵਧੀਆ|ਹਾਂ|ਓਕੇ|āe|ae|ka pai)[!！。.\s]*$/i]];
+    ["ok",/^(好|好的|行|嗯|ठीक है|अच्छा|हाँ|ओके|ਠੀਕ ਹੈ|ਵਧੀਆ|ਹਾਂ|ਓਕੇ|āe|ae|ka pai)[!！。.\s]*$/i],
+    /* the same, typed in English letters */
+    ["greet",/^(namaste|namaskar|sat s(h)?ri akal|ssa|ni ?hao|salaam)( ji)?[!.\s]*$/i],
+    ["how_are_you",/\b(kaise ho|kaise hain|kaisa hai|kya haal|ki haal|kidda|kiddan|kida|kive ho|kiven ho|ni hao ma|nihao ma)\b/i],
+    ["human",/\b(insaan|insan|banda) (ho|aa|hai)|\b(bot|robot) (ho|aa|hai)\b|\bzhen ?ren\b/i],
+    ["who",/^(aap kaun (ho|hain)|tusi kaun (ho|o)|ni shi shei)[?!\s]*$/i],
+    ["thanks",/^((bahut |bohat )?(dhanyavad|dhanyawad|shukriya|thanks ji)|xie ?xie)( ji)?[!.\s]*$/i],
+    ["bye",/^(alvida|phir milenge|fir milange|phir milange|zai ?jian)( ji)?[!.\s]*$/i],
+    ["ok",/^(theek hai|thik hai|thik aa|theek aa|acha|accha|achha|haan|ok|hao ?de)( ji)?[!.\s]*$/i]];
   function talkKey(q){var raw=String(q||"").trim().toLowerCase();for(var j=0;j<TALKX.length;j++)if(TALKX[j][1].test(raw))return TALKX[j][0];var t=norm(q).replace(/\s+/g," ").trim().replace(/\b(i|what|it|how|that|you|there|who|we|they) (m|s|re|ll|ve|d)\b/g,"$1$2").replace(/^(um+|so|well|oh|ok so|hey) /,"");if(!t)return"";
     /* a greeting with a question after it is a question, unless it's just "how are you" */
     var g=t.replace(/^(hi+|hello+|hey+|kia ora|gday|good (morning|afternoon|evening)) (there |team )?/,"");
@@ -268,8 +307,14 @@
     return v}
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
     var t=typing();load().then(function(){setTimeout(function(){t.remove();answer(q)},1800+Math.min(600,q.length*6))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
-  function answer(q){var s=q.trim(),sl=scriptLang(s);
-    if(sl&&sl!==lang()){state.lang=sl===pageLang()?"":sl;save();labels()}
+  function answer(q){var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
+    /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
+    sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
+    /* still understood after "Reply in English"; only the reply language stays English */
+    if(rl0){sq=romanMeaning(sq)||sq;if(rl)sl=rl}
+    if(sl&&sl!==lang()&&!(sl==="en"&&state.noRoman&&lang()==="en")){state.lang=sl===pageLang()?"":sl;save();labels()}
+    /* the "Reply in English" button follows the latest answer */
+    if(rl){state.msgs=state.msgs.filter(function(m){return m.t!=="english"});save();if(log)[].forEach.call(log.querySelectorAll(".ac-enrow"),function(x){x.remove()});setTimeout(function(){addBot({t:"english"})},0)}
     var tk=talkKey(s);
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
@@ -277,12 +322,14 @@
     if(QUALITY.test(s)){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
         var lines=w.why.map(function(x){return"✓ "+x.replace(/\.$/,"")}).concat((w.trust||[]).map(function(t){return"✓ "+t[0]+(t[1]?": "+(t[1].match(/^[^.!?。।]*[.!?。।]?/)||[t[1]])[0]:"")}));
         addBot({t:"answer",x:talk("quality")+"\n\n"+lines.join("\n")+"\n\n"+talk("quality_end"),u:"/#why",l:""});addBot({t:"actions",q:s});return}}
-    var res=search(s),top=res[0],wantsContact=CONTACT.test(s);
+    var res=search(sq),top=res[0],wantsContact=CONTACT.test(s);
     var good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||top.D.d.k==="faq"||top.s>8))),links=[],used={};
     if(wantsContact&&!(good&&top.D.d.k==="qa"&&top.cov>=.67)){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(good){var d=top.D.d;used[d.u||"_"]=1;
+      /* matched in English: give the same answer in the visitor's language when we have it */
+      if(lang()!=="en"&&(d.g||"en")==="en"&&d.i){for(var j=0;j<DOCS.length;j++){var o=DOCS[j].d;if(o.i===d.i&&o.g===lang()){d=o;break}}}
       if(d.k==="qa"||d.k==="faq"){addBot({t:"answer",title:d.k==="faq"?d.q:"",x:d.a,u:d.u&&d.u!==location.pathname?d.u:"",l:d.l||""})}
-      else addBot({t:"answer",title:d.t,x:snippet(d,s,320),u:d.u,l:""});
+      else addBot({t:"answer",title:d.t,x:snippet(d,sq,320),u:d.u,l:""});
       if(lang()!=="en"&&(d.g||"en")==="en"&&L("en"))addBot({t:"note",x:L("en")});
       res.slice(1,12).forEach(function(r){var x=r.D.d;if(links.length>=2||used[x.u]||!x.u||r.s<top.s*.45||r.cov<.34)return;used[x.u]=1;links.push({t:x.k==="sec"?x.t.split(": ").pop():x.t,u:x.u,s:x.k==="faq"||x.k==="qa"?"":snippet(x,s,110)})});
       if(links.length)addBot({t:"text",x:"",links:links});
@@ -342,7 +389,7 @@
     var away=0;document.addEventListener("visibilitychange",function(){if(document.hidden){away=Date.now();return}
       if(!away||Date.now()-away<18e5||state.open)return;away=0;
       try{localStorage.setItem("ambs:chat-seen",String(Date.now()));sessionStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged")}catch(e){}
-      state.msgs=[];state.lang="";save();if(log)log.innerHTML="";nudgeTimer()});
+      state.msgs=[];state.lang="";state.noRoman=0;save();if(log)log.innerHTML="";nudgeTimer()});
     window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2)]})})};
     document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a){ev.preventDefault();open()}})}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
