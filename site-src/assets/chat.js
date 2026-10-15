@@ -22,7 +22,7 @@
       greeting:"Kia ora! Pātaihia mai he aha te aha mō Ambs Solutions: ngā mahi ka whakaaunoatia e mātou, te āhua o te mahi, ngā utu, te tono rānei i tētahi wā kore utu.",not_found:"Aroha mai, kāore au i kite i tētahi whakautu i tō mātou paetukutuku. Ka taea e koe te tono waea kore utu, te waiho pātai mā te tīma, te whakapā tōtika mai rānei.",en:"Kei te reo Pākehā ngā whakautu.",thanks:"Kei te pai!",typing:"E rapu ana…",where:"Wāhi",callus:"Waea mai",emailus:"Īmēra mai"}
   };
   var EN_EXTRA={en:"",thanks:"You're welcome! Anything else?",typing:"Looking…",where:"Where",callus:"Call",emailus:"Email"};
-  var DEF={more_on:"More on this:",langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
+  var DEF={yes:"Yes.",more_on:"More on this:",langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
   var LANGS=["en","zh","hi","pa","mi"];
   function pageLang(){var l=(document.documentElement.lang||"en").slice(0,2).toLowerCase();return LANGS.indexOf(l)>=0?l:"en"}
   /* the chat speaks the page's language, or the language the visitor writes in (Chinese, Hindi or Punjabi script switch it) */
@@ -105,18 +105,18 @@
       var sc=0;Object.keys(best).forEach(function(k){sc+=best[k]});
       /* a stored question worded like the visitor's gets a lift */
       if(D.qset){var inter=0;uniq.forEach(function(w){if(D.qset[w])inter++});var uni=uniq.length+D.qn-inter;if(uni)sc+=12*inter/uni}
-      var cov=0;uniq.forEach(function(w){cov+=hit[w]||0});cov/=uniq.length;return{D:D,s:sc*(KIND[D.d.k]||1)*(.2+cov)*(.2+cov)*1.8*((D.d.g||"en")===cl&&cl!=="en"?1.3:1)*(D.d.k==="qa"&&uniq.length<=2?1.6:1),cov:cov}}).filter(function(r){return r.s>0});
+      var cov=0;uniq.forEach(function(w){cov+=hit[w]||0});cov/=uniq.length;return{D:D,hit:hit,s:sc*(KIND[D.d.k]||1)*(.2+cov)*(.2+cov)*1.8*((D.d.g||"en")===cl&&cl!=="en"?1.3:1)*(D.d.k==="qa"&&uniq.length<=2?1.6:1),cov:cov}}).filter(function(r){return r.s>0});
     /* an answer that covers clearly more of the question wins, then the stronger match */
     res.sort(function(a,b){return Math.abs(b.cov-a.cov)>=.3?b.cov-a.cov:b.s-a.s});return res}
   /* a direct answer: the sentences that answer the question, kept in their order on the page */
   function answerText(d,text,max){max=max||380;var qs=toks(text),sents=(String(d.a||"").match(/[^\s].*?(?:[.!?。।]+(?=\s|$)|$)/g)||[d.a||""]).map(function(x){return x.trim()}).filter(Boolean);
     var sc=sents.map(function(s,i){var t=toks(s),v=0;qs.forEach(function(w){if(t.indexOf(w)>=0)v+=1;else (SYNMAP[w]||[]).forEach(function(y){if(t.indexOf(y)>=0)v+=.5})});
       /* a heading-like scrap ("Know if it's working.") says little on its own */
-      if(s.split(" ").length<5)v*=.4;return{i:i,v:v}});
+      if(s.split(" ").length<5)v*=.4;if(/\b(our guide|our page|this guide|more detail is|see our|read our|is on our)\b/i.test(s))v*=.2;return{i:i,v:v}});
     var best=sc.slice().sort(function(a,b){return b.v-a.v||a.i-b.i}),pick={},len=0;
     if(!best.length||best[0].v<=0){best=sc.slice(0,3)}
     /* the best sentence, the one after it when it adds context, then other matching sentences while there's room */
-    var first=best[0].i;pick[first]=1;len=sents[first].length;
+    var first=d.k==="page"?0:best[0].i;pick[first]=1;len=sents[first].length;
     if(sents[first+1]&&len+sents[first+1].length<=max&&sents[first].split(" ").length<14){pick[first+1]=1;len+=sents[first+1].length}
     best.slice(1).forEach(function(b){if(b.v>=best[0].v*.5&&b.v>0&&sents[b.i].split(" ").length>=5&&!pick[b.i]&&len+sents[b.i].length<=max){pick[b.i]=1;len+=sents[b.i].length}});
     var out=sents.filter(function(s,i){return pick[i]&&s.split(" ").length>=3}).join(" ");
@@ -290,7 +290,7 @@
   function typing(){var t=el("div","ac-m ac-bot ac-type");t.innerHTML="<i></i><i></i><i></i>";t.setAttribute("aria-label",L("typing"));log.appendChild(t);scroll();return t}
   /* everyday conversation: answered like a person would, before searching the website. The answers can be changed
      in the website editor (Chat helper → Everyday conversation); these are the defaults */
-  var TALK_DEF={offtopic:"I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",how_are_you:"I'm doing well, thanks for asking! How can I help you today?",
+  var TALK_DEF={knowledge:"Yes. I know Ambs Solutions well: our services, prices, how we work, the software we connect, the industries we work with, data and privacy, and the guides on our website. Ask me anything, or tap one of these to start.",offtopic:"I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",how_are_you:"I'm doing well, thanks for asking! How can I help you today?",
     who:"I'm the Ambs Solutions helper. I answer questions using our website, any time of day. For anything I can't answer, a real person from our team is happy to help.",
     human:"I'm an automated helper, not a person. If you'd like to talk to someone from our team, you can book a free session, leave a message or call us.",
     thanks:"You're welcome! Is there anything else I can help with?",ok:"Great! Anything else I can help with?",bye:"Thanks for stopping by. Have a great day!",
@@ -312,6 +312,8 @@
     ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast)\b/],
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
     ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
+    /* questions about the bot itself: "do you have any knowledge?", "what do you know?" */
+    ["knowledge",/\b(do you (have|know|got) (any |much |a lot of |enough )?(knowledge|info|information|idea|clue)|(have you )?got (any )?(knowledge|info)|what do you know|how much do you know|what (all )?(can|could) (you|i) (answer|ask|tell)|what (questions|things) can (you|i)|are you (smart|clever|intelligent|trained|knowledgeable|any use|useful)|how (smart|clever|intelligent) are you|do you know (anything|much|a lot|stuff|things|everything)|are you (well )?informed)\b/],
     ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
   var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|(your|any) reviews|(do|have) you (have|got) (any )?(reviews|testimonials)|reviews (of|about|for) (you|ambs)|testimonials?|(your|any) results|^(are you|is ambs) worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
   var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person|waea|īmēra|imera|whakapā)\b|电话|邮箱|邮件|联系|फ़ोन|फोन|ईमेल|संपर्क|नंबर|ਫ਼ੋਨ|ਫੋਨ|ਈਮੇਲ|ਸੰਪਰਕ|ਨੰਬਰ/i;
@@ -352,25 +354,45 @@
     /* the "Reply in English" button follows the latest answer */
     if(rl){state.msgs=state.msgs.filter(function(m){return m.t!=="english"});save();if(log)[].forEach.call(log.querySelectorAll(".ac-enrow"),function(x){x.remove()});setTimeout(function(){addBot({t:"english"})},0)}
     var tk=talkKey(s);
+    /* "do you speak Hindi?": show the languages, with the buttons to switch */
+    if(/\b(do|can|could) (you|u) (speak|talk|chat|understand|reply|answer|write)( in)? (hindi|punjabi|panjabi|chinese|mandarin|maori|te reo|english|other languages|my language|languages)\b|\bwhat languages\b/.test(norm(s))){if(/^(do|can|could)\b/.test(norm(s).trim()))addBot({t:"text",x:L("yes")});addBot({t:"langs"});return}
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"});return}
-    if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
+    if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="knowledge"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
       else if(tk==="human")addBot({t:"actions",q:""});return}
     if(QUALITY.test(s)){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
         var lines=w.why.map(function(x){return"✓ "+x.replace(/\.$/,"")}).concat((w.trust||[]).map(function(t){return"✓ "+t[0]+(t[1]?": "+(t[1].match(/^[^.!?。।]*[.!?。।]?/)||[t[1]])[0]:"")}));
         addBot({t:"answer",x:talk("quality")+"\n\n"+lines.join("\n")+"\n\n"+talk("quality_end"),u:"/#why",l:""});addBot({t:"actions",q:s});return}}
     var df=lang()==="en"&&define(sq);if(df){addBot({t:"answer",x:df.x,src:df.d.u&&df.d.u!==location.pathname?{t:df.d.t.split(": ")[0],u:df.d.u}:null});addBot({t:"actions",q:s});return}
-    var res=search(sq),top=res[0],wantsContact=CONTACT.test(s);
+    var res=search(sq),top=res[0],wantsContact=CONTACT.test(s),yours=null;
+    /* "can you make a website for a real estate agent?": a question about what we do gets our own answer to it, not a guide's paragraph */
+    /* our answer must be about the thing asked: a word of its own question (or one meaning the same), not just "build" or "help" */
+    var GEN={build:1,make:1,help:1,work:1,use:1,get:1,set:1,creat:1,need:1,want:1,automat:1,offer:1,provid:1,busi:1,small:1,send:1};
+    /* our own answers by their question; service and industry pages by their title */
+    function asksAbout(D){var set=D.qset;if(!set&&(D.d.k==="page"||D.d.k==="home")){set={};toks(D.d.t.split(": ")[0]).forEach(function(w){set[w]=1})}if(!set)return false;
+      return toks(sq).some(function(w){if(GEN[w])return false;if(set[w])return true;return (SYNMAP[w]||[]).some(function(y){return !GEN[y]&&set[y]})})}
+    if(top&&top.D.d.k!=="qa"&&/^(can|could|do|will|would) (you|u|ambs|your team)\b/.test(norm(s).trim())){
+      /* our own answers first, then the homepage cards (each industry's "what we'd take off you first"), then service and industry pages */
+      var KP={qa:0,home:1,page:2};res.filter(function(r){var k=r.D.d.k;return (k==="qa"||k==="home"||(k==="page"&&/^\/(services|industries)\//.test(r.D.d.u||"")))&&r.cov>=.3&&(k!=="qa"||(r.cov>=top.cov-.5&&r.s>=top.s*.3))&&asksAbout(r.D)})
+        .sort(function(a,b){return KP[a.D.d.k]-KP[b.D.d.k]||b.s-a.s}).slice(0,1).forEach(function(r){yours=r})}
+    if(yours)top=yours;
     /* half a two-word question matching one rare word isn't an answer ("capital of France") */
-    var nq=toks(sq).length,good=top&&(top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8))))),links=[],used={};
+    /* a yes/no question with a clear answer starts with "Yes." — never for a page's own Q&A (it says yes or no itself where it means it), and never when the answer says "not", "don't", "only"… */
+    function yesLead(ax,d,sure){if(!sure||d.k==="faq"||!/^(can|could|do|does|did|is|are|will|would|should|have|has)\b/.test(norm(s).trim()))return ax;
+      if(/^(yes|no|not|nope|usually|often|only|partly|mostly|sometimes|it depends|it can|it could|not always|in most|generally)\b/i.test(ax.trim()))return ax;
+      if(/\b(not|cannot|can't|don't|doesn't|won't|isn't|aren't|never|no|only if|unless)\b|n't\b/i.test((ax.match(/^[^.!?。।]*/)||[""])[0]))return ax;return L("yes")+" "+ax}
+    var nq=toks(sq).length,good=top&&(!!yours||top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8))))),links=[],used={};
     if(wantsContact&&!(good&&top.D.d.k==="qa"&&top.cov>=.67)){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(good){var d=top.D.d;used[d.u||"_"]=1;
       /* matched in English: give the same answer in the visitor's language when we have it */
       if(lang()!=="en"&&(d.g||"en")==="en"&&d.i){for(var j=0;j<DOCS.length;j++){var o=DOCS[j].d;if(o.i===d.i&&o.g===lang()){d=o;break}}}
-      if(d.k==="qa"){addBot({t:"answer",x:d.a,u:d.u&&d.u!==location.pathname?d.u:"",l:d.l||""})}
+      if(d.k==="qa"){addBot({t:"answer",x:yesLead(d.a,d,true),u:d.u&&d.u!==location.pathname?d.u:"",l:d.l||""})}
       else{var from=d.u&&d.u!==location.pathname&&d.u.indexOf("/#")!==0?{t:(d.k==="sec"?d.t.split(": ")[0]:d.k==="faq"?"":d.t),u:d.u}:null;
+        if(from&&d.k==="home")from.t="";
         if(from&&!from.t){for(var j2=0;j2<DOCS.length;j2++){var pg=DOCS[j2].d;if(pg.k==="page"&&pg.u===d.u){from.t=pg.t;break}}}
         var close=1;if(d.k==="faq"&&top.D.qset){var qt=toks(sq),hit=0;qt.forEach(function(w){if(top.D.qset[w])hit++});close=hit/Math.max(1,qt.length+top.D.qn-hit)}
-        addBot({t:"answer",x:d.k==="faq"&&close>=.3?d.a:answerText(d,sq),src:from&&from.t?from:null})}
+        var ax=d.k==="faq"&&close>=.3?d.a:answerText(d,sq);if(d.k==="home"&&d.u&&d.u.indexOf("/industries/")===0&&d.t.indexOf(": ")>0)ax=d.t.split(": ").slice(1).join(": ")+": "+d.a;
+        ax=yesLead(ax,d,!!yours||top.cov>=.6);
+        addBot({t:"answer",x:ax,src:from&&from.t?from:null})}
       if(lang()!=="en"&&(d.g||"en")==="en"&&L("en"))addBot({t:"note",x:L("en")});
       if(wantsContact)addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(wantsContact){addBot({t:"contact"});addBot({t:"actions",q:s});return}

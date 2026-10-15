@@ -642,7 +642,7 @@ def build_chat_index():
         for i in range(1,30):
             t,d=g(f'auto.c{i}t'),g(f'auto.c{i}d')
             if not t: continue
-            pts=' '.join(g(f'auto.c{i}p{j}') for j in range(1,8) if g(f'auto.c{i}p{j}'))
+            pts=' '.join(x if re.search(r'[.!?。।]$',x) else x+'.' for x in (g(f'auto.c{i}p{j}') for j in range(1,8)) if x)
             A('home',t,d+' '+pts,'/services/websites-and-portals' if i>=7 else '/services/ai-automation','',g('auto.title'),i=f'auto{i}')
         steps=' '.join(f"{g(f'how.s{i}t')}: {g(f'how.s{i}d')}" for i in range(1,12) if g(f'how.s{i}t'))
         if steps: A('home',g('how.title'),steps,'/#how','','process steps how it works what happens next' if lang=='' else '',i='how')

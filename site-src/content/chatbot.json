@@ -30,6 +30,7 @@
   "joke": "Why did the spreadsheet feel tired? It had been working in too many cells all week. That's the kind of job we like to automate! What can I help you with?",
   "weather": "I can't check the weather, sorry. I can help with anything about Ambs Solutions though: what we automate, prices, or booking a free session.",
   "time": "It's {time} in New Zealand right now.",
+  "knowledge": "Yes. I know Ambs Solutions well: our services, prices, how we work, the software we connect, the industries we work with, data and privacy, and the guides on our website. Ask me anything, or tap one of these to start.",
   "help": "I can help with our services, pricing, how we work, the software we connect, your industry and booking a free session. Ask me anything, or tap one of these to get started.",
   "sorry": "No problem at all. What would you like to know?",
   "test": "I'm here and working. Ask me anything about Ambs Solutions.",
@@ -56,6 +57,7 @@
   "error": "Sorry, that didn't send. Please try again, or email us.",
   "helpful": "Anything else I can help with?",
   "in_english": "Reply in English",
+  "yes": "Yes.",
   "more_on": "More on this:",
   "langs_line": "I also speak {langs}. Just type in your language, or tap one below.",
   "restart": "Start again",
@@ -100,7 +102,7 @@
   {
    "id": "app",
    "q": "Do you build apps or portals?",
-   "also": "app, mobile app, phone app, portal, staff portal, customer portal, client login, dashboard, iphone, android",
+   "also": "app, mobile app, phone app, portal, staff portal, customer portal, client login, iphone, android",
    "a": "Yes: staff and customer portals. Job tracking, photos, invoices and approvals in your own app on every phone. Each person sees only what they need, with your logo and colours and a secure sign-in, and it installs on the home screen like a normal app.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites and portals"
@@ -216,6 +218,38 @@
    "a": "Yes. We set up confirmation, reminder and rebooking texts that cut down no-shows without anyone chasing. They work with the booking system you already use, cancelled spots can be offered to people on a waitlist, and a follow-up text after the visit can ask for a review.",
    "link": "/guides/reduce-no-shows-with-booking-reminders",
    "link_label": "How to reduce no-shows"
+  },
+  {
+   "id": "invoices",
+   "q": "Can you automate quotes and invoices?",
+   "also": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts",
+   "a": "Yes. Site notes or a voice memo become a draft quote in your own prices and wording, and approved jobs become an invoice ready to check and send. Invoices land in your accounting app with nothing retyped, and polite payment reminders go out on time.",
+   "link": "/guides/automate-quotes-and-invoices",
+   "link_label": "How to automate quotes and invoices"
+  },
+  {
+   "id": "tax",
+   "q": "Can you do my taxes or accounts?",
+   "also": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books",
+   "a": "No, we don't do tax returns or give tax advice. That's a job for your accountant. What we can do is make the records behind it tidier: invoices going straight into Xero, receipts filed as the work happens, and fuel and mileage logs kept for you, so they're easier to hand over.",
+   "link": "",
+   "link_label": ""
+  },
+  {
+   "id": "dashboards",
+   "q": "Do you build dashboards?",
+   "also": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts",
+   "a": "Yes. A live dashboard shows sales, jobs and cash in one view that updates itself, wherever you are. It's built around the numbers you care about, alerts you when a number moves outside your normal range, and is easy to share with your team or accountant.",
+   "link": "/services/websites-and-portals",
+   "link_label": "Websites, portals and dashboards"
+  },
+  {
+   "id": "replies",
+   "q": "Can you help with customer replies and Google reviews?",
+   "also": "google reviews, reviews, review replies, customer replies, enquiries, emails, messages, answer customers, faq, opening hours questions",
+   "a": "Yes. Opening hours, pricing and directions are answered quickly on your website and by email, and replies to Google reviews are drafted in your own tone for you to approve. Urgent messages are flagged to you straight away.",
+   "link": "/services/ai-automation",
+   "link_label": "AI automation"
   }
  ]
 }
