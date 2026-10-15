@@ -101,9 +101,15 @@
     ".ac-launch:hover{transform:translateY(-2px)}.ac-launch svg{width:22px;height:22px}.ac-launch .ac-dot{width:9px;height:9px;border-radius:50%;background:#24b328;box-shadow:0 0 0 3px rgba(36,179,40,.25)}",
     "html[data-theme=dark] .ac-launch{background:#eef2fb;color:#14172b}",
     "body.ac-on .ac-launch{opacity:0;pointer-events:none;transform:scale(.9)}body.ac-has .totop{bottom:calc(env(safe-area-inset-bottom,0px) + 84px)!important}",
-    ".qbar a.qb-ask{background:linear-gradient(180deg,#d9e9ff,#b5d3ff);color:#0d2a55}html[data-theme=dark] .qbar a.qb-ask{color:#0d2a55}",
-    "@media (max-width:1120px){body.ac-qbar-on .ac-launch{opacity:0;pointer-events:none;transform:translateY(12px)}.qbar a{min-width:92px!important;padding:0 .8rem!important}}",
+    "@media (max-width:1120px){body.ac-qbar-on .ac-launch{bottom:calc(env(safe-area-inset-bottom,0px) + 86px)}body.ac-qbar-on .totop{bottom:calc(env(safe-area-inset-bottom,0px) + 150px)!important}}",
+    /* flashing, to catch the eye: a soft ring pulses out every few seconds and the green dot blinks */
+    ".ac-launch::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(36,179,40,.55);animation:ac-ring 2.4s ease-out infinite;pointer-events:none}",
+    "@keyframes ac-ring{0%{box-shadow:0 0 0 0 rgba(36,179,40,.55)}70%{box-shadow:0 0 0 14px rgba(36,179,40,0)}100%{box-shadow:0 0 0 0 rgba(36,179,40,0)}}",
+    ".ac-launch .ac-dot{animation:ac-blink 1.2s ease-in-out infinite}@keyframes ac-blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}",
+    ".ac-launch{animation:ac-nod 4.8s ease-in-out 3s infinite}@keyframes ac-nod{0%,86%,100%{transform:none}90%{transform:translateY(-3px) scale(1.04)}94%{transform:none}97%{transform:translateY(-2px) scale(1.02)}}",
+    "@media (prefers-reduced-motion:reduce){.ac-launch,.ac-launch::after,.ac-launch .ac-dot{animation:none}}",
     ".ac-panel{position:fixed;right:calc(env(safe-area-inset-right,0px) + 20px);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);z-index:300;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100dvh - 40px));display:flex;flex-direction:column;background:var(--ac-bg);color:var(--ac-ink);border:1px solid var(--ac-line);border-radius:22px;box-shadow:0 30px 70px -24px rgba(10,14,30,.55);overflow:hidden;font:15px/1.5 var(--body,'Instrument Sans',Arial,sans-serif);opacity:0;visibility:hidden;transform:translateY(16px) scale(.98);transform-origin:bottom right;transition:opacity .3s ease,transform .45s cubic-bezier(.16,1,.3,1),visibility 0s linear .45s}",
+    "@media (max-width:640px){.ac-panel.peek{height:auto;max-height:min(58dvh,460px)}.ac-shade.peek{display:none}}",
     ".ac-panel.on{opacity:1;visibility:visible;transform:none;transition:opacity .3s ease,transform .45s cubic-bezier(.16,1,.3,1),visibility 0s}",
     "@media (max-width:640px){.ac-panel{right:0;left:0;bottom:0;width:100%;height:min(88dvh,720px);border-radius:22px 22px 0 0;border-bottom:0}}",
     ".ac-head{display:flex;align-items:center;gap:12px;padding:14px 14px 12px 18px;border-bottom:1px solid var(--ac-line);position:relative;background:var(--ac-head)}",
@@ -133,7 +139,7 @@
     ".ac-in button{flex:none;width:46px;height:46px;border:0;border-radius:50%;background:#1877e0;color:#fff;cursor:pointer;display:grid;place-items:center}.ac-in button svg{width:20px;height:20px}.ac-in button:disabled{opacity:.45;cursor:default}",
     ".ac-nudge{position:fixed;right:calc(env(safe-area-inset-right,0px) + 20px);bottom:calc(env(safe-area-inset-bottom,0px) + 84px);z-index:97;max-width:min(300px,calc(100vw - 40px));display:flex;gap:10px;align-items:flex-start;padding:13px 12px 13px 15px;border-radius:18px 18px 6px 18px;background:var(--ac-bg);color:var(--ac-ink);border:1px solid var(--ac-line);box-shadow:0 18px 40px -16px rgba(10,14,30,.5);font:500 14.5px/1.45 var(--body,'Instrument Sans',Arial,sans-serif);cursor:pointer;opacity:0;transform:translateY(10px) scale(.97);transform-origin:bottom right;transition:opacity .4s ease,transform .5s cubic-bezier(.16,1,.3,1)}",
     ".ac-nudge.on{opacity:1;transform:none}.ac-nudge p{margin:0;flex:1}.ac-nudge .ac-nx{flex:none;border:0;background:transparent;color:var(--ac-muted);width:26px;height:26px;margin:-4px -4px 0 0;border-radius:8px;cursor:pointer;display:grid;place-items:center}.ac-nudge .ac-nx svg{width:14px;height:14px}.ac-nudge .ac-nx:hover{background:rgba(120,130,160,.14)}",
-    "@media (max-width:1120px){body.ac-qbar-on .ac-nudge{bottom:calc(env(safe-area-inset-bottom,0px) + 86px)}}body.ac-on .ac-nudge{display:none}",
+    "@media (max-width:1120px){body.ac-qbar-on .ac-nudge{bottom:calc(env(safe-area-inset-bottom,0px) + 150px)}}body.ac-on .ac-nudge{display:none}",
     ".ac-shade{position:fixed;inset:0;z-index:299;background:rgba(10,14,30,.32);opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}@media (max-width:640px){.ac-shade.on{opacity:1;visibility:visible;transition:opacity .3s}}"
   ].join("\n");document.head.appendChild(s)}
   var ICO={chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5z"/><path d="M8.5 9.5h7M8.5 12.5h4"/></svg>',
@@ -150,6 +156,8 @@
     root.querySelector(".ac-re").addEventListener("click",function(){state.msgs=[];state.lang="";save();labels();log.innerHTML="";welcome();input.focus()});
     root.querySelector("form").addEventListener("submit",function(ev){ev.preventDefault();var v=input.value.trim();if(!v)return;input.value="";ask(v)});
     document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&state.open)close()});
+    var unpeek=function(){if(root.classList.contains("peek")){root.classList.remove("peek");shade.classList.remove("peek");scroll()}};
+    root.addEventListener("click",function(ev){if(!ev.target.closest(".ac-x"))unpeek()});input.addEventListener("focus",unpeek);
     root._shade=shade;voiceSetup();labels()}
   /* speaking a question: the browser turns speech into text (Chrome, Edge and Safari; the button is hidden elsewhere) */
   var REC=null,recOn=false;
@@ -164,7 +172,7 @@
   function stopVoice(){if(REC&&recOn)try{REC.stop()}catch(e){}}
   function labels(){if(!root)return;root.querySelector("#acTitle").textContent=L("title");root.querySelector(".ac-sub").textContent=L("subtitle");input.placeholder=L("placeholder");
     root.querySelector('.ac-in button[type="submit"]').setAttribute("aria-label",L("send"));var mb=root.querySelector(".ac-mic");if(mb){mb.setAttribute("aria-label",L("voice"));mb.title=L("voice")}root.querySelector(".ac-x").setAttribute("aria-label",L("close"));root.querySelector(".ac-re").setAttribute("aria-label",L("restart"));root.querySelector(".ac-re").title=L("restart");
-    if(openBtn)openBtn.querySelector("span:last-child").textContent=L("launcher");var qa=document.querySelector(".qbar .qb-ask span");if(qa)qa.textContent=L("launcher")}
+    if(openBtn)openBtn.querySelector("span:last-child").textContent=L("launcher");}
   function load(){if(DATA)return Promise.resolve(DATA);if(LOADING)return LOADING;
     LOADING=fetch(INDEX).then(function(r){return r.json()}).then(function(d){DATA=d;prep();labels();return d});return LOADING}
   function open(auto){auto=auto===true;hideNudge();sset("ambs:nudged","1");if(!root)build();state.open=true;save();root.classList.add("on");root._shade.classList.add("on");document.body.classList.add("ac-on");
@@ -261,7 +269,7 @@
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
     var t=typing();load().then(function(){setTimeout(function(){t.remove();answer(q)},280+Math.min(500,q.length*8))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
   function answer(q){var s=q.trim(),sl=scriptLang(s);
-    if(sl&&sl!==lang()&&(sl!=="en"||state.lang)){state.lang=sl==="en"&&pageLang()==="en"?"":sl;save();labels()}
+    if(sl&&sl!==lang()){state.lang=sl===pageLang()?"":sl;save();labels()}
     var tk=talkKey(s);
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
@@ -288,7 +296,8 @@
   /* ---- offering help after a while: once per visit, counted across pages while the page is on screen ---- */
   var nudgeEl=null;
   function sget(k){try{return sessionStorage.getItem(k)}catch(e){return null}}function sset(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}
-  function quiet(){try{return localStorage.getItem("ambs:chat-quiet")==="1"}catch(e){return false}}function beQuiet(){try{localStorage.setItem("ambs:chat-quiet","1")}catch(e){}}
+  /* closed by the visitor: it doesn't open by itself again during this visit; next time they open the website it starts again */
+  function quiet(){return sget("ambs:chat-quiet")==="1"}function beQuiet(){sset("ambs:chat-quiet","1")}
   function nudgeTimer(){if(!NUDGE||quiet()||sget("ambs:nudged")||state.msgs.length||/^\/booking-confirmed/.test(location.pathname))return;
     var here=0,iv=setInterval(function(){if(document.hidden)return;here++;
       if(state.open||sget("ambs:nudged")||quiet()){clearInterval(iv);return}
@@ -296,7 +305,9 @@
   /* the chat starts the conversation: on a computer the window opens with a hello; on a phone a small message
      appears instead, so the page isn't covered */
   function initiate(){sset("ambs:nudged","1");
-    if(NUDGE_OPEN&&window.matchMedia("(min-width:900px)").matches&&!state.msgs.length){if(!root)build();state.auto=true;
+    if(NUDGE_OPEN&&!state.msgs.length){if(!root)build();state.auto=true;
+      /* on a phone it opens as a short window at the bottom, so most of the page stays in view; tapping it opens it fully */
+      if(window.matchMedia("(max-width:640px)").matches){root.classList.add("peek");root._shade.classList.add("peek")}
       load().then(function(){if(state.msgs.length)return;addBot({t:"text",x:L("nudge")});addBot({t:"chips",items:sugg()})}).catch(function(){});
       open(true);if(window.gtag)gtag("event","chat_auto_open");return}
     showNudge()}
@@ -308,19 +319,20 @@
   function hideNudge(){if(!nudgeEl)return;var n=nudgeEl;nudgeEl=null;n.classList.remove("on");setTimeout(function(){n.remove()},450)}
 
   /* ---- the button that opens it ---- */
-  function start(){restore();css();
+  function start(){if(/[?&]chat=reset\b/.test(location.search)){try{localStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged");sessionStorage.removeItem("ambs:chat")}catch(e){}}
+    restore();css();
     openBtn=el("button","ac-launch");openBtn.type="button";openBtn.innerHTML='<span class="ac-dot" aria-hidden="true"></span>'+ICO.chat.replace("<svg",'<svg style="display:none"')+'<span></span>';openBtn.querySelector("span:last-child").textContent=L("launcher");
     openBtn.setAttribute("aria-haspopup","dialog");openBtn.addEventListener("click",open);document.body.appendChild(openBtn);document.body.classList.add("ac-has");
-    var qb=document.querySelector(".qbar");if(qb&&!qb.querySelector(".qb-ask")){var a=el("a","qb-ask");a.href="#ask";a.innerHTML=ICO.chat+"<span></span>";a.querySelector("span").textContent=L("launcher");
-      a.addEventListener("click",function(ev){ev.preventDefault();open()});qb.appendChild(a);document.body.classList.add("ac-qbar");
-      /* on phones the bar holds the button; while the bar is tucked away the round button shows instead */
+    /* the chat button always stands on its own; on phones it moves up above the Call / Book bar while that bar shows */
+    var qb=document.querySelector(".qbar");if(qb){
       var sync=function(){var on=getComputedStyle(qb).display!=="none"&&!qb.classList.contains("away");document.body.classList.toggle("ac-qbar-on",on)};
       new MutationObserver(sync).observe(qb,{attributes:true,attributeFilter:["class","style"]});addEventListener("resize",sync);sync()}
     if(location.hash==="#ask")open();else if(state.open)open();
     /* the homepage switches language without reloading: follow it */
-    new MutationObserver(function(){if(state.lang){state.lang="";save()}labels();if(root&&DATA&&state.msgs.length===0&&log.children.length){log.innerHTML="";welcome()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+    new MutationObserver(function(){if(state.lang){state.lang="";save()}labels();
+      if(root&&DATA&&!state.msgs.some(function(m){return m.who==="me"})){state.msgs=[];save();log.innerHTML="";welcome()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
     nudgeTimer();
     window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2)]})})};
-    document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a&&!a.classList.contains("qb-ask")){ev.preventDefault();open()}})}
+    document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a){ev.preventDefault();open()}})}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
 })();
