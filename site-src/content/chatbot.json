@@ -9,6 +9,11 @@
   "Do you work outside Auckland?"
  ],
  "not_found": "Sorry, I couldn't find an answer to that on our website. You can book a free call, leave your question for the team, or contact us directly.",
+ "nudge": {
+  "enabled": true,
+  "delay": 40,
+  "text": "Need a hand? I can answer questions about what we automate, prices, or booking a free session."
+ },
  "chat": {
   "offtopic": "I can only answer questions about Ambs Solutions, and I couldn't find that on our website. If it's something about your business, our team is happy to help:",
   "how_are_you": "I'm doing well, thanks for asking! How can I help you today?",

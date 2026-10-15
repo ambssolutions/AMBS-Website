@@ -1360,7 +1360,10 @@ function chatInit(){
     top.querySelector("#chOn").checked=c.enabled!==false;top.querySelector("#chOn").addEventListener("change",markDirty);
     top.appendChild(fld("chGreet","Greeting",c.greeting,{area:true,rows:2,help:"The first message visitors see."}));
     top.appendChild(fld("chMiss","When it can’t find an answer",c.not_found,{area:true,rows:2,help:"Shown with the Book, Leave a message and Call or email buttons."}));
-    m.appendChild(top);top.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
+    var nu=c.nudge||{},np=h('<div class="panel"><h3>Offer help after a while</h3><p class="help">When someone has been looking around the website for a while, a small message pops up beside the chat button. It shows once per visit, never after they have opened the chat, and not on the booking-confirmed page.</p><label class="chk" style="display:flex;gap:8px;align-items:center;margin:4px 0 12px"><input type="checkbox" id="chNuOn"> Offer help</label></div>');
+    np.querySelector("#chNuOn").checked=nu.enabled!==false;np.querySelector("#chNuOn").addEventListener("change",markDirty);
+    np.appendChild(fld("chNuText","Message",nu.text,{area:true,rows:2,max:200}));np.appendChild(fld("chNuDelay","After how many seconds on the website",String(nu.delay||40),{help:"Counted across pages during a visit, while the page is on screen. For example 40."}));
+    m.appendChild(top);m.appendChild(np);top.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
     var sug=listEditor("Quick questions","Buttons under the greeting, so visitors can start with one tap. Up to 6.",c.suggestions||[],"Add a quick question");m.appendChild(sug);
     /* answers written here come first when a question matches */
     var qp=h('<div class="panel"><h3>Your own answers</h3><p class="help">Answers for questions people often ask. These win over the website’s wording when a question matches. Add other ways people might ask it, separated by commas, so it matches more questions.</p><div class="items"></div><button type="button" class="add">+ Add an answer</button></div>'),qbox=qp.querySelector(".items");
@@ -1382,7 +1385,7 @@ function chatInit(){
       var qa=Array.prototype.map.call(qbox.querySelectorAll(".ch-qa"),function(r){var o={id:r.dataset.id};r.querySelectorAll("[data-k]").forEach(function(t){o[t.dataset.k]=t.value.trim()});return o});
       var half=qa.filter(function(x){return(x.q&&!x.a)||(!x.q&&x.a)});if(half.length){toast("Each answer needs both a question and an answer.",true);return}
       var talkv={};tk.querySelectorAll("[data-talk]").forEach(function(x){talkv[x.dataset.talk]=x.value});
-      var data={enabled:$("chOn").checked,name:c.name,chat:talkv,greeting:$("chGreet").value,not_found:$("chMiss").value,suggestions:sug.values(),labels:labels,qa:qa};
+      var data={enabled:$("chOn").checked,name:c.name,chat:talkv,nudge:{enabled:$("chNuOn").checked,delay:parseInt($("chNuDelay").value,10)||40,text:$("chNuText").value},greeting:$("chGreet").value,not_found:$("chMiss").value,suggestions:sug.values(),labels:labels,qa:qa};
       busy(btn,true);api("settings",{action:"chatbot",data:data}).then(function(){dirty=false;busy(btn,false);toast("Saved. The chat helper is being updated. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
   }).catch(fail);
 }

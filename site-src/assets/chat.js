@@ -6,28 +6,30 @@
 (function(){
   if(window.AMBS_CHAT)return;window.AMBS_CHAT=1;
   var me=document.currentScript||document.querySelector('script[src*="/assets/chat.js"]');
-  var INDEX=me&&me.dataset.index||"/assets/chat-index.json",LAUNCH=me&&me.dataset.label||"Ask us";
+  var INDEX=me&&me.dataset.index||"/assets/chat-index.json",LAUNCH=me&&me.dataset.label||"Ask us",NUDGE=me&&me.dataset.nudge||"",NUDGE_AFTER=+(me&&me.dataset.nudgeAfter)||40;
   var FORM_KEY="b26ce370-6383-473e-926e-ceb49a91e7fd",PORTAL_LEAD_URL="https://portal.ambs.co.nz/api/app?action=lead";
   var DATA=null,LOADING=null,DOCS=[],DF={},AVG={t:1,q:1,x:1,a:1},N=0;
 
   /* built-in translations of the default wording; edited wording shows as written */
   var TR={
-    zh:{launcher:"咨询我们",title:"咨询 Ambs Solutions",subtitle:"随时从我们的网站获取答案",placeholder:"输入您的问题…",send:"发送",book:"预约免费咨询",message:"留言",contact:"电话或邮件",read:"了解更多",related:"这些页面可能有帮助：",name:"您的姓名",email:"您的邮箱",phone:"电话（选填）",question:"您的问题",send_msg:"发送留言",sent:"谢谢！您的留言已发送给团队，我们会尽快回复您。",error:"抱歉，发送失败。请重试，或给我们发邮件。",helpful:"还有什么可以帮您？",restart:"重新开始",close:"关闭",
+    zh:{nudge:"需要帮忙吗？关于我们能自动化什么、价格或预约免费咨询，都可以问我。",launcher:"咨询我们",title:"咨询 Ambs Solutions",subtitle:"随时从我们的网站获取答案",placeholder:"输入您的问题…",send:"发送",book:"预约免费咨询",message:"留言",contact:"电话或邮件",read:"了解更多",related:"这些页面可能有帮助：",name:"您的姓名",email:"您的邮箱",phone:"电话（选填）",question:"您的问题",send_msg:"发送留言",sent:"谢谢！您的留言已发送给团队，我们会尽快回复您。",error:"抱歉，发送失败。请重试，或给我们发邮件。",helpful:"还有什么可以帮您？",restart:"重新开始",close:"关闭",
       greeting:"您好！关于 Ambs Solutions 的任何问题都可以问我：我们能自动化什么、如何运作、价格，或预约免费咨询。",not_found:"抱歉，我在网站上没有找到答案。您可以预约免费通话、给团队留言，或直接联系我们。",en:"答案以英文显示。",thanks:"不客气！",typing:"正在查找…",where:"地点",callus:"致电",emailus:"发邮件"},
-    hi:{launcher:"हमसे पूछें",title:"Ambs Solutions से पूछें",subtitle:"हमारी वेबसाइट से जवाब, कभी भी",placeholder:"अपना सवाल लिखें…",send:"भेजें",book:"मुफ़्त सत्र बुक करें",message:"संदेश छोड़ें",contact:"कॉल या ईमेल",read:"और पढ़ें",related:"ये पेज मदद कर सकते हैं:",name:"आपका नाम",email:"आपका ईमेल",phone:"फ़ोन (वैकल्पिक)",question:"आपका सवाल",send_msg:"संदेश भेजें",sent:"धन्यवाद! आपका संदेश टीम तक पहुँच गया है। हम जल्द ही आपसे संपर्क करेंगे।",error:"क्षमा करें, संदेश नहीं भेजा जा सका। कृपया फिर से कोशिश करें या हमें ईमेल करें।",helpful:"क्या मैं और किसी चीज़ में मदद कर सकता हूँ?",restart:"फिर से शुरू करें",close:"बंद करें",
+    hi:{nudge:"मदद चाहिए? हम क्या ऑटोमेट करते हैं, कीमत, या मुफ़्त सत्र बुक करने के बारे में मुझसे पूछें।",launcher:"हमसे पूछें",title:"Ambs Solutions से पूछें",subtitle:"हमारी वेबसाइट से जवाब, कभी भी",placeholder:"अपना सवाल लिखें…",send:"भेजें",book:"मुफ़्त सत्र बुक करें",message:"संदेश छोड़ें",contact:"कॉल या ईमेल",read:"और पढ़ें",related:"ये पेज मदद कर सकते हैं:",name:"आपका नाम",email:"आपका ईमेल",phone:"फ़ोन (वैकल्पिक)",question:"आपका सवाल",send_msg:"संदेश भेजें",sent:"धन्यवाद! आपका संदेश टीम तक पहुँच गया है। हम जल्द ही आपसे संपर्क करेंगे।",error:"क्षमा करें, संदेश नहीं भेजा जा सका। कृपया फिर से कोशिश करें या हमें ईमेल करें।",helpful:"क्या मैं और किसी चीज़ में मदद कर सकता हूँ?",restart:"फिर से शुरू करें",close:"बंद करें",
       greeting:"नमस्ते! Ambs Solutions के बारे में कुछ भी पूछें: हम क्या ऑटोमेट करते हैं, यह कैसे काम करता है, कीमत, या मुफ़्त सत्र बुक करना।",not_found:"क्षमा करें, मुझे हमारी वेबसाइट पर इसका जवाब नहीं मिला। आप मुफ़्त कॉल बुक कर सकते हैं, टीम के लिए सवाल छोड़ सकते हैं, या सीधे संपर्क कर सकते हैं।",en:"जवाब अंग्रेज़ी में दिखाए जाते हैं।",thanks:"आपका स्वागत है!",typing:"ढूँढ रहे हैं…",where:"स्थान",callus:"कॉल करें",emailus:"ईमेल करें"},
-    pa:{launcher:"ਸਾਨੂੰ ਪੁੱਛੋ",title:"Ambs Solutions ਨੂੰ ਪੁੱਛੋ",subtitle:"ਸਾਡੀ ਵੈੱਬਸਾਈਟ ਤੋਂ ਜਵਾਬ, ਕਦੇ ਵੀ",placeholder:"ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ…",send:"ਭੇਜੋ",book:"ਮੁਫ਼ਤ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ",message:"ਸੁਨੇਹਾ ਛੱਡੋ",contact:"ਕਾਲ ਜਾਂ ਈਮੇਲ",read:"ਹੋਰ ਪੜ੍ਹੋ",related:"ਇਹ ਪੰਨੇ ਮਦਦ ਕਰ ਸਕਦੇ ਹਨ:",name:"ਤੁਹਾਡਾ ਨਾਮ",email:"ਤੁਹਾਡੀ ਈਮੇਲ",phone:"ਫ਼ੋਨ (ਚੋਣਵਾਂ)",question:"ਤੁਹਾਡਾ ਸਵਾਲ",send_msg:"ਸੁਨੇਹਾ ਭੇਜੋ",sent:"ਧੰਨਵਾਦ! ਤੁਹਾਡਾ ਸੁਨੇਹਾ ਟੀਮ ਕੋਲ ਪਹੁੰਚ ਗਿਆ ਹੈ। ਅਸੀਂ ਜਲਦੀ ਤੁਹਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰਾਂਗੇ।",error:"ਮਾਫ਼ ਕਰਨਾ, ਸੁਨੇਹਾ ਨਹੀਂ ਭੇਜਿਆ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ ਜਾਂ ਸਾਨੂੰ ਈਮੇਲ ਕਰੋ।",helpful:"ਕੀ ਮੈਂ ਹੋਰ ਕਿਸੇ ਚੀਜ਼ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?",restart:"ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ",close:"ਬੰਦ ਕਰੋ",
+    pa:{nudge:"ਮਦਦ ਚਾਹੀਦੀ ਹੈ? ਅਸੀਂ ਕੀ ਆਟੋਮੇਟ ਕਰਦੇ ਹਾਂ, ਕੀਮਤ, ਜਾਂ ਮੁਫ਼ਤ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰਨ ਬਾਰੇ ਮੈਨੂੰ ਪੁੱਛੋ।",launcher:"ਸਾਨੂੰ ਪੁੱਛੋ",title:"Ambs Solutions ਨੂੰ ਪੁੱਛੋ",subtitle:"ਸਾਡੀ ਵੈੱਬਸਾਈਟ ਤੋਂ ਜਵਾਬ, ਕਦੇ ਵੀ",placeholder:"ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ…",send:"ਭੇਜੋ",book:"ਮੁਫ਼ਤ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ",message:"ਸੁਨੇਹਾ ਛੱਡੋ",contact:"ਕਾਲ ਜਾਂ ਈਮੇਲ",read:"ਹੋਰ ਪੜ੍ਹੋ",related:"ਇਹ ਪੰਨੇ ਮਦਦ ਕਰ ਸਕਦੇ ਹਨ:",name:"ਤੁਹਾਡਾ ਨਾਮ",email:"ਤੁਹਾਡੀ ਈਮੇਲ",phone:"ਫ਼ੋਨ (ਚੋਣਵਾਂ)",question:"ਤੁਹਾਡਾ ਸਵਾਲ",send_msg:"ਸੁਨੇਹਾ ਭੇਜੋ",sent:"ਧੰਨਵਾਦ! ਤੁਹਾਡਾ ਸੁਨੇਹਾ ਟੀਮ ਕੋਲ ਪਹੁੰਚ ਗਿਆ ਹੈ। ਅਸੀਂ ਜਲਦੀ ਤੁਹਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰਾਂਗੇ।",error:"ਮਾਫ਼ ਕਰਨਾ, ਸੁਨੇਹਾ ਨਹੀਂ ਭੇਜਿਆ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ ਜਾਂ ਸਾਨੂੰ ਈਮੇਲ ਕਰੋ।",helpful:"ਕੀ ਮੈਂ ਹੋਰ ਕਿਸੇ ਚੀਜ਼ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?",restart:"ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ",close:"ਬੰਦ ਕਰੋ",
       greeting:"ਸਤ ਸ੍ਰੀ ਅਕਾਲ! Ambs Solutions ਬਾਰੇ ਕੁਝ ਵੀ ਪੁੱਛੋ: ਅਸੀਂ ਕੀ ਆਟੋਮੇਟ ਕਰਦੇ ਹਾਂ, ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ, ਕੀਮਤ, ਜਾਂ ਮੁਫ਼ਤ ਸੈਸ਼ਨ ਬੁੱਕ ਕਰਨਾ।",not_found:"ਮਾਫ਼ ਕਰਨਾ, ਮੈਨੂੰ ਸਾਡੀ ਵੈੱਬਸਾਈਟ 'ਤੇ ਇਸਦਾ ਜਵਾਬ ਨਹੀਂ ਮਿਲਿਆ। ਤੁਸੀਂ ਮੁਫ਼ਤ ਕਾਲ ਬੁੱਕ ਕਰ ਸਕਦੇ ਹੋ, ਟੀਮ ਲਈ ਸਵਾਲ ਛੱਡ ਸਕਦੇ ਹੋ, ਜਾਂ ਸਿੱਧਾ ਸੰਪਰਕ ਕਰ ਸਕਦੇ ਹੋ।",en:"ਜਵਾਬ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਦਿਖਾਏ ਜਾਂਦੇ ਹਨ।",thanks:"ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ!",typing:"ਲੱਭ ਰਹੇ ਹਾਂ…",where:"ਟਿਕਾਣਾ",callus:"ਕਾਲ ਕਰੋ",emailus:"ਈਮੇਲ ਕਰੋ"},
-    mi:{launcher:"Pātai mai",title:"Pātai ki Ambs Solutions",subtitle:"He whakautu mai i tō mātou paetukutuku",placeholder:"Tuhia tō pātai…",send:"Tukua",book:"Tonoa he wā kore utu",message:"Waiho he karere",contact:"Waea, īmēra rānei",read:"Pānui atu anō",related:"Ka āwhina pea ēnei whārangi:",name:"Tō ingoa",email:"Tō īmēra",phone:"Waea (kōwhiringa)",question:"Tō pātai",send_msg:"Tukua te karere",sent:"Ngā mihi! Kua tae tō karere ki te tīma. Ka whakapā mai mātou ā tōna wā.",error:"Aroha mai, kāore i tukuna. Tēnā, ngana anō, ka īmēra mai rānei.",helpful:"He aha atu anō e taea ana e au te āwhina?",restart:"Tīmata anō",close:"Kati",
+    mi:{nudge:"He āwhina māu? Pātai mai mō ngā mahi ka whakaaunoatia e mātou, ngā utu, te tono rānei i tētahi wā kore utu.",launcher:"Pātai mai",title:"Pātai ki Ambs Solutions",subtitle:"He whakautu mai i tō mātou paetukutuku",placeholder:"Tuhia tō pātai…",send:"Tukua",book:"Tonoa he wā kore utu",message:"Waiho he karere",contact:"Waea, īmēra rānei",read:"Pānui atu anō",related:"Ka āwhina pea ēnei whārangi:",name:"Tō ingoa",email:"Tō īmēra",phone:"Waea (kōwhiringa)",question:"Tō pātai",send_msg:"Tukua te karere",sent:"Ngā mihi! Kua tae tō karere ki te tīma. Ka whakapā mai mātou ā tōna wā.",error:"Aroha mai, kāore i tukuna. Tēnā, ngana anō, ka īmēra mai rānei.",helpful:"He aha atu anō e taea ana e au te āwhina?",restart:"Tīmata anō",close:"Kati",
       greeting:"Kia ora! Pātaihia mai he aha te aha mō Ambs Solutions: ngā mahi ka whakaaunoatia e mātou, te āhua o te mahi, ngā utu, te tono rānei i tētahi wā kore utu.",not_found:"Aroha mai, kāore au i kite i tētahi whakautu i tō mātou paetukutuku. Ka taea e koe te tono waea kore utu, te waiho pātai mā te tīma, te whakapā tōtika mai rānei.",en:"Kei te reo Pākehā ngā whakautu.",thanks:"Kei te pai!",typing:"E rapu ana…",where:"Wāhi",callus:"Waea mai",emailus:"Īmēra mai"}
   };
   var EN_EXTRA={en:"",thanks:"You're welcome! Anything else?",typing:"Looking…",where:"Where",callus:"Call",emailus:"Email"};
   var DEF={launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close"};
   function lang(){return (document.documentElement.lang||"en").slice(0,2).toLowerCase()}
   function L(k){var b=DATA&&DATA.bot||{},lab=b.labels||{},v=k==="greeting"||k==="not_found"?b[k]:lab[k],tr=TR[lang()];
-    if(k==="launcher"&&!DATA)v=LAUNCH;
+    if(k==="launcher"&&!DATA)v=LAUNCH;if(k==="nudge")v=NUDGE;
+    if(k==="nudge"&&tr&&tr.nudge&&v===DEFNU)return tr.nudge;
     if(tr&&tr[k]&&(v==null||v===""||v===DEF[k]||(k==="greeting"&&v===DEFG)||(k==="not_found"&&v===DEFN)||(k==="launcher"&&v==="Ask us")))return tr[k];
     if(v!=null&&v!=="")return v;return DEF[k]!=null?DEF[k]:EN_EXTRA[k]!=null?EN_EXTRA[k]:""}
+  var DEFNU="Need a hand? I can answer questions about what we automate, prices, or booking a free session.";
   var DEFG="Kia ora! Ask me anything about Ambs Solutions: what we automate, how it works, prices, or booking a free session.";
   var DEFN="Sorry, I couldn't find an answer to that on our website. You can book a free call, leave your question for the team, or contact us directly.";
 
@@ -105,6 +107,9 @@
     ".ac-in{display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line,rgba(30,45,80,.11))}",
     ".ac-in input{flex:1;min-width:0;border:1px solid var(--line,rgba(30,45,80,.18));background:var(--paper,#f4f7fc);color:var(--ink,#14172b);border-radius:999px;padding:11px 16px;font:16px/1.2 inherit;outline:none}.ac-in input:focus{border-color:#1877e0;box-shadow:0 0 0 3px rgba(24,119,224,.18)}",
     ".ac-in button{flex:none;width:46px;height:46px;border:0;border-radius:50%;background:#1877e0;color:#fff;cursor:pointer;display:grid;place-items:center}.ac-in button svg{width:20px;height:20px}.ac-in button:disabled{opacity:.45;cursor:default}",
+    ".ac-nudge{position:fixed;right:calc(env(safe-area-inset-right,0px) + 20px);bottom:calc(env(safe-area-inset-bottom,0px) + 84px);z-index:97;max-width:min(300px,calc(100vw - 40px));display:flex;gap:10px;align-items:flex-start;padding:13px 12px 13px 15px;border-radius:18px 18px 6px 18px;background:var(--card,#fff);color:var(--ink,#14172b);border:1px solid var(--line,rgba(30,45,80,.11));box-shadow:0 18px 40px -16px rgba(10,14,30,.5);font:500 14.5px/1.45 var(--body,'Instrument Sans',Arial,sans-serif);cursor:pointer;opacity:0;transform:translateY(10px) scale(.97);transform-origin:bottom right;transition:opacity .4s ease,transform .5s cubic-bezier(.16,1,.3,1)}",
+    ".ac-nudge.on{opacity:1;transform:none}.ac-nudge p{margin:0;flex:1}.ac-nudge .ac-nx{flex:none;border:0;background:transparent;color:var(--muted,#5b6479);width:26px;height:26px;margin:-4px -4px 0 0;border-radius:8px;cursor:pointer;display:grid;place-items:center}.ac-nudge .ac-nx svg{width:14px;height:14px}.ac-nudge .ac-nx:hover{background:rgba(120,130,160,.14)}",
+    "@media (max-width:1120px){body.ac-qbar-on .ac-nudge{bottom:calc(env(safe-area-inset-bottom,0px) + 86px)}}body.ac-on .ac-nudge{display:none}",
     ".ac-shade{position:fixed;inset:0;z-index:299;background:rgba(10,14,30,.32);opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}@media (max-width:640px){.ac-shade.on{opacity:1;visibility:visible;transition:opacity .3s}}"
   ].join("\n");document.head.appendChild(s)}
   var ICO={chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5z"/><path d="M8.5 9.5h7M8.5 12.5h4"/></svg>',
@@ -126,7 +131,7 @@
     if(openBtn)openBtn.querySelector("span:last-child").textContent=L("launcher");var qa=document.querySelector(".qbar .qb-ask span");if(qa)qa.textContent=L("launcher")}
   function load(){if(DATA)return Promise.resolve(DATA);if(LOADING)return LOADING;
     LOADING=fetch(INDEX).then(function(r){return r.json()}).then(function(d){DATA=d;prep();labels();return d});return LOADING}
-  function open(){if(!root)build();state.open=true;save();root.classList.add("on");root._shade.classList.add("on");document.body.classList.add("ac-on");
+  function open(){hideNudge();sset("ambs:nudged","1");if(!root)build();state.open=true;save();root.classList.add("on");root._shade.classList.add("on");document.body.classList.add("ac-on");
     if(window.gtag)gtag("event","chat_open");
     load().then(function(){if(!log.children.length){if(state.msgs.length)state.msgs.forEach(function(m){render(m,true)});else welcome()}scroll()}).catch(function(){if(!log.children.length)addBot({t:"text",x:L("not_found")}),addBot({t:"actions"})});
     setTimeout(function(){if(window.matchMedia("(min-width:641px)").matches)input.focus()},60)}
@@ -231,6 +236,20 @@
     var some=res.filter(function(r){return r.cov>=.34&&r.D.d.u}).slice(0,6);some.forEach(function(r){var x=r.D.d;if(links.length>=3||used[x.u])return;used[x.u]=1;links.push({t:x.k==="sec"?x.t.split(": ").pop():x.t,u:x.u,s:snippet(x,s,110)})});
     addBot({t:"text",x:L("not_found"),links:links});addBot({t:"actions",q:s})}
 
+  /* ---- offering help after a while: once per visit, counted across pages while the page is on screen ---- */
+  var nudgeEl=null;
+  function sget(k){try{return sessionStorage.getItem(k)}catch(e){return null}}function sset(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}
+  function nudgeTimer(){if(!NUDGE||sget("ambs:nudged")||state.msgs.length||/^\/booking-confirmed/.test(location.pathname))return;
+    var spent=+(sget("ambs:time")||0),here=0,iv=setInterval(function(){if(document.hidden)return;spent++;here++;sset("ambs:time",spent);
+      if(state.open||sget("ambs:nudged")){clearInterval(iv);return}
+      if(spent>=NUDGE_AFTER&&here>=8){clearInterval(iv);showNudge()}},1000)}
+  function showNudge(){sset("ambs:nudged","1");css();nudgeEl=el("div","ac-nudge");nudgeEl.setAttribute("role","status");
+    nudgeEl.innerHTML='<p></p><button type="button" class="ac-nx">'+ICO.x+'</button>';nudgeEl.querySelector("p").textContent=L("nudge");nudgeEl.querySelector(".ac-nx").setAttribute("aria-label",L("close"));
+    nudgeEl.addEventListener("click",function(ev){if(ev.target.closest(".ac-nx")){hideNudge();return}hideNudge();open();if(window.gtag)gtag("event","chat_nudge_open")});
+    document.body.appendChild(nudgeEl);requestAnimationFrame(function(){requestAnimationFrame(function(){nudgeEl&&nudgeEl.classList.add("on")})});
+    if(window.gtag)gtag("event","chat_nudge_shown");setTimeout(hideNudge,30000)}
+  function hideNudge(){if(!nudgeEl)return;var n=nudgeEl;nudgeEl=null;n.classList.remove("on");setTimeout(function(){n.remove()},450)}
+
   /* ---- the button that opens it ---- */
   function start(){restore();css();
     openBtn=el("button","ac-launch");openBtn.type="button";openBtn.innerHTML='<span class="ac-dot" aria-hidden="true"></span>'+ICO.chat.replace("<svg",'<svg style="display:none"')+'<span></span>';openBtn.querySelector("span:last-child").textContent=L("launcher");
@@ -243,6 +262,7 @@
     if(location.hash==="#ask")open();else if(state.open)open();
     /* the homepage switches language without reloading: follow it */
     new MutationObserver(function(){labels();if(root&&DATA&&state.msgs.length===0&&log.children.length){log.innerHTML="";welcome()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+    nudgeTimer();
     window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2)]})})};
     document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a&&!a.classList.contains("qb-ask")){ev.preventDefault();open()}})}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();

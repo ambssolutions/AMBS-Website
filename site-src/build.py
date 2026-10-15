@@ -662,7 +662,9 @@ def build_chat_index():
 def chat_tag(iv):
     if not CHAT.get('enabled',True): return ''
     lab=(CHAT.get('labels') or {}).get('launcher','Ask us')
-    return f'<!--chat--><script src="/assets/chat.js?v={_v("chat.js")}" data-index="/assets/chat-index.json?v={iv}" data-label="{e(lab)}" defer></script><!--/chat-->'
+    nu=CHAT.get('nudge') or {}
+    nudge=f' data-nudge="{e(nu.get("text",""))}" data-nudge-after="{int(nu.get("delay",40) or 40)}"' if nu.get('enabled',True) and nu.get('text') else ''
+    return f'<!--chat--><script src="/assets/chat.js?v={_v("chat.js")}" data-index="/assets/chat-index.json?v={iv}" data-label="{e(lab)}"{nudge} defer></script><!--/chat-->'
 def stamp_chat(path,tag):
     if not os.path.exists(path): return
     h=open(path,encoding='utf8').read();h=re.sub(r'<!--chat-->.*?<!--/chat-->\n?','',h,flags=re.S)
