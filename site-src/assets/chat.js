@@ -319,7 +319,13 @@
   function hideNudge(){if(!nudgeEl)return;var n=nudgeEl;nudgeEl=null;n.classList.remove("on");setTimeout(function(){n.remove()},450)}
 
   /* ---- the button that opens it ---- */
-  function start(){if(/[?&]chat=reset\b/.test(location.search)){try{localStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged");sessionStorage.removeItem("ambs:chat")}catch(e){}}
+  /* a new visit: the website was opened again (typed in, a bookmark, a search result, the app icon), the page was
+     reloaded, or the visitor was away for more than 30 minutes. Clicking from page to page is the same visit. */
+  function newVisit(){var nav=null,ref="",last=0;try{nav=(performance.getEntriesByType("navigation")[0]||{}).type}catch(e){}
+    try{ref=document.referrer?new URL(document.referrer).host:""}catch(e){}
+    try{last=+localStorage.getItem("ambs:chat-seen")||0;localStorage.setItem("ambs:chat-seen",String(Date.now()))}catch(e){}
+    return nav==="reload"||(nav!=="back_forward"&&ref!==location.host)||Date.now()-last>18e5}
+  function start(){if(newVisit()||/[?&]chat=reset\b/.test(location.search)){try{localStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged");sessionStorage.removeItem("ambs:chat")}catch(e){}}
     restore();css();
     openBtn=el("button","ac-launch");openBtn.type="button";openBtn.innerHTML='<span class="ac-dot" aria-hidden="true"></span>'+ICO.chat.replace("<svg",'<svg style="display:none"')+'<span></span>';openBtn.querySelector("span:last-child").textContent=L("launcher");
     openBtn.setAttribute("aria-haspopup","dialog");openBtn.addEventListener("click",open);document.body.appendChild(openBtn);document.body.classList.add("ac-has");
@@ -332,6 +338,11 @@
     new MutationObserver(function(){if(state.lang){state.lang="";save()}labels();
       if(root&&DATA&&!state.msgs.some(function(m){return m.who==="me"})){state.msgs=[];save();log.innerHTML="";welcome()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
     nudgeTimer();
+    /* a phone often brings back an old tab without reloading it: after 30 minutes away that's a new visit too */
+    var away=0;document.addEventListener("visibilitychange",function(){if(document.hidden){away=Date.now();return}
+      if(!away||Date.now()-away<18e5||state.open)return;away=0;
+      try{localStorage.setItem("ambs:chat-seen",String(Date.now()));sessionStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged")}catch(e){}
+      state.msgs=[];state.lang="";save();if(log)log.innerHTML="";nudgeTimer()});
     window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2)]})})};
     document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a){ev.preventDefault();open()}})}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
