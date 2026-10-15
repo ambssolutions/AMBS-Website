@@ -903,5 +903,12 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "How it works"
+ },
+ "ed.chat.label.langs_line": {
+  "hi": "auto",
+  "mi": "auto",
+  "pa": "auto",
+  "zh": "auto",
+  "_en": "I also speak {langs}. Just type in your language, or tap one below."
  }
 }

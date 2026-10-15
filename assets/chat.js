@@ -22,7 +22,7 @@
       greeting:"Kia ora! Pātaihia mai he aha te aha mō Ambs Solutions: ngā mahi ka whakaaunoatia e mātou, te āhua o te mahi, ngā utu, te tono rānei i tētahi wā kore utu.",not_found:"Aroha mai, kāore au i kite i tētahi whakautu i tō mātou paetukutuku. Ka taea e koe te tono waea kore utu, te waiho pātai mā te tīma, te whakapā tōtika mai rānei.",en:"Kei te reo Pākehā ngā whakautu.",thanks:"Kei te pai!",typing:"E rapu ana…",where:"Wāhi",callus:"Waea mai",emailus:"Īmēra mai"}
   };
   var EN_EXTRA={en:"",thanks:"You're welcome! Anything else?",typing:"Looking…",where:"Where",callus:"Call",emailus:"Email"};
-  var DEF={launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
+  var DEF={langs_line:"I also speak {langs}. Just type in your language, or tap one below.",launcher:"Ask us",title:"Ask Ambs Solutions",subtitle:"Answers from our website, any time",placeholder:"Type your question…",send:"Send",book:"Book a free session",message:"Leave a message",contact:"Call or email",read:"Read more",related:"These pages might help:",name:"Your name",email:"Your email",phone:"Phone (optional)",question:"Your question",send_msg:"Send message",sent:"Thanks! Your message is with the team. We'll get back to you soon.",error:"Sorry, that didn't send. Please try again, or email us.",helpful:"Anything else I can help with?",restart:"Start again",close:"Close",voice:"Speak your question",listening:"Listening… speak now",mic_blocked:"To speak your question, allow the microphone in your browser, or type it instead."};
   var LANGS=["en","zh","hi","pa","mi"];
   function pageLang(){var l=(document.documentElement.lang||"en").slice(0,2).toLowerCase();return LANGS.indexOf(l)>=0?l:"en"}
   /* the chat speaks the page's language, or the language the visitor writes in (Chinese, Hindi or Punjabi script switch it) */
@@ -159,6 +159,8 @@
     ".ac-chip{border:1px solid var(--ac-line2);background:var(--ac-chip);color:var(--ac-ink);border-radius:999px;padding:7px 12px;font:600 13.5px/1.2 var(--body,'Instrument Sans',Arial,sans-serif);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}",
     ".ac-chip:hover{border-color:#1877e0;color:#1877e0}.ac-chip.go{background:linear-gradient(180deg,#b7f4b9,#7ee282);border-color:transparent;color:#14301a}.ac-chip.go:hover{color:#14301a;filter:brightness(1.03)}",
     ".ac-note{font-size:12px;color:var(--ac-muted);align-self:center}",
+    ".ac-langs{align-self:flex-start;max-width:100%;animation:ac-in .35s cubic-bezier(.16,1,.3,1) both}.ac-langs p{margin:0 0 7px;font-size:13px;color:var(--ac-muted);line-height:1.45}",
+    ".ac-langs .ac-chips{gap:6px}.ac-langs .ac-chip{padding:6px 11px;font-size:13px}.ac-langs .ac-chip.on{background:#1877e0;border-color:#1877e0;color:#fff;cursor:default}",
     ".ac-form{display:grid;gap:8px;margin-top:8px}.ac-form input,.ac-form textarea{width:100%;box-sizing:border-box;border:1px solid var(--ac-line2);background:var(--ac-soft);color:var(--ac-ink);border-radius:10px;padding:9px 11px;font:15px/1.4 var(--body,'Instrument Sans',Arial,sans-serif)}",
     ".ac-form textarea{min-height:70px;resize:vertical}.ac-form .bad{border-color:#e5352b}.ac-form button{justify-self:start}.ac-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}",
     ".ac-type{display:flex;gap:4px;padding:12px 14px}.ac-type i{width:7px;height:7px;border-radius:50%;background:var(--ac-muted);opacity:.5;animation:ac-b 1s infinite}.ac-type i:nth-child(2){animation-delay:.15s}.ac-type i:nth-child(3){animation-delay:.3s}@keyframes ac-b{50%{opacity:1;transform:translateY(-3px)}}",
@@ -211,10 +213,17 @@
   function close(){if(!root)return;beQuiet();stopVoice();state.open=false;save();root.classList.remove("on");root._shade.classList.remove("on");document.body.classList.remove("ac-on");if(openBtn)openBtn.focus({preventScroll:true})}
   function scroll(){log.scrollTop=log.scrollHeight}
   /* only the newest row of buttons stays, so the conversation doesn't fill up with repeats */
-  function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"});[].forEach.call(log.querySelectorAll(".ac-chips"),function(x){x.remove()})}
+  function push(m){if(m.t==="actions"||m.t==="chips"||m.who==="me"){state.msgs=state.msgs.filter(function(x){return x.t!=="actions"&&x.t!=="chips"&&x.t!=="langs"});[].forEach.call(log.querySelectorAll(".ac-chips,.ac-langs"),function(x){x.remove()})}
     state.msgs.push(m);save();render(m)}
   function addBot(m){m.who="bot";push(m)}
-  function welcome(){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()})}
+  function welcome(){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"})}
+  /* the languages the chat speaks, each written in its own script */
+  var LNAME={en:"English",zh:"中文",hi:"हिन्दी",pa:"ਪੰਜਾਬੀ",mi:"te reo Māori"};
+  function chatLangs(){return LANGS.filter(function(l){return l==="en"||(DATA&&DATA.bot_tr&&DATA.bot_tr[l])})}
+  /* switching with the buttons: the chat says hello again in that language */
+  function setLang(l){state.lang=l===pageLang()?"":l;state.noRoman=l==="en"?1:0;save();labels();
+    if(!state.msgs.some(function(m){return m.who==="me"})){state.msgs=[];save();log.innerHTML="";welcome()}
+    else{state.msgs=state.msgs.filter(function(m){return m.t!=="langs"});[].forEach.call(log.querySelectorAll(".ac-langs"),function(x){x.remove()});welcome()}}
   function render(m,quiet){var b;
     if(m.who==="me"){b=el("div","ac-m ac-me",m.x);log.appendChild(b);scroll();return}
     if(m.t==="text"||m.t==="answer"){b=el("div","ac-m ac-bot");if(m.title){b.appendChild(el("b","ac-t",m.title))}b.appendChild(document.createTextNode(m.x||""));
@@ -222,6 +231,12 @@
       if(m.links&&m.links.length){b.appendChild(el("div","ac-note",L("related"))).style.marginTop="8px";var box=el("div","ac-links");m.links.forEach(function(k){var a=el("a",null,k.t);a.href=k.u;if(k.s)a.appendChild(el("small",null,k.s));a.addEventListener("click",nav);box.appendChild(a)});b.appendChild(box)}
       log.appendChild(b)}
     else if(m.t==="note"){log.appendChild(el("div","ac-note",m.x))}
+    else if(m.t==="langs"){var ls=chatLangs();if(ls.length<2)return;var cur=lang();b=el("div","ac-langs");
+      var others=ls.filter(function(l){return l!==cur}).map(function(l){return LNAME[l]}).join(" · ");
+      b.appendChild(el("p",null,"🌐 "+L("langs_line").replace("{langs}",others)));
+      var row=el("div","ac-chips");ls.forEach(function(l){var c=el("button","ac-chip"+(l===cur?" on":""),LNAME[l]);c.type="button";c.lang=l;
+        if(l===cur)c.setAttribute("aria-pressed","true");else c.addEventListener("click",function(){setLang(l)});row.appendChild(c)});
+      b.appendChild(row);log.appendChild(b)}
     else if(m.t==="english"){if(m.done)return;b=el("div","ac-chips ac-enrow");var en=el("button","ac-chip","🔤 "+((DATA&&DATA.bot&&DATA.bot.labels&&DATA.bot.labels.in_english)||"Reply in English"));en.type="button";
       en.addEventListener("click",function(){m.done=true;state.noRoman=true;state.lang="en";save();labels();b.remove();if(lastQ){var t=typing();setTimeout(function(){t.remove();answer(lastQ)},900)}});b.appendChild(en);log.appendChild(b)}
     else if(m.t==="chips"){b=el("div","ac-chips");(m.items||[]).forEach(function(q){var c=el("button","ac-chip",q);c.type="button";c.addEventListener("click",function(){ask(q)});b.appendChild(c)});log.appendChild(b)}
@@ -316,7 +331,7 @@
     /* the "Reply in English" button follows the latest answer */
     if(rl){state.msgs=state.msgs.filter(function(m){return m.t!=="english"});save();if(log)[].forEach.call(log.querySelectorAll(".ac-enrow"),function(x){x.remove()});setTimeout(function(){addBot({t:"english"})},0)}
     var tk=talkKey(s);
-    if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});return}
+    if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
       else if(tk==="human")addBot({t:"actions",q:""});return}
     if(QUALITY.test(s)){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
@@ -356,7 +371,7 @@
     if(NUDGE_OPEN&&!state.msgs.length){if(!root)build();state.auto=true;
       /* on a phone it opens as a short window at the bottom, so most of the page stays in view; tapping it opens it fully */
       if(window.matchMedia("(max-width:640px)").matches){root.classList.add("peek");root._shade.classList.add("peek")}
-      load().then(function(){if(state.msgs.length)return;addBot({t:"text",x:L("nudge")});addBot({t:"chips",items:sugg()})}).catch(function(){});
+      load().then(function(){if(state.msgs.length)return;addBot({t:"text",x:L("nudge")});addBot({t:"chips",items:sugg()});addBot({t:"langs"})}).catch(function(){});
       open(true);if(window.gtag)gtag("event","chat_auto_open");return}
     showNudge()}
   function showNudge(){sset("ambs:nudged","1");css();nudgeEl=el("div","ac-nudge");nudgeEl.setAttribute("role","status");
