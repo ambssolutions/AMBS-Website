@@ -591,42 +591,75 @@ def _block_text(x,out):
     elif isinstance(x,str):
         t=_txt(x)
         if len(t)>2 and not re.match(r'^(https?:|/|#|mailto:|tel:)',t): out.append(t)
+def chat_strings():
+    """The chat helper's own wording as translation keys ("ed.chat.*"): when the owner changes the English in the editor,
+       that line's other languages are cleared and queued for Claude, like the rest of the editor's wording."""
+    c=CHAT;out={}
+    for k in ('greeting','not_found'):
+        if c.get(k): out['ed.chat.'+k]=c[k]
+    if (c.get('nudge') or {}).get('text'): out['ed.chat.nudge']=c['nudge']['text']
+    for i,q in enumerate(c.get('suggestions',[])):
+        if q: out[f'ed.chat.sugg.{i}']=q
+    for k,v in (c.get('chat') or {}).items():
+        if v: out['ed.chat.talk.'+k]=v
+    for k,v in (c.get('labels') or {}).items():
+        if v: out['ed.chat.label.'+k]=v
+    for it in c.get('qa',[]):
+        if not (it.get('id') and it.get('q') and it.get('a')): continue
+        for f,src in (('q','q'),('a','a'),('also','also'),('ll','link_label')):
+            if it.get(src): out[f'ed.chat.qa.{it["id"]}.{f}']=it[src]
+    return out
+def _tr_files():
+    d=os.path.join(SRC,'assets','i18n')
+    return {f[:-5]:json.load(open(os.path.join(d,f),encoding='utf8')) for f in sorted(os.listdir(d)) if f.endswith('.json')} if os.path.isdir(d) else {}
 def build_chat_index():
     site=_load('site.json',{})
+    TRL=_tr_files()
     docs=[]
-    def add(kind,title,text,u,q='',extra=''):
+    def add(kind,title,text,u,q='',extra='',lang=''):
         text=_txt(text);title=_txt(title)
-        if text or q: docs.append({k:v for k,v in dict(k=kind,t=title,q=_txt(q),a=text,u=u,x=extra).items() if v})
+        if text or q: docs.append({k:v for k,v in dict(k=kind,t=title,q=_txt(q),a=text,u=u,x=extra,g=lang).items() if v})
+    # the owner's own answers, in English and in every language they have been translated into
     for it in CHAT.get('qa',[]):
-        if it.get('q') and it.get('a'): docs.append({k:v for k,v in dict(k='qa',t=it['q'],q=it['q'],a=it['a'],u=it.get('link',''),l=it.get('link_label',''),x=it.get('also','')).items() if v})
-    # homepage
-    g=lambda k:EN.get(k,'')
-    hid=lambda h:'/'+h
-    add('page',g('hero.h1'),g('hero.sub')+' '+g('hero.note'),'/')
-    for i in range(1,30):
-        q,a=g(f'faq.q{i}'),g(f'faq.a{i}')
-        if q and a: add('faq',q,a,'/#faq',q)
-    for i in range(1,30):
-        t,d=g(f'auto.c{i}t'),g(f'auto.c{i}d')
-        if not t: continue
-        pts=' '.join(g(f'auto.c{i}p{j}') for j in range(1,8) if g(f'auto.c{i}p{j}'))
-        add('home',t,d+' '+pts,'/services/websites-and-portals' if i>=7 else '/services/ai-automation','', g('auto.title'))
-    steps=' '.join(f"{g(f'how.s{i}t')}: {g(f'how.s{i}d')}" for i in range(1,12) if g(f'how.s{i}t'))
-    if steps: add('home',g('how.title'),steps,'/#how','','process steps how it works what happens next')
-    why=' '.join(g(f'why.n{i}')+'.' for i in range(1,12) if g(f'why.n{i}'))
-    if why: add('home',g('why.t'),why,'/#why','','why choose you different')
-    about=' '.join(g(k) for k in EN if k.startswith('about.') and k!='about.title')
-    if about: add('home',g('about.title'),about,'/#about','','about who are you company team')
-    for i in range(1,12):
-        t,d=g(f'trust.u{i}t'),g(f'trust.u{i}d')
-        if t: add('home',t,d,'/#how')
-    if g('trust.title'): add('home',g('trust.title'),g('trust.lead'),'/','','tools software apps')
-    for b in ('cafe','trades','clinic','retail','adviser','transport','other'):
-        tasks=[g(f't.{b}{j}') for j in range(1,8) if g(f't.{b}{j}')]
-        if g('biz.'+b) and tasks:
-            ind={'cafe':'cafes-and-takeaways','trades':'trades-and-building','clinic':'clinics-and-salons','retail':'shops-and-dairies','adviser':'advisers-and-accountants','transport':'transport-and-delivery'}.get(b)
-            add('home',g('biz.'+b)+': '+g('card.handled'),'. '.join(tasks)+'.','/industries/'+ind if ind else '/#automate')
-    # every live page and post
+        if not (it.get('q') and it.get('a')): continue
+        docs.append({k:v for k,v in dict(k='qa',t=it['q'],q=it['q'],a=it['a'],u=it.get('link',''),l=it.get('link_label',''),x=it.get('also','')).items() if v})
+        for lang,tr in TRL.items():
+            key=f'ed.chat.qa.{it.get("id")}.'
+            if tr.get(key+'q') and tr.get(key+'a'):
+                docs.append({k:v for k,v in dict(k='qa',t=tr[key+'q'],q=tr[key+'q'],a=tr[key+'a'],u=it.get('link',''),l=tr.get(key+'ll') or it.get('link_label',''),x=tr.get(key+'also',''),g=lang).items() if v})
+    # the homepage, in English and in each translated language
+    def home(g,lang):
+        A=lambda *a,**k:add(*a,lang=lang,**k)
+        A('page',g('hero.h1'),g('hero.sub')+' '+g('hero.note'),'/')
+        for i in range(1,30):
+            q,a=g(f'faq.q{i}'),g(f'faq.a{i}')
+            if q and a: A('faq',q,a,'/#faq',q)
+        for i in range(1,30):
+            t,d=g(f'auto.c{i}t'),g(f'auto.c{i}d')
+            if not t: continue
+            pts=' '.join(g(f'auto.c{i}p{j}') for j in range(1,8) if g(f'auto.c{i}p{j}'))
+            A('home',t,d+' '+pts,'/services/websites-and-portals' if i>=7 else '/services/ai-automation','',g('auto.title'))
+        steps=' '.join(f"{g(f'how.s{i}t')}: {g(f'how.s{i}d')}" for i in range(1,12) if g(f'how.s{i}t'))
+        if steps: A('home',g('how.title'),steps,'/#how','','process steps how it works what happens next' if lang=='' else '')
+        why=' '.join(g(f'why.n{i}')+'.' for i in range(1,12) if g(f'why.n{i}'))
+        if why: A('home',g('why.t'),why,'/#why','','why choose you different' if lang=='' else '')
+        about=' '.join(g(k) for k in EN if k.startswith('about.') and k!='about.title' and g(k))
+        if about: A('home',g('about.title'),about,'/#about','','about who are you company team' if lang=='' else '')
+        for i in range(1,12):
+            t,d=g(f'trust.u{i}t'),g(f'trust.u{i}d')
+            if t: A('home',t,d,'/#how')
+        if g('trust.title'): A('home',g('trust.title'),g('trust.lead'),'/','','tools software apps' if lang=='' else '')
+        for b in ('cafe','trades','clinic','retail','adviser','transport','other'):
+            tasks=[g(f't.{b}{j}') for j in range(1,8) if g(f't.{b}{j}')]
+            if g('biz.'+b) and tasks:
+                ind={'cafe':'cafes-and-takeaways','trades':'trades-and-building','clinic':'clinics-and-salons','retail':'shops-and-dairies','adviser':'advisers-and-accountants','transport':'transport-and-delivery'}.get(b)
+                A('home',g('biz.'+b)+': '+g('card.handled'),'. '.join(tasks)+'.','/industries/'+ind if ind else '/#automate')
+        for k,v in HOMESEC.get('custom',{}).items():
+            out=[];_block_text(v.get('blocks',[]),out)
+            if lang=='': A('home',v.get('title') or v.get('name') or 'Ambs Solutions',' '.join(out),'/#'+k)
+    home(lambda k:EN.get(k,''),'')
+    for lang,tr in TRL.items(): home(lambda k,tr=tr:tr.get(k,''),lang)
+    # every live page and post (written in English)
     for p in PAGES:
         f=os.path.join(SRC,'content',p[0],p[1]+'.html')
         if not os.path.exists(f): continue
@@ -649,13 +682,22 @@ def build_chat_index():
     for slug,d in CUSTOM.items():
         out=[];_block_text(d.get('blocks',[]),out)
         add('page',d.get('title',slug),' '.join(out),'/'+slug)
-    for k,v in HOMESEC.get('custom',{}).items():
-        out=[];_block_text(v.get('blocks',[]),out)
-        add('home',v.get('title') or v.get('name') or 'Ambs Solutions',' '.join(out),'/#'+k)
     for sec in ('services','industries','guides','news'):
         if sec in HUB and any(p[0]==sec for p in PAGES): add('page',HUB[sec].get('h1',sec),HUB[sec].get('lead',''),url(sec),'',sec)
     bot={k:v for k,v in CHAT.items() if k!='qa'}
-    data={'src':hashlib.md5(open(os.path.join(SRC,'assets','home.js'),'rb').read()).hexdigest()[:8],'bot':bot,'biz':{'phone':site.get('phone',''),'email':site.get('email',''),'location':site.get('location',''),'book':'/#book'},'docs':docs}
+    # the chat's wording in each language (only lines that have been translated)
+    bot_tr={}
+    for lang,tr in TRL.items():
+        g=lambda k:tr.get('ed.chat.'+k,'')
+        t={k:g(k) for k in ('greeting','not_found','nudge') if g(k)}
+        sg=[g(f'sugg.{i}') or q for i,q in enumerate(CHAT.get('suggestions',[]))]
+        if any(g(f'sugg.{i}') for i in range(len(sg))): t['suggestions']=sg
+        ch={k:g('talk.'+k) for k in (CHAT.get('chat') or {}) if g('talk.'+k)}
+        if ch: t['chat']=ch
+        lb={k:g('label.'+k) for k in (CHAT.get('labels') or {}) if g('label.'+k)}
+        if lb: t['labels']=lb
+        if t: bot_tr[lang]=t
+    data={'src':hashlib.md5(open(os.path.join(SRC,'assets','home.js'),'rb').read()).hexdigest()[:8],'bot':bot,'bot_tr':bot_tr,'biz':{'phone':site.get('phone',''),'email':site.get('email',''),'location':site.get('location',''),'book':'/#book'},'docs':docs}
     js=json.dumps(data,ensure_ascii=False,separators=(',',':'))
     open(os.path.join(OUT,'assets','chat-index.json'),'w',encoding='utf8').write(js)
     return hashlib.md5(js.encode()).hexdigest()[:8],len(docs)
@@ -663,7 +705,8 @@ def chat_tag(iv):
     if not CHAT.get('enabled',True): return ''
     lab=(CHAT.get('labels') or {}).get('launcher','Ask us')
     nu=CHAT.get('nudge') or {}
-    nudge=f' data-nudge="{e(nu.get("text",""))}" data-nudge-after="{int(nu.get("delay",40) or 40)}"' if nu.get('enabled',True) and nu.get('text') else ''
+    ntr={l:t['ed.chat.nudge'] for l,t in _tr_files().items() if t.get('ed.chat.nudge')}
+    nudge=(f' data-nudge="{e(nu.get("text",""))}" data-nudge-after="{int(nu.get("delay",40) or 40)}"'+(f' data-nudge-tr="{e(json.dumps(ntr,ensure_ascii=False))}"' if ntr else '')) if nu.get('enabled',True) and nu.get('text') else ''
     return f'<!--chat--><script src="/assets/chat.js?v={_v("chat.js")}" data-index="/assets/chat-index.json?v={iv}" data-label="{e(lab)}"{nudge} defer></script><!--/chat-->'
 def stamp_chat(path,tag):
     if not os.path.exists(path): return
@@ -676,7 +719,7 @@ if __name__=='__main__':
     for f in ('pages.css','pages.js','blocks.css','blocks.mjs','forms.js'): open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
     secs={k:v for k,v in HOMESEC.get('custom',{}).items()}
     rb=render_blocks({k:v.get('blocks',[]) for k,v in CUSTOM.items()},secs)
-    stamp_home(rb['sections'],rb['strings'])
+    stamp_home(rb['sections'],dict(rb['strings'],**chat_strings()))
     only=sys.argv[1:]
     total=0
     for p in PAGES:
