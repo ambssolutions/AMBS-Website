@@ -32,8 +32,8 @@
     if(/[āēīōū]/i.test(t)||/\b(tena koe|tēnā koe|ka pai|nga mihi|ngā mihi|he aha|kei hea|e hia|me pehea|me pēhea)\b/i.test(t))return"mi";
     if(/^[\x00-\x7F’‘“”…–—]+$/.test(t)&&/[a-z]{3,}/i.test(t))return"en";return""}
   /* Punjabi, Hindi, te reo Māori or Chinese typed in English letters ("kinna kharcha hai", "aap kya karte ho", "kei te pehea koe", "nihao") */
-  var RW={pa:"tusi tussi tusin tuhada tuhadi tuhade tuhanu tuhannu sanu saanu mainu kinna kinne kinni kida kidda kiddan kive kiwe kiven kivein kithe kitthe kado kadon karde kardi karda hunda hundi hega haige dasso daso dasdo chahida lagda lagu vich naal hor changa vadhiya vadiya sasriakal",
-    hi:"aap aapka aapki aapke aapko kya kyaa kaise kaisa kaisi kitna kitne kitni kahan kahaan kab kaun kyun kyon mujhe mera meri humein hame karte karta karti sakte chahiye nahi nahin accha acha theek thik namaste namaskar dhanyavad dhanyawad shukriya bataiye bataye batao kijiye liye lagega lagta",
+  var RW={pa:"hafte dekhne chahide chahidi changi jehi tusi tussi tusin tuhada tuhadi tuhade tuhanu tuhannu sanu saanu mainu kinna kinne kinni kida kidda kiddan kive kiwe kiven kivein kithe kitthe kado kadon karde kardi karda hunda hundi hega haige dasso daso dasdo chahida lagda lagu vich naal hor changa vadhiya vadiya sasriakal skde skda skdi sakde sakda sakdi krde krdi krda kehra kehre kiddan dyoge dyogi jauga jaugi bnauge hou kol vaje khulle lagge tvanu twade twanu thode di da nu ne nal naal lyi layi aa ae hega nhi kuj kise sada sadi sade mainu veer paji chahidi chahida nwi navi doge kroge hovegi hovega rahu rahega pau lgnge lagnge jaoogi hunda dikhdi hoya kita dikhao sikha jud vrtde chlu kharab gya fer je apni ohnu ohde jisch hun kidan kinni kithon kda dso haal chaal hal chal tuc tuci ta ni pena painda pauga lgnge lgda jande rahu kro",
+    hi:"aap aapka aapki aapke aapko kya kyaa kaise kaisa kaisi kitna kitne kitni kahan kahaan kab kaun kyun kyon mujhe mera meri humein hame karte karta karti sakte skte sakta skta krte krta krti chahiye ka ke hai hoga hogi baje somvar khud badlav aake uske zyada mujhe hamari hamara humara liye kuch toh bhi kaun dekhega sakti paunga jayega chalega bhai agar milega aati karwana karke iska banwane banana karna karni batao bataiye nahi nahin accha acha theek thik namaste namaskar dhanyavad dhanyawad shukriya bataiye bataye batao kijiye liye lagega lagta",
     mi:"kia ora kei pehea koe korua koutou ahau tino rawe mahi utu whare hea tena tenei aroha whanau pakihi rorohiko paetukutuku taupanga watea whakaaro korero patai awhina ingoa kaimahi haere hia aha morena",
     zh:"nihao xiexie duoshao zenme shenme nimen women keyi gongsi wangzhan jiage yuyue zaijian haode"},RWM={};
   Object.keys(RW).forEach(function(g){RW[g].split(" ").forEach(function(w){RWM[w]=g})});
@@ -45,20 +45,37 @@
     if(n.pa&&n.pa>=n.hi)return"pa";if(n.hi)return"hi";return""}
   /* what those words mean, so the search can find the answer */
   var RMEAN=[[/\b(kharcha|kharch|kharche|kimat|keemat|kemat|daam|paisa|paise|fees?|utu|jiage|qian|duoshao)\b/,"cost price"],
-    [/\b(samay|samaa|time|waqt|wakt|din|dina|hafte|hafta|mahina|lagda|lagega|lagenge|lagange|lagta|lagegi|lagu|kado|kadon|kab|jaldi)\b/,"how long time weeks"],
+    [/\b(samay|samaa|time|waqt|wakt|din|dina|hafte|hafta|mahina|lagange|lagta|lagegi|lagu|kado|kadon|kab|jaldi|ready)\b/,"how long time weeks"],
     [/\b(milna|milo|mil|mulakat|mulaqat|appointment|meeting|hui|yuyue|book|booking)\b/,"book session"],
     [/\b(kahan|kahaan|kithe|kitthe|hea)\b/,"where based location"],[/\b(kaise|kive|kiven|kiwe|kivein|kiwein|kiwen|kivven|pehea|zenme)\b/,"how work process"],[/\b(shuru|suru|aarambh|shuruat)\b/,"how do i get started first step"],
-    [/\b(karte|karde|karda|kardi|mahi|zuo)\b/,"what automate services"],[/\b(paetukutuku|wangzhan)\b/,"website"],[/\b(taupanga|yingyong)\b/,"app portal"],
+    [/\b(karte|karde|karda|kardi|krte|krde|krda|krdi|krti|kr|mahi|zuo)\b/,"what automate services"],[/\b(paetukutuku|wangzhan)\b/,"website"],[/\b(taupanga|yingyong)\b/,"app portal"],
     [/\b(madad|maddad|awhina|bangzhu)\b/,"help"],[/\b(surakshit|surakhit|surakhiyat)\b/,"data safe privacy"],[/\b(waea|dianhua)\b/,"contact phone"],
     [/\b(malik|maalik)\b/,"own"],[/\b(dukan|dukaan|kaarobar|karobar|pakihi)\b/,"business"],[/\b(kaimahi|karamchari|mulazam)\b/,"staff"]];
   /* the question for the search: what the words mean, plus any English words in it ("website", "app", "Xero"); the rest are left out */
-  var RSTOP={};("hai hain ho hoga hovega ji ki ka ke da di de nu nun te ne se mein me vich to toh bhi vi sakte sakde sakda sakdi skde bana banana banao banaunde kar karo kam kaam aa e o haan han nahi na koi kuch kujh sab ek ik apna apne sada sade tuhada saada mai main menu mainu ko wala wale vala vale te i a he ki ko ka nei mo ma ne de le ba").split(" ").forEach(function(w){RSTOP[w]=1});
-  function romanMeaning(t){var w=norm(t),out=[],cost=RMEAN[0][0].test(w),time=RMEAN[1][0].test(w)&&!(cost&&!/\b(din|dina|hafte|hafta|mahina|samay|waqt|wakt|kab|kado|kadon)\b/.test(w)),start=/\b(shuru|suru|aarambh|shuruat)\b/.test(w);
+  var RSTOP={};("sahi jehi changi dikhe dekhne chahide chahidi dyoge dyogi doge jauga jaugi jayega hou hovega lagge ga gi ge hon hona bai baiji paaji bada badi bahut bohat jada zyada kol uske uska hum ham thoda thodi pai pa sakti jata jati jaata hal solution wale vale wali main mai hi aayi aaya aagyi aa gyi gya gayi o eh ye mera meri mere mainu mujhe mujhko sada sadi sade saada hamara hamari hamare humara tuhada tuhadi tuhade aapka aapki asi assi apa sanu saanu bilkul koi log nu o jande jaande pena painda pauga kro karo jhanjat jhanjhat jhanjht doge dogge kroge karoge krdo kardo kr kar krna karna krni karni dena deyo do lyo lo plz pls ji veer paji bhai bro sir jo jisch ohnu ohde oh eh ih ye yeh v vi bhi sab sara sari kuj kuch lyi layi liye vaste wala wali sku skda skde skdi skte sakte sakda sakdi sakta ho skda ja jave jaye jayega jaoge karwana karke ch c vich wich hai hain ho hoga hovega ji ki ka ke da di de nu nun te ne se mein me vich to toh bhi vi sakte sakde sakda sakdi skde bana banana banao banaunde kar karo kam kaam aa e o haan han nahi na koi kuch kujh sab ek ik apna apne sada sade tuhada saada mai main menu mainu ko wala wale vala vale te i a he ki ko ka nei mo ma ne de le ba").split(" ").forEach(function(w){RSTOP[w]=1});
+  /* everyday Punjabi and Hindi words typed in English letters, and what they mean ("nwi website chahidi" = "new website need") */
+  var ROMAN={};"bna=build|bnaa=build|bana=build|banana=build|banao=build|bnao=build|bnaun=build|banaun=build|banwana=build|banwane=build|banwani=build|banani=build|bnani=build|banate=build|banta=build|bnn=build|banne=build|bnega=build|banega=build|bnu=build|banwa=build|bnwa=build|bnwana=build|bnwani=build|banaoge=build|bnaoge=build|chahida=need|chahidi=need|chahide=need|chahiye=need|chahte=need|chahta=need|chahti=need|chaida=need|chaidi=need|nwi=new|nwa=new|navi=new|nava=new|nayi=new|naya=new|naye=new|nvi=new|nva=new|apni=own|apna=own|apne=own|malik=own|maalik=own|malki=own|surakhit=safe|surakshit=safe|info=information data|jankari=information data|jaankari=information data|dikhdi=see|dikhti=see|dikh=see|dikhe=see|dikhega=see|dikhju=see|dekhni=see|dekhna=see|dekhne=see|dikhaao=see show|dikhao=see show|dikha=see show|vekh=see show|dekh=see show|muft=free|mufat=free|mupht=free|hunda=happens|hota=happens|hoga=happens|jud=connect|judd=connect|jod=connect|jodna=connect|jodd=connect|judna=connect|jodoge=connect|jud=connect|skda=connect|vrtde=use|vartde=use|vartna=use|istemal=use|chlu=works with|chalega=works with|chalu=works with|chalda=works with|chlda=works with|kharab=breaks problem fix|kharaab=breaks problem fix|kharaabi=breaks problem fix|dikkat=breaks problem fix|kaun=person|kon=person|dekhega=deal with|dekhuga=deal with|dekhugi=deal with|gal=talk|galbaat=talk|baat=talk|chhota=small size|chota=small size|chotta=small size|chhoti=small size|choti=small size|akela=sole trader one person|akeli=sole trader one person|matlab=what is meaning|sikha=train training|sikhana=train training|sikhao=train training|sikhaoge=train training|samjha=explain|samjhana=explain|samjhao=explain|sikhlai=train training|sikhaunge=train training|workers=staff|kamme=staff|karamchari=staff|hisab=reports numbers|hisaab=reports numbers|jwab=reply|jawab=reply|layak=worth value|laik=worth value|faida=worth value|fayda=worth value|sasta=cheaper|saste=cheaper|advance=deposit upfront|peshgi=deposit upfront|kisht=instalments payment plan|kishton=instalments payment plan|kiste=instalments payment plan|kistan=instalments payment plan|kishtan=instalments payment plan|lamba=long|lambi=long|wapis=refund|wapas=refund|badal=change edit|badalna=change edit|badli=change edit|purana=past work examples|puraana=past work examples|purani=past work examples|kita=past work examples|kiya=past work examples|hoya=past work examples|naukri=replace staff jobs|samajh=understand technical|samjh=understand technical|lena=buy|leni=buy|khareedna=buy|khareed=buy|vechan=sell online|vechna=sell online|bechna=sell online|bechne=sell online|vech=sell online|bech=sell online|samaan=products|saman=products|maal=products|khatam=running low|milne=visit in person|milna=visit in person|ghar=visit in person|dukaan=business|dukan=business|yaad=reminders|kis=contact person deal|baje=hours open|vaje=hours open|khulle=open hours|khula=open hours|somvar=monday|khud=myself|badlav=change edit|quotation=quote|bnauge=build|banaoge=build|ban=build|kal=tomorrow|aake=visit|aa ke=visit|restaurant=cafe restaurant|pehli=first|pehla=first|pehle=before|auto=automatic|rahu=stay mine|rahega=stay|rahuga=stay mine|sirf=only|sath=with|kaha=location based|kahan=location based|kithe=location based|kitthe=location based|theek=fix|thik=fix|baad=later|ready=ready|full=full|pura=full|poora=full".split("|").forEach(function(x){var i=x.indexOf("=");ROMAN[x.slice(0,i)]=x.slice(i+1)});
+  var RPHRASE=[[/\bpehli (meeting|mulakat|session)\b.*\b(free|muft|paise?|paisa|fees|kharcha|kharch)\b.*$/g," is the first free session free "],
+    [/\b(nahi|nhi|ni|na) (aunde|aande|aate|aati|aaunde)\b/g," noshow "],[/\b(paise?|paisa) (wapis|wapas)\b/g," refund "],[/\b(kinni|kitni|kinne|kitne) (puraani|purani|saal)\b/g," how long in business "],
+    [/\b(kinne|kitne) (log|bande|lok|jane)\b/g," team size how many people "],[/\b(kdo|kado|kab|kadon) (tak|tk)\b(?=.*\b(reply|jwab|jawab|jawaab)\b)/g," how quickly "],[/\b(ni|nahi|nhi) (aati|aaundi|aundi|samajh)\b/g," not technical "],
+    [/\b(gal|baat) (krni|karni|karna|krna|kr|kar)\b/g," talk to someone "],[/\b(sale|sales) (da|di|ki|ka) report\b/g," sales dashboard report "],[/\b(ni|nahi|nhi|na) (dikhdi|dikhti|dikhda|dikhta|dikhegi)\b/g," private privacy confidential "],[/\b(ki|kya) (cheez|chiz|cheej|hai|aa|h)\b/g," what is "],[/\b(kinne|kitne) din\b/g," how long "],[/\b(aate|aunde|aande|aaunde) (nahi|ni|nhi|na)\b/g," noshow "],[/\b(ik|ek|ikk) (jagah|thaan|jagha)\b/g," one place "],
+    [/\b(di|ki) jagah\b/g," replace staff "],[/\bjob (jaugi|jaoogi|jayegi|jaegi|jau)\b/g," replace staff jobs "],[/\b(ni|nahi|nhi|na) (pta|pata)\b/g," not technical "],[/\b(nahi|ni|nhi) (aata|aaunda|aunda)\b/g," not technical "],
+    [/\bonline (dukan|dukaan|shop|store)\b/g," online shop "],[/^.*\b(mera|mere|meri|sada|sadi|hamara|apna) hi (rahu|rahuga|rahega|rahegi|rehna|rahna|hou|hoga)\b.*$/g," own what you build "],
+    [/\b(quote|quotes|quotation|quotations|kotation) (bnaun|banaun|banane|bnane|banana|bnana|bnaunde|banaunde)\b/g," quotes take ages writing quotes "],[/\b(kinne|kitne|kehre|kis) (vaje|baje)\b.*$/g," when can i reach you "],[/\b(kinne|kitne|kinna|kitna) (time|samaa|samay|din)\b/g," how long "],
+    [/\b(roz|rozana|har roz|daily)\b.*\b(karna|krna) (padega|pauga|paega|pavega|hoga)\b.*$/g," how does it work do i need to do anything "],[/\b(vadiya|vadhiya|badhiya|changa|accha|achha|acha|sahi) (kam|kaam) (karde|krde|karte|kar)\b/g," are you any good "],
+    [/\b(aake|aa ke|aa kar|akar) (dikha|dikhao|dikhana|dekh|dekho|dekhna)\w*\b/g," visit in person "],[/\b(kal|aaj|parso) (baat|gal) ho\w*\b.*$/g," how do i book a free session "],[/\bsamjha( do| dyo| deo|o)?\b|\bsamjhao\b/g," "],[/\b(ai|a i) (wala|vala|wali|vali)\b.*$/g," what is ai automation "],[/\b(changi|sohni|vadiya|achhi|acchi) (dikhe|dikhni|lage|lagni)\b/g," "],[/\bwebsite (chahidi|chahida|chahiye|chaidi|chahi di)\b/g," i need a website "],
+[/\bpehli (meeting|mulakat|session)\b/g," first meeting free session "],[/\bapne aap\b/g," automatic "],[/\b(baat|gal) ho\b/g," talk to someone "],
+    [/\b(sada|sadda|hamara|mera) .{0,30}\b(ki|ya) (tuhada|aapka|tumhara)\b/g," own "]];
+  function romanMeaning(t){t=String(t);RPHRASE.forEach(function(r){t=norm(t).replace(r[0],r[1])});var w=norm(t),out=[],cost=RMEAN[0][0].test(w),time=RMEAN[1][0].test(w)&&!(cost&&!/\b(din|dina|hafte|hafta|mahina|samay|waqt|wakt|kab|kado|kadon)\b/.test(w)),start=/\b(shuru|suru|aarambh|shuruat)\b/.test(w);
     /* "kitna paisa lagega" asks the cost, not the time; "kiwein shuru karde haan" asks how to start, not what we do */
     RMEAN.forEach(function(m,i){if(i===1&&!time)return;if(start&&m[1]==="what automate services")return;if(m[0].test(w))out.push(m[1])});
     if(!time&&/\b(kitna|kitne|kitni|kinna|kinne|kinni|hia)\b/.test(w))out.push("cost price");
     if(/\b(bana|banana|banao|banaunde|banande|banate|bnaa)\b/.test(w))out.push("build");
-    w.split(" ").forEach(function(x){if(x&&!RWM[x]&&!RSTOP[x]&&!RMEAN.some(function(m){return m[0].test(x)}))out.push(x)});
+    var content=0;w.split(" ").forEach(function(x){if(!x)return;if(ROMAN[x]){out.push(ROMAN[x]);content++;return}
+      if(!RWM[x]&&!RSTOP[x]&&!RMEAN.some(function(m){return m[0].test(x)})){out.push(x);if(!/^(help|madad|kam|kaam|work)$/.test(x))content++}});
+    /* "ki kam kr skde ho": only "do / can" and no subject, so it's "what do you do" */
+    var i=out.indexOf("what automate services");if(i>=0&&content>0)out.splice(i,1);
+    if(i<0&&!content&&/\b(skde|sakde|skte|sakte|skda|sakda|skta|sakta|kroge|karoge|doge)\b/.test(w))out.push("what automate services");
     return out.join(" ")}
   function sugg(){var b=BT();return((lang()!=="en"&&b.suggestions)||(DATA&&DATA.bot&&DATA.bot.suggestions)||[]).slice(0,6)}
   function BT(){return DATA&&DATA.bot_tr&&DATA.bot_tr[lang()]||{}}
@@ -75,14 +92,14 @@
   var DEFN="Sorry, I couldn't find an answer to that on our website. You can book a free call, leave your question for the team, or contact us directly.";
 
   /* ---- finding answers ---- */
-  var STOP={};("a an and are as at be been but by can could did do does doing for from had has have how i if in into is it its just me my of on or our please should so tell than that the their them then there these they this those to too us was we were what when where which who why will with would you your yours i'm im want need know about get got any some much many also more very really there's what's whats hi hey like re ll ve mine else someone somebody something anything everything").split(" ").forEach(function(w){STOP[w]=1});
+  var STOP={};("a an and are as at be been but by can could did do does doing for from had has have how i if in into is it its just me my of on or our please should so tell than that the their them then there these they this those to too us was we were what when where which who why will with would you your yours i'm im want need know about get got any some much many also more very really there's what's whats hi hey like re ll ve tho though yous ya ok okay pls plz lol haha whether wondered possible possibly mess messy chaos chaotic hassle forever drowning killing wondering wonder might maybe perhaps kindly hoping curious honestly basically literally mine else someone somebody something anything everything").split(" ").forEach(function(w){STOP[w]=1});
   var SYN=[["cost","price","pricing","fee","charge","budget","rate","expensive","cheap","afford","pay","quote"],["computer","tech","technology","technical","techy"],["salon","hair","beauty","barber","nail"],["example","portfolio","case","sample"],["deposit","upfront","instalment","installment"],["electrician","sparky","plumber","builder","tradie","trade","tradesperson"],["book","booking","appointment","meeting","schedule","consult","consultation","session","walkthrough"],
     ["staff","employee","team","people","worker","job"],["automate","automation","automatic","ai","bot","robot"],["website","site","web","webpage","seo","google"],["app","software","tool","system","program","platform"],
     ["invoice","bill","billing","payment","xero","myob","accounting"],["review","rating","feedback"],["remind","reminder","text","sms","noshow","no-show","miss"],["privacy","data","secure","security","safe","gdpr","confidential"],
     ["where","location","based","office","address","auckland","nationwide","zealand","nz"],["contact","phone","email","call","reach","talk","speak","number"],["portal","dashboard","app"],["mobile","app","iphone","android","phone"],["build","make","create","develop","design","set"],["start","begin","process","step","work"],
     ["long","time","week","weeks","quick","fast","timeline"],["support","help","fix","broke","break","maintenance"],["own","ownership","login","contract","cancel"],["small","size","solo","sole"]];
   var SYNMAP={};SYN.forEach(function(g){g.forEach(function(w){var s=stem(w);(SYNMAP[s]=SYNMAP[s]||[]);g.forEach(function(o){var so=stem(o);if(so!==s&&SYNMAP[s].indexOf(so)<0)SYNMAP[s].push(so)})})});
-  function norm(s){return String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/no[- ]shows?/g,"noshow").replace(/[^\p{L}\p{N}\p{M}$]+/gu," ")}
+  function norm(s){return String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/\bno[- ]?show(s|ing|ed)?\b/g,"noshow").replace(/\bin voices\b/g,"invoices").replace(/\bin voice\b/g,"invoice").replace(/[^\p{L}\p{N}\p{M}$]+/gu," ")}
   var STOPX={};("的 了 吗 呢 吧 是 我 你 您 们 和 在 有 这 那 也 就 都 要 会 可以 能 请 问 一下 है हैं क्या के की का में को से और मैं आप हम यह वह तो भी पर एक हो ਹੈ ਹਨ ਕੀ ਦੇ ਦੀ ਦਾ ਨੂੰ ਵਿੱਚ ਤੋਂ ਅਤੇ ਮੈਂ ਤੁਸੀਂ ਅਸੀਂ ਇਹ ਉਹ ਤਾਂ ਵੀ ਤੇ ਇੱਕ ਹੋ ko te ngā nga he i ki a e o mō mo me kei ka au koe tēnei tenei").split(" ").forEach(function(w){STOPX[w.normalize("NFKD").replace(/[\u0300-\u036f]/g,"")]=1});
   function stem(w){if(w.length<=3)return w;if(/ies$/.test(w)&&w.length>4)return w.slice(0,-3)+"y";if(/(ss|us|is)$/.test(w))return w;if(/(ches|shes|xes|sses)$/.test(w))return w.slice(0,-2);if(/s$/.test(w))w=w.slice(0,-1);
     if(/ing$/.test(w)&&w.length>5)w=w.slice(0,-3);else if(/ed$/.test(w)&&w.length>4)w=w.slice(0,-2);if(/ion$/.test(w)&&w.length>6)w=w.slice(0,-3);if(/e$/.test(w)&&w.length>4)w=w.slice(0,-1);return w}
@@ -103,7 +120,7 @@
       return{d:d,tf:tf,qset:qset,qn:qn,alts:alts,exact:exact,len:{t:f.t.length,q:f.q.length,x:f.x.length,a:f.a.length}}});
     N=DOCS.length||1;Object.keys(AVG).forEach(function(k){AVG[k]=Math.max(1,AVG[k]/N)})}
   var W={t:2.4,q:3,x:2,a:1},KIND={qa:1.35,faq:1.2,page:1.3,home:1.1,sec:.85};
-  var VOC=null,GENW={build:1,make:1,help:1,work:1,use:1,get:1,set:1,creat:1,need:1,want:1,offer:1,provid:1,busi:1,small:1,not:1,usually:1,one:1,typical:1,actually:1,just:1,possibl:1};
+  var VOC=null,GENW={build:1,make:1,help:1,work:1,use:1,get:1,set:1,creat:1,need:1,want:1,offer:1,provid:1,busi:1,business:1,company:1,small:1,not:1,usually:1,one:1,typical:1,actually:1,just:1,possibl:1};
   function near(a,b,max){if(Math.abs(a.length-b.length)>max)return false;var d=[],i,j;for(i=0;i<=b.length;i++)d[i]=i;
     for(i=1;i<=a.length;i++){var prev=d[0],lo;d[0]=i;lo=i;for(j=1;j<=b.length;j++){var t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,prev+(a[i-1]===b[j-1]?0:1));prev=t;if(d[j]<lo)lo=d[j]}if(lo>max)return false}return d[b.length]<=max}
   function spell(text){if(!VOC)VOC=Object.keys(DF).filter(function(w){return /^[a-z]{4,}$/.test(w)});
@@ -115,7 +132,7 @@
     /* a word's weight in "how much of the question is covered": rare words ("invoices") count more than common ones ("hours");
        a word the website never uses counts most, so a question about something we don't cover isn't answered with something else */
     /* Chinese is split into pairs of characters, so every pair counts the same there */
-    var IW={},IWT=0,latin=!/[^\u0000-\u024f\s]/.test(norm(text));uniq.forEach(function(w){var df=DF[w];(SYNMAP[w]||[]).forEach(function(y){if(DF[y]!=null&&(df==null||DF[y]>df))df=DF[y]});if(df==null)df=Math.max(1,N*.02);IW[w]=latin?Math.log(1+(N-df+.5)/(df+.5))*(GENW[w]?.3:1):1;IWT+=IW[w]});
+    var IW={},IWT=0,latin=!/[^\u0000-\u024f\s]/.test(norm(text));uniq.forEach(function(w){var df=DF[w];(SYNMAP[w]||[]).forEach(function(y){if(DF[y]!=null&&(df==null||DF[y]>df))df=DF[y]});if(df==null)df=Math.max(1,N*.05);IW[w]=latin?Math.log(1+(N-df+.5)/(df+.5))*(GENW[w]||/^\d+$/.test(w)?.3:1):1;IWT+=IW[w]});
     var terms=[];uniq.forEach(function(w){terms.push({w:w,wt:1,o:w});(SYNMAP[w]||[]).forEach(function(s){terms.push({w:s,wt:.55,o:w})})});
     /* each word of the question counts once: its best match, either itself or (for less) a word that means the same */
     var cl=lang(),tq=qnorm(text),pool=DOCS.filter(function(D){var g=D.d.g||"en";return g==="en"||g===cl});
@@ -332,25 +349,25 @@
     weather:"I can't check the weather, sorry. I can help with anything about Ambs Solutions though: what we automate, prices, or booking a free session.",
     time:"It's {time} in New Zealand right now.",quality:"Here's what you can expect when you work with us, straight from how we work:",quality_end:"The easiest way to judge us is the free session: we look at how your work really happens and you keep the written plan, even if you don't hire us.",help:"Ask me anything about Ambs Solutions, or tap one of these to get started.",
     sorry:"No problem at all. What would you like to know?",test:"I'm here and working! Ask me anything about Ambs Solutions."};
-  var TALK=[["greet",/^(hi+|hello+|hey+|heya|hiya|yo|kia ora|gday|g day|good (morning|afternoon|evening|day)|namaste|ni hao|sat sri akal|tena koe|morena|greetings)( there| team| everyone| ambs)?( (is )?(anyone|anybody|someone) (there|here|home))?$|^(is )?(anyone|anybody|someone) (there|here|home)$/],
-    ["how_are_you",/\b(how are (you|u|ya)|how r u|hows it going|how is it going|how you doing|how are things|whats up|sup|how have you been)\b/],
-    ["human",/\b(are (you|u) (a |an )?(human|real|person|robot|bot|ai|machine|chatbot|computer))\b|\b(am i (talking|chatting|speaking) (to|with) (a )?(human|person|bot|robot|real))/],
+  var TALK=[["greet",/^(hi+|hello+|hey+|heya|hiya|yo|kia ora|gday|g day|good (morning|afternoon|evening|day)|namaste|ni hao|nihao|sat sri akal|tena koe|tena koutou|morena|greetings|kia ora koutou|kia ora e hoa|gday mate|g day mate|hey mate|hi mate)( there| team| everyone| ambs| koutou| mate| bro| e hoa)?( (is )?(anyone|anybody|someone) (there|here|home))?$|^(is )?(anyone|anybody|someone) (there|here|home)$/],
+    ["how_are_you",/\b(hows your day( going)?|how is your day( going)?|how s your day( going)?|how are (you|u|ya)|how r u|hows it going|how is it going|how you doing|how are things|whats up|sup|how have you been)\b/],
+    ["human",/\b((are|r) (you|u) (a |an )?(human|real(?= person| human| one|$)|person|robot|bot|ai|machine|chatbot|computer))\b|\b(am i (talking|chatting|speaking) (to|with) (a )?(human|person|bot|robot|real))/],
     ["who",/^(who are (you|u)|what are (you|u)|whats your name|what is your name|your name|introduce yourself|what can you do|what do you do here)$/],
-    ["thanks",/^(thanks?|thanks? (and |)bye|cheers (and |)bye|thank (you|u)|thanks (a lot|heaps|so much|mate)|thank you so much|thx|ty|cheers|ka pai|nga mihi|much appreciated|appreciate it)( mate| heaps)?$/],
-    ["ok",/^(lol|haha+|lol ok|ok lol|haha ok|ok+|okay|k|cool|nice|great|awesome|perfect|sweet|sounds good|got it|alright|all good|good to know|noted|interesting|wow|amazing|fair enough|right|sure|yes|yep|yeah|no|nope|nah)$/],
-    ["bye",/^(bye+|goodbye|good bye|see (you|ya)|later|catch you later|have a (good|great|nice) (day|one|night)|ka kite|ka kite ano|good night|gotta go|thats all|that is all|nothing else|im done)$/],
+    ["thanks",/^(thanks? heaps that helped|that helped|that was helpful|very helpful|chur( bro| mate)?|cheers (bro|mate|heaps)|nga mihi( nui)?|thanks? (and |)bye|cheers (and |)bye|thank (you|u)|thanks (a lot|heaps|so much|mate)|thank you so much|thx|ty|cheers|ka pai|nga mihi|much appreciated|appreciate it)( mate| heaps)?$/],
+    ["ok",/^(sweet as|sweet|nah all good|all good thanks|no worries|lol|haha+|lol ok|ok lol|haha ok|ok+|okay|k|cool|nice|great|awesome|perfect|sweet|sounds good|got it|alright|all good|good to know|noted|interesting|wow|amazing|fair enough|right|sure|yes|yep|yeah|no|nope|nah)$/],
+    ["bye",/^(bye+|goodbye|good bye|see (you|ya)|later|catch you later|have a (good|great|nice) (day|one|night)|ka kite|ka kite ano|good night|gotta go|thats all|that is all|nothing else|im done|ok bye|okay bye|ok thanks bye|bye bye|bye for now|cya)$/],
     ["good",/^(im |i am )?(so |really |very |pretty |all )?(good|great|fine|well|not bad|doing well|all good|pretty good|very good)( thanks| thank you| thx)?( and you| you| how about you)?$/],
     ["bad",/^(im |i am |feeling |im feeling )?(so |really |very |a bit |pretty |super |too )?(not (good|great|well)|bad|tired|stressed|busy|exhausted|sad|overwhelmed|swamped|flat out|run off my feet)( today| at the moment| right now)?$/],
     ["joke",/\b(tell me a joke|joke|make me laugh|something funny)\b/],
-    ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast)\b/],
+    ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast|mausam|mosam)\b/],
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
-    ["help",/^(help|help me|can you help( me)?|i need help|menu|options|start|what can i ask)$/],
+    ["help",/^(help|help me|can (you|u) help( me)?|i need help|menu|options|start|what can i ask)$/],
     /* questions about the bot itself: "do you have any knowledge?", "what do you know?" */
-    ["knowledge",/\b(do you (have|know|got) (any |much |a lot of |enough )?(knowledge|info|information|idea|clue)|(have you )?got (any )?(knowledge|info)|what do you know|how much do you know|what (all )?(can|could) (you|i) (answer|ask|tell)|what (questions|things) can (you|i)|are you (smart|clever|intelligent|trained|knowledgeable|any use|useful)|how (smart|clever|intelligent) are you|do you know (anything|much|a lot|stuff|things|everything)|are you (well )?informed)\b/],
+    ["knowledge",/\b(do you (have|know|got) (any |much |a lot of |enough )?(knowledge|info|information|idea|clue)|(have you )?got (any )?(knowledge|info)|what do you know|how much do you know|what (all )?(can|could) (you|i) (answer|ask|tell)|what (questions|things) can (you|i)|(you re|youre|you are|ur) (pretty |so |very |quite |really )?(smart|clever|intelligent|good)( for a bot)?|good bot|are you (smart|clever|intelligent|trained|knowledgeable|any use|useful)|how (smart|clever|intelligent) are you|do you know (anything|much|a lot|stuff|things|everything)|are you (well )?informed)\b/],
     ["sorry",/^(sorry|my bad|oops|apologies)$/],["test",/^(test|testing|test test|hello world)$/]];
   var QUALITY=/\b(how good|are (you|u) (any )?good|any good|why (should (i|we) )?(choose|pick|use|go with|hire|trust) (you|ambs|your)|why (you|u|ambs)\b|what makes (you|ambs) (different|better|special)|why are you better|are (you|u) (reliable|trustworthy|legit|legitimate|experienced|the best)|can i trust (you|ambs)|track record|reputation|(your|any) reviews|(do|have) you (have|got) (any )?(reviews|testimonials)|reviews (of|about|for) (you|ambs)|testimonials?|(your|any) results|^(are you|is ambs) worth it|better than (others|other|the rest)|how are you different|what do you do differently)\b|你们怎么样|为什么选择|为什么选你们|靠谱|可靠吗|有什么不同|口碑|आप कितने अच्छे|क्यों चुनें|आप ही क्यों|भरोसा|भरोसेमंद|अलग क्या|ਕਿੰਨੇ ਚੰਗੇ|ਕਿਉਂ ਚੁਣੀਏ|ਤੁਸੀਂ ਹੀ ਕਿਉਂ|ਭਰੋਸਾ|ਭਰੋਸੇਯੋਗ|ਵੱਖਰਾ ਕੀ|he aha koutou i pai ake ai|he aha ai mātou e kōwhiri/i;
   /* "what's your phone number?" is about contacting us; "can I see my numbers on my phone?" isn't */
-  var CONTACT_US=/\b(your|ur|ambs|you guys) (phone|email|e mail|contact|number|mobile|address)|\b(contact|call|ring|reach|email|phone|text) (you|u|ambs|someone|somebody)\b|\b(talk|speak|chat) (to|with) (a |an )?(someone|somebody|person|human|real|team|staff)|\breal person\b|\bhuman\b|\bcall me( back)?\b/;
+  var CONTACT_US=/\b(your|ur|ambs|you guys) (phone|email|e mail|contact|number|mobile|address)|\b(contact|call|ring|reach|email|phone|text) (you|u|ambs|someone|somebody)\b|\b(talk|speak|chat) (to|with) (a |an )?(someone|somebody|person|human|real|team|staff)|\breal person\b|\bhuman\b|\bcall me( back)?\b|\b(ring|call) (me|us) back\b|\bsomeone (call|ring)\b|\bcall (kr|kar|karo|krdo|kardo)\b|\b(number|phone|email|mail) (do|dena|dedo|deyo|ki aa|kya hai|ki hai|ki h|dasso|daso|dso|batao|bata do|dass do)\b|\b(phone|call) (kar|kr) (dena|do|dyo|deo|dio|dyoge|dena)\b|\bphone kiwe\b|\b(tuhada|aapka|tumhara|apna) (number|phone|email)\b|\b(number|email|email address|phone number) (ki|kya)\b/;
   var ABOUT_US=/\b(you|u|your|ur|yours|ambs|my|mine|me|i|im|we|our|us|ours|automation|automate|automations|website|websites|site|app|apps|portal|business|price|cost|ai|chatbot|software|xero|myob|payroll|invoice|invoices|quote|quotes|staff|roster|rosters|booking|bookings|customers|clients|wordpress|wix|squarespace|shopify)\b/;
   var CONTACT=/\b(phone|email|e-mail|contact|call you|ring|number|reach you|talk to (a|someone|somebody|a person|human)|speak to|human|real person|waea|īmēra|imera|whakapā)\b|电话|邮箱|邮件|联系|फ़ोन|फोन|ईमेल|संपर्क|नंबर|ਫ਼ੋਨ|ਫੋਨ|ਈਮੇਲ|ਸੰਪਰਕ|ਨੰਬਰ/i;
   var TALKX=[["greet",/^(你好|您好|嗨|哈喽|早上好|下午好|晚上好|नमस्ते|नमस्कार|हैलो|हेलो|राम राम|सत श्री अकाल|ਸਤ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਸਤਿ ?ਸ੍ਰੀ ?ਅਕਾਲ|ਹੈਲੋ|ਨਮਸਤੇ|kia ora|tēnā koe|tena koe|mōrena|morena)[!！。.\s]*$/i],
@@ -361,20 +378,22 @@
     ["bye",/^(再见|拜拜|अलविदा|फिर मिलेंगे|बाय|ਅਲਵਿਦਾ|ਫਿਰ ਮਿਲਾਂਗੇ|ਬਾਏ|ka kite|ka kite anō|ka kite ano|haere rā)[!！。.\s]*$/i],
     ["ok",/^(好|好的|行|嗯|ठीक है|अच्छा|हाँ|ओके|ਠੀਕ ਹੈ|ਵਧੀਆ|ਹਾਂ|ਓਕੇ|āe|ae|ka pai)[!！。.\s]*$/i],
     /* the same, typed in English letters */
-    ["greet",/^(namaste|namaskar|sat s(h)?ri akal|ssa|ni ?hao|salaam)( ji)?[!.\s]*$/i],
-    ["how_are_you",/\b(kaise ho|kaise hain|kaisa hai|kya haal|ki haal|kidda|kiddan|kida|kive ho|kiven ho|ni hao ma|nihao ma)\b/i],
+    ["greet",/^(namaste|namaskar|sat s(h)?ri akal|ssa|ni ?hao|salaam)( (ji|veer|paji|bhai|bro|sir|ji veer))?[!.\s]*$/i],
+    ["weather",/\b(mausam|mosam|baarish|barish)\b/i],["offtopic",/\b(cricket|rugby|football|match (da|ka|di|ki)? ?score|score (of|in) the (match|game)|who won the)\b/i],
+    ["how_are_you",/^(aap |tusi |tussi )?(kaise ho|kaise hain|kaisa hai|kya haal( hai)?|ki haal( aa| hai| chaal)?|kidda|kiddan|kida|kive ho|kiven ho|ni hao ma|nihao ma)( (aap|ji|veer|paji|paaji|bhai|bhaiya|tusi|aa|hai))*[?!.\s]*$/i],
     ["human",/\b(insaan|insan|banda) (ho|aa|hai)|\b(bot|robot) (ho|aa|hai)\b|\bzhen ?ren\b/i],
     ["who",/^(aap kaun (ho|hain)|tusi kaun (ho|o)|ni shi shei)[?!\s]*$/i],
-    ["thanks",/^((bahut |bohat )?(dhanyavad|dhanyawad|shukriya|thanks ji)|xie ?xie)( ji)?[!.\s]*$/i],
+    ["thanks",/^((bahut |bohat |bhut )?(dhanyavad|dhanyawad|dhanwad|dhanwaad|dhanvaad|shukriya|shukria|thanks ji)|(hao de )?xie ?xie( ni)?)( ji)?[!.\s]*$/i],
     ["bye",/^(alvida|phir milenge|fir milange|phir milange|zai ?jian)( ji)?[!.\s]*$/i],
     ["ok",/^(theek hai|thik hai|thik aa|theek aa|acha|accha|achha|haan|ok|hao ?de)( ji)?[!.\s]*$/i]];
   function talkKey(q){var raw=String(q||"").trim().toLowerCase();for(var j=0;j<TALKX.length;j++)if(TALKX[j][1].test(raw))return TALKX[j][0];var t=norm(q).replace(/\s+/g," ").trim().replace(/\b(i|what|it|how|that|you|there|who|we|they) (m|s|re|ll|ve|d)\b/g,"$1$2").replace(/^(um+|so|well|oh|ok so|hey) /,"");if(!t)return"";
     /* a greeting with a question after it is a question, unless it's just "how are you" */
     var g=t.replace(/^(hi+|hello+|hey+|kia ora|gday|good (morning|afternoon|evening)) (there |team )?/,"");
+    if(g!==t&&g&&/^(there|team|everyone|all|bro|mate|guys|ji|veer|paji|bhai|sir|whanau|e hoa|koutou|koutou katoa|tatou)$/.test(g))return"greet";
     if(g!==t&&g&&!/^(how are|how r|hows|whats up|how you)/.test(g))t=g;
     for(var i=0;i<TALK.length;i++){var k=TALK[i];if(k[1].test(t)){
       /* long messages that also mention a real question go to the search, e.g. "thanks, and how much does it cost?" */
-      if(t.split(" ").length>7&&k[0]!=="how_are_you")return"";if((k[0]==="who"||k[0]==="human")&&t.split(" ").length>6)return"";return k[0]}}return""}
+      if(t.split(" ").length>7&&k[0]!=="how_are_you"&&!(k[0]==="human"&&t.split(" ").length<=9))return"";if(k[0]==="who"&&t.split(" ").length>6)return"";if(k[0]==="human"&&t.split(" ").length>9)return"";return k[0]}}return""}
   function talk(k){var b=(DATA&&DATA.bot&&DATA.bot.chat)||{},v=b[k]||TALK_DEF[k]||"",bt=(BT().chat||{})[k];if(lang()!=="en"&&bt)v=bt;
     if(k==="thanks"&&lang()!=="en"&&!b.thanks&&TR[lang()])v=TR[lang()].thanks;
     if(k==="time"){try{v=v.replace("{time}",new Date().toLocaleString({zh:"zh-CN",hi:"hi-IN",pa:"pa-IN",mi:"mi-NZ"}[lang()]||"en-NZ",{timeZone:"Pacific/Auckland",weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"}))}catch(e){v=v.replace("{time}",new Date().toLocaleString())}}
@@ -398,17 +417,50 @@
     try{fetch(lg.u,{method:"POST",keepalive:true,headers:{"Content-Type":"application/json",apikey:lg.k},body:JSON.stringify({p_q:clean,p_lang:lang(),p_page:location.pathname,p_result:res,p_answer:String(ans).slice(0,300)})}).catch(function(){})}catch(e){}}
   function ask(q){lastQ=q;push({who:"me",x:q});if(window.gtag)gtag("event","chat_question");
     var t=typing();load().then(function(){setTimeout(function(){t.remove();CAP=[];LASTD=null;try{answer(q)}finally{var got=CAP;CAP=null;logQ(q,got);related(q,got)}},1800+Math.min(600,q.length*6))}).catch(function(){t.remove();addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:q})})}
-  function answer(q){var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
+  /* "Sat Shrine akal" (a phone's autocorrect), "sat sri akaal", "sasriakal": all the Punjabi greeting */
+  var IND=[[/\bfood (truck|trucks|cart|carts|van|vans|stall|stalls)\b|\bcoffee (cart|carts|van|vans)\b|\b(restaurants?|bakery|bakeries|bakers?|catering|caterers?|bistro|brewery|pub|pubs|bars?|pizzeria|pizza shop|fish and chip shop|chippy|food business)\b/gi,"cafe"],
+    [/\b(tradies|sparky|sparkies|roofers?|roofing|painters?|decorators?|landscapers?|landscaping|tilers?|tiling|carpenters?|carpentry|joiners?|joinery|concreters?|concreting|handyman|handymen|glaziers?|scaffolders?|scaffolding|fencers?|fencing|drainlayers?|plasterers?|gib stoppers?|arborists?|mechanics?|auto electricians?|panel beaters?|locksmiths?|construction)\b/gi,"tradie"],
+    [/\b(hairdressers?|hair dressers?|barbers?|physiotherapists?|dentists?|dental|chiropractors?|chiros?|osteopaths?|osteos?|podiatrists?|optometrists?|vets?|veterinary|massage therapists?|massage|therapists?|counsellors?|psychologists?|medical centres?|medical centers?|doctors?|beauticians?|spas?|tattoo (studio|shop|parlour)s?|nail (bar|studio|salon)s?|lash (studio|bar)s?|practitioners?)\b/gi,"clinic"],
+    [/\b(supermarkets?|convenience stores?|superettes?|gift shops?|second hand (store|shop)s?|op shops?|pharmacy|pharmacies|chemists?|florists?|book ?shops?|hardware stores?|boutiques?|butchers?|butchery|petrol stations?|liquor stores?|bottle stores?|grocery|grocer|grocers|mini ?mart|clothing store|clothes shop|retail stores?)\b/gi,"dairy"],
+    [/\b(mortgage (advisers?|advisors?|brokers?)|insurance (advisers?|advisors?|brokers?)|brokers?|financial (advisers?|advisors?|planners?)|bookkeepers?|bookkeeping (firm|business|practice|company)|lawyers?|solicitors?|law firms?|legal practice|barristers?|immigration (advisers?|advisors?|consultants?)|tax agents?|accounting practice|advisors?)\b/gi,"adviser"],
+    [/\b(couriers?|removals?|removalists?|movers|moving company|taxis?|cabs?|uber drivers?|freight|logistics|haulage|tow trucks?|towing|bus company|shuttle)\b/gi,"transport"],
+    [/\b(gyms?|fitness (studio|centre|center)s?|personal trainers?|yoga studio|church(es)?|charity|charities|not for profits?|non ?profits?|ngos?|charitable trusts?|community group|photographers?|photography|videographers?|tutors?|tutoring|music (school|teacher)s?|childcare|child care|daycare|early childhood( centre| center)?|kindergartens?|kindy|preschool|property managers?|property management|landlords?|real estate( agents?| agency| office)?|car (dealer|dealers|dealership|yard)s?|driving (school|instructor)s?|cleaning (company|business)|cleaners|schools?|sports club|clubs?|hotels?|motels?|accommodation|airbnb|farms?|farmers?|orchards?|vineyards?|winery|event planners?|wedding planners?|florists?)\b/gi,"industry"]];
+  var INDG={};("help work business company owner run centre center idea any thing like us our we they here just need want get can do what how which offer provid automat").split(" ").forEach(function(w){INDG[stem(w)]=1;INDG[w]=1});
+  var INDC=[["biz.cafe",/\b(cafes?|caf|takeaways?|take aways?|restaurants?|coffee shops?)\b/],["biz.trades",/\b(tradies?|trades(man|men|person|people)?|builders?|building (company|business|firm)|plumb(er|ers|ing)|electricians?|sparky|sparkies|construction)\b/],
+    ["biz.clinic",/\b(clinics?|salons?|physios?|physiotherap\w*|barbers?|hairdressers?|hair|beauty|nails?|massage)\b/],["biz.retail",/\b(dairy|dairies|shops?|retail\w*)\b/],
+    ["biz.adviser",/\b(advisers?|advisors?|accountants?|accounting (firm|practice|business)|accountancy)\b/],["biz.transport",/\b(transport|trucking|trucks?|delivery|deliveries|couriers?|drivers?|fleet)\b/]];
+  var INDA={};("help work business company owner own im am small manage services service suit might fit right run centre center idea any anything thing like us our we they here just need want get can do what how which offer provid automat automate automation firm practice plate take off kind sort solution service useful possible option benefit job industry type staff people employee team worker first contractor operator keep change always every week month day time lot lots heaps")
+    .split(" ").forEach(function(w){INDA[stem(w)]=1;INDA[w]=1});
+  function indCard(q){var t=norm(q),id="",rest=t;if(/\bonline\b|\btoo small\b|\bsmall for\b/.test(t))return null;
+    INDC.forEach(function(c){if(!id&&c[1].test(t)){id=c[0];rest=t.replace(new RegExp(c[1].source,"g")," ")}});if(!id)return null;
+    INDC.forEach(function(c){rest=rest.replace(new RegExp(c[1].source,"g")," ")});
+    if(toks(rest).some(function(w){return w!=="not"&&!/^\d+$/.test(w)&&!INDA[w]&&(DF[w]!=null||(SYNMAP[w]||[]).some(function(y){return DF[y]!=null}))}))return null;
+    for(var j=0;j<DOCS.length;j++){var d=DOCS[j].d;if(d.k==="home"&&d.i===id&&(d.g||"en")==="en")return {D:DOCS[j],cov:1,s:99,hit:{}}}return null}
+  function indStrip(q){var t=norm(q),o=t;if(!INDC.some(function(c){return c[1].test(t)})&&!/\b(cafe|tradie|clinic|dairy|adviser|transport)\b/.test(t))return "";
+    /* "can someone come to the shop?": the shop is a place there, not who is asking */
+    if(INDC.some(function(c){return new RegExp("\\b(the|this|that|your) "+c[1].source.slice(2)).test(t)}))return "";INDC.forEach(function(c){t=t.replace(new RegExp(c[1].source,"g")," ")});
+    t=t.replace(/\b(i|we) (run|own|have|manage|operate)\b|\b(i m|im|i am|we re|we are) (a|an)\b/g," ");
+    t=t.replace(/\b(cafe|tradie|clinic|dairy|adviser|transport|industry|workshop|centre|center|studio|business|company|firm|practice|owner)\b/g," ").replace(/\s+/g," ").trim();return t===o.replace(/\s+/g," ").trim()?"":t}
+  function fixGreet(t){return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsa?t?\s*sri\s*akaa?l\b/gi,"sat sri akal")}
+  function answer(q){q=fixGreet(q);var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
     /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
-    sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
+    sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|nihao|ni hao|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
     /* still understood after "Reply in English"; only the reply language stays English */
     if(rl0){sq=romanMeaning(sq)||sq;if(rl)sl=rl}
     /* "invocies", "webiste": a word the website never uses becomes the closest one it does */
+    /* a place name the website never uses ("I run a takeaway in Otahuhu"): leave it out */
+    if(DOCS.length){var nm={};(s.match(/\b(?:in|at|from|near|around|based in|out of)\s+([A-Z][a-z\u00C0-\u017F]{2,})/g)||[]).forEach(function(m){var w=m.trim().split(/\s+/).pop().toLowerCase();if(DF[stem(w)]==null&&!SYNMAP[stem(w)])nm[w]=1});
+      if(Object.keys(nm).length)sq=sq.split(/\s+/).filter(function(w){return !nm[w.toLowerCase().replace(/[^a-z\u00C0-\u017F]/g,"")]}).join(" ")||sq}
+    /* a business the website doesn't name ("I run a bakery", "dentist here") is read as the industry it belongs to,
+       and one with no industry page ("gym", "church") as "industry", so it finds the industry answer, not "couldn't find" */
+    if(!/[^\u0000-\u024f\s]/.test(sq)){IND.forEach(function(r){sq=sq.replace(r[0],r[1])});
+      /* "church, can you help with our website?": the website question; "industry" stays only when nothing else is asked */
+      if(/\bindustry\b/.test(sq)&&DOCS.length){var rest=sq.replace(/\b(industry|centre|center|business|company|firm|owner|studio|\d+)\b/g," ");if(toks(rest).some(function(w){return DF[w]!=null&&!INDG[w]}))sq=rest}}
     if(!sl||sl==="en")sq=spell(sq);
     if(sl&&sl!==lang()&&!(sl==="en"&&state.noRoman&&lang()==="en")){state.lang=sl===pageLang()?"":sl;save();labels()}
     /* the "Reply in English" button follows the latest answer */
     if(rl){state.msgs=state.msgs.filter(function(m){return m.t!=="english"});save();if(log)[].forEach.call(log.querySelectorAll(".ac-enrow"),function(x){x.remove()});setTimeout(function(){addBot({t:"english"})},0)}
-    var tk=talkKey(s);
+    var tk=talkKey(s)||(sq!==s&&talkKey(sq)==="help"?"help":"");
     /* "do you speak Hindi?": show the languages, with the buttons to switch */
     var LWORD={hi:/^(hindi|हिन्दी|हिंदी)$/,pa:/^(punjabi|panjabi|ਪੰਜਾਬੀ|पंजाबी)$/,zh:/^(chinese|mandarin|中文|普通话|汉语|華語)$/,mi:/^(maori|te reo|te reo maori|reo maori)$/,en:/^(english|angrezi|अंग्रेज़ी|अंग्रेजी|ਅੰਗਰੇਜ਼ੀ|英文|英语)$/};
     var lw=norm(s).replace(/\s+/g," ").trim().replace(/^(in|speak|talk in|reply in|chat in|answer in|can you speak|do you speak|can we talk in|can you reply in)\s+/,"").replace(/\s+(please|plz|pls|ji|language|bhasha|ma)$/,"").trim(),lpick="";
@@ -418,14 +470,30 @@
     if(tk==="greet"){addBot({t:"text",x:L("greeting")});addBot({t:"chips",items:sugg()});addBot({t:"langs"});return}
     if(tk){addBot({t:"text",x:talk(tk)});if(tk==="help"||tk==="knowledge"||tk==="who"||tk==="good"||tk==="how_are_you"||tk==="test")addBot({t:"chips",items:sugg()});
       else if(tk==="human")addBot({t:"actions",q:""});return}
-    if(QUALITY.test(s)){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
+    if(QUALITY.test(s)||(rl0&&QUALITY.test(sq))){var w=(DATA.why&&(DATA.why[lang()]||DATA.why.en))||null;if(w&&w.why&&w.why.length){
         var lines=w.why.map(function(x){return"✓ "+x.replace(/\.$/,"")}).concat((w.trust||[]).map(function(t){return"✓ "+t[0]+(t[1]?": "+(t[1].match(/^[^.!?。।]*[.!?。।]?/)||[t[1]])[0]:"")}));
         addBot({t:"answer",x:talk("quality")+"\n\n"+lines.join("\n")+"\n\n"+talk("quality_end"),u:"/#why",l:""});addBot({t:"actions",q:s});return}}
+    /* "I'd like to offer you our SEO services", "can we partner?": a sales pitch gets our contact details */
+    if((!sl||sl==="en")&&/\b(offer you (our|my)|we sell\b|can we partner|partner with you|partnership|collaborat\w*|reseller|affiliate program|sponsor(ship)?|guest post)\b/.test(norm(s))){addBot({t:"contact"});addBot({t:"actions",q:s});return}
+    /* "I want to book a plumber", "my Outlook isn't working": not something we do, so say so instead of matching a word */
+    if((!sl||sl==="en"||rl0)&&(/\b(book|hire|find|recommend|need) (me )?(a|an) (plumber|electrician|sparky|builder|cleaner|painter|roofer|mechanic|taxi|courier|dentist|doctor|lawyer|accountant|hairdresser|barber|table)\b/.test(norm(s))||/\bmy (\w+ )?(email|outlook|laptop|computer|pc|printer|phone|wifi|internet|iphone|mac)( \w+)? (is not|isnt|isn t|not|stopped|won t|wont) work/.test(norm(s))||/\b(laptop|computer|pc|printer|phone screen|screen|wifi|internet|iphone)\b.*\b(repair|fix|theek|thik|badal\w*|change)\b|\b(repair|fix|theek|thik)\w* (my |mera |meri )?(laptop|computer|pc|printer|phone)\b/.test(norm(s))||/\bis (\w+) down\b|\b(essay|homework|assignment)\b|\bwhat time does (?!ambs|your|you)\w+ (close|open)\b/.test(norm(s)))){addBot({t:"text",x:talk("offtopic")});addBot({t:"actions",q:s});return}
+    /* "AI receptionist that answers the phone": the website doesn't cover phone answering, so don't let "receptionist" find the staff answer */
+    if((!sl||sl==="en")&&/\b(buy|invest in|acquire) (my|our) (business|company)\b/.test(norm(s))){addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:s});return}
+    if((!sl||sl==="en")&&/\b(ai|virtual|robot|automated) receptionists?\b|\banswer(s|ing)? (the |my )?(phone|calls)\b/.test(norm(s))){addBot({t:"text",x:L("not_found")});addBot({t:"actions",q:s});return}
     var df=lang()==="en"&&define(sq);if(df){addBot({t:"answer",x:df.x,src:df.d.u&&df.d.u!==location.pathname?{t:df.d.t.split(": ")[0],u:df.d.u}:null});addBot({t:"actions",q:s});return}
+    var indHit=null;
+    /* "mechanic, can you send booking reminders?": what's asked is the reminders, so the business is left out of the search */
+    /* unless the industry's own card has it ("can you help a plumber with quotes?" gets the trades card) */
+    var ist=indStrip(sq),icw=toks(ist).filter(function(w){return !INDA[w]&&!/^\d+$/.test(w)&&DF[w]!=null});
+    if(ist&&icw.length){var cid="",cd=null;INDC.forEach(function(c){if(!cid&&c[1].test(norm(sq)))cid=c[0]});var tex={"cafe":"biz.cafe","tradie":"biz.trades","clinic":"biz.clinic","dairy":"biz.retail","adviser":"biz.adviser","transport":"biz.transport"};
+      if(!cid)Object.keys(tex).forEach(function(k){if(!cid&&new RegExp("\\b"+k+"\\b").test(norm(sq)))cid=tex[k]});
+      for(var j=0;j<DOCS.length;j++){if(DOCS[j].d.k==="home"&&DOCS[j].d.i===cid&&(DOCS[j].d.g||"en")==="en"){cd=DOCS[j];break}}
+      var rw=icw.slice().sort(function(a,b){return DF[a]-DF[b]})[0],inCard=cd&&(icw.filter(function(w){return cd.tf.a[w]||cd.tf.t[w]}).length*2>=icw.length||!!(cd.tf.a[rw]||cd.tf.t[rw]));
+      if(!inCard)sq=ist;else indHit=cd}
     var res=search(sq),top=res[0],wantsContact=CONTACT_US.test(norm(s))||(CONTACT.test(s)&&norm(s).trim().split(/\s+/).length<=3&&!/\bmy\b/.test(norm(s))),yours=null;
     /* "can you make a website for a real estate agent?": a question about what we do gets our own answer to it, not a guide's paragraph */
     /* our answer must be about the thing asked: a word of its own question (or one meaning the same), not just "build" or "help" */
-    var GEN={build:1,make:1,help:1,work:1,use:1,get:1,set:1,creat:1,need:1,want:1,automat:1,offer:1,provid:1,busi:1,small:1,send:1};
+    var GEN={build:1,make:1,help:1,work:1,use:1,get:1,set:1,creat:1,need:1,want:1,automat:1,offer:1,provid:1,busi:1,business:1,company:1,small:1,send:1};
     /* the question's key word: its rarest word the website knows. An answer must contain it (or a word meaning the same),
        so "can you fix my laptop?" isn't answered with "Yes" and our support plan */
     var IWm=res.IW||{},rare="",known=0,unknown=0,eng=!sl||sl==="en",aud={};
@@ -438,6 +506,7 @@
     if(eng&&unknown&&!content)known=0;
     function hitsRare(r){return !rare||(r.hit[rare]||0)>0||r.cov>=.6}
     /* an owner's answer is about the question when its question or wordings have the key word, or two of the question's words */
+    function qaHits(D){var t=D.tf,n=0;Object.keys(IWm).forEach(function(w){if(GEN[w]||w==="not")return;if([w].concat(SYNMAP[w]||[]).some(function(y){return t.q[y]||t.x[y]}))n++});return n}
     function qaAbout(D){if(!rare||D.d.k!=="qa")return true;var t=D.tf;function has(w){return [w].concat(SYNMAP[w]||[]).some(function(y){return t.q[y]||t.x[y]||t.t[y]})}
       if(has(rare))return true;var n=0;Object.keys(IWm).forEach(function(w){if(!GEN[w]&&w!=="not"&&has(w))n++});return n>=2}
     /* our own answers by their question; service and industry pages by their title */
@@ -455,10 +524,20 @@
       function pri(r){var k=r.D.d.k;return k==="qa"?(inQ(r.D)?0:.5):KP[k]+(inQ(r.D)?0:2)}res.filter(function(r){var k=r.D.d.k;return (k==="qa"||k==="home"||(k==="page"&&/^\/(services|industries)\//.test(r.D.d.u||"")))&&r.cov>=.3&&(k!=="qa"||(r.cov>=top.cov-.5&&r.s>=top.s*.3))&&asksAbout(r.D)&&hitsRare(r)&&qaAbout(r.D)})
         .sort(function(a,b){return pri(a)-pri(b)||b.s-a.s}).slice(0,1).forEach(function(r){yours=r})}
     if(yours)top=yours;
+    /* one of the owner's wordings word for word inside a longer message ("…6 or 7 people who just dont turn up…"): that answer */
+    if(!yours&&(eng||rl0)){var qt=toks(sq),pm=null,pl=0;DOCS.forEach(function(D){if(D.d.k!=="qa"||(D.d.g||"en")!=="en")return;if(!D.altSeq)D.altSeq=String(D.d.x||"").split(/\s*,\s*/).map(function(a){return toks(a)}).filter(function(a){return a.length>=2});
+        D.altSeq.forEach(function(a){if(a.length<=pl)return;for(var i=0;i+a.length<=qt.length;i++){var m=true;for(var j=0;j<a.length;j++)if(qt[i+j]!==a[j]){m=false;break}if(m){pm=D;pl=a.length;break}}})});
+      if(pm&&(top.D.d.k!=="qa"||top.D===pm||(pl>=3&&top.D!==pm&&!(top.D.altSeq||[]).some(function(a){return a.length>=pl})))){var pr=null;res.forEach(function(r){if(r.D===pm)pr=r});top=pr||{D:pm,cov:.7,s:top.s,hit:{}};top.cov=Math.max(top.cov,.7);yours=top}}
+    /* an owner's answer level with a page's text wins: the owner wrote it for this question */
+    if(!yours&&top&&top.D.d.k!=="qa"){var qn=res.slice(1,5).filter(function(r){return r.D.d.k==="qa"&&r.cov>=top.cov-.05&&r.s>=top.s*.85&&qaAbout(r.D)&&hitsRare(r)})[0];if(qn)top=qn}
+    /* "I run a physio clinic, how can you help?", "dentist here, any ideas?": a business named with nothing else asked gets its industry's card */
+    if((eng||rl0)&&!/^(are|r|is) (you|u|ambs|your team)\b/.test(norm(sq).trim())){var ic=indCard(sq);if(!ic&&indHit)ic={D:indHit,cov:1,s:99,hit:{}};if(ic){top=ic;yours=ic}}
+    /* Punjabi or Hindi typed in English letters: an owner's answer close behind beats a page's sentence */
+    if(!yours&&rl0&&top&&top.D.d.k!=="qa"){var qa1=res.slice(1,8).filter(function(r){return r.D.d.k==="qa"&&r.cov>=top.cov-.3})[0];if(qa1)top=qa1}
     /* "how much to automate my invoicing?": a question about cost gets an owner's answer about cost, not the invoicing one */
     var COSTQ=/\b(how much|cost|costs|price|prices|pricing|charge|fees?|rates|budget)\b/;
-    if(eng&&top&&COSTQ.test(norm(sq))&&!(top.D.d.k==="qa"&&COSTQ.test(norm(top.D.d.q)))){var cq=res.slice(0,10).filter(function(r){return r.D.d.k==="qa"&&COSTQ.test(norm(r.D.d.q))});
-      cq.sort(function(a,b){return (inQx(b)-inQx(a))||b.s-a.s});if(cq[0])top=cq[0]}
+    if((eng||rl0)&&top&&!(yours&&yours.D.d.k==="home")&&COSTQ.test(norm(sq))&&!/\b(worth|value|cheaper|deposit|upfront|instalments?|installments?|advance|refund|free|muft)\b/.test(norm(sq))&&!(top.D.d.k==="qa"&&(COSTQ.test(norm(top.D.d.q))||(qaAbout(top.D)&&COSTQ.test(norm(top.D.d.x||"")))))){var cq=res.slice(0,40).filter(function(r){return r.D.d.k==="qa"&&COSTQ.test(norm(r.D.d.q))});
+      cq.sort(function(a,b){return (inQx(b)-inQx(a))||b.s-a.s});if(cq[0]){top=cq[0];top.cov=Math.max(top.cov,.6)}}
     function inQx(r){var t=r.D.tf;return Object.keys(IWm).filter(function(w){return !GEN[w]&&t.q[w]&&!COSTQ.test(w)}).length}
     /* "how quickly do you reply?": the owner's answer whose question is about it, not the one that only mentions "quickly" */
     if(!yours&&top&&top.D.d.k==="qa"&&!qaAbout(top.D)){var alt=res.slice(1,6).filter(function(r){return r.D.d.k==="qa"&&qaAbout(r.D)&&r.cov>=top.cov-.15})[0];if(alt)top=alt}
@@ -466,16 +545,16 @@
     /* a yes/no question with a clear answer starts with "Yes." — never for a page's own Q&A (it says yes or no itself where it means it), and never when the answer says "not", "don't", "only"… */
     /* "how long for a website?" or "Power BI or something simpler?" isn't a yes/no question: an answer written "Yes. We build…" loses its "Yes." */
     /* "I spend hours on invoices, can you help?": the question is the last part */
-    var YNW=/^(can|could|do|does|did|is|are|will|would|should|have|has)\b/,lastPart=(sq.split(/[,.;!?]+/).map(function(x){return norm(x).trim()}).filter(Boolean).pop()||"");
-    var YN=(YNW.test(norm(sq).trim())||YNW.test(lastPart))&&!/\bor\b/.test(norm(sq));
+    var YNW=/^(can|could|do|does|did|is|are|will|would|should|have|has)\b/,lastPart=(s.split(/[,.;!?]+/).map(function(x){return norm(x).trim()}).filter(Boolean).pop()||"");
+    var YN=(YNW.test(norm(sq).trim())||YNW.test(lastPart))&&!/\bor\b/.test(norm(sq))&&!/\b(problem|issue|risk|risky|dangerous|bad|wrong|catch|illegal|a scam)\b/.test(lastPart||norm(sq));
     function noYes(ax){if(YN||!eng)return ax;var y=L("yes")||"Yes.";if(ax.indexOf(y+" ")===0)return ax.slice(y.length+1);return ax.replace(/^Yes[.:]\s+(?=\S)/,"")}
     function yesLead(ax,d,sure){if(!sure||d.k==="faq"||!YN)return ax;
-      if(/^(yes|no|not|nope|usually|often|only|partly|mostly|sometimes|it depends|that depends|it can|it could|not always|in most|generally)\b/i.test(ax.trim()))return ax;
+      if(/^(yes|no|not|nope|usually|often|only|partly|mostly|sometimes|it depends|that depends|it can|it could|not always|in most|generally)\b/i.test(ax.trim()))return ax;if(/^(नहीं|ਨਹੀਂ|不|没有|Kāo|Kao|हाँ|ਹਾਂ|是的|Āe)/.test(ax.trim()))return ax;
       if(/\b(not|cannot|can't|don't|doesn't|won't|isn't|aren't|never|no|only if|unless)\b|n't\b/i.test((ax.match(/^[^.!?。।]*/)||[""])[0]))return ax;return L("yes")+" "+ax}
     /* other languages: a short question that contains one of the owner's wordings ("需要签合同吗" has "合同") */
     if(!eng&&top&&top.D.d.k==="qa"&&top.altIn&&top.cov>=.3)top.cov=Math.max(top.cov,.6);
     var nq=toks(sq).length,good=top&&known>0&&(!!yours||top.cov>=.6||(top.cov>=.5&&(top.D.d.k==="qa"||(nq>=3&&(top.D.d.k==="faq"||top.s>8)))))&&(!!yours||(top.D.d.k==="qa"&&qaAbout(top.D))||(top.D.d.k!=="qa"&&!CAN_YOU.test(norm(sq).trim())&&!(eng&&unknown))),links=[],used={};
-    if(wantsContact&&(CONTACT_US.test(norm(s))||!(good&&top.D.d.k==="qa"&&top.cov>=.67))){addBot({t:"contact"});addBot({t:"actions",q:s});return}
+    if(wantsContact&&((CONTACT_US.test(norm(s))&&!(good&&top.D.d.k==="qa"&&top.cov>=.67&&/\bor\b/.test(norm(s))))||!(good&&top.D.d.k==="qa"&&top.cov>=.67))){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(good){var d=top.D.d;LASTD=top.D;LASTRES=res;used[d.u||"_"]=1;
       /* matched in English: give the same answer in the visitor's language when we have it */
       if(lang()!=="en"&&(d.g||"en")==="en"&&d.i){for(var j=0;j<DOCS.length;j++){var o=DOCS[j].d;if(o.i===d.i&&o.g===lang()){d=o;break}}}
@@ -491,7 +570,10 @@
       if(wantsContact)addBot({t:"contact"});addBot({t:"actions",q:s});return}
     if(wantsContact){addBot({t:"contact"});addBot({t:"actions",q:s});return}
     /* nothing about us in the question at all: a general question we can't answer, so say so and suggest topics */
-    var off=eng?(!top||top.cov<=.5||(unknown&&top.D.d.k!=="qa"))&&!ABOUT_US.test(norm(sq)):(!top||top.cov<=.5);
+    /* Punjabi or Hindi typed in English letters that we can't match is almost always about us: "couldn't find", not off-topic */
+    /* "mechanic workshop, booking reminders possible?": nothing found, so ask again without the business ("booking reminders possible?") */
+    if(!answer.retry){var st=indStrip(sq);if(st&&toks(st).length){answer.retry=1;try{answer(st)}finally{answer.retry=0}return}}
+    var off=eng?(!top||top.cov<=.5||(unknown&&top.D.d.k!=="qa"))&&!ABOUT_US.test(norm(sq)):(!top||top.cov<=.5)&&!rl0;
     if(off){addBot({t:"text",x:talk("offtopic")});addBot({t:"actions",q:s});return}
     var some=res.filter(function(r){return r.cov>=.34&&r.D.d.u}).slice(0,6);some.forEach(function(r){var x=r.D.d;if(links.length>=3||used[x.u])return;used[x.u]=1;links.push({t:x.k==="sec"?x.t.split(": ").pop():x.t,u:x.u,s:snippet(x,s,110)})});
     addBot({t:"text",x:L("not_found"),links:links});addBot({t:"actions",q:s})}
@@ -548,7 +630,7 @@
       if(!away||Date.now()-away<18e5||state.open)return;away=0;
       try{localStorage.setItem("ambs:chat-seen",String(Date.now()));sessionStorage.removeItem("ambs:chat-quiet");sessionStorage.removeItem("ambs:nudged")}catch(e){}
       state.msgs=[];state.lang="";state.noRoman=0;save();if(log)log.innerHTML="";nudgeTimer()});
-    window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2),Object.keys(r.hit).join(" ")]}).concat([JSON.stringify(search(q).IW)])})};
+    window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_RM=function(t){return romanLang(t)+": "+romanMeaning(t)};window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2),Object.keys(r.hit).join(" ")]}).concat([JSON.stringify(search(q).IW)])})};
     document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a){ev.preventDefault();open()}})}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
 })();

@@ -72,7 +72,7 @@
   {
    "id": "book",
    "q": "How do I book a free session?",
-   "also": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today",
+   "also": "book, booking, appointment, meeting, consultation, call, free session, walkthrough, get started, talk to someone, get a quote, can i get a quote, have a chat, keen to chat, set up a chat, quote today, get a quote today, talk to someone, talk to a person, speak to someone, meet with you, talk tomorrow, call tomorrow, arrange a meeting, set up a meeting",
    "a": "Book a free session and we look at how your work really happens. You leave with a written plan and an hours estimate, yours to keep. There is no cost and no jargon.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -80,7 +80,7 @@
   {
    "id": "what",
    "q": "What can you automate?",
-   "also": "what do you do, services, what can you help with, what do you offer, automate, automation ideas, examples, what do you guys do, what do you actually do, what is it you do, which bits can you take off me, admin",
+   "also": "what do you do, services, what can you help with, what do you offer, automate, automation ideas, examples, what do you guys do, what do you actually do, what is it you do, which bits can you take off me, admin, what work can you do, what work do you do, what kind of work do you do, what jobs can you do, what can you do for me, what can you do for my business, what things can you do, what do you offer, what services do you offer, what do you provide, what exactly do you guys do, what exactly do you do, what is it you guys do, what you guys do, what do yous do, in plain english, what do you do exactly, bookings and invoices, help with admin, admin work, paperwork",
    "a": "Two ways we help. Automations that clear the repetitive work: quotes and invoices, customer replies, bookings and reminders, moving data between apps, your numbers every week, and records you can show. And digital tools built around your business: websites that win trust, staff and customer portals, and live dashboards.",
    "link": "/services",
    "link_label": "See our services"
@@ -88,7 +88,7 @@
   {
    "id": "time",
    "q": "How long does it take?",
-   "also": "how long, timeline, how quickly, how soon, weeks, turnaround, when will it be ready, how quickly, how fast, first automation, timeframe, before christmas, deadline, first automation running, how quickly could you, how long until",
+   "also": "how long, timeline, how quickly, how soon, weeks, turnaround, when will it be ready, how quickly, how fast, first automation, timeframe, before christmas, deadline, first automation running, how quickly could you, how long until, up and running, how long till, how soon can it be running, before christmas rush, next week, how many weeks, weeks to set up",
    "a": "We start with one automation, usually built in one to two weeks depending on the job. You see it run on your real jobs, checked alongside the way you do it now, before it goes live.",
    "link": "/#how",
    "link_label": "How it works"
@@ -96,7 +96,7 @@
   {
    "id": "how",
    "q": "How does it work?",
-   "also": "how it works, process, steps, what happens, get started, next steps, onboarding, process, first chat, where do i start, how do i start, what happens after i book, next step",
+   "also": "how it works, process, steps, what happens, get started, next steps, onboarding, process, first chat, where do i start, how do i start, what happens after i book, next step, what are the steps, steps once i say yes, what happens next, what happens once i say yes, process from start to finish, whats the process",
    "a": "Three steps. We watch the work and leave you with a written plan and an hours estimate, yours to keep. We build one automation first, usually in one to two weeks, and you see it run on your real jobs. Then you own it: we hand over the logins, train your team, and fix or tweak anything free for the first 30 days.",
    "link": "/#how",
    "link_label": "How it works"
@@ -104,7 +104,7 @@
   {
    "id": "app",
    "q": "Do you build apps or portals?",
-   "also": "app, mobile app, phone app, portal, staff portal, customer portal, client login, iphone, android",
+   "also": "app, mobile app, phone app, portal, staff portal, customer portal, client login, iphone, android, app for my staff, tick off jobs, checklist app, app our staff use, little app, custom software, bespoke software, custom app, build an app, app for my business, track jobs, job tracking, customers check their job, customers can check job status",
    "a": "Yes: staff and customer portals. Job tracking, photos, invoices and approvals in your own app on every phone. Each person sees only what they need, with your logo and colours and a secure sign-in, and it installs on the home screen like a normal app.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites and portals"
@@ -112,7 +112,7 @@
   {
    "id": "web",
    "q": "Can you build me a website?",
-   "also": "website, new website, web design, rebuild my site, redesign, seo, google, multilingual, landing page, need a website, make me a site, simple site, contact form, new business site, get me found, redesign, freshen up, dated, slow website, chinese and english, other languages, site in chinese, site in hindi, another language, website for my business, i need a website",
+   "also": "website, new website, web design, rebuild my site, redesign, seo, google, multilingual, landing page, need a website, make me a site, simple site, contact form, new business site, get me found, redesign, freshen up, dated, slow website, chinese and english, other languages, site in chinese, site in hindi, another language, website for my business, i need a website, redo my website, redo it, old website, looks old, outdated website, website looks old, help with our website, help with my website, website help, nothing fancy, simple website, website is broken",
    "a": "Yes. We build fast, multilingual websites that win trust and turn visitors into calls. They are easy for you to update with no developer needed, set up so Google understands what you offer, with enquiry forms that come straight to your inbox.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites and portals"
@@ -120,7 +120,7 @@
   {
    "id": "price",
    "q": "How much does it cost?",
-   "also": "price, pricing, cost, fees, charge, quote, expensive, cheap, budget, rates, how much, how much do your services cost, cost roughly, price list, packages, tight budget, cheapest, one off fee, ongoing fee, per month, automation cost, cost of an automation, one automation cost, how much to automate",
+   "also": "price, pricing, cost, fees, charge, quote, expensive, cheap, budget, rates, how much, how much do your services cost, cost roughly, price list, packages, tight budget, cheapest, one off fee, ongoing fee, per month, automation cost, cost of an automation, one automation cost, how much to automate, ballpark cost, rough price, rough cost, how much would it cost, cost of an ai setup, ai setup cost, cost to set up, ballpark figure, how much will this cost me",
    "a": "It depends on the task and the tools involved, so we don't publish a price list. The first session is free. After it you get a written plan, and the scope and price are agreed in writing before any work starts. Fixes and tweaks are free for the first 30 days after launch.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -136,7 +136,7 @@
   {
    "id": "own",
    "q": "Do I own what you build?",
-   "also": "ownership, logins, accounts, lock in, contract, cancel, stop working with you, who owns, own the website, own the code, if you go out of business, what happens to my systems",
+   "also": "ownership, logins, accounts, lock in, contract, cancel, stop working with you, who owns, own the website, own the code, if you go out of business, what happens to my systems, keep everything, stay mine, stays mine, will it stay mine, owner of the website, stop paying, lose everything, if i stop paying, ours or yours",
    "a": "Yes. Systems are set up in your own accounts, so you keep them if you stop working with us. We hand over the logins and train your team.",
    "link": "",
    "link_label": ""
@@ -144,7 +144,7 @@
   {
    "id": "data",
    "q": "Is my data safe?",
-   "also": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential, where is my data stored, privacy act, compliant, patient records, health information, train ai",
+   "also": "privacy, data, security, privacy act, gdpr, stored, hosting, ai training, confidential, where is my data stored, privacy act, compliant, patient records, health information, train ai, data secure, data stay safe, data safe stay, sent overseas, where does my data end up, where is my data stored, data kept in nz, stored in new zealand",
    "a": "Your data stays yours. We handle it under the Privacy Act 2020, keep what we store for you in New Zealand or Australia, and never use it to train anyone's AI model.",
    "link": "/privacy",
    "link_label": "Read our privacy policy"
@@ -152,7 +152,7 @@
   {
    "id": "free",
    "q": "What happens in the free session?",
-   "also": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step, catch, whats the catch, really free, how long is the free session, what do we cover, written plan",
+   "also": "free session, consultation, walkthrough, first meeting, discovery, what to expect, assessment, audit, first step, catch, whats the catch, really free, how long is the free session, what do we cover, written plan, free consultation, is the consultation free, get ready before our first meeting",
    "a": "We sit with whoever actually does the job and look at how the work really happens today. You leave with a written plan and an hours estimate, yours to keep even if you don't hire us. There is no cost and no jargon, and it can happen on site or remotely.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -160,7 +160,7 @@
   {
    "id": "tools",
    "q": "Which software do you work with?",
-   "also": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software, google workspace, outlook, teams, excel, accounting software, software we already have, myob, pos, move data between apps, apps talk to each other, data entry, typing the same info, retyping, three systems, google calendar",
+   "also": "software, tools, integrations, connect, microsoft 365, outlook, excel, teams, google workspace, gmail, sheets, xero, myob, pos, booking system, new software, google workspace, outlook, teams, excel, accounting software, software we already have, myob, pos, move data between apps, apps talk to each other, data entry, typing the same info, retyping, three systems, google calendar, xero connect, connect xero, connect to xero, connect with xero, works with xero, myob not xero, excel to xero, connect excel, live in excel, excel spreadsheets, quickbooks, works with quickbooks, myob not xero, does that matter",
    "a": "Most automations connect the tools you already pay for: Microsoft 365 (Outlook, Excel, Teams, OneDrive and SharePoint), Google Workspace (Gmail, Calendar, Sheets and Drive) and Xero. Where your booking, point-of-sale or job software can export to Excel or Google Sheets, or sends you emails, we work from that. Most of the time you won't need new software.",
    "link": "/services/ai-automation",
    "link_label": "AI automation"
@@ -168,7 +168,7 @@
   {
    "id": "support",
    "q": "What support do you offer after launch?",
-   "also": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty, breaks, broken, goes down, who do i call, ongoing support, fix stuff, maintain, maintenance, care plan, website care, look after it, breaks in the first month, first month, first 30 days, after it is finished, what support do i get, automation breaks, if it breaks",
+   "also": "support, maintenance, after launch, help later, monitoring, fixes, tweaks, monthly plan, pay as you go, aftercare, warranty, breaks, broken, goes down, who do i call, ongoing support, fix stuff, maintain, maintenance, care plan, website care, look after it, breaks in the first month, first month, first 30 days, after it is finished, what support do i get, automation breaks, if it breaks, problem later, fix later, who fixes it, when it breaks, on a weekend, who do i ring, something goes wrong, if something goes wrong, stops working, something stops working, when it breaks, what happens when it breaks, breaks on a saturday",
    "a": "We set up monitoring where the tools allow, so most problems are caught early. Fixes and tweaks are free for the first 30 days after launch. After that, support is a monthly plan or pay as you go, whichever suits you, with one named contact reachable in New Zealand hours.",
    "link": "/#faq",
    "link_label": "Common questions"
@@ -176,7 +176,7 @@
   {
    "id": "team",
    "q": "Who will I work with?",
-   "also": "who will i deal with, contact person, account manager, team, ticket, reach you, response, new zealand hours, how many people",
+   "also": "who will i deal with, contact person, account manager, team, ticket, reach you, response, new zealand hours, how many people, passed around, different people, will i deal with the same person, same person, who will i talk to, who do i talk to, contact person, who deals with me, outsourced, call centre, who does the work, who actually does the work",
    "a": "You deal directly with the person who builds it: one named contact who knows your business, reachable in New Zealand hours. No ticket queue and no hand-offs.",
    "link": "/#why",
    "link_label": "Why partner with us"
@@ -184,7 +184,7 @@
   {
    "id": "industries",
    "q": "Which industries do you work with?",
-   "also": "industries, industry, sectors, cafe, takeaway, trades, builder, plumber, electrician, clinic, salon, shop, dairy, retail, adviser, accountant, transport, delivery, my type of business, accounting practice, trucking, transport company, physio, beauty salon, builders, cafes, my industry, relevant to us, trucking, trucks, courier, freight, builders",
+   "also": "industries, industry, sectors, my type of business, my industry, relevant to us, suit us, suit my business, right for us, good fit for us, might suit, my kind of business, what kind of businesses, which businesses, type of businesses, do you work with my industry",
    "a": "We work with small and growing New Zealand businesses, including cafés and takeaways, trades and building, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery. If your business isn't on that list, we look at the repetitive work you do every week and start there.",
    "link": "/industries",
    "link_label": "See industries"
@@ -192,7 +192,7 @@
   {
    "id": "size",
    "q": "Is my business too small?",
-   "also": "too small, small business, sole trader, one person, solo, how small, worth it, size, am i too small, just me, me and a ute, sole trader, bigger companies, large business, worth it for me",
+   "also": "too small, small business, sole trader, one person, solo, how small, worth it, size, am i too small, just me, me and a ute, sole trader, bigger companies, large business, worth it for me, one man band, overkill, just me, too small for this, small, only me, one person only, only 3 people, few people, only a few staff, tiny business, would this make sense, does this make sense for me, just me and a ute",
    "a": "If you spend more than about three hours a week on the same task, it's usually worth a look, whether you have one van or forty staff. Sole traders are very welcome.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -200,7 +200,7 @@
   {
    "id": "ai",
    "q": "What is AI automation?",
-   "also": "ai, artificial intelligence, automation meaning, what does automation mean, how does ai help, explain, what can ai do, what can ai do for my business, ai for small business",
+   "also": "ai, artificial intelligence, automation meaning, what does automation mean, how does ai help, explain, what can ai do, what can ai do for my business, ai for small business, is ai automation a thing, is that a thing, ai automation for my business, use ai in my business, is this just chatgpt, chatgpt, like chatgpt",
    "a": "It means taking the jobs your team does the same way every week, like quotes, reminders, retyping and reports, and building systems that do them for you. You keep the final say: anything involving money, complaints or judgement can be sent to you to check first.",
    "link": "/services/ai-automation",
    "link_label": "AI automation"
@@ -208,7 +208,7 @@
   {
    "id": "training",
    "q": "Do you train my team?",
-   "also": "training, train staff, teach, handover, show my team, language, hindi, punjabi, learn, show my team, staff not techy, cope, will they cope",
+   "also": "training, train staff, teach, handover, show my team, language, hindi, punjabi, learn, show my team, staff not techy, cope, will they cope, speak punjabi, my staff speak punjabi, learn it, show us how to use it, hand it over, will they learn",
    "a": "Yes. When an automation goes live we hand over the logins and train your team to use it, in plain words. Training can be in English, Hindi or Punjabi, whichever your team prefers.",
    "link": "/#how",
    "link_label": "How it works"
@@ -216,7 +216,7 @@
   {
    "id": "noshow",
    "q": "Can you help reduce no-shows?",
-   "also": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms, text reminders, sms reminders, booking reminders, online bookings",
+   "also": "no shows, no-show, missed appointments, reminders, booking reminders, confirmations, rebooking, waitlist, cancellations, text reminders, sms, text reminders, sms reminders, booking reminders, online bookings, clients keep not showing up, no showing, dont turn up, customers not showing up, clients dont show up, people dont turn up, missed appointments every week, cut down no-shows, cut no-shows, stop no-shows",
    "a": "Yes. We set up confirmation, reminder and rebooking texts that cut down no-shows without anyone chasing. They work with the booking system you already use, cancelled spots can be offered to people on a waitlist, and a follow-up text after the visit can ask for a review.",
    "link": "/guides/reduce-no-shows-with-booking-reminders",
    "link_label": "How to reduce no-shows"
@@ -224,7 +224,7 @@
   {
    "id": "invoices",
    "q": "Can you automate quotes and invoices?",
-   "also": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts, unpaid invoices, overdue, chasing, quote to invoice, invoice when job done, plumbing quotes at night, writing quotes, quotes at night, spend every night writing quotes",
+   "also": "invoices, invoicing, quotes, quoting, billing, payment reminders, chasing payments, xero invoices, voice memo quote, accounts, unpaid invoices, overdue, chasing, quote to invoice, invoice when job done, plumbing quotes at night, writing quotes, quotes at night, spend every night writing quotes, invoices automatically, automatic invoices, invoice automatic, quotes take ages, quotes take me, writing quotes takes, invoices take ages, sort my invoices, quotes into invoices, quote turns into an invoice, approved quote becomes an invoice, quotes turn into invoices automatically, speed up my quoting",
    "a": "Yes. Site notes or a voice memo become a draft quote in your own prices and wording, and approved jobs become an invoice ready to check and send. Invoices land in your accounting app with nothing retyped, and polite payment reminders go out on time.",
    "link": "/guides/automate-quotes-and-invoices",
    "link_label": "How to automate quotes and invoices"
@@ -232,7 +232,7 @@
   {
    "id": "tax",
    "q": "Can you do my taxes or accounts?",
-   "also": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books, are you an accountant, do you do bookkeeping",
+   "also": "tax, taxes, tax return, gst return, accountant, accounting, bookkeeping, ird, tax advice, do my books, are you an accountant, do you do bookkeeping, income tax, file my tax, tax file, file tax",
    "a": "No, we don't do tax returns or give tax advice. That's a job for your accountant. What we can do is make the records behind it tidier: invoices going straight into Xero, receipts filed as the work happens, and fuel and mileage logs kept for you, so they're easier to hand over.",
    "link": "",
    "link_label": ""
@@ -240,7 +240,7 @@
   {
    "id": "dashboards",
    "q": "Do you build dashboards?",
-   "also": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts, numbers in one place, weekly numbers, power bi, revenue",
+   "also": "dashboard, dashboards, reports, reporting, live numbers, sales figures, kpi, business numbers, charts, numbers in one place, weekly numbers, power bi, revenue, see my numbers, without opening apps, numbers in one place, all my numbers, report emailed, monday report, weekly report, last weeks numbers, report every monday, sales numbers in one place, numbers every monday, numbers on my phone, weekly numbers in one place, my weekly numbers in one place",
    "a": "Yes. A live dashboard shows sales, jobs and cash in one view that updates itself, wherever you are. It's built around the numbers you care about, alerts you when a number moves outside your normal range, and is easy to share with your team or accountant.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites, portals and dashboards"
@@ -248,7 +248,7 @@
   {
    "id": "replies",
    "q": "Can you help with customer replies and Google reviews?",
-   "also": "google reviews, reviews, review replies, customer replies, enquiries, emails, messages, answer customers, faq, opening hours questions, same questions, inbox, auto reply, answer enquiries, sound like me, draft replies, same questions every day, same questions by email",
+   "also": "google reviews, reviews, review replies, customer replies, enquiries, emails, messages, answer customers, faq, opening hours questions, same questions, inbox, auto reply, answer enquiries, sound like me, draft replies, same questions every day, same questions by email, emails pile up, customers wait, nobody has replied, reviews nobody replied, reply to reviews",
    "a": "Yes. Opening hours, pricing and directions are answered quickly on your website and by email, and replies to Google reviews are drafted in your own tone for you to approve. Urgent messages are flagged to you straight away.",
    "link": "/services/ai-automation",
    "link_label": "AI automation"
@@ -262,9 +262,17 @@
    "link_label": "Websites and portals"
   },
   {
+   "id": "web_time",
+   "q": "How long does a website take?",
+   "also": "how long for a website, website timeline, how long to build a website, how long does a website take, when will my website be ready, how many weeks for a website, website ready, time to build a website, how quickly can you build a website",
+   "a": "The timeline is always agreed with the scope, so you know when your website will be ready before we start.",
+   "link": "/services/websites-and-portals",
+   "link_label": "Websites and portals"
+  },
+  {
    "id": "value",
    "q": "Is it worth the money?",
-   "also": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use",
+   "also": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, cheaper than staff, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use, part timer, worth the coin, is it worth it, how many hours will it save, save me hours, how much time will it save, why would i pay you, cheaper tools",
    "a": "It depends on the job. As a rule of thumb, a task that takes three hours or more a week, every week, is worth a look. In the free session we measure your own week and leave you an hours estimate, so you can weigh the cost against the time it saves before you spend anything.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -272,7 +280,7 @@
   {
    "id": "pay",
    "q": "How do payments work?",
-   "also": "payment, payments, deposit, upfront, instalments, payment plan, pay you, bank transfer, credit card, when do i pay you, payment options, when do i pay, how do i pay",
+   "also": "payment, payments, deposit, upfront, instalments, payment plan, pay you, bank transfer, when do i pay you, payment options, when do i pay, how do i pay, full payment, pay before, pay upfront, advance payment, payment upfront, pay monthly, monthly payments, all upfront, payment monthly, when do i get invoiced, invoiced before or after, before or after the work",
    "a": "It depends on the job. Payment terms are agreed in writing with the scope and price before any work starts, so you know what you pay and when. Our team can talk you through the options in your free session.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -280,7 +288,7 @@
   {
    "id": "contract",
    "q": "Do I have to sign a long contract?",
-   "also": "contract, long contract, minimum period, lock in, locked in, cancel, cancel anytime, leave, notice period, agreement, sign",
+   "also": "contract, long contract, minimum period, lock in, locked in, cancel, cancel anytime, leave, notice period, agreement, sign, locked in for 12 months, 12 months, minimum months, how many months, sign up for a year, yearly contract",
    "a": "It depends on the job. Work starts only when we both sign a written agreement setting out the scope, price and timeframes. After launch, support is a monthly plan or pay as you go, and your systems are set up in your own accounts, so you keep them if you stop working with us.",
    "link": "/terms",
    "link_label": "Terms"
@@ -288,7 +296,7 @@
   {
    "id": "works",
    "q": "What if it doesn't work?",
-   "also": "doesn't work, does not work, guarantee, money back, refund, not happy, goes wrong, risk, warranty, what if it fails",
+   "also": "doesn't work, does not work, guarantee, money back, refund, not happy, goes wrong, risk, warranty, what if it fails, what you promised, doesnt do what you promised, not what i expected",
    "a": "The hours we estimate are not a guarantee, but you don't have to take them on trust. We build one automation first and you see it run on your real jobs, checked alongside the way you do it now, before you rely on it. Fixes and tweaks are free for the first 30 days after launch, and we set up monitoring where the tools allow, so most problems are caught early. For anything else, such as refunds, our team will answer you directly.",
    "link": "/#how",
    "link_label": "How it works"
@@ -296,7 +304,7 @@
   {
    "id": "hosting",
    "q": "Do you look after hosting and domain names?",
-   "also": "hosting, host my website, domain, domain name, co.nz, register a domain, move my domain, who hosts",
+   "also": "hosting, host my website, domain, domain name, co.nz, register a domain, move my domain, who hosts, hosting cost, what does hosting cost, who hosts the site",
    "a": "That depends on your site: our team can go through hosting and domain names with you in the free session. Your website and its accounts are set up in your own name, so you keep them if you stop working with us.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites and portals"
@@ -304,7 +312,7 @@
   {
    "id": "edit",
    "q": "Can I edit my website myself?",
-   "also": "edit my website, update the site myself, change text myself, make changes, who updates the site, cms, content management",
+   "also": "edit my website, update the site myself, change text myself, make changes, who updates the site, cms, content management, change the website later, change it myself, change website, change the prices on my site, change prices myself, update my site myself, change the prices on my site myself, change prices myself",
    "a": "Yes. Our websites are easy for you to update, with no developer needed. Where the tools allow, we set things up so you can make simple changes yourself, like editing text or adding a staff member.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites and portals"
@@ -320,7 +328,7 @@
   {
    "id": "hours",
    "q": "When can I reach you?",
-   "also": "your hours, what are your hours, open, weekends, how quickly do you reply, respond, response time, after 5, after hours, how fast do you reply, how fast do you respond, how soon will you reply, open saturday, open on saturday, open sunday, open on weekends",
+   "also": "your hours, what are your hours, open, weekends, how quickly do you reply, respond, response time, after 5, after hours, how fast do you reply, how fast do you respond, how soon will you reply, open saturday, open on saturday, open sunday, open on weekends, get back to me, get back to people, how fast do you get back, what time do you close, closing time, close, what time do you open, open hours",
    "a": "We're reachable in New Zealand hours, and you deal with one named contact who knows your business, with no ticket queue. You can leave a message here at any time.",
    "link": "",
    "link_label": ""
@@ -328,7 +336,7 @@
   {
    "id": "examples",
    "q": "Can I see examples of your work?",
-   "also": "examples, portfolio, case studies, past work, websites you built, show me, previous clients, references, client list",
+   "also": "examples, portfolio, case studies, past work, websites you built, show me, previous clients, references, client list, any examples, examples of stuff, stuff youve built, show me your work, talk to one of your clients, speak to a client, done this before, done this for others",
    "a": "This website is one: it's in five languages, and this chat helper was built by us too. Each service and industry page shows a typical example of how an automation works. Ask our team for examples closest to your business.",
    "link": "/services/ai-automation",
    "link_label": "AI automation"
@@ -344,7 +352,7 @@
   {
    "id": "chatbot",
    "q": "Can you put a chat bot like this on my website?",
-   "also": "chatbot, chat bot, chat helper, chat widget, bot for my website, answer customers after hours, live chat",
+   "also": "chatbot, chat bot, chat helper, chat widget, bot for my website, answer customers after hours, live chat, chat thing, like this one, chat like this, a bot like you, how much for a chatbot, chatbot cost",
    "a": "Yes. This chat helper was built by us. It answers visitors' questions from your own website in their language, and offers booking or a message when it can't. Our team can talk you through one for your site.",
    "link": "/services/websites-and-portals",
    "link_label": "Websites and portals"
@@ -352,7 +360,7 @@
   {
    "id": "staff",
    "q": "Will this replace my staff?",
-   "also": "replace staff, sack, fire staff, cut staff, lose their jobs, receptionist, job losses, redundant",
+   "also": "replace staff, sack, fire staff, cut staff, lose their jobs, job losses, redundant, let staff go, lay off, receptionist's job, receptionist out of a job, replace my receptionist, fewer staff, need fewer staff",
    "a": "No. It clears the repetitive work so your people can do the parts that need judgement, hands or a friendly face. The aim is to free up hours for more work, not to cut staff.",
    "link": "/#faq",
    "link_label": "Common questions"
@@ -360,7 +368,7 @@
   {
    "id": "techy",
    "q": "Do I need to be good with technology?",
-   "also": "not technical, not techy, hopeless with tech, good with computers, tech skills, computer skills, not good with technology",
+   "also": "not technical, not techy, hopeless with tech, good with computers, tech skills, computer skills, not good with technology, useless with computers, not good with computers",
    "a": "No. If you can show us how the job gets done today, that is everything we need. We handle the rest, explain it in plain words with no jargon, and train your team when it goes live.",
    "link": "/#faq",
    "link_label": "Common questions"
@@ -376,7 +384,7 @@
   {
    "id": "shop_online",
    "q": "Do you build online shops?",
-   "also": "online shop, online store, ecommerce, e-commerce, shopify, sell online, sell my products online, take payments online, woocommerce, pay online, customers pay online, online payments",
+   "also": "online shop, online store, ecommerce, e-commerce, shopify, sell online, sell my products online, take payments online, woocommerce, pay online, customers pay online, online payments, sell online, sell my products online, sell at markets, online store setup",
    "a": "Online shops aren't covered on our website, so please ask our team about yours. What we do for shops is the admin behind them: stock counts and reorders, price and listing updates, and a daily sales summary.",
    "link": "/industries/shops-and-dairies",
    "link_label": "Shops and dairies"
@@ -384,7 +392,7 @@
   {
    "id": "rosters",
    "q": "Can you help with rosters and timesheets?",
-   "also": "roster, rosters, staff rosters, timesheets, payroll, shifts, who is working, staff hours, roster keeps changing, staff roster",
+   "also": "roster, rosters, staff rosters, timesheets, payroll, shifts, who is working, staff hours, roster keeps changing, staff roster, timesheets on paper, casual staff, paper timesheets, roster nightmare, rosters every week",
    "a": "Yes. A staff portal can show the roster, opening and closing steps and today's deliveries, and timesheets can be totalled from the roster ready for payroll. Many cafés run their roster in a spreadsheet, and we can work with that.",
    "link": "/industries/cafes-and-takeaways",
    "link_label": "Cafés and takeaways"
@@ -392,7 +400,7 @@
   {
    "id": "stock",
    "q": "Can you help with stock and reorders?",
-   "also": "stock, stock control, inventory, reorders, running low, low stock, supplier orders, stock take, stocktake",
+   "also": "stock, stock control, inventory, reorders, running low, low stock, supplier orders, stock take, stocktake, stock count, running out, run out of stock, keep running out, stocktake takes, stock count takes, stocktake, stock take",
    "a": "Yes. Each morning you can get yesterday's sales and a weekly view of what's running low, so reorders happen before the shelf is empty. Suggested orders come to you to approve first. We work from your point-of-sale or inventory system's exports to Excel or Google Sheets, rather than connecting to it directly.",
    "link": "/industries/shops-and-dairies",
    "link_label": "Shops and dairies"
@@ -400,7 +408,7 @@
   {
    "id": "marketing",
    "q": "Do you run ads or social media?",
-   "also": "google ads, facebook ads, instagram ads, social media, social media management, advertising, ads, ppc, meta ads, marketing, run my ads, manage my social media",
+   "also": "google ads, facebook ads, instagram ads, social media, social media management, advertising, ads, ppc, meta ads, marketing, run my ads, manage my social media, post on instagram, instagram posts, facebook posts, social media posts",
    "a": "Only through a partner. We don't run ads or social media ourselves, but we can arrange Google Ads, Facebook and Instagram ads or social media management through a partner, alongside the website and automations we build. Ask us about it in your free session.",
    "link": "/#book",
    "link_label": "Book a free session"
@@ -408,7 +416,7 @@
   {
    "id": "overseas",
    "q": "Do you work with businesses outside New Zealand?",
-   "also": "australia, overseas, outside new zealand, international, uk, usa, other countries, another country, abroad",
+   "also": "australia, overseas, outside new zealand, international, uk, usa, other countries, another country, abroad, based in india, i am in india, india, fiji, samoa, tonga, cook islands, canada, america, us, united states, england, united kingdom, ireland, singapore, malaysia, philippines, pakistan, nepal, sri lanka, bangladesh, dubai, uae, south africa, can you work from overseas, do you work remotely, work for someone in another country, sydney, melbourne, brisbane, perth, adelaide, gold coast",
    "a": "Yes. We work with businesses anywhere, mostly remotely. Our team is in Auckland and works in New Zealand hours.",
    "link": "/#book",
    "link_label": "Book a free session"
