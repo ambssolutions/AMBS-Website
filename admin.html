@@ -115,6 +115,12 @@ nav.tabs button:hover{color:var(--ink)}
 .chsub .n{font-size:.78em;font-weight:700;border-radius:999px;padding:.1rem .45rem;background:var(--pastel);color:#14172b}
 .chsub .n:empty{display:none}
 .chsub .n.need{background:var(--amber-bg);color:var(--amber)}
+.ch-why{border:1.5px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;width:1.6em;height:1.6em;font:inherit;font-weight:700;font-size:.85em;line-height:1;cursor:pointer;margin-left:6px;vertical-align:middle}
+.ch-why[aria-expanded=true]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.ch-ans{border:1.5px solid var(--green);border-radius:12px;padding:10px;margin:8px 0 2px;background:var(--bg)}
+.ch-ans-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ch-ans .sim{display:flex;flex-direction:column;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;background:var(--card)}
+.ch-ans .sim b{display:block}.ch-ans .sim span{color:var(--muted);font-size:.9em}
 @media (max-width:600px){.chsub{display:grid;grid-template-columns:1fr 1fr;gap:8px}.chsub button{justify-content:center;padding:.55rem .5rem;font-size:.92rem}}
 .panel h3{margin:0 0 4px;font-size:1.05rem}
 .panel p.help{margin:0 0 12px;color:var(--muted);font-size:.9rem}
@@ -1409,11 +1415,30 @@ function chatInit(){
         '<div class="help" style="margin:4px 0">'+esc(d.toLocaleString("en-NZ",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}))+' · '+esc(RES[r.result]||r.result||"")+(r.lang&&r.lang!=="en"?' · '+esc(r.lang):'')+(r.page?' · '+esc(r.page==='/'||r.page==='/index.html'?'Home page':r.page.replace(/\.html$/,'')):'')+'</div>'+
         (r.answer?'<div class="help" style="margin:0 0 6px">Replied: '+esc(r.answer.slice(0,180))+(r.answer.length>180?'…':'')+'</div>':'')+
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" data-do="add">+ Add an answer</button><button type="button" class="btn" data-do="done">'+(r.done?'Not done':'Mark done')+'</button><button type="button" class="btn" data-do="del">Delete</button></div></div>'}).join("")+(rows.length>300?'<p class="help">Showing the newest 300. Search to find older ones.</p>':'')}
-    function logLoad(){$("chLogBox").innerHTML='<p class="help">Loading…</p>';api("settings",{action:"chatlog",limit:2000}).then(function(j){LOG=j.rows||[];logDraw()}).catch(function(e){$("chLogBox").innerHTML='<p class="help">'+esc(e.message||e)+'</p>'})}
+    function logLoad(){$("chLogBox").innerHTML='<p class="help">Loading…</p>';api("settings",{action:"chatlog",limit:2000}).then(function(j){LOG=j.rows||[];logDraw();if(chAuto){chAuto=false;if(LOG.some(function(r){return !r.done&&(r.result==="not found"||r.result==="off topic")}))chSec("visitors")}}).catch(function(e){$("chLogBox").innerHTML='<p class="help">'+esc(e.message||e)+'</p>'})}
     function logSet(ids,o){return api("settings",Object.assign({action:"chatlogset",ids:ids},o))}
+    /* answer a visitor's question right under it: a new answer, or their wording added to an answer you already have */
+    var SIMSTOP={};"the a an and or to of for in on at is are do does can you your we our i my me it this that with be how what when where who which will would could should have has about any there their they them from just".split(" ").forEach(function(w){SIMSTOP[w]=1});
+    function simWords(t){var o={};String(t||"").toLowerCase().replace(/[^a-z0-9\u00c0-\uffff ]+/g," ").split(/\s+/).forEach(function(w){if(w.length>2&&!SIMSTOP[w])o[w.replace(/(ies|es|s|ing|ed)$/,"")]=1});return o}
+    function similar(q){var qw=simWords(q),ks=Object.keys(qw);if(!ks.length)return[];
+      return Array.prototype.map.call(qbox.querySelectorAll(".ch-qa"),function(row){var t=row.querySelector('[data-k="q"]').value+" "+row.querySelector('[data-k="also"]').value,w=simWords(t),n=0;ks.forEach(function(k){if(w[k])n++});return{row:row,n:n}})
+        .filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n}).slice(0,3)}
+    function saveAll(btn,done){$("chSave").click();var t=setInterval(function(){if(!dirty){clearInterval(t);done&&done()}},400);setTimeout(function(){clearInterval(t)},30000)}
+    function ansBox(el,r){var old=el.querySelector(".ch-ans");if(old){old.remove();return}
+      var sims=similar(r.q),box=h('<div class="ch-ans"><label class="help" style="display:block;margin:0 0 4px;font-weight:700;color:var(--ink)">Your answer</label><textarea class="t" rows="3" style="width:100%" placeholder="Write the answer visitors should see"></textarea>'+
+        '<div class="ch-ans-act"><button type="button" class="btn primary" data-a="save">Save &amp; publish answer</button><button type="button" class="btn" data-a="cancel">Cancel</button></div>'+
+        (sims.length?'<p class="help" style="margin:12px 0 2px"><b>Already answered?</b> Add this question as another way people ask one of these:</p><div class="sims"></div>':'')+'</div>');
+      var ta=box.querySelector("textarea");ta.addEventListener("input",function(){ED.autosize(ta)});
+      sims.forEach(function(x){var q=x.row.querySelector('[data-k="q"]').value,a=x.row.querySelector('[data-k="a"]').value,sb=h('<div class="sim"><div><b></b><span></span></div><button type="button" class="btn">Use this answer</button></div>');
+        sb.querySelector("b").textContent=q;sb.querySelector("span").textContent=a.slice(0,110)+(a.length>110?"…":"");
+        sb.querySelector("button").addEventListener("click",function(){var al=x.row.querySelector('[data-k="also"]');al.value=(al.value.trim()?al.value.trim().replace(/,\s*$/,"")+", ":"")+r.q.replace(/[?!.]+$/,"").toLowerCase();markDirty();
+          logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});toast("Saving: “"+q+"” now also answers this question.");saveAll(this,logDraw)});box.querySelector(".sims").appendChild(sb)});
+      box.querySelector('[data-a="cancel"]').addEventListener("click",function(){box.remove()});
+      box.querySelector('[data-a="save"]').addEventListener("click",function(){var a=ta.value.trim();if(!a){toast("Write the answer first.",true);ta.focus();return}
+        qrow({q:r.q,a:a});qaCount();markDirty();logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});saveAll(this,logDraw)});
+      el.appendChild(box);ta.focus()}
     lp.querySelector("#chLogBox").addEventListener("click",function(e){var b=e.target.closest("[data-do]");if(!b)return;var el=b.closest(".ch-lq"),id=Number(el.dataset.id),r=LOG.filter(function(x){return x.id===id})[0];if(!r)return;
-      if(b.dataset.do==="add"){chSec("answers");var row=qrow({q:r.q});qaCount();markDirty();$("chQaFind").value="";row.scrollIntoView({behavior:"smooth",block:"center"});row.querySelector('[data-k="a"]').focus();
-        logSet([id],{done:true}).then(function(){r.done=true;logDraw()}).catch(function(){});toast("Added to Your own answers. Write the answer, then Save & publish.");return}
+      if(b.dataset.do==="add"){ansBox(el,r);return}
       if(b.dataset.do==="del"){if(!confirm("Delete this question from the list?"))return;logSet([id],{del:true}).then(function(){LOG=LOG.filter(function(x){return x.id!==id});logDraw()}).catch(fail);return}
       logSet([id],{done:!r.done}).then(function(){r.done=!r.done;logDraw()}).catch(fail)});
     lp.querySelector("#chLogF").addEventListener("change",logDraw);lp.querySelector("#chLogQ").addEventListener("input",logDraw);lp.querySelector("#chLogMore").addEventListener("click",logLoad);
@@ -1433,7 +1458,12 @@ function chatInit(){
       bar.querySelectorAll("[data-sec]").forEach(function(b){var on=b.dataset.sec===k;b.setAttribute("aria-selected",String(on));});
       PANES[k].forEach(function(p){var d=p.querySelector("details");if(d)d.open=true;p.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})})});
       try{sessionStorage.setItem("ambs:chsec",k)}catch(e){}}
-    window.chSecShow=chSec;var chStart="settings";try{chStart=sessionStorage.getItem("ambs:chsec")||"settings"}catch(e){}chSec(chStart);
+    window.chSecShow=chSec;var chStart="",chAuto=false;try{chStart=sessionStorage.getItem("ambs:chsec")||""}catch(e){}chAuto=!chStart;chSec(chStart||"settings");
+    /* a short line for each section; the full explanation opens with "?" */
+    [[top,"Switch the chat on or off and set its first messages."],[np,"Says hello after someone has been on a page for a while."],[lp,"What people typed into the chat. Answer the ones it couldn’t."],[qp,"Your own answers. They come first when a question matches."],
+     [sug,"One-tap questions under the greeting."],[tk,"Replies to small talk like “How are you?”."],[lb,"The buttons and labels in the chat window."]].forEach(function(x){var p=x[0].querySelector(".help");if(!p)return;
+      var s2=h('<p class="help ch-short"></p>');s2.textContent=x[1]+" ";var b=h('<button type="button" class="ch-why" aria-expanded="false" aria-label="More about this">?</button>');s2.appendChild(b);
+      p.parentNode.insertBefore(s2,p);p.style.display="none";b.addEventListener("click",function(){var on=p.style.display==="none";p.style.display=on?"":"none";b.setAttribute("aria-expanded",String(on))})});
     var act=h('<div class="actions"><a class="btn" href="/#ask" target="_blank" rel="noopener">Try it on the website</a><span class="sp"></span><button type="button" class="btn primary" id="chSave">Save &amp; publish</button></div>');m.appendChild(act);
     $("chSave").addEventListener("click",function(){var btn=this,labels={};lb.querySelectorAll("[data-lab]").forEach(function(x){labels[x.dataset.lab]=x.value});
       var qa=Array.prototype.map.call(qbox.querySelectorAll(".ch-qa"),function(r){var o={id:r.dataset.id};r.querySelectorAll("[data-k]").forEach(function(t){o[t.dataset.k]=t.value.trim()});return o});
