@@ -5,7 +5,7 @@
    { action: "analytics", id: "G-XXXXXXX" }   the Google Analytics measurement ID (empty turns it off)
    { action: "sitetext", text: { "cta.h": "...", ... } }   the wording on every page other than the homepage
    { action: "chatget" } / { action: "chatbot", data: {...} }   the "Ask us" chat helper (site-src/content/chatbot.json)
-   { action: "chatlog", limit } / { action: "chatlogset", ids: [...], done: true|false, del: true }
+   { action: "chatlog", limit } / { action: "chatlogset", ids: [...], done: true|false, del: true } / { action: "chatlogset", ids, note } / { action: "chatlogset", ids, status: "skip"|"open", note }
        the questions visitors typed into the chat (Supabase table chat_questions, read through admin-only functions) */
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
 import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
@@ -104,6 +104,16 @@ export default async function handler(req, res) {
     if (b.action === "chatlogset") {
       const ids = (Array.isArray(b.ids) ? b.ids : []).map(Number).filter((n) => Number.isInteger(n) && n > 0).slice(0, 2000);
       if (!ids.length) return send(res, 400, { error: "Nothing chosen" });
+      /* won't answer (with a reason), or back to Not answered (clears any note) */
+      if (!b.del && (b.status === "skip" || b.status === "open")) {
+        const n = await sbRpc(who.token, "chat_questions_mark", { p_ids: ids, p_status: b.status, p_note: typeof b.note === "string" && b.note.trim() ? b.note.replace(/\s+/g, " ").trim().slice(0, 600) : null });
+        return send(res, 200, { ok: true, changed: n });
+      }
+      /* an answer was added or linked: mark it answered and keep what the chat will reply next time */
+      if (!b.del && typeof b.note === "string" && b.note.trim()) {
+        const n = await sbRpc(who.token, "chat_questions_note", { p_ids: ids, p_note: b.note.replace(/\s+/g, " ").trim().slice(0, 600) });
+        return send(res, 200, { ok: true, changed: n });
+      }
       const n = await sbRpc(who.token, "chat_questions_update", { p_ids: ids, p_done: b.del ? null : !!b.done, p_delete: !!b.del });
       return send(res, 200, { ok: true, changed: n });
     }

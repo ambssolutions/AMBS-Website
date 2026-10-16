@@ -441,7 +441,8 @@
     if(INDC.some(function(c){return new RegExp("\\b(the|this|that|your) "+c[1].source.slice(2)).test(t)}))return "";INDC.forEach(function(c){t=t.replace(new RegExp(c[1].source,"g")," ")});
     t=t.replace(/\b(i|we) (run|own|have|manage|operate)\b|\b(i m|im|i am|we re|we are) (a|an)\b/g," ");
     t=t.replace(/\b(cafe|tradie|clinic|dairy|adviser|transport|industry|workshop|centre|center|studio|business|company|firm|practice|owner)\b/g," ").replace(/\s+/g," ").trim();return t===o.replace(/\s+/g," ").trim()?"":t}
-  function fixGreet(t){return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsa?t?\s*sri\s*akaa?l\b/gi,"sat sri akal")}
+  function fixGreet(t){/* a whole message like "Sat shri aaaaakakaka" (keys mashed after "sat shri") is still the greeting */
+    if(/^\s*sat\s*(shri|sri|shree|shrine|shiri|siri|sree)(\s+a+[kh][a-z]*)?(\s+ji)?[\s!.]*$/i.test(String(t)))return "sat sri akal";return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsa?t?\s*sri\s*akaa?l\b/gi,"sat sri akal")}
   function answer(q){q=fixGreet(q);var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
     /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
     sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|nihao|ni hao|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
