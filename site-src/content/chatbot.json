@@ -13,9 +13,9 @@
  "not_found": "I couldn't find a precise answer to that on our website. Our team can answer it properly: book a free session, leave your question for us, or contact us directly.",
  "nudge": {
   "enabled": true,
-  "delay": 15,
-  "text": "Kia ora! I'm Ambs Bot, and I can answer your questions about automation, websites, pricing and our free session. Can I help you with anything?",
-  "open": true
+  "open": true,
+  "delay": 12,
+  "text": "Kia ora! I'm Ambs Bot, and I can answer your questions about automation, websites, pricing and our free session. Can I help you with anything?"
  },
  "chat": {
   "offtopic": "That's outside what I can help with. I'm here for questions about Ambs Solutions: our services, pricing, process and free sessions. If it's about your business, our team is happy to help:",
