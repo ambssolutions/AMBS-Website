@@ -122,6 +122,8 @@ nav.tabs button:hover{color:var(--ink)}
 .ch-why[aria-expanded=true]{background:var(--ink);color:var(--card);border-color:var(--ink)}
 .ch-ans{border:1.5px solid var(--green);border-radius:12px;padding:10px;margin:8px 0 2px;background:var(--bg)}
 .ch-ans-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ch-fix{border-left:4px solid var(--green);background:var(--ok-bg);border-radius:8px;padding:8px 10px;margin:6px 0 8px;font-size:.95em;color:var(--ink)}
+.ch-fix span{display:block;color:var(--muted);font-size:.85em;margin-top:4px}
 .ch-ans .sim{display:flex;flex-direction:column;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;background:var(--card)}
 .ch-ans .sim b{display:block}.ch-ans .sim span{color:var(--muted);font-size:.9em}
 @media (max-width:600px){.chsub{display:grid;grid-template-columns:1fr 1fr;gap:8px}.chsub button{justify-content:center;padding:.55rem .5rem;font-size:.92rem}}
@@ -1421,8 +1423,9 @@ function chatInit(){
       var rows=LOG.filter(function(r){if(listOf(r)!==f)return false;return !qq||(r.q+" "+r.answer).toLowerCase().indexOf(qq)>=0});
       var needN=LOG.filter(function(r){return !r.done&&(r.result==="not found"||r.result==="off topic")}).length;$("chLogN").textContent=LOG.length+" saved, "+needN+" need an answer";chBadge("visitors",needN?String(needN):"",needN>0);
       if(!rows.length){box.innerHTML='<p class="help">'+(qq?'No questions match that search.':f==="need"?'All caught up: every question has an answer.':f==="added"?'Questions you answer or link to an answer move here.':'Nothing here yet.')+'</p>';return}
-      box.innerHTML=rows.slice(0,300).map(function(r){var d=new Date(r.at);return '<div class="ch-lq" data-id="'+r.id+'" style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px'+(r.done?';opacity:.6':'')+'"><div style="font-weight:600">'+esc(r.q)+'</div>'+
-        '<div class="help" style="margin:4px 0">'+esc(d.toLocaleString("en-NZ",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}))+' · '+esc(r.done?"Answer added by you":RES[r.result]||r.result||"")+(r.lang&&r.lang!=="en"?' · '+esc(r.lang):'')+(r.page?' · '+esc(r.page==='/'||r.page==='/index.html'?'Home page':r.page.replace(/\.html$/,'')):'')+'</div>'+
+      box.innerHTML=rows.slice(0,300).map(function(r){var d=new Date(r.at);return '<div class="ch-lq" data-id="'+r.id+'" style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px'+(r.done&&!r.fix_note?';opacity:.6':'')+'"><div style="font-weight:600">'+esc(r.q)+'</div>'+
+        '<div class="help" style="margin:4px 0">'+esc(d.toLocaleString("en-NZ",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}))+' · '+esc(r.done?(r.fix_by==="Claude"?"Answer added by Claude":"Answer added by you"):RES[r.result]||r.result||"")+(r.lang&&r.lang!=="en"?' · '+esc(r.lang):'')+(r.page?' · '+esc(r.page==='/'||r.page==='/index.html'?'Home page':r.page.replace(/\.html$/,'')):'')+'</div>'+
+        (r.done&&r.fix_note?'<div class="ch-fix"><b>Next time the bot will answer:</b> '+esc(r.fix_note.slice(0,260))+(r.fix_note.length>260?'…':'')+'<span>Answer added by '+esc(r.fix_by==="Claude"?"Claude":"you")+(r.fix_at?' · '+esc(new Date(r.fix_at).toLocaleString("en-NZ",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})):'')+'</span></div>':'')+
         (r.answer?'<div class="help" style="margin:0 0 6px">'+(r.done?'The bot first replied: ':'Replied: ')+esc(r.answer.slice(0,180))+(r.answer.length>180?'…':'')+'</div>':'')+
         '<div style="display:flex;gap:8px;flex-wrap:wrap">'+(r.done?'':'<button type="button" class="btn" data-do="add">'+(needs(r)?'+ Add an answer':'+ Add a better answer')+'</button>')+(r.done?'<button type="button" class="btn" data-do="done">Move to Not answered</button>':needs(r)?'<button type="button" class="btn" data-do="done">Mark answered</button>':'')+'<button type="button" class="btn" data-do="del">Delete</button></div></div>'}).join("")+(rows.length>300?'<p class="help">Showing the newest 300. Search to find older ones.</p>':'')}
     function logLoad(){$("chLogBox").innerHTML='<p class="help">Loading…</p>';api("settings",{action:"chatlog",limit:2000}).then(function(j){LOG=j.rows||[];logDraw();if(chAuto){chAuto=false;if(LOG.some(function(r){return !r.done&&(r.result==="not found"||r.result==="off topic")}))chSec("visitors")}}).catch(function(e){$("chLogBox").innerHTML='<p class="help">'+esc(e.message||e)+'</p>'})}
@@ -1444,7 +1447,7 @@ function chatInit(){
       function simItem(row){var q=row.querySelector('[data-k="q"]').value,a=row.querySelector('[data-k="a"]').value,sb=h('<div class="sim"><div><b></b><span></span></div><button type="button" class="btn">Use this answer</button></div>');
         sb.querySelector("b").textContent=q;sb.querySelector("span").textContent=a.slice(0,110)+(a.length>110?"…":"");
         sb.querySelector("button").addEventListener("click",function(){var al=row.querySelector('[data-k="also"]');al.value=(al.value.trim()?al.value.trim().replace(/,\s*$/,"")+", ":"")+r.q.replace(/[?!.]+$/,"").toLowerCase();markDirty();
-          logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});toast("Saving: “"+q+"” now also answers this question.");saveAll(this,logDraw)});return sb}
+          var nt="Linked to “"+q+"”: "+a;logSet([r.id],{note:nt}).then(function(){r.done=true;r.fix_note=nt;r.fix_by="you";r.fix_at=new Date().toISOString()}).catch(function(){});toast("Saving: “"+q+"” now also answers this question.");saveAll(this,logDraw)});return sb}
       sims.forEach(function(x){box.querySelector(".sims").appendChild(simItem(x.row))});
       var fi=box.querySelector('[data-a="find"]'),picks=box.querySelector(".picks");
       /* answers whose question has the word come first, then their other wordings, then the answer text */
@@ -1455,7 +1458,7 @@ function chatInit(){
         if(!n)picks.innerHTML='<p class="help" style="margin:6px 0 0">No answer has that word. Try another word, or write a new answer above.</p>'});
       box.querySelector('[data-a="cancel"]').addEventListener("click",function(){box.remove()});
       box.querySelector('[data-a="save"]').addEventListener("click",function(){var a=ta.value.trim();if(!a){toast("Write the answer first.",true);ta.focus();return}
-        qrow({q:r.q,a:a});qaCount();markDirty();logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});saveAll(this,logDraw)});
+        qrow({q:r.q,a:a});qaCount();markDirty();logSet([r.id],{note:a}).then(function(){r.done=true;r.fix_note=a;r.fix_by="you";r.fix_at=new Date().toISOString()}).catch(function(){});saveAll(this,logDraw)});
       el.appendChild(box);ta.focus()}
     lp.querySelector("#chLogBox").addEventListener("click",function(e){var b=e.target.closest("[data-do]");if(!b)return;var el=b.closest(".ch-lq"),id=Number(el.dataset.id),r=LOG.filter(function(x){return x.id===id})[0];if(!r)return;
       if(b.dataset.do==="add"){ansBox(el,r);return}
@@ -1480,7 +1483,7 @@ function chatInit(){
       try{sessionStorage.setItem("ambs:chsec",k)}catch(e){}}
     window.chSecShow=chSec;var chStart="",chAuto=false;try{chStart=sessionStorage.getItem("ambs:chsec")||""}catch(e){}chAuto=!chStart;chSec(chStart||"settings");
     /* a short line for each section; the full explanation opens with "?" */
-    [[top,"Switch the chat on or off and set its first messages."],[np,"Says hello after someone has been on a page for a while."],[lp,"What people typed into the chat: Not answered, Answer added (by you) and Answered by the bot."],[qp,"Your own answers. They come first when a question matches."],
+    [[top,"Switch the chat on or off and set its first messages."],[np,"Says hello after someone has been on a page for a while."],[lp,"What people typed into the chat: Not answered, Answer added (by you or Claude, with what the bot will say next time) and Answered by the bot."],[qp,"Your own answers. They come first when a question matches."],
      [sug,"One-tap questions under the greeting."],[tk,"Replies to small talk like “How are you?”."],[lb,"The buttons and labels in the chat window."]].forEach(function(x){var p=x[0].querySelector(".help");if(!p)return;
       var s2=h('<p class="help ch-short"></p>');s2.textContent=x[1]+" ";var b=h('<button type="button" class="ch-why" aria-expanded="false" aria-label="More about this">?</button>');s2.appendChild(b);
       p.parentNode.insertBefore(s2,p);p.style.display="none";b.addEventListener("click",function(){var on=p.style.display==="none";p.style.display=on?"":"none";b.setAttribute("aria-expanded",String(on))})});
