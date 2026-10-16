@@ -107,6 +107,21 @@ nav.tabs button:hover{color:var(--ink)}
 .narrow{max-width:860px;padding-top:24px;padding-bottom:120px}
 /* forms */
 .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:16px}
+/* Chat helper: one section at a time, picked from the buttons along the top */
+.chsub{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 14px}
+.chsub button{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:.55rem .95rem;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+.chsub button:hover{color:var(--ink)}
+.chsub button[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:var(--card)}
+.chsub .n{font-size:.78em;font-weight:700;border-radius:999px;padding:.1rem .45rem;background:var(--pastel);color:#14172b}
+.chsub .n:empty{display:none}
+.chsub .n.need{background:var(--amber-bg);color:var(--amber)}
+.ch-why{border:1.5px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;width:1.6em;height:1.6em;font:inherit;font-weight:700;font-size:.85em;line-height:1;cursor:pointer;margin-left:6px;vertical-align:middle}
+.ch-why[aria-expanded=true]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.ch-ans{border:1.5px solid var(--green);border-radius:12px;padding:10px;margin:8px 0 2px;background:var(--bg)}
+.ch-ans-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ch-ans .sim{display:flex;flex-direction:column;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;background:var(--card)}
+.ch-ans .sim b{display:block}.ch-ans .sim span{color:var(--muted);font-size:.9em}
+@media (max-width:600px){.chsub{display:grid;grid-template-columns:1fr 1fr;gap:8px}.chsub button{justify-content:center;padding:.55rem .5rem;font-size:.92rem}}
 .panel h3{margin:0 0 4px;font-size:1.05rem}
 .panel p.help{margin:0 0 12px;color:var(--muted);font-size:.9rem}
 .fld{margin:12px 0}
@@ -880,6 +895,7 @@ function findHighlight(q,scope){
     box.querySelectorAll("input,textarea").forEach(function(el){if(!hit&&String(el.value||"").toLowerCase().indexOf(q)>=0)hit=el});
     if(!hit){var w=document.createTreeWalker(box,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode())){if(n.nodeValue.toLowerCase().indexOf(q)>=0&&n.parentElement.closest(".rte,.panel")){hit=n.parentElement;break}}}
     if(!hit){if(tries<40)setTimeout(look,200);return}
+    var cs=hit.closest("[data-chsec]");if(cs&&cs.style.display==="none"&&window.chSecShow)window.chSecShow(cs.dataset.chsec);
     var dd=hit.closest("details");if(dd&&!dd.open)dd.open=true;
     hit.scrollIntoView({block:"center",behavior:"smooth"});hit.classList.add("find-flash");setTimeout(function(){hit.classList.remove("find-flash")},2600);
     if(hit.setSelectionRange){var i=hit.value.toLowerCase().indexOf(q);try{hit.focus({preventScroll:true});hit.setSelectionRange(i,i+q.length)}catch(e){}}
@@ -1356,6 +1372,10 @@ function businessInit(){
 var CH_LABELS=[["launcher","Button"],["title","Window title"],["subtitle","Line under the title"],["placeholder","Typing box"],["book","Booking button"],["message","Leave a message button"],["contact","Call or email button"],["read","Link under an answer"],["related","Above other pages that might help"],["name","Message form: name"],["email","Message form: email"],["phone","Message form: phone"],["question","Message form: question"],["send_msg","Message form: send button"],["sent","After a message is sent"],["error","If a message can't be sent"],["restart","Start again button"],["close","Close button"],["send","Send button (for screen readers)"],["voice","Microphone button"],["listening","While listening"],["mic_blocked","If the microphone is blocked"],["helpful","Anything else?"],["languages","Language button in the chat window's top bar"],["yes","Start of an answer to a yes/no question"],["more_on","Before the page an answer came from"],["also_ask","Above the related questions after an answer"],["langs_line","Line about the other languages under the greeting ({langs} becomes the language names)"],["in_english","Button to switch back to English (shown when someone types Punjabi, Hindi, Māori or Chinese in English letters; always shown in English)"]];
 function chatInit(){
   var m=$("chMain");api("settings",{action:"chatget"}).then(function(j){var c=j.chat||{};m.innerHTML="";
+    var CHSEC=[["settings","Settings"],["visitors","Visitor questions"],["answers","Your answers"],["quick","Quick questions"],["talk","Everyday replies"],["wording","Window wording"]];
+    var bar=h('<nav class="chsub" role="tablist" aria-label="Chat helper sections"></nav>');m.appendChild(bar);
+    CHSEC.forEach(function(x){var b=h('<button type="button" role="tab" aria-selected="false" data-sec="'+x[0]+'">'+x[1]+' <span class="n"></span></button>');b.addEventListener("click",function(){chSec(x[0])});bar.appendChild(b)});
+    function chBadge(k,t,need){var e=bar.querySelector('[data-sec="'+k+'"] .n');if(e){e.textContent=t||"";e.classList.toggle("need",!!need)}}
     var top=h('<div class="panel"><h3>Chat helper</h3><p class="help">The “Ask us” button on every page. It answers visitors from your own website: every page, guide, news post, question and the homepage. It is free to run and uses no AI service. When it can’t answer, it offers to book a session, take a message (it arrives in your email and portal Leads like the contact forms), or shows your phone and email.</p><label class="chk" style="display:flex;gap:8px;align-items:center;margin:4px 0 12px"><input type="checkbox" id="chOn"> Show the chat helper on the website</label></div>');
     top.querySelector("#chOn").checked=c.enabled!==false;top.querySelector("#chOn").addEventListener("change",markDirty);
     var rl=h('<label class="chk" style="display:flex;gap:8px;align-items:center;margin:0 0 12px"><input type="checkbox" id="chRel"> After an answer, suggest up to 3 related questions from your own answers (“People also ask”)</label>');top.appendChild(rl);
@@ -1370,7 +1390,7 @@ function chatInit(){
     var sug=listEditor("Quick questions","Buttons under the greeting, so visitors can start with one tap. Up to 6.",c.suggestions||[],"Add a quick question");m.appendChild(sug);
     /* answers written here come first when a question matches */
     var qp=h('<div class="panel"><h3>Your own answers <span id="chQaN" style="font-weight:400;font-size:.8em;color:var(--muted);margin-left:6px"></span></h3><p class="help">Answers for questions people often ask. These win over the website’s wording when a question matches. Add other ways people might ask it, separated by commas, so it matches more questions. Start an answer with “No,” or “Only…” when that’s the truth; the helper adds “Yes.” by itself to yes/no questions.</p><input class="t" id="chQaFind" type="search" placeholder="Find an answer, for example: price" style="width:100%;margin:0 0 10px"><div class="items"></div><button type="button" class="add">+ Add an answer</button></div>'),qbox=qp.querySelector(".items");
-    function qaCount(){var n=qbox.querySelectorAll(".ch-qa").length;$("chQaN").textContent=n+" answers"}
+    function qaCount(){var n=qbox.querySelectorAll(".ch-qa").length;$("chQaN").textContent=n+" answers";chBadge("answers",String(n))}
     qp.querySelector("#chQaFind").addEventListener("input",function(){var f=this.value.trim().toLowerCase();qbox.querySelectorAll(".ch-qa").forEach(function(r){var t=Array.prototype.map.call(r.querySelectorAll("[data-k]"),function(x){return x.value}).join(" ").toLowerCase();r.style.display=!f||t.indexOf(f)>=0?"":"none";if(!f||t.indexOf(f)>=0)r.querySelectorAll("textarea").forEach(function(x){ED.autosize(x)})})});
     function qrow(x){x=x||{};var r=h('<div class="qa ch-qa" style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px"><div class="li"><span class="drag" title="Drag to move" aria-hidden="true">⠿</span><textarea class="t" rows="1" placeholder="Question, for example: Do you work weekends?" data-k="q"></textarea><button type="button" class="x" aria-label="Remove this answer">✕</button></div>'+
         '<textarea class="t" rows="1" placeholder="Other ways people ask (optional), for example: saturday, after hours, evenings" data-k="also" style="width:100%;margin-top:6px"></textarea>'+
@@ -1381,7 +1401,7 @@ function chatInit(){
     (c.qa||[]).forEach(qrow);sortable(qbox,".ch-qa",markDirty);qp.querySelector(".add").addEventListener("click",function(){qrow({}).querySelector("textarea").focus();markDirty();qaCount()});
     /* the questions visitors typed: see them all, and turn any of them into an answer */
     var RES={"not found":"Not answered","off topic":"Off topic","answered":"Answered","small talk":"Small talk","contact":"Asked for contact details","language":"Languages"};
-    var lp=h('<div class="panel"><h3>Questions visitors asked <span id="chLogN" style="font-weight:400;font-size:.8em;color:var(--muted);margin-left:6px"></span></h3><p class="help">Every question typed into the chat, newest first, with what the helper replied. Email addresses and phone numbers are hidden before they’re saved. Use <b>Add an answer</b> to write an answer for a question it couldn’t answer well; the question goes into “Your own answers” below, ready for you to fill in and save.</p>'+
+    var lp=h('<div class="panel"><h3>Questions visitors asked <span id="chLogN" style="font-weight:400;font-size:.8em;color:var(--muted);margin-left:6px"></span></h3><p class="help">Every question typed into the chat, newest first, with what the helper replied. Email addresses and phone numbers are hidden before they’re saved. Use <b>Add an answer</b> to write an answer for a question it couldn’t answer well; the question opens in “Your answers”, ready for you to fill in and save.</p>'+
       '<label class="chk" style="display:flex;gap:8px;align-items:center;margin:4px 0 10px"><input type="checkbox" id="chLog"> Keep a list of the questions visitors ask</label>'+
       '<div class="grid2" style="margin-bottom:10px"><select class="t" id="chLogF"><option value="need">Needs an answer (not answered or off topic)</option><option value="all">All questions</option><option value="answered">Answered</option><option value="done">Marked done</option></select><input class="t" id="chLogQ" type="search" placeholder="Search the questions"></div>'+
       '<div id="chLogBox"><p class="help">Loading…</p></div><div class="actions" style="margin-top:8px"><button type="button" class="btn" id="chLogMore">Refresh</button><button type="button" class="btn" id="chLogCsv">Download as a spreadsheet (CSV)</button></div></div>');
@@ -1389,17 +1409,36 @@ function chatInit(){
     var LOG=[];function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(ch){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]})}
     function logDraw(){var box=$("chLogBox"),f=$("chLogF").value,qq=$("chLogQ").value.trim().toLowerCase();
       var rows=LOG.filter(function(r){if(f==="need"&&(r.done||!(r.result==="not found"||r.result==="off topic")))return false;if(f==="answered"&&(r.done||r.result!=="answered"))return false;if(f==="done"&&!r.done)return false;if(f==="all"&&false)return false;return !qq||(r.q+" "+r.answer).toLowerCase().indexOf(qq)>=0});
-      $("chLogN").textContent=LOG.length+" saved, "+LOG.filter(function(r){return !r.done&&(r.result==="not found"||r.result==="off topic")}).length+" need an answer";
+      var needN=LOG.filter(function(r){return !r.done&&(r.result==="not found"||r.result==="off topic")}).length;$("chLogN").textContent=LOG.length+" saved, "+needN+" need an answer";chBadge("visitors",needN?String(needN):"",needN>0);
       if(!rows.length){box.innerHTML='<p class="help">Nothing here yet.</p>';return}
       box.innerHTML=rows.slice(0,300).map(function(r){var d=new Date(r.at);return '<div class="ch-lq" data-id="'+r.id+'" style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px'+(r.done?';opacity:.6':'')+'"><div style="font-weight:600">'+esc(r.q)+'</div>'+
         '<div class="help" style="margin:4px 0">'+esc(d.toLocaleString("en-NZ",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}))+' · '+esc(RES[r.result]||r.result||"")+(r.lang&&r.lang!=="en"?' · '+esc(r.lang):'')+(r.page?' · '+esc(r.page==='/'||r.page==='/index.html'?'Home page':r.page.replace(/\.html$/,'')):'')+'</div>'+
         (r.answer?'<div class="help" style="margin:0 0 6px">Replied: '+esc(r.answer.slice(0,180))+(r.answer.length>180?'…':'')+'</div>':'')+
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" data-do="add">+ Add an answer</button><button type="button" class="btn" data-do="done">'+(r.done?'Not done':'Mark done')+'</button><button type="button" class="btn" data-do="del">Delete</button></div></div>'}).join("")+(rows.length>300?'<p class="help">Showing the newest 300. Search to find older ones.</p>':'')}
-    function logLoad(){$("chLogBox").innerHTML='<p class="help">Loading…</p>';api("settings",{action:"chatlog",limit:2000}).then(function(j){LOG=j.rows||[];logDraw()}).catch(function(e){$("chLogBox").innerHTML='<p class="help">'+esc(e.message||e)+'</p>'})}
+    function logLoad(){$("chLogBox").innerHTML='<p class="help">Loading…</p>';api("settings",{action:"chatlog",limit:2000}).then(function(j){LOG=j.rows||[];logDraw();if(chAuto){chAuto=false;if(LOG.some(function(r){return !r.done&&(r.result==="not found"||r.result==="off topic")}))chSec("visitors")}}).catch(function(e){$("chLogBox").innerHTML='<p class="help">'+esc(e.message||e)+'</p>'})}
     function logSet(ids,o){return api("settings",Object.assign({action:"chatlogset",ids:ids},o))}
+    /* answer a visitor's question right under it: a new answer, or their wording added to an answer you already have */
+    var SIMSTOP={};"the a an and or to of for in on at is are do does can you your we our i my me it this that with be how what when where who which will would could should have has about any there their they them from just".split(" ").forEach(function(w){SIMSTOP[w]=1});
+    function simWords(t){var o={};String(t||"").toLowerCase().replace(/[^a-z0-9\u00c0-\uffff ]+/g," ").split(/\s+/).forEach(function(w){if(w.length>2&&!SIMSTOP[w])o[w.replace(/(ies|es|s|ing|ed)$/,"")]=1});return o}
+    function similar(q){var qw=simWords(q),ks=Object.keys(qw);if(!ks.length)return[];
+      return Array.prototype.map.call(qbox.querySelectorAll(".ch-qa"),function(row){var t=row.querySelector('[data-k="q"]').value+" "+row.querySelector('[data-k="also"]').value,w=simWords(t),n=0;ks.forEach(function(k){if(w[k])n++});return{row:row,n:n}})
+        .filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n}).slice(0,3)}
+    function saveAll(btn,done){$("chSave").click();var t=setInterval(function(){if(!dirty){clearInterval(t);done&&done()}},400);setTimeout(function(){clearInterval(t)},30000)}
+    function ansBox(el,r){var old=el.querySelector(".ch-ans");if(old){old.remove();return}
+      var sims=similar(r.q),box=h('<div class="ch-ans"><label class="help" style="display:block;margin:0 0 4px;font-weight:700;color:var(--ink)">Your answer</label><textarea class="t" rows="3" style="width:100%" placeholder="Write the answer visitors should see"></textarea>'+
+        '<div class="ch-ans-act"><button type="button" class="btn primary" data-a="save">Save &amp; publish answer</button><button type="button" class="btn" data-a="cancel">Cancel</button></div>'+
+        (sims.length?'<p class="help" style="margin:12px 0 2px"><b>Already answered?</b> Add this question as another way people ask one of these:</p><div class="sims"></div>':'')+'</div>');
+      var ta=box.querySelector("textarea");ta.addEventListener("input",function(){ED.autosize(ta)});
+      sims.forEach(function(x){var q=x.row.querySelector('[data-k="q"]').value,a=x.row.querySelector('[data-k="a"]').value,sb=h('<div class="sim"><div><b></b><span></span></div><button type="button" class="btn">Use this answer</button></div>');
+        sb.querySelector("b").textContent=q;sb.querySelector("span").textContent=a.slice(0,110)+(a.length>110?"…":"");
+        sb.querySelector("button").addEventListener("click",function(){var al=x.row.querySelector('[data-k="also"]');al.value=(al.value.trim()?al.value.trim().replace(/,\s*$/,"")+", ":"")+r.q.replace(/[?!.]+$/,"").toLowerCase();markDirty();
+          logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});toast("Saving: “"+q+"” now also answers this question.");saveAll(this,logDraw)});box.querySelector(".sims").appendChild(sb)});
+      box.querySelector('[data-a="cancel"]').addEventListener("click",function(){box.remove()});
+      box.querySelector('[data-a="save"]').addEventListener("click",function(){var a=ta.value.trim();if(!a){toast("Write the answer first.",true);ta.focus();return}
+        qrow({q:r.q,a:a});qaCount();markDirty();logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});saveAll(this,logDraw)});
+      el.appendChild(box);ta.focus()}
     lp.querySelector("#chLogBox").addEventListener("click",function(e){var b=e.target.closest("[data-do]");if(!b)return;var el=b.closest(".ch-lq"),id=Number(el.dataset.id),r=LOG.filter(function(x){return x.id===id})[0];if(!r)return;
-      if(b.dataset.do==="add"){var row=qrow({q:r.q});qaCount();markDirty();$("chQaFind").value="";row.scrollIntoView({behavior:"smooth",block:"center"});row.querySelector('[data-k="a"]').focus();
-        logSet([id],{done:true}).then(function(){r.done=true;logDraw()}).catch(function(){});toast("Added to Your own answers. Write the answer, then Save & publish.");return}
+      if(b.dataset.do==="add"){ansBox(el,r);return}
       if(b.dataset.do==="del"){if(!confirm("Delete this question from the list?"))return;logSet([id],{del:true}).then(function(){LOG=LOG.filter(function(x){return x.id!==id});logDraw()}).catch(fail);return}
       logSet([id],{done:!r.done}).then(function(){r.done=!r.done;logDraw()}).catch(fail)});
     lp.querySelector("#chLogF").addEventListener("change",logDraw);lp.querySelector("#chLogQ").addEventListener("input",logDraw);lp.querySelector("#chLogMore").addEventListener("click",logLoad);
@@ -1413,6 +1452,18 @@ function chatInit(){
     tk.querySelector("details").addEventListener("toggle",function(){tbox.querySelectorAll("textarea").forEach(function(t){ED.autosize(t)})});m.appendChild(tk);
     var lb=h('<div class="panel"><details class="st-grp"><summary>Wording in the chat window <span class="sum">'+CH_LABELS.length+' lines</span></summary><div class="st-box"></div></details><p class="help" style="margin-top:8px">The chat speaks Chinese, Hindi, Punjabi and te reo Māori too: in the language picked on the website, or the one the visitor types in. When you change any English here, Claude translates it in your next chat (like the rest of the website), and until then visitors see the English for that line. Guides and service pages answer in English.</p></div>'),lbox=lb.querySelector(".st-box"),labs=c.labels||{};
     CH_LABELS.forEach(function(x){if(labs[x[0]]==null)return;var f=fld("chL-"+x[0],x[1],labs[x[0]],x[0]==="sent"||x[0]==="error"?{area:true,rows:2}:{});f.querySelector("input,textarea").dataset.lab=x[0];lbox.appendChild(f)});m.appendChild(lb);
+    var PANES={settings:[top,np],visitors:[lp],answers:[qp],quick:[sug],talk:[tk],wording:[lb]};
+    Object.keys(PANES).forEach(function(k){PANES[k].forEach(function(p){p.dataset.chsec=k})});
+    function chSec(k){if(!PANES[k])k="settings";Object.keys(PANES).forEach(function(x){PANES[x].forEach(function(p){p.style.display=x===k?"":"none"})});
+      bar.querySelectorAll("[data-sec]").forEach(function(b){var on=b.dataset.sec===k;b.setAttribute("aria-selected",String(on));});
+      PANES[k].forEach(function(p){var d=p.querySelector("details");if(d)d.open=true;p.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})})});
+      try{sessionStorage.setItem("ambs:chsec",k)}catch(e){}}
+    window.chSecShow=chSec;var chStart="",chAuto=false;try{chStart=sessionStorage.getItem("ambs:chsec")||""}catch(e){}chAuto=!chStart;chSec(chStart||"settings");
+    /* a short line for each section; the full explanation opens with "?" */
+    [[top,"Switch the chat on or off and set its first messages."],[np,"Says hello after someone has been on a page for a while."],[lp,"What people typed into the chat. Answer the ones it couldn’t."],[qp,"Your own answers. They come first when a question matches."],
+     [sug,"One-tap questions under the greeting."],[tk,"Replies to small talk like “How are you?”."],[lb,"The buttons and labels in the chat window."]].forEach(function(x){var p=x[0].querySelector(".help");if(!p)return;
+      var s2=h('<p class="help ch-short"></p>');s2.textContent=x[1]+" ";var b=h('<button type="button" class="ch-why" aria-expanded="false" aria-label="More about this">?</button>');s2.appendChild(b);
+      p.parentNode.insertBefore(s2,p);p.style.display="none";b.addEventListener("click",function(){var on=p.style.display==="none";p.style.display=on?"":"none";b.setAttribute("aria-expanded",String(on))})});
     var act=h('<div class="actions"><a class="btn" href="/#ask" target="_blank" rel="noopener">Try it on the website</a><span class="sp"></span><button type="button" class="btn primary" id="chSave">Save &amp; publish</button></div>');m.appendChild(act);
     $("chSave").addEventListener("click",function(){var btn=this,labels={};lb.querySelectorAll("[data-lab]").forEach(function(x){labels[x.dataset.lab]=x.value});
       var qa=Array.prototype.map.call(qbox.querySelectorAll(".ch-qa"),function(r){var o={id:r.dataset.id};r.querySelectorAll("[data-k]").forEach(function(t){o[t.dataset.k]=t.value.trim()});return o});
