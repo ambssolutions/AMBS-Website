@@ -1434,12 +1434,22 @@ function chatInit(){
     function ansBox(el,r){var old=el.querySelector(".ch-ans");if(old){old.remove();return}
       var sims=similar(r.q),box=h('<div class="ch-ans"><label class="help" style="display:block;margin:0 0 4px;font-weight:700;color:var(--ink)">Your answer</label><textarea class="t" rows="3" style="width:100%" placeholder="Write the answer visitors should see"></textarea>'+
         '<div class="ch-ans-act"><button type="button" class="btn primary" data-a="save">Save &amp; publish answer</button><button type="button" class="btn" data-a="cancel">Cancel</button></div>'+
-        (sims.length?'<p class="help" style="margin:12px 0 2px"><b>Already answered?</b> Add this question as another way people ask one of these:</p><div class="sims"></div>':'')+'</div>');
+        (sims.length?'<p class="help" style="margin:12px 0 2px"><b>Already answered?</b> Link this question to one of these answers:</p><div class="sims"></div>':'')+
+        '<p class="help" style="margin:12px 0 4px"><b>Link it to another answer</b>: search all your answers.</p><input class="t" type="search" data-a="find" placeholder="Type a word, for example price or website" style="width:100%"><div class="picks"></div></div>');
       var ta=box.querySelector("textarea");ta.addEventListener("input",function(){ED.autosize(ta)});
-      sims.forEach(function(x){var q=x.row.querySelector('[data-k="q"]').value,a=x.row.querySelector('[data-k="a"]').value,sb=h('<div class="sim"><div><b></b><span></span></div><button type="button" class="btn">Use this answer</button></div>');
+      /* linking adds the visitor's question to that answer's other wordings, so the chat gives that answer from now on */
+      function simItem(row){var q=row.querySelector('[data-k="q"]').value,a=row.querySelector('[data-k="a"]').value,sb=h('<div class="sim"><div><b></b><span></span></div><button type="button" class="btn">Use this answer</button></div>');
         sb.querySelector("b").textContent=q;sb.querySelector("span").textContent=a.slice(0,110)+(a.length>110?"…":"");
-        sb.querySelector("button").addEventListener("click",function(){var al=x.row.querySelector('[data-k="also"]');al.value=(al.value.trim()?al.value.trim().replace(/,\s*$/,"")+", ":"")+r.q.replace(/[?!.]+$/,"").toLowerCase();markDirty();
-          logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});toast("Saving: “"+q+"” now also answers this question.");saveAll(this,logDraw)});box.querySelector(".sims").appendChild(sb)});
+        sb.querySelector("button").addEventListener("click",function(){var al=row.querySelector('[data-k="also"]');al.value=(al.value.trim()?al.value.trim().replace(/,\s*$/,"")+", ":"")+r.q.replace(/[?!.]+$/,"").toLowerCase();markDirty();
+          logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});toast("Saving: “"+q+"” now also answers this question.");saveAll(this,logDraw)});return sb}
+      sims.forEach(function(x){box.querySelector(".sims").appendChild(simItem(x.row))});
+      var fi=box.querySelector('[data-a="find"]'),picks=box.querySelector(".picks");
+      /* answers whose question has the word come first, then their other wordings, then the answer text */
+      fi.addEventListener("input",function(){var f=fi.value.trim().toLowerCase();picks.innerHTML="";if(!f)return;
+        var hits=Array.prototype.map.call(qbox.querySelectorAll(".ch-qa"),function(row){var v=function(k){return row.querySelector('[data-k="'+k+'"]').value.toLowerCase()};
+          var rank=!v("q")?9:v("q").indexOf(f)>=0?0:v("also").indexOf(f)>=0?1:v("a").indexOf(f)>=0?2:9;return{row:row,rank:rank}}).filter(function(x){return x.rank<9}).sort(function(a,b){return a.rank-b.rank}).slice(0,6);
+        hits.forEach(function(x){picks.appendChild(simItem(x.row))});var n=hits.length;
+        if(!n)picks.innerHTML='<p class="help" style="margin:6px 0 0">No answer has that word. Try another word, or write a new answer above.</p>'});
       box.querySelector('[data-a="cancel"]').addEventListener("click",function(){box.remove()});
       box.querySelector('[data-a="save"]').addEventListener("click",function(){var a=ta.value.trim();if(!a){toast("Write the answer first.",true);ta.focus();return}
         qrow({q:r.q,a:a});qaCount();markDirty();logSet([r.id],{done:true}).then(function(){r.done=true}).catch(function(){});saveAll(this,logDraw)});
