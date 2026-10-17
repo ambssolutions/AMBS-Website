@@ -3150,6 +3150,10 @@ body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
 .want .wi{font-size:22px;flex:none}.wantord{margin:18px 0 6px}.want .wt{flex:1;min-width:0}.want .wt b{display:block;font-size:1rem}.want .wt small{display:block;color:var(--muted);font-size:.82rem}
 .want .wk{flex:none;width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
 .want[aria-pressed="true"]{border-color:#24b328;background:rgba(36,179,40,.07)}.want[aria-pressed="true"] .wk{background:#24b328;border-color:#24b328}.want[aria-pressed="true"] .wk:after{content:"✓"}
+.wants{margin:0 0 16px}.wants .wz-h4{margin:6px 0 4px}.wants .note{margin:0 0 8px}
+.wantc{min-width:0}.wantc.open{grid-column:1/-1}.wantsoc{grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr))}.wantsoc .want{min-height:56px;padding:8px 12px;gap:10px}
+.want .wsi{display:block;width:24px;height:24px}.want .wt small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wantin{display:grid;gap:8px;margin:6px 2px 2px}.wantf{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}.wantf input{box-sizing:border-box;width:100%;min-height:44px;font-size:16px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel,#fff);color:var(--ink)}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .wantnote .linkbtn{min-height:36px}
 body.one #kbHint,body.one #evenSp,body.one #pgBtn,body.one #partsPv,body.one #movePv,body.one #testPv,body.one #bigPv,body.one .pvparts{display:none!important}
@@ -3234,40 +3238,68 @@ editSheet=function(id,tab){_oneSheet(id,tab);var sh=document.querySelector(".esh
   if(!sh.dataset.oneWired){sh.dataset.oneWired="1";var d=sh.querySelector(".edone");if(d)d.addEventListener("click",function(){document.body.classList.remove("esheet-on")})}}};
 /* ---------- "what do you want in it?": asked after the website or a fresh start, then the designs show exactly those parts ---------- */
 var FLOW=null,WANT=null;
-var WANTS=[["logo","🏷️","Logo",""],["photo","👤","Photo of you",""],["social","📱","Social icons","Facebook, Instagram…"],["button","🔘","A button","Book, get a quote…"],["banner","🖼️","Banner","An offer or promotion"],["disclaimer","⚖️","Disclaimer","Confidential notice"],["signoff","✍️","Handwritten sign-off","“Kind regards,” that writes itself"],["tagline","💬","Tagline","A short line about you"]];
+var WANTS=[["logo","🏷️","Logo",""],["photo","👤","Photo of you",""],["tagline","💬","Tagline","A short line about you"],["signoff","✍️","Handwritten sign-off","“Kind regards,” that writes itself"],["banner","🖼️","Banner","An offer or promotion"],["disclaimer","⚖️","Disclaimer","Confidential notice"]];
+/* each contact line, social network and button is its own tick */
+var WANT_C={mobile:["📱","Mobile","mobile","021 123 4567","tel"],phone:["☎️","Office phone","phone","09 123 4567","tel"],email:["✉️","Email","email","you@business.co.nz","email"],web:["🌐","Website","website","yourbusiness.co.nz","url"],location:["📍","Address","location","Street, suburb, city","text"]};
+var WANT_B={book:["📅","Booking button","bookLabel","bookUrl","Book a time"],review:["⭐","Review button","reviewLabel","reviewUrl","Leave us a review"],extra:["🔘","Another button","extraLabel","extraUrl","Get a quote"]},WANT_BK=["book","review","extra"];
 (function(){var ti=stepId("template");if(!STEPS.some(function(x){return x.id==="wants"})){STEPS.splice(ti,0,{id:"wants",sh:"Include",t:"What do you want in your signature?",d:"Tick what you want. The designs that follow show exactly these.",parts:[]});if(STEP>=ti)STEP++}})();
-function wantNow(){var o=inOrder("book"),r=inOrder("review");return{logo:S.logoShow!==false&&!!(S.logoData||S.logoUrl),photo:!!S.photoShow,social:shown("social")&&SOCIAL.some(function(k){return S.social[k]}),button:!!((o&&o[1])||(r&&r[1])),banner:shown("banner"),disclaimer:shown("disclaimer"),signoff:S.signoffStyle==="animated"||S.signoffStyle==="still",tagline:shown("tagline")&&!!S.tagline}}
+function wantNow(){var w={logo:S.logoShow!==false&&!!(S.logoData||S.logoUrl),photo:!!S.photoShow,banner:shown("banner"),disclaimer:shown("disclaimer"),signoff:S.signoffStyle==="animated"||S.signoffStyle==="still",tagline:shown("tagline")&&!!S.tagline},so=shown("social");
+  CONTACT_KINDS.forEach(function(k){w["c_"+k]=!!S[WANT_C[k][2]]&&(S.hideC||[]).indexOf(k)<0});
+  SOCIAL.forEach(function(k){w["s_"+k]=so&&!!S.social[k]&&(S.hideS||[]).indexOf(k)<0});
+  WANT_BK.forEach(function(k){var o=inOrder(k);w["b_"+k]=!!(o&&o[1]&&S[WANT_B[k][2]]&&S[WANT_B[k][3]])});return w}
+function wantAny(pre){return Object.keys(WANT||{}).some(function(k){return k.indexOf(pre)===0&&WANT[k]})}
 var WANT_ORDER=null;
 /* your own order goes into every design: same parts, same sequence, beside your details or underneath */
 function applyOrder(o){if(!WANT_ORDER||!o||!o.order)return o;var media=o.order.filter(function(x){return/^(logo|photo)$/.test(x[0])}),rest=o.order.filter(function(x){return!/^(logo|photo)$/.test(x[0])}),out=[];
   WANT_ORDER.forEach(function(w){var e=rest.filter(function(x){return x[0]===w[0]})[0];if(!e)return;rest.splice(rest.indexOf(e),1);if(w[1]==="under"||w[1]==="side")e[2]=w[1];e[3]=w[2]?1:0;out.push(e)});
   o.order=media.concat(out).concat(rest);return o}
 function applyWants(o){if(o&&o.order)applyOrder(o);if(!WANT||!o||!o.order)return o;var set=function(id,v){o.order.forEach(function(x){if(x[0]===id)x[1]=v?1:0})};
-  o.photoShow=!!WANT.photo;set("photo",WANT.photo);o.logoShow=!!WANT.logo;set("logo",WANT.logo);set("social",WANT.social);set("book",WANT.button);if(!WANT.button){set("review",0);set("extra",0)}
+  o.photoShow=!!WANT.photo;set("photo",WANT.photo);o.logoShow=!!WANT.logo;set("logo",WANT.logo);set("social",wantAny("s_"));WANT_BK.forEach(function(k){set(k,WANT["b_"+k])});
   set("banner",WANT.banner);set("disclaimer",WANT.disclaimer);set("tagline",WANT.tagline);
   if(WANT.signoff){if(o.signoffStyle!=="animated"&&o.signoffStyle!=="still")o.signoffStyle="animated"}else o.signoffStyle="none";return o}
 function wantsApplyNow(){var t={order:S.order,photoShow:S.photoShow,logoShow:S.logoShow,signoffStyle:S.signoffStyle};applyWants(t);S.photoShow=t.photoShow;S.logoShow=t.logoShow;S.signoffStyle=t.signoffStyle;
+  S.hideC=CONTACT_KINDS.filter(function(k){return!WANT["c_"+k]});S.hideS=SOCIAL.filter(function(k){return!WANT["s_"+k]});
   if(WANT.signoff&&!soSlug(S.signoff))S.signoff="Kind regards,";changed()}
 /* sensible starting words for the parts asked for, all editable */
-function wantsCommit(){if(!WANT)return;if(WANT.button&&!(S.bookLabel&&S.bookUrl)){if(!S.bookLabel)S.bookLabel="Get in touch";if(!S.bookUrl&&S.website)S.bookUrl=(/^https?:/i.test(S.website)?"":"https://")+S.website}
+function wantsCommit(){if(!WANT)return;WANT_BK.forEach(function(k){if(!WANT["b_"+k])return;var d=WANT_B[k];if(!S[d[2]])S[d[2]]=d[4];if(k==="book"&&!S[d[3]]&&S.website)S[d[3]]=(/^https?:/i.test(S.website)?"":"https://")+S.website});
   if(WANT.disclaimer&&!S.disclaimer)S.disclaimer=defaults().disclaimer;wantsApplyNow()}
 var _onePl=presetLook;presetLook=function(p){var o=_onePl(p);return document.body.classList.contains("one")&&WANT?applyWants(o):o};
+function wantIcon(k){return'<img class="wsi" alt="" width="24" height="24" src="data:image/svg+xml;charset=utf-8,'+encodeURIComponent(brandSvg(k))+'">'}
+/* one tick card; parts that need words (a number, a link) open a box underneath when ticked */
+function wantCard(key,icon,title,sub,fields){var c=h2('<div class="wantc"></div>'),on=function(){return!!WANT[key]},
+  b=h2('<button type="button" class="want" aria-pressed="'+on()+'"><span class="wi" aria-hidden="true">'+icon+'</span><span class="wt"><b>'+esc(title)+'</b><small></small></span><span class="wk" aria-hidden="true"></span></button>'),sm=b.querySelector("small"),box=h2('<div class="wantin"></div>');
+  var subNow=function(){var v=fields&&fields.length?fields.map(function(f){return S[f.k]||(f.get?f.get():"")}).filter(Boolean).join(" · "):"";sm.textContent=v||sub||"";sm.hidden=!sm.textContent};
+  var need=function(){return fields&&fields.some(function(f){return!(f.get?f.get():S[f.k])})};
+  var drawBox=function(open){box.innerHTML="";box.hidden=!open;c.classList.toggle("open",!!open);if(!open)return;fields.forEach(function(f){var l=h2('<label class="wantf"><span>'+esc(f.l)+'</span><input type="'+(f.t||"text")+'" autocomplete="off" placeholder="'+esc(f.ph||"")+'"></label>'),i=l.querySelector("input");i.value=(f.get?f.get():S[f.k])||"";
+    i.addEventListener("input",function(){if(f.set)f.set(i.value.trim());else S[f.k]=i.value.trim();subNow();save();update()});box.appendChild(l)})};
+  b.addEventListener("click",function(){WANT[key]=!on();b.setAttribute("aria-pressed",String(on()));drawBox(on()&&!!fields&&need());wantsApplyNow();if(!box.hidden){var i=box.querySelector("input");if(i)i.focus()}});
+  subNow();drawBox(false);c.appendChild(b);c.appendChild(box);return c}
+function wantGroup(body,title,note,cls){var s=h2('<section class="wants"><h4 class="wz-h4">'+esc(title)+'</h4>'+(note?'<p class="note">'+esc(note)+'</p>':'')+'<div class="wantg'+(cls?" "+cls:"")+'" role="group" aria-label="'+esc(title)+'"></div></section>');body.appendChild(s);return s.querySelector(".wantg")}
 function wantsRender(body){if(!body)return;if(!WANT)WANT=wantNow();body.innerHTML="";
-  var g=h2('<div class="wantg" role="group" aria-label="What to include"></div>');
-  WANTS.forEach(function(w){var b=h2('<button type="button" class="want" aria-pressed="'+!!WANT[w[0]]+'"><span class="wi" aria-hidden="true">'+w[1]+'</span><span class="wt"><b>'+esc(w[2])+'</b>'+(w[3]?'<small>'+esc(w[3])+'</small>':'')+'</span><span class="wk" aria-hidden="true"></span></button>');
-    b.addEventListener("click",function(){WANT[w[0]]=!WANT[w[0]];b.setAttribute("aria-pressed",String(!!WANT[w[0]]));wantsApplyNow()});g.appendChild(b)});
-  body.appendChild(g);
+  var g=wantGroup(body,"Your contact details");
+  CONTACT_KINDS.forEach(function(k){var d=WANT_C[k];g.appendChild(wantCard("c_"+k,d[0],d[1],"",[{k:d[2],l:d[1],ph:d[3],t:d[4]}]))});
+  g=wantGroup(body,"Social media","Tick each one you want. Add your page link or @name.","wantsoc");
+  var soc=SOCIAL.slice().sort(function(a2,b2){return(S.social[b2]?1:0)-(S.social[a2]?1:0)});
+  soc.forEach(function(k){g.appendChild(wantCard("s_"+k,wantIcon(k),SOCIAL_NAME[k],"",[{l:SOCIAL_NAME[k]+" page or @name",ph:k==="whatsapp"?"021 123 4567":"@yourbusiness",get:function(){return S.social[k]||""},set:function(v){S.social[k]=v}}]))});
+  g=wantGroup(body,"Buttons");
+  WANT_BK.forEach(function(k){var d=WANT_B[k];g.appendChild(wantCard("b_"+k,d[0],d[1],"",[{k:d[2],l:"Button words",ph:d[4]},{k:d[3],l:"Link",ph:"https://…",t:"url"}]))});
+  g=wantGroup(body,"Pictures and extras");
+  WANTS.forEach(function(w){g.appendChild(wantCard(w[0],w[1],w[2],w[3]))});
   var ow=h2('<div class="wantord"><h4 class="wz-h4">Put them in order</h4><p class="note">Drag ⠿ or use ▲▼. Choose beside your details or underneath, and same line as the part above. The designs you see next keep this order.</p></div>');
   ow.appendChild(allOrder(function(){WANT_ORDER=S.order.filter(function(o){return!/^(logo|photo)$/.test(o[0])}).map(function(o){return[o[0],o[2],o[3]]});save();update();var y=window.scrollY,pb=document.querySelector(".panel"),y3=pb?pb.scrollTop:0;wantsRender(body);window.scrollTo(0,y);if(pb)pb.scrollTop=y3}));
   body.appendChild(ow);body.appendChild(h2('<p class="note">You can still add, remove or move any part later.</p>'))}
+/* what's ticked, in a few words */
+function wantList(){var on=[],n=CONTACT_KINDS.filter(function(k){return WANT["c_"+k]}).length,so=SOCIAL.filter(function(k){return WANT["s_"+k]}).map(function(k){return SOCIAL_NAME[k]});
+  if(n)on.push(n+" contact line"+(n>1?"s":""));if(so.length)on.push(so.length>3?so.length+" social icons":so.join(", "));
+  WANT_BK.forEach(function(k){if(WANT["b_"+k])on.push(WANT_B[k][1])});WANTS.forEach(function(w){if(WANT[w[0]])on.push(w[2])});return on}
 /* designs that already have the parts you asked for come first */
 function tplSort(body){if(!WANT||!body)return;var grid=body.querySelector(".tpl-grid");if(!grid)return;
+  var want={social:wantAny("s_"),button:wantAny("b_")};WANTS.forEach(function(w){want[w[0]]=!!WANT[w[0]]});
   var score=function(i){var o=_onePl(PRESETS[i]),sh=function(id){return(o.order||[]).some(function(x){return x[0]===id&&x[1]})},n=0;
     var nat={logo:o.logoShow!==false&&sh("logo"),photo:!!o.photoShow,social:sh("social"),button:sh("book"),banner:sh("banner"),disclaimer:sh("disclaimer"),signoff:o.signoffStyle==="animated"||o.signoffStyle==="still",tagline:sh("tagline")};
-    Object.keys(WANT).forEach(function(k){if(!!nat[k]===!!WANT[k])n++});return n};
+    Object.keys(want).forEach(function(k){if(!!nat[k]===want[k])n++});return n};
   [].slice.call(grid.querySelectorAll(".tcard")).map(function(c){return{c:c,s:score(+c.dataset.i)}}).sort(function(a,b){return b.s-a.s}).forEach(function(x){grid.appendChild(x.c)});
-  var on=WANTS.filter(function(w){return WANT[w[0]]}).map(function(w){return w[2]});
-  var n=h2('<div class="wantnote"><span>Showing every design with: <b>'+esc(on.join(" · ")||"just your details")+'</b></span><button type="button" class="linkbtn">Change</button></div>');n.querySelector("button").addEventListener("click",function(){go(stepId("wants"))});
+  var n=h2('<div class="wantnote"><span>Showing every design with: <b>'+esc(wantList().join(" · ")||"just your details")+'</b></span><button type="button" class="linkbtn">Change</button></div>');n.querySelector("button").addEventListener("click",function(){go(stepId("wants"))});
   body.insertBefore(n,body.firstChild);drawThumbs(true)}
 function oneNext(id,fwd){if(id==="start")return fwd?"details":"start";
   if(id==="details")return fwd?(FLOW?"wants":"edit"):(FLOW==="new"?"start":"edit");
