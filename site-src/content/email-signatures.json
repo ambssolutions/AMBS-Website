@@ -2621,7 +2621,7 @@
      "banner": "1"
     },
     "pvWidth": "desktop",
-    "pvMode": "light",
+    "pvMode": "dark",
     "logoAnim": false,
     "logoAnimUrl": "",
     "logoAnimData": "",
@@ -2994,9 +2994,10 @@
      "whatsapp",
      "x",
      "google"
-    ]
+    ],
+    "pvChosen": true
    },
-   "updated": "2026-10-17T01:23:30.475Z",
+   "updated": "2026-10-17T01:24:02.234Z",
    "by": "hello@ambs.co.nz"
   }
  ]
