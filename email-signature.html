@@ -1143,6 +1143,8 @@ function button(href,label,icon,mode,col){var c=Object.assign({},S.colors);if(co
 function contactIcon(kind,mode,csz){var st=S.contactIcons;if(st==="none")return"";var sz=Math.max(13,Math.round((csz||S.textSize)*1.15));
   if(st==="letters"){var pp=pal(),L={mobile:["M",pp[3%pp.length]],phone:["P",pp[2%pp.length]],email:["E",pp[4%pp.length]],web:["W",pp[5%pp.length]],location:["A",pp[0]]}[kind];return'<b style="color:'+(S.contactLabels?S.colors.letters:L[1])+';font-size:'+(csz||S.textSize)+'px;">'+L[0]+'</b>'}
   return'<img src="'+esc(iconSrc(kind,st,mode,embL("icons")))+'" width="'+sz+'" height="'+sz+'" alt="" style="display:block;border:0;width:'+sz+'px;height:'+sz+'px;">'}
+/* phone numbers never break across two lines, even where an email app drops white-space:nowrap (the Gmail phone app squeezed "+64 22 / 024 7888") */
+function nbsp(t){return String(t).replace(/ /g,"&nbsp;")}
 function tel(n){return"tel:"+n.replace(/[^\d+]/g,"")}
 function st(id){return S.st[id]||{}}
 function fx(id,col,size,bold,italic){var o=st(id);return'color:'+(o.color||col)+';font-size:'+(o.size||size)+'px;line-height:'+Math.round((o.size||size)*1.4)+'px;font-weight:'+((o.bold!==undefined?o.bold:bold)?"bold":"normal")+';font-style:'+((o.italic!==undefined?o.italic:italic)?"italic":"normal")+';'}
@@ -1153,8 +1155,8 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="contact"){var it=[],cs0=st("contact"),csz=cs0.size||S.textSize;c=Object.assign({},c);if(cs0.color)c.link=cs0.color;
     var add=function(kind,html){it.push({ic:contactIcon(kind,mode,csz),tx:html,k:kind})};
     contactOrder().filter(function(k){return(S.hideC||[]).indexOf(k)<0}).forEach(function(k){
-      if(k==="mobile"&&S.mobile)add("mobile",a(tel(S.mobile),esc(S.mobile),c.link));
-      if(k==="phone"&&S.phone)add("phone",a(tel(S.phone),esc(S.phone),c.link));
+      if(k==="mobile"&&S.mobile)add("mobile",a(tel(S.mobile),nbsp(esc(S.mobile)),c.link));
+      if(k==="phone"&&S.phone)add("phone",a(tel(S.phone),nbsp(esc(S.phone)),c.link));
       if(k==="email"&&S.email)add("email",a("mailto:"+S.email,esc(S.email),c.link));
       if(k==="web"&&S.website)add("web",a(url(S.website),esc(S.website.replace(/^https?:\/\//,"").replace(/\/$/,"")),c.link));
       if(k==="location"&&S.location){var al=addrLines(S.location,S.contactLayout!=="line");add("location",'<span style="color:'+c.text+';">'+al.map(esc).join("<br>")+'</span>');if(al.length>1)it[it.length-1].two=true}});
