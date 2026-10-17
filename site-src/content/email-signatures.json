@@ -3243,7 +3243,7 @@
      "social": {
       "dy": -2,
       "dx": -7,
-      "gapT": -3
+      "gapT": 1
      },
      "review": {
       "dx": -2,
@@ -3371,7 +3371,7 @@
        "dx": 15,
        "dy": 0,
        "padT": 4,
-       "gapT": -3
+       "gapT": 1
       },
       "name": {
        "size": 17,
