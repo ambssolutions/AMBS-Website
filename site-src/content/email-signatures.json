@@ -770,7 +770,7 @@
     "signoff": "Warm regards,",
     "signoffStyle": "animated",
     "signoffFont": "casual",
-    "signoffSize": 37,
+    "signoffSize": 25,
     "signoffAnimColor": "dark",
     "photoShow": false,
     "photoShape": "rounded",
@@ -813,22 +813,22 @@
     "logoPos": "left",
     "logoBg": "none",
     "logoMatch": false,
-    "logoSize": 125,
+    "logoSize": 120,
     "logoUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-mvbo7dax.png",
     "divider": "solid",
-    "dividerW": 3,
+    "dividerW": 2,
     "lineGapL": 16,
     "lineGapR": 9,
     "order": [
      [
-      "photo",
-      0,
+      "logo",
+      1,
       "left",
       0
      ],
      [
-      "logo",
-      1,
+      "photo",
+      0,
       "left",
       0
      ],
@@ -857,12 +857,6 @@
       0
      ],
      [
-      "book",
-      1,
-      "side",
-      1
-     ],
-     [
       "review",
       1,
       "side",
@@ -875,26 +869,32 @@
       1
      ],
      [
+      "book",
+      1,
+      "side",
+      0
+     ],
+     [
       "tagline",
       0,
       "side",
       0
      ],
      [
-      "rainbow",
-      0,
+      "banner",
+      1,
       "under",
       0
      ],
      [
-      "banner",
-      1,
-      "under",
-      1
-     ],
-     [
       "disclaimer",
       1,
+      "under",
+      0
+     ],
+     [
+      "rainbow",
+      0,
       "under",
       0
      ]
@@ -920,12 +920,12 @@
     "textSize": 13,
     "rainbowW": 220,
     "iconStyle": "glyph",
-    "iconSize": 29,
+    "iconSize": 26,
     "contactIcons": "glyph",
     "btnStyle": "filled",
-    "btnRadius": 6,
-    "btnPadX": 8,
-    "btnFont": 12,
+    "btnRadius": 10,
+    "btnPadX": 32,
+    "btnFont": 13,
     "contactSep": "",
     "bookIcon": "none",
     "useCode": false,
@@ -962,7 +962,7 @@
       "bold": false,
       "italic": false,
       "color": "#14172b",
-      "dy": -2
+      "dy": 5
      },
      "disclaimer": {
       "size": 14,
@@ -977,7 +977,8 @@
      },
      "book": {
       "dx": 1,
-      "dy": -2
+      "dy": -3,
+      "align": "left"
      },
      "logo": {
       "dx": 8,
@@ -989,14 +990,21 @@
       "dx": -2
      },
      "social": {
-      "dy": -4,
-      "dx": -8
+      "dy": -5,
+      "dx": -7
      },
      "review": {
-      "dx": -2
+      "dx": -2,
+      "align": "left"
      },
      "name": {
       "size": 18
+     },
+     "extra": {
+      "align": "left"
+     },
+     "line": {
+      "dy": -1
      }
     },
     "maker": {
@@ -1017,11 +1025,11 @@
      "emboss": 3
     },
     "custom": [],
-    "pieceGap": 5,
-    "iconGap": 3,
-    "btnGap": 7,
+    "pieceGap": 1,
+    "iconGap": 1,
+    "btnGap": 4,
     "contactGap": null,
-    "lineLen": 89,
+    "lineLen": 99,
     "mob": {
      "btnSide": "",
      "socialWithLogo": true,
@@ -1301,7 +1309,7 @@
      "google"
     ]
    },
-   "updated": "2026-10-17T00:53:37.695Z",
+   "updated": "2026-10-17T01:02:04.279Z",
    "by": "hello@ambs.co.nz"
   },
   {
