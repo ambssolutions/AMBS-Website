@@ -937,7 +937,7 @@
      "logo": "0",
      "banner": "1"
     },
-    "pvWidth": "desktop",
+    "pvWidth": "phone",
     "pvMode": "light",
     "logoAnim": false,
     "logoAnimUrl": "",
@@ -1109,7 +1109,7 @@
       ],
       [
        "disclaimer",
-       0,
+       1,
        "under",
        0
       ]
@@ -1168,7 +1168,7 @@
      "photoSize": 88,
      "photoShow": false,
      "align": "left",
-     "signoffSize": 25,
+     "signoffSize": 22,
      "bannerW": 482,
      "rainbowW": 220
     },
@@ -1310,7 +1310,7 @@
      "google"
     ]
    },
-   "updated": "2026-10-17T01:06:03.433Z",
+   "updated": "2026-10-17T01:08:02.092Z",
    "by": "hello@ambs.co.nz"
   },
   {
