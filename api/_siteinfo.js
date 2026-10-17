@@ -32,7 +32,13 @@ async function safeUrl(u) {
 }
 
 /* fetch a public address, following up to 4 redirects (each one checked), stopping at maxBytes */
+/* some websites (Cloudflare and similar) turn away anything that doesn't look like a browser */
+const BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36";
 export async function grab(u, maxBytes, accept) {
+  try { return await grab1(u, maxBytes, accept, false); }
+  catch (e) { if (e.refused) return await grab1(u, maxBytes, accept, true); throw e; }
+}
+async function grab1(u, maxBytes, accept, asBrowser) {
   let cur = u;
   for (let hop = 0; hop < 5; hop++) {
     const p = await safeUrl(cur);
@@ -41,10 +47,12 @@ export async function grab(u, maxBytes, accept) {
     const t = setTimeout(() => ctl.abort(), 8000);
     let r;
     try {
-      r = await fetch(p.href, { redirect: "manual", signal: ctl.signal, headers: { "User-Agent": UA, Accept: accept || "text/html,*/*;q=0.8" } });
+      r = await fetch(p.href, { redirect: "manual", signal: ctl.signal, headers: asBrowser
+        ? { "User-Agent": BROWSER_UA, Accept: accept || "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "en-NZ,en;q=0.9" }
+        : { "User-Agent": UA, Accept: accept || "text/html,*/*;q=0.8" } });
     } catch (e) { clearTimeout(t); throw new Error("The website didn’t answer."); }
     if (r.status >= 300 && r.status < 400 && r.headers.get("location")) { clearTimeout(t); cur = new URL(r.headers.get("location"), p.href).href; continue; }
-    if (!r.ok) { clearTimeout(t); throw new Error("The website answered with an error (" + r.status + ")."); }
+    if (!r.ok) { clearTimeout(t); const err = new Error("The website answered with an error (" + r.status + ")."); err.refused = !asBrowser && [401, 403, 406, 429, 503].includes(r.status); throw err; }
     const chunks = []; let n = 0;
     try {
       for await (const c of r.body) { n += c.length; if (n > maxBytes) break; chunks.push(c); }
@@ -339,9 +347,42 @@ async function animatedGif(sharp, buf, pages, bestPage, box) {
 
 const sameUrl = (a, b) => a.replace(/\/(index\.html?)?(?=#|$)/i, "") === b.replace(/\/(index\.html?)?(?=#|$)/i, "");
 const addLinks = (r, o) => { for (const k of ["book", "review", "google", "extra"]) if (!r.links[k] && o.links[k]) r.links[k] = o.links[k]; };
+/* a business name instead of an address ("apex advice"): try the likely addresses, New Zealand first,
+   then a web search; the first one that answers with a web page wins */
+async function findSite(name) {
+  const words = String(name).toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9 -]+/g, " ").trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return "";
+  const bases = [...new Set([words.join(""), words.join("-"), words.filter((w) => !/^(ltd|limited|nz|the)$/.test(w)).join("")])].filter(Boolean);
+  const tlds = [".co.nz", ".nz", ".com", ".com.au", ".net.nz", ".org.nz"];
+  const tries = [];
+  for (const t of tlds) for (const b of bases) tries.push("https://" + b + t + "/");
+  const ok = await Promise.all(tries.map((u) => grab(u, 4e5).then((p) => {
+    /* a domain that's for sale redirects elsewhere or says so: skip it */
+    const host = new URL(p.url).hostname, body = p.buf.toString("utf8", 0, 2e5);
+    if (!/html/.test(p.type || "text/html") || !bases.some((b) => host.includes(b)) || /domain (is )?for sale|buy this domain|parked free|hugedomains/i.test(body)) return "";
+    return p.url;
+  }).catch(() => "")));
+  const hit = ok.find(Boolean);
+  if (hit) return hit;
+  try {
+    const q = await grab("https://html.duckduckgo.com/html/?q=" + encodeURIComponent(name + " nz"), 6e5);
+    const m = q.buf.toString("utf8").match(/uddg=([^&"]+)/g) || [];
+    for (const x of m) {
+      const u = decodeURIComponent(x.slice(5));
+      const h = /^https?:\/\//.test(u) ? new URL(u).hostname.replace(/[^a-z0-9]/g, "") : "";
+      const key = words.filter((w) => w.length >= 3 && !/^(ltd|limited|the|and)$/.test(w))[0] || words[0];
+      if (!h.includes(key)) continue;
+      if (/^https?:\/\//.test(u) && !/(facebook|instagram|linkedin|youtube|twitter|x\.com|google|yelp|nzherald|wikipedia|duckduckgo|finda|yellow|companieshub|opencorporates)\./i.test(u)) return new URL(u).origin + "/";
+    }
+  } catch (e) {}
+  return "";
+}
+
 export async function siteInfo(input) {
-  const start = normaliseSite(input);
-  if (!start) throw new Error("Please type a website address, like yourbusiness.co.nz");
+  let start = normaliseSite(input);
+  const raw = String(input || "").trim();
+  if (raw && (!/\./.test(raw) || /\s/.test(raw.replace(/^https?:\/\//i, "")))) start = await findSite(raw.replace(/^https?:\/\//i, ""));
+  if (!start) throw new Error(raw && !/\./.test(raw) ? "We couldn’t find a website for “" + raw + "”. Type its address, like yourbusiness.co.nz" : "Please type a website address, like yourbusiness.co.nz");
   const page = await grab(start, 1.5e6);
   if (!/html|xml|text\/plain/.test(page.type || "text/html")) throw new Error("That address isn’t a web page.");
   const html = page.buf.toString("utf8");
