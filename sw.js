@@ -70,6 +70,12 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
+  /* app settings (name and icons) always come fresh, so a new phone icon shows without waiting for a new build */
+  if (url.pathname.endsWith('.webmanifest')) {
+    e.respondWith(fetch(req, { cache: 'no-store' }).catch(() => caches.match(req)));
+    return;
+  }
+
   /* the page itself: network first, so a deploy shows straight away */
   if (req.mode === 'navigate') {
     e.respondWith(
