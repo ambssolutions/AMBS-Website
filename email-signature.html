@@ -3074,5 +3074,123 @@ function gate(start){var wrap=document.querySelector(".wrap");wrap.hidden=true;
       .catch(function(e){b.disabled=false;b.textContent="Sign in";msg.textContent=e.code===403?"This account can’t use the builder.":(e.message==="signin"?"Please sign in.":e.message)})})}
 if(onAmbs())gate(init);else init();
 </script>
+<style>
+/* ---------- one-screen editor: one panel of grouped settings, tap a part for all of its settings, Save and Copy always at hand ---------- */
+body.one .flow,body.one #wizBack,body.one .wiz,body.one .acts,body.one #copySig,body.one #copyCode,body.one #copyGm,body.one .edhint{display:none!important}
+body.one[data-step="edit"] .pnav,body.one[data-step="edit"] #stepCount,body.one[data-step="edit"] #skipStep{display:none!important}
+body.one{padding-bottom:96px}
+body.one .og .confirmbox,body.one:not([data-step="edit"]) #stepCount,body.one #skipStep{display:none!important}
+.obar{position:fixed;left:0;right:0;bottom:0;z-index:38;display:flex;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--panel,#fff);border-top:1px solid var(--line);box-shadow:0 -10px 28px -20px rgba(13,17,34,.55)}
+.obar button{flex:1;min-height:52px;border-radius:14px;border:1px solid var(--line);background:var(--panel,#fff);color:var(--ink);font:700 16px/1 inherit;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.obar .ob-u{flex:0 0 56px;font-size:20px}.obar .ob-go{flex:1.5;background:#24b328;border-color:#24b328;color:#fff}.obar button:disabled{opacity:.45}
+@media (min-width:761px){.obar{left:50%;right:auto;transform:translateX(-50%);bottom:16px;width:min(620px,calc(100% - 32px));border:1px solid var(--line);border-radius:18px}}
+body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
+.ogs{display:flex;flex-direction:column;gap:10px}
+.og{border:1px solid var(--line);border-radius:16px;background:var(--panel,#fff);overflow:hidden}
+.og>button.ogh{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:10px 16px;cursor:pointer}
+.og>button.ogh:focus-visible{outline:2px solid var(--focus,#1877E0);outline-offset:-2px}
+.ogh .ogi{flex:none;width:38px;height:38px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;font-size:18px;background:var(--soft,#f3f6fc)}
+.ogh .ogt{flex:1;min-width:0}.ogh .ogt b{display:block;font-size:1.02rem}.ogh .ogt small{display:block;color:var(--muted);font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ogh .ogc{color:var(--muted);font-size:1rem;transition:transform .2s}.og.open .ogh .ogc{transform:rotate(180deg)}
+.og .ogb{border-top:1px solid var(--line);padding:6px 16px 16px}
+.og .ogs-sub{margin:14px 0 4px;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7B2FBE}
+.otop{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.otop button{min-height:44px}@media (min-width:761px){.otop [data-o="even"]{display:none}body.one #stepBody{padding-bottom:90px}body.one .pv-col{padding-bottom:90px}}
+.opart .oph{display:flex;align-items:center;gap:10px;margin:0 0 10px}
+.opart .oph b{font-size:1.15rem}
+.opart .oback{min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--soft,#f3f6fc);color:var(--ink);font:700 15px inherit;font-family:inherit;cursor:pointer}
+.opart .osec{font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7B2FBE;margin:14px 0 6px}
+.opq .qbar{position:static!important;max-width:none!important;margin:0!important}
+.ocopy .sbox{max-width:720px}
+/* phones: the part's quick settings and all its settings in one sheet */
+body.one .esheet{max-height:72vh;overflow:auto}
+body.one .esheet .esh{position:sticky;top:0;z-index:2;background:var(--panel,#fff)}
+body.one .esheet .estabs{display:none!important}
+body.one .esheet .esq{display:block!important;overflow:visible;padding-bottom:0}
+body.one .esheet .esb{display:flex!important;overflow:visible}
+body.one .esheet .esb:before{content:"All settings";display:block;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7B2FBE;margin:4px 0 -2px}
+body.one .esheet .esq:before{content:"Quick settings";display:block;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7B2FBE;margin:2px 4px 8px}
+/* big enough to tap: every button, choice and box in the settings at least 44px tall, and 16px text so phones don't zoom */
+body.one .panel .btn,body.one .esheet .btn,body.one .panel .seg button,body.one .esheet .seg button,body.one .panel .chips button,body.one .esheet .chips button,body.one .panel .acts2 button,body.one .esheet .acts2 button{min-height:44px}
+body.one .panel input[type=text],body.one .panel input[type=url],body.one .panel input[type=email],body.one .panel input[type=tel],body.one .panel input:not([type]),body.one .panel select,body.one .panel textarea,
+body.one .esheet input[type=text],body.one .esheet input[type=url],body.one .esheet input:not([type]),body.one .esheet select,body.one .esheet textarea{min-height:44px;font-size:16px}
+body.one .panel .seg,body.one .esheet .seg{flex-wrap:wrap}
+@media (max-width:760px){body.one header.top #undoBtn,body.one header.top #redoBtn,body.one header.top #sigSave{display:none!important}
+  body.one .panel{padding-bottom:12px}}
+</style>
+<script>
+/* one-screen editor: replaces the Simple/Advanced split and the five steps with one panel of grouped settings.
+   Tapping a part of the preview opens every setting for that part, with its quick settings (size, colour, move, spacing) on top. */
+var OGROUPS=[
+  {id:"details",ic:"👤",t:"Your details",d:"Name, role, phones, email, website, social accounts",items:["details"]},
+  {id:"media",ic:"🖼️",t:"Logo, photo & colours",items:["brand","logo","photo"]},
+  {id:"layout",ic:"📐",t:"Layout & order",items:["layout","reorder"]},
+  {id:"extras",ic:"🔘",t:"Buttons, icons & banner",items:["actions","social","banner","disclaimer","custom"]},
+  {id:"look",ic:"🎨",t:"Text, sign-off & style",items:["tune","signoff","style","dark"]}];
+var OG_OPEN="details",PV_PART=null;
+function ogOf(item){for(var i=0;i<OGROUPS.length;i++)if(OGROUPS[i].items.indexOf(item)>=0)return OGROUPS[i].id;if(TUNE_PARTS.indexOf(item)>=0)return"look";if(/^(name|role|company|contact)$/.test(item))return"details";return null}
+function ogSummary(g){if(g.d)return g.d;return g.items.map(function(a){var x=accSummary(a);return x||ACC_NAMES[a]}).filter(Boolean).join(" · ")}
+function isPartId(id){id=String(id||"");return id.indexOf("c-")===0||!!inOrder(id)||/^(logo|photo|signoff|line|book|review|extra|actions|banner|disclaimer|social|name|role|contact|tagline|rainbow)$/.test(id)}
+function ogRender(body){
+  var top=h2('<div class="otop"><button type="button" class="btn sec small" data-o="tpl">🎨 Change design</button><button type="button" class="btn sec small" data-o="even">✨ Even spacing</button><button type="button" class="btn sec small" data-o="parts">☰ Show or hide parts</button></div>');
+  top.querySelector('[data-o="tpl"]').addEventListener("click",function(){go(stepId("template"))});
+  top.querySelector('[data-o="even"]').addEventListener("click",function(){evenSpacing()});
+  top.querySelector('[data-o="parts"]').addEventListener("click",function(){var b=$("partsPv");if(b)b.click()});
+  body.appendChild(top);
+  var wrap=h2('<div class="ogs"></div>');body.appendChild(wrap);
+  OGROUPS.forEach(function(g){var open=g.id===OG_OPEN;
+    var el=h2('<section class="og'+(open?" open":"")+'" data-g="'+g.id+'"><button type="button" class="ogh" aria-expanded="'+open+'"><span class="ogi" aria-hidden="true">'+g.ic+'</span><span class="ogt"><b>'+esc(g.t)+'</b><small>'+esc(ogSummary(g))+'</small></span><span class="ogc" aria-hidden="true">▾</span></button></section>');
+    el.querySelector(".ogh").addEventListener("click",function(){OG_OPEN=OG_OPEN===g.id?null:g.id;go(stepId("edit"));if(OG_OPEN){var n=document.querySelector('.og[data-g="'+g.id+'"]');if(n)n.scrollIntoView({block:"nearest",behavior:"smooth"})}});
+    if(open){var b=h2('<div class="ogb"></div>');el.appendChild(b);
+      g.items.forEach(function(a){var sub=h2('<div class="ogitem" data-acc="'+a+'"></div>');b.appendChild(sub);
+        if(a==="tune"||a==="brand")sub.appendChild(h2('<h4 class="ogs-sub">'+(a==="tune"?"Text":"Logo and brand colours")+'</h4>'));
+        if(a==="tune")TUNE_PARTS.forEach(function(p){renderPart(p,sub,true)});else renderPart(a,sub,a!=="details"&&a!=="brand")})}
+    wrap.appendChild(el)})}
+function opRender(body,id){var key=partKey(id),isC=String(id).indexOf("c-")===0,name=typeof qbName==="function"?qbName(id):blockLabel(id);
+  var el=h2('<div class="opart" data-kp="'+esc(String(id))+'"><div class="oph"><button type="button" class="oback">‹ All settings</button><b>'+esc(name)+'</b></div><div class="osec">Quick settings</div><div class="opq"></div><div class="osec">All settings</div><div class="opall"></div></div>');
+  el.querySelector(".oback").addEventListener("click",function(){PV_PART=null;KEYPART=null;var g=ogOf(isC?"custom":key);if(g)OG_OPEN=g;try{placeGrab()}catch(e){}go(stepId("edit"))});
+  body.appendChild(el);renderPart(isC?"custom":key,el.querySelector(".opall"),false);
+  /* every setting for this part open at once, nothing folded away */
+  el.querySelectorAll(".opall details.more").forEach(function(d){d.open=true});
+  if(isC)setTimeout(function(){var cp=el.querySelector('.cpart[data-cid="'+id+'"]');if(cp){cp.scrollIntoView({block:"nearest"});cp.classList.add("flash");setTimeout(function(){cp.classList.remove("flash")},1400)}},60);
+  SEL=key;markSel()}
+var _oneGo=go;
+go=function(i,part){var idx=Math.max(0,Math.min(STEPS.length-1,i)),s=STEPS[idx];
+  if(s.id!=="edit"||!document.body.classList.contains("one")){_oneGo(i,part);
+    /* the other screens (start, check details, design) lead straight back to editing */
+    if(document.body.classList.contains("one")){var nx=$("nextStep"),pv=$("prevStep");if(nx){nx.hidden=false;nx.textContent=s.id==="start"?"Skip, go to editing":"✓ Done";}if(pv){pv.textContent="← Back to editing";pv.disabled=false;pv.hidden=s.id==="start"&&!(S._sigId||S.name)}}
+    return}
+  SPAGE=null;_oneGo(i);var body=$("stepBody"),cn=body.querySelector(".codenote");body.innerHTML="";if(cn)body.appendChild(cn);
+  $("stepTitle").textContent=PV_PART?"Edit":(S._sigName||"Your signature");$("stepHint").textContent=PV_PART?"":"Tap any part of the preview to change it, or open a group below.";
+  if(PV_PART)opRender(body,PV_PART);else{ogRender(body);SEL=null}
+  markSel();if(PV_PART&&KEYPART===PV_PART)setTimeout(function(){try{drawQbar(true)}catch(e){}},0)};
+var _oneOpenItem=openItem;
+openItem=function(id){if(!document.body.classList.contains("one")){_oneOpenItem(id);return}
+  if(isPartId(id)){PV_PART=id;KEYPART=id;go(stepId("edit"));try{placeGrab()}catch(e){}return}
+  var g=ogOf(id);if(!g){_oneOpenItem(id);return}PV_PART=null;OG_OPEN=g;go(stepId("edit"));
+  setTimeout(function(){var n=document.querySelector('.ogitem[data-acc="'+id+'"]');if(n)n.scrollIntoView({block:"start",behavior:"smooth"})},60)};
+/* the quick settings sit inside the part's panel on laptops too, instead of floating under the preview */
+var _oneQbar=drawQbar;
+drawQbar=function(force){_oneQbar(force);if(window.innerWidth<=760||!document.body.classList.contains("one"))return;var q=$("qbar"),host=document.querySelector('.opart[data-kp="'+(window.CSS&&CSS.escape?CSS.escape(String(KEYPART)):KEYPART)+'"] .opq');
+  if(!q||q.hidden||!host)return;if(q.parentNode!==host)host.appendChild(q);q.classList.add("insheet");q.classList.remove("dock");q.style.top="";q.style.left=""};
+var _oneSheet=editSheet;
+editSheet=function(id,tab){_oneSheet(id,tab);var sh=document.querySelector(".esheet:not(.out)");if(sh&&document.body.classList.contains("one")){sh.dataset.tab="both";document.body.classList.add("esheet-on");sh.querySelectorAll(".esb details.more").forEach(function(d){d.open=true});
+  if(!sh.dataset.oneWired){sh.dataset.oneWired="1";var d=sh.querySelector(".edone");if(d)d.addEventListener("click",function(){document.body.classList.remove("esheet-on")})}}};
+function openCopy(){var ov=h2('<div class="sdlg ocopy" role="dialog" aria-modal="true" aria-label="Copy your signature"><div class="sbox"><div class="sh"><b>Copy your signature</b><button type="button" class="btn sec small sx">Close</button></div><div class="ocb"></div></div></div>');
+  ov.querySelector(".sx").addEventListener("click",function(){ov.remove()});ov.addEventListener("click",function(e){if(e.target===ov)ov.remove()});document.body.appendChild(ov);drawCopy(ov.querySelector(".ocb"))}
+function oneInit(){document.body.classList.add("one");
+  ["nextStep","prevStep"].forEach(function(k){var b=$(k);if(b)b.addEventListener("click",function(e){if(!document.body.classList.contains("one")||STEPS[STEP].id==="edit")return;e.stopImmediatePropagation();PV_PART=null;go(stepId("edit"))},true)});try{if(WIZ_ON)wizOff(false)}catch(e){}
+  var bar=h2('<div class="obar" role="toolbar" aria-label="Save and copy"><button type="button" class="ob-u" aria-label="Undo" title="Undo">↶</button><button type="button" class="ob-s">💾 Save</button><button type="button" class="ob-go">📋 Copy signature</button></div>');
+  bar.querySelector(".ob-u").addEventListener("click",function(){histGo(-1)});bar.querySelector(".ob-s").addEventListener("click",function(){var b=$("sigSave");if(b)b.click()});bar.querySelector(".ob-go").addEventListener("click",openCopy);document.body.appendChild(bar);
+  var u=$("undoBtn"),sync=function(){bar.querySelector(".ob-u").disabled=!!(u&&u.disabled)};if(u){new MutationObserver(sync).observe(u,{attributes:true,attributeFilter:["disabled"]});sync()}
+  document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest(".esheet .edone"))document.body.classList.remove("esheet-on")},true);
+  var hp=document.querySelector("header.top .brandline p");if(hp)hp.textContent="Tap any part of the preview to change it. Save and copy at the bottom.";
+  var st=STEPS[STEP]&&STEPS[STEP].id;if(st!=="edit"&&(S._sigId||S.name))go(stepId("edit"))}
+/* the simple step-by-step screens are replaced by this editor */
+wizPref=function(){return false};
+var _oneOpenSig=openSig;
+openSig=function(id){return _oneOpenSig(id).then(function(r){if(document.body.classList.contains("one")){PV_PART=null;KEYPART=null;try{if(WIZ_ON)wizOff(false)}catch(e){}go(stepId("edit"))}return r})};
+(function(){var t=setInterval(function(){if(typeof S==="object"&&S&&$("stepBody")&&$("stepBody").childNodes.length){clearInterval(t);oneInit()}},50)})();
+</script>
 
 </body></html>
