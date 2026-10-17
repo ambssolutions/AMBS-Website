@@ -3154,6 +3154,7 @@ body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
 .wantc{min-width:0}.wantc.open{grid-column:1/-1}.wantsoc{grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr))}.wantsoc .want{min-height:56px;padding:8px 12px;gap:10px}
 .want .wsi{display:block;width:24px;height:24px}.want .wt small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wantin{display:grid;gap:8px;margin:6px 2px 2px}.wantf{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}.wantf input{box-sizing:border-box;width:100%;min-height:44px;font-size:16px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel,#fff);color:var(--ink)}
+.sdlg.pmove{background:rgba(20,23,43,.12)}.pmove .sbox{max-height:58vh;overflow:auto}.pmneed{display:grid;gap:8px;padding:12px;margin:0 0 14px;border:1.5px solid #24b328;border-radius:14px;background:rgba(36,179,40,.06)}.pmneed .pmok{min-height:44px}.pmchips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}.pmchip{min-height:44px;font-size:15px}.allord li.pmnew{outline:2px solid #24b328;border-radius:10px}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .wantnote .linkbtn{min-height:36px}
 body.one #kbHint,body.one #evenSp,body.one #pgBtn,body.one #partsPv,body.one #movePv,body.one #testPv,body.one #bigPv,body.one .pvparts{display:none!important}
@@ -3314,11 +3315,29 @@ var ONE_PG=false,_onePg=phoneGuide;
 phoneGuide=function(){if(!document.body.classList.contains("one")||ONE_PG){var k=S.phoneGuide;if(ONE_PG)S.phoneGuide=true;try{_onePg()}finally{S.phoneGuide=k}return}var g=$("phoneGuide");if(g)g.hidden=true};
 function oneMore(){var big=window.innerWidth>760,pgOn=ONE_PG;
   var items=[["✨","Even spacing","Same space between every part",function(){evenSpacing()}],["☰","Show or hide parts","Tick what appears, reorder",function(){var b=$("partsPv");if(b)b.click()}],
-    ["✥","Move or add parts","Drag parts around the preview",function(){var b=$("movePv");if(b)b.click()}],["🔗","Test links","Click the links to check them",function(){var b=$("testPv");if(b)b.click()}],
+    ["✥","Move or add parts",big?"Drag parts around the preview":"Put parts in order, or add new ones",function(){if(big){var b=$("movePv");if(b)b.click()}else phoneMove()}],["🔗","Test links","Click the links to check them",function(){var b=$("testPv");if(b)b.click()}],
     ["📱","Phone guide: "+(pgOn?"on":"off"),"A line where a phone screen ends",function(){ONE_PG=!pgOn;phoneGuide()}]].concat(big?[["⤢","Bigger preview","",function(){var b=$("bigPv");if(b)b.click()}]]:[]);
   var ov=h2('<div class="sdlg msheet omore" role="dialog" aria-modal="true" aria-label="More preview tools"><div class="sbox"><div class="sh"><b>More</b><button type="button" class="btn sec small sx">Close</button></div><div class="omi"></div></div></div>'),box=ov.querySelector(".omi");
   items.forEach(function(it){var b=h2('<button type="button" class="omb"><span class="omic" aria-hidden="true">'+it[0]+'</span><span><b>'+esc(it[1])+'</b>'+(it[2]?'<small>'+esc(it[2])+'</small>':'')+'</span></button>');b.addEventListener("click",function(){ov.remove();it[3]()});box.appendChild(b)});
   ov.querySelector(".sx").addEventListener("click",function(){ov.remove()});ov.addEventListener("click",function(e){if(e.target===ov)ov.remove()});document.body.appendChild(ov)}
+/* on phones "Move or add" is the order list with + Add a part: no dragging around a tiny preview */
+function phoneMove(){var ov=h2('<div class="sdlg msheet pmove" role="dialog" aria-modal="true" aria-label="Move or add parts"><div class="sbox"><div class="sh"><b>Move or add parts</b><button type="button" class="btn sec small sx">✓ Done</button></div><div class="pmb"></div></div></div>'),body=ov.querySelector(".pmb"),sb=ov.querySelector(".sbox");
+  var need=null;
+  var draw=function(){var y=sb.scrollTop;body.innerHTML="";
+    /* a button needs its words and link before it can show */
+    if(need&&!(S[WANT_B[need][2]]&&S[WANT_B[need][3]])){var d=WANT_B[need],f=h2('<div class="pmneed"><h4 class="wz-h4">'+esc(d[1])+'</h4><label class="wantf"><span>Button words</span><input type="text" placeholder="'+esc(d[4])+'"></label><label class="wantf"><span>Link</span><input type="url" placeholder="https://…"></label><button type="button" class="btn small pmok">Add button</button></div>'),ins=f.querySelectorAll("input");
+      ins[0].value=S[d[2]]||"";ins[1].value=S[d[3]]||"";[0,1].forEach(function(i){ins[i].addEventListener("input",function(){S[d[2+i]]=ins[i].value.trim();save();update()})});
+      f.querySelector(".pmok").addEventListener("click",function(){if(!(S[d[2]]&&S[d[3]])){toast("Add the button words and a link");return}var k=need;need=null;changed();draw();mark(blockLabel(k))});body.appendChild(f);setTimeout(function(){(ins[0].value?ins[1]:ins[0]).focus()},50)}else need=null;
+    var shownNow=function(k){var o=inOrder(k);if(!o||!o[1])return false;if(k==="logo")return S.logoShow!==false;if(k==="photo")return!!S.photoShow;try{return!!block(k,"preview")}catch(e){return true}};
+    var add=h2('<div class="pmadd"><h4 class="wz-h4">+ Add a part</h4><div class="pmchips"></div></div>'),ch=add.querySelector(".pmchips");
+    ADDABLE.forEach(function(x){if(x[0]===need||(x[0].indexOf("c:")!==0&&shownNow(x[0])))return;var b=h2('<button type="button" class="aoc pmchip"><span aria-hidden="true">'+esc(x[2])+'</span> '+esc(x[1])+'</button>');
+      b.addEventListener("click",function(){var o=addPart(x[0]);if(x[0]==="logo"&&getP("logoWhere")==="off")setP("logoWhere","left");S.autoFit=false;save();changed();
+        if(WANT_B[x[0]]&&!(S[WANT_B[x[0]][2]]&&S[WANT_B[x[0]][3]])){need=x[0];draw();sb.scrollTop=0;return}toast(x[1]+" added. Move it in the list below.");draw();mark(blockLabel(o[0]))});ch.appendChild(b)});
+    body.appendChild(add);
+    var ow=h2('<div class="pmord"><h4 class="wz-h4">Order</h4><p class="note">Use ▲▼ or drag ⠿. Untick to hide. Choose beside your details or underneath.</p></div>');
+    ow.appendChild(allOrder(function(){save();changed();draw()}));body.appendChild(ow);sb.scrollTop=y};
+  var mark=function(lbl){var li=[].slice.call(body.querySelectorAll(".allord li")).filter(function(l){var t=l.querySelector(".st b");return t&&t.textContent===lbl})[0];if(li){li.classList.add("pmnew");li.scrollIntoView({block:"center"})}};
+  draw();var close=function(){ov.remove()};ov.querySelector(".sx").addEventListener("click",close);ov.addEventListener("click",function(e){if(e.target===ov)close()});document.body.appendChild(ov)}
 function onePreview(){var add=function(host,before){if(!host||host.querySelector(".pvmore"))return;var b=h2('<button type="button" class="bigbtn pvmore">⋯ More</button>');b.addEventListener("click",function(e){e.preventDefault();oneMore()});if(before)host.insertBefore(b,before);else host.appendChild(b)};
   var bar=document.querySelector(".pv-col>.bar");if(!bar)return;var fp=$("fullPv");if(fp)add(fp.parentNode,fp.nextSibling);else add(bar);
   var ch=document.querySelector(".pvchips");if(ch){add(ch);var mm=ch.parentNode;if(mm&&mm.classList.contains("mail"))mm.parentNode.insertBefore(ch,mm.nextSibling)}
