@@ -1193,7 +1193,11 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
     var bh=uploaded.banner&&mode!=="email"?Math.round(bw*uploaded.banner.h/uploaded.banner.w):(ab?Math.round(bw*0.15):Math.round(bw/6));
     var im=uploaded.banner||mode==="email"||ab?'<img src="'+esc(src)+'" width="'+bw+'" alt="'+esc(S.company||"Banner")+'" style="display:block;border:0;width:'+bw+'px;max-width:100%;height:auto;'+ebBanner()+'">':img(src,bw,bh,"Banner",ebBanner());
     return S.bannerLink?'<a href="'+esc(url(S.bannerLink))+'" style="text-decoration:none;">'+im+'</a>':im}
-  if(id==="disclaimer")return S.disclaimer?'<div style="'+fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'max-width:'+(+S.discW||(wide?560:440))+'px;'+(S.disclaimerJustify?"text-align:justify;":"")+'">'+(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer)+'</div>':"";
+  if(id==="disclaimer"){if(!S.disclaimer)return"";
+    /* with a banner showing, the disclaimer is exactly as wide as the banner. A table with a width attribute holds that width in Outlook
+       (which ignores max-width), and max-width:100% lets it shrink with the banner on a narrow phone */
+    var dw=shown("banner")&&S.bannerUrl&&+S.bannerW?+S.bannerW:(+S.discW||(wide?560:440));
+    return'<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="'+dw+'" style="border-collapse:collapse;width:'+dw+'px;max-width:100%;"><tr><td style="'+fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'mso-line-height-rule:exactly;'+(S.disclaimerJustify?"text-align:justify;":"")+'">'+(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer)+'</td></tr></table>'}
   return""}
 function rows(mode,zone){var out=[],groups=[];
   /* parts marked "join" sit on the same line as the part above them */
@@ -1382,6 +1386,9 @@ var COPY_GMAIL=false;
 function builtHtml(){return darkStyle()+builtHtml2()}
 function builtHtml2(){if(!S.mob||COPY_GMAIL)return S.mob?withLayout("lap",builtOne):builtOne();
   var lap=withLayout("lap",builtOne),mob=withLayout("mob",builtOne);
+  /* the phone layout is already hidden from Outlook as a whole: an Outlook-only marker inside it (the dark-mode sign-off) would end that
+     hiding early, and Outlook then showed the rest of the phone layout as a second signature */
+  mob=mob.replace(/<!--\[if !mso\]><!-->/g,"").replace(/<!--<!\[endif\]-->/g,"");
   return'<style>@media only screen and (max-width:480px){.sgd{display:none!important;max-height:0!important;overflow:hidden!important}.sgm{display:block!important;max-height:none!important;overflow:visible!important}}</style>'+
     '<div class="sgd">'+lap+'</div><!--[if !mso]><!--><div class="sgm" style="display:none;max-height:0;overflow:hidden;">'+mob+'</div><!--<![endif]-->'}
 /* the Outlook phone app squeezes small pictures inside table columns (logo, icons) to almost nothing:
