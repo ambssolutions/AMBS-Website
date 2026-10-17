@@ -3066,8 +3066,8 @@
     "logoUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-mvbo7dax.png",
     "divider": "solid",
     "dividerW": 2,
-    "lineGapL": 21,
-    "lineGapR": 15,
+    "lineGapL": 22,
+    "lineGapR": 14,
     "order": [
      [
       "logo",
@@ -3193,7 +3193,7 @@
     "logoAnimData": "",
     "logoAnimRatio": 0,
     "darkOn": true,
-    "logoDarkUrl": "",
+    "logoDarkUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-dark.png",
     "logoDarkData": "",
     "logoDarkRatio": 0,
     "dk": {
@@ -3204,29 +3204,30 @@
     "template": "Satwinder Singh Mobile Latest Final",
     "st": {
      "signoff": {
-      "bold": true
+      "bold": true,
+      "gapB": -8
      },
      "contact": {
       "size": 11,
       "bold": false,
       "italic": false,
       "color": "#14172b",
-      "dy": 5
+      "dy": 1
      },
      "disclaimer": {
       "size": 12,
       "align": "left",
-      "dy": -5,
+      "dy": -3,
       "color": "#1f2023",
       "dx": -18
      },
      "role": {
       "size": 12,
-      "dy": -6
+      "dy": -22
      },
      "book": {
       "dx": -12,
-      "dy": -7,
+      "dy": -20,
       "align": "left"
      },
      "logo": {
@@ -3236,12 +3237,13 @@
       "padT": 6
      },
      "banner": {
-      "dy": -8,
+      "dy": -4,
       "dx": -2
      },
      "social": {
       "dy": -2,
-      "dx": -7
+      "dx": -7,
+      "gapT": -3
      },
      "review": {
       "dx": -2,
@@ -3249,7 +3251,7 @@
      },
      "name": {
       "size": 18,
-      "dy": 8
+      "dy": 4
      },
      "extra": {
       "align": "left"
@@ -3368,7 +3370,8 @@
       "social": {
        "dx": 15,
        "dy": 0,
-       "padT": 4
+       "padT": 4,
+       "gapT": -3
       },
       "name": {
        "size": 17,
@@ -3376,7 +3379,7 @@
       },
       "contact": {
        "dx": -4,
-       "dy": 1,
+       "dy": 2,
        "size": 12,
        "bold": false
       },
@@ -3386,16 +3389,22 @@
       },
       "role": {
        "bold": false,
-       "color": "#050505"
+       "color": "#050505",
+       "dy": -17
       },
       "banner": {
-       "dy": -4
+       "dy": -5
       },
       "book": {
-       "dx": -1
+       "dx": -1,
+       "dy": -11
       },
       "signoff": {
-       "size": 29
+       "size": 29,
+       "gapB": -8
+      },
+      "disclaimer": {
+       "dy": -2
       }
      },
      "contactLayout": "stack",

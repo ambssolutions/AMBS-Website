@@ -1338,7 +1338,7 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
   try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1;bOff.forEach(function(o){o[1]=1})}
   var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="center" style="padding:'+Math.max(8,+S.gap||10)+'px 0 0 0;text-align:center;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="center" style="padding:'+Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+'px 0 0 0;text-align:center;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -1360,8 +1360,8 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
     var ink=mode!=="email"&&S.darkOn&&S.pvMode==="dark"&&S.signoffAnimColor!=="white"?"white":S.signoffAnimColor,soSwap=mode==="email"&&darkExtras()&&S.signoffAnimColor!=="white";
     var inner=mode==="email"?'<img'+(soSwap?' class="dsl"':'')+' src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+S.signoffAnimColor+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'">'+(soSwap?'<!--[if !mso]><!--><img class="dsd" src="'+HOST+'signoff/'+fo.key+'/'+sl+'-white'+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:none;border:0;width:'+w0+'px;height:'+h0+'px;max-height:0;overflow:hidden;mso-hide:all;'+(S.align==="center"?"margin:0 auto;":"")+'"><!--<![endif]-->':'')
       :'<img class="so-img" data-fb="1" src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+ink+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'"><span class="'+(anim?"writing":"still")+' so-fb" hidden style="font-family:\''+fo.google+'\',cursive;font-size:'+Math.round(fo.px/2*k0)+'px;line-height:'+h0+'px;color:'+ANIM_INK[S.signoffAnimColor]+';">'+esc(SIGNOFFS[sl].text)+'</span>';
-    var sal=st("signoff").align||S.align;top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+sal+'" style="padding:'+(+st("signoff").dy||0)+'px 0 8px '+(+st("signoff").dx||0)+'px;text-align:'+sal+';">'+alignWrap(inner,sal)+'</td></tr>'}
-  else if(S.signoffStyle!=="none"&&S.signoff){var so=st("signoff"),sz=+so.size||soPlainSize();top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+S.align+'" style="padding:0 0 10px 0;text-align:'+S.align+';font-family:'+(S.signoffStyle==="script"?SCRIPT:S.font)+';font-size:'+sz+'px;line-height:'+Math.round(sz*1.25)+'px;color:'+(so.color||S.colors.text)+';'+(so.bold?"font-weight:bold;":"")+(so.italic?"font-style:italic;":"")+'">'+esc(S.signoff)+'</td></tr>'}
+    var sal=st("signoff").align||S.align;top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+sal+'" style="padding:'+(+st("signoff").dy||0)+'px 0 '+Math.max(0,8+(+st("signoff").gapB||0))+'px '+(+st("signoff").dx||0)+'px;text-align:'+sal+';">'+alignWrap(inner,sal)+'</td></tr>'}
+  else if(S.signoffStyle!=="none"&&S.signoff){var so=st("signoff"),sz=+so.size||soPlainSize();top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+S.align+'" style="padding:0 0 '+Math.max(0,10+(+st("signoff").gapB||0))+'px 0;text-align:'+S.align+';font-family:'+(S.signoffStyle==="script"?SCRIPT:S.font)+';font-size:'+sz+'px;line-height:'+Math.round(sz*1.25)+'px;color:'+(so.color||S.colors.text)+';'+(so.bold?"font-weight:bold;":"")+(so.italic?"font-style:italic;":"")+'">'+esc(S.signoff)+'</td></tr>'}
   out=T("font-family:"+S.font+";"+ebText())+top+'<tr><td align="'+S.align+'" style="padding:0;">'+out+'</td></tr>'+(under?'<tr><td align="'+S.align+'" style="padding:'+underGap()+'px 0 0 0;">'+under+'</td></tr>':"")+'</table>';
   var sp0=Math.max(0,+S.sigPad||0);if(sp0)out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td style="padding:'+sp0+'px;">'+out+'</td></tr></table>';
   if(S.card!=="none")out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td'+(darkExtras()&&hexL(S.colors.cardBg)>0.75?' class="dkb"':'')+' bgcolor="'+S.colors.cardBg+'" style="background:'+S.colors.cardBg+';border-radius:12px;padding:18px 20px;'+ebCard()+'">'+out+'</td></tr></table>';
@@ -2565,7 +2565,10 @@ function hexN(c){c=String(c||"").trim().toLowerCase();if(/^#[0-9a-f]{3}$/.test(c
 function hexL(c){c=hexN(c);if(!c)return 1;var v=[1,3,5].map(function(i){return parseInt(c.substr(i,2),16)});return(0.2126*v[0]+0.7152*v[1]+0.0722*v[2])/255}
 var DK_AUTO={text:"#e8eaed",muted:"#bdc1c6",link:"#e8eaed"};
 function dkCol(k){var dk=S.dk||{};if(dk[k])return dk[k];return hexL(C(S.colors[k]))<0.5?DK_AUTO[k]:""}
-function darkCols(){var out=[],seen={};[["text","dkt"],["muted","dkm"],["link","dkk"]].forEach(function(x){var from=hexN(C(S.colors[x[0]]));if(!from||seen[from])return;seen[from]=1;out.push({from:from,cls:x[1],to:dkCol(x[0])})});return out}
+function darkCols(){var out=[],seen={};[["text","dkt"],["muted","dkm"],["link","dkk"]].forEach(function(x){var from=hexN(C(S.colors[x[0]]));if(!from||seen[from])return;seen[from]=1;out.push({from:from,cls:x[1],to:dkCol(x[0])})});
+  /* colours chosen for one part (Fine-tune text), on the laptop or the phone layout: a dark one turns light in dark mode too,
+     or it disappears into the dark background. The class is named after the colour, so both layouts share it */
+  [S.st,S.mob&&S.mob.st,S._lap&&S._lap.st].forEach(function(o){if(!o)return;for(var k in o){var cl=o[k]&&hexN(C(o[k].color));if(!cl||seen[cl]||hexL(cl)>=0.5)continue;seen[cl]=1;out.push({from:cl,cls:"dkc"+cl.slice(1),to:DK_AUTO.text})}});return out}
 function darkMap(){var m={};darkCols().forEach(function(x){m[x.from]=x.to});return m}
 function darkTag(h){var cols=darkCols().filter(function(x){return x.to});if(!cols.length)return h;
   return h.replace(/<(\w+)([^>]*)>/g,function(tag,name,attrs){var st=/ style="([^"]*)"/.exec(attrs);if(!st)return tag;var cm=/(?:^|;)\s*color:\s*(#[0-9a-fA-F]{3,6})/.exec(st[1]);if(!cm)return tag;
@@ -2871,6 +2874,7 @@ function tidyBar(){if(window.innerWidth<=760||document.querySelector(".bar.tidy"
   [$("kbHint"),bar.querySelector(".step")].forEach(function(x){if(x)l1.appendChild(x)});
   [$("copyCode"),$("copySig")].forEach(function(x){if(x){x.classList.add("small");c1.appendChild(x)}});
   var cg=h2('<button type="button" class="btn sec small" id="copyGm" title="Laptop layout only: Gmail removes the phone layout and has a size limit" hidden>Copy for Gmail</button>');cg.addEventListener("click",function(){copyGmail(cg)});c1.insertBefore(cg,$("copySig"));
+  var es=h2('<button type="button" class="btn sec small" id="evenSp" title="Make the space between every part the same, on laptops and phones">Even spacing</button>');es.addEventListener("click",function(){evenSpacing()});c1.insertBefore(es,cg);
   bar.querySelectorAll(".seg[data-pv]").forEach(function(x){v.appendChild(x)});
   var pg=h2('<button type="button" class="bigbtn" id="pgBtn" title="Show where a phone screen ends">📱 Phone guide</button>');pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));
   pg.addEventListener("click",function(){S.phoneGuide=S.phoneGuide===false;pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));save();phoneGuide()});v.appendChild(pg);
@@ -2962,6 +2966,39 @@ function checkPics(cb){var srcs=[];emailHtml().replace(/<img[^>]+src="([^"]+)"/g
   srcs.forEach(function(u){if(IMG_OK[u]===true){if(--left===0)cb(bad);return}var im=new Image(),done=function(ok){IMG_OK[u]=ok;if(!ok)bad.push(u);if(--left===0)cb(bad)};im.onload=function(){done(true)};im.onerror=function(){done(false)};im.src=u})}
 function picName(u){if(/signoff\//.test(u))return"handwritten sign-off";if(/banner/.test(u))return"banner";if(/logo/.test(u))return"logo";if(/\/made\//.test(u))return"picture";return"icons"}
 function warnPics(bad){var names=bad.map(picName).filter(function(v,i,a){return a.indexOf(v)===i});return"Your "+names.join(", ")+" "+(names.length>1||names[0]==="icons"?"aren’t":"isn’t")+" online yet, so email apps show a broken picture. "+(bad.some(function(u){return/-e[123]\.png$/.test(u)})?"Embossed pictures go online with the next website update; until then set Embossed to Off. ":"")}
+/* Even spacing: measures what you actually see (the letters and pictures, not their boxes) and moves each part so the space
+   between every part is the same, for the laptop layout and the phone layout. Spacing is padding, which every email app keeps. */
+function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
+  var un=function(r,b){return!b?r:!r?Object.assign({},b):{l:Math.min(r.l,b.l),t:Math.min(r.t,b.t),r:Math.max(r.r,b.r),b:Math.max(r.b,b.b)}};
+  var ink=function(el){var r=null,add=function(b){if(b&&b.width>=1&&b.height>=1)r=un(r,{l:b.left,t:b.top,r:b.right,b:b.bottom})};
+    var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode())){if(!n.nodeValue.trim())continue;var rg=document.createRange();rg.selectNodeContents(n);[].forEach.call(rg.getClientRects(),add)}
+    el.querySelectorAll("img").forEach(function(i){if(getComputedStyle(i).display!=="none"&&i.offsetParent)add(i.getBoundingClientRect())});return r};
+  var measure=function(width){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+(width?width+"px":"max-content");document.body.appendChild(d);d.innerHTML=signature("preview");
+    var R={};d.querySelectorAll("[data-edit]").forEach(function(e){var k=e.dataset.edit;if(k==="line"){var b=e.getBoundingClientRect();if(b.width)R.line={l:b.left,t:b.top,r:b.right,b:b.bottom}}else{var i=ink(e);if(i)R[k]=un(R[k],i)}});d.remove();return R};
+  var pass=function(width){var R=measure(width),ch=0,sul=socialUnderLogo(),Z={};
+    S.order.forEach(function(o){if(!o[1]||!R[o[0]])return;var z=o[2];if(sul&&o[0]==="social")return;var L=(Z[z]=Z[z]||[]);if(o[3]&&L.length)L[L.length-1].ids.push(o[0]);else L.push({ids:[o[0]]})});
+    var box=function(g){return g.ids.reduce(function(r,id){return un(r,R[id])},null)};
+    var nudge=function(id,key,delta,k){delta=Math.round(delta/(k||1));if(!delta)return;S.st[id]=S.st[id]||{};S.st[id][key]=(+S.st[id][key]||0)+delta;ch++};
+    ["left","side","right"].forEach(function(z){var L=Z[z]||[];for(var i=1;i<L.length;i++){var a=box(L[i-1]),b=box(L[i]);if(!a||!b)continue;
+      var want=L[i-1].ids.indexOf("name")>=0&&L[i].ids[0]==="role"?NR:G;nudge(L[i].ids[0],"dy",want-(b.t-a.b),z==="side"?1:2)}});
+    if(sul&&R.logo&&R.social)nudge("social","gapT",G-(R.social.t-R.logo.b));
+    var body=null;["left","side","right"].forEach(function(z){(Z[z]||[]).forEach(function(g){body=un(body,box(g))})});if(sul)body=un(body,R.social);
+    var prev=body;(Z.under||[]).forEach(function(g){var b=box(g);if(prev&&b)nudge(g.ids[0],"dy",G-(b.t-prev.b));if(b)prev=b});
+    if(R.signoff&&body){var want=Math.round(G-(body.t-R.signoff.b)),base=S.signoffStyle==="animated"||S.signoffStyle==="still"?8:10,cur=+((S.st.signoff||{}).gapB)||0,nb=Math.max(-base,cur+want);
+      if(nb!==cur){S.st.signoff=S.st.signoff||{};S.st.signoff.gapB=nb;ch++}
+      /* the sign-off can't come any closer: lift the top part of the column that starts highest instead */
+      var rest=cur+want-nb;if(rest<0){var top=null,tz="";["left","side"].forEach(function(z){var g=(Z[z]||[])[0],bx=g&&box(g);if(bx&&(!top||bx.t<top.t)){top=bx;tz=z;top.id=g.ids[0]}});if(top&&+((S.st[top.id]||{}).dy||0)>0)nudge(top.id,"dy",Math.max(rest,-(+S.st[top.id].dy)*(tz==="side"?1:2)),tz==="side"?1:2)}}
+    /* the same space either side of the dividing line */
+    var lft=null,sd=null;(Z.left||[]).forEach(function(g){lft=un(lft,box(g))});if(sul)lft=un(lft,R.social);(Z.side||[]).forEach(function(g){sd=un(sd,box(g))});
+    if(R.line&&lft&&sd&&S.divider!=="none"){var gl=S.lineGapL==null||S.lineGapL===""?18:+S.lineGapL,gr=S.lineGapR==null||S.lineGapR===""?18:+S.lineGapR,
+      d=Math.round(((sd.l-R.line.r)-(R.line.l-lft.r))/2);if(d&&gl+d>=0&&gr-d>=0){S.lineGapL=gl+d;S.lineGapR=gr-d;ch++}}
+    return ch};
+  var run=function(width){for(var i=0;i<PASSES;i++)if(!pass(width))break};
+  var wasMob=S._active==="mob",c=canonical(S),keep=S;
+  try{S=c;run(0);
+    if(c.mob){S=canonical(c);Object.assign(S,JSON.parse(JSON.stringify(c.mob)));run(PHONE_W);c.mob.st=S.st;c.mob.lineGapL=S.lineGapL;c.mob.lineGapR=S.lineGapR}
+    S=c}catch(e){S=keep;throw e}
+  if(wasMob)syncActive();save();update();toast("Even spacing: "+G+"px between every part"+(c.mob?", on laptops and phones.":"."))}
 function copyGmail(b){COPY_GMAIL=true;try{copySig(b)}finally{COPY_GMAIL=false}}
 function gmailHtml(){COPY_GMAIL=true;try{return emailHtml()}finally{COPY_GMAIL=false}}
 function copySig(b){b=b||$("copySig");var html=emailHtml(),clip=$("clip");var off=offline();checkPics(function(bad){if(bad.length)toast(warnPics(bad))});if(off.length)toast("Heads up: your "+off.map(function(i){return i.label}).join(" and ")+" isn’t online yet, so it’s left out. Go to Copy and use → Put it online.");else if(!COPY_GMAIL&&html.length>10000&&gmailHtml().length<=10000)toast("Copied both layouts for Outlook and Apple Mail. For Gmail, press Copy for Gmail: it fits Gmail’s 10,000 limit.");
