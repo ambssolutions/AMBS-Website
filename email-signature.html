@@ -1274,11 +1274,25 @@ function lineLen(){var p=S.lineLen==null||S.lineLen===""?100:+S.lineLen;return M
 function zoneOf(id){var o=inOrder(id);return id==="line"?"line":o?o[2]:""}
 /* move whatever is selected: arrows, the move pad, or arrow keys */
 function moveBy(id,ddx,ddy){var z=zoneOf(id);if(!z){toast("Pick a part in the preview first.");return false}
+  /* social icons under the logo: sideways within the logo column; up and down changes the gap under the logo,
+     or moves the icons and the button together when they share a row */
+  if(id==="social"&&socialUnderLogo()){var sc=S.st.social=S.st.social||{};
+    /* no room beside them under the logo: ▶ takes them out next to your details */
+    var se0=document.querySelector('#sig [data-edit="social"]'),lg0=document.querySelector('#sig [data-edit="logo"]'),tight=se0&&lg0&&se0.getBoundingClientRect().width>=lg0.getBoundingClientRect().width-4;
+    var logoR=(inOrder("logo")||[])[2]==="right";
+    if(ddx&&tight&&!(+sc.ulx||0)){if((ddx>0)!==logoR){S.socialWithLogo=false;S.autoFit=false;save();update();toast("Icons moved next to your details. "+(logoR?"▶":"◀")+" puts them back under the logo.");return true}toast("They’re under the logo. "+(logoR?"◀":"▶")+" moves them next to your details.");return false}
+    if(ddx){var nx=Math.max(-1,Math.min(1,(+sc.ulx||0)+(ddx>0?1:-1)));if(nx===(+sc.ulx||0)){toast(nx<0?"They’re at the left of the logo.":"They’re at the right of the logo.");return false}if(nx)sc.ulx=nx;else delete sc.ulx;toast(nx<0?"Icons lined up on the left under the logo":nx>0?"Icons lined up on the right under the logo":"Icons centred under the logo")}
+    ddy=ddy*2;
+    if(ddy){var se=document.querySelector('#sig [data-edit="social"]'),tr=se&&se.closest("tr"),bt=tr&&tr.parentNode&&[].filter.call(tr.parentNode.querySelectorAll('[data-edit="book"],[data-edit="review"],[data-edit="extra"]'),function(e){return e.closest("tr")===tr||e.closest("table").closest("tr")===tr})[0];SOC_TB=bt?bt.dataset.edit:SOC_TB;
+      if(SOC_TB){var bs=S.st[SOC_TB]=S.st[SOC_TB]||{};bs.dy=(+bs.dy||0)+ddy;toast("The icons and the button move together, so they stay level.")}
+      else{var min=-Math.max(8,+S.gap||10),ny=Math.max(min,(+sc.gapT||0)+ddy);if(ny===(+sc.gapT||0)){toast("It’s right under the logo.");return false}if(ny)sc.gapT=ny;else delete sc.gapT}}
+    save();update();return true}
   if(z==="line"){var gl=S.lineGapL==null?18:+S.lineGapL,gr=S.lineGapR==null?18:+S.lineGapR;
     if(ddx){var right=inOrder("logo")&&inOrder("logo")[2]==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="left"});var d=right?-ddx:ddx;
       if(gl+d<0||gr-d<0){toast(d<0?"The line is touching the logo.":"The line is touching the text.");return false}S.lineGapL=gl+d;S.lineGapR=gr-d}
     if(ddy){var f=lineFree();if(!f){toast("Make the line shorter (Length) to move it up or down.");return false}S.st.line=S.st.line||{};var ny=Math.max(-Math.ceil(f/2),Math.min(Math.ceil(f/2),(+S.st.line.dy||0)+ddy));if(ny===(+S.st.line.dy||0)){toast(ddy<0?"It’s at the top.":"It’s at the bottom.");return false}S.st.line.dy=ny}save();update();return true}
   S.st[id]=S.st[id]||{};var c=S.st[id];
+  var lo1=inOrder("logo");if(id==="social"&&ddx&&z==="side"&&lo1&&lo1[1]&&S.logoShow!==false&&(lo1[2]==="left"&&ddx<0&&(+c.dx||0)<=0||lo1[2]==="right"&&ddx>0&&(+c.dx||0)>=0)){S.socialWithLogo=true;S.autoFit=false;save();update();toast("Icons moved under the logo.");return true}
   if(z==="left"||z==="right"){if(ddx){colNorm(id);var bar=S.divider!=="none",d=z==="right"?-ddx:ddx,cur=+c.dx||0,gl=bar?(+S.lineGapL||0):18,nx=cur+d;
       if(nx<0){toast("It’s at the edge already.");return false}
       /* towards the line: use up the gap first, then take the line along with it */
@@ -1364,7 +1378,9 @@ function signature(mode){SIGMODE=mode;var raw=S.colors,rawSt=S.st;S.colors={};fo
 /* social icons can sit under the logo, filling the space beside a tall column of details */
 function socialUnderLogo(){var so=inOrder("social"),lo=inOrder("logo");return!!(S.socialWithLogo&&so&&so[1]&&so[2]==="side"&&lo&&lo[1]&&S.logoShow!==false&&(lo[2]==="left"||lo[2]==="right"))}
 var SOC_COLS=0;
-function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
+/* icons under the logo: the ◀▶ arrows shift them sideways inside the logo column */
+var SOC_TB=null;function ulAl(){var x=+((S.st||{}).social||{}).ulx||0;return x<0?"left":x>0?"right":"center"}
+function signatureInner(mode){SOC_TB=null;var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
   /* buttons can stand in their own column to the right of the details, so a long signature gets shorter */
   var bR=S.btnSide==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="right"}),bOff=[],btnH="";
   if(bR){var bl=S.order.filter(function(o){return o[1]&&o[2]==="side"&&/^(book|review|extra)$/.test(o[0])}),bh=bl.map(function(o){return block(o[0],mode)}).filter(Boolean);
@@ -1372,7 +1388,7 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
   try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1;bOff.forEach(function(o){o[1]=1})}
   var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="center" style="padding:'+Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+'px 0 0 0;text-align:center;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="'+ulAl()+'" style="padding:'+Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+'px 0 0 0;text-align:'+ulAl()+';">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -1392,14 +1408,14 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
      that enlarge text but not pictures (the Outlook phone app); the divider is the details' left border, so it always runs their full height */
   var tb=[];if(sul&&L.length===1&&Lid[0]==="logo"&&hasBar&&S.divider!=="rainbow"&&!Rr.length&&!btnH&&!lbg&&!ctr){var sv=S.order.filter(function(o){return o[1]&&o[2]==="side"&&o[0]!=="social"&&block(o[0],mode)});
     for(var q=sv.length-1;q>=0&&isBtn(sv[q][0]);q--)tb.unshift(sv[q]);if(tb.length===sv.length)tb=[]}
-  if(tb.length){var keepSoc=socH;socH="";var logoTd=pad(colCell(inOrder("logo")),"right",gL,"logo");socH=keepSoc;
+  if(tb.length){SOC_TB=tb[0][0];var keepSoc=socH;socH="";var logoTd=pad(colCell(inOrder("logo")),"right",gL,"logo");socH=keepSoc;
     var sideTop,btns,rest=S.order.filter(function(o){return o[1]&&o[2]==="side"&&tb.indexOf(o)<0});
     tb.forEach(function(o){o[1]=0});so[1]=0;try{sideTop=content(mode,"side",true)}finally{tb.forEach(function(o){o[1]=1});so[1]=1}
     /* the button's own nudge (Even spacing) becomes the gap above the row, so it isn't counted twice */
     var b0=st(tb[0][0]),dyB=+b0.dy||0,g2=Math.max(0,basePad(tb[0][0],1)+dyB);b0.dy=0;
     rest.forEach(function(o){o[1]=0});try{btns=content(mode,"side")}finally{rest.forEach(function(o){o[1]=1});b0.dy=dyB}
     var edge='border-left:'+Math.max(1,+S.dividerW||2)+'px solid '+S.colors.line+';padding-left:'+gR+'px;';
-    var socTd=pad('<td valign="middle" align="center" style="vertical-align:middle;text-align:center;padding:'+g2+'px 0 0 0;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
+    var socTd=pad('<td valign="middle" align="'+ulAl()+'" style="vertical-align:middle;text-align:'+ulAl()+';padding:'+g2+'px 0 0 0;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
     out=T("font-family:"+S.font+";")+'<tr>'+logoTd+'<td valign="middle" style="vertical-align:middle;'+edge+'">'+sideTop+'</td></tr>'+
       '<tr>'+socTd+'<td valign="middle" style="vertical-align:middle;'+edge+'padding-top:'+g2+'px;">'+btns+'</td></tr></table>'}
   var top="";
@@ -3162,6 +3178,35 @@ body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
 .wantin{display:grid;gap:8px;margin:6px 2px 2px}.wantf{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}.wantf textarea{box-sizing:border-box;width:100%;font:inherit;font-size:16px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel,#fff);color:var(--ink)}.wantf input{box-sizing:border-box;width:100%;min-height:44px;font-size:16px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel,#fff);color:var(--ink)}
 .sdlg.pmove{background:rgba(20,23,43,.12)}.pmove .sbox{max-height:58vh;overflow:auto}.pmneed{display:grid;gap:8px;padding:12px;margin:0 0 14px;border:1.5px solid #24b328;border-radius:14px;background:rgba(36,179,40,.06)}.pmneed .pmok{min-height:44px}.pmchips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}.pmchip{min-height:44px;font-size:15px}.allord li.pmnew{outline:2px solid #24b328;border-radius:10px}
 .fbplain .fbi{cursor:default;padding-left:14px}
+.wlist{border:1px solid var(--line);border-radius:16px;background:var(--panel,#fff);overflow:hidden;display:block!important;margin:4px 0 10px}
+.wlist>.wantc+.wantc{border-top:1px solid var(--line)}
+.wlist .want.wrow{border:0;border-radius:0;min-height:58px;padding:10px 16px;background:transparent;gap:14px}
+.wrow .wi{color:var(--muted);display:flex;width:22px;justify-content:center;font-size:0}
+.wrow[aria-checked="true"] .wi{color:#24b328}
+.wrow .wt b{font-size:.98rem;font-weight:600}
+.wsw{width:46px;height:28px;border-radius:14px;background:#d5d9e3;position:relative;flex:none;transition:background .2s}
+.wsw:after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.wrow[aria-checked="true"] .wsw{background:#24b328}.wrow[aria-checked="true"] .wsw:after{transform:translateX(18px)}
+.wlist .wantin{margin:0;padding:0 16px 14px 52px}
+.wsoc{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:2px;padding:10px 8px}
+.wst{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 2px;border-radius:12px;cursor:pointer;font:inherit;color:var(--ink);position:relative;min-height:72px}
+.wst .wsti{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;filter:grayscale(1);opacity:.38;transition:opacity .15s,filter .15s}
+.wst .wsti img{width:34px;height:34px;display:block}
+.wst small{font-size:11px;color:var(--muted);white-space:nowrap}
+.wst[aria-pressed="true"] .wsti{filter:none;opacity:1}
+.wst[aria-pressed="true"]:after{content:"✓";position:absolute;top:4px;left:calc(50% + 10px);width:17px;height:17px;border-radius:50%;background:#24b328;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--panel,#fff)}
+.wst[aria-pressed="true"] small{color:var(--ink);font-weight:600}
+.wsocg .wantin{margin:0;padding:2px 16px 14px;border-top:1px solid var(--line)}
+.wsocg .wantin .wantf{padding-top:10px}
+.allord .sorti{flex-wrap:nowrap;padding:10px 10px;gap:10px;border-radius:14px}
+.allord .sorti .sh.fixh{width:20px;padding:0}
+.allord .sorti .st b{font-size:.92rem;font-weight:600}
+.allord .sortl{gap:8px}
+.aopw{display:block;margin-top:6px}
+.aosel{-webkit-appearance:none;appearance:none;max-width:100%;height:34px;padding:0 32px 0 12px;border:1px solid var(--line);border-radius:999px;background:var(--soft,#f3f6fc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7080' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);text-overflow:ellipsis;cursor:pointer}
+.allord select.aosel{width:auto!important;min-width:0!important;height:32px!important;min-height:0!important;font-size:14px!important;padding:0 30px 0 12px!important;line-height:30px}
+.allord .sorti{padding:8px 10px}.allord .sorti .st b{line-height:1.25}
+.allord .sorti .sa{width:32px;height:32px;border-radius:50%;font-size:11px}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .wantnote .linkbtn{min-height:36px}
 body.one #kbHint,body.one #evenSp,body.one #pgBtn,body.one #partsPv,body.one #movePv,body.one #testPv,body.one #bigPv,body.one .pvparts{display:none!important}
@@ -3246,21 +3291,25 @@ editSheet=function(id,tab){_oneSheet(id,tab);var sh=document.querySelector(".esh
   if(!sh.dataset.oneWired){sh.dataset.oneWired="1";var d=sh.querySelector(".edone");if(d)d.addEventListener("click",function(){document.body.classList.remove("esheet-on")})}}};
 /* ---------- "what do you want in it?": asked after the website or a fresh start, then the designs show exactly those parts ---------- */
 var FLOW=null,WANT=null;
-var WANTS=[["logo","🏷️","Logo",""],["photo","👤","Photo of you",""],["tagline","💬","Tagline","A short line about you"],["signoff","✍️","Handwritten sign-off","“Kind regards,” that writes itself"],["banner","🖼️","Banner","An offer or promotion"],["disclaimer","⚖️","Disclaimer","Confidential notice"]];
+var WANTS=[["logo","logo","Logo",""],["photo","user","Photo of you",""],["tagline","type","Tagline","A short line about you"],["signoff","pen","Handwritten sign-off","“Kind regards,” that writes itself"],["banner","tag","Banner","An offer or promotion"],["disclaimer","shield","Disclaimer","Confidential notice"]];
+var LIC={mobile:'<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>',phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',email:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',web:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/>',location:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+  book:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',review:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',extra:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+  logo:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',type:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>',pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',tag:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><path d="M7 7h.01"/>',shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'};
+function lineIcon(k){return'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(LIC[k]||"")+'</svg>'}
 /* each contact line, social network and button is its own tick */
-var WANT_C={mobile:["📱","Mobile","mobile","021 123 4567","tel"],phone:["☎️","Office phone","phone","09 123 4567","tel"],email:["✉️","Email","email","you@business.co.nz","email"],web:["🌐","Website","website","yourbusiness.co.nz","url"],location:["📍","Address","location","Street, suburb, city","text"]};
-var WANT_B={book:["📅","Booking button","bookLabel","bookUrl","Book a time"],review:["⭐","Review button","reviewLabel","reviewUrl","Leave us a review"],extra:["🔘","Another button","extraLabel","extraUrl","Get a quote"]},WANT_BK=["book","review","extra"];
+var WANT_C={mobile:["mobile","Mobile","mobile","021 123 4567","tel"],phone:["phone","Office phone","phone","09 123 4567","tel"],email:["email","Email","email","you@business.co.nz","email"],web:["web","Website","website","yourbusiness.co.nz","url"],location:["location","Address","location","Street, suburb, city","text"]};
+var WANT_B={book:["book","Booking button","bookLabel","bookUrl","Book a time"],review:["review","Review button","reviewLabel","reviewUrl","Leave us a review"],extra:["extra","Another button","extraLabel","extraUrl","Get a quote"]},WANT_BK=["book","review","extra"];
 (function(){var ti=stepId("template");if(!STEPS.some(function(x){return x.id==="wants"})){STEPS.splice(ti,0,{id:"wants",sh:"Include",t:"What do you want in your signature?",d:"Tick what you want. The designs that follow show exactly these.",parts:[]});if(STEP>=ti)STEP++}})();
 function wantNow(){var w={logo:S.logoShow!==false&&!!(S.logoData||S.logoUrl),photo:!!S.photoShow,banner:shown("banner"),disclaimer:shown("disclaimer"),signoff:S.signoffStyle==="animated"||S.signoffStyle==="still",tagline:shown("tagline")&&!!S.tagline},so=shown("social");
   CONTACT_KINDS.forEach(function(k){w["c_"+k]=!!S[WANT_C[k][2]]&&(S.hideC||[]).indexOf(k)<0});
   SOCIAL.forEach(function(k){w["s_"+k]=so&&!!S.social[k]&&(S.hideS||[]).indexOf(k)<0});
   WANT_BK.forEach(function(k){var o=inOrder(k);w["b_"+k]=!!(o&&o[1]&&S[WANT_B[k][2]]&&S[WANT_B[k][3]])});return w}
 function wantAny(pre){return Object.keys(WANT||{}).some(function(k){return k.indexOf(pre)===0&&WANT[k]})}
-var WANT_ORDER=null;
+var WANT_ORDER=null,WANT_SWL=null;
 /* your own order goes into every design: same parts, same sequence, beside your details or underneath */
 function applyOrder(o){if(!WANT_ORDER||!o||!o.order)return o;var media=o.order.filter(function(x){return/^(logo|photo)$/.test(x[0])}),rest=o.order.filter(function(x){return!/^(logo|photo)$/.test(x[0])}),out=[];
   WANT_ORDER.forEach(function(w){var e=rest.filter(function(x){return x[0]===w[0]})[0];if(!e)return;rest.splice(rest.indexOf(e),1);if(w[1]==="under"||w[1]==="side")e[2]=w[1];e[3]=w[2]?1:0;out.push(e)});
-  o.order=media.concat(out).concat(rest);return o}
+  o.order=media.concat(out).concat(rest);if(WANT_SWL!=null)o.socialWithLogo=WANT_SWL;return o}
 function applyWants(o){if(o&&o.order)applyOrder(o);if(!WANT||!o||!o.order)return o;var set=function(id,v){o.order.forEach(function(x){if(x[0]===id)x[1]=v?1:0})};
   o.photoShow=!!WANT.photo;set("photo",WANT.photo);o.logoShow=!!WANT.logo;set("logo",WANT.logo);set("social",wantAny("s_"));WANT_BK.forEach(function(k){set(k,WANT["b_"+k])});
   set("banner",WANT.banner);set("disclaimer",WANT.disclaimer);set("tagline",WANT.tagline);
@@ -3275,27 +3324,32 @@ var _onePl=presetLook;presetLook=function(p){var o=_onePl(p);return document.bod
 function wantIcon(k){return'<img class="wsi" alt="" width="24" height="24" src="data:image/svg+xml;charset=utf-8,'+encodeURIComponent(brandSvg(k))+'">'}
 /* one tick card; parts that need words (a number, a link) open a box underneath when ticked */
 function wantCard(key,icon,title,sub,fields){var c=h2('<div class="wantc"></div>'),on=function(){return!!WANT[key]},
-  b=h2('<button type="button" class="want" aria-pressed="'+on()+'"><span class="wi" aria-hidden="true">'+icon+'</span><span class="wt"><b>'+esc(title)+'</b><small></small></span><span class="wk" aria-hidden="true"></span></button>'),sm=b.querySelector("small"),box=h2('<div class="wantin"></div>');
+  b=h2('<button type="button" class="want wrow" role="switch" aria-checked="'+on()+'"><span class="wi">'+lineIcon(icon)+'</span><span class="wt"><b>'+esc(title)+'</b><small></small></span><span class="wsw" aria-hidden="true"></span></button>'),sm=b.querySelector("small"),box=h2('<div class="wantin"></div>');
   var subNow=function(){var v=fields&&fields.length?fields.map(function(f){return S[f.k]||(f.get?f.get():"")}).filter(Boolean).join(" · "):"";sm.textContent=v||sub||"";sm.hidden=!sm.textContent};
   var need=function(){return fields&&fields.some(function(f){return!(f.get?f.get():S[f.k])})};
   var drawBox=function(open){box.innerHTML="";box.hidden=!open;c.classList.toggle("open",!!open);if(!open)return;fields.forEach(function(f){var l=h2('<label class="wantf"><span>'+esc(f.l)+'</span>'+(f.t==="area"?'<textarea rows="3" placeholder="'+esc(f.ph||"")+'"></textarea>':'<input type="'+(f.t||"text")+'" autocomplete="off" placeholder="'+esc(f.ph||"")+'">')+'</label>'),i=l.querySelector("input,textarea");i.value=(f.get?f.get():S[f.k])||"";
     i.addEventListener("input",function(){if(f.set)f.set(i.value.trim());else S[f.k]=i.value.trim();subNow();save();update()});box.appendChild(l)})};
-  b.addEventListener("click",function(){WANT[key]=!on();b.setAttribute("aria-pressed",String(on()));drawBox(on()&&!!fields);wantsApplyNow();if(!box.hidden){var ins=[].slice.call(box.querySelectorAll("input,textarea")),i=ins.filter(function(x){return!x.value})[0]||ins[0];if(i){i.focus();if(i.select&&i.value)i.select()}}});
+  b.addEventListener("click",function(){WANT[key]=!on();b.setAttribute("aria-checked",String(on()));drawBox(on()&&!!fields);wantsApplyNow();if(!box.hidden){var ins=[].slice.call(box.querySelectorAll("input,textarea")),i=ins.filter(function(x){return!x.value})[0]||ins[0];if(i){i.focus();if(i.select&&i.value)i.select()}}});
   subNow();drawBox(on()&&!!fields&&need());c.appendChild(b);c.appendChild(box);return c}
-function wantGroup(body,title,note,cls){var s=h2('<section class="wants"><h4 class="wz-h4">'+esc(title)+'</h4>'+(note?'<p class="note">'+esc(note)+'</p>':'')+'<div class="wantg'+(cls?" "+cls:"")+'" role="group" aria-label="'+esc(title)+'"></div></section>');body.appendChild(s);return s.querySelector(".wantg")}
+/* social networks: a grid of their logos, tap to switch on; the box for the one tapped opens underneath */
+function wantSocial(g){var grid=h2('<div class="wsoc"></div>'),box=h2('<div class="wantin" hidden></div>');g.appendChild(grid);g.appendChild(box);
+  var soc=SOCIAL.slice().sort(function(a2,b2){return(S.social[b2]?1:0)-(S.social[a2]?1:0)});
+  var openFor=function(k){box.innerHTML="";if(!k){box.hidden=true;return}box.hidden=false;var l=h2('<label class="wantf"><span>'+esc(SOCIAL_NAME[k])+' page or @name</span><input type="text" autocomplete="off" placeholder="'+(k==="whatsapp"?"021 123 4567":"@yourbusiness")+'"></label>'),i=l.querySelector("input");i.value=S.social[k]||"";
+    i.addEventListener("input",function(){S.social[k]=i.value.trim();save();update()});box.appendChild(l);i.focus();if(i.value)i.select()};
+  soc.forEach(function(k){var key="s_"+k,t=h2('<button type="button" class="wst" aria-pressed="'+!!WANT[key]+'" title="'+esc(SOCIAL_NAME[k])+'"><span class="wsti">'+wantIcon(k)+'</span><small>'+esc(SOCIAL_NAME[k])+'</small></button>');
+    t.addEventListener("click",function(){WANT[key]=!WANT[key];t.setAttribute("aria-pressed",String(!!WANT[key]));wantsApplyNow();openFor(WANT[key]?k:null)});grid.appendChild(t)})}
+function wantGroup(body,title,note,cls){var s=h2('<section class="wants"><h4 class="wz-h4">'+esc(title)+'</h4>'+(note?'<p class="note">'+esc(note)+'</p>':'')+'<div class="wlist'+(cls?" "+cls:"")+'" role="group" aria-label="'+esc(title)+'"></div></section>');body.appendChild(s);return s.querySelector(".wlist")}
 function wantsRender(body){if(!body)return;if(!WANT)WANT=wantNow();body.innerHTML="";
   var g=wantGroup(body,"Your contact details");
   CONTACT_KINDS.forEach(function(k){var d=WANT_C[k];g.appendChild(wantCard("c_"+k,d[0],d[1],"",[{k:d[2],l:d[1],ph:d[3],t:d[4]}]))});
-  g=wantGroup(body,"Social media","Tick each one you want. Add your page link or @name.","wantsoc");
-  var soc=SOCIAL.slice().sort(function(a2,b2){return(S.social[b2]?1:0)-(S.social[a2]?1:0)});
-  soc.forEach(function(k){g.appendChild(wantCard("s_"+k,wantIcon(k),SOCIAL_NAME[k],"",[{l:SOCIAL_NAME[k]+" page or @name",ph:k==="whatsapp"?"021 123 4567":"@yourbusiness",get:function(){return S.social[k]||""},set:function(v){S.social[k]=v}}]))});
+  g=wantGroup(body,"Social media","Tap the ones you want.","wsocg");wantSocial(g);
   g=wantGroup(body,"Buttons");
   WANT_BK.forEach(function(k){var d=WANT_B[k];g.appendChild(wantCard("b_"+k,d[0],d[1],"",[{k:d[2],l:"Button words",ph:d[4]},{k:d[3],l:"Link",ph:"https://…",t:"url"}]))});
   g=wantGroup(body,"Pictures and extras");
   var WF={tagline:[{k:"tagline",l:"Your tagline",ph:"A short line about what you do"}],disclaimer:[{k:"disclaimer",l:"Disclaimer words",ph:defaults().disclaimer,t:"area"}]};
   WANTS.forEach(function(w){g.appendChild(wantCard(w[0],w[1],w[2],w[3],WF[w[0]]))});
-  var ow=h2('<div class="wantord"><h4 class="wz-h4">Put them in order</h4><p class="note">Drag ⠿ or use ▲▼. Choose beside your details or underneath, and same line as the part above. The designs you see next keep this order.</p></div>');
-  ow.appendChild(allOrder(function(){WANT_ORDER=S.order.filter(function(o){return!/^(logo|photo)$/.test(o[0])}).map(function(o){return[o[0],o[2],o[3]]});save();update();var y=window.scrollY,pb=document.querySelector(".panel"),y3=pb?pb.scrollTop:0;wantsRender(body);window.scrollTo(0,y);if(pb)pb.scrollTop=y3}));
+  var ow=h2('<div class="wantord"><h4 class="wz-h4">Put them in order</h4><p class="note">Drag ⠿ or use ▲▼, and pick where each one goes. The designs you see next keep this.</p></div>');
+  ow.appendChild(allOrder(function(){WANT_SWL=!!S.socialWithLogo;WANT_ORDER=S.order.filter(function(o){return!/^(logo|photo)$/.test(o[0])}).map(function(o){return[o[0],o[2],o[3]]});save();update();var y=window.scrollY,pb=document.querySelector(".panel"),y3=pb?pb.scrollTop:0;wantsRender(body);window.scrollTo(0,y);if(pb)pb.scrollTop=y3},{shownOnly:true}));
   body.appendChild(ow);body.appendChild(h2('<p class="note">You can still add, remove or move any part later.</p>'))}
 /* what's ticked, in a few words */
 function wantList(){var on=[],n=CONTACT_KINDS.filter(function(k){return WANT["c_"+k]}).length,so=SOCIAL.filter(function(k){return WANT["s_"+k]}).map(function(k){return SOCIAL_NAME[k]});
@@ -3366,29 +3420,34 @@ var BTN_SHARED=["btnStyle","btnPadX","btnPadY","btnFont","btnRadius","emb.btn","
   var _lay=ITEM.layout;ITEM.layout=function(){var f=_lay();return document.body.classList.contains("one")?f.filter(function(x){return x[0]!=="order"}):f}})();
 /* ---------- one list for every part, top to bottom: show or hide, move, beside your details or underneath, same line ---------- */
 var ZN={left:0,top:1,side:1,right:2,bottom:3,under:4};
-function allOrder(done){var box=h2('<div class="allord"></div>');
+function allOrder(done,opt){opt=opt||{};var box=h2('<div class="allord'+(opt.shownOnly?' aoshown':'')+'"></div>');
+  var pill=function(opts,cur,on,lbl){var w=h2('<span class="aopw"><select class="aosel" aria-label="'+esc(lbl)+'">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(o[0]===cur?" selected":"")+'>'+esc(o[1])+'</option>'}).join("")+'</select></span>');w.querySelector("select").addEventListener("change",function(e){on(e.target.value)});return w};
   var fixed=h2('<ul class="sortl aofix"></ul>');
-  var fx=function(lbl,chk,on,extra){var li=h2('<li class="sorti'+(chk?"":" off")+'"><span class="sh fixh" aria-hidden="true">•</span><input type="checkbox" class="sc" aria-label="Show '+esc(lbl)+'"'+(chk?" checked":"")+'><span class="st"><b>'+esc(lbl)+'</b></span></li>');li.querySelector("input").addEventListener("change",function(e){on(e.target.checked)});if(extra)li.appendChild(extra);fixed.appendChild(li)};
+  var fx=function(lbl,chk,on,extra){if(opt.shownOnly&&!chk)return;var li=h2('<li class="sorti'+(chk?"":" off")+'"><span class="sh fixh" aria-hidden="true"></span>'+(opt.shownOnly?'':'<input type="checkbox" class="sc" aria-label="Show '+esc(lbl)+'"'+(chk?" checked":"")+'>')+'<span class="st"><b>'+esc(lbl)+'</b></span></li>');var cb=li.querySelector("input");if(cb)cb.addEventListener("change",function(e){on(e.target.checked)});if(extra)li.querySelector(".st").appendChild(extra);fixed.appendChild(li)};
   fx("Sign-off",S.signoffStyle!=="none",function(c){if(c){S.signoffStyle=S.soPrev&&S.soPrev!=="none"?S.soPrev:"animated";if(!soSlug(S.signoff))S.signoff="Kind regards,"}else{S.soPrev=S.signoffStyle;S.signoffStyle="none"}done()});
-  var lw=h2('<div class="aox"><span>Where</span></div>'),cur=getP("logoWhere");[["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"]].forEach(function(o){var b=h2('<button type="button" class="aoc" aria-pressed="'+(cur===o[0])+'">'+o[1]+'</button>');b.addEventListener("click",function(){setP("logoWhere",o[0]);done()});lw.appendChild(b)});
+  var cur=getP("logoWhere"),lw=pill([["left","On the left"],["right","On the right"],["top","Above your details"],["bottom","Below your details"],["social","Next to the social icons"]],cur,function(v){setP("logoWhere",v);done()},"Where the logo goes");
   fx("Logo",S.logoShow!==false&&!!(inOrder("logo")||[])[1],function(c){if(c){setP("logoWhere",S.logoPos&&S.logoPos!=="off"?S.logoPos:"left")}else setP("logoWhere","off");done()},lw);
   if(inOrder("photo"))fx("Photo of you",!!S.photoShow,function(c){S.photoShow=c;var po=inOrder("photo");if(po)po[1]=c?1:0;done()});
-  box.appendChild(fixed);
+  if(fixed.children.length)box.appendChild(fixed);
   var mov=S.order.filter(function(o){return!/^(logo|photo)$/.test(o[0])}),disp=mov.slice().sort(function(a,b){return((ZN[a[2]]==null?1:ZN[a[2]])-(ZN[b[2]]==null?1:ZN[b[2]]))||(S.order.indexOf(a)-S.order.indexOf(b))});
-  var zname=function(z){return z==="under"?"Underneath":z==="right"?"Right column":z==="left"?"Left column":"Beside your details"};
   var commit=function(list){var media=S.order.filter(function(o){return/^(logo|photo)$/.test(o[0])});S.order=media.concat(list);done()};
   /* an order set by hand stays as it is: the automatic phone fitting no longer rearranges it */
   var done0=done;done=function(){S.autoFit=false;done0()};
-  var ul=sortList(disp.map(function(o,i){var j=o[3]&&i>0&&disp[i-1][2]===o[2];return{label:blockLabel(o[0]),sub:zname(o[2])+(j?" · same line as above":""),off:!o[1],chk:!!o[1]}}),
+  var lo=inOrder("logo"),logoSide=S.logoShow!==false&&lo&&lo[1]&&(lo[2]==="left"||lo[2]==="right");
+  var ul=sortList(disp.map(function(o){return{label:blockLabel(o[0]),off:!o[1],chk:!!o[1]}}),
     function(a,b){var emp=function(k){var o=disp[k];if(!o||!o[1]||!/^(book|review|extra|tagline)$/.test(o[0]))return false;try{return!block(o[0],"preview")}catch(e){return false}};
       if(b<a)while(b>0&&emp(b))b--;else while(b<disp.length-1&&emp(b))b++;var l=disp.slice(),x=l.splice(a,1)[0];l.splice(b,0,x);var nb=b<a?l[b+1]:l[b-1];if(nb&&nb[2]!==x[2]&&!/^(left|right)$/.test(nb[2]))x[2]=nb[2];x[3]=0;commit(l)},
-    function(i,c){disp[i][1]=c?1:0;done()});
-  [].forEach.call(ul.children,function(li,i){var o=disp[i],row=h2('<div class="aox"></div>');
+    opt.shownOnly?null:function(i,c){disp[i][1]=c?1:0;done()});
+  [].forEach.call(ul.children,function(li,i){var o=disp[i];
     /* a part with nothing in it (a button with no words yet) stays in the order but isn't listed */
     var has=true;try{has=!!block(o[0],"preview")}catch(e){}if(o[1]&&!has&&/^(book|review|extra|tagline)$/.test(o[0]))li.hidden=true;
-    [["side","Beside details"],["under","Underneath"]].forEach(function(z){var on=(o[2]==="under")===(z[0]==="under");var b=h2('<button type="button" class="aoc" aria-pressed="'+on+'">'+z[1]+'</button>');b.addEventListener("click",function(){if(on)return;o[2]=z[0];o[3]=0;commit(disp)});row.appendChild(b)});
-    if(i>0&&disp[i-1][2]===o[2]){var j=h2('<button type="button" class="aoc" aria-pressed="'+!!o[3]+'">↔ Same line as above</button>');j.addEventListener("click",function(){o[3]=o[3]?0:1;done()});row.appendChild(j)}
-    li.appendChild(row)});
+    if(opt.shownOnly&&!o[1])li.hidden=true;
+    var prev=null;for(var k=i-1;k>=0;k--){var pl=ul.children[k];if(!pl.hidden){prev=disp[k];break}}
+    var swl=o[0]==="social"&&socialUnderLogo(),val=swl?"logo":(o[3]&&prev&&prev[2]===o[2]?"join":o[2]==="under"?"under":/^(left|right)$/.test(o[2])?o[2]:"side");
+    var ch=[["side","Beside your details"]];if(prev)ch.push(["join","Same line as "+blockLabel(prev[0]).toLowerCase()]);ch.push(["under","Underneath everything"]);
+    if(o[0]==="social"&&logoSide)ch.splice(1,0,["logo","Under the logo"]);if(/^(left|right)$/.test(o[2]))ch.push([o[2],o[2]==="left"?"Left column":"Right column"]);
+    li.querySelector(".st").appendChild(pill(ch,val,function(v){if(o[0]==="social")S.socialWithLogo=v==="logo";
+      if(v==="logo"){o[2]="side";o[3]=0}else if(v==="join"&&prev){o[2]=prev[2];o[3]=1}else{o[2]=v;o[3]=0}commit(disp)},"Where "+blockLabel(o[0])+" goes"))});
   box.appendChild(ul);return box}
 var _onePB=partsBody;
 partsBody=function(redraw){var el=_onePB(redraw);if(!document.body.classList.contains("one"))return el;var pp=el.querySelector(".pb-p");if(!pp)return el;pp.innerHTML="";
