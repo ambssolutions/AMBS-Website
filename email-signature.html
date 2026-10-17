@@ -1351,7 +1351,7 @@ function signature(mode){SIGMODE=mode;var raw=S.colors,rawSt=S.st;S.colors={};fo
 /* social icons can sit under the logo, filling the space beside a tall column of details */
 function socialUnderLogo(){var so=inOrder("social"),lo=inOrder("logo");return!!(S.socialWithLogo&&so&&so[1]&&so[2]==="side"&&lo&&lo[1]&&S.logoShow!==false&&(lo[2]==="left"||lo[2]==="right"))}
 var SOC_COLS=0;
-function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";SOC_COLS=Math.max(2,Math.floor(((+S.logoSize||90)+8)/((+S.iconSize||24)+iconGap())));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
+function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
   /* buttons can stand in their own column to the right of the details, so a long signature gets shorter */
   var bR=S.btnSide==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="right"}),bOff=[],btnH="";
   if(bR){var bl=S.order.filter(function(o){return o[1]&&o[2]==="side"&&/^(book|review|extra)$/.test(o[0])}),bh=bl.map(function(o){return block(o[0],mode)}).filter(Boolean);
@@ -3007,7 +3007,13 @@ function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
     var nudge=function(id,key,delta,k){delta=Math.round(delta/(k||1));if(!delta)return;S.st[id]=S.st[id]||{};S.st[id][key]=(+S.st[id][key]||0)+delta;ch++};
     ["left","side","right"].forEach(function(z){var L=Z[z]||[];for(var i=1;i<L.length;i++){var a=box(L[i-1]),b=box(L[i]);if(!a||!b)continue;
       var want=L[i-1].ids.indexOf("name")>=0&&L[i].ids[0]==="role"?NR:G;nudge(L[i].ids[0],"dy",want-(b.t-a.b),z==="side"?1:2)}});
-    if(sul&&R.logo&&R.social)nudge("social","gapT",G+4-(R.social.t-R.logo.b)); /* icons under the logo get a little more room, so they don't read as part of it */
+    /* icons under the logo line up with the button beside them (its middle); with no button they get a little more room than the
+       other gaps, so they don't read as part of the logo. With the logo centred in its column, the icons move half as far as the gap grows */
+    if(sul&&R.logo&&R.social){var bt=null;["book","review","extra"].forEach(function(id){var o=inOrder(id);if(o&&o[1]&&o[2]==="side"&&R[id]&&(!bt||R[id].b>bt.b))bt=R[id]});
+      var lva=(S.st.logo||{}).valign||"middle",minG=8;
+      if(bt&&lva!=="bottom"){var want=((bt.t+bt.b)-(R.social.t+R.social.b))/2,k=lva==="middle"?0.5:1,gap=R.social.t-R.logo.b;
+        if(gap+want/k<minG)want=(minG-gap)*k;nudge("social","gapT",want,k)}
+      else nudge("social","gapT",G+4-(R.social.t-R.logo.b))}
     var body=null;["left","side","right"].forEach(function(z){(Z[z]||[]).forEach(function(g){body=un(body,box(g))})});if(sul)body=un(body,R.social);
     var prev=body;(Z.under||[]).forEach(function(g){var b=box(g);if(prev&&b)nudge(g.ids[0],"dy",G-(b.t-prev.b));if(b)prev=b});
     if(R.signoff&&body){var want=Math.round(G-(body.t-R.signoff.b)),base=S.signoffStyle==="animated"||S.signoffStyle==="still"?8:10,cur=+((S.st.signoff||{}).gapB)||0,nb=Math.max(-base,cur+want);
