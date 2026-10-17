@@ -127,6 +127,9 @@ export async function headSha() {
 export async function readFile(path, ref) {
   try {
     const f = await gh("/contents/" + path.split("/").map(encodeURIComponent).join("/") + "?ref=" + ref);
+    /* GitHub leaves the content out for files over 1 MB (encoding "none"); read those through the blob instead,
+       or a big file (like the saved email signatures) looks empty */
+    if (!f.content && f.sha) return { text: await readBlob(f.sha), sha: f.sha };
     return { text: Buffer.from(f.content, "base64").toString("utf8"), sha: f.sha };
   } catch (e) {
     if (e.status === 404) return null;
