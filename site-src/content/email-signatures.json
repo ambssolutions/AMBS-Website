@@ -765,7 +765,7 @@
     "website": "www.deltaair.co.nz",
     "tagline": "",
     "disclaimerLabel": "Disclaimer:",
-    "disclaimerJustify": true,
+    "disclaimerJustify": false,
     "disclaimer": "This email and any attachments are confidential and meant only for the person they are addressed to. If you received it by mistake, please let us know and delete it.",
     "signoff": "Warm regards,",
     "signoffStyle": "animated",
@@ -778,7 +778,7 @@
     "photoUrl": "",
     "bannerUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-banner-mvbo7aiy.gif",
     "bannerLink": "https://www.deltaair.co.nz/#offers",
-    "bannerW": 486,
+    "bannerW": 446,
     "bookLabel": "Request a free quote",
     "bookUrl": "https://www.deltaair.co.nz/#contact",
     "reviewLabel": "",
@@ -965,11 +965,11 @@
       "dy": 5
      },
      "disclaimer": {
-      "size": 14,
+      "size": 12,
       "align": "left",
       "dy": -5,
       "color": "#1f2023",
-      "dx": -21
+      "dx": -18
      },
      "role": {
       "size": 12,
@@ -998,7 +998,8 @@
       "align": "left"
      },
      "name": {
-      "size": 18
+      "size": 18,
+      "dy": 8
      },
      "extra": {
       "align": "left"
@@ -1309,7 +1310,7 @@
      "google"
     ]
    },
-   "updated": "2026-10-17T01:02:17.399Z",
+   "updated": "2026-10-17T01:06:03.433Z",
    "by": "hello@ambs.co.nz"
   },
   {
