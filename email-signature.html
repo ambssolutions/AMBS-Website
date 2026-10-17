@@ -1379,7 +1379,7 @@ function signature(mode){SIGMODE=mode;var raw=S.colors,rawSt=S.st;S.colors={};fo
 function socialUnderLogo(){var so=inOrder("social"),lo=inOrder("logo");return!!(S.socialWithLogo&&so&&so[1]&&so[2]==="side"&&lo&&lo[1]&&S.logoShow!==false&&(lo[2]==="left"||lo[2]==="right"))}
 var SOC_COLS=0;
 /* icons under the logo: the ◀▶ arrows shift them sideways inside the logo column */
-var SOC_TB=null;function ulAl(){var x=+((S.st||{}).social||{}).ulx||0;return x<0?"left":x>0?"right":"center"}
+var SOC_TB=null;function ulP(){return+(((S.st||{}).social||{}).pad)||0}function ulAl(){var x=+((S.st||{}).social||{}).ulx||0;return x<0?"left":x>0?"right":"center"}
 function signatureInner(mode){SOC_TB=null;var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
   /* buttons can stand in their own column to the right of the details, so a long signature gets shorter */
   var bR=S.btnSide==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="right"}),bOff=[],btnH="";
@@ -1388,7 +1388,7 @@ function signatureInner(mode){SOC_TB=null;var sul=socialUnderLogo(),socH="",so=i
   try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1;bOff.forEach(function(o){o[1]=1})}
   var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="'+ulAl()+'" style="padding:'+Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+'px 0 0 0;text-align:'+ulAl()+';">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="'+ulAl()+'" style="padding:'+(Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+ulP())+'px '+ulP()+'px '+ulP()+'px '+ulP()+'px;text-align:'+ulAl()+';">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -1415,7 +1415,7 @@ function signatureInner(mode){SOC_TB=null;var sul=socialUnderLogo(),socH="",so=i
     var b0=st(tb[0][0]),dyB=+b0.dy||0,g2=Math.max(0,basePad(tb[0][0],1)+dyB);b0.dy=0;
     rest.forEach(function(o){o[1]=0});try{btns=content(mode,"side")}finally{rest.forEach(function(o){o[1]=1});b0.dy=dyB}
     var edge='border-left:'+Math.max(1,+S.dividerW||2)+'px solid '+S.colors.line+';padding-left:'+gR+'px;';
-    var socTd=pad('<td valign="middle" align="'+ulAl()+'" style="vertical-align:middle;text-align:'+ulAl()+';padding:'+g2+'px 0 0 0;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
+    var socTd=pad('<td valign="middle" align="'+ulAl()+'" style="vertical-align:middle;text-align:'+ulAl()+';padding:'+g2+'px '+ulP()+'px '+ulP()+'px '+ulP()+'px;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
     out=T("font-family:"+S.font+";")+'<tr>'+logoTd+'<td valign="middle" style="vertical-align:middle;'+edge+'">'+sideTop+'</td></tr>'+
       '<tr>'+socTd+'<td valign="middle" style="vertical-align:middle;'+edge+'padding-top:'+g2+'px;">'+btns+'</td></tr></table>'}
   var top="";
@@ -2750,9 +2750,9 @@ function startPick(){var w=h2('<div class="wide startpick"></div>');w.appendChil
   var sk=h2('<button type="button" class="sp-skip">Skip and keep the example details →</button>');sk.addEventListener("click",function(){go(stepId("details"))});w.appendChild(sk);return w}
 /* quick start: type the business website, we read the logo, name, phone, email, address and social accounts from it */
 var SITEFILL=null;
-function siteFillCard(){var el=h2('<div class="sfill"><h3>What’s your website?</h3><p>We fill in your logo, brand colours, business name, phone, email, address, social accounts, booking and Google review links from it. You can change anything after.</p><div class="row"><input type="url" inputmode="url" autocomplete="url" placeholder="yourbusiness.co.nz" aria-label="Your website"><button type="button" class="btn">Fill everything</button></div><div class="sfout"></div></div>');
+function siteFillCard(){var el=h2('<div class="sfill"><h3>What’s your website?</h3><p>We fill in your logo, brand colours, business name, phone, email, address, social accounts, booking and Google review links from it. You can change anything after.</p><div class="row"><input type="text" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="yourbusiness.co.nz or business name" aria-label="Your website or business name"><button type="button" class="btn">Fill everything</button></div><div class="sfout"></div></div>');
   var inp=el.querySelector("input"),btn=el.querySelector("button"),out=el.querySelector(".sfout");inp.value=SITEFILL&&SITEFILL.site||S.website||"";
-  var go1=function(){var v=inp.value.trim();if(!v){inp.focus();toast("Type your website first, like yourbusiness.co.nz");return}siteFill(v,btn,out)};
+  var go1=function(){var v=inp.value.trim();if(!v){inp.focus();toast("Type your website or business name first, like yourbusiness.co.nz");return}siteFill(v,btn,out)};
   btn.addEventListener("click",go1);inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();go1()}});
   if(SITEFILL&&SITEFILL.html)out.innerHTML=SITEFILL.html;return el}
 function siteFill(site,btn,out){var keep=btn.textContent;
