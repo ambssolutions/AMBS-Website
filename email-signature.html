@@ -2487,9 +2487,10 @@ function fitSnap(t){var j={};(t.order||[]).forEach(function(x){if(/^(review|extr
    buttons side by side or stacked, social icons under the logo or with the details. Shrinking the logo, or moving it
    above the details, happens only when nothing else fits. Anything in lock was chosen by hand and is left alone */
 function fitLayout(base,lock,bigLogo){lock=lock||{};var key=fitKey(base,lock);if(PF_CACHE[key])return JSON.parse(PF_CACHE[key]);
+  /* the banner, disclaimer and stripe under the signature shrink to the screen on phones, so only the parts above them are measured */
   var keep=S,kb=barH;base=JSON.parse(JSON.stringify(base));base.mob=null;
   var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:max-content";document.body.appendChild(d);
-  var size=function(t){S=t;barH=36;try{d.innerHTML=signature("preview");var m=d.firstElementChild;return[d.scrollWidth,m?m.offsetHeight:0]}finally{S=keep;barH=kb}};
+  var size=function(t){t=JSON.parse(JSON.stringify(t));t.order.forEach(function(x){if(/^(banner|disclaimer|rainbow)$/.test(x[0])&&x[2]==="under")x[1]=0});S=t;barH=36;try{d.innerHTML=signature("preview");var m=d.firstElementChild;return[d.scrollWidth,m?m.offsetHeight:0]}finally{S=keep;barH=kb}};
   var btns=function(t){var S0=S;S=t;try{return t.order.filter(function(x){return/^(book|review|extra)$/.test(x[0])&&x[1]&&block(x[0],"preview")}).length}finally{S=S0}},
     sideLogo=function(t){var lo=t.order.filter(function(x){return x[0]==="logo"})[0];return t.logoShow!==false&&lo&&lo[1]&&(lo[2]==="left"||lo[2]==="right")};
   var search=function(t0){var cl0=t0.contactLayout,best=null,cls=lock.contactLayout?[cl0]:cl0==="line"?["line","pairs","smart","stack"]:["pairs","smart","stack"];if(cls.indexOf(cl0)<0)cls.unshift(cl0);
