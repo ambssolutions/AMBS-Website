@@ -3019,7 +3019,7 @@
     "signoff": "Warm regards,",
     "signoffStyle": "animated",
     "signoffFont": "casual",
-    "signoffSize": 20,
+    "signoffSize": 18,
     "signoffAnimColor": "dark",
     "photoShow": false,
     "photoShape": "rounded",
@@ -3564,7 +3564,7 @@
     ],
     "pvChosen": true
    },
-   "updated": "2026-10-17T01:40:10.901Z",
+   "updated": "2026-10-17T01:40:59.717Z",
    "by": "hello@ambs.co.nz"
   }
  ]
