@@ -1274,11 +1274,25 @@ function lineLen(){var p=S.lineLen==null||S.lineLen===""?100:+S.lineLen;return M
 function zoneOf(id){var o=inOrder(id);return id==="line"?"line":o?o[2]:""}
 /* move whatever is selected: arrows, the move pad, or arrow keys */
 function moveBy(id,ddx,ddy){var z=zoneOf(id);if(!z){toast("Pick a part in the preview first.");return false}
+  /* social icons under the logo: sideways within the logo column; up and down changes the gap under the logo,
+     or moves the icons and the button together when they share a row */
+  if(id==="social"&&socialUnderLogo()){var sc=S.st.social=S.st.social||{};
+    /* no room beside them under the logo: ▶ takes them out next to your details */
+    var se0=document.querySelector('#sig [data-edit="social"]'),lg0=document.querySelector('#sig [data-edit="logo"]'),tight=se0&&lg0&&se0.getBoundingClientRect().width>=lg0.getBoundingClientRect().width-4;
+    var logoR=(inOrder("logo")||[])[2]==="right";
+    if(ddx&&tight&&!(+sc.ulx||0)){if((ddx>0)!==logoR){S.socialWithLogo=false;S.autoFit=false;save();update();toast("Icons moved next to your details. "+(logoR?"▶":"◀")+" puts them back under the logo.");return true}toast("They’re under the logo. "+(logoR?"◀":"▶")+" moves them next to your details.");return false}
+    if(ddx){var nx=Math.max(-1,Math.min(1,(+sc.ulx||0)+(ddx>0?1:-1)));if(nx===(+sc.ulx||0)){toast(nx<0?"They’re at the left of the logo.":"They’re at the right of the logo.");return false}if(nx)sc.ulx=nx;else delete sc.ulx;toast(nx<0?"Icons lined up on the left under the logo":nx>0?"Icons lined up on the right under the logo":"Icons centred under the logo")}
+    ddy=ddy*2;
+    if(ddy){var se=document.querySelector('#sig [data-edit="social"]'),tr=se&&se.closest("tr"),bt=tr&&tr.parentNode&&[].filter.call(tr.parentNode.querySelectorAll('[data-edit="book"],[data-edit="review"],[data-edit="extra"]'),function(e){return e.closest("tr")===tr||e.closest("table").closest("tr")===tr})[0];SOC_TB=bt?bt.dataset.edit:SOC_TB;
+      if(SOC_TB){var bs=S.st[SOC_TB]=S.st[SOC_TB]||{};bs.dy=(+bs.dy||0)+ddy;toast("The icons and the button move together, so they stay level.")}
+      else{var min=-Math.max(8,+S.gap||10),ny=Math.max(min,(+sc.gapT||0)+ddy);if(ny===(+sc.gapT||0)){toast("It’s right under the logo.");return false}if(ny)sc.gapT=ny;else delete sc.gapT}}
+    save();update();return true}
   if(z==="line"){var gl=S.lineGapL==null?18:+S.lineGapL,gr=S.lineGapR==null?18:+S.lineGapR;
     if(ddx){var right=inOrder("logo")&&inOrder("logo")[2]==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="left"});var d=right?-ddx:ddx;
       if(gl+d<0||gr-d<0){toast(d<0?"The line is touching the logo.":"The line is touching the text.");return false}S.lineGapL=gl+d;S.lineGapR=gr-d}
     if(ddy){var f=lineFree();if(!f){toast("Make the line shorter (Length) to move it up or down.");return false}S.st.line=S.st.line||{};var ny=Math.max(-Math.ceil(f/2),Math.min(Math.ceil(f/2),(+S.st.line.dy||0)+ddy));if(ny===(+S.st.line.dy||0)){toast(ddy<0?"It’s at the top.":"It’s at the bottom.");return false}S.st.line.dy=ny}save();update();return true}
   S.st[id]=S.st[id]||{};var c=S.st[id];
+  var lo1=inOrder("logo");if(id==="social"&&ddx&&z==="side"&&lo1&&lo1[1]&&S.logoShow!==false&&(lo1[2]==="left"&&ddx<0&&(+c.dx||0)<=0||lo1[2]==="right"&&ddx>0&&(+c.dx||0)>=0)){S.socialWithLogo=true;S.autoFit=false;save();update();toast("Icons moved under the logo.");return true}
   if(z==="left"||z==="right"){if(ddx){colNorm(id);var bar=S.divider!=="none",d=z==="right"?-ddx:ddx,cur=+c.dx||0,gl=bar?(+S.lineGapL||0):18,nx=cur+d;
       if(nx<0){toast("It’s at the edge already.");return false}
       /* towards the line: use up the gap first, then take the line along with it */
@@ -1364,7 +1378,9 @@ function signature(mode){SIGMODE=mode;var raw=S.colors,rawSt=S.st;S.colors={};fo
 /* social icons can sit under the logo, filling the space beside a tall column of details */
 function socialUnderLogo(){var so=inOrder("social"),lo=inOrder("logo");return!!(S.socialWithLogo&&so&&so[1]&&so[2]==="side"&&lo&&lo[1]&&S.logoShow!==false&&(lo[2]==="left"||lo[2]==="right"))}
 var SOC_COLS=0;
-function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
+/* icons under the logo: the ◀▶ arrows shift them sideways inside the logo column */
+var SOC_TB=null;function ulAl(){var x=+((S.st||{}).social||{}).ulx||0;return x<0?"left":x>0?"right":"center"}
+function signatureInner(mode){SOC_TB=null;var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
   /* buttons can stand in their own column to the right of the details, so a long signature gets shorter */
   var bR=S.btnSide==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="right"}),bOff=[],btnH="";
   if(bR){var bl=S.order.filter(function(o){return o[1]&&o[2]==="side"&&/^(book|review|extra)$/.test(o[0])}),bh=bl.map(function(o){return block(o[0],mode)}).filter(Boolean);
@@ -1372,7 +1388,7 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
   try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1;bOff.forEach(function(o){o[1]=1})}
   var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="center" style="padding:'+Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+'px 0 0 0;text-align:center;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="'+ulAl()+'" style="padding:'+Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+'px 0 0 0;text-align:'+ulAl()+';">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -1392,14 +1408,14 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
      that enlarge text but not pictures (the Outlook phone app); the divider is the details' left border, so it always runs their full height */
   var tb=[];if(sul&&L.length===1&&Lid[0]==="logo"&&hasBar&&S.divider!=="rainbow"&&!Rr.length&&!btnH&&!lbg&&!ctr){var sv=S.order.filter(function(o){return o[1]&&o[2]==="side"&&o[0]!=="social"&&block(o[0],mode)});
     for(var q=sv.length-1;q>=0&&isBtn(sv[q][0]);q--)tb.unshift(sv[q]);if(tb.length===sv.length)tb=[]}
-  if(tb.length){var keepSoc=socH;socH="";var logoTd=pad(colCell(inOrder("logo")),"right",gL,"logo");socH=keepSoc;
+  if(tb.length){SOC_TB=tb[0][0];var keepSoc=socH;socH="";var logoTd=pad(colCell(inOrder("logo")),"right",gL,"logo");socH=keepSoc;
     var sideTop,btns,rest=S.order.filter(function(o){return o[1]&&o[2]==="side"&&tb.indexOf(o)<0});
     tb.forEach(function(o){o[1]=0});so[1]=0;try{sideTop=content(mode,"side",true)}finally{tb.forEach(function(o){o[1]=1});so[1]=1}
     /* the button's own nudge (Even spacing) becomes the gap above the row, so it isn't counted twice */
     var b0=st(tb[0][0]),dyB=+b0.dy||0,g2=Math.max(0,basePad(tb[0][0],1)+dyB);b0.dy=0;
     rest.forEach(function(o){o[1]=0});try{btns=content(mode,"side")}finally{rest.forEach(function(o){o[1]=1});b0.dy=dyB}
     var edge='border-left:'+Math.max(1,+S.dividerW||2)+'px solid '+S.colors.line+';padding-left:'+gR+'px;';
-    var socTd=pad('<td valign="middle" align="center" style="vertical-align:middle;text-align:center;padding:'+g2+'px 0 0 0;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
+    var socTd=pad('<td valign="middle" align="'+ulAl()+'" style="vertical-align:middle;text-align:'+ulAl()+';padding:'+g2+'px 0 0 0;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
     out=T("font-family:"+S.font+";")+'<tr>'+logoTd+'<td valign="middle" style="vertical-align:middle;'+edge+'">'+sideTop+'</td></tr>'+
       '<tr>'+socTd+'<td valign="middle" style="vertical-align:middle;'+edge+'padding-top:'+g2+'px;">'+btns+'</td></tr></table>'}
   var top="";
