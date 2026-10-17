@@ -1,6 +1,6 @@
 {
   "name": "AMBS Email Signature Builder",
-  "short_name": "Signatures",
+  "short_name": "AMBS Signature",
   "description": "Make and copy email signatures for Gmail, Outlook and Apple Mail.",
   "id": "/email-signature",
   "start_url": "/email-signature",
