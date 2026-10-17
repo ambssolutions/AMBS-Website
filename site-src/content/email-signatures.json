@@ -2017,7 +2017,7 @@
       0
      ]
     ],
-    "contactLayout": "pairs",
+    "contactLayout": "stack",
     "align": "left",
     "gap": 6,
     "card": "none",
@@ -2055,7 +2055,7 @@
      "logo": "0",
      "banner": "1"
     },
-    "pvWidth": "phone",
+    "pvWidth": "desktop",
     "pvMode": "light",
     "logoAnim": false,
     "logoAnimUrl": "",
@@ -2147,7 +2147,7 @@
     "pieceGap": 1,
     "iconGap": 1,
     "btnGap": 4,
-    "contactGap": null,
+    "contactGap": 0,
     "lineLen": 99,
     "mob": {
      "btnSide": "",
@@ -2431,7 +2431,7 @@
      "google"
     ]
    },
-   "updated": "2026-10-17T01:17:09.029Z",
+   "updated": "2026-10-17T01:18:40.576Z",
    "by": "hello@ambs.co.nz"
   }
  ]
