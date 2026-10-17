@@ -1382,8 +1382,10 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
   if(tb.length){var keepSoc=socH;socH="";var logoTd=pad(colCell(inOrder("logo")),"right",gL,"logo");socH=keepSoc;
     var sideTop,btns,rest=S.order.filter(function(o){return o[1]&&o[2]==="side"&&tb.indexOf(o)<0});
     tb.forEach(function(o){o[1]=0});so[1]=0;try{sideTop=content(mode,"side",true)}finally{tb.forEach(function(o){o[1]=1});so[1]=1}
-    rest.forEach(function(o){o[1]=0});try{btns=content(mode,"side")}finally{rest.forEach(function(o){o[1]=1})}
-    var g2=basePad(tb[0][0],1),edge='border-left:'+Math.max(1,+S.dividerW||2)+'px solid '+S.colors.line+';padding-left:'+gR+'px;';
+    /* the button's own nudge (Even spacing) becomes the gap above the row, so it isn't counted twice */
+    var b0=st(tb[0][0]),dyB=+b0.dy||0,g2=Math.max(0,basePad(tb[0][0],1)+dyB);b0.dy=0;
+    rest.forEach(function(o){o[1]=0});try{btns=content(mode,"side")}finally{rest.forEach(function(o){o[1]=1});b0.dy=dyB}
+    var edge='border-left:'+Math.max(1,+S.dividerW||2)+'px solid '+S.colors.line+';padding-left:'+gR+'px;';
     var socTd=pad('<td valign="middle" align="center" style="vertical-align:middle;text-align:center;padding:'+g2+'px 0 0 0;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
     out=T("font-family:"+S.font+";")+'<tr>'+logoTd+'<td valign="middle" style="vertical-align:middle;'+edge+'">'+sideTop+'</td></tr>'+
       '<tr>'+socTd+'<td valign="middle" style="vertical-align:middle;'+edge+'padding-top:'+g2+'px;">'+btns+'</td></tr></table>'}
