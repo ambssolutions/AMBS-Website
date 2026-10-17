@@ -1405,7 +1405,7 @@ function withLayout(which,fn){var keep=S,kb=barH;S=canonical(keep);if(which==="m
     return fn()}finally{S=keep;barH=kb}}
 var COPY_GMAIL=false;
 function builtHtml(){return darkStyle()+builtHtml2()}
-function builtHtml2(){if(!S.mob||COPY_GMAIL)return S.mob?withLayout("lap",builtOne):builtOne();
+function builtHtml2(){if(!S.mob||COPY_GMAIL)return withLayout("lap",builtOne); /* always measure the dividing line for the layout being copied, not whatever the preview last showed */
   var lap=withLayout("lap",builtOne),mob=withLayout("mob",builtOne);
   /* the phone layout is already hidden from Outlook as a whole: an Outlook-only marker inside it (the dark-mode sign-off) would end that
      hiding early, and Outlook then showed the rest of the phone layout as a second signature */
