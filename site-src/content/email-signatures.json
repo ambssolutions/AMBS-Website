@@ -1944,7 +1944,7 @@
     "logoPos": "left",
     "logoBg": "none",
     "logoMatch": false,
-    "logoSize": 108,
+    "logoSize": 96,
     "logoUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-mvbo7dax.png",
     "divider": "solid",
     "dividerW": 2,
@@ -2105,7 +2105,7 @@
      },
      "role": {
       "size": 12,
-      "dy": -54
+      "dy": -70
      },
      "book": {
       "dx": -12,
@@ -2125,7 +2125,7 @@
      "social": {
       "dy": -2,
       "dx": -7,
-      "gapT": 1
+      "gapT": 10
      },
      "review": {
       "dx": -2,
