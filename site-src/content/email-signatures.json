@@ -3227,7 +3227,7 @@
      },
      "book": {
       "dx": -12,
-      "dy": -20,
+      "dy": -3,
       "align": "left"
      },
      "logo": {
@@ -3251,7 +3251,7 @@
      },
      "name": {
       "size": 18,
-      "dy": 4
+      "dy": 8
      },
      "extra": {
       "align": "left"
@@ -3393,11 +3393,11 @@
        "dy": -17
       },
       "banner": {
-       "dy": -5
+       "dy": -3
       },
       "book": {
        "dx": -1,
-       "dy": -11
+       "dy": -2
       },
       "signoff": {
        "size": 29,

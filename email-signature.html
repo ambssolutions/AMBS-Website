@@ -1139,7 +1139,11 @@ function button(href,label,icon,mode,col){var c=Object.assign({},S.colors);if(co
   var filled=S.btnStyle==="filled",py=btnPadY(),px=(S.btnPadX==null?14:S.btnPadX);
   /* Outlook on Windows ignores a link's background and padding, which left white words on white: the colour and border sit on the
      table cell (bgcolor), mso-padding-alt gives Outlook the size, and the link keeps its padding so the whole button is clickable elsewhere */
-  return'<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td align="center" valign="middle"'+(filled?' bgcolor="'+c.button+'"':'')+' style="'+(filled?'background:'+c.button+';':'')+'border:1.5px solid '+c.button+';border-radius:'+S.btnRadius+'px;mso-padding-alt:'+py+'px '+px+'px;'+ebBtn(filled)+'"><a href="'+esc(href)+'" style="display:inline-block;padding:'+py+'px '+px+'px;color:'+(filled?"#ffffff":c.button)+';border-radius:'+S.btnRadius+'px;font-size:'+btnFs()+'px;font-weight:bold;line-height:16px;mso-line-height-rule:exactly;text-decoration:none;white-space:nowrap;">'+ic+label+'</a></td></tr></table>'}
+  var fs=btnFs(),txt=String(label).replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").replace(/&amp;/g,"&"),cv=button.cv||(button.cv=document.createElement("canvas").getContext("2d"));cv.font="bold "+fs+"px "+(S.font||"Arial");
+  var vw=Math.ceil(cv.measureText(txt).width+(icon?20:0)+2*px+4),vh=16+2*py+3,arc=Math.min(50,Math.round(100*(+S.btnRadius||0)/vh));
+  /* Outlook on Windows draws this rounded shape (VML) instead; every other app ignores it and shows the button below */
+  var vml='<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="'+esc(href)+'" style="height:'+vh+'px;v-text-anchor:middle;width:'+vw+'px;" arcsize="'+arc+'%" strokecolor="'+c.button+'" strokeweight="1.5px" fillcolor="'+(filled?c.button:"#ffffff")+'"'+(filled?'':' filled="f"')+'><w:anchorlock/><center style="color:'+(filled?"#ffffff":c.button)+';font-family:'+(S.font||"Arial")+';font-size:'+fs+'px;font-weight:bold;">'+label+'</center></v:roundrect><![endif]-->';
+  return vml+'<!--[if !mso]><!--><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td align="center" valign="middle"'+(filled?' bgcolor="'+c.button+'"':'')+' style="'+(filled?'background:'+c.button+';':'')+'border:1.5px solid '+c.button+';border-radius:'+S.btnRadius+'px;mso-padding-alt:'+py+'px '+px+'px;'+ebBtn(filled)+'"><a href="'+esc(href)+'" style="display:inline-block;padding:'+py+'px '+px+'px;color:'+(filled?"#ffffff":c.button)+';border-radius:'+S.btnRadius+'px;font-size:'+btnFs()+'px;font-weight:bold;line-height:16px;mso-line-height-rule:exactly;text-decoration:none;white-space:nowrap;">'+ic+label+'</a></td></tr></table><!--<![endif]-->'}
 function contactIcon(kind,mode,csz){var st=S.contactIcons;if(st==="none")return"";var sz=Math.max(13,Math.round((csz||S.textSize)*1.15));
   if(st==="letters"){var pp=pal(),L={mobile:["M",pp[3%pp.length]],phone:["P",pp[2%pp.length]],email:["E",pp[4%pp.length]],web:["W",pp[5%pp.length]],location:["A",pp[0]]}[kind];return'<b style="color:'+(S.contactLabels?S.colors.letters:L[1])+';font-size:'+(csz||S.textSize)+'px;">'+L[0]+'</b>'}
   return'<img src="'+esc(iconSrc(kind,st,mode,embL("icons")))+'" width="'+sz+'" height="'+sz+'" alt="" style="display:block;border:0;width:'+sz+'px;height:'+sz+'px;">'}
@@ -1390,7 +1394,7 @@ function builtHtml2(){if(!S.mob||COPY_GMAIL)return S.mob?withLayout("lap",builtO
   var lap=withLayout("lap",builtOne),mob=withLayout("mob",builtOne);
   /* the phone layout is already hidden from Outlook as a whole: an Outlook-only marker inside it (the dark-mode sign-off) would end that
      hiding early, and Outlook then showed the rest of the phone layout as a second signature */
-  mob=mob.replace(/<!--\[if !mso\]><!-->/g,"").replace(/<!--<!\[endif\]-->/g,"");
+  mob=mob.replace(/<!--\[if mso\]>[\s\S]*?<!\[endif\]-->/g,"").replace(/<!--\[if !mso\]><!-->/g,"").replace(/<!--<!\[endif\]-->/g,"");
   return'<style>@media only screen and (max-width:480px){.sgd{display:none!important;max-height:0!important;overflow:hidden!important}.sgm{display:block!important;max-height:none!important;overflow:visible!important}}</style>'+
     '<div class="sgd">'+lap+'</div><!--[if !mso]><!--><div class="sgm" style="display:none;max-height:0;overflow:hidden;">'+mob+'</div><!--<![endif]-->'}
 /* the Outlook phone app squeezes small pictures inside table columns (logo, icons) to almost nothing:
@@ -1415,7 +1419,7 @@ function slim(h){
         seen[k]=v});
       for(var k in seen)out.push(k+":"+seen[k]);
       return out.length?' style="'+out.join(";")+'"':""});
-    attrs=attrs.replace(/(bgcolor|color)="#([0-9a-f])\2([0-9a-f])\3([0-9a-f])\4"/gi,'$1="#$2$3$4"');
+    attrs=attrs.replace(/ (bgcolor|color)="#([0-9a-f])\2([0-9a-f])\3([0-9a-f])\4"/gi,' $1="#$2$3$4"'); /* not fillcolor/strokecolor: Outlook's button shape wants the full colour */
     return"<"+name+attrs+">"});
   return h.replace(/>\s*\n\s*</g,"><").trim()}
 function emailHtml(){return S.useCode&&String(S.code||"").trim()?cleanCode(S.code,false):builtHtml()}
@@ -2974,7 +2978,9 @@ function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
   var un=function(r,b){return!b?r:!r?Object.assign({},b):{l:Math.min(r.l,b.l),t:Math.min(r.t,b.t),r:Math.max(r.r,b.r),b:Math.max(r.b,b.b)}};
   var ink=function(el){var r=null,add=function(b){if(b&&b.width>=1&&b.height>=1)r=un(r,{l:b.left,t:b.top,r:b.right,b:b.bottom})};
     var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode())){if(!n.nodeValue.trim())continue;var rg=document.createRange();rg.selectNodeContents(n);[].forEach.call(rg.getClientRects(),add)}
-    el.querySelectorAll("img").forEach(function(i){if(getComputedStyle(i).display!=="none"&&i.offsetParent)add(i.getBoundingClientRect())});return r};
+    el.querySelectorAll("img").forEach(function(i){if(getComputedStyle(i).display!=="none"&&i.offsetParent)add(i.getBoundingClientRect())});
+    /* a button's edge is its coloured background or border, not its words */
+    el.querySelectorAll("a,td").forEach(function(x){var cs=getComputedStyle(x);if(x.offsetParent&&((cs.backgroundColor&&!/rgba\(0, 0, 0, 0\)|transparent/.test(cs.backgroundColor))||parseFloat(cs.borderTopWidth)>0))add(x.getBoundingClientRect())});return r};
   var measure=function(width){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+(width?width+"px":"max-content");document.body.appendChild(d);d.innerHTML=signature("preview");
     var R={};d.querySelectorAll("[data-edit]").forEach(function(e){var k=e.dataset.edit;if(k==="line"){var b=e.getBoundingClientRect();if(b.width)R.line={l:b.left,t:b.top,r:b.right,b:b.bottom}}else{var i=ink(e);if(i)R[k]=un(R[k],i)}});d.remove();return R};
   var pass=function(width){var R=measure(width),ch=0,sul=socialUnderLogo(),Z={};
