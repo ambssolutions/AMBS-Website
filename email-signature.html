@@ -1375,6 +1375,18 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
   if(tileL)main=pad(main,"left",18);if(tileR)main=pad(main,"right",18);
   var parts=[];L.forEach(function(c,i){parts.push(pad(c,"right",tileL&&i===L.length-1?16:hasBar&&i===L.length-1?gL:18,Lid[i]))});if(L.length&&hasBar)parts.push(pad(bar,"right",gR));parts.push(main);if(btnH)parts.push('<td valign="middle" style="vertical-align:middle;padding:0 0 0 16px;">'+btnH+'</td>');if(Rr.length){if(hasBar)parts.push(pad(bar,"left",gR));Rr.forEach(function(c,i){parts.push(pad(c,"left",tileR&&i===0?16:hasBar&&i===0?gL:18,Rid[i]))})}
   out=T("font-family:"+S.font+";"+(ctr?"margin:0 auto;":""))+'<tr>'+parts.join("")+'</tr></table>';
+  /* icons under the logo and the button(s) ending the details share one table row, so every email app keeps them level, even the ones
+     that enlarge text but not pictures (the Outlook phone app); the divider is the details' left border, so it always runs their full height */
+  var tb=[];if(sul&&L.length===1&&Lid[0]==="logo"&&hasBar&&S.divider!=="rainbow"&&!Rr.length&&!btnH&&!lbg&&!ctr){var sv=S.order.filter(function(o){return o[1]&&o[2]==="side"&&o[0]!=="social"&&block(o[0],mode)});
+    for(var q=sv.length-1;q>=0&&isBtn(sv[q][0]);q--)tb.unshift(sv[q]);if(tb.length===sv.length)tb=[]}
+  if(tb.length){var keepSoc=socH;socH="";var logoTd=pad(colCell(inOrder("logo")),"right",gL,"logo");socH=keepSoc;
+    var sideTop,btns,rest=S.order.filter(function(o){return o[1]&&o[2]==="side"&&tb.indexOf(o)<0});
+    tb.forEach(function(o){o[1]=0});so[1]=0;try{sideTop=content(mode,"side",true)}finally{tb.forEach(function(o){o[1]=1});so[1]=1}
+    rest.forEach(function(o){o[1]=0});try{btns=content(mode,"side")}finally{rest.forEach(function(o){o[1]=1})}
+    var g2=basePad(tb[0][0],1),edge='border-left:'+Math.max(1,+S.dividerW||2)+'px solid '+S.colors.line+';padding-left:'+gR+'px;';
+    var socTd=pad('<td valign="middle" align="center" style="vertical-align:middle;text-align:center;padding:'+g2+'px 0 0 0;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td>',"right",gL,"logo");
+    out=T("font-family:"+S.font+";")+'<tr>'+logoTd+'<td valign="middle" style="vertical-align:middle;'+edge+'">'+sideTop+'</td></tr>'+
+      '<tr>'+socTd+'<td valign="middle" style="vertical-align:middle;'+edge+'padding-top:'+g2+'px;">'+btns+'</td></tr></table>'}
   var top="";
   if(S.signoffStyle==="animated"||S.signoffStyle==="still"){var sl=soSlug(S.signoff)||"kind-regards",fo=soFont(),sz0=SO.size[fo.key][sl],k0=S.signoffSize/30,w0=Math.round(sz0[0]*k0),h0=Math.round(sz0[1]*k0),anim=S.signoffStyle==="animated";
     /* dark mode: a white-ink copy swaps in where the email app supports it; the preview shows it too */
