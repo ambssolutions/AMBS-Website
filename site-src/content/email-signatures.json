@@ -470,7 +470,7 @@
    "state": {
     "name": "Satwinder Singh",
     "role": "Director",
-    "company": "Delta Air Solutions",
+    "company": "Delta Air Solutions Ltd",
     "location": "",
     "mobile": "0220 247 888",
     "phone": "0800 247 888",
@@ -757,7 +757,7 @@
    "state": {
     "name": "Satwinder Singh",
     "role": "Director",
-    "company": "Delta Air Solutions",
+    "company": "Delta Air Solutions Ltd",
     "location": "",
     "mobile": "0220 247 888",
     "phone": "0800 247 888",
@@ -1019,7 +1019,7 @@
      "button": "See the offer",
      "badge": "",
      "badgeSmall": "",
-     "icon": "star",
+     "icon": "offer",
      "style": "light",
      "logo": false,
      "link": "mailto:?subject=Referral",
@@ -1328,7 +1328,7 @@
    "state": {
     "name": "Satwinder Singh",
     "role": "Director",
-    "company": "Delta Air Solutions",
+    "company": "Delta Air Solutions Ltd",
     "location": "",
     "mobile": "0220 247 888",
     "phone": "0800 247 888",
@@ -1884,7 +1884,7 @@
    "state": {
     "name": "Satwinder Singh",
     "role": "Director",
-    "company": "Delta Air Solutions",
+    "company": "Delta Air Solutions Ltd",
     "location": "",
     "mobile": "0220 247 888",
     "phone": "0800 247 888",
@@ -2449,7 +2449,7 @@
    "state": {
     "name": "Satwinder Singh",
     "role": "Director",
-    "company": "Delta Air Solutions",
+    "company": "Delta Air Solutions Ltd",
     "location": "",
     "mobile": "0220 247 888",
     "phone": "0800 247 888",
@@ -3015,7 +3015,7 @@
    "state": {
     "name": "Satwinder Singh",
     "role": "Director",
-    "company": "Delta Air Solutions",
+    "company": "Delta Air Solutions Ltd",
     "location": "",
     "mobile": "0220 247 888",
     "phone": "0800 247 888",
@@ -3278,7 +3278,7 @@
      "button": "See the offer",
      "badge": "",
      "badgeSmall": "",
-     "icon": "star",
+     "icon": "offer",
      "style": "light",
      "logo": false,
      "link": "mailto:?subject=Referral",
