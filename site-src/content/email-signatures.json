@@ -3181,13 +3181,13 @@
     "code": "",
     "emboss": 0,
     "emb": {
-     "btn": "1",
+     "btn": "0",
      "icons": "0",
      "logo": "0",
      "banner": "1"
     },
     "pvWidth": "phone",
-    "pvMode": "dark",
+    "pvMode": "light",
     "logoAnim": false,
     "logoAnimUrl": "",
     "logoAnimData": "",
@@ -3225,8 +3225,8 @@
       "dy": -6
      },
      "book": {
-      "dx": 0,
-      "dy": -3,
+      "dx": -12,
+      "dy": -7,
       "align": "left"
      },
      "logo": {
@@ -3565,7 +3565,7 @@
     ],
     "pvChosen": true
    },
-   "updated": "2026-10-17T01:42:31.143Z",
+   "updated": "2026-10-17T01:49:26.694Z",
    "by": "hello@ambs.co.nz"
   }
  ]
