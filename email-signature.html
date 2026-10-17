@@ -2997,6 +2997,8 @@ function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
     /* a button's edge is its coloured background or border, not its words */
     el.querySelectorAll("a,td").forEach(function(x){var cs=getComputedStyle(x);if(x.offsetParent&&((cs.backgroundColor&&!/rgba\(0, 0, 0, 0\)|transparent/.test(cs.backgroundColor))||parseFloat(cs.borderTopWidth)>0))add(x.getBoundingClientRect())});return r};
   var measure=function(width){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+(width?width+"px":"max-content");document.body.appendChild(d);d.innerHTML=signature("preview");
+    /* size the dividing line the way the copied signature does (withLayout), or the layout measured here differs from the one sent */
+    for(var bi=0;bi<2;bi++){if(!d.querySelector("[data-measure]"))break;var hh=barMeasure(d);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh;d.innerHTML=signature("preview")}
     var R={};d.querySelectorAll("[data-edit]").forEach(function(e){var k=e.dataset.edit;if(k==="line"){var b=e.getBoundingClientRect();if(b.width)R.line={l:b.left,t:b.top,r:b.right,b:b.bottom}}else{var i=ink(e);if(i)R[k]=un(R[k],i)}});d.remove();return R};
   var pass=function(width){var R=measure(width),ch=0,sul=socialUnderLogo(),Z={};
     S.order.forEach(function(o){if(!o[1]||!R[o[0]])return;var z=o[2];if(sul&&o[0]==="social")return;var L=(Z[z]=Z[z]||[]);if(o[3]&&L.length)L[L.length-1].ids.push(o[0]);else L.push({ids:[o[0]]})});
@@ -3017,10 +3019,10 @@ function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
       d=Math.round(((sd.l-R.line.r)-(R.line.l-lft.r))/2);if(d&&gl+d>=0&&gr-d>=0){S.lineGapL=gl+d;S.lineGapR=gr-d;ch++}}
     return ch};
   var run=function(width){for(var i=0;i<PASSES;i++)if(!pass(width))break};
-  var wasMob=S._active==="mob",c=canonical(S),keep=S;
+  var wasMob=S._active==="mob",c=canonical(S),keep=S,kb=barH;
   try{S=c;run(0);
     if(c.mob){S=canonical(c);Object.assign(S,JSON.parse(JSON.stringify(c.mob)));run(PHONE_W);c.mob.st=S.st;c.mob.lineGapL=S.lineGapL;c.mob.lineGapR=S.lineGapR}
-    S=c}catch(e){S=keep;throw e}
+    S=c}catch(e){S=keep;throw e}finally{barH=kb}
   if(wasMob)syncActive();save();update();toast("Even spacing: "+G+"px between every part"+(c.mob?", on laptops and phones.":"."))}
 function copyGmail(b){COPY_GMAIL=true;try{copySig(b)}finally{COPY_GMAIL=false}}
 function gmailHtml(){COPY_GMAIL=true;try{return emailHtml()}finally{COPY_GMAIL=false}}

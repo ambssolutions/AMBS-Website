@@ -817,8 +817,8 @@
     "logoUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-mvbo7dax.png",
     "divider": "solid",
     "dividerW": 2,
-    "lineGapL": 16,
-    "lineGapR": 9,
+    "lineGapL": 17,
+    "lineGapR": 8,
     "order": [
      [
       "logo",
@@ -944,7 +944,7 @@
     "logoAnimData": "",
     "logoAnimRatio": 0,
     "darkOn": true,
-    "logoDarkUrl": "",
+    "logoDarkUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-dark.png",
     "logoDarkData": "",
     "logoDarkRatio": 0,
     "dk": {
@@ -955,29 +955,30 @@
     "template": "Social first",
     "st": {
      "signoff": {
-      "bold": true
+      "bold": true,
+      "gapB": -4
      },
      "contact": {
       "size": 11,
       "bold": false,
       "italic": false,
       "color": "#14172b",
-      "dy": 5
+      "dy": 0
      },
      "disclaimer": {
       "size": 12,
       "align": "left",
-      "dy": -5,
+      "dy": -3,
       "color": "#1f2023",
       "dx": -18
      },
      "role": {
       "size": 12,
-      "dy": -6
+      "dy": -22
      },
      "book": {
       "dx": 1,
-      "dy": -3,
+      "dy": -4,
       "align": "left"
      },
      "logo": {
@@ -986,12 +987,13 @@
       "align": "left"
      },
      "banner": {
-      "dy": -8,
+      "dy": -4,
       "dx": -2
      },
      "social": {
       "dy": -5,
-      "dx": -7
+      "dx": -7,
+      "gapT": 1
      },
      "review": {
       "dx": -2,
@@ -1117,31 +1119,38 @@
      "st": {
       "social": {
        "dx": 17,
-       "dy": -2
+       "dy": -2,
+       "gapT": 1
       },
       "name": {
        "size": 19,
-       "dy": 8
+       "dy": 0
       },
       "contact": {
        "dx": -4,
-       "dy": 1,
+       "dy": 0,
        "size": 13,
        "bold": false
       },
       "logo": {},
       "role": {
        "bold": false,
-       "color": "#050505"
+       "color": "#050505",
+       "dy": -18
       },
       "banner": {
-       "dy": -4
+       "dy": -11
       },
       "book": {
-       "dx": 10
+       "dx": 10,
+       "dy": -4
       },
       "signoff": {
-       "size": 32
+       "size": 32,
+       "gapB": -8
+      },
+      "disclaimer": {
+       "dy": -3
       }
      },
      "contactLayout": "pairs",
@@ -1161,8 +1170,8 @@
      "contactGap": 0,
      "contactIconGap": 4,
      "gap": 6,
-     "lineGapL": 30,
-     "lineGapR": 23,
+     "lineGapL": 27,
+     "lineGapR": 26,
      "dividerW": 2,
      "lineLen": 108,
      "photoSize": 88,
@@ -3223,7 +3232,7 @@
      },
      "role": {
       "size": 12,
-      "dy": -22
+      "dy": -38
      },
      "book": {
       "dx": -12,
@@ -3390,7 +3399,7 @@
       "role": {
        "bold": false,
        "color": "#050505",
-       "dy": -17
+       "dy": -33
       },
       "banner": {
        "dy": -3
