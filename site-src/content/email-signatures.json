@@ -813,7 +813,7 @@
     "logoPos": "left",
     "logoBg": "none",
     "logoMatch": false,
-    "logoSize": 68,
+    "logoSize": 125,
     "logoUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-mvbo7dax.png",
     "divider": "solid",
     "dividerW": 3,
@@ -899,7 +899,7 @@
       0
      ]
     ],
-    "contactLayout": "line",
+    "contactLayout": "pairs",
     "align": "left",
     "gap": 6,
     "card": "none",
@@ -920,7 +920,7 @@
     "textSize": 13,
     "rainbowW": 220,
     "iconStyle": "glyph",
-    "iconSize": 34,
+    "iconSize": 29,
     "contactIcons": "glyph",
     "btnStyle": "filled",
     "btnRadius": 6,
@@ -937,7 +937,7 @@
      "logo": "0",
      "banner": "1"
     },
-    "pvWidth": "phone",
+    "pvWidth": "desktop",
     "pvMode": "light",
     "logoAnim": false,
     "logoAnimUrl": "",
@@ -972,7 +972,7 @@
       "dx": -21
      },
      "role": {
-      "size": 10,
+      "size": 12,
       "dy": -6
      },
      "book": {
@@ -994,6 +994,9 @@
      },
      "review": {
       "dx": -2
+     },
+     "name": {
+      "size": 18
      }
     },
     "maker": {
@@ -1017,7 +1020,7 @@
     "pieceGap": 5,
     "iconGap": 3,
     "btnGap": 7,
-    "contactGap": 5,
+    "contactGap": null,
     "lineLen": 89,
     "mob": {
      "btnSide": "",
@@ -1298,7 +1301,7 @@
      "google"
     ]
    },
-   "updated": "2026-10-17T00:45:17.780Z",
+   "updated": "2026-10-17T00:53:37.695Z",
    "by": "hello@ambs.co.nz"
   },
   {
