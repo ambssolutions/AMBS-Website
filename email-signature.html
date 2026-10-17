@@ -1179,6 +1179,14 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
         if(x2&&x1.k!=="location"&&x2.k!=="location"&&plen(x1)+plen(x2)<=30){grp.push([x1,x2]);q++}else grp.push([x1])}}
     else for(var q=0;q<it.length;q+=per)grp.push(it.slice(q,q+per));
     var allCols=per===2?2*(icw?2:1)+1:0;
+    /* two to a line, but never squeezed: each detail is its own block that sits beside the other when there's room and drops
+       underneath on a narrow phone screen (Gmail and Outlook phone apps ignore the phone layout, so this has to happen by itself).
+       The first column is as wide as its widest detail, so the second column still lines up on a laptop */
+    if(per===2||S.contactLayout==="smart"){var cv=block.cv||(block.cv=document.createElement("canvas").getContext("2d"));cv.font=(cs0.bold?"bold ":"")+csz+"px "+(S.font||"Arial");
+      var tw=function(x){return Math.ceil(cv.measureText(x.tx.replace(/<[^>]+>/g,"").replace(/&nbsp;/g," ").replace(/&amp;/g,"&")).width)+icw+2},c1=0;
+      grp.forEach(function(r){if(r.length===2)c1=Math.max(c1,tw(r[0]))});
+      var item=function(x,w){return'<table cellpadding="0" cellspacing="0" border="0" role="presentation"'+(w?' width="'+w+'"':'')+' style="border-collapse:collapse;'+(w?'width:'+w+'px;':'')+'"><tr>'+icCell(x)+txCell(x)+'</tr></table>'};
+      return grp.map(function(r){return flowRow(r.map(function(x,k){return{h:item(x,r.length===2&&k===0?c1:0),va:"middle",pad:vpad+"px "+(k===0&&r.length===2?Math.max(g,14):0)+"px "+vpad+"px 0"}}),ctr?"center":"left")}).join("")}
     for(var gi=0;gi<grp.length;gi++){var r=grp[gi],tds=[];
       if(S.contactLayout==="smart"&&r.length===1){rows.push('<tr>'+icCell(r[0]).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(r[0]).replace('<td ','<td colspan="'+(allCols-(icw?1:0))+'" ').replace('padding:0;','padding:'+vpad+'px 0;')+'</tr>');continue}r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:'+Math.max(g,14)+'px;min-width:'+Math.max(g,14)+'px;font-size:0;line-height:0;">&nbsp;</td>')});
       if(r.length<per)tds.push('<td colspan="'+(icw?2:1)+'"></td>');rows.push('<tr>'+tds.join("")+'</tr>')}
@@ -1197,13 +1205,18 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="banner"){var bw=S.bannerW,ab=AMBS_BANNERS.filter(function(x){return x.url===S.bannerUrl||x.urlNo===S.bannerUrl})[0],src=mode==="email"?url(S.bannerUrl):(uploaded.banner?uploaded.banner.src:(ab?(ab.urlNo===S.bannerUrl?ab.previewNo:ab.preview):url(S.bannerUrl)));
     if(!src)return mode==="email"?"":'<div style="width:'+bw+'px;max-width:100%;height:'+Math.round(bw/6)+'px;border:1.5px dashed #c9cfe0;border-radius:8px;color:#8a90a3;font:12px Arial;display:flex;align-items:center;justify-content:center;">Your banner (choose one in the Banner section)</div>';
     var bh=uploaded.banner&&mode!=="email"?Math.round(bw*uploaded.banner.h/uploaded.banner.w):(ab?Math.round(bw*0.15):Math.round(bw/6));
-    var im=uploaded.banner||mode==="email"||ab?'<img src="'+esc(src)+'" width="'+bw+'" alt="'+esc(S.company||"Banner")+'" style="display:block;border:0;width:'+bw+'px;max-width:100%;height:auto;'+ebBanner()+'">':img(src,bw,bh,"Banner",ebBanner());
+    /* in the copied signature the banner is fluid: Outlook on Windows keeps the width attribute, every other app lets it shrink with a narrow
+       phone screen (a fixed width stopped the whole signature from narrowing, so the contact details couldn't wrap) */
+    var bimg=function(fluid){return'<img src="'+esc(src)+'" width="'+bw+'" alt="'+esc(S.company||"Banner")+'" style="display:block;border:0;'+(fluid?'width:100%;max-width:'+bw+'px;':'width:'+bw+'px;max-width:100%;')+'height:auto;'+ebBanner()+'">'};
+    var im=uploaded.banner||mode==="email"||ab?(mode==="email"?'<!--[if mso]>'+bimg(false)+'<![endif]--><!--[if !mso]><!-->'+bimg(true)+'<!--<![endif]-->':bimg(false)):img(src,bw,bh,"Banner",ebBanner());
     return S.bannerLink?'<a href="'+esc(url(S.bannerLink))+'" style="text-decoration:none;">'+im+'</a>':im}
   if(id==="disclaimer"){if(!S.disclaimer)return"";
     /* with a banner showing, the disclaimer is exactly as wide as the banner. A table with a width attribute holds that width in Outlook
        (which ignores max-width), and max-width:100% lets it shrink with the banner on a narrow phone */
     var dw=shown("banner")&&S.bannerUrl&&+S.bannerW?+S.bannerW:(+S.discW||(wide?560:440));
-    return'<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="'+dw+'" style="border-collapse:collapse;width:'+dw+'px;max-width:100%;"><tr><td style="'+fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'mso-line-height-rule:exactly;'+(S.disclaimerJustify?"text-align:justify;":"")+'">'+(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer)+'</td></tr></table>'}
+    var dtx=(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer),dst=fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'mso-line-height-rule:exactly;'+(S.disclaimerJustify?"text-align:justify;":"");
+    /* Outlook on Windows gets a fixed-width table; everything else a block capped at the banner's width that can narrow with a phone screen */
+    return'<!--[if mso]><table cellpadding="0" cellspacing="0" border="0" role="presentation" width="'+dw+'" style="border-collapse:collapse;width:'+dw+'px;"><tr><td style="'+dst+'">'+dtx+'</td></tr></table><![endif]--><!--[if !mso]><!--><div style="max-width:'+dw+'px;'+dst+'">'+dtx+'</div><!--<![endif]-->'}
   return""}
 function rows(mode,zone){var out=[],groups=[];
   /* parts marked "join" sit on the same line as the part above them */
