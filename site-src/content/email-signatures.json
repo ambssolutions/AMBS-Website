@@ -1286,9 +1286,19 @@
      "web",
      "location"
     ],
-    "bannerMade": true
+    "bannerMade": true,
+    "socialOrder": [
+     "facebook",
+     "instagram",
+     "tiktok",
+     "linkedin",
+     "youtube",
+     "whatsapp",
+     "x",
+     "google"
+    ]
    },
-   "updated": "2026-10-17T00:37:04.544Z",
+   "updated": "2026-10-17T00:39:54.311Z",
    "by": "hello@ambs.co.nz"
   }
  ]
