@@ -776,7 +776,7 @@
     "photoShape": "rounded",
     "photoSize": 96,
     "photoUrl": "",
-    "bannerUrl": "",
+    "bannerUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-banner-mvbo7aiy.gif",
     "bannerLink": "https://www.deltaair.co.nz/#offers",
     "bannerW": 486,
     "bookLabel": "Request a free quote",
@@ -814,7 +814,7 @@
     "logoBg": "none",
     "logoMatch": false,
     "logoSize": 68,
-    "logoUrl": "",
+    "logoUrl": "https://ambs.co.nz/assets/email/made/delta-air-solutions-logo-mvbo7dax.png",
     "divider": "solid",
     "dividerW": 3,
     "lineGapL": 16,
@@ -1133,13 +1133,13 @@
       }
      },
      "contactLayout": "pairs",
-     "logoSize": 145,
+     "logoSize": 116,
      "logoPos": "left",
      "logoShow": true,
      "logoMatch": false,
      "nameSize": 17,
      "textSize": 13,
-     "iconSize": 34,
+     "iconSize": 24,
      "btnPadX": 32,
      "btnPadY": 9,
      "btnFont": 15,
@@ -1298,7 +1298,7 @@
      "google"
     ]
    },
-   "updated": "2026-10-17T00:40:31.551Z",
+   "updated": "2026-10-17T00:45:17.780Z",
    "by": "hello@ambs.co.nz"
   }
  ]
