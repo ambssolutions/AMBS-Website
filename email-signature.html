@@ -856,7 +856,7 @@ body.wiz-on{overflow:hidden}body.wiz-on .wrap,body.wiz-on .pnav{visibility:hidde
 <script>
 /* email icons: one 48x48 SVG per icon and style. The same function draws the editor preview and the PNGs hosted at ambs.co.nz/assets/email/ */
 var ICON_PATHS={"mobile": "M16.5 1h-9C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h9c1.38 0 2.5-1.12 2.5-2.5v-17C19 2.12 17.88 1 16.5 1zM12 21.25c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM17 17H7V4h10v13z", "instagram": "M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077", "tiktok": "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z", "facebook": "M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z", "linkedin": "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z", "youtube": "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z", "whatsapp": "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z", "x": "M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z", "google": "M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z", "phone": "M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02z", "email": "M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z", "web": "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 17.93A8 8 0 0 1 4 12c0-.62.08-1.21.21-1.79L9 15v1a2 2 0 0 0 2 2zm6.9-2.54A2 2 0 0 0 16 16h-1v-3a1 1 0 0 0-1-1H8v-2h2a1 1 0 0 0 1-1V7h2a2 2 0 0 0 2-2v-.41a7.98 7.98 0 0 1 2.9 12.8z", "location": "M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z", "calendar": "M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14z", "star": "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"};
-var ICON_COLORS={"mobile": "#24b328", "instagram": "#E4405F", "tiktok": "#000000", "facebook": "#0866FF", "linkedin": "#0A66C2", "youtube": "#FF0000", "whatsapp": "#25D366", "x": "#000000", "google": "#4285F4", "phone": "#24b328", "email": "#1877E0", "web": "#7B2FBE", "location": "#E5352B", "calendar": "#24b328", "star": "#F5B800"};
+var ICON_COLORS={"mobile": "#24b328", "instagram": "#E4405F", "tiktok": "#000000", "facebook": "#0866FF", "linkedin": "#0A66C2", "youtube": "#FF0000", "whatsapp": "#25D366", "x": "#000000", "google": "#4285F4", "phone": "#24b328", "email": "#1877E0", "web": "#1A73E8", "location": "#E5352B", "calendar": "#24b328", "star": "#F5B800"};
 var ICON_STYLES=[["brand","Official app icons"],["circle","Colour circles"],["square","Colour squares"],["dark","Dark circles"],["grey","Grey circles"],["glyph","Brand colour"],["glyph-dark","Dark"],["glyph-grey","Grey"],["glyph-white","White (for dark)"],["outline","Colour outline"]];
 function iconSvgBase(name,style){
   var p=ICON_PATHS[name],c=ICON_COLORS[name],bg=null,fg="#ffffff",defs="",shape="",inner;
@@ -1072,7 +1072,9 @@ function url(u){u=String(u||"").trim();if(!u)return"";if(/^(https?:|mailto:|tel:
 function socialUrl(k,v){v=String(v||"").trim();if(!v)return"";if(/^https?:\/\//i.test(v))return v;if(/^[\w.-]+\.[a-z]{2,}\//i.test(v))return"https://"+v;var h=v.replace(/^@/,"");
   if(k==="whatsapp")return"https://wa.me/"+v.replace(/\D/g,"");
   return{instagram:"https://instagram.com/"+h,tiktok:"https://www.tiktok.com/@"+h,facebook:"https://facebook.com/"+h,linkedin:"https://www.linkedin.com/company/"+h,youtube:"https://www.youtube.com/@"+h,x:"https://x.com/"+h,google:url(v)}[k]}
-function iconSrc(name,style,mode,lv){lv=+lv||0;return mode==="email"?HOST+style+"-"+name+(lv?"-e"+lv:"")+".png?v=2":"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(iconSvg(name,style,lv))}
+/* a new ?v= when an icon's picture changes, so email apps (and Gmail's picture cache) fetch the new one: web went purple → blue */
+var ICON_V={web:3};
+function iconSrc(name,style,mode,lv){lv=+lv||0;return mode==="email"?HOST+style+"-"+name+(lv?"-e"+lv:"")+".png?v="+(ICON_V[name]||2):"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(iconSvg(name,style,lv))}
 function T(extra){return'<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;'+(extra||"")+'">'}
 function img(src,w,h,alt,extra){return'<img src="'+esc(src)+'" width="'+w+'" height="'+h+'" alt="'+esc(alt)+'" style="display:block;border:0;width:'+w+'px;height:'+h+'px;'+(extra||"")+'">'}
 function logoHtml(mode,w){return mode==="email"?logoInner(mode,w):'<div data-edit="logo" style="display:inline-block;">'+logoInner(mode,w)+'</div>'}
@@ -1136,11 +1138,19 @@ function btnFs(){return +S.btnFont||(S.textSize-1)}
 function btnPadY(){var v=S.btnPadY;return v==null||v===""||isNaN(+v)?8:Math.max(1,Math.min(16,+v))}
 function button(href,label,icon,mode,col){var c=Object.assign({},S.colors);if(col)c.button=col;var ic=icon?'<img src="'+esc(iconSrc(icon,S.btnStyle==="filled"?"glyph-white":"glyph",mode))+'" width="14" height="14" alt="" style="display:inline-block;border:0;width:14px;height:14px;vertical-align:-2px;margin-right:6px;">':"";
   if(S.btnStyle==="link")return'<span style="white-space:nowrap;">'+a(href,ic+label,c.button,true)+'</span>';
-  var filled=S.btnStyle==="filled";
-  return'<a href="'+esc(href)+'" style="display:inline-block;padding:'+btnPadY()+'px '+(S.btnPadX==null?14:S.btnPadX)+'px;background:'+(filled?c.button:"transparent")+';color:'+(filled?"#ffffff":c.button)+';border:1.5px solid '+c.button+';border-radius:'+S.btnRadius+'px;font-size:'+btnFs()+'px;font-weight:bold;line-height:16px;text-decoration:none;white-space:nowrap;'+ebBtn(filled)+'">'+ic+label+'</a>'}
+  var filled=S.btnStyle==="filled",py=btnPadY(),px=(S.btnPadX==null?14:S.btnPadX);
+  /* Outlook on Windows ignores a link's background and padding, which left white words on white: the colour and border sit on the
+     table cell (bgcolor), mso-padding-alt gives Outlook the size, and the link keeps its padding so the whole button is clickable elsewhere */
+  var fs=btnFs(),txt=String(label).replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").replace(/&amp;/g,"&"),cv=button.cv||(button.cv=document.createElement("canvas").getContext("2d"));cv.font="bold "+fs+"px "+(S.font||"Arial");
+  var vw=Math.ceil(cv.measureText(txt).width+(icon?20:0)+2*px+4),vh=16+2*py+3,arc=Math.min(50,Math.round(100*(+S.btnRadius||0)/vh));
+  /* Outlook on Windows draws this rounded shape (VML) instead; every other app ignores it and shows the button below */
+  var vml='<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="'+esc(href)+'" style="height:'+vh+'px;v-text-anchor:middle;width:'+vw+'px;" arcsize="'+arc+'%" strokecolor="'+c.button+'" strokeweight="1.5px" fillcolor="'+(filled?c.button:"#ffffff")+'"'+(filled?'':' filled="f"')+'><w:anchorlock/><center style="color:'+(filled?"#ffffff":c.button)+';font-family:'+(S.font||"Arial")+';font-size:'+fs+'px;font-weight:bold;">'+label+'</center></v:roundrect><![endif]-->';
+  return vml+'<!--[if !mso]><!--><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td align="center" valign="middle"'+(filled?' bgcolor="'+c.button+'"':'')+' style="'+(filled?'background:'+c.button+';':'')+'border:1.5px solid '+c.button+';border-radius:'+S.btnRadius+'px;mso-padding-alt:'+py+'px '+px+'px;'+ebBtn(filled)+'"><a href="'+esc(href)+'" style="display:inline-block;padding:'+py+'px '+px+'px;color:'+(filled?"#ffffff":c.button)+';border-radius:'+S.btnRadius+'px;font-size:'+btnFs()+'px;font-weight:bold;line-height:16px;mso-line-height-rule:exactly;text-decoration:none;white-space:nowrap;">'+ic+label+'</a></td></tr></table><!--<![endif]-->'}
 function contactIcon(kind,mode,csz){var st=S.contactIcons;if(st==="none")return"";var sz=Math.max(13,Math.round((csz||S.textSize)*1.15));
   if(st==="letters"){var pp=pal(),L={mobile:["M",pp[3%pp.length]],phone:["P",pp[2%pp.length]],email:["E",pp[4%pp.length]],web:["W",pp[5%pp.length]],location:["A",pp[0]]}[kind];return'<b style="color:'+(S.contactLabels?S.colors.letters:L[1])+';font-size:'+(csz||S.textSize)+'px;">'+L[0]+'</b>'}
   return'<img src="'+esc(iconSrc(kind,st,mode,embL("icons")))+'" width="'+sz+'" height="'+sz+'" alt="" style="display:block;border:0;width:'+sz+'px;height:'+sz+'px;">'}
+/* phone numbers never break across two lines, even where an email app drops white-space:nowrap (the Gmail phone app squeezed "+64 22 / 024 7888") */
+function nbsp(t){return String(t).replace(/ /g,"&nbsp;")}
 function tel(n){return"tel:"+n.replace(/[^\d+]/g,"")}
 function st(id){return S.st[id]||{}}
 function fx(id,col,size,bold,italic){var o=st(id);return'color:'+(o.color||col)+';font-size:'+(o.size||size)+'px;line-height:'+Math.round((o.size||size)*1.4)+'px;font-weight:'+((o.bold!==undefined?o.bold:bold)?"bold":"normal")+';font-style:'+((o.italic!==undefined?o.italic:italic)?"italic":"normal")+';'}
@@ -1151,17 +1161,17 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
   if(id==="contact"){var it=[],cs0=st("contact"),csz=cs0.size||S.textSize;c=Object.assign({},c);if(cs0.color)c.link=cs0.color;
     var add=function(kind,html){it.push({ic:contactIcon(kind,mode,csz),tx:html,k:kind})};
     contactOrder().filter(function(k){return(S.hideC||[]).indexOf(k)<0}).forEach(function(k){
-      if(k==="mobile"&&S.mobile)add("mobile",a(tel(S.mobile),esc(S.mobile),c.link));
-      if(k==="phone"&&S.phone)add("phone",a(tel(S.phone),esc(S.phone),c.link));
+      if(k==="mobile"&&S.mobile)add("mobile",a(tel(S.mobile),nbsp(esc(S.mobile)),c.link));
+      if(k==="phone"&&S.phone)add("phone",a(tel(S.phone),nbsp(esc(S.phone)),c.link));
       if(k==="email"&&S.email)add("email",a("mailto:"+S.email,esc(S.email),c.link));
       if(k==="web"&&S.website)add("web",a(url(S.website),esc(S.website.replace(/^https?:\/\//,"").replace(/\/$/,"")),c.link));
       if(k==="location"&&S.location){var al=addrLines(S.location,S.contactLayout!=="line");add("location",'<span style="color:'+c.text+';">'+al.map(esc).join("<br>")+'</span>');if(al.length>1)it[it.length-1].two=true}});
     if(!it.length)return"";
     /* icon and words sit in their own table cells, both centred on the same line, so they line up in every inbox */
-    var ts='font-size:'+csz+'px;line-height:'+Math.round(csz*1.35)+'px;white-space:nowrap;'+(cs0.bold?"font-weight:bold;":"")+(cs0.italic?"font-style:italic;":"");
+    var ts='font-size:'+csz+'px;line-height:'+Math.round(csz*1.35)+'px;mso-line-height-rule:exactly;white-space:nowrap;'+(cs0.bold?"font-weight:bold;":"")+(cs0.italic?"font-style:italic;":"");
     /* the same space between every label and its text: letters are narrower than icons, so their cell is narrower too */
     var icw=it[0].ic?(S.contactIcons==="letters"?Math.round(csz*0.95):Math.max(13,Math.round(csz*1.15)))+cIconGap():0;
-    var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="'+(x.two?"top":"middle")+'" style="width:'+icw+'px;vertical-align:'+(x.two?"top":"middle")+';padding:0;line-height:0;font-size:0;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
+    var icCell=function(x){return x.ic?'<td width="'+icw+'" valign="'+(x.two?"top":"middle")+'" style="width:'+icw+'px;vertical-align:'+(x.two?"top":"middle")+';padding:0;line-height:0;font-size:0;mso-line-height-rule:exactly;">'+x.ic.replace('<b style="','<b style="line-height:'+Math.round(csz*1.35)+'px;')+'</td>':''};
     var txCell=function(x){return'<td valign="middle" style="vertical-align:middle;padding:0;'+ts+'">'+x.tx+'</td>'};
     var g=contactGap(),vpad=Math.max(0,Math.round((S.contactLayout==="pairs"||S.contactLayout==="smart"?Math.max(1,Math.round(csz*0.18)):g)/2)),ctr=S.align==="center",TB=T(ctr?"margin:0 auto;":"");
     if(S.contactLayout==="line")return flowRow(it.map(function(x,i){return{h:T()+'<tr>'+icCell(x)+txCell(x)+(i<it.length-1?(cSep()?'<td valign="middle" style="vertical-align:middle;padding:0 '+g+'px;color:'+c.muted+';'+ts+'">'+esc(cSep())+'</td>':'<td style="width:'+g+'px;font-size:0;line-height:0;">&nbsp;</td>'):'')+'</tr></table>'}}),ctr?"center":"left");
@@ -1171,6 +1181,14 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
         if(x2&&x1.k!=="location"&&x2.k!=="location"&&plen(x1)+plen(x2)<=30){grp.push([x1,x2]);q++}else grp.push([x1])}}
     else for(var q=0;q<it.length;q+=per)grp.push(it.slice(q,q+per));
     var allCols=per===2?2*(icw?2:1)+1:0;
+    /* two to a line, but never squeezed: each detail is its own block that sits beside the other when there's room and drops
+       underneath on a narrow phone screen (Gmail and Outlook phone apps ignore the phone layout, so this has to happen by itself).
+       The first column is as wide as its widest detail, so the second column still lines up on a laptop */
+    if(per===2||S.contactLayout==="smart"){var cv=block.cv||(block.cv=document.createElement("canvas").getContext("2d"));cv.font=(cs0.bold?"bold ":"")+csz+"px "+(S.font||"Arial");
+      var tw=function(x){return Math.ceil(cv.measureText(x.tx.replace(/<[^>]+>/g,"").replace(/&nbsp;/g," ").replace(/&amp;/g,"&")).width)+icw+2},c1=0;
+      grp.forEach(function(r){if(r.length===2)c1=Math.max(c1,tw(r[0]))});
+      var item=function(x,w){return'<table cellpadding="0" cellspacing="0" border="0" role="presentation"'+(w?' width="'+w+'"':'')+' style="border-collapse:collapse;'+(w?'width:'+w+'px;':'')+'"><tr>'+icCell(x)+txCell(x)+'</tr></table>'};
+      return grp.map(function(r){return flowRow(r.map(function(x,k){return{h:item(x,r.length===2&&k===0?c1:0),va:"middle",pad:vpad+"px "+(k===0&&r.length===2?Math.max(g,14):0)+"px "+vpad+"px 0"}}),ctr?"center":"left")}).join("")}
     for(var gi=0;gi<grp.length;gi++){var r=grp[gi],tds=[];
       if(S.contactLayout==="smart"&&r.length===1){rows.push('<tr>'+icCell(r[0]).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(r[0]).replace('<td ','<td colspan="'+(allCols-(icw?1:0))+'" ').replace('padding:0;','padding:'+vpad+'px 0;')+'</tr>');continue}r.forEach(function(x,k){tds.push(icCell(x).replace('padding:0;','padding:'+vpad+'px 0;')+txCell(x).replace('padding:0;','padding:'+vpad+'px 0;'));if(k<per-1)tds.push('<td style="width:'+Math.max(g,14)+'px;min-width:'+Math.max(g,14)+'px;font-size:0;line-height:0;">&nbsp;</td>')});
       if(r.length<per)tds.push('<td colspan="'+(icw?2:1)+'"></td>');rows.push('<tr>'+tds.join("")+'</tr>')}
@@ -1184,14 +1202,23 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
 
     if(mode!=="email"&&!cs.length)return'<div style="font-size:11px;color:#8a90a3;border:1px dashed #c9cfe0;border-radius:6px;padding:6px 10px;display:inline-block;">Add an Instagram or TikTok username to show icons here</div>';
     if(cs.length&&SOC_COLS){var rws=[];for(var j=0;j<cs.length;j+=SOC_COLS)rws.push(cs.slice(j,j+SOC_COLS));
-      return T("margin:0 auto;")+rws.map(function(rw,ri){return'<tr><td align="center" style="text-align:center;padding:'+(ri?iconGap():0)+'px 0 0 0;">'+inlineTable(rw.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<rw.length-1?iconGap():0)+'px 0 0;">'+x+'</td>'}),true)+'</td></tr>'}).join("")+'</table>'}
-    return cs.length?inlineTable(cs.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<cs.length-1?iconGap():0)+'px 0 0;">'+x+'</td>'}),ctr):""}
+      return T("margin:0 auto;")+rws.map(function(rw,ri){return'<tr><td align="center" style="text-align:center;padding:'+(ri?iconGap():0)+'px 0 0 0;">'+inlineTable(rw.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<rw.length-1?iconGap():0)+'px 0 0;font-size:0;line-height:0;mso-line-height-rule:exactly;">'+x+'</td>'}),true)+'</td></tr>'}).join("")+'</table>'}
+    return cs.length?inlineTable(cs.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<cs.length-1?iconGap():0)+'px 0 0;font-size:0;line-height:0;mso-line-height-rule:exactly;">'+x+'</td>'}),ctr):""}
   if(id==="banner"){var bw=S.bannerW,ab=AMBS_BANNERS.filter(function(x){return x.url===S.bannerUrl||x.urlNo===S.bannerUrl})[0],src=mode==="email"?url(S.bannerUrl):(uploaded.banner?uploaded.banner.src:(ab?(ab.urlNo===S.bannerUrl?ab.previewNo:ab.preview):url(S.bannerUrl)));
     if(!src)return mode==="email"?"":'<div style="width:'+bw+'px;max-width:100%;height:'+Math.round(bw/6)+'px;border:1.5px dashed #c9cfe0;border-radius:8px;color:#8a90a3;font:12px Arial;display:flex;align-items:center;justify-content:center;">Your banner (choose one in the Banner section)</div>';
     var bh=uploaded.banner&&mode!=="email"?Math.round(bw*uploaded.banner.h/uploaded.banner.w):(ab?Math.round(bw*0.15):Math.round(bw/6));
-    var im=uploaded.banner||mode==="email"||ab?'<img src="'+esc(src)+'" width="'+bw+'" alt="'+esc(S.company||"Banner")+'" style="display:block;border:0;width:'+bw+'px;max-width:100%;height:auto;'+ebBanner()+'">':img(src,bw,bh,"Banner",ebBanner());
+    /* in the copied signature the banner is fluid: Outlook on Windows keeps the width attribute, every other app lets it shrink with a narrow
+       phone screen (a fixed width stopped the whole signature from narrowing, so the contact details couldn't wrap) */
+    var bimg=function(fluid){return'<img src="'+esc(src)+'" width="'+bw+'" alt="'+esc(S.company||"Banner")+'" style="display:block;border:0;'+(fluid?'width:100%;max-width:'+bw+'px;':'width:'+bw+'px;max-width:100%;')+'height:auto;'+ebBanner()+'">'};
+    var im=uploaded.banner||mode==="email"||ab?(mode==="email"?'<!--[if mso]>'+bimg(false)+'<![endif]--><!--[if !mso]><!-->'+bimg(true)+'<!--<![endif]-->':bimg(false)):img(src,bw,bh,"Banner",ebBanner());
     return S.bannerLink?'<a href="'+esc(url(S.bannerLink))+'" style="text-decoration:none;">'+im+'</a>':im}
-  if(id==="disclaimer")return S.disclaimer?'<div style="'+fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'max-width:'+(+S.discW||(wide?560:440))+'px;'+(S.disclaimerJustify?"text-align:justify;":"")+'">'+(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer)+'</div>':"";
+  if(id==="disclaimer"){if(!S.disclaimer)return"";
+    /* with a banner showing, the disclaimer is exactly as wide as the banner. A table with a width attribute holds that width in Outlook
+       (which ignores max-width), and max-width:100% lets it shrink with the banner on a narrow phone */
+    var dw=shown("banner")&&S.bannerUrl&&+S.bannerW?+S.bannerW:(+S.discW||(wide?560:440));
+    var dtx=(S.disclaimerLabel?'<b style="color:'+c.text+';">'+esc(S.disclaimerLabel)+'</b> ':"")+esc(S.disclaimer),dst=fx("disclaimer",c.muted,Math.max(10,S.textSize-2),false,false)+'mso-line-height-rule:exactly;'+(S.disclaimerJustify?"text-align:justify;":"");
+    /* Outlook on Windows gets a fixed-width table; everything else a block capped at the banner's width that can narrow with a phone screen */
+    return'<!--[if mso]><table cellpadding="0" cellspacing="0" border="0" role="presentation" width="'+dw+'" style="border-collapse:collapse;width:'+dw+'px;"><tr><td style="'+dst+'">'+dtx+'</td></tr></table><![endif]--><!--[if !mso]><!--><div style="max-width:'+dw+'px;'+dst+'">'+dtx+'</div><!--<![endif]-->'}
   return""}
 function rows(mode,zone){var out=[],groups=[];
   /* parts marked "join" sit on the same line as the part above them */
@@ -1332,7 +1359,7 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
   try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1;bOff.forEach(function(o){o[1]=1})}
   var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="center" style="padding:'+Math.max(8,+S.gap||10)+'px 0 0 0;text-align:center;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="center" style="padding:'+Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+'px 0 0 0;text-align:center;">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -1354,8 +1381,8 @@ function signatureInner(mode){var sul=socialUnderLogo(),socH="",so=inOrder("soci
     var ink=mode!=="email"&&S.darkOn&&S.pvMode==="dark"&&S.signoffAnimColor!=="white"?"white":S.signoffAnimColor,soSwap=mode==="email"&&darkExtras()&&S.signoffAnimColor!=="white";
     var inner=mode==="email"?'<img'+(soSwap?' class="dsl"':'')+' src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+S.signoffAnimColor+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'">'+(soSwap?'<!--[if !mso]><!--><img class="dsd" src="'+HOST+'signoff/'+fo.key+'/'+sl+'-white'+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:none;border:0;width:'+w0+'px;height:'+h0+'px;max-height:0;overflow:hidden;mso-hide:all;'+(S.align==="center"?"margin:0 auto;":"")+'"><!--<![endif]-->':'')
       :'<img class="so-img" data-fb="1" src="'+HOST+'signoff/'+fo.key+'/'+sl+'-'+ink+(anim?'.gif':'.png')+'?v=5" width="'+w0+'" height="'+h0+'" alt="'+esc(SIGNOFFS[sl].text)+'" style="display:block;border:0;width:'+w0+'px;height:'+h0+'px;'+(S.align==="center"?"margin:0 auto;":"")+'"><span class="'+(anim?"writing":"still")+' so-fb" hidden style="font-family:\''+fo.google+'\',cursive;font-size:'+Math.round(fo.px/2*k0)+'px;line-height:'+h0+'px;color:'+ANIM_INK[S.signoffAnimColor]+';">'+esc(SIGNOFFS[sl].text)+'</span>';
-    var sal=st("signoff").align||S.align;top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+sal+'" style="padding:'+(+st("signoff").dy||0)+'px 0 8px '+(+st("signoff").dx||0)+'px;text-align:'+sal+';">'+alignWrap(inner,sal)+'</td></tr>'}
-  else if(S.signoffStyle!=="none"&&S.signoff){var so=st("signoff"),sz=+so.size||soPlainSize();top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+S.align+'" style="padding:0 0 10px 0;text-align:'+S.align+';font-family:'+(S.signoffStyle==="script"?SCRIPT:S.font)+';font-size:'+sz+'px;line-height:'+Math.round(sz*1.25)+'px;color:'+(so.color||S.colors.text)+';'+(so.bold?"font-weight:bold;":"")+(so.italic?"font-style:italic;":"")+'">'+esc(S.signoff)+'</td></tr>'}
+    var sal=st("signoff").align||S.align;top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+sal+'" style="padding:'+(+st("signoff").dy||0)+'px 0 '+Math.max(0,8+(+st("signoff").gapB||0))+'px '+(+st("signoff").dx||0)+'px;text-align:'+sal+';">'+alignWrap(inner,sal)+'</td></tr>'}
+  else if(S.signoffStyle!=="none"&&S.signoff){var so=st("signoff"),sz=+so.size||soPlainSize();top='<tr><td'+(mode==="email"?"":' data-edit="signoff"')+' align="'+S.align+'" style="padding:0 0 '+Math.max(0,10+(+st("signoff").gapB||0))+'px 0;text-align:'+S.align+';font-family:'+(S.signoffStyle==="script"?SCRIPT:S.font)+';font-size:'+sz+'px;line-height:'+Math.round(sz*1.25)+'px;color:'+(so.color||S.colors.text)+';'+(so.bold?"font-weight:bold;":"")+(so.italic?"font-style:italic;":"")+'">'+esc(S.signoff)+'</td></tr>'}
   out=T("font-family:"+S.font+";"+ebText())+top+'<tr><td align="'+S.align+'" style="padding:0;">'+out+'</td></tr>'+(under?'<tr><td align="'+S.align+'" style="padding:'+underGap()+'px 0 0 0;">'+under+'</td></tr>':"")+'</table>';
   var sp0=Math.max(0,+S.sigPad||0);if(sp0)out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td style="padding:'+sp0+'px;">'+out+'</td></tr></table>';
   if(S.card!=="none")out='<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;"><tr><td'+(darkExtras()&&hexL(S.colors.cardBg)>0.75?' class="dkb"':'')+' bgcolor="'+S.colors.cardBg+'" style="background:'+S.colors.cardBg+';border-radius:12px;padding:18px 20px;'+ebCard()+'">'+out+'</td></tr></table>';
@@ -1378,8 +1405,11 @@ function withLayout(which,fn){var keep=S,kb=barH;S=canonical(keep);if(which==="m
     return fn()}finally{S=keep;barH=kb}}
 var COPY_GMAIL=false;
 function builtHtml(){return darkStyle()+builtHtml2()}
-function builtHtml2(){if(!S.mob||COPY_GMAIL)return S.mob?withLayout("lap",builtOne):builtOne();
+function builtHtml2(){if(!S.mob||COPY_GMAIL)return withLayout("lap",builtOne); /* always measure the dividing line for the layout being copied, not whatever the preview last showed */
   var lap=withLayout("lap",builtOne),mob=withLayout("mob",builtOne);
+  /* the phone layout is already hidden from Outlook as a whole: an Outlook-only marker inside it (the dark-mode sign-off) would end that
+     hiding early, and Outlook then showed the rest of the phone layout as a second signature */
+  mob=mob.replace(/<!--\[if mso\]>[\s\S]*?<!\[endif\]-->/g,"").replace(/<!--\[if !mso\]><!-->/g,"").replace(/<!--<!\[endif\]-->/g,"");
   return'<style>@media only screen and (max-width:480px){.sgd{display:none!important;max-height:0!important;overflow:hidden!important}.sgm{display:block!important;max-height:none!important;overflow:visible!important}}</style>'+
     '<div class="sgd">'+lap+'</div><!--[if !mso]><!--><div class="sgm" style="display:none;max-height:0;overflow:hidden;">'+mob+'</div><!--<![endif]-->'}
 /* the Outlook phone app squeezes small pictures inside table columns (logo, icons) to almost nothing:
@@ -1404,7 +1434,7 @@ function slim(h){
         seen[k]=v});
       for(var k in seen)out.push(k+":"+seen[k]);
       return out.length?' style="'+out.join(";")+'"':""});
-    attrs=attrs.replace(/(bgcolor|color)="#([0-9a-f])\2([0-9a-f])\3([0-9a-f])\4"/gi,'$1="#$2$3$4"');
+    attrs=attrs.replace(/ (bgcolor|color)="#([0-9a-f])\2([0-9a-f])\3([0-9a-f])\4"/gi,' $1="#$2$3$4"'); /* not fillcolor/strokecolor: Outlook's button shape wants the full colour */
     return"<"+name+attrs+">"});
   return h.replace(/>\s*\n\s*</g,"><").trim()}
 function emailHtml(){return S.useCode&&String(S.code||"").trim()?cleanCode(S.code,false):builtHtml()}
@@ -1539,7 +1569,7 @@ function cparts(){var wrap=h2('<div class="wide cparts"></div>');if(!(S.custom||
     wrap.appendChild(card)});return wrap}
 
 /* ---------- banner maker: draws a 1200 x 180 banner from your words, in your brand colours ---------- */
-var MK_ICONS={none:null,gift:"M3 8h18v4H3zM12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5",
+var MK_ICONS={none:null,offer:"M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4zM7.5 5.5a2 2 0 1 0 0 4 2 2 0 1 0 0-4z",gift:"M3 8h18v4H3zM12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5",
   calendar:"M5.5 5h13a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4",
   users:"M9 4.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6",
   megaphone:"M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13",
@@ -2556,7 +2586,10 @@ function hexN(c){c=String(c||"").trim().toLowerCase();if(/^#[0-9a-f]{3}$/.test(c
 function hexL(c){c=hexN(c);if(!c)return 1;var v=[1,3,5].map(function(i){return parseInt(c.substr(i,2),16)});return(0.2126*v[0]+0.7152*v[1]+0.0722*v[2])/255}
 var DK_AUTO={text:"#e8eaed",muted:"#bdc1c6",link:"#e8eaed"};
 function dkCol(k){var dk=S.dk||{};if(dk[k])return dk[k];return hexL(C(S.colors[k]))<0.5?DK_AUTO[k]:""}
-function darkCols(){var out=[],seen={};[["text","dkt"],["muted","dkm"],["link","dkk"]].forEach(function(x){var from=hexN(C(S.colors[x[0]]));if(!from||seen[from])return;seen[from]=1;out.push({from:from,cls:x[1],to:dkCol(x[0])})});return out}
+function darkCols(){var out=[],seen={};[["text","dkt"],["muted","dkm"],["link","dkk"]].forEach(function(x){var from=hexN(C(S.colors[x[0]]));if(!from||seen[from])return;seen[from]=1;out.push({from:from,cls:x[1],to:dkCol(x[0])})});
+  /* colours chosen for one part (Fine-tune text), on the laptop or the phone layout: a dark one turns light in dark mode too,
+     or it disappears into the dark background. The class is named after the colour, so both layouts share it */
+  [S.st,S.mob&&S.mob.st,S._lap&&S._lap.st].forEach(function(o){if(!o)return;for(var k in o){var cl=o[k]&&hexN(C(o[k].color));if(!cl||seen[cl]||hexL(cl)>=0.5)continue;seen[cl]=1;out.push({from:cl,cls:"dkc"+cl.slice(1),to:DK_AUTO.text})}});return out}
 function darkMap(){var m={};darkCols().forEach(function(x){m[x.from]=x.to});return m}
 function darkTag(h){var cols=darkCols().filter(function(x){return x.to});if(!cols.length)return h;
   return h.replace(/<(\w+)([^>]*)>/g,function(tag,name,attrs){var st=/ style="([^"]*)"/.exec(attrs);if(!st)return tag;var cm=/(?:^|;)\s*color:\s*(#[0-9a-fA-F]{3,6})/.exec(st[1]);if(!cm)return tag;
@@ -2862,6 +2895,7 @@ function tidyBar(){if(window.innerWidth<=760||document.querySelector(".bar.tidy"
   [$("kbHint"),bar.querySelector(".step")].forEach(function(x){if(x)l1.appendChild(x)});
   [$("copyCode"),$("copySig")].forEach(function(x){if(x){x.classList.add("small");c1.appendChild(x)}});
   var cg=h2('<button type="button" class="btn sec small" id="copyGm" title="Laptop layout only: Gmail removes the phone layout and has a size limit" hidden>Copy for Gmail</button>');cg.addEventListener("click",function(){copyGmail(cg)});c1.insertBefore(cg,$("copySig"));
+  var es=h2('<button type="button" class="btn sec small" id="evenSp" title="Make the space between every part the same, on laptops and phones">Even spacing</button>');es.addEventListener("click",function(){evenSpacing()});c1.insertBefore(es,cg);
   bar.querySelectorAll(".seg[data-pv]").forEach(function(x){v.appendChild(x)});
   var pg=h2('<button type="button" class="bigbtn" id="pgBtn" title="Show where a phone screen ends">📱 Phone guide</button>');pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));
   pg.addEventListener("click",function(){S.phoneGuide=S.phoneGuide===false;pg.setAttribute("aria-pressed",String(S.phoneGuide!==false));save();phoneGuide()});v.appendChild(pg);
@@ -2953,6 +2987,43 @@ function checkPics(cb){var srcs=[];emailHtml().replace(/<img[^>]+src="([^"]+)"/g
   srcs.forEach(function(u){if(IMG_OK[u]===true){if(--left===0)cb(bad);return}var im=new Image(),done=function(ok){IMG_OK[u]=ok;if(!ok)bad.push(u);if(--left===0)cb(bad)};im.onload=function(){done(true)};im.onerror=function(){done(false)};im.src=u})}
 function picName(u){if(/signoff\//.test(u))return"handwritten sign-off";if(/banner/.test(u))return"banner";if(/logo/.test(u))return"logo";if(/\/made\//.test(u))return"picture";return"icons"}
 function warnPics(bad){var names=bad.map(picName).filter(function(v,i,a){return a.indexOf(v)===i});return"Your "+names.join(", ")+" "+(names.length>1||names[0]==="icons"?"aren’t":"isn’t")+" online yet, so email apps show a broken picture. "+(bad.some(function(u){return/-e[123]\.png$/.test(u)})?"Embossed pictures go online with the next website update; until then set Embossed to Off. ":"")}
+/* Even spacing: measures what you actually see (the letters and pictures, not their boxes) and moves each part so the space
+   between every part is the same, for the laptop layout and the phone layout. Spacing is padding, which every email app keeps. */
+function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
+  var un=function(r,b){return!b?r:!r?Object.assign({},b):{l:Math.min(r.l,b.l),t:Math.min(r.t,b.t),r:Math.max(r.r,b.r),b:Math.max(r.b,b.b)}};
+  var ink=function(el){var r=null,add=function(b){if(b&&b.width>=1&&b.height>=1)r=un(r,{l:b.left,t:b.top,r:b.right,b:b.bottom})};
+    var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode())){if(!n.nodeValue.trim())continue;var rg=document.createRange();rg.selectNodeContents(n);[].forEach.call(rg.getClientRects(),add)}
+    el.querySelectorAll("img").forEach(function(i){if(getComputedStyle(i).display!=="none"&&i.offsetParent)add(i.getBoundingClientRect())});
+    /* a button's edge is its coloured background or border, not its words */
+    el.querySelectorAll("a,td").forEach(function(x){var cs=getComputedStyle(x);if(x.offsetParent&&((cs.backgroundColor&&!/rgba\(0, 0, 0, 0\)|transparent/.test(cs.backgroundColor))||parseFloat(cs.borderTopWidth)>0))add(x.getBoundingClientRect())});return r};
+  var measure=function(width){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+(width?width+"px":"max-content");document.body.appendChild(d);d.innerHTML=signature("preview");
+    /* size the dividing line the way the copied signature does (withLayout), or the layout measured here differs from the one sent */
+    for(var bi=0;bi<2;bi++){if(!d.querySelector("[data-measure]"))break;var hh=barMeasure(d);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh;d.innerHTML=signature("preview")}
+    var R={};d.querySelectorAll("[data-edit]").forEach(function(e){var k=e.dataset.edit;if(k==="line"){var b=e.getBoundingClientRect();if(b.width)R.line={l:b.left,t:b.top,r:b.right,b:b.bottom}}else{var i=ink(e);if(i)R[k]=un(R[k],i)}});d.remove();return R};
+  var pass=function(width){var R=measure(width),ch=0,sul=socialUnderLogo(),Z={};
+    S.order.forEach(function(o){if(!o[1]||!R[o[0]])return;var z=o[2];if(sul&&o[0]==="social")return;var L=(Z[z]=Z[z]||[]);if(o[3]&&L.length)L[L.length-1].ids.push(o[0]);else L.push({ids:[o[0]]})});
+    var box=function(g){return g.ids.reduce(function(r,id){return un(r,R[id])},null)};
+    var nudge=function(id,key,delta,k){delta=Math.round(delta/(k||1));if(!delta)return;S.st[id]=S.st[id]||{};S.st[id][key]=(+S.st[id][key]||0)+delta;ch++};
+    ["left","side","right"].forEach(function(z){var L=Z[z]||[];for(var i=1;i<L.length;i++){var a=box(L[i-1]),b=box(L[i]);if(!a||!b)continue;
+      var want=L[i-1].ids.indexOf("name")>=0&&L[i].ids[0]==="role"?NR:G;nudge(L[i].ids[0],"dy",want-(b.t-a.b),z==="side"?1:2)}});
+    if(sul&&R.logo&&R.social)nudge("social","gapT",G+4-(R.social.t-R.logo.b)); /* icons under the logo get a little more room, so they don't read as part of it */
+    var body=null;["left","side","right"].forEach(function(z){(Z[z]||[]).forEach(function(g){body=un(body,box(g))})});if(sul)body=un(body,R.social);
+    var prev=body;(Z.under||[]).forEach(function(g){var b=box(g);if(prev&&b)nudge(g.ids[0],"dy",G-(b.t-prev.b));if(b)prev=b});
+    if(R.signoff&&body){var want=Math.round(G-(body.t-R.signoff.b)),base=S.signoffStyle==="animated"||S.signoffStyle==="still"?8:10,cur=+((S.st.signoff||{}).gapB)||0,nb=Math.max(-base,cur+want);
+      if(nb!==cur){S.st.signoff=S.st.signoff||{};S.st.signoff.gapB=nb;ch++}
+      /* the sign-off can't come any closer: lift the top part of the column that starts highest instead */
+      var rest=cur+want-nb;if(rest<0){var top=null,tz="";["left","side"].forEach(function(z){var g=(Z[z]||[])[0],bx=g&&box(g);if(bx&&(!top||bx.t<top.t)){top=bx;tz=z;top.id=g.ids[0]}});if(top&&+((S.st[top.id]||{}).dy||0)>0)nudge(top.id,"dy",Math.max(rest,-(+S.st[top.id].dy)*(tz==="side"?1:2)),tz==="side"?1:2)}}
+    /* the same space either side of the dividing line */
+    var lft=null,sd=null;(Z.left||[]).forEach(function(g){lft=un(lft,box(g))});if(sul)lft=un(lft,R.social);(Z.side||[]).forEach(function(g){sd=un(sd,box(g))});
+    if(R.line&&lft&&sd&&S.divider!=="none"){var gl=S.lineGapL==null||S.lineGapL===""?18:+S.lineGapL,gr=S.lineGapR==null||S.lineGapR===""?18:+S.lineGapR,
+      d=Math.round(((sd.l-R.line.r)-(R.line.l-lft.r))/2);if(d&&gl+d>=0&&gr-d>=0){S.lineGapL=gl+d;S.lineGapR=gr-d;ch++}}
+    return ch};
+  var run=function(width){for(var i=0;i<PASSES;i++)if(!pass(width))break};
+  var wasMob=S._active==="mob",c=canonical(S),keep=S,kb=barH;
+  try{S=c;run(0);
+    if(c.mob){S=canonical(c);Object.assign(S,JSON.parse(JSON.stringify(c.mob)));run(PHONE_W);c.mob.st=S.st;c.mob.lineGapL=S.lineGapL;c.mob.lineGapR=S.lineGapR}
+    S=c}catch(e){S=keep;throw e}finally{barH=kb}
+  if(wasMob)syncActive();save();update();toast("Even spacing: "+G+"px between every part"+(c.mob?", on laptops and phones.":"."))}
 function copyGmail(b){COPY_GMAIL=true;try{copySig(b)}finally{COPY_GMAIL=false}}
 function gmailHtml(){COPY_GMAIL=true;try{return emailHtml()}finally{COPY_GMAIL=false}}
 function copySig(b){b=b||$("copySig");var html=emailHtml(),clip=$("clip");var off=offline();checkPics(function(bad){if(bad.length)toast(warnPics(bad))});if(off.length)toast("Heads up: your "+off.map(function(i){return i.label}).join(" and ")+" isn’t online yet, so it’s left out. Go to Copy and use → Put it online.");else if(!COPY_GMAIL&&html.length>10000&&gmailHtml().length<=10000)toast("Copied both layouts for Outlook and Apple Mail. For Gmail, press Copy for Gmail: it fits Gmail’s 10,000 limit.");
