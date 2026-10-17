@@ -3159,7 +3159,7 @@ body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
 .wants{margin:0 0 16px}.wants .wz-h4{margin:6px 0 4px}.wants .note{margin:0 0 8px}
 .wantc{min-width:0}.wantc.open{grid-column:1/-1}.wantsoc{grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr))}.wantsoc .want{min-height:56px;padding:8px 12px;gap:10px}
 .want .wsi{display:block;width:24px;height:24px}.want .wt small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.wantin{display:grid;gap:8px;margin:6px 2px 2px}.wantf{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}.wantf input{box-sizing:border-box;width:100%;min-height:44px;font-size:16px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel,#fff);color:var(--ink)}
+.wantin{display:grid;gap:8px;margin:6px 2px 2px}.wantf{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}.wantf textarea{box-sizing:border-box;width:100%;font:inherit;font-size:16px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel,#fff);color:var(--ink)}.wantf input{box-sizing:border-box;width:100%;min-height:44px;font-size:16px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel,#fff);color:var(--ink)}
 .sdlg.pmove{background:rgba(20,23,43,.12)}.pmove .sbox{max-height:58vh;overflow:auto}.pmneed{display:grid;gap:8px;padding:12px;margin:0 0 14px;border:1.5px solid #24b328;border-radius:14px;background:rgba(36,179,40,.06)}.pmneed .pmok{min-height:44px}.pmchips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}.pmchip{min-height:44px;font-size:15px}.allord li.pmnew{outline:2px solid #24b328;border-radius:10px}
 .fbplain .fbi{cursor:default;padding-left:14px}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
@@ -3278,10 +3278,10 @@ function wantCard(key,icon,title,sub,fields){var c=h2('<div class="wantc"></div>
   b=h2('<button type="button" class="want" aria-pressed="'+on()+'"><span class="wi" aria-hidden="true">'+icon+'</span><span class="wt"><b>'+esc(title)+'</b><small></small></span><span class="wk" aria-hidden="true"></span></button>'),sm=b.querySelector("small"),box=h2('<div class="wantin"></div>');
   var subNow=function(){var v=fields&&fields.length?fields.map(function(f){return S[f.k]||(f.get?f.get():"")}).filter(Boolean).join(" · "):"";sm.textContent=v||sub||"";sm.hidden=!sm.textContent};
   var need=function(){return fields&&fields.some(function(f){return!(f.get?f.get():S[f.k])})};
-  var drawBox=function(open){box.innerHTML="";box.hidden=!open;c.classList.toggle("open",!!open);if(!open)return;fields.forEach(function(f){var l=h2('<label class="wantf"><span>'+esc(f.l)+'</span><input type="'+(f.t||"text")+'" autocomplete="off" placeholder="'+esc(f.ph||"")+'"></label>'),i=l.querySelector("input");i.value=(f.get?f.get():S[f.k])||"";
+  var drawBox=function(open){box.innerHTML="";box.hidden=!open;c.classList.toggle("open",!!open);if(!open)return;fields.forEach(function(f){var l=h2('<label class="wantf"><span>'+esc(f.l)+'</span>'+(f.t==="area"?'<textarea rows="3" placeholder="'+esc(f.ph||"")+'"></textarea>':'<input type="'+(f.t||"text")+'" autocomplete="off" placeholder="'+esc(f.ph||"")+'">')+'</label>'),i=l.querySelector("input,textarea");i.value=(f.get?f.get():S[f.k])||"";
     i.addEventListener("input",function(){if(f.set)f.set(i.value.trim());else S[f.k]=i.value.trim();subNow();save();update()});box.appendChild(l)})};
-  b.addEventListener("click",function(){WANT[key]=!on();b.setAttribute("aria-pressed",String(on()));drawBox(on()&&!!fields&&need());wantsApplyNow();if(!box.hidden){var i=box.querySelector("input");if(i)i.focus()}});
-  subNow();drawBox(false);c.appendChild(b);c.appendChild(box);return c}
+  b.addEventListener("click",function(){WANT[key]=!on();b.setAttribute("aria-pressed",String(on()));drawBox(on()&&!!fields);wantsApplyNow();if(!box.hidden){var ins=[].slice.call(box.querySelectorAll("input,textarea")),i=ins.filter(function(x){return!x.value})[0]||ins[0];if(i){i.focus();if(i.select&&i.value)i.select()}}});
+  subNow();drawBox(on()&&!!fields&&need());c.appendChild(b);c.appendChild(box);return c}
 function wantGroup(body,title,note,cls){var s=h2('<section class="wants"><h4 class="wz-h4">'+esc(title)+'</h4>'+(note?'<p class="note">'+esc(note)+'</p>':'')+'<div class="wantg'+(cls?" "+cls:"")+'" role="group" aria-label="'+esc(title)+'"></div></section>');body.appendChild(s);return s.querySelector(".wantg")}
 function wantsRender(body){if(!body)return;if(!WANT)WANT=wantNow();body.innerHTML="";
   var g=wantGroup(body,"Your contact details");
@@ -3292,7 +3292,8 @@ function wantsRender(body){if(!body)return;if(!WANT)WANT=wantNow();body.innerHTM
   g=wantGroup(body,"Buttons");
   WANT_BK.forEach(function(k){var d=WANT_B[k];g.appendChild(wantCard("b_"+k,d[0],d[1],"",[{k:d[2],l:"Button words",ph:d[4]},{k:d[3],l:"Link",ph:"https://…",t:"url"}]))});
   g=wantGroup(body,"Pictures and extras");
-  WANTS.forEach(function(w){g.appendChild(wantCard(w[0],w[1],w[2],w[3]))});
+  var WF={tagline:[{k:"tagline",l:"Your tagline",ph:"A short line about what you do"}],disclaimer:[{k:"disclaimer",l:"Disclaimer words",ph:defaults().disclaimer,t:"area"}]};
+  WANTS.forEach(function(w){g.appendChild(wantCard(w[0],w[1],w[2],w[3],WF[w[0]]))});
   var ow=h2('<div class="wantord"><h4 class="wz-h4">Put them in order</h4><p class="note">Drag ⠿ or use ▲▼. Choose beside your details or underneath, and same line as the part above. The designs you see next keep this order.</p></div>');
   ow.appendChild(allOrder(function(){WANT_ORDER=S.order.filter(function(o){return!/^(logo|photo)$/.test(o[0])}).map(function(o){return[o[0],o[2],o[3]]});save();update();var y=window.scrollY,pb=document.querySelector(".panel"),y3=pb?pb.scrollTop:0;wantsRender(body);window.scrollTo(0,y);if(pb)pb.scrollTop=y3}));
   body.appendChild(ow);body.appendChild(h2('<p class="note">You can still add, remove or move any part later.</p>'))}
