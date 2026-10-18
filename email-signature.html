@@ -1148,6 +1148,11 @@ function ebBox(){var k=EB();if(!k)return"";return"box-shadow:0 "+Math.round(k*0.
 function ebCard(){var k=EB();if(!k)return"";var dk=S.card==="dark";return"box-shadow:0 "+Math.round(k*0.8)+"px "+Math.round(k*2.4)+"px -"+Math.round(k/3)+"px rgba(20,23,43,"+(.04*k).toFixed(2)+"),inset 0 1px 0 rgba(255,255,255,"+(dk?.1:.9)+"),inset 0 -2px 0 rgba(0,0,0,"+(.012*k).toFixed(3)+");border:1px solid "+(dk?"rgba(255,255,255,.08)":"rgba(20,23,43,.06)")+";"}
 function inlineTable(cells,center){return T(center?"margin:0 auto;":"")+'<tr>'+cells.join("")+'</tr></table>'}
 function btnFs(){return +S.btnFont||(S.textSize-1)}
+/* a button's own look (S.btnOwn[id]: btnStyle, btnPadX, btnPadY, btnFont, btnRadius, emb) over the look shared by all buttons */
+var BTN_LOOK=["btnStyle","btnPadX","btnPadY","btnFont","btnRadius"];
+function withBtn(id,fn){var o=S.btnOwn&&S.btnOwn[id];if(!o)return fn();var keep={},ke=S.emb;
+  BTN_LOOK.forEach(function(k){keep[k]=S[k];if(o[k]!=null)S[k]=o[k]});if(o.emb!=null)S.emb=Object.assign({},S.emb,{btn:o.emb});
+  try{return fn()}finally{BTN_LOOK.forEach(function(k){S[k]=keep[k]});S.emb=ke}}
 function btnPadY(){var v=S.btnPadY;return v==null||v===""||isNaN(+v)?8:Math.max(1,Math.min(16,+v))}
 function button(href,label,icon,mode,col){var c=Object.assign({},S.colors);if(col)c.button=col;var ic=icon?'<img src="'+esc(iconSrc(icon,S.btnStyle==="filled"?"glyph-white":"glyph",mode))+'" width="14" height="14" alt="" style="display:inline-block;border:0;width:14px;height:14px;vertical-align:-2px;margin-right:6px;">':"";
   if(S.btnStyle==="link")return'<span style="white-space:nowrap;">'+a(href,ic+label,c.button,true)+'</span>';
@@ -1208,9 +1213,9 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
     return TB+rows.join("")+'</table>'}
   if(id==="tagline")return S.tagline?'<div style="'+fx("tagline",c.muted,S.textSize-1,false,false)+(+S.tagW?'max-width:'+(+S.tagW)+'px;':'')+'">'+esc(S.tagline)+'</div>':"";
   if(id==="rainbow")return hbar(S.rainbowW,3);
-  if(id==="book")return S.bookLabel&&S.bookUrl?btnWrap(button(url(S.bookUrl),esc(S.bookLabel),S.bookIcon==="calendar"?"calendar":null,mode,c.button)):"";
-  if(id==="review"){if(!(S.reviewLabel&&S.reviewUrl))return"";var rc=c.reviewBtn||c.button,star='<span style="color:'+(S.btnStyle==="filled"&&/^#?f5b800$/i.test(rc)?"#ffffff":"#F5B800")+';">★</span>&nbsp;';return btnWrap(button(url(S.reviewUrl),star+esc(S.reviewLabel),null,mode,rc))}
-  if(id==="extra")return S.extraLabel&&S.extraUrl?btnWrap(button(url(S.extraUrl),esc(S.extraLabel),null,mode,c.extraBtn||c.button)):"";
+  if(id==="book")return withBtn("book",function(){return S.bookLabel&&S.bookUrl?btnWrap(button(url(S.bookUrl),esc(S.bookLabel),S.bookIcon==="calendar"?"calendar":null,mode,c.button)):""});
+  if(id==="review")return withBtn("review",function(){if(!(S.reviewLabel&&S.reviewUrl))return"";var rc=c.reviewBtn||c.button,star='<span style="color:'+(S.btnStyle==="filled"&&/^#?f5b800$/i.test(rc)?"#ffffff":"#F5B800")+';">★</span>&nbsp;';return btnWrap(button(url(S.reviewUrl),star+esc(S.reviewLabel),null,mode,rc))});
+  if(id==="extra")return withBtn("extra",function(){return S.extraLabel&&S.extraUrl?btnWrap(button(url(S.extraUrl),esc(S.extraLabel),null,mode,c.extraBtn||c.button)):""});
   if(id==="social"){var sz=S.iconSize,cs=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).map(function(k){return'<a href="'+esc(socialUrl(k,S.social[k]))+'" style="text-decoration:none;">'+img(iconSrc(k,S.iconStyle,mode,embL("icons")),sz,sz,SOCIAL_NAME[k])+'</a>'});
 
     if(mode!=="email"&&!cs.length)return'<div style="font-size:11px;color:#8a90a3;border:1px dashed #c9cfe0;border-radius:6px;padding:6px 10px;display:inline-block;">Add an Instagram or TikTok username to show icons here</div>';
@@ -1535,8 +1540,9 @@ var ITEM={
 };
 function inOrder(id){return S.order.filter(function(o){return o[0]===id})[0]}
 function shown(id){var o=inOrder(id);if(o)return!!o[1];if(id==="signoff")return S.signoffStyle!=="none";if(id==="photo")return S.photoShow;if(id==="logo")return S.logoShow;return true}
-function getP(path){if(path==="logoWhere")return S.logoShow?S.logoPos:"off";return path.split(".").reduce(function(o,k){return o==null?undefined:o[k]},S)}
+function getP(path){if(path==="logoWhere")return S.logoShow?S.logoPos:"off";var bo=/^btnOwn\.(\w+)\.(\w+)$/.exec(path);if(bo){var ov=S.btnOwn&&S.btnOwn[bo[1]]&&S.btnOwn[bo[1]][bo[2]];return ov!=null?ov:getP(bo[2]==="emb"?"emb.btn":bo[2])}return path.split(".").reduce(function(o,k){return o==null?undefined:o[k]},S)}
 function setP(path,v){
+  if(S.btnOwn&&(BTN_LOOK.indexOf(path)>=0||path==="emb.btn"))Object.keys(S.btnOwn).forEach(function(id){delete S.btnOwn[id][path==="emb.btn"?"emb":path]});
   /* the review and other buttons borrow the booking colour until they have their own: keep theirs when the booking colour changes */
   if(path==="colors.button"&&S.colors&&v!==S.colors.button)["reviewBtn","extraBtn"].forEach(function(k){if(!S.colors[k])S.colors[k]=S.colors.button});
   if(path==="logoWhere"){S.logoShow=v!=="off";if(S.logoShow)S.logoPos=v;if(v==="social")inOrder("social")[1]=1;placeMedia(S,"logo",true);S.logoMatch=v==="social";return}
@@ -1832,7 +1838,7 @@ function openItem(id){id=partKey(id);var i=stepOf(id);if(i<0)return;var isC=Stri
   go(i,id);if(isC)setTimeout(function(){var cp=document.querySelector('.cpart[data-cid="'+id+'"]');if(cp){cp.scrollIntoView({block:"nearest",behavior:"smooth"});cp.classList.add("flash");setTimeout(function(){cp.classList.remove("flash")},1400)}},60)}
 var SIMPLE_PARTS=["logo","name","role","contact","tagline","actions","social","banner","disclaimer","rainbow","signoff","photo"],MORE_OPEN={};
 function isAdvField(f){var t=f[0],k=String(f[1]||"");if(t==="note"||t==="logomatch"||t==="blogo")return true;
-  return/^emb\./.test(k)||/^(logoBg|logoUrl|photoUrl|bannerUrl|bannerLink|btnGap|pieceGap|iconGap|btnPadX|btnPadY|btnFont|bookIcon|contactLabels|disclaimerJustify|btnRadius|disclaimerLabel)$/.test(k)||/^colors\.reviewBtn|^colors\.extraBtn/.test(k)}
+  return/^emb\./.test(k)||/^(logoBg|logoUrl|photoUrl|bannerUrl|bannerLink|btnGap|pieceGap|iconGap|btnPadX|btnPadY|btnFont|bookIcon|contactLabels|disclaimerJustify|btnRadius|disclaimerLabel)$/.test(k)||/^btnOwn\.\w+\.(btnPadX|btnPadY|btnFont|btnRadius|emb)$/.test(k)||/^colors\.reviewBtn|^colors\.extraBtn/.test(k)}
 function renderPart(id,container,titled){var fields=(ITEM[id]?ITEM[id]():[]).concat(inOrder(id)||id==="actions"||id==="signoff"?[["place",id==="actions"?["book","review","extra"]:[id]]]:[]),o=inOrder(id),name=(PARTS.filter(function(p){return p[0]===id})[0]||[id,""])[1];
   var box=h2('<div class="part" data-part="'+id+'"></div>');container.appendChild(box);
   var tools=o?'<span class="acts2"><button type="button" data-a="up" aria-label="Move up">▲</button><button type="button" data-a="down" aria-label="Move down">▼</button><button type="button" data-a="toggle">'+(o[1]?"Hide":"Show")+'</button></span>':'';
@@ -3596,10 +3602,12 @@ function oneRefresh(){var sh=document.querySelector(".esheet:not(.out)");if(sh){
   var y2=window.scrollY,pb=document.querySelector(".panel"),y3=pb?pb.scrollTop:0;go(stepId("edit"));window.scrollTo(0,y2);if(pb)pb.scrollTop=y3}
 /* ---------- each button has its own settings (words, link, colour, icon), plus the look all buttons share ---------- */
 var BTN_SHARED=["btnStyle","btnPadX","btnPadY","btnFont","btnRadius","emb.btn","btnGap","pieceGap"];
-(function(){var all=function(){return ITEM.actions()},pick=function(k){return all().filter(function(f){return f[1]===k})[0]},sh=function(){return[["note","Shared by all your buttons:"]].concat(all().filter(function(f){return BTN_SHARED.indexOf(f[1])>=0}))};
-  ITEM.book=function(){var c=pick("colors.button")||["color","colors.button","Colour"];return[["text","bookLabel","Words on the button"],["text","bookUrl","Link"],["color",c[1],"Button colour"].concat(c.slice(3)),pick("bookIcon")].filter(Boolean).concat(sh())};
-  ITEM.review=function(){var c=pick("colors.reviewBtn")||["color","colors.reviewBtn","Colour"];return[["text","reviewLabel","Words on the button"],["text","reviewUrl","Link (your Google review page)"],["color",c[1],"Button colour"].concat(c.slice(3))].concat(sh())};
-  ITEM.extra=function(){var c=pick("colors.extraBtn")||["color","colors.extraBtn","Colour"];return[["text","extraLabel","Words on the button"],["text","extraUrl","Link"],["color",c[1],"Button colour"].concat(c.slice(3))].concat(sh())};
+(function(){var all=function(){return ITEM.actions()},pick=function(k){return all().filter(function(f){return f[1]===k})[0]},sh=function(id){var own=function(f){var k=f[1]==="emb.btn"?"emb":f[1];if(BTN_LOOK.indexOf(k)<0&&k!=="emb")return null;var g=f.slice();g[1]="btnOwn."+id+"."+k;return g};
+    var A=all().filter(function(f){return BTN_SHARED.indexOf(f[1])>=0});
+    return[["note","This button’s look:"]].concat(A.map(own).filter(Boolean)).concat([["note","Shared by all your buttons:"]]).concat(A.filter(function(f){return!own(f)}))};
+  ITEM.book=function(){var c=pick("colors.button")||["color","colors.button","Colour"];return[["text","bookLabel","Words on the button"],["text","bookUrl","Link"],["color",c[1],"Button colour"].concat(c.slice(3)),pick("bookIcon")].filter(Boolean).concat(sh("book"))};
+  ITEM.review=function(){var c=pick("colors.reviewBtn")||["color","colors.reviewBtn","Colour"];return[["text","reviewLabel","Words on the button"],["text","reviewUrl","Link (your Google review page)"],["color",c[1],"Button colour"].concat(c.slice(3))].concat(sh("review"))};
+  ITEM.extra=function(){var c=pick("colors.extraBtn")||["color","colors.extraBtn","Colour"];return[["text","extraLabel","Words on the button"],["text","extraUrl","Link"],["color",c[1],"Button colour"].concat(c.slice(3))].concat(sh("extra"))};
   PARTS.push(["book","Booking button"],["review","Review button"],["extra","Extra button"]);
   var _pk=partKey;partKey=function(p){if(document.body.classList.contains("one")&&/^(book|review|extra)$/.test(p))return p;return _pk(p)};
   var _lay=ITEM.layout;ITEM.layout=function(){var f=_lay();return document.body.classList.contains("one")?f.filter(function(x){return x[0]!=="order"}):f}})();
