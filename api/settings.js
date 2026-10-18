@@ -74,6 +74,15 @@ export default async function handler(req, res) {
       return send(res, 200, { ok: true, files: changed });
     }
 
+    if (b.action === "profiles") {
+      const list = [].concat(b.profiles || []).map((u) => String(u || "").trim()).filter(Boolean).slice(0, 12);
+      const bad = list.find((u) => !/^https:\/\/[^\s"<>]+$/.test(u));
+      if (bad) return send(res, 400, { error: "Each profile must be a full link starting with https://" });
+      if (JSON.stringify(list) === JSON.stringify(details.profiles || [])) return send(res, 400, { error: "Nothing has changed" });
+      await commitFiles(head, { [SITE_JSON]: JSON.stringify({ ...details, profiles: list }, null, 1) + "\n" }, "Editor source: social profiles" + by);
+      return send(res, 200, { ok: true });
+    }
+
     if (b.action === "analytics") {
       const id = String(b.id || "").trim().toUpperCase();
       if (id && !/^G-[A-Z0-9]{4,}$/.test(id)) return send(res, 400, { error: "The measurement ID starts with G-, like G-AB12CD34EF" });

@@ -2,5 +2,9 @@
  "phone": "+64 22 099 9578",
  "email": "hello@ambs.co.nz",
  "location": "Auckland, NZ",
- "analytics_id": "G-X0ZZ2V4GJZ"
+ "analytics_id": "G-X0ZZ2V4GJZ",
+ "profiles": [
+  "https://www.instagram.com/ambssolutions/",
+  "https://www.tiktok.com/@ambssolutions"
+ ]
 }

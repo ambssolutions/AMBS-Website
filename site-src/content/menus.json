@@ -92,6 +92,11 @@
    "key": "nav.guides"
   },
   {
+   "id": "locations",
+   "href": "/locations",
+   "label": "Where we work"
+  },
+  {
    "href": "#faq",
    "key": "nav.faq"
   }

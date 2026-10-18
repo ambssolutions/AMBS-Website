@@ -66,6 +66,22 @@
    "icon": "transport"
   },
   {
+   "section": "industries",
+   "slug": "cleaning-and-home-services",
+   "title": "Cleaning and home services",
+   "blurb": "Visit reminders, quotes from enquiry photos and invoices for repeat work.",
+   "category": "Home services",
+   "icon": "clean"
+  },
+  {
+   "section": "industries",
+   "slug": "law-firms",
+   "title": "Law firms and conveyancers",
+   "blurb": "Client onboarding, file notes from calls and key date reminders.",
+   "category": "Professional services",
+   "icon": "law"
+  },
+  {
    "section": "guides",
    "slug": "how-to-choose-what-to-automate-first",
    "title": "How to choose what to automate first",
@@ -136,26 +152,56 @@
    "blurb": "Plain-English meanings of the automation and AI terms you will hear.",
    "category": "Getting started",
    "icon": "book"
+  },
+  {
+   "section": "guides",
+   "slug": "ai-for-small-business-nz",
+   "title": "AI for small business in New Zealand",
+   "blurb": "Practical, honest ways AI can take work off a small team, and what to keep with people.",
+   "category": "Getting started",
+   "icon": "target"
+  },
+  {
+   "section": "guides",
+   "slug": "client-portals",
+   "title": "Client portals for small business",
+   "blurb": "When a portal beats email, what to put in it, and how to keep it secure.",
+   "category": "Digital tools",
+   "icon": "web"
+  },
+  {
+   "section": "locations",
+   "slug": "auckland",
+   "title": "Auckland",
+   "blurb": "AI automation, websites and portals for Auckland businesses, from the people who build them.",
+   "category": "North Island",
+   "icon": "map"
   }
  ],
  "hubs": {
   "services": {
-   "title": "Services: AI automation and digital solutions in New Zealand | Ambs Solutions",
+   "title": "AI Automation & Digital Services NZ | Ambs Solutions",
    "h1": "Automation and digital tools, built around your business",
    "lead": "Two ways we help New Zealand businesses: automations that clear the repetitive work, and digital tools that make the business easier to run and easier to find.",
    "desc": "AI and business automation, website design, staff and customer portals and live dashboards for New Zealand small businesses. Built around the tools you already use."
   },
   "industries": {
-   "title": "Industries we help with automation in New Zealand | Ambs Solutions",
+   "title": "Industries We Automate for in NZ | Ambs Solutions",
    "h1": "Automation for the way your industry actually works",
    "lead": "Every industry has its own repetitive work. Pick yours to see the tasks we usually take off first, the tools we connect, and typical estimates of the time involved.",
    "desc": "Automation for New Zealand cafés, trades, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery businesses."
   },
   "guides": {
-   "title": "Guides: automation and digital tools for NZ businesses | Ambs Solutions",
+   "title": "Automation Guides for NZ Businesses | Ambs Solutions",
    "h1": "Practical guides to automation for New Zealand businesses",
    "lead": "Practical guides on what to automate, how it works, what it takes and what to watch for. Written for owners, not engineers.",
    "desc": "Practical guides for NZ small businesses: what to automate first, invoicing, booking reminders, AI replies, app connections, dashboards and privacy."
+  },
+  "locations": {
+   "title": "Where We Work in New Zealand | Ambs Solutions",
+   "h1": "Where we work",
+   "lead": "AI automation, websites and portals for businesses across New Zealand. Based in Auckland, working nationwide. Pick your area.",
+   "desc": "Ambs Solutions helps businesses across New Zealand with AI automation, websites, portals and dashboards. See what we do in your area."
   }
  },
  "service_cards": [
