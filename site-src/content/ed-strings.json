@@ -229,5 +229,6 @@
  "ed.chat.talk.thanks": "You're welcome! Is there anything else I can help with?",
  "ed.chat.talk.time": "It's {time} in New Zealand right now.",
  "ed.chat.talk.weather": "I can't check the weather, sorry. I can help with anything about Ambs Solutions though: what we automate, prices, or booking a free session.",
- "ed.chat.talk.who": "I'm Ambs Bot, the Ambs Solutions assistant. I know our services, pricing, process and the industries we work with, and I'm here any time of day. For anything I can't answer, a real person from our team is happy to help."
+ "ed.chat.talk.who": "I'm Ambs Bot, the Ambs Solutions assistant. I know our services, pricing, process and the industries we work with, and I'm here any time of day. For anything I can't answer, a real person from our team is happy to help.",
+ "ed.menu.locations": "Where we work"
 }
