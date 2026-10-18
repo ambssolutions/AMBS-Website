@@ -1292,6 +1292,11 @@ function moveBy(id,ddx,ddy){var z=zoneOf(id);if(!z){toast("Pick a part in the pr
       if(gl+d<0||gr-d<0){toast(d<0?"The line is touching the logo.":"The line is touching the text.");return false}S.lineGapL=gl+d;S.lineGapR=gr-d}
     if(ddy){var f=lineFree();if(!f){toast("Make the line shorter (Length) to move it up or down.");return false}S.st.line=S.st.line||{};var ny=Math.max(-Math.ceil(f/2),Math.min(Math.ceil(f/2),(+S.st.line.dy||0)+ddy));if(ny===(+S.st.line.dy||0)){toast(ddy<0?"It’s at the top.":"It’s at the bottom.");return false}S.st.line.dy=ny}save();update();return true}
   S.st[id]=S.st[id]||{};var c=S.st[id];
+  var lo2=inOrder("logo"),uLs=(S.underLogo||[]).indexOf(id)>=0;
+  if(id!=="social"&&ddx&&z==="side"&&lo2&&lo2[1]&&S.logoShow!==false&&(lo2[2]==="left"||lo2[2]==="right")&&!/^(banner|disclaimer|rainbow)$/.test(id)){var towards=lo2[2]==="left"?ddx<0:ddx>0;
+    if(uLs&&!towards){S.underLogo=S.underLogo.filter(function(x){return x!==id});S.autoFit=false;save();update();toast(blockLabel(id)+" moved back next to your details.");return true}
+    if(uLs&&towards){toast("It’s under the logo. "+(lo2[2]==="left"?"▶":"◀")+" moves it back next to your details.");return false}
+    if(towards&&(+c.dx||0)<=0){S.underLogo=(S.underLogo||[]).concat([id]);S.autoFit=false;save();update();toast(blockLabel(id)+" moved under the logo. "+(lo2[2]==="left"?"▶":"◀")+" moves it back.");return true}}
   var lo1=inOrder("logo");if(id==="social"&&ddx&&z==="side"&&lo1&&lo1[1]&&S.logoShow!==false&&(lo1[2]==="left"&&ddx<0&&(+c.dx||0)<=0||lo1[2]==="right"&&ddx>0&&(+c.dx||0)>=0)){S.socialWithLogo=true;S.autoFit=false;save();update();toast("Icons moved under the logo.");return true}
   if(z==="left"||z==="right"){if(ddx){colNorm(id);var bar=S.divider!=="none",d=z==="right"?-ddx:ddx,cur=+c.dx||0,gl=bar?(+S.lineGapL||0):18,nx=cur+d;
       if(nx<0){toast("It’s at the edge already.");return false}
@@ -1380,7 +1385,11 @@ function socialUnderLogo(){var so=inOrder("social"),lo=inOrder("logo");return!!(
 var SOC_COLS=0;
 /* icons under the logo: the ◀▶ arrows shift them sideways inside the logo column */
 var SOC_TB=null;function ulP(){return+(((S.st||{}).social||{}).pad)||0}function ulAl(){var x=+((S.st||{}).social||{}).ulx||0;return x<0?"left":x>0?"right":"center"}
-function signatureInner(mode){SOC_TB=null;var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
+/* other parts (a button, the tagline…) can sit under the logo too: S.underLogo lists them */
+function ulIds(){var lo=inOrder("logo");if(!(lo&&lo[1]&&S.logoShow!==false&&(lo[2]==="left"||lo[2]==="right")))return[];return(S.underLogo||[]).filter(function(id){var o=inOrder(id);return o&&o[1]&&o[2]==="side"&&id!=="social"})}
+function signatureInner(mode){SOC_TB=null;var ulL=ulIds(),ulOs=ulL.map(inOrder),ulH=ulOs.map(function(o){var h=block(o[0],mode);return h?'<tr><td align="center" style="padding:'+Math.max(8,+S.gap||10)+'px 0 0 0;text-align:center;">'+(mode==="email"?h:'<div data-edit="'+o[0]+'">'+h+'</div>')+'</td></tr>':""}).join("");ulOs.forEach(function(o){o[1]=0});
+  try{return signatureInner2(mode,ulH)}finally{ulOs.forEach(function(o){o[1]=1})}}
+function signatureInner2(mode,ulH){var sul=socialUnderLogo(),socH="",so=inOrder("social");if(sul){var lb0=S.logoBg==="brand"?C("@p"):"",ist=S.iconStyle;if(lb0&&hexL(lb0)<0.6&&!/^(brand|square|circle)$/.test(S.iconStyle))S.iconStyle="glyph-white";/* the icons under the logo keep one row whatever the logo size (two even rows only for six or more) */var nSo=socialOrder().filter(function(k){return S.social[k]&&(S.hideS||[]).indexOf(k)<0}).length;SOC_COLS=Math.max(1,nSo<=5?nSo:Math.ceil(nSo/2));try{socH=block("social",mode)}finally{SOC_COLS=0;S.iconStyle=ist}so[1]=0}
   /* buttons can stand in their own column to the right of the details, so a long signature gets shorter */
   var bR=S.btnSide==="right"&&!S.order.some(function(o){return o[1]&&o[2]==="right"}),bOff=[],btnH="";
   if(bR){var bl=S.order.filter(function(o){return o[1]&&o[2]==="side"&&/^(book|review|extra)$/.test(o[0])}),bh=bl.map(function(o){return block(o[0],mode)}).filter(Boolean);
@@ -1388,7 +1397,7 @@ function signatureInner(mode){SOC_TB=null;var sul=socialUnderLogo(),socH="",so=i
   try{var side=content(mode,"side",true)}finally{if(sul)so[1]=1;bOff.forEach(function(o){o[1]=1})}
   var under=content(mode,"under"),ctr=S.align==="center",out,sp='<td width="16" style="width:16px;font-size:0;">&nbsp;</td>';
   var lbg=S.logoBg==="brand"?C("@p"):S.logoBg==="light"?"#f1f3f8":"";
-  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="'+ulAl()+'" style="padding:'+(Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+ulP())+'px '+ulP()+'px '+ulP()+'px '+ulP()+'px;text-align:'+ulAl()+';">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+'</td>'}
+  var colCell=function(o){var id=o[0];if(id==="logo"){var ls=st("logo"),lva=ls.valign||"middle";return'<td valign="'+lva+'"'+(socH||ulH?' align="center"':'')+(lbg&&darkExtras()&&hexL(lbg)>0.75?' class="dkb"':'')+(lbg?' bgcolor="'+lbg+'"':'')+' style="vertical-align:'+lva+';'+(lbg?'background:'+lbg+';border-radius:10px;':'')+'padding:'+colPad("logo",lva,lbg?16:0)+';">'+logoHtml(mode)+(socH?T("margin:0 auto;")+'<tr><td align="'+ulAl()+'" style="padding:'+(Math.max(0,Math.max(8,+S.gap||10)+(+st("social").gapT||0))+ulP())+'px '+ulP()+'px '+ulP()+'px '+ulP()+'px;text-align:'+ulAl()+';">'+(mode==="email"?socH:'<div data-edit="social">'+socH+'</div>')+'</td></tr></table>':'')+(ulH?T("margin:0 auto;")+ulH+'</table>':'')+'</td>'}
     var hh=block(id,mode);if(!hh)return"";var cs=st(id),va=cs.valign||(id==="photo"?"top":"middle"),al=cs.align||"left";return'<td valign="'+va+'" align="'+al+'" style="vertical-align:'+va+';text-align:'+al+';padding:'+colPad(id,va,0)+';">'+(mode==="email"||id==="photo"?hh:'<div data-edit="'+id+'">'+hh+'</div>')+'</td>'};
   var L=S.order.filter(function(o){return o[1]&&o[2]==="left"}).map(colCell).filter(Boolean),Rr=S.order.filter(function(o){return o[1]&&o[2]==="right"}).map(colCell).filter(Boolean);
   var hasPhoto=S.order.some(function(o){return o[0]==="photo"&&o[1]&&(o[2]==="left"||o[2]==="right")});
@@ -3225,6 +3234,7 @@ body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
 .ost.past{color:var(--ink)}.ost.past .osn{border-color:#24b328;color:#24b328}
 .ost[aria-current]{color:var(--ink);font-weight:800}.ost[aria-current] .osn{background:#24b328;border-color:#24b328;color:#fff}
 .ost:hover .osn{border-color:#24b328}
+.opwhere{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 12px;font-weight:600;font-size:14px}.opwhere select.aosel{height:38px;font-size:15px}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .wantnote .linkbtn{min-height:36px}
 body.one #kbHint,body.one #evenSp,body.one #pgBtn,body.one #partsPv,body.one #movePv,body.one #testPv,body.one #bigPv,body.one .pvparts{display:none!important}
@@ -3285,7 +3295,11 @@ function ogRender(body){
 function opRender(body,id){var key=partKey(id),isC=String(id).indexOf("c-")===0,name=typeof qbName==="function"?qbName(id):blockLabel(id);
   var el=h2('<div class="opart" data-kp="'+esc(String(id))+'"><div class="oph"><button type="button" class="oback">‹ All settings</button><b>'+esc(name)+'</b></div><div class="osec">Quick settings</div><div class="opq"></div><div class="osec">All settings</div><div class="opall"></div></div>');
   el.querySelector(".oback").addEventListener("click",function(){PV_PART=null;KEYPART=null;var g=ogOf(isC?"custom":key);if(g)OG_OPEN=g;try{placeGrab()}catch(e){}go(stepId("edit"))});
-  body.appendChild(el);renderPart(isC?"custom":key,el.querySelector(".opall"),false);
+  body.appendChild(el);
+  var po=inOrder(key);if(po&&!/^(logo|photo)$/.test(key)){sortOrder();var vis=S.order.filter(function(x){if(!x[1]||/^(logo|photo)$/.test(x[0]))return false;if(x===po)return true;try{return!!block(x[0],"preview")}catch(e){return true}}),k=vis.indexOf(po),prev=k>0?vis[k-1]:null,pc=placeChoices(po,prev);
+    var wr=h2('<div class="opwhere"><span>Where it goes</span><span class="aopw"><select class="aosel" aria-label="Where '+esc(name)+' goes">'+pc.ch.map(function(c){return'<option value="'+c[0]+'"'+(c[0]===pc.val?" selected":"")+'>'+esc(c[1])+'</option>'}).join("")+'</select></span></div>');
+    wr.querySelector("select").addEventListener("change",function(e){setPlace(po,e.target.value,prev);save();changed();go(stepId("edit"))});el.querySelector(".opq").before(wr)}
+  renderPart(isC?"custom":key,el.querySelector(".opall"),false);
   /* every setting for this part open at once, nothing folded away */
   el.querySelectorAll(".opall details.more").forEach(function(d){d.open=true});
   if(isC)setTimeout(function(){var cp=el.querySelector('.cpart[data-cid="'+id+'"]');if(cp){cp.scrollIntoView({block:"nearest"});cp.classList.add("flash");setTimeout(function(){cp.classList.remove("flash")},1400)}},60);
@@ -3456,6 +3470,12 @@ var BTN_SHARED=["btnStyle","btnPadX","btnPadY","btnFont","btnRadius","emb.btn","
   var _lay=ITEM.layout;ITEM.layout=function(){var f=_lay();return document.body.classList.contains("one")?f.filter(function(x){return x[0]!=="order"}):f}})();
 /* ---------- one list for every part, top to bottom: show or hide, move, beside your details or underneath, same line ---------- */
 var ZN={left:0,top:1,side:1,right:2,bottom:3,under:4};
+function placeChoices(o,prev){var lo=inOrder("logo"),logoSide=S.logoShow!==false&&lo&&lo[1]&&(lo[2]==="left"||lo[2]==="right");
+  var ul=o[0]==="social"?socialUnderLogo():(S.underLogo||[]).indexOf(o[0])>=0&&logoSide&&o[2]==="side",val=ul?"logo":(o[3]&&prev&&prev[2]===o[2]?"join":o[2]==="under"?"under":/^(left|right)$/.test(o[2])?o[2]:"side");
+  var ch=[["side","Beside your details"]];if(logoSide&&!/^(logo|photo|banner|disclaimer|rainbow)$/.test(o[0]))ch.push(["logo","Under the logo"]);if(prev)ch.push(["join","Same line as "+blockLabel(prev[0]).toLowerCase()]);ch.push(["under","Underneath everything"]);
+  if(/^(left|right)$/.test(o[2]))ch.push([o[2],o[2]==="left"?"Left column":"Right column"]);return{val:val,ch:ch}}
+function setPlace(o,v,prev){if(o[0]==="social")S.socialWithLogo=v==="logo";else{var u=(S.underLogo||[]).filter(function(x){return x!==o[0]});if(v==="logo")u.push(o[0]);S.underLogo=u}
+  if(v==="logo"){o[2]="side";o[3]=0}else if(v==="join"&&prev){o[2]=prev[2];o[3]=1}else{o[2]=v;o[3]=0}S.autoFit=false}
 function allOrder(done,opt){opt=opt||{};var box=h2('<div class="allord'+(opt.shownOnly?' aoshown':'')+'"></div>');
   var pill=function(opts,cur,on,lbl){var w=h2('<span class="aopw"><select class="aosel" aria-label="'+esc(lbl)+'">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(o[0]===cur?" selected":"")+'>'+esc(o[1])+'</option>'}).join("")+'</select></span>');w.querySelector("select").addEventListener("change",function(e){on(e.target.value)});return w};
   var fixed=h2('<ul class="sortl aofix"></ul>');
@@ -3479,11 +3499,8 @@ function allOrder(done,opt){opt=opt||{};var box=h2('<div class="allord'+(opt.sho
     var has=true;try{has=!!block(o[0],"preview")}catch(e){}if(o[1]&&!has&&/^(book|review|extra|tagline)$/.test(o[0]))li.hidden=true;
     if(opt.shownOnly&&!o[1])li.hidden=true;
     var prev=null;for(var k=i-1;k>=0;k--){var pl=ul.children[k];if(!pl.hidden){prev=disp[k];break}}
-    var swl=o[0]==="social"&&socialUnderLogo(),val=swl?"logo":(o[3]&&prev&&prev[2]===o[2]?"join":o[2]==="under"?"under":/^(left|right)$/.test(o[2])?o[2]:"side");
-    var ch=[["side","Beside your details"]];if(prev)ch.push(["join","Same line as "+blockLabel(prev[0]).toLowerCase()]);ch.push(["under","Underneath everything"]);
-    if(o[0]==="social"&&logoSide)ch.splice(1,0,["logo","Under the logo"]);if(/^(left|right)$/.test(o[2]))ch.push([o[2],o[2]==="left"?"Left column":"Right column"]);
-    li.querySelector(".st").appendChild(pill(ch,val,function(v){if(o[0]==="social")S.socialWithLogo=v==="logo";
-      if(v==="logo"){o[2]="side";o[3]=0}else if(v==="join"&&prev){o[2]=prev[2];o[3]=1}else{o[2]=v;o[3]=0}commit(disp)},"Where "+blockLabel(o[0])+" goes"))});
+    var pc=placeChoices(o,prev);
+    li.querySelector(".st").appendChild(pill(pc.ch,pc.val,function(v){setPlace(o,v,prev);commit(disp)},"Where "+blockLabel(o[0])+" goes"))});
   box.appendChild(ul);return box}
 var _onePB=partsBody;
 partsBody=function(redraw){var el=_onePB(redraw);if(!document.body.classList.contains("one"))return el;var pp=el.querySelector(".pb-p");if(!pp)return el;pp.innerHTML="";
