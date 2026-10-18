@@ -1552,7 +1552,7 @@ function h2(s){var t=document.createElement("template");t.innerHTML=s.trim();ret
 var STEPS=[
   {id:"start",sh:"Start",t:"Start",d:"Pick one way to begin. You can change anything later.",parts:["start"]},
   {id:"details",sh:"Details",t:"Check details",d:"This is what goes in your signature. Fix anything that’s wrong, then confirm.",parts:["details"]},
-  {id:"template",sh:"Template",t:"Template",d:"Pick a look. Your details and colours go straight into it."},
+  {id:"template",sh:"Template",t:"Choose a design",d:"Pick a look. Your details and colours go straight into it."},
   {id:"edit",sh:"Edit",t:"Edit and save",d:"Tap any part of your signature to change it, then save.",acc:["brand","dark","reorder","signoff","photo","logo","actions","social","custom","banner","disclaimer","style","layout","tune"]},
   {id:"copy",sh:"Copy",t:"Copy and use",d:"Copy the signature and paste it into your email."}
 ];
@@ -3298,6 +3298,28 @@ body.one .esheet input[type=text],body.one .esheet input[type=url],body.one .esh
 body.one .panel .seg,body.one .esheet .seg{flex-wrap:wrap}
 @media (max-width:760px){body.one header.top #undoBtn,body.one header.top #redoBtn,body.one header.top #sigSave{display:none!important}
   body.one .panel{padding-bottom:12px;width:calc(100% - 24px)!important;max-width:none!important;box-sizing:border-box;margin-left:12px!important;margin-right:12px!important}}
+/* professional layout pass: one size system everywhere, Save/Copy bar inside the settings column, preview beside the settings on tablets */
+body.one .pick .sw{width:var(--sw);height:var(--sw)}
+body.one .allord select.aosel{height:var(--c-s)!important;line-height:calc(var(--c-s) - 2px)}
+body.one .allord .sorti .sa,body.one .sorti .sa{width:var(--c-s);height:var(--c-s);font-size:13px}
+body.one .ogtab{min-height:var(--c-s)}
+body.one .sp-skip{min-height:var(--c-s);padding:6px 0}
+body.one .scsw span,body.one .setcol small,body.one .onecol small{font-size:12px}
+body.one .mpside .note,body.one .icons button,body.one .icons .ic b{font-size:12.5px}
+body.one .wsoc small,body.one .wantsoc small{font-size:12px}
+body.one .allord small,body.one .sorti small{font-size:12.5px}
+@media (min-width:761px){
+ body.one .panel>.obar{position:sticky;left:auto;right:auto;transform:none;bottom:10px;width:auto;margin:16px 0 0;padding:8px;border:1px solid var(--line);border-radius:16px;z-index:8;box-shadow:0 12px 0 0 var(--panel,#fff),0 -10px 24px -18px rgba(13,17,34,.5)}
+ body.one .panel>.obar button{min-height:46px;font-size:15px;white-space:nowrap}
+ body.one .panel>.obar .ob-u{flex:0 0 48px}
+}
+@media (min-width:761px) and (max-width:1023px){
+ body.one .app{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:14px!important;align-items:start}
+ body.one .app>.flow{grid-column:1/-1}
+ body.one .pv-col{position:sticky;top:8px}
+ body.one .ph .pht{flex:1 1 100%}
+ body.one .panel>.obar button{font-size:14px;gap:5px}
+}
 </style>
 <script>
 /* one-screen editor: replaces the Simple/Advanced split and the five steps with one panel of grouped settings.
@@ -3629,6 +3651,7 @@ function oneInit(){document.body.classList.add("one");
     var to=oneNext(STEPS[STEP].id,k==="nextStep");if(STEPS[STEP].id==="wants"&&k==="nextStep")wantsCommit();if(to==="edit")FLOW=null;histPush(true);save();go(stepId(to))},true)});try{if(WIZ_ON)wizOff(false)}catch(e){}
   var bar=h2('<div class="obar" role="toolbar" aria-label="Save and copy"><button type="button" class="ob-u" aria-label="Undo" title="Undo">↶</button><button type="button" class="ob-s">💾 Save</button><button type="button" class="ob-go">📋 Copy signature</button></div>');
   bar.querySelector(".ob-u").addEventListener("click",function(){histGo(-1)});bar.querySelector(".ob-s").addEventListener("click",function(){var b=$("sigSave");if(b)b.click()});bar.querySelector(".ob-go").addEventListener("click",openCopy);document.body.appendChild(bar);
+  var barHome=function(){var pn=document.querySelector(".panel"),to=window.innerWidth>760&&pn?pn:document.body;if(bar.parentNode!==to)to.appendChild(bar)};barHome();window.addEventListener("resize",barHome);
   var u=$("undoBtn"),sync=function(){bar.querySelector(".ob-u").disabled=!!(u&&u.disabled)};if(u){new MutationObserver(sync).observe(u,{attributes:true,attributeFilter:["disabled"]});sync()}
   document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest(".esheet .edone"))document.body.classList.remove("esheet-on")},true);
   var hp=document.querySelector("header.top .brandline p");if(hp)hp.textContent="Tap any part of the preview to change it. Save and copy at the bottom.";
