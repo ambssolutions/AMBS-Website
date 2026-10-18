@@ -3083,27 +3083,29 @@ function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
     /* size the dividing line the way the copied signature does (withLayout), or the layout measured here differs from the one sent */
     for(var bi=0;bi<2;bi++){if(!d.querySelector("[data-measure]"))break;var hh=barMeasure(d);if(S.photoShow)hh=Math.max(hh,S.photoSize);if(Math.abs(hh-barH)<=3)break;barH=hh;d.innerHTML=signature("preview")}
     var R={};d.querySelectorAll("[data-edit]").forEach(function(e){var k=e.dataset.edit;if(k==="line"){var b=e.getBoundingClientRect();if(b.width)R.line={l:b.left,t:b.top,r:b.right,b:b.bottom}}else{var i=ink(e);if(i)R[k]=un(R[k],i)}});d.remove();return R};
-  var pass=function(width){var R=measure(width),ch=0,sul=socialUnderLogo(),Z={};
-    S.order.forEach(function(o){if(!o[1]||!R[o[0]])return;var z=o[2];if(sul&&o[0]==="social")return;var L=(Z[z]=Z[z]||[]);if(o[3]&&L.length)L[L.length-1].ids.push(o[0]);else L.push({ids:[o[0]]})});
+  var pass=function(width){var R=measure(width),ch=0,sul=socialUnderLogo(),Z={},UL=ulIds();
+    /* parts under the logo sit in the logo's column with their own fixed gap: they are not part of the column beside it, and a nudge does nothing to them */
+    UL.forEach(function(id){if(S.st[id]&&S.st[id].dy){delete S.st[id].dy;ch++}});
+    S.order.forEach(function(o){if(!o[1]||!R[o[0]])return;var z=o[2];if(sul&&o[0]==="social")return;if(UL.indexOf(o[0])>=0)return;var L=(Z[z]=Z[z]||[]);if(o[3]&&L.length)L[L.length-1].ids.push(o[0]);else L.push({ids:[o[0]]})});
     var box=function(g){return g.ids.reduce(function(r,id){return un(r,R[id])},null)};
-    var nudge=function(id,key,delta,k){delta=Math.round(delta/(k||1));if(!delta)return;S.st[id]=S.st[id]||{};S.st[id][key]=(+S.st[id][key]||0)+delta;ch++};
+    var nudge=function(id,key,delta,k,lo){delta=Math.round(delta/(k||1));if(!delta)return;S.st[id]=S.st[id]||{};var was=+S.st[id][key]||0,nv=Math.max(lo==null?-400:Math.max(-400,lo),Math.min(600,was+delta));if(nv===was)return;S.st[id][key]=nv;ch++};
     ["left","side","right"].forEach(function(z){var L=Z[z]||[];for(var i=1;i<L.length;i++){var a=box(L[i-1]),b=box(L[i]);if(!a||!b)continue;
-      var want=L[i-1].ids.indexOf("name")>=0&&L[i].ids[0]==="role"?NR:G;nudge(L[i].ids[0],"dy",want-(b.t-a.b),z==="side"?1:2)}});
+      var want=L[i-1].ids.indexOf("name")>=0&&L[i].ids[0]==="role"?NR:G;nudge(L[i].ids[0],"dy",want-(b.t-a.b),z==="side"?1:2,-basePad(L[i].ids[0],i))}});
     /* icons under the logo line up with the button beside them (its middle); with no button they get a little more room than the
        other gaps, so they don't read as part of the logo. With the logo centred in its column, the icons move half as far as the gap grows */
     if(sul&&R.logo&&R.social){var bt=null;["book","review","extra"].forEach(function(id){var o=inOrder(id);if(o&&o[1]&&o[2]==="side"&&R[id]&&(!bt||R[id].b>bt.b))bt=R[id]});
       var lva=(S.st.logo||{}).valign||"middle",minG=8;
-      if(bt&&lva!=="bottom"){var want=((bt.t+bt.b)-(R.social.t+R.social.b))/2,k=lva==="middle"?0.5:1,gap=R.social.t-R.logo.b;
+      if(bt&&lva!=="bottom"&&!UL.length){var want=((bt.t+bt.b)-(R.social.t+R.social.b))/2,k=lva==="middle"?0.5:1,gap=R.social.t-R.logo.b;
         if(gap+want/k<minG)want=(minG-gap)*k;nudge("social","gapT",want,k)}
       else nudge("social","gapT",G+4-(R.social.t-R.logo.b))}
-    var body=null;["left","side","right"].forEach(function(z){(Z[z]||[]).forEach(function(g){body=un(body,box(g))})});if(sul)body=un(body,R.social);
+    var body=null;["left","side","right"].forEach(function(z){(Z[z]||[]).forEach(function(g){body=un(body,box(g))})});if(sul)body=un(body,R.social);UL.forEach(function(id){body=un(body,R[id])});
     var prev=body;(Z.under||[]).forEach(function(g){var b=box(g);if(prev&&b)nudge(g.ids[0],"dy",G-(b.t-prev.b));if(b)prev=b});
     if(R.signoff&&body){var want=Math.round(G-(body.t-R.signoff.b)),base=S.signoffStyle==="animated"||S.signoffStyle==="still"?8:10,cur=+((S.st.signoff||{}).gapB)||0,nb=Math.max(-base,cur+want);
       if(nb!==cur){S.st.signoff=S.st.signoff||{};S.st.signoff.gapB=nb;ch++}
       /* the sign-off can't come any closer: lift the top part of the column that starts highest instead */
       var rest=cur+want-nb;if(rest<0){var top=null,tz="";["left","side"].forEach(function(z){var g=(Z[z]||[])[0],bx=g&&box(g);if(bx&&(!top||bx.t<top.t)){top=bx;tz=z;top.id=g.ids[0]}});if(top&&+((S.st[top.id]||{}).dy||0)>0)nudge(top.id,"dy",Math.max(rest,-(+S.st[top.id].dy)*(tz==="side"?1:2)),tz==="side"?1:2)}}
     /* the same space either side of the dividing line */
-    var lft=null,sd=null;(Z.left||[]).forEach(function(g){lft=un(lft,box(g))});if(sul)lft=un(lft,R.social);(Z.side||[]).forEach(function(g){sd=un(sd,box(g))});
+    var lft=null,sd=null;(Z.left||[]).forEach(function(g){lft=un(lft,box(g))});if(sul)lft=un(lft,R.social);UL.forEach(function(id){lft=un(lft,R[id])});(Z.side||[]).forEach(function(g){sd=un(sd,box(g))});
     if(R.line&&lft&&sd&&S.divider!=="none"){var gl=S.lineGapL==null||S.lineGapL===""?18:+S.lineGapL,gr=S.lineGapR==null||S.lineGapR===""?18:+S.lineGapR,
       d=Math.round(((sd.l-R.line.r)-(R.line.l-lft.r))/2);if(d&&gl+d>=0&&gr-d>=0){S.lineGapL=gl+d;S.lineGapR=gr-d;ch++}}
     return ch};
