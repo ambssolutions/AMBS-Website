@@ -111,6 +111,7 @@ const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* other languages are fetched the first time they are picked (and when a saved choice opens the page) */
 var I18N_LOADING={};
 function loadLang(l){
+  if(window.ambsLangFont)ambsLangFont(l);
   if(I18N[l])return Promise.resolve();
   if(!I18N_LOADING[l]){
     var v=document.documentElement.getAttribute("data-i18nv")||"";

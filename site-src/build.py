@@ -64,8 +64,11 @@ def social_html():
 def ga_snippet():
     # sends page views plus the actions that matter: booking clicks, phone and email taps, booking confirmed
     if not re.match(r'^G-[A-Z0-9]{4,}$',GA_ID): return ''
-    return (f'<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>\n'
-      '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());'
+    # the tag itself loads after the page has finished loading (it is 180 KB and held phones back for a third of a second);
+    # page views and clicks before then wait in dataLayer and are sent when it arrives
+    return ('<!--ga--><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());'
+      f'(function(){{var go=function(){{var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id={GA_ID}";document.head.appendChild(s)}};'
+      'if(document.readyState==="complete")setTimeout(go,1500);else addEventListener("load",function(){setTimeout(go,1500)})})();'
       f'gtag("config","{GA_ID}");'
       'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";'
       'if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});'
