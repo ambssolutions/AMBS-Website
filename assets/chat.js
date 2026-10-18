@@ -357,7 +357,7 @@
     ["ok",/^(sweet as|sweet|nah all good|all good thanks|no worries|lol|haha+|lol ok|ok lol|haha ok|ok+|okay|k|cool|nice|great|awesome|perfect|sweet|sounds good|got it|alright|all good|good to know|noted|interesting|wow|amazing|fair enough|right|sure|yes|yep|yeah|no|nope|nah)$/],
     ["bye",/^(bye+|goodbye|good bye|see (you|ya)|later|catch you later|have a (good|great|nice) (day|one|night)|ka kite|ka kite ano|good night|gotta go|thats all|that is all|nothing else|im done|ok bye|okay bye|ok thanks bye|bye bye|bye for now|cya)$/],
     ["good",/^(im |i am )?(so |really |very |pretty |all )?(good|great|fine|well|not bad|doing well|all good|pretty good|very good)( thanks| thank you| thx)?( and you| you| how about you)?$/],
-    ["bad",/^(im |i am |feeling |im feeling )?(so |really |very |a bit |pretty |super |too )?(not (good|great|well)|bad|tired|stressed|busy|exhausted|sad|overwhelmed|swamped|flat out|run off my feet)( today| at the moment| right now)?$/],
+    ["bad",/^(im |i am |feeling |im feeling )?(getting |feeling )?(so |really |very |a bit |pretty |super |too )?(not (good|great|well)|bad|tired|stressed|busy|exhausted|sad|overwhelmed|swamped|flat out|run off my feet|bored|so bored)( today| at the moment| right now)?$/],
     ["joke",/\b(tell me a joke|joke|make me laugh|something funny)\b/],
     ["weather",/\b(weather|rain(ing)?|sunny|temperature|forecast|mausam|mosam)\b/],
     ["time",/\b(what time is it|whats the time|what is the time|time now|todays date|what day is it|what is the date|whats the date)\b/],
@@ -442,7 +442,9 @@
     t=t.replace(/\b(i|we) (run|own|have|manage|operate)\b|\b(i m|im|i am|we re|we are) (a|an)\b/g," ");
     t=t.replace(/\b(cafe|tradie|clinic|dairy|adviser|transport|industry|workshop|centre|center|studio|business|company|firm|practice|owner)\b/g," ").replace(/\s+/g," ").trim();return t===o.replace(/\s+/g," ").trim()?"":t}
   function fixGreet(t){/* a whole message like "Sat shri aaaaakakaka" (keys mashed after "sat shri") is still the greeting */
-    if(/^\s*sat\s*(shri|sri|shree|shrine|shiri|siri|sree)(\s+a+[kh][a-z]*)?(\s+ji)?[\s!.]*$/i.test(String(t)))return "sat sri akal";return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsa?t?\s*sri\s*akaa?l\b/gi,"sat sri akal")}
+    if(/^\s*sat\s*(shri|sri|shree|shrine|shiri|siri|sree)(\s+a+[kh][a-z]*)?(\s+ji)?[\s!.]*$/i.test(String(t)))return "sat sri akal";
+    /* letters held down or doubled: "sat shhrrririi kaalllalalalal" */
+    if(/^\s*sa+t+\s+s+h*r+[ri]*\s+(a+|k+a+)[a-z]*(\s+ji)?[\s!.]*$/i.test(String(t)))return "sat sri akal";return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsa?t?\s*sri\s*akaa?l\b/gi,"sat sri akal")}
   function answer(q){q=fixGreet(q);var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
     /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
     sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|nihao|ni hao|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
@@ -633,5 +635,7 @@
       state.msgs=[];state.lang="";state.noRoman=0;save();if(log)log.innerHTML="";nudgeTimer()});
     window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_RM=function(t){return romanLang(t)+": "+romanMeaning(t)};window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2),Object.keys(r.hit).join(" ")]}).concat([JSON.stringify(search(q).IW)])})};
     document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a){ev.preventDefault();open()}})}
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+  /* speed: the chat button is built once the page has loaded and the phone is idle, never while the page is still opening */
+  var go=function(){if(window.requestIdleCallback)requestIdleCallback(start,{timeout:2500});else setTimeout(start,300)};
+  if(document.readyState==="complete")go();else addEventListener("load",go);
 })();

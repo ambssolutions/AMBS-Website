@@ -1,4 +1,7 @@
 /* ---- main: translations, language, menu ---- */
+/* speed: size readings that only matter once the visitor scrolls wait until the first screen has been drawn,
+   so the phone draws the page before working out the layout of everything below it */
+function afterPaint(f){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(f,0)});else setTimeout(f,0)}
 /* ================= translations ================= */
 const I18N = {
 en:{
@@ -111,6 +114,7 @@ const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* other languages are fetched the first time they are picked (and when a saved choice opens the page) */
 var I18N_LOADING={};
 function loadLang(l){
+  if(window.ambsLangFont)ambsLangFont(l);
   if(I18N[l])return Promise.resolve();
   if(!I18N_LOADING[l]){
     var v=document.documentElement.getAttribute("data-i18nv")||"";
@@ -762,7 +766,7 @@ if("IntersectionObserver" in window && !reduced){
     if(bar&&!reducedMo) bar.style.transform="scaleX("+Math.min(1,st/docH).toFixed(4)+")";
   }
   function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
-  measure();
+  afterPaint(measure);
   if("ResizeObserver" in window) new ResizeObserver(measure).observe(document.body); else window.addEventListener("resize",measure);
   window.addEventListener("scroll",onScroll,{passive:true});frame();
   if(reducedMo||!("IntersectionObserver" in window))return;
@@ -1196,7 +1200,7 @@ try{
   function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(update);}}
   window.addEventListener("scroll",onScroll,{passive:true});
   window.addEventListener("resize",function(){measure();onScroll();});
-  measure();update();
+  afterPaint(function(){measure();update();});
 })();
 }catch(e){if(window.console)console.error(e);}
 
@@ -1501,7 +1505,7 @@ try{
   addEventListener("load",measure);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
   if("ResizeObserver" in window){var ro=new ResizeObserver(function(){clearTimeout(measure.t);measure.t=setTimeout(measure,200);});ro.observe(document.body);}
-  measure();
+  afterPaint(measure);
   if(tt)tt.addEventListener("click",function(){
     var calm=matchMedia("(prefers-reduced-motion:reduce)").matches;
     scrollTo({top:0,behavior:calm?"auto":"smooth"});
@@ -1776,7 +1780,7 @@ try{(function(){
 /* How it works on phones: the cards stack just below the pinned heading, so tell the CSS how tall that heading is
    (measured on load and when the screen size changes, never while scrolling) */
 (function(){var sec=document.getElementById("how"),head=sec&&sec.querySelector(".sec-head");if(!head)return;
-  var set=function(){sec.style.setProperty("--how-head",head.offsetHeight+"px")};set();
+  var set=function(){sec.style.setProperty("--how-head",head.offsetHeight+"px")};afterPaint(set);
   if("ResizeObserver" in window)new ResizeObserver(set).observe(head);else addEventListener("resize",set)})();
 /* How it works: pin the section while the three cards slide up and stack, then let the page move on
    (switched off: the cards now stack with plain CSS sticky positioning, which scrolls natively and feels smoother) */
@@ -1854,6 +1858,6 @@ try{(function(){return;
   var lw=innerWidth,lh=innerHeight,rt=0;
   addEventListener("resize",function(){if(innerWidth===lw&&Math.abs(innerHeight-lh)<140)return;lw=innerWidth;lh=innerHeight;clearTimeout(rt);rt=setTimeout(layout,150);});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
-  addEventListener("load",layout);layout();
+  addEventListener("load",layout);afterPaint(layout);
 })();}catch(e){}
 
