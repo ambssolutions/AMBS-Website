@@ -1499,7 +1499,15 @@ function emailHtml(){var h=S.useCode&&String(S.code||"").trim()?cleanCode(S.code
    its 10,000-character limit when you paste: leave it out of the Gmail copy so the same signature fits. Nothing Gmail shows changes. */
 function gmailOnly(h){
   h=h.replace(/<!--\[if mso\]>[\s\S]*?<!\[endif\]-->/g,"").replace(/<!--\[if !mso\]><!-->/g,"").replace(/<!--<!\[endif\]-->/g,"");
-  return h.replace(/ style="([^"]*)"/g,function(m,st){var d=st.split(";").filter(function(x){return x.trim()&&!/^\s*mso-/i.test(x)});return d.length?' style="'+d.join(";")+'"':""})}
+  /* and what only older apps need, written twice or the default in Gmail: a picture's size in its style as well as its width/height,
+     border:0 on pictures, a cell's width in its style as well as width="…", border="0" on tables, text-align:left beside align="left", and role="presentation" */
+  return h.replace(/<(\w+)([^>]*)>/g,function(tag,name,at){var n=name.toLowerCase(),W=(/ width="(\d+)"/.exec(at)||[])[1],H=(/ height="(\d+)"/.exec(at)||[])[1],L=/ align="left"/.test(at);
+    at=at.replace(/ role="presentation"/g,"");if(n==="table")at=at.replace(/ border="0"/,"");
+    at=at.replace(/ style="([^"]*)"/,function(m,st){var d=st.split(";").filter(function(x){var k=x.trim().toLowerCase().replace(/\s+/g,"");if(!k||/^mso-/.test(k))return false;
+      if(n==="img"&&(k==="border:0"||(W&&k==="width:"+W+"px")||(H&&k==="height:"+H+"px")))return false;
+      if(n==="td"&&W&&k==="width:"+W+"px")return false;
+      if(L&&k==="text-align:left")return false;return true});return d.length?' style="'+d.join(";")+'"':""});
+    return"<"+name+at+">"})}
 /* your own HTML code: keep the signature, take out anything that could run (scripts, event handlers, javascript: links).
    forPreview also drops <style> and <link> so they can't restyle the builder itself. */
 function cleanCode(h,forPreview){var d=new DOMParser().parseFromString(String(h||""),"text/html");
