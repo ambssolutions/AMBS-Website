@@ -95,10 +95,6 @@
    "id": "locations",
    "href": "/locations",
    "label": "Where we work"
-  },
-  {
-   "href": "#faq",
-   "key": "nav.faq"
   }
  ]
 }
