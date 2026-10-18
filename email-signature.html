@@ -1271,7 +1271,7 @@ function bannerHeight(d){if(!S.bannerMade||!S.maker){toast("Height changes work 
 function lineFree(){return Math.max(0,barH-lineLen())}
 function lineTop(){var f=lineFree(),dy=+((S.st.line||{}).dy)||0;return Math.max(0,Math.min(f,Math.round(f/2+dy)))}
 function lineLen(){var p=S.lineLen==null||S.lineLen===""?100:+S.lineLen;return Math.max(10,Math.round(barH*p/100))}
-function zoneOf(id){var o=inOrder(id);return id==="line"?"line":o?o[2]:""}
+function zoneOf(id){var o=inOrder(id);return id==="line"?"line":o?o[2]:id==="signoff"&&S.signoffStyle!=="none"?"top":""}
 /* move whatever is selected: arrows, the move pad, or arrow keys */
 function moveBy(id,ddx,ddy){var z=zoneOf(id);if(!z){toast("Pick a part in the preview first.");return false}
   /* social icons under the logo: sideways within the logo column; up and down changes the gap under the logo,
@@ -1335,7 +1335,7 @@ function setColRow(box,mini,after){var cur=S.divider==="rainbow"?(S.palette||[])
     b.addEventListener("click",function(e){e.preventDefault();S.divider="rainbow";S.palette=z[1].slice();save();update();if(after)after();toast("Stripe: "+z[0])});row.appendChild(b)});
   box.appendChild(row)}
 /* one-colour stripe: the logo's and brand colours, one tap each */
-function oneColRow(box,mini,after){var seen={},cols=[S.brandP,S.brandS,S.brandA].concat((S.logoCols&&S.logoCols.main)||[],S.palette||[],["#14172b","#64748b"]).map(function(c){return toHex(C(c))}).filter(function(c){c=String(c).toLowerCase();if(!c||seen[c])return false;seen[c]=1;return true}).slice(0,9);
+function oneColRow(box,mini,after){var seen={},cols=[S.brandP,S.brandS,S.brandA].concat((S.logoCols&&S.logoCols.main)||[],["#14172b","#64748b"],S.palette||[]).map(function(c){return toHex(C(c))}).filter(function(c){c=String(c).toLowerCase();if(!c||seen[c])return false;seen[c]=1;return true}).slice(0,9);
   var cur=S.divider==="solid"?String(toHex(C(S.colors.line||"@a"))).toLowerCase():"";
   var row=h2('<span class="onecol'+(mini?" mini":"")+'"><small>One colour</small></span>');
   cols.forEach(function(c){var b=h2('<button type="button" class="ocsw" aria-label="One colour '+c+'" aria-pressed="'+(cur===c.toLowerCase())+'" style="background:'+c+'"></button>');b.addEventListener("click",function(e){e.preventDefault();S.divider="solid";S.colors.line=c;save();update();if(after)after();toast("One-colour stripe")});row.appendChild(b)});
@@ -1537,6 +1537,8 @@ function inOrder(id){return S.order.filter(function(o){return o[0]===id})[0]}
 function shown(id){var o=inOrder(id);if(o)return!!o[1];if(id==="signoff")return S.signoffStyle!=="none";if(id==="photo")return S.photoShow;if(id==="logo")return S.logoShow;return true}
 function getP(path){if(path==="logoWhere")return S.logoShow?S.logoPos:"off";return path.split(".").reduce(function(o,k){return o==null?undefined:o[k]},S)}
 function setP(path,v){
+  /* the review and other buttons borrow the booking colour until they have their own: keep theirs when the booking colour changes */
+  if(path==="colors.button"&&S.colors&&v!==S.colors.button)["reviewBtn","extraBtn"].forEach(function(k){if(!S.colors[k])S.colors[k]=S.colors.button});
   if(path==="logoWhere"){S.logoShow=v!=="off";if(S.logoShow)S.logoPos=v;if(v==="social")inOrder("social")[1]=1;placeMedia(S,"logo",true);S.logoMatch=v==="social";return}
   if(path==="logoSize")S.logoMatch=false;
   if(path==="photoShow"){var po=inOrder("photo");if(po)po[1]=v?1:0}
@@ -3247,6 +3249,7 @@ body.one .esheet{max-height:72vh;overflow:auto}
 body.one .esheet .esh{position:sticky;top:0;z-index:2;background:var(--panel,#fff)}
 body.one .esheet .estabs{display:none!important}
 body.one .esheet .esq{display:block!important;overflow:visible;padding-bottom:0}
+body.one .esheet:not([data-kp="line"]) .esq{display:none!important}body.one .esheet:not([data-kp="line"]) .esb:before{display:none}
 body.one .esheet .esb{display:flex!important;overflow:visible}
 body.one .esheet .esb:before{content:"All settings";display:block;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7B2FBE;margin:4px 0 -2px}
 body.one .esheet .esq:before{content:"Quick settings";display:block;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7B2FBE;margin:2px 4px 8px}
@@ -3292,13 +3295,15 @@ function ogRender(body){
         if(a==="tune"||a==="brand")sub.appendChild(h2('<h4 class="ogs-sub">'+(a==="tune"?"Text":"Logo and brand colours")+'</h4>'));
         if(a==="tune")TUNE_PARTS.forEach(function(p){renderPart(p,sub,true)});else renderPart(a,sub,a!=="details"&&a!=="brand")})}
     wrap.appendChild(el)})}
+/* "Where it goes" at the top of a part's settings */
+function placeRow(key,name){var po=inOrder(key);if(!po||/^(logo|photo)$/.test(key))return null;sortOrder();var vis=S.order.filter(function(x){if(!x[1]||/^(logo|photo)$/.test(x[0]))return false;if(x===po)return true;try{return!!block(x[0],"preview")}catch(e){return true}}),k=vis.indexOf(po),prev=k>0?vis[k-1]:null,pc=placeChoices(po,prev);
+    var wr=h2('<div class="opwhere"><span>Where it goes</span><span class="aopw"><select class="aosel" aria-label="Where '+esc(name)+' goes">'+pc.ch.map(function(c){return'<option value="'+c[0]+'"'+(c[0]===pc.val?" selected":"")+'>'+esc(c[1])+'</option>'}).join("")+'</select></span></div>');
+    wr.querySelector("select").addEventListener("change",function(e){setPlace(po,e.target.value,prev);save();changed();if(document.querySelector(".esheet:not(.out)")){var sh=document.querySelector(".esheet:not(.out)");editSheet(sh.dataset.kp)}else go(stepId("edit"))});return wr}
 function opRender(body,id){var key=partKey(id),isC=String(id).indexOf("c-")===0,name=typeof qbName==="function"?qbName(id):blockLabel(id);
-  var el=h2('<div class="opart" data-kp="'+esc(String(id))+'"><div class="oph"><button type="button" class="oback">‹ All settings</button><b>'+esc(name)+'</b></div><div class="osec">Quick settings</div><div class="opq"></div><div class="osec">All settings</div><div class="opall"></div></div>');
+  var el=h2('<div class="opart" data-kp="'+esc(String(id))+'"><div class="oph"><button type="button" class="oback">‹ All settings</button><b>'+esc(name)+'</b></div>'+(key==="line"?'<div class="osec">Quick settings</div><div class="opq"></div><div class="osec">All settings</div>':'')+'<div class="opall"></div></div>');
   el.querySelector(".oback").addEventListener("click",function(){PV_PART=null;KEYPART=null;var g=ogOf(isC?"custom":key);if(g)OG_OPEN=g;try{placeGrab()}catch(e){}go(stepId("edit"))});
   body.appendChild(el);
-  var po=inOrder(key);if(po&&!/^(logo|photo)$/.test(key)){sortOrder();var vis=S.order.filter(function(x){if(!x[1]||/^(logo|photo)$/.test(x[0]))return false;if(x===po)return true;try{return!!block(x[0],"preview")}catch(e){return true}}),k=vis.indexOf(po),prev=k>0?vis[k-1]:null,pc=placeChoices(po,prev);
-    var wr=h2('<div class="opwhere"><span>Where it goes</span><span class="aopw"><select class="aosel" aria-label="Where '+esc(name)+' goes">'+pc.ch.map(function(c){return'<option value="'+c[0]+'"'+(c[0]===pc.val?" selected":"")+'>'+esc(c[1])+'</option>'}).join("")+'</select></span></div>');
-    wr.querySelector("select").addEventListener("change",function(e){setPlace(po,e.target.value,prev);save();changed();go(stepId("edit"))});el.querySelector(".opq").before(wr)}
+  var wr=placeRow(key,name);if(wr)(el.querySelector(".opq")||el.querySelector(".opall")).before(wr);
   renderPart(isC?"custom":key,el.querySelector(".opall"),false);
   /* every setting for this part open at once, nothing folded away */
   el.querySelectorAll(".opall details.more").forEach(function(d){d.open=true});
@@ -3334,10 +3339,12 @@ openItem=function(id){if(!document.body.classList.contains("one")){_oneOpenItem(
   setTimeout(function(){var n=document.querySelector('.ogitem[data-acc="'+id+'"]');if(n)n.scrollIntoView({block:"start",behavior:"smooth"})},60)};
 /* the quick settings sit inside the part's panel on laptops too, instead of floating under the preview */
 var _oneQbar=drawQbar;
-drawQbar=function(force){_oneQbar(force);if(window.innerWidth<=760||!document.body.classList.contains("one"))return;var q=$("qbar"),host=document.querySelector('.opart[data-kp="'+(window.CSS&&CSS.escape?CSS.escape(String(KEYPART)):KEYPART)+'"] .opq');
+/* one list of settings per part: the quick toolbar only repeated them (the divider line keeps its colour presets) */
+drawQbar=function(force){_oneQbar(force);if(document.body.classList.contains("one")&&KEYPART!=="line"){var q0=$("qbar");if(q0)q0.hidden=true;return}if(window.innerWidth<=760||!document.body.classList.contains("one"))return;var q=$("qbar"),host=document.querySelector('.opart[data-kp="'+(window.CSS&&CSS.escape?CSS.escape(String(KEYPART)):KEYPART)+'"] .opq');
   if(!q||q.hidden||!host)return;if(q.parentNode!==host)host.appendChild(q);q.classList.add("insheet");q.classList.remove("dock");q.style.top="";q.style.left=""};
 var _oneSheet=editSheet;
-editSheet=function(id,tab){_oneSheet(id,tab);var sh=document.querySelector(".esheet:not(.out)");if(sh&&document.body.classList.contains("one")){sh.dataset.tab="both";document.body.classList.add("esheet-on");sh.querySelectorAll(".esb details.more").forEach(function(d){d.open=true});
+editSheet=function(id,tab){_oneSheet(id,tab);var sh=document.querySelector(".esheet:not(.out)");if(sh&&document.body.classList.contains("one")){
+  if(!sh.querySelector(".opwhere")){var k0=partKey(id),wr0=placeRow(k0,k0);if(wr0){var esb=sh.querySelector(".esb");if(esb)esb.insertBefore(wr0,esb.firstChild)}}sh.dataset.tab=id==="line"?"both":"all";document.body.classList.add("esheet-on");sh.querySelectorAll(".esb details.more").forEach(function(d){d.open=true});
   if(!sh.dataset.oneWired){sh.dataset.oneWired="1";var d=sh.querySelector(".edone");if(d)d.addEventListener("click",function(){document.body.classList.remove("esheet-on")})}}};
 /* ---------- "what do you want in it?": asked after the website or a fresh start, then the designs show exactly those parts ---------- */
 var FLOW=null,WANT=null;
