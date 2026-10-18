@@ -3663,6 +3663,11 @@ function oneInit(){document.body.classList.add("one");
 wizPref=function(){return false};
 var _oneOpenSig=openSig;
 openSig=function(id){return _oneOpenSig(id).then(function(r){if(document.body.classList.contains("one")){PV_PART=null;KEYPART=null;try{if(WIZ_ON)wizOff(false)}catch(e){}go(stepId("edit"))}return r})};
+/* "same line as the part above": say so when a phone screen has no room for both, so the part drops underneath there */
+function joinFitNote(id,pid){if(S.mob&&S._active!=="mob")return;var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;width:"+PHONE_W+"px";document.body.appendChild(d);
+  try{d.innerHTML=signature("preview");var a=d.querySelector('[data-edit="'+pid+'"]'),b=d.querySelector('[data-edit="'+id+'"]');if(!a||!b)return;var ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();
+    if(rb.width&&ra.width&&rb.top>=ra.bottom-2)toast("It’s set to sit beside the part above, but a phone screen has no room for both, so on phones it drops underneath. To keep them side by side, make them smaller or put them underneath everything.")}catch(e){}finally{d.remove()}}
+var _oneSetPlace=setPlace;setPlace=function(o,v,prev){_oneSetPlace(o,v,prev);if(v==="join"&&prev){var id=o[0],pid=prev[0];setTimeout(function(){joinFitNote(id,pid)},450)}};
 (function(){var t=setInterval(function(){if(typeof S==="object"&&S&&$("stepBody")&&$("stepBody").childNodes.length){clearInterval(t);oneInit()}},50)})();
 </script>
 
