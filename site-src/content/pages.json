@@ -136,6 +136,14 @@
    "blurb": "Plain-English meanings of the automation and AI terms you will hear.",
    "category": "Getting started",
    "icon": "book"
+  },
+  {
+   "section": "locations",
+   "slug": "auckland",
+   "title": "Auckland",
+   "blurb": "AI automation, websites and portals for Auckland businesses, from the people who build them.",
+   "category": "North Island",
+   "icon": "map"
   }
  ],
  "hubs": {
@@ -156,6 +164,12 @@
    "h1": "Practical guides to automation for New Zealand businesses",
    "lead": "Practical guides on what to automate, how it works, what it takes and what to watch for. Written for owners, not engineers.",
    "desc": "Practical guides for NZ small businesses: what to automate first, invoicing, booking reminders, AI replies, app connections, dashboards and privacy."
+  },
+  "locations": {
+   "title": "Where We Work in New Zealand | Ambs Solutions",
+   "h1": "Where we work",
+   "lead": "AI automation, websites and portals for businesses across New Zealand. Based in Auckland, working nationwide. Pick your area.",
+   "desc": "Ambs Solutions helps businesses across New Zealand with AI automation, websites, portals and dashboards. See what we do in your area."
   }
  },
  "service_cards": [

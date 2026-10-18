@@ -35,6 +35,8 @@ ICON={
 SITE=json.load(open(os.path.join(SRC,'content','pages.json'),encoding='utf8'))
 # Google Analytics: the measurement ID is in site-src/content/site.json ("analytics_id"), editable in the website editor (Business details)
 GA_ID=json.load(open(os.path.join(SRC,'content','site.json'),encoding='utf8')).get('analytics_id','').strip()
+# Social profiles (Instagram, TikTok…) Google links to the business: "profiles" in site.json, editable in the website editor (Business details)
+PROFILES=[u.strip() for u in json.load(open(os.path.join(SRC,'content','site.json'),encoding='utf8')).get('profiles',[]) if u.strip().startswith('https://')]
 def ga_snippet():
     # sends page views plus the actions that matter: booking clicks, phone and email taps, booking confirmed
     if not re.match(r'^G-[A-Z0-9]{4,}$',GA_ID): return ''
@@ -245,7 +247,7 @@ def crumbs(items):
     ld={'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':i+1,'name':t,'item':BASE+(h or items[-1][1] or '')} for i,(t,h) in enumerate(items)]}
     return f'<nav class="crumbs" aria-label="Breadcrumb"><ol>{lis}</ol></nav>', ld
 ORG={'@type':'ProfessionalService','@id':BASE+'/#business','name':'Ambs Solutions','url':BASE+'/','telephone':'+64 22 099 9578','email':'hello@ambs.co.nz',
-     'areaServed':{'@type':'Country','name':'New Zealand'},'address':{'@type':'PostalAddress','addressLocality':'Auckland','addressCountry':'NZ'},'logo':BASE+'/logo.png'}
+     'areaServed':{'@type':'Country','name':'New Zealand'},'address':{'@type':'PostalAddress','addressLocality':'Auckland','addressCountry':'NZ'},'logo':BASE+'/logo.png','sameAs':PROFILES}
 
 def build_page(p):
     sec,slug,ctitle,cdesc,cat,ic=p
@@ -751,6 +753,11 @@ if __name__=='__main__':
     for slug,d in CUSTOM.items(): build_custom(slug,d,rb['pages'].get(slug,''))
     build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap()
     for f in ('index.html','email-signature.html'): stamp_ga(os.path.join(OUT,f))
+    # the homepage's business details for Google list the same social profiles
+    idx=os.path.join(OUT,'index.html')
+    if os.path.exists(idx):
+        h=open(idx,encoding='utf8').read();h2=re.sub(r'"sameAs": \[[^\]]*\]','"sameAs": '+json.dumps(PROFILES),h,count=1)
+        if h2!=h: open(idx,'w',encoding='utf8').write(h2)
     open(os.path.join(OUT,'assets','chat.js'),'w',encoding='utf8').write(open(os.path.join(SRC,'assets','chat.js'),encoding='utf8').read())
     iv,nd=build_chat_index();tag=chat_tag(iv)
     # the chat helper goes on every public page (not the editor or the email signature builder)

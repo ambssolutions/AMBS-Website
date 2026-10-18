@@ -1356,6 +1356,11 @@ function businessInit(){
     var act=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="bzSave">Save &amp; publish</button></div>');m.appendChild(p);m.appendChild(act);
     $("bzSave").addEventListener("click",function(){var btn=this;if(!confirm("Change these details everywhere on the website?"))return;busy(btn,true);
       api("settings",{action:"business",phone:$("bzPhone").value,email:$("bzEmail").value,location:$("bzLoc").value}).then(function(r){dirty=false;busy(btn,false);toast("Updated in "+r.files+" places. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
+    /* social profiles: Google links them to the business (sameAs in the details it reads) */
+    var sp=h('<div class="panel"><h3>Social profiles</h3><p class="help">Your Instagram, TikTok, Facebook, LinkedIn or Google Business Profile pages. Google uses them to connect your website to your business. One full link per line.</p></div>');
+    sp.appendChild(fld("spList","Profile links",(b.profiles||[]).join("\n"),{area:true,rows:4,help:"For example https://www.instagram.com/yourname/"}));
+    var spa=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="spSave">Save &amp; publish</button></div>');m.appendChild(sp);m.appendChild(spa);
+    $("spSave").addEventListener("click",function(){var btn=this;busy(btn,true);api("settings",{action:"profiles",profiles:$("spList").value.split(/\n+/).map(function(x){return x.trim()}).filter(Boolean)}).then(function(){dirty=false;busy(btn,false);toast("Saved. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
     /* Google Analytics: the measurement ID goes on every page when the site is rebuilt */
     var ga=h('<div class="panel"><h3>Google Analytics</h3><p class="help">Your measurement ID from analytics.google.com (Admin → Data streams). It is added to every page. Leave it empty to turn Analytics off.</p></div>');
     ga.appendChild(fld("gaId","Measurement ID",b.analytics_id||"",{help:"Starts with G-, for example G-AB12CD34EF"}));
