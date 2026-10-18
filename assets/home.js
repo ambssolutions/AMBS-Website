@@ -1479,7 +1479,8 @@ try{
   function measure(){
     var y=pageYOffset;vh=innerHeight;
     secs.forEach(function(x){x.top=x.el.getBoundingClientRect().top+y;});
-    update();
+    secs.sort(function(a,b){return a.top-b.top;});   /* page order, whatever order the sections are in */
+    cur=null;update();
   }
   function update(){
     ticking=false;
