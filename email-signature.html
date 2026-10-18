@@ -3207,6 +3207,11 @@ body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
 .allord select.aosel{width:auto!important;min-width:0!important;height:32px!important;min-height:0!important;font-size:14px!important;padding:0 30px 0 12px!important;line-height:30px}
 .allord .sorti{padding:8px 10px}.allord .sorti .st b{line-height:1.25}
 .allord .sorti .sa{width:32px;height:32px;border-radius:50%;font-size:11px}
+.ogtabs{display:flex;flex-wrap:wrap;gap:6px;padding:2px 2px 10px;margin:0 0 6px;border-bottom:1px solid var(--line);scrollbar-width:none;position:sticky;top:0;z-index:3;background:var(--panel,#fff)}
+.ogtabs::-webkit-scrollbar{display:none}
+.ogtab{flex:none;min-height:38px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel,#fff);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.ogtab[aria-selected="true"]{background:#14172b;border-color:#14172b;color:#fff}
+.ogitem[hidden]{display:none!important}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .wantnote .linkbtn{min-height:36px}
 body.one #kbHint,body.one #evenSp,body.one #pgBtn,body.one #partsPv,body.one #movePv,body.one #testPv,body.one #bigPv,body.one .pvparts{display:none!important}
@@ -3239,7 +3244,9 @@ var OGROUPS=[
   {id:"layout",ic:"📐",t:"Order & layout",d:"Put every part in order, beside your details or underneath",items:["reorder","layout"]},
   {id:"extras",ic:"🔘",t:"Buttons, icons & banner",items:["book","review","extra","social","banner","disclaimer","custom"]},
   {id:"look",ic:"🎨",t:"Text, sign-off & style",items:["tune","signoff","style","dark"]}];
-var OG_OPEN="details",PV_PART=null;
+var OG_OPEN="details",PV_PART=null,OG_TAB={};
+/* short names for the tabs along the top of a group */
+var OG_TABN={brand:"Brand",logo:"Logo",photo:"Photo",reorder:"Order",layout:"Layout",book:"Booking",review:"Review",extra:"Another button",social:"Social icons",banner:"Banner",disclaimer:"Disclaimer",custom:"Your own parts",tune:"Text",signoff:"Sign-off",style:"Colours & fonts",dark:"Dark mode"};
 function ogOf(item){if(/^(actions|book|review|extra)$/.test(item))return"extras";for(var i=0;i<OGROUPS.length;i++)if(OGROUPS[i].items.indexOf(item)>=0)return OGROUPS[i].id;if(TUNE_PARTS.indexOf(item)>=0)return"look";if(/^(name|role|company|contact)$/.test(item))return"details";return null}
 function ogSummary(g){if(g.d)return g.d;return g.items.map(function(a){var x=accSummary(a);return x||ACC_NAMES[a]}).filter(Boolean).join(" · ")}
 function isPartId(id){id=String(id||"");return id.indexOf("c-")===0||!!inOrder(id)||/^(logo|photo|signoff|line|book|review|extra|actions|banner|disclaimer|social|name|role|contact|tagline|rainbow)$/.test(id)}
@@ -3254,7 +3261,11 @@ function ogRender(body){
     var el=h2('<section class="og'+(open?" open":"")+'" data-g="'+g.id+'"><button type="button" class="ogh" aria-expanded="'+open+'"><span class="ogi" aria-hidden="true">'+g.ic+'</span><span class="ogt"><b>'+esc(g.t)+'</b><small>'+esc(ogSummary(g))+'</small></span><span class="ogc" aria-hidden="true">▾</span></button></section>');
     el.querySelector(".ogh").addEventListener("click",function(){OG_OPEN=OG_OPEN===g.id?null:g.id;go(stepId("edit"));if(OG_OPEN){var n=document.querySelector('.og[data-g="'+g.id+'"]');if(n)n.scrollIntoView({block:"nearest",behavior:"smooth"})}});
     if(open){var b=h2('<div class="ogb"></div>');el.appendChild(b);
-      g.items.forEach(function(a){var sub=h2('<div class="ogitem" data-acc="'+a+'"></div>');b.appendChild(sub);
+      /* groups with several parts: one tab per part, only the chosen one shows */
+      var tabs=g.items.length>1,cur=tabs?(g.items.indexOf(OG_TAB[g.id])>=0?OG_TAB[g.id]:g.items[0]):null;
+      if(tabs){var tb=h2('<div class="ogtabs" role="tablist" aria-label="'+esc(g.t)+'"></div>');g.items.forEach(function(a){var t=h2('<button type="button" role="tab" class="ogtab" aria-selected="'+(a===cur)+'">'+esc(OG_TABN[a]||a)+'</button>');
+          t.addEventListener("click",function(){OG_TAB[g.id]=a;[].forEach.call(tb.children,function(x){x.setAttribute("aria-selected",String(x===t))});[].forEach.call(b.querySelectorAll(".ogitem"),function(x){x.hidden=x.dataset.acc!==a});t.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"})});tb.appendChild(t)});b.appendChild(tb)}
+      g.items.forEach(function(a){var sub=h2('<div class="ogitem" data-acc="'+a+'"'+(tabs&&a!==cur?" hidden":"")+'></div>');b.appendChild(sub);
         if(a==="tune"||a==="brand")sub.appendChild(h2('<h4 class="ogs-sub">'+(a==="tune"?"Text":"Logo and brand colours")+'</h4>'));
         if(a==="tune")TUNE_PARTS.forEach(function(p){renderPart(p,sub,true)});else renderPart(a,sub,a!=="details"&&a!=="brand")})}
     wrap.appendChild(el)})}
@@ -3280,7 +3291,7 @@ go=function(i,part){var idx=Math.max(0,Math.min(STEPS.length-1,i)),s=STEPS[idx];
 var _oneOpenItem=openItem;
 openItem=function(id){if(!document.body.classList.contains("one")){_oneOpenItem(id);return}
   if(isPartId(id)){PV_PART=id;KEYPART=id;go(stepId("edit"));try{placeGrab()}catch(e){}return}
-  var g=ogOf(id);if(!g){_oneOpenItem(id);return}PV_PART=null;OG_OPEN=g;go(stepId("edit"));
+  var g=ogOf(id);if(!g){_oneOpenItem(id);return}PV_PART=null;OG_OPEN=g;OG_TAB[g]=String(id).indexOf("c-")===0?"custom":id;go(stepId("edit"));
   setTimeout(function(){var n=document.querySelector('.ogitem[data-acc="'+id+'"]');if(n)n.scrollIntoView({block:"start",behavior:"smooth"})},60)};
 /* the quick settings sit inside the part's panel on laptops too, instead of floating under the preview */
 var _oneQbar=drawQbar;
