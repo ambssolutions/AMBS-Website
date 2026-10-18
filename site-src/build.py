@@ -11,6 +11,9 @@ BASE='https://ambs.co.nz'; TODAY='2026-10-04'
 
 ICON={
  'auto':'<path d="M13 3L5 13h6l-1 8 8-10h-6z"/>',
+ 'map':'<path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
+ 'clean':'<path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/><path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/><path d="M5.5 15l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z"/>',
+ 'law':'<path d="M12 4v16M8 20h8M5 7h14"/><path d="M5 7l-2.5 6a2.5 2.5 0 0 0 5 0z"/><path d="M19 7l-2.5 6a2.5 2.5 0 0 0 5 0z"/>',
  'web':'<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 8.5h18"/><circle cx="12" cy="14.3" r="3.4"/>',
  'cafe':'<path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3c0 1.5 1 1.5 1 3M12 3c0 1.5 1 1.5 1 3"/>',
  'trades':'<path d="M14.5 5.5l4 4-9.5 9.5H5v-4z"/><path d="M12.5 7.5l4 4"/>',
@@ -56,8 +59,9 @@ NOW=os.environ.get('AMBS_NOW') or datetime.datetime.now(zoneinfo.ZoneInfo('Pacif
 def is_live(d): return not d.get('draft') or bool(d.get('publish_at') and d['publish_at']<=NOW)
 PAGES=[(p['section'],p['slug'],p['title'],p['blurb'],p['category'],p['icon']) for p in SITE['pages'] if is_live(p)]
 PHOTO={(p['section'],p['slug']):p['photo'] for p in SITE['pages'] if p.get('photo')}
-SECTION={'services':('Services','What we build'),'industries':('Industries','Who we help'),'guides':('Guides','Knowledge hub'),'news':('News','Latest news')}
+SECTION={'services':('Services','What we build'),'industries':('Industries','Who we help'),'guides':('Guides','Knowledge hub'),'news':('News','Latest news'),'locations':('Locations','Where we work')}
 HUB=SITE['hubs']
+HUB.setdefault('locations',dict(title='Where We Work in New Zealand | Ambs Solutions',h1='Where we work',lead='AI automation, websites and portals for businesses across New Zealand. Pick your area.',desc='Ambs Solutions helps businesses across New Zealand with AI automation, websites, portals and dashboards. See what we do in your area.'))
 HUB.setdefault('news',dict(title='News | Ambs Solutions',h1='News',lead='The latest from Ambs Solutions.',desc='News and updates from Ambs Solutions, AI automation and digital solutions for New Zealand businesses.'))
 
 def _load(name,default):
@@ -259,7 +263,7 @@ def build_page(p):
           'mainEntityOfPage':BASE+canon,'image':BASE+'/logo.png','articleSection':cat})
     else:
         graph.append({'@type':'Service','name':meta['h1'],'serviceType':meta.get('serviceType',ctitle),'description':meta['description'],'provider':{'@id':BASE+'/#business'},
-          'areaServed':{'@type':'Country','name':'New Zealand'},'url':BASE+canon})
+          'areaServed':({'@type':'City','name':meta.get('city') or ctitle} if sec=='locations' else {'@type':'Country','name':'New Zealand'}),'url':BASE+canon})
     if meta.get('faq'):
         graph.append({'@type':'FAQPage','mainEntity':[{'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':a}} for q,a in meta['faq']]})
     ld={'@context':'https://schema.org','@graph':graph}
@@ -483,7 +487,7 @@ def render_blocks(pages,sections):
     return json.loads(r.stdout)
 
 def build_sitemap():
-    rows=[('/', '1.0','weekly')]+[(url(s),'0.8','weekly') for s in ('services','industries','guides')]+[(url(p[0],p[1]),'0.7' if p[0]!='guides' else '0.6','monthly') for p in PAGES]+([('/news','0.6','weekly')] if any(p[0]=='news' for p in PAGES) else [])+[('/'+s_,'0.5','monthly') for s_ in CUSTOM]+[('/privacy','0.3','yearly'),('/terms','0.3','yearly')]
+    rows=[('/', '1.0','weekly')]+[(url(s),'0.8','weekly') for s in ('services','industries','guides')]+[(url(p[0],p[1]),'0.7' if p[0]!='guides' else '0.6','monthly') for p in PAGES]+[('/'+s_,'0.6','weekly') for s_ in ('news','locations') if any(p[0]==s_ for p in PAGES)]+[('/'+s_,'0.5','monthly') for s_ in CUSTOM]+[('/privacy','0.3','yearly'),('/terms','0.3','yearly')]
     x='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url>\n    <loc>{BASE}{u if u!="/" else "/"}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{f}</changefreq>\n    <priority>{pr}</priority>\n  </url>\n' for u,pr,f in rows)+'</urlset>\n'
     open(os.path.join(OUT,'sitemap.xml'),'w').write(x)
 
@@ -687,7 +691,7 @@ def build_chat_index():
     for slug,d in CUSTOM.items():
         out=[];_block_text(d.get('blocks',[]),out)
         add('page',d.get('title',slug),' '.join(out),'/'+slug)
-    for sec in ('services','industries','guides','news'):
+    for sec in ('services','industries','guides','news','locations'):
         if sec in HUB and any(p[0]==sec for p in PAGES): add('page',HUB[sec].get('h1',sec),HUB[sec].get('lead',''),url(sec),'',sec)
     bot={k:v for k,v in CHAT.items() if k!='qa'}
     # the questions visitors type are kept in the AMBS Supabase project (table chat_questions) for /admin -> Chat helper -> Questions visitors asked
@@ -743,7 +747,7 @@ if __name__=='__main__':
         if os.path.exists(path) and (not only or p[0]+'/'+p[1] in only):
             w=build_page(p); total+=w; print(f'{p[0]}/{p[1]}: {w} words')
         elif not os.path.exists(path): print(f'MISSING {p[0]}/{p[1]}')
-    for s in ('services','industries','guides')+(('news',) if any(p[0]=='news' for p in PAGES) else ()): build_hub(s)
+    for s in ('services','industries','guides')+tuple(s_ for s_ in ('news','locations') if any(p[0]==s_ for p in PAGES)): build_hub(s)
     for slug,d in CUSTOM.items(): build_custom(slug,d,rb['pages'].get(slug,''))
     build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap()
     for f in ('index.html','email-signature.html'): stamp_ga(os.path.join(OUT,f))

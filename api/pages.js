@@ -13,12 +13,12 @@ import { SITE_TEXT_JSON, SITE_TEXT_GROUPS } from "./_sitetext.js";
 import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths, readEnglish } from "./_lib.js";
 import { cleanBlocks } from "./_blocks.js";
 
-const SECTIONS = ["guides", "industries", "services", "news", "legal"];
-const LISTED = ["guides", "industries", "services", "news"];
+const SECTIONS = ["guides", "industries", "services", "news", "locations", "legal"];
+const LISTED = ["guides", "industries", "services", "news", "locations"];
 const PAGES_JSON = "site-src/content/pages.json";
-const ICONS = ["auto", "web", "cafe", "trades", "clinic", "retail", "adviser", "transport", "guide", "shield", "chart", "chat", "cal", "link", "invoice", "book", "target"];
+const ICONS = ["auto", "map", "clean", "law", "web", "cafe", "trades", "clinic", "retail", "adviser", "transport", "guide", "shield", "chart", "chat", "cal", "link", "invoice", "book", "target"];
 /* addresses a page of its own can't take */
-const RESERVED = new Set(["index", "admin", "api", "assets", "404", "booking-confirmed", "privacy", "terms", "services", "industries", "guides", "news", "invoice", "sitemap", "robots", "manifest", "sw", "version", "site-src", "logo", "favicon", "og-image"]);
+const RESERVED = new Set(["index", "admin", "api", "assets", "404", "booking-confirmed", "privacy", "terms", "services", "industries", "guides", "news", "locations", "invoice", "sitemap", "robots", "manifest", "sw", "version", "site-src", "logo", "favicon", "og-image"]);
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const today = () => new Date().toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" });
 /* New Zealand time now, as "2026-10-07T09:00" */
@@ -261,7 +261,7 @@ export default async function handler(req, res) {
       }
       if (sec === "guides" || sec === "news") meta.published = meta.updated = today();
       const category = (st && str(st.category, 60).trim()) || (sec === "guides" ? "Getting started" : sec === "news" ? "News" : title);
-      const icon = st && ICONS.includes(st.icon) ? st.icon : sec === "guides" || sec === "news" ? "guide" : "target";
+      const icon = st && ICONS.includes(st.icon) ? st.icon : sec === "guides" || sec === "news" ? "guide" : sec === "locations" ? "map" : "target";
       site.pages.push({ section: sec, slug, title, blurb: "", category, icon, draft: true });
       const body = (st && cleanBody(str(st.body, 60000))) || "<h2>" + title.replace(/[<&>]/g, "") + "</h2>\n<p>Start writing here.</p>";
       await save({
@@ -287,7 +287,7 @@ export default async function handler(req, res) {
     }
 
     if (b.action === "hubs") {
-      for (const sec of ["services", "industries", "guides", "news"]) {
+      for (const sec of ["services", "industries", "guides", "news", "locations"]) {
         const h = (b.hubs || {})[sec];
         if (h) site.hubs[sec] = { title: str(h.title, 300), h1: str(h.h1, 300), lead: str(h.lead, 1500), desc: str(h.desc, 400) };
       }

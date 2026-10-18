@@ -805,7 +805,7 @@ var $=function(id){return document.getElementById(id)};
 var loaded={wording:true},current="wording",dirty=false,fresh={};
 var LIVE_NOTE="Live on ambs.co.nz in about 2 minutes.";
 var ICON_NAMES={auto:"Lightning",web:"Website",cafe:"Coffee cup",trades:"Tools",clinic:"Medical cross",retail:"Shop",adviser:"Document",transport:"Truck",guide:"Book",shield:"Shield",chart:"Chart",chat:"Speech bubble",cal:"Calendar",link:"Link",invoice:"Invoice",book:"Open book",target:"Target"};
-var SEC={guides:"Guides",industries:"Industries",services:"Services",news:"News",legal:"Legal pages",page:"Pages"};
+var SEC={guides:"Guides",industries:"Industries",services:"Services",news:"News",locations:"Locations",legal:"Legal pages",page:"Pages"};
 var SEC_ONE={guides:"guide",industries:"industry page",services:"service page"};
 
 function toast(msg,err){var t=document.createElement("div");t.className="toast"+(err?" err":"");t.setAttribute("role",err?"alert":"status");t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove()},err?6000:3800)}
@@ -973,7 +973,7 @@ function pagesNav(){
   var hub=h('<button type="button" data-k="hubs"><span>Section pages &amp; service cards</span></button>');hub.addEventListener("click",function(){if(leaveOk())openHubs()});n.appendChild(hub);
   var grp=function(t){n.appendChild(h('<div style="font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px .7rem 4px">'+esc(t)+'</div>'))};
   if((site.custom||[]).length){grp("Pages");site.custom.forEach(function(p){navBtn(n,"page",p.slug,p.title,p)})}
-  ["services","industries","guides","news"].forEach(function(sec){var ps=site.pages.filter(function(p){return p.section===sec});if(!ps.length)return;
+  ["services","industries","guides","locations","news"].forEach(function(sec){var ps=site.pages.filter(function(p){return p.section===sec});if(!ps.length)return;
     grp(SEC[sec]);ps.forEach(function(p){navBtn(n,p.section,p.slug,p.title,p)});
   });
   n.appendChild(h('<div style="font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px .7rem 4px">Legal pages</div>'));
@@ -1005,7 +1005,7 @@ function pageUrl(sec,slug){return sec==="legal"||sec==="page"?"/"+slug:"/"+sec+"
 function newPage(){
   if(!leaveOk())return;
   var m=$("pgMain");open=false;markNav();
-  m.innerHTML='<h2 class="sec">Add a new page</h2><div class="panel"><div class="fld"><label for="npSec">What kind of page?</label><select id="npSec" class="t"><option value="page">Page built from blocks (any address, like /about)</option><option value="news">News post</option><option value="guides">Guide</option><option value="industries">Industry page</option><option value="services">Service page</option></select></div><div class="fld" id="npSlugF"><label for="npSlug">Address (optional)</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)">For example “about” makes ambs.co.nz/about. Left empty, it comes from the title.</p><input class="t" id="npSlug" placeholder="about"></div><div class="fld"><label for="npTitle">Title</label><input class="t" id="npTitle" placeholder="For example: How to automate your rosters"></div><div class="fld" id="npFromF"><label for="npFrom">Start from</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)" id="npFromHelp"></p><select id="npFrom" class="t"></select></div><button type="button" class="btn primary" id="npGo">Create page</button><p class="help" style="margin-top:12px">The new page starts as a draft, so nothing appears on the website until you press Publish.</p></div>';
+  m.innerHTML='<h2 class="sec">Add a new page</h2><div class="panel"><div class="fld"><label for="npSec">What kind of page?</label><select id="npSec" class="t"><option value="page">Page built from blocks (any address, like /about)</option><option value="news">News post</option><option value="guides">Guide</option><option value="industries">Industry page</option><option value="locations">Location page (a town or city you work in)</option><option value="services">Service page</option></select></div><div class="fld" id="npSlugF"><label for="npSlug">Address (optional)</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)">For example “about” makes ambs.co.nz/about. Left empty, it comes from the title.</p><input class="t" id="npSlug" placeholder="about"></div><div class="fld"><label for="npTitle">Title</label><input class="t" id="npTitle" placeholder="For example: How to automate your rosters"></div><div class="fld" id="npFromF"><label for="npFrom">Start from</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)" id="npFromHelp"></p><select id="npFrom" class="t"></select></div><button type="button" class="btn primary" id="npGo">Create page</button><p class="help" style="margin-top:12px">The new page starts as a draft, so nothing appears on the website until you press Publish.</p></div>';
   /* the pages of the chosen kind, to borrow their layout */
   function fromList(){var sec=$("npSec").value,ps=sec==="page"?(site.custom||[]):site.pages.filter(function(p){return p.section===sec});
     $("npFrom").innerHTML='<option value="">A blank page</option>'+ps.map(function(p){return'<option value="'+esc(p.slug)+'">'+(sec==="page"?"A copy of: ":"The layout of: ")+esc(p.title)+'</option>'}).join("");
@@ -1285,9 +1285,9 @@ function choosePhoto(){
 
 /* section pages and service cards */
 function openHubs(){
-  open=false;markNav();dirty=false;var m=$("pgMain");m.innerHTML='<h2 class="sec">Section pages &amp; service cards</h2><p class="sechelp">The top of the Services, Industries and Guides pages, the two big service cards and the “How every project runs” steps.</p>';
+  open=false;markNav();dirty=false;var m=$("pgMain");m.innerHTML='<h2 class="sec">Section pages &amp; service cards</h2><p class="sechelp">The top of the Services, Industries, Guides and Locations pages, the two big service cards and the “How every project runs” steps.</p>';
   var hubs=site.hubs;
-  ["services","industries","guides"].forEach(function(sec){var p=h('<div class="panel"><h3>'+SEC[sec]+' page <a href="/'+sec+'" target="_blank" rel="noopener" style="font-size:.85rem;font-weight:600">View</a></h3></div>');
+  ["services","industries","guides","locations"].filter(function(s){return hubs[s]}).forEach(function(sec){var p=h('<div class="panel"><h3>'+SEC[sec]+' page <a href="/'+sec+'" target="_blank" rel="noopener" style="font-size:.85rem;font-weight:600">View</a></h3></div>');
     p.appendChild(fld("hb-"+sec+"-h1","Heading",hubs[sec].h1,{max:90}));p.appendChild(fld("hb-"+sec+"-lead","Introduction",hubs[sec].lead,{area:true,max:320}));
     p.appendChild(fld("hb-"+sec+"-title","Title in Google",hubs[sec].title,{max:65}));p.appendChild(fld("hb-"+sec+"-desc","Description in Google",hubs[sec].desc,{area:true,max:160}));m.appendChild(p)});
   site.service_cards.forEach(function(c,i){var p=h('<div class="panel"><h3>Service card: '+esc(c.title)+'</h3><p class="help">Shown on the Services page.</p><div class="grid2"></div></div>');var g=p.querySelector(".grid2");
@@ -1296,7 +1296,7 @@ function openHubs(){
     var inc=listEditor("What's included","One per line, shown with a tick.",c.includes.map(function(x){return x.text}),"Add a line");inc.style.border="0";inc.style.padding="0";inc.id="sc"+i+"inc";p.appendChild(inc);m.appendChild(p)});
   var st=h('<div class="panel"><h3>How every project runs</h3><p class="help">The numbered steps on the Services page.</p></div>');
   site.service_steps.forEach(function(x,i){st.appendChild(fld("st"+i+"t","Step "+(i+1)+" title",x.title,{max:50}));st.appendChild(fld("st"+i+"d","Step "+(i+1)+" text",x.text,{area:true,max:200}))});m.appendChild(st);
-  var act=h('<div class="actions"><span class="sp"></span><select class="t" id="hbWhich" style="width:auto"><option value="services">Preview the Services page</option><option value="industries">Preview the Industries page</option><option value="guides">Preview the Guides page</option></select><button type="button" class="btn" id="hbPrev">Preview</button><button type="button" class="btn primary" id="hbSave">Save &amp; publish</button></div>');m.appendChild(act);
+  var act=h('<div class="actions"><span class="sp"></span><select class="t" id="hbWhich" style="width:auto"><option value="services">Preview the Services page</option><option value="industries">Preview the Industries page</option><option value="guides">Preview the Guides page</option>'+(hubs.locations?'<option value="locations">Preview the Locations page</option>':'')+'</select><button type="button" class="btn" id="hbPrev">Preview</button><button type="button" class="btn primary" id="hbSave">Save &amp; publish</button></div>');m.appendChild(act);
   $("hbPrev").addEventListener("click",function(){var b=this,sec=$("hbWhich").value,v=function(id){return $(id).value};busy(b,true,"Preparing…");
     pageDoc("/"+sec).then(function(d){setText(d,".phero h1",v("hb-"+sec+"-h1"));setText(d,".phero .plead",v("hb-"+sec+"-lead"));
       if(sec==="services"){d.querySelectorAll(".svc-card").forEach(function(c,i){if(!$("sc"+i+"title"))return;setText(c,".svc-k",v("sc"+i+"label"));setText(c,".svc-t",v("sc"+i+"title"));setText(c,".svc-d",v("sc"+i+"text"));var g=c.querySelector(".svc-go");if(g&&g.firstChild)g.firstChild.textContent=v("sc"+i+"button")+" ";
@@ -1306,7 +1306,7 @@ function openHubs(){
   m.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
   $("hbSave").addEventListener("click",function(){var b=this,v=function(id){return $(id).value};
     var out={action:"hubs",hubs:{},service_cards:[],service_steps:[]};
-    ["services","industries","guides"].forEach(function(sec){out.hubs[sec]={h1:v("hb-"+sec+"-h1"),lead:v("hb-"+sec+"-lead"),title:v("hb-"+sec+"-title"),desc:v("hb-"+sec+"-desc")}});
+    ["services","industries","guides","locations"].filter(function(s){return $("hb-"+s+"-h1")}).forEach(function(sec){out.hubs[sec]={h1:v("hb-"+sec+"-h1"),lead:v("hb-"+sec+"-lead"),title:v("hb-"+sec+"-title"),desc:v("hb-"+sec+"-desc")}});
     site.service_cards.forEach(function(c,i){out.service_cards.push({label:v("sc"+i+"label"),title:v("sc"+i+"title"),text:v("sc"+i+"text"),button:v("sc"+i+"button"),includes:$("sc"+i+"inc").values().map(function(t,k){return{icon:(c.includes[k]||c.includes[c.includes.length-1]).icon,text:t}})})});
     site.service_steps.forEach(function(x,i){out.service_steps.push({title:v("st"+i+"t"),text:v("st"+i+"d")})});
     busy(b,true);api("pages",out).then(function(){dirty=false;toast("Saved. "+LIVE_NOTE);return api("pages",{action:"list"}).then(function(l){site=l;openHubs()})}).catch(function(e){busy(b,false);fail(e)})});
