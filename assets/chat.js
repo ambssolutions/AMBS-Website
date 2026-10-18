@@ -635,5 +635,7 @@
       state.msgs=[];state.lang="";state.noRoman=0;save();if(log)log.innerHTML="";nudgeTimer()});
     window.AMBS_CHAT_OPEN=open;window.AMBS_CHAT_RM=function(t){return romanLang(t)+": "+romanMeaning(t)};window.AMBS_CHAT_SEARCH=function(q,n){return load().then(function(){return search(q).slice(0,n||6).map(function(r){return[r.D.d.k,r.D.d.t,+r.s.toFixed(2),+r.cov.toFixed(2),Object.keys(r.hit).join(" ")]}).concat([JSON.stringify(search(q).IW)])})};
     document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest('a[href="#ask"],a[href="/#ask"]');if(a){ev.preventDefault();open()}})}
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+  /* speed: the chat button is built once the page has loaded and the phone is idle, never while the page is still opening */
+  var go=function(){if(window.requestIdleCallback)requestIdleCallback(start,{timeout:2500});else setTimeout(start,300)};
+  if(document.readyState==="complete")go();else addEventListener("load",go);
 })();

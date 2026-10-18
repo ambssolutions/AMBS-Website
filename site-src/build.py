@@ -61,6 +61,9 @@ def social_html():
         'var w=new URL(l.href),p=w.pathname;if(/instagram/.test(w.host))p="/_u"+p;'
         'l.href="intent://"+w.host+p+"#Intent;scheme=https;package="+l.dataset.app+";S.browser_fallback_url="+encodeURIComponent(w.href)+";end"})})();</script>')
     return f'<div class="f2-social">{"".join(out)}</div>{js}' if out else ''
+# the two site fonts are served from /assets/fonts (downloaded from Google Fonts: latin and latin-ext, which has the
+# te reo macrons) and preloaded, so they arrive with the page instead of making the browser lay it out again later
+FONT_HEAD='<!--fonts--><link rel="preload" href="/assets/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>\n<link rel="preload" href="/assets/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>\n<style>@font-face {font-family: \'Bricolage Grotesque\'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(/assets/fonts/bricolage-grotesque-latin-ext.woff2) format(\'woff2\'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}@font-face {font-family: \'Bricolage Grotesque\'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(/assets/fonts/bricolage-grotesque-latin.woff2) format(\'woff2\'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face {font-family: \'Instrument Sans\'; font-style: normal; font-weight: 400 700; font-stretch: 100%; font-display: swap; src: url(/assets/fonts/instrument-sans-latin-ext.woff2) format(\'woff2\'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}@font-face {font-family: \'Instrument Sans\'; font-style: normal; font-weight: 400 700; font-stretch: 100%; font-display: swap; src: url(/assets/fonts/instrument-sans-latin.woff2) format(\'woff2\'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}</style><!--/fonts-->'
 def ga_snippet():
     # sends page views plus the actions that matter: booking clicks, phone and email taps, booking confirmed
     if not re.match(r'^G-[A-Z0-9]{4,}$',GA_ID): return ''
@@ -200,9 +203,7 @@ def head(title,desc,canon,ld,ogtype='website',blocks=False):
 <link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
 <link rel="manifest" href="/manifest.webmanifest">
 {THEME}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+{FONT_HEAD}
 <link rel="stylesheet" href="/assets/pages.css?v={CSSV}">{chr(10)+'<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'">' if blocks else ''}
 <script type="application/ld+json">{json.dumps(ld,ensure_ascii=False)}</script>
 {ga_snippet()}
@@ -780,6 +781,9 @@ if __name__=='__main__':
     for slug,d in CUSTOM.items(): build_custom(slug,d,rb['pages'].get(slug,''))
     build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap()
     for f in ('index.html','email-signature.html'): stamp_ga(os.path.join(OUT,f))
+    _ip=os.path.join(OUT,'index.html');_ih=open(_ip,encoding='utf8').read()
+    _ih2=re.sub(r'<!--fonts-->.*?<!--/fonts-->',lambda m:FONT_HEAD,_ih,flags=re.S)
+    if _ih2!=_ih: open(_ip,'w',encoding='utf8').write(_ih2)
     # the homepage's business details for Google list the same social profiles
     idx=os.path.join(OUT,'index.html')
     if os.path.exists(idx):
