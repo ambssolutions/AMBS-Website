@@ -1494,7 +1494,12 @@ function slim(h){
     attrs=attrs.replace(/ (bgcolor|color)="#([0-9a-f])\2([0-9a-f])\3([0-9a-f])\4"/gi,' $1="#$2$3$4"'); /* not fillcolor/strokecolor: Outlook's button shape wants the full colour */
     return"<"+name+attrs+">"});
   return h.replace(/>\s*\n\s*</g,"><").trim()}
-function emailHtml(){return S.useCode&&String(S.code||"").trim()?cleanCode(S.code,false):builtHtml()}
+function emailHtml(){var h=S.useCode&&String(S.code||"").trim()?cleanCode(S.code,false):builtHtml();return COPY_GMAIL?gmailOnly(h):h}
+/* Gmail removes Outlook-only code from a signature when it saves it (the drawn Outlook buttons and mso- settings), but counts it towards
+   its 10,000-character limit when you paste: leave it out of the Gmail copy so the same signature fits. Nothing Gmail shows changes. */
+function gmailOnly(h){
+  h=h.replace(/<!--\[if mso\]>[\s\S]*?<!\[endif\]-->/g,"").replace(/<!--\[if !mso\]><!-->/g,"").replace(/<!--<!\[endif\]-->/g,"");
+  return h.replace(/ style="([^"]*)"/g,function(m,st){var d=st.split(";").filter(function(x){return x.trim()&&!/^\s*mso-/i.test(x)});return d.length?' style="'+d.join(";")+'"':""})}
 /* your own HTML code: keep the signature, take out anything that could run (scripts, event handlers, javascript: links).
    forPreview also drops <style> and <link> so they can't restyle the builder itself. */
 function cleanCode(h,forPreview){var d=new DOMParser().parseFromString(String(h||""),"text/html");
