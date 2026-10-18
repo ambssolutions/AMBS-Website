@@ -2364,3 +2364,11 @@ html body #how .sec-head{position:sticky;top:var(--hdr-h,60px);z-index:3;margin-
 html[data-theme=dark] body #how .sec-head{background:linear-gradient(180deg,rgba(22,28,51,.98),rgba(22,28,51,.92))}
 html body #how .steps{--stack-top:calc(var(--hdr-h,60px) + var(--how-head,88px) + 10px)!important;margin-top:1rem!important}
 }
+
+/* social profile icons under the footer tagline (from "profiles" in site.json) */
+footer.f2 .f2-social{display:flex;gap:10px;margin-top:1rem;flex-wrap:wrap}
+footer.f2 .f2-social a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;border:1px solid rgba(91,100,121,.25);color:#3b4356;transition:color .2s,border-color .2s,background .2s}
+footer.f2 .f2-social a:hover,footer.f2 .f2-social a:focus-visible{color:#fff;background:#1877E0;border-color:#1877E0}
+footer.f2 .f2-social svg{width:19px;height:19px;fill:currentColor}
+html[data-theme=dark] footer.f2 .f2-social a{color:#d7dbe6;border-color:rgba(215,219,230,.25)}
+@media (prefers-color-scheme:dark){html:not([data-theme=light]) footer.f2 .f2-social a{color:#d7dbe6;border-color:rgba(215,219,230,.25)}}

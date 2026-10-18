@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<script>
+/* a refresh always starts fresh: top of the same page, with no leftover #section */
+(function(){try{
+  var nav=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0];
+  var reload=nav?nav.type==="reload":!!(performance.navigation&&performance.navigation.type===1);
+  if(!reload)return;
+  var app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  if(location.hash||location.search)history.replaceState(null,"",location.pathname);
+  window.scrollTo({top:0,behavior:"instant"});addEventListener("load",function(){window.scrollTo({top:0,behavior:"instant"});});
+}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Client Portals for NZ Small Business: A Guide | Ambs</title>
+<meta name="description" content="Do you need a client portal? What a customer portal is, when it beats email for an NZ small business, what goes in one, security and privacy, and how to start.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://ambs.co.nz/guides/client-portals">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ambs Solutions">
+<meta property="og:url" content="https://ambs.co.nz/guides/client-portals">
+<meta property="og:title" content="Client Portals for NZ Small Business: A Guide | Ambs">
+<meta property="og:description" content="Do you need a client portal? What a customer portal is, when it beats email for an NZ small business, what goes in one, security and privacy, and how to start.">
+<meta property="og:image" content="https://ambs.co.nz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_NZ">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F7FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1428" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v4.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<script>(function(){var t=null;try{t=sessionStorage.getItem("ambs:theme")}catch(e){}if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}document.documentElement.dataset.theme=t})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/pages.css?v=5d589139">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ambs.co.nz/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://ambs.co.nz/guides"}, {"@type": "ListItem", "position": 3, "name": "Client portals for small business", "item": "https://ambs.co.nz/guides/client-portals"}]}, {"@type": "ProfessionalService", "@id": "https://ambs.co.nz/#business", "name": "Ambs Solutions", "url": "https://ambs.co.nz/", "telephone": "+64 22 099 9578", "email": "hello@ambs.co.nz", "areaServed": {"@type": "Country", "name": "New Zealand"}, "address": {"@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ"}, "logo": "https://ambs.co.nz/logo.png", "sameAs": ["https://www.instagram.com/ambssolutions/", "https://www.tiktok.com/@ambssolutions"]}, {"@type": "Article", "headline": "Client portals for small business", "description": "Do you need a client portal? What a customer portal is, when it beats email for an NZ small business, what goes in one, security and privacy, and how to start.", "datePublished": "2026-10-04", "dateModified": "2026-10-04", "inLanguage": "en-NZ", "wordCount": 2191, "author": {"@type": "Organization", "name": "Ambs Solutions", "url": "https://ambs.co.nz/"}, "publisher": {"@id": "https://ambs.co.nz/#business"}, "mainEntityOfPage": "https://ambs.co.nz/guides/client-portals", "image": "https://ambs.co.nz/logo.png", "articleSection": "Digital tools"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need a client portal?", "acceptedAnswer": {"@type": "Answer", "text": "Not always. A portal tends to pay off when you exchange documents, approvals or updates with many customers, the same way, week after week, and things get lost in email. If you have a few customers and simple jobs, tidy email and a shared folder may do the job."}}, {"@type": "Question", "name": "What is the difference between a client portal and a customer portal?", "acceptedAnswer": {"@type": "Answer", "text": "Usually nothing. Advisers and accountants tend to say client portal, while shops, trades and transport businesses often say customer portal. Both mean a private area where each customer signs in and sees only their own information. A staff portal is the same idea for your team."}}, {"@type": "Question", "name": "Will my customers need to download an app?", "acceptedAnswer": {"@type": "Answer", "text": "Usually not. A portal can run in the phone's web browser and be added to the home screen so it feels like an app, without anything to download from an app store."}}, {"@type": "Question", "name": "Is a client portal more secure than email?", "acceptedAnswer": {"@type": "Answer", "text": "It can be. A portal lets you control who sees what, keep documents in one place and see who approved what and when, rather than having copies spread across inboxes. It still needs good basics, such as separate logins, sensible permissions and two-factor authentication for anyone with wide access."}}, {"@type": "Question", "name": "Can a client portal connect to Xero?", "acceptedAnswer": {"@type": "Answer", "text": "It can be set up to show customers what they owe and what they have paid, pulled from your accounting software, and an approval in the portal can create a draft invoice. What is possible depends on the tools involved, so check this before you start."}}]}]}</script>
+<!--ga--><script async src="https://www.googletagmanager.com/gtag/js?id=G-X0ZZ2V4GJZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X0ZZ2V4GJZ");document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";if(/#book$/.test(h)||/zohobookings/.test(h))gtag("event","book_click",{link_text:(a.textContent||"").trim().slice(0,60)});else if(h.indexOf("tel:")===0)gtag("event","phone_click");else if(h.indexOf("mailto:")===0)gtag("event","email_click")},true);if(location.pathname.indexOf("/booking-confirmed")===0)gtag("event","booking_confirmed");</script><!--/ga-->
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="hdr"><div class="sh-bar">
+  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
+  <div class="sh-right">
+    <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
+    <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language"><option value="en" selected>English</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="mi">Te Reo Māori</option><option value="pa">ਪੰਜਾਬੀ</option></select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    <nav class="sh-nav" aria-label="Main"><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#how">How it works</a><a href="/#faq">Questions</a><a href="/services">Services</a><a href="/guides" aria-current="page">Guides</a></nav>
+    <a class="sh-btn sh-book" href="/#book">Book a call</a>
+    <a class="sh-btn sh-contact" href="#contact">Contact us</a>
+    <a class="sh-ico sh-sm sh-call" href="tel:+64220999578" aria-label="Call us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+    <button class="sh-menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"><span></span></button>
+  </div>
+  <nav class="sh-drawer" id="siteNav" aria-label="Menu">
+    <a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a><a href="/#faq">Questions</a><a href="/services">Services</a><a href="/guides" aria-current="page">Guides</a><a href="/industries">Industries</a>
+    <a class="sh-btn sh-contact sh-wide" href="#contact">Contact us</a>
+    <div class="sh-pair" role="group" aria-label="Light or dark mode"><button type="button" data-settheme="light" aria-pressed="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.5M12 18.9v2.5M2.6 12h2.5M18.9 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></svg><span>Light</span></button><button type="button" data-settheme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span></button></div>
+  </nav>
+</div></header>
+<main id="main">
+<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/guides">Guides</a></li><li aria-current="page">Client portals for small business</li></ol></nav></div>
+<section class="phero"><div class="wrap">
+  <p class="eyebrow">Digital tools</p>
+  <h1>Client portals for small business</h1>
+  <p class="plead">A client portal gives your customers one private place to send documents, approve work and see where things stand, instead of a trail of emails. It isn&#x27;t right for every business. This guide helps you decide, and shows what to put in one if you go ahead.</p>
+  <div class="pmeta"><span>Digital tools</span><span>10 min read</span><span>Updated 4 October 2026</span></div>
+  
+</div></section>
+<div class="wrap layout">
+  <article class="prose">
+<div class="takeaways"><b>In short</b><ul><li>A client portal is a private, logged-in area where each customer sees only their own jobs, documents, approvals and invoices.</li><li>It&#x27;s usually worth it when you chase the same documents, approvals or updates from many customers, again and again.</li><li>If you have a handful of customers and simple jobs, good email habits and a shared folder may be enough.</li><li>Start with one feature, such as document uploads or approvals, and add more once people use it.</li><li>Treat it as a store of personal information: separate logins, the right permissions, known hosting and a plan for old records.</li></ul></div>
+<h2>What a client portal is</h2>
+<p>Picture an accountant's inbox in tax season. One client has sent bank statements as photos, another has replied to the wrong email thread, and a third has sent the same document twice with different names. Somewhere in there is a signed form, probably.</p>
+<div class="msgs" aria-label="Example client emails">
+  <p class="msg msg--in">Hi, did you get the statements I sent last week? Not sure if they came through.</p>
+  <p class="msg msg--in">Attached again just in case. Also what else do you need from me?</p>
+</div>
+<p>Those messages are a sign of the problem a client portal solves. A portal is a private, logged-in area of a website. Each customer signs in and sees only what relates to them: their documents, their jobs, what's still outstanding, what they've approved and what they owe.</p>
+<p>You may hear it called a client portal, a customer portal or a member area. When it's for your team rather than your customers, it's usually called a staff portal. The idea is the same: one place for the things that otherwise get scattered across email, texts and group chats.</p>
+<p>A portal can work on any phone. It can run in the web browser and be added to the home screen like an app, so nobody has to download anything from an app store.</p>
+
+<h2>Do you need a client portal?</h2>
+<p>A portal is a tool, not a badge of a modern business. Some businesses get a lot from one. Others would be adding a login nobody uses. This comparison is a good starting point:</p>
+<table>
+  <thead><tr><th>Email and a shared folder are often enough when</th><th>A portal is usually worth a look when</th></tr></thead>
+  <tbody>
+    <tr><td>You have a small number of customers at any time</td><td>You work with many customers at once, each at a different stage</td></tr>
+    <tr><td>Each job needs one or two documents</td><td>You chase the same set of documents from every customer</td></tr>
+    <tr><td>Approvals are rare and simple</td><td>Quotes, variations or sign-offs need a clear record of who approved what and when</td></tr>
+    <tr><td>Customers rarely ask "where's my job up to?"</td><td>Status questions arrive every day by phone and email</td></tr>
+    <tr><td>Information is low risk</td><td>You handle personal, financial or health details you'd rather not have sitting in inboxes</td></tr>
+  </tbody>
+</table>
+<p>If most of your answers sit in the right-hand column, a portal could save real time. If they're mostly on the left, start by tidying how email and folders are used. That costs little and may solve most of the problem.</p>
+<div class="callout callout--tip"><p><strong>Count before you decide.</strong> For one normal week, note every time someone chases a document, sends a status update or asks "did you get my email?". That tally tells you more than any feature list. Our guide on <a href="/guides/how-to-choose-what-to-automate-first">choosing what to automate first</a> explains how to time a task.</p></div>
+
+<h2>When email is still the better choice</h2>
+<p>It's worth being honest about this. A portal asks every customer to do something new: sign in, find their way around and come back next time. If a customer only deals with you once a year, they may forget how. If your customers are mostly older or not confident online, a portal can feel like a barrier rather than a help.</p>
+<p>Email also has real strengths. Everyone has it, it needs no training and it already sits on every phone. Some simple habits get you a long way:</p>
+<ul>
+  <li>One shared business inbox, rather than documents landing in personal accounts</li>
+  <li>A standard checklist email that lists exactly what each customer needs to send</li>
+  <li>A consistent way of naming and filing documents as they arrive</li>
+  <li>Automatic, polite reminders until everything is in</li>
+</ul>
+<p>That last one can be automated without a portal at all. Many businesses start with automated reminders and add a portal later, once they can see where email still falls short.</p>
+
+<h2>What goes in a client portal</h2>
+<p>The best portals do a few jobs well rather than everything at once. These are the features small businesses most often start with:</p>
+<div class="task-grid">
+  <div class="task"><b>Document uploads</b><span>Advisers and accountants</span><p>Clients upload documents to one safe place, see what's still outstanding and sign forms, instead of emailing attachments.</p></div>
+  <div class="task"><b>Approvals</b><span>Trades and building</span><p>Quotes, variations and sign-offs approved with one tap, with a record of who approved what and when.</p></div>
+  <div class="task"><b>Invoices and statements</b><span>Any business that bills</span><p>Customers see what they owe and what they've paid, pulled from your accounting software.</p></div>
+  <div class="task"><b>Bookings and tracking</b><span>Transport and delivery</span><p>Regular customers book deliveries, track status and download proof of delivery themselves.</p></div>
+</div>
+<p>Other common features include progress photos for a building job, intake forms and upcoming appointments for a clinic, and notes the business wants a client to read on their file.</p>
+<p>Our industry pages show how portals fit different kinds of work, from <a href="/industries/advisers-and-accountants">advisers and accountants</a> and <a href="/industries/clinics-and-salons">clinics and salons</a> to <a href="/industries/trades-and-building">trades and building</a> and <a href="/industries/transport-and-delivery">transport and delivery</a>.</p>
+<h3>Things to leave out at first</h3>
+<p>Live chat, discussion boards, detailed reports and long settings pages can all wait. Each extra screen is something to build, explain and keep up to date. If customers ask for more once they're using the portal, that's a good sign, and a much better guide than guessing up front.</p>
+
+<h2>Customer portals and staff portals</h2>
+<p>Many businesses find the same thinking applies on the inside. A staff portal gives your team one place for the day's jobs, notes, photos, checklists and rosters, instead of a group chat.</p>
+<p>The two often work best together. A building crew uploads photos against a job in the staff portal, and the client sees progress and approves a variation in the customer portal. Because both read from the same records, nobody has to forward photos or retype approvals.</p>
+<p>If you're unsure which to start with, ask where the most chasing happens. If it's with customers, start there. If it's within your own team, a staff portal may give you more time back first.</p>
+
+<h2>Connecting a portal to the tools you already use</h2>
+<p>A portal is most useful when it's joined up with the rest of the business, so information is entered once and used everywhere. For example:</p>
+<ul>
+  <li>A job approved in the portal creates a draft invoice in your accounting software, such as Xero.</li>
+  <li>Documents uploaded by a client are filed into the right folder, such as in OneDrive, SharePoint or Google Drive.</li>
+  <li>A completed checklist updates the customer's record, so the reminders stop on their own.</li>
+  <li>The portal's jobs and approvals feed a dashboard, so you can see what's waiting without opening every file.</li>
+</ul>
+<p>What's possible depends on the tools involved and how they connect. Our guide to <a href="/guides/connect-your-business-apps">connecting your business apps</a> explains how information moves between systems and where it can go wrong.</p>
+
+<h2>Client portal security and privacy</h2>
+<div class="callout callout--note"><p><strong>General information, not legal advice.</strong> For anything specific to your business, check the guidance from the Office of the Privacy Commissioner or talk to a lawyer.</p></div>
+<p>A client portal usually holds personal information: names, contact details, and often financial, health or identity documents. Under the Privacy Act 2020 you're expected to keep personal information reasonably safe from loss, misuse and unauthorised access, and what's reasonable depends on how sensitive it is.</p>
+<p>A well set up portal can be safer than email, because documents live in one controlled place rather than as copies in several inboxes. But only if the basics are right:</p>
+<ol class="steps-list">
+  <li><strong>Separate logins for everyone.</strong> Each customer and each staff member has their own, so access can be removed when someone leaves or a job ends.</li>
+  <li><strong>Permissions that match the role.</strong> Each customer sees only their own information. Staff see only what their role needs.</li>
+  <li><strong>Two-factor authentication for wide access.</strong> At the very least for you and anyone on your team who can see many customers' details.</li>
+  <li><strong>Know where it's hosted.</strong> Find out where the portal's data is stored, and who at the provider can see it.</li>
+  <li><strong>A plan for old records.</strong> Decide how long documents are kept, and remember copies in other places. Businesses generally need to keep business records for seven years for tax purposes, and your accountant can tell you which records that covers.</li>
+  <li><strong>Test that one customer can't see another's files.</strong> Check it before launch, and again after any change.</li>
+</ol>
+<p>If something does go wrong, such as a document shown to the wrong customer, and it has caused or is likely to cause serious harm, the Privacy Act requires you to notify the Privacy Commissioner and the people affected as soon as practicable. Our guide to <a href="/guides/privacy-act-2020-and-automation">the Privacy Act 2020 and automation</a> covers this and has a checklist to run through.</p>
+<p>When we build portals, they're set up so each person sees only what they should, and you control who has access. Data we store for you is hosted in New Zealand or Australia, and only Ambs works on your project and sees your data.</p>
+
+<h2>What makes customers actually use a portal</h2>
+<p>A portal nobody opens is just another login. The ones that get used tend to share a few traits:</p>
+<ul>
+  <li><strong>It works well on a phone.</strong> Many customers will only ever open it on one.</li>
+  <li><strong>Signing in is simple.</strong> Fewer steps mean fewer "I can't get in" calls, while still keeping it secure.</li>
+  <li><strong>It saves the customer effort too.</strong> Uploading a photo of a document, or approving a quote with one tap, should be easier than finding the right email.</li>
+  <li><strong>Notifications bring people back.</strong> A short email or text with a link, such as "your quote is ready to approve", is usually what gets someone to open it.</li>
+  <li><strong>It looks like you.</strong> Your logo and colours reassure customers that they're in the right place.</li>
+  <li><strong>Your team uses it consistently.</strong> If staff still send documents by email "just this once", customers will too.</li>
+</ul>
+<p>If many of your customers are more comfortable in another language, it helps if the key screens and messages are in that language too. Have translations checked by a fluent speaker.</p>
+
+<h2>How to start a client portal: one feature first</h2>
+<ol class="steps-list">
+  <li><strong>Pick the one job that causes the most chasing.</strong> Often it's document collection, approvals or status updates.</li>
+  <li><strong>Write down what done looks like.</strong> For example: "clients see their checklist, upload each document against it, and we're told when everything is in."</li>
+  <li><strong>Decide who can see what.</strong> Before anything is built, list the people who'll use it and what each needs to see.</li>
+  <li><strong>Try it with a few friendly customers.</strong> Watch where they get stuck and fix that before you invite everyone.</li>
+  <li><strong>Make it the normal way.</strong> Point every request to the portal, and stop accepting the same thing three different ways.</li>
+  <li><strong>Add the next feature once it's used.</strong> Let real use, not a wish list, decide what comes next.</li>
+</ol>
+
+<h2>Questions to ask before you build or buy a portal</h2>
+<ul>
+  <li>Which job will it take off us first, and how much time does that job take now?</li>
+  <li>Who owns the portal, the data and the logins?</li>
+  <li>Where is the data stored, and who can see it?</li>
+  <li>Can each customer only ever see their own information, and how is that tested?</li>
+  <li>Does it connect to the tools we already use, such as our accounting software and file storage?</li>
+  <li>Can customers use it on a phone without downloading an app?</li>
+  <li>Can we export our data and keep everything if we change provider?</li>
+  <li>Who do we call when a customer can't sign in?</li>
+</ul>
+<p>If you'd like a second opinion on whether a portal is worth it for your business, or which feature to start with, that's what our free session is for. We look at how documents, approvals and updates move through your business today and leave you with a written plan that's yours to keep. See our <a href="/services/websites-and-portals">websites, portals and dashboards service</a> for how we build them.</p>
+<section class="g-calc" aria-labelledby="calcH"><p class="g-calc-k">Try it with your own numbers</p><h2 id="calcH" class="g-calc-h">Work out your hours back</h2>
+<p class="g-calc-sub">Pick one repetitive task. Move the sliders to match a normal week.</p>
+<div class="g-calc-in">
+<label>How many times a week<output id="cTimes">20</output><input type="range" id="rTimes" min="1" max="150" value="20"></label>
+<label>Minutes each time<output id="cMins">10</output><input type="range" id="rMins" min="1" max="60" value="10"></label>
+<label>How much could be automated<output id="cShare">50%</output><input type="range" id="rShare" min="10" max="90" step="10" value="50"></label>
+</div>
+<div class="g-calc-out"><div><b id="cNow">3.3</b><span>hours a week on this task now</span></div><div class="g-calc-big"><b id="cYear">87</b><span>hours a year back</span></div></div>
+<p class="g-calc-note">An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together. <a href="/#book">Book a free session →</a></p>
+</section><h2 id="questions">Common questions</h2><div class="faq"><details><summary>Do I need a client portal?</summary><p>Not always. A portal tends to pay off when you exchange documents, approvals or updates with many customers, the same way, week after week, and things get lost in email. If you have a few customers and simple jobs, tidy email and a shared folder may do the job.</p></details><details><summary>What is the difference between a client portal and a customer portal?</summary><p>Usually nothing. Advisers and accountants tend to say client portal, while shops, trades and transport businesses often say customer portal. Both mean a private area where each customer signs in and sees only their own information. A staff portal is the same idea for your team.</p></details><details><summary>Will my customers need to download an app?</summary><p>Usually not. A portal can run in the phone&#x27;s web browser and be added to the home screen so it feels like an app, without anything to download from an app store.</p></details><details><summary>Is a client portal more secure than email?</summary><p>It can be. A portal lets you control who sees what, keep documents in one place and see who approved what and when, rather than having copies spread across inboxes. It still needs good basics, such as separate logins, sensible permissions and two-factor authentication for anyone with wide access.</p></details><details><summary>Can a client portal connect to Xero?</summary><p>It can be set up to show customers what they owe and what they have paid, pulled from your accounting software, and an approval in the portal can create a draft invoice. What is possible depends on the tools involved, so check this before you start.</p></details></div>
+  </article>
+  <aside class="toc" aria-label="On this page"><div class="toc-box"><b>On this page</b><ol id="tocList"></ol></div></aside>
+</div>
+<div class="wrap"><section class="section"><div class="section-h"><h2>Keep reading</h2><a href="/guides">All guides →</a></div><div class="cards"><a class="card" href="/services/websites-and-portals" data-cat="Services"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 8.5h18"/><circle cx="12" cy="14.3" r="3.4"/></svg></span><span class="tag">Services</span><h3>Websites, portals and dashboards</h3><p>Fast multilingual websites, staff and customer portals, and live dashboards you own.</p><span class="go">Learn more</span></a><a class="card" href="/industries/advisers-and-accountants" data-cat="Professional services"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="tag">Professional services</span><h3>Advisers and accountants</h3><p>Document chasing, file notes from calls and compliance records.</p><span class="go">Learn more</span></a><a class="card" href="/guides/privacy-act-2020-and-automation" data-cat="Compliance"><span class="card-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg></span><span class="tag">Compliance</span><h3>The Privacy Act 2020 and automation</h3><p>What New Zealand businesses should check before automating anything that touches personal information.</p><span class="go">Read the guide</span></a></div></section><section class="cta"><div><h2>See what you could hand over</h2><p>Book a free session. We look at how your work really happens and leave you with a written plan and an hours estimate, yours to keep.</p></div>
+  <div class="btns"><a class="btn btn--go" href="/#book">Book a free session</a><a class="btn btn--ghost" href="tel:+64220999578">Call +64 22 099 9578</a></div></section></div>
+</main>
+<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Call</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>Book</span></a></nav>
+<footer class="ftr f2"><div class="wrap">
+  <div class="f2-grid">
+    <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
+      <p>AI automation and digital solutions for New Zealand businesses. Built in Auckland, working nationwide.</p><div class="f2-social"><a href="https://www.instagram.com/ambssolutions/" target="_blank" rel="noopener me" aria-label="Ambs Solutions on Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a><a href="https://www.tiktok.com/@ambssolutions" target="_blank" rel="noopener me" aria-label="Ambs Solutions on TikTok" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a></div></div>
+    <nav class="f2-col" aria-label="Company"><p class="f2-h">Company</p><a href="/#automate">What we do</a><a href="/#about">About us</a><a href="/#why">Why us</a><a href="/#how">How it works</a></nav>
+    <nav class="f2-col" aria-label="Explore"><p class="f2-h">Explore</p><a href="/services">Services</a><a href="/industries">Industries</a><a href="/guides">Guides</a><a href="/#faq">Questions</a></nav>
+    <div class="f2-col" id="contact"><p class="f2-h">Contact us</p><a href="/#book">Book a call</a><a href="mailto:hello@ambs.co.nz">hello@ambs.co.nz</a><a href="tel:+64220999578">+64 22 099 9578</a><span>Auckland, NZ</span></div>
+  </div>
+  <div class="f2-bottom"><p class="f2-copy">© 2026 Ambs Solutions. All rights reserved.</p><nav class="f2-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms of use</a></nav></div>
+</div></footer>
+<script src="/assets/pages.js?v=f57942d3" defer></script>
+<!--chat--><script src="/assets/chat.js?v=8a4a86b7" data-index="/assets/chat-index.json?v=452d7b4b" data-label="Ask us" data-nudge="Kia ora! I&#x27;m Ambs Bot, and I can answer your questions about automation, websites, pricing and our free session. Can I help you with anything?" data-nudge-after="12" data-nudge-open="1" data-nudge-tr="{&quot;hi&quot;: &quot;नमस्ते! मैं Ambs Bot हूँ, और ऑटोमेशन, वेबसाइट, कीमत और हमारे मुफ़्त सत्र के बारे में आपके सवालों के जवाब दे सकता हूँ। क्या मैं आपकी कोई मदद कर सकता हूँ?&quot;, &quot;mi&quot;: &quot;Kia ora! Ko Ambs Bot ahau, ā, ka taea e au te whakautu i ō pātai mō te whakaaunoa, ngā paetukutuku, ngā utu me tō mātou wā kore utu. He āwhina ka taea e au?&quot;, &quot;pa&quot;: &quot;ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ Ambs Bot ਹਾਂ, ਅਤੇ ਆਟੋਮੇਸ਼ਨ, ਵੈੱਬਸਾਈਟਾਂ, ਕੀਮਤ ਅਤੇ ਸਾਡੇ ਮੁਫ਼ਤ ਸੈਸ਼ਨ ਬਾਰੇ ਤੁਹਾਡੇ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਦੇ ਸਕਦਾ ਹਾਂ। ਕੀ ਮੈਂ ਤੁਹਾਡੀ ਕੋਈ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?&quot;, &quot;zh&quot;: &quot;您好！我是 Ambs Bot，可以解答关于自动化、网站、价格和免费咨询的问题。有什么可以帮您的吗？&quot;}" defer></script><!--/chat-->
+</body>
+</html>
