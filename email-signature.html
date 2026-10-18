@@ -3247,11 +3247,34 @@ body.one .rng input[type=range]{margin:6px 0 4px}
 .ogrp-pos .opwhere{margin:0}
 @media (max-width:760px){.ogrp-b>label.rng,.ogrp-b>label.f{grid-column:1/-1}}
 @media (max-width:420px){.pside{grid-template-columns:1fr!important}.pside .qsd button{min-width:34px}}
-.pvx{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px;border-top:1px solid var(--line);align-items:start;background:var(--soft,#f3f6fc)}
+.pvx{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:14px;border-top:1px solid var(--line);align-items:start;background:var(--soft,#f3f6fc)}
 .pvxc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;min-width:0;transition:box-shadow .15s}.pvxc:hover{box-shadow:var(--shadow)}
 .pvxh{font-size:13px;font-weight:700;color:var(--muted);margin:0 2px 8px}
-.pvxi{zoom:.62;pointer-events:none;max-width:none!important;padding:16px!important;overflow:hidden}
+.pvxi{pointer-events:none;max-width:none!important;width:max-content;padding:16px!important;overflow:hidden}
 .pvxi.phone{width:360px;max-width:360px!important}
+
+/* ---------- one size system for every setting: laptop 40px controls / 36px steppers; phone 44px / 40px ---------- */
+body.one{--c-h:40px;--c-s:36px;--c-r:10px;--c-fs:14px;--sw:24px}
+@media (max-width:760px){body.one{--c-h:44px;--c-s:40px;--sw:28px}}
+body.one .opart .seg button,body.one .esheet .seg button,body.one .opart .chips button,body.one .esheet .chips button,body.one .opart .aoc,body.one .esheet .aoc,body.one .opwhere .optools button,body.one .opart .btn.small,body.one .esheet .btn.small:not(.edone),body.one .opart .acts2 button,body.one .opart .bi button,body.one .esheet .bi button,body.one .opart button.rs,body.one .esheet button.rs{min-height:var(--c-h)!important;height:var(--c-h);padding:0 14px!important;border-radius:var(--c-r)!important;font-size:var(--c-fs)!important;font-weight:600;line-height:1}
+body.one .opart .seg,body.one .esheet .seg,body.one .opart .chips,body.one .esheet .chips,body.one .opwhere .optools{gap:6px!important;flex-wrap:wrap}
+body.one .opart .mp button,body.one .esheet .mp button,body.one .opart .pside button,body.one .esheet .pside button,body.one .opart .qsd button,body.one .esheet .qsd button{width:var(--c-s)!important;height:var(--c-s)!important;min-height:0!important;border-radius:var(--c-r)!important;font-size:14px!important;padding:0!important}
+body.one .opart .mp,body.one .esheet .mp{grid-template-columns:repeat(3,var(--c-s))!important;grid-template-rows:repeat(3,var(--c-s))!important;gap:6px!important}
+body.one .opart .sw,body.one .esheet .sw{width:var(--sw)!important;height:var(--sw)!important;flex:none}
+body.one .opart .pick,body.one .esheet .pick{gap:8px!important;align-items:center;flex-wrap:wrap}
+body.one .opart .pick input[type=color],body.one .esheet .pick input[type=color]{width:var(--c-s)!important;height:var(--c-s)!important;border-radius:var(--c-r);padding:2px}
+body.one .opart select.aosel,body.one .esheet select.aosel{height:var(--c-h)!important;min-height:var(--c-h)!important;font-size:15px!important}
+body.one .opart .tg button,body.one .esheet .tg button{min-height:var(--c-h)!important;height:var(--c-h);min-width:var(--c-h);border-radius:var(--c-r)!important;font-size:15px!important}
+body.one .opart .tg,body.one .esheet .tg{gap:6px}
+body.one .opart .oback{min-height:var(--c-h)!important;height:var(--c-h);border-radius:var(--c-r)!important;font-size:14px!important}
+body.one .opart .lbl,body.one .esheet .lbl,body.one .opart label.f>span,body.one .esheet label.f>span,body.one .opart .cl>label,body.one .esheet .cl>label{font-size:13px;font-weight:700;margin-bottom:6px;display:block}
+body.one .ogrp-b{gap:16px 16px!important}
+body.one .movepad{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:start}body.one .movepad>.lbl{grid-column:1/-1;margin:0}
+body.one .movepad .mpside{display:flex;flex-direction:column;gap:12px;min-width:0}
+body.one .place .prow{display:flex;flex-wrap:wrap;gap:6px 12px}
+body.one .pside{gap:8px 20px!important;grid-template-columns:repeat(2,max-content)!important}body.one .pside .qsd{gap:6px}body.one .pside .qsd small{flex:none;width:48px;font-size:13px;font-weight:600}body.one .pside .qsd b{min-width:40px;font-size:14px}
+@media (max-width:420px){body.one .pside{grid-template-columns:max-content!important}}
+body.one .opwhere{gap:10px}body.one .place .movepad{margin-top:16px}body.one .place .prow+*{margin-top:14px}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .wantnote .linkbtn{min-height:36px}
 body.one #kbHint,body.one #evenSp,body.one #pgBtn,body.one #partsPv,body.one #movePv,body.one #testPv,body.one #bigPv,body.one .pvparts{display:none!important}
@@ -3319,8 +3342,9 @@ function pvRender(phone,dark){var k={w:S.pvWidth,m:S.pvMode},h="";S.pvWidth=phon
 var PVX_T=0;function pvExtra(){clearTimeout(PVX_T);PVX_T=setTimeout(function(){var col=document.querySelector(".pv-col"),mail=col&&col.querySelector(".mail");if(!mail)return;var box=$("pvx");
   var off=!document.body.classList.contains("one")||window.innerWidth<1100||MOVE||TEST||(S.useCode&&String(S.code||"").trim());if(off){if(box)box.remove();return}
   if(!box||box.parentNode!==mail){if(box)box.remove();box=h2('<div id="pvx" class="pvx" aria-label="Other views"></div>');mail.appendChild(box)}
-  var ph=S.pvWidth==="phone",dk=S.pvMode==="dark",views=[[!ph,dk,(!ph?"📱 On a phone":"💻 On a laptop")+(dk?", dark":"")],[ph,!dk,(dk?"☀️ Light mode":"🌙 Dark mode")+(ph?", phone":"")]];
+  var ph=S.pvWidth==="phone",dk=S.pvMode==="dark",nm=function(p,d){return(p?"📱 Phone":"💻 Laptop")+(d?" · dark":" · light")},views=[[false,false],[true,false],[false,true],[true,true]].filter(function(v){return!(v[0]===ph&&v[1]===dk)}).map(function(v){return[v[0],v[1],nm(v[0],v[1])]});
   box.innerHTML="";views.forEach(function(v){var c=h2('<div class="pvxc"><div class="pvxh">'+esc(v[2])+'</div><div class="inbox pvxi'+(v[0]?" phone":"")+(v[1]?" dark":"")+'"></div></div>');var vi=c.querySelector(".pvxi");vi.innerHTML=pvRender(v[0],v[1]);box.appendChild(c);if(v[1])pvDark(vi);
+      /* shrink each view to fit its card */vi.style.zoom=1;var cw=c.clientWidth-20,nw=vi.scrollWidth;vi.style.zoom=Math.min(1,Math.max(.3,cw/nw)).toFixed(3);
     c.addEventListener("click",function(){S.pvWidth=v[0]?"phone":"laptop";S.pvMode=v[1]?"dark":"light";try{syncActive()}catch(e){}changed()});c.title="Show this view"})},250)}
 /* the same dark-inbox colours as the main preview: dark text becomes light, coloured parts stay */
 function pvDark(pv){var dmap=S.darkOn?darkMap():null;pv.querySelectorAll("[bgcolor]").forEach(function(el){if(hexL(el.getAttribute("bgcolor"))>0.75)el.style.background="#262a33"});
