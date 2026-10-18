@@ -44,6 +44,7 @@ def _count_label(lab,n):
     if n!=1: return lab
     return lab[:-3]+'y' if lab.endswith('ies') else lab[:-1] if lab.endswith('s') else lab
 
+SOC_APP={'instagram':'com.instagram.android','tiktok':'com.zhiliaoapp.musically','facebook':'com.facebook.katana','linkedin':'com.linkedin.android','youtube':'com.google.android.youtube','x':'com.twitter.android'}
 def social_html():
     """the social profile icons in the footer, from "profiles" in site.json"""
     out=[]
@@ -51,8 +52,15 @@ def social_html():
         host=urllib.parse.urlparse(u).netloc.lower().replace('www.','')
         k=next((k for k in SOC_PATH if host.startswith(k+'.') or (k=='x' and host in ('x.com','twitter.com')) or (k=='facebook' and host=='fb.com')),None)
         if not k: continue
-        out.append(f'<a href="{e(u)}" target="_blank" rel="noopener me" aria-label="Ambs Solutions on {SOC_NAME[k]}" title="{SOC_NAME[k]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="{SOC_PATH[k]}"/></svg></a>')
-    return f'<div class="f2-social">{"".join(out)}</div>' if out else ''
+        app=f' data-app="{SOC_APP[k]}"' if k in SOC_APP else ''
+        out.append(f'<a href="{e(u)}"{app} target="_blank" rel="noopener me" aria-label="Ambs Solutions on {SOC_NAME[k]}" title="{SOC_NAME[k]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="{SOC_PATH[k]}"/></svg></a>')
+    # on phones the icons open the Instagram or TikTok app: same tab on iPhone (the app's own link takes over),
+    # an Android app link that falls back to the website when the app isn't installed
+    js=('<script>(function(){var u=navigator.userAgent,a=/Android/i.test(u),i=/iPhone|iPad|iPod/i.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);'
+        'if(!a&&!i)return;document.querySelectorAll(".f2-social a[data-app]").forEach(function(l){l.removeAttribute("target");if(!a)return;'
+        'var w=new URL(l.href),p=w.pathname;if(/instagram/.test(w.host))p="/_u"+p;'
+        'l.href="intent://"+w.host+p+"#Intent;scheme=https;package="+l.dataset.app+";S.browser_fallback_url="+encodeURIComponent(w.href)+";end"})})();</script>')
+    return f'<div class="f2-social">{"".join(out)}</div>{js}' if out else ''
 def ga_snippet():
     # sends page views plus the actions that matter: booking clicks, phone and email taps, booking confirmed
     if not re.match(r'^G-[A-Z0-9]{4,}$',GA_ID): return ''
