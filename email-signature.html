@@ -1218,7 +1218,7 @@ function block(id,mode,wide){if(id.indexOf("c-")===0)return customBlock(id,mode)
       return T("margin:0 auto;")+rws.map(function(rw,ri){return'<tr><td align="center" style="text-align:center;padding:'+(ri?iconGap():0)+'px 0 0 0;">'+inlineTable(rw.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<rw.length-1?iconGap():0)+'px 0 0;font-size:0;line-height:0;mso-line-height-rule:exactly;">'+x+'</td>'}),true)+'</td></tr>'}).join("")+'</table>'}
     return cs.length?inlineTable(cs.map(function(x,i){return'<td valign="middle" style="vertical-align:middle;padding:0 '+(i<cs.length-1?iconGap():0)+'px 0 0;font-size:0;line-height:0;mso-line-height-rule:exactly;">'+x+'</td>'}),ctr):""}
   if(id==="banner"){var bw=S.bannerW,ab=AMBS_BANNERS.filter(function(x){return x.url===S.bannerUrl||x.urlNo===S.bannerUrl})[0],src=mode==="email"?url(S.bannerUrl):(uploaded.banner?uploaded.banner.src:(ab?(ab.urlNo===S.bannerUrl?ab.previewNo:ab.preview):url(S.bannerUrl)));
-    if(!src)return mode==="email"?"":'<div style="width:'+bw+'px;max-width:100%;height:'+Math.round(bw/6)+'px;border:1.5px dashed #c9cfe0;border-radius:8px;color:#8a90a3;font:12px Arial;display:flex;align-items:center;justify-content:center;">Your banner (choose one in the Banner section)</div>';
+    if(!src)return mode==="email"?"":'<div style="width:'+Math.min(bw,240)+'px;max-width:100%;height:'+Math.round(bw/6)+'px;border:1.5px dashed #c9cfe0;border-radius:8px;color:#8a90a3;font:12px Arial;display:flex;align-items:center;justify-content:center;">Your banner (choose one in the Banner section)</div>';
     var bh=uploaded.banner&&mode!=="email"?Math.round(bw*uploaded.banner.h/uploaded.banner.w):(ab?Math.round(bw*0.15):Math.round(bw/6));
     /* in the copied signature the banner is fluid: Outlook on Windows keeps the width attribute, every other app lets it shrink with a narrow
        phone screen (a fixed width stopped the whole signature from narrowing, so the contact details couldn't wrap) */
@@ -2213,9 +2213,12 @@ function phoneGuide(){var box=$("inbox"),sig=$("sig");if(!box||!sig)return;var g
   sig.querySelectorAll("[data-edit]").forEach(function(e){if(under.indexOf(e.dataset.edit)>=0||under.some(function(u){return e.closest('[data-edit="'+u+'"]')}))return;bot=Math.max(bot,e.getBoundingClientRect().bottom-r.top)});
   o.style.width=over+"px";o.style.bottom="auto";o.style.height=(bot||r.height)+"px";o.hidden=!over;g.classList.toggle("fits",nw<=PHONE_W+4)}
 /* how wide the signature is when nothing wraps; wider than a phone means lines move down in the Outlook phone app */
-function sigNaturalWidth(){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;";d.innerHTML=signature("preview");document.body.appendChild(d);
+function sigNaturalWidth(){var d=document.createElement("div");d.style.cssText="position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;";
+  /* drawn without the banner, disclaimer and stripe: they shrink to fit, so they mustn't stretch the details column either */
+  var fl=S.order.filter(function(o){return o[1]&&/^(banner|disclaimer|rainbow)$/.test(o[0])});fl.forEach(function(o){o[1]=0});try{d.innerHTML=signature("preview")}finally{fl.forEach(function(o){o[1]=1})}document.body.appendChild(d);
   /* only the parts that can't shrink: the banner, disclaimer and other parts underneath already fit a phone */
-  var under=S.order.filter(function(o){return o[2]==="under"}).map(function(o){return o[0]}),L=d.getBoundingClientRect().left,w=0;
+  /* the banner, disclaimer and stripe shrink to fit wherever they sit (and an empty banner isn't sent at all) */
+  var under=S.order.filter(function(o){return o[2]==="under"||/^(banner|disclaimer|rainbow)$/.test(o[0])}).map(function(o){return o[0]}),L=d.getBoundingClientRect().left,w=0;
   d.querySelectorAll("[data-edit]").forEach(function(e){if(under.indexOf(e.dataset.edit)>=0||e.closest('[data-edit="signoff"]'))return;var inU=under.some(function(u){return e.closest('[data-edit="'+u+'"]')});if(inU)return;w=Math.max(w,e.getBoundingClientRect().right-L)});
   d.remove();return Math.ceil(w)}
 var PW_T=0;
@@ -3212,6 +3215,16 @@ body.esheet-on .obar,body.one:not([data-step="edit"]) .obar{display:none}
 .ogtab{flex:none;min-height:38px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel,#fff);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
 .ogtab[aria-selected="true"]{background:#14172b;border-color:#14172b;color:#fff}
 .ogitem[hidden]{display:none!important}
+.ostages{margin:0 0 14px}
+.ostages ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:relative}
+.ostages ol:before{content:"";position:absolute;left:8%;right:8%;top:15px;height:2px;background:var(--line)}
+.ostages li{min-width:0;position:relative}
+.ost{width:100%;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 2px 2px;border:0;background:none;color:var(--muted);font:inherit;font-size:12px;font-weight:600;cursor:pointer;min-height:48px}
+.ost .osn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--panel,#fff);border:2px solid var(--line);font-size:13px;font-weight:800;color:var(--muted);position:relative;z-index:1}
+.ost .osl{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ost.past{color:var(--ink)}.ost.past .osn{border-color:#24b328;color:#24b328}
+.ost[aria-current]{color:var(--ink);font-weight:800}.ost[aria-current] .osn{background:#24b328;border-color:#24b328;color:#fff}
+.ost:hover .osn{border-color:#24b328}
 .wantnote{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft,#f3f6fc);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 .wantnote .linkbtn{min-height:36px}
 body.one #kbHint,body.one #evenSp,body.one #pgBtn,body.one #partsPv,body.one #movePv,body.one #testPv,body.one #bigPv,body.one .pvparts{display:none!important}
@@ -3277,8 +3290,20 @@ function opRender(body,id){var key=partKey(id),isC=String(id).indexOf("c-")===0,
   el.querySelectorAll(".opall details.more").forEach(function(d){d.open=true});
   if(isC)setTimeout(function(){var cp=el.querySelector('.cpart[data-cid="'+id+'"]');if(cp){cp.scrollIntoView({block:"nearest"});cp.classList.add("flash");setTimeout(function(){cp.classList.remove("flash")},1400)}},60);
   SEL=key;markSel()}
+/* all the stages along the top of the panel: tap one to go straight there */
+var OSTAGES=[["start","Website"],["details","Details"],["wants","Include"],["template","Design"],["edit","Edit"],["copy","Copy"]];
+function oneStages(cur){var pn=document.querySelector(".panel");if(!pn)return;var bar=pn.querySelector(".ostages");
+  if(!bar){bar=h2('<nav class="ostages" aria-label="Stages"><ol></ol></nav>');pn.insertBefore(bar,pn.firstChild)}
+  var ol=bar.querySelector("ol"),ci=OSTAGES.findIndex(function(x){return x[0]===cur});ol.innerHTML="";
+  OSTAGES.forEach(function(x,i){var li=h2('<li><button type="button" class="ost'+(i<ci?" past":"")+'"'+(i===ci?' aria-current="step"':'')+'><span class="osn">'+(i+1)+'</span><span class="osl">'+esc(x[1])+'</span></button></li>');
+    li.querySelector("button").addEventListener("click",function(){var id=x[0];if(id===cur)return;
+      if(id==="copy"){openCopy();return}
+      if(id==="start"){go(stepId("start"));return}
+      if(id==="edit"){PV_PART=null;go(stepId("edit"));return}
+      if(!FLOW)FLOW="design";if(id==="wants")WANT=wantNow();go(stepId(id))});ol.appendChild(li)});
+}
 var _oneGo=go;
-go=function(i,part){var idx=Math.max(0,Math.min(STEPS.length-1,i)),s=STEPS[idx];
+go=function(i,part){var idx=Math.max(0,Math.min(STEPS.length-1,i)),s=STEPS[idx];if(document.body.classList.contains("one"))setTimeout(function(){oneStages(s.id)},0);
   if(s.id!=="edit"||!document.body.classList.contains("one")){_oneGo(i,part);
     /* the other screens (start, check details, design) lead straight back to editing */
     if(document.body.classList.contains("one")){if(s.id==="start")FLOW="new";if(s.id==="wants")wantsRender($("stepBody"));if(s.id==="template")tplSort($("stepBody"));
