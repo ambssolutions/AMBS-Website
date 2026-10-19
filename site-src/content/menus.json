@@ -32,12 +32,12 @@
    "key": "nav.automate"
   },
   {
-   "href": "#about",
-   "key": "nav.about"
-  },
-  {
    "href": "#why",
    "key": "nav.why"
+  },
+  {
+   "href": "#about",
+   "key": "nav.about"
   },
   {
    "href": "#how",
@@ -66,12 +66,12 @@
    "key": "nav.automate"
   },
   {
-   "href": "#about",
-   "key": "nav.about"
-  },
-  {
    "href": "#why",
    "key": "nav.why"
+  },
+  {
+   "href": "#about",
+   "key": "nav.about"
   },
   {
    "href": "#how",
