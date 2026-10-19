@@ -2059,3 +2059,8 @@ html .hero .hero-sub{opacity:1!important;transform:none!important;transition:non
 /* darker than the light page needs, so it still passes 4.5:1 on the darkest dawn/dusk footer (#c9d3e2) */
 html:not([data-theme=dark]):not(.sky-night) footer.f2 .f2-brand p,html:not([data-theme=dark]):not(.sky-night) footer.f2 .f2-copy{color:#4a5265}
 html:not([data-theme=dark]):not(.sky-night) footer.f2 .f2-fine{color:#4b5367}
+/* the price card's chips and tickets are built by home.js; until then the card keeps its finished height (measured in English), so on laptops the hero text card beside it, which matches its height, never grows or jumps */
+@media (min-width:1024px){html body .hero #docket:has(#tickets:empty){min-height:656px!important;box-sizing:border-box}}
+@media (min-width:1119px){html body .hero #docket:has(#tickets:empty){min-height:612px!important}}
+@media (min-width:1800px){html body .hero #docket:has(#tickets:empty){min-height:686px!important}}
+@media (min-width:2300px){html body .hero #docket:has(#tickets:empty){min-height:855px!important}}
