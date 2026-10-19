@@ -23,7 +23,7 @@ These notes apply to this site and to any other AMBS Solutions website.
 - Expanding cards (like "What we do" on phones): unfold slowly and smoothly with a native CSS fold (`grid-template-rows` transition, about 1.4s), with the content fading in.
 - Colours: use the logo's green for all greens, and brand blue and purple from the logo.
 - Dark mode logos light up from grey to full colour with no glow or halo around them.
-- Top bar on laptops: its column is 1240px (`padding-inline` on `header .bar` in `home.css`), so the longer Māori menu fits without covering the logo; the language box is 132px so "Te Reo Māori" fits. Hindi and Punjabi headings use line-height 1.3 so their letters never run into the next line.
+- Top bar: every item keeps the same size and place in every language (fixed widths sized for Māori, the longest: language box 132px on laptops / 105px on phones, menu pill 526px, Book a call 120–124px, Contact us 108–116px, words centred; `home.css` end). Its laptop column is 1240px (`padding-inline` on `header .bar`). Hero headings get more line space in Hindi/Punjabi (1.3), Chinese (1.3, smaller on phones so the full stop stays on its line) and Māori (1.16) so letters never run into the next line. Check with a script that switches all 5 languages and compares positions after any header change.
 
 ## Website editor (/admin)
 - **What the owner can edit at ambs.co.nz/admin:**
