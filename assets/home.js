@@ -1612,8 +1612,18 @@ try{
     targets(g,chips[i].dataset.t).forEach(function(e){e.classList.add("spot");});
     g.classList.add("spotting");}
   /* a step whose part of the picture is hidden on this screen size is left out */
-  function avail(){stages.forEach(function(g){g.querySelectorAll(".wd-st").forEach(function(c){
-    c.hidden=!targets(g,c.dataset.t).some(function(e){return e.getClientRects().length>0;});});});}
+  function availOne(g){g.querySelectorAll(".wd-st").forEach(function(c){
+    c.hidden=!targets(g,c.dataset.t).some(function(e){return e.getClientRects().length>0;});});}
+  /* drawings set aside while the page loaded (inline script at the end of the section) go back as their card nears the screen */
+  var held=window.__wdMk||[];
+  function waiting(g){return held.some(function(h){return h[0].parentNode===g;});}
+  function restore(g){held.forEach(function(h){if(h[0].parentNode===g)g.replaceChild(h[1],h[0]);});availOne(g);}
+  function avail(){stages.forEach(function(g){if(!waiting(g))availOne(g);});}
+  if(held.length){
+    if("IntersectionObserver" in window){var pio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){pio.unobserve(e.target);restore(e.target);}});},{rootMargin:"900px 0px"});
+      stages.forEach(function(g){if(waiting(g))pio.observe(g);});}
+    else stages.forEach(restore);
+  }
   function tick(k){var st=state[k];clearTimeout(st.t);if(st.held)return;
     var chips=stages[k].querySelectorAll(".wd-st"),n=chips.length,i=st.i;
     for(var x=0;x<n;x++){i=(i+1)%n;if(!chips[i].hidden)break;}
