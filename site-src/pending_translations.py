@@ -66,3 +66,10 @@ if __name__ == "__main__":
             print("No translations waiting.")
         for k, v in p.items():
             print(f"{k}  [{', '.join(v['langs'])}]\n   {v['en']}")
+        # the build also checks the privacy policy names every outside service the site uses (build.py privacy_check)
+        try:
+            miss = json.load(open(os.path.join(ROOT, "site-src", "content", "privacy-check.json"), encoding="utf8")).get("missing", [])
+        except Exception:
+            miss = []
+        for x in miss:
+            print(f"Privacy policy doesn't mention {x['name']} (used on {x['where']}).")

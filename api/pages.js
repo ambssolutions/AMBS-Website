@@ -102,7 +102,9 @@ export default async function handler(req, res) {
         const d = JSON.parse((await readFile(f.path, head)).text);
         custom.push({ section: "page", slug: f.path.split("/").pop().replace(/\.json$/, ""), title: d.h1, draft: !!d.draft, ...(d.publish_at ? { publish_at: d.publish_at } : {}) });
       }
-      return send(res, 200, { now: nowNZ(), pages: site.pages, custom, legal, hubs: site.hubs, service_cards: site.service_cards, service_steps: site.service_steps, icons: ICONS });
+      let privacy_missing = [];
+      try { privacy_missing = JSON.parse((await readFile("site-src/content/privacy-check.json", head)).text).missing || []; } catch (e) {}
+      return send(res, 200, { now: nowNZ(), pages: site.pages, custom, legal, privacy_missing, hubs: site.hubs, service_cards: site.service_cards, service_steps: site.service_steps, icons: ICONS });
     }
 
     if (b.action === "search") {

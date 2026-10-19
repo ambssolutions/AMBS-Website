@@ -789,7 +789,81 @@ def stamp_chat(path,tag):
     if tag: h=h.replace('</body>',tag+'\n</body>',1)
     open(path,'w',encoding='utf8').write(h)
 
+# Legal pages keep their own "Last updated" date: when a page's wording changes (in the editor or by hand),
+# the next build sets the date to that day (New Zealand time). The wording's fingerprint is kept in legal-state.json.
+LEGAL_STATE=os.path.join(SRC,'content','legal-state.json')
+def legal_dates():
+    try: st=json.load(open(LEGAL_STATE,encoding='utf8'))
+    except Exception: st={}
+    old=dict(st)
+    for slug in ('privacy','terms'):
+        f=os.path.join(SRC,'content','legal',slug+'.html')
+        if not os.path.exists(f): continue
+        raw=open(f,encoding='utf8').read();m=re.match(r'\s*<!--META\s*(\{.*?\})\s*-->\s*(.*)',raw,re.S)
+        meta=json.loads(m.group(1));fp=hashlib.sha1(re.sub(r'\s+',' ',m.group(2)).strip().encode()).hexdigest()
+        if slug in st and st[slug]!=fp:
+            d=datetime.date.fromisoformat(NOW[:10]).strftime('%-d %B %Y')
+            if meta.get('updated')!=d:
+                meta['updated']=d
+                open(f,'w',encoding='utf8').write('<!--META '+json.dumps(meta,ensure_ascii=False)+'-->\n'+m.group(2))
+                print(f'{slug}: wording changed, "Last updated" set to {d}')
+        st[slug]=fp
+    if st!=old: open(LEGAL_STATE,'w',encoding='utf8').write(json.dumps(st,indent=1)+'\n')
+
+# Privacy check: every outside service a visitor's details or visit reach must be named in the privacy policy.
+# The build finds the services the public pages load or send to and lists any the policy doesn't mention in
+# privacy-check.json (shown in the editor on the Privacy Policy page and by pending_translations.py at the start of a chat).
+# A service new to this list shows as its web address; add it here with the words the policy should use.
+PRIVACY_SERVICES=[  # (part of the web address, name, words the policy must contain (any one))
+    ('googletagmanager.com','Google Analytics',['Google Analytics']),
+    ('google-analytics.com','Google Analytics',['Google Analytics']),
+    ('fonts.googleapis.com','Google Fonts',['Google Fonts']),('fonts.gstatic.com','Google Fonts',['Google Fonts']),
+    ('web3forms.com','Web3Forms (contact forms)',['Web3Forms']),
+    ('portal.ambs.co.nz','your client system (enquiries saved as Leads)',['client system']),
+    ('supabase.co','the chat question log',['Chat helper']),
+    ('open-meteo.com','the weather lookup (open-meteo)',['open-meteo']),
+    ('zohobookings.com','Zoho Bookings (the booking calendar)',['Zoho']),
+    ('youtube','YouTube (videos on a page)',['YouTube']),('vimeo.com','Vimeo (videos on a page)',['Vimeo']),
+]
+PRIVACY_IGNORE=('ambs.co.nz','www.w3.org','schema.org')
+PRIVACY_CHECK=os.path.join(SRC,'content','privacy-check.json')
+def privacy_check():
+    hosts={}
+    def add(h,where):
+        h=h.lower()
+        if h=='ambs.co.nz' or h.endswith('.ambs.co.nz') and h!='portal.ambs.co.nz' or h in PRIVACY_IGNORE: return
+        hosts.setdefault(h,where)
+    for root,dirs,files in os.walk(OUT):
+        dirs[:]=[d for d in dirs if d not in ('node_modules','site-src','api','assets','.git','.github','invoice')]
+        for f in files:
+            if not f.endswith('.html') or f in ('admin.html','email-signature.html') or f.startswith('zz'): continue
+            s=open(os.path.join(root,f),encoding='utf8',errors='ignore').read();w=os.path.relpath(os.path.join(root,f),OUT)
+            for m in re.finditer(r'<(?:script|iframe|link|img|source|video|audio|embed|form)\b[^>]*?(?:src|href|action)="https?://([^"/:]+)',s): add(m.group(1),w)
+            for m in re.finditer(r'<script\b([^>]*)>(.*?)</script>',s,re.S):
+                if 'ld+json' in m.group(1): continue  # Google's page data (social profile links), not something the page loads
+                for h in re.findall(r'https?://([a-z0-9.-]+\.[a-z]{2,})',m.group(2)): add(h,w)
+    # the scripts every public page runs, and what the server asks on a visitor's behalf
+    for f in ('assets/home.js','assets/chat.js','assets/forms.js','assets/pages.js','assets/chat-index.json','api/weather.js'):
+        fp=os.path.join(OUT,f)
+        if os.path.exists(fp):
+            for h in re.findall(r'https?://([a-z0-9.-]+\.[a-z]{2,})',open(fp,encoding='utf8',errors='ignore').read()): add(h,f)
+    raw=open(os.path.join(SRC,'content','legal','privacy.html'),encoding='utf8').read().lower()
+    missing=[]
+    for h in sorted(hosts):
+        known=[x for x in PRIVACY_SERVICES if x[0] in h]
+        if known:
+            if not any(k.lower() in raw for k in known[0][2]) and known[0][1] not in [x['name'] for x in missing]:
+                missing.append({'name':known[0][1],'host':h,'where':hosts[h]})
+        else: missing.append({'name':h,'host':h,'where':hosts[h],'unknown':True})
+    out=json.dumps({'missing':missing},ensure_ascii=False,indent=1)+'\n'
+    try: old=open(PRIVACY_CHECK,encoding='utf8').read()
+    except Exception: old=''
+    if out!=old: open(PRIVACY_CHECK,'w',encoding='utf8').write(out)
+    for x in missing: print('PRIVACY POLICY doesn\'t mention:',x['name'],'('+x['host']+', used on '+x['where']+')')
+
+
 if __name__=='__main__':
+    legal_dates()
     os.makedirs(os.path.join(OUT,'assets'),exist_ok=True)
     for f in ('pages.css','pages.js','blocks.css','blocks.mjs','forms.js'): open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
     secs={k:v for k,v in HOMESEC.get('custom',{}).items()}
@@ -823,4 +897,5 @@ if __name__=='__main__':
         for f in files:
             if f.endswith('.html') and f not in ('admin.html','email-signature.html'): stamp_chat(os.path.join(root,f),tag)
     print('chat helper:',nd,'answers indexed')
+    privacy_check()
     print('done, total words',total)

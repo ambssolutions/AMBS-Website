@@ -1059,6 +1059,10 @@ function renderPage(sec,slug,d){
   var meta=d.meta,m=$("pgMain"),card=d.card||{};m.innerHTML="";
   var live=sec==="legal"||edLive(card),sch=sec==="legal"?"":edSched(card);
   var top=h('<div><h2 class="sec">'+esc(meta.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">'+(sec==="legal"?"Legal page":esc(SEC[sec]))+(live?' · <a href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p></div>');m.appendChild(top);
+  /* the build lists outside services the website uses that this policy doesn't name yet (build.py privacy_check) */
+  var pm=(site&&site.privacy_missing)||[];
+  if(sec==="legal"&&slug==="privacy"&&pm.length)m.appendChild(h('<div class="msg" style="background:var(--amber-bg);color:var(--amber);margin:0 0 14px"><b>This policy doesn\u2019t mention '+pm.map(function(x){return esc(x.name)}).join(", ")+' yet.</b> The website uses '+(pm.length>1?"them":"it")+', so add a line saying what visitors\u2019 details go there and why. Ask Claude to draft it if you like.</div>'));
+  if(sec==="legal")m.appendChild(h('<p class="sechelp" style="margin:-6px 0 12px">\u201cLast updated\u201d changes to the day of your edit by itself when you change the wording.</p>'));
   var head=h('<div class="panel"><h3>Top of the page</h3></div>');
   if(sec!=="legal")head.appendChild(fld("pgEyebrow","Small label above the heading",meta.eyebrow,{max:40}));
   head.appendChild(fld("pgH1","Page heading",meta.h1,{max:90}));
