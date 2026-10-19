@@ -687,19 +687,16 @@ if("IntersectionObserver" in window && !reduced){
       hero.classList.remove(...MOODS);hero.classList.add(nx);lastMood=nx;label();
       setFx(nx);
     });}
-  let loc={lat:-36.85,lng:174.76,city:"Auckland"};
+  let loc={city:"Auckland"};
+  /* our own /api/weather finds the visitor's town and its weather on the server, so the browser never calls another site */
   function weather(){
     if(manual)return;
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lng}&current=weather_code`)
-      .then(r=>r.json()).then(d=>{if(!manual)mood(d&&d.current?d.current.weather_code:0);})
-      .catch(()=>{if(!manual)mood(0);});
+    fetch("/api/weather").then(r=>r.json()).then(d=>{
+      if(d&&d.city)loc.city=d.city;
+      if(!manual)mood(d&&typeof d.code==="number"?d.code:0);
+    }).catch(()=>{if(!manual)mood(0);});
   }
-  function locate(){
-    fetch("https://ipwho.is/").then(r=>r.json()).then(d=>{
-      if(d&&d.success&&d.latitude){loc={lat:d.latitude,lng:d.longitude,city:d.city||"Auckland"};}
-      weather();
-    }).catch(weather);
-  }
+  const locate=weather;
   /* the live weather is looked up once the page has loaded, so it never competes with the first screen */
   sky();mood(0);if(document.readyState==="complete")setTimeout(locate,0);else addEventListener("load",()=>setTimeout(locate,0));
 
