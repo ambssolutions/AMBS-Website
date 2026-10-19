@@ -1733,7 +1733,7 @@ try{
 
 /* ---- part 18 ---- */
 try{
-(function(){var hc=document.querySelector(".hero-copy");if(!hc)return;var w=0;function set(){if(innerWidth===w)return;w=innerWidth;hc.style.minHeight="";var t=hc.getBoundingClientRect().top+scrollY;var de=document.documentElement;de.style.setProperty("--vh",(innerHeight/100)+"px");de.style.setProperty("--hc-top",Math.round(t)+"px");}set();addEventListener("resize",set);addEventListener("load",function(){w=0;set();});})();
+(function(){var hc=document.querySelector(".hero-copy");if(!hc)return;var w=0;function set(){if(innerWidth===w)return;w=innerWidth;hc.style.minHeight="";/* measured from the hero frame, which doesn't move with the centred text, so measuring again gives the same answer */var t=hc.parentNode.getBoundingClientRect().top+scrollY;var de=document.documentElement;de.style.setProperty("--vh",(innerHeight/100)+"px");de.style.setProperty("--hc-top",Math.round(t)+"px");}set();addEventListener("resize",set);addEventListener("load",function(){w=0;set();});})();
 }catch(e){if(window.console)console.error(e);}
 
 /* ---- part 19 ---- */
