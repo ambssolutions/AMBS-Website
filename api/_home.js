@@ -94,7 +94,7 @@ function panelHtml(n, digital, c) {
     "          " + photoStage(c.photo, c.t) + "\n" +
     '          <div class="wd-copy"><h3 data-i18n="auto.c' + n + 't">' + esc(c.t) + '</h3><p data-i18n="auto.c' + n + 'd">' + esc(c.d) + "</p>" +
     (pts ? '<ul class="wd-pts">' + pts + "</ul>" : "") +
-    '<a class="wd-more" href="' + escAttr(c.link || "/services") + '"><span data-i18n="wd.more">Learn more</span></a></div>\n' +
+    '<a class="wd-more" href="' + escAttr(c.link || "/services") + '"><span data-i18n="wd.more">See the service</span></a></div>\n' +
     "        </div>\n";
 }
 /* the drawing part of a card: everything from the stage up to the text */

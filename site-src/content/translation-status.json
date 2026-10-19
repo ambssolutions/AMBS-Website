@@ -1694,5 +1694,11 @@
   "pa": "auto",
   "zh": "auto",
   "_en": "Where we work"
+ },
+ "wd.more": {
+  "zh": "auto",
+  "hi": "auto",
+  "pa": "auto",
+  "mi": "auto"
  }
 }
