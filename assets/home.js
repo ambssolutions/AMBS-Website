@@ -626,6 +626,9 @@ if("IntersectionObserver" in window && !reduced){
 (function(){
   const hero=document.querySelector(".hero");if(!hero)return;
   const fx=document.createElement("div");fx.className="wxfx sun";hero.appendChild(fx);
+  /* a new sky is drawn fresh (cleared for one frame first), so Google's layout-shift score sees new content, not the old sun or cloud moving */
+  const FXK={"wx-clear":"sun","wx-cloud":"cloud","wx-rain":"rain","wx-storm":"storm"};
+  function setFx(m){if(!fx)return;const c="wxfx "+FXK[m];if(fx.className===c)return;fx.className="wxfx";requestAnimationFrame(()=>requestAnimationFrame(()=>{fx.className=c;}));}
   function sky(){
     if(window.__skyLock)return;
     const h=new Date().getHours();
@@ -646,7 +649,7 @@ if("IntersectionObserver" in window && !reduced){
     else if((code>=51&&code<=67)||(code>=80&&code<=82)||(code>=71&&code<=77))m="wx-rain";
     else if(code>=2&&code<=48)m="wx-cloud";
     hero.classList.add(m);lastMood=m;label();
-    if(fx)fx.className="wxfx "+({"wx-clear":"sun","wx-cloud":"cloud","wx-rain":"rain","wx-storm":"storm"})[m];
+    setFx(m);
   }
   function label(){
     const el=document.getElementById("wxline");if(!el)return;
@@ -669,7 +672,7 @@ if("IntersectionObserver" in window && !reduced){
     manual=true;
     MOODS.forEach(c=>hero.classList.remove(c));
     hero.classList.add(m);lastMood=m;label();
-    if(fx)fx.className="wxfx "+({"wx-clear":"sun","wx-cloud":"cloud","wx-rain":"rain","wx-storm":"storm"})[m];
+    setFx(m);
   };
   const MOODS=["wx-clear","wx-cloud","wx-rain","wx-storm"];
   const RING=["wx-clear","wx-cloud","wx-rain","wx-storm","live"];
@@ -682,14 +685,14 @@ if("IntersectionObserver" in window && !reduced){
       manual=true;
       const nx=RING[ri];
       hero.classList.remove(...MOODS);hero.classList.add(nx);lastMood=nx;label();
-      if(fx)fx.className="wxfx "+({"wx-clear":"sun","wx-cloud":"cloud","wx-rain":"rain","wx-storm":"storm"})[nx];
+      setFx(nx);
     });}
   let loc={lat:-36.85,lng:174.76,city:"Auckland"};
   function weather(){
     if(manual)return;
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lng}&current=weather_code`)
-      .then(r=>r.json()).then(d=>{mood(d&&d.current?d.current.weather_code:0);})
-      .catch(()=>mood(0));
+      .then(r=>r.json()).then(d=>{if(!manual)mood(d&&d.current?d.current.weather_code:0);})
+      .catch(()=>{if(!manual)mood(0);});
   }
   function locate(){
     fetch("https://ipwho.is/").then(r=>r.json()).then(d=>{
