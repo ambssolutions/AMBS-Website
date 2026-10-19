@@ -910,3 +910,8 @@ footer.f2 .f2-social a:hover,footer.f2 .f2-social a:focus-visible{color:#fff;bac
 footer.f2 .f2-social svg{width:19px;height:19px;fill:currentColor}
 html[data-theme=dark] footer.f2 .f2-social a{color:#d7dbe6;border-color:rgba(215,219,230,.25)}
 @media (prefers-color-scheme:dark){html:not([data-theme=light]) footer.f2 .f2-social a{color:#d7dbe6;border-color:rgba(215,219,230,.25)}}
+/* Header room for longer languages (Māori menu): wider top bar, logo never covered, language box fits "Te Reo Māori" */
+.sh-mark{flex-shrink:0}
+@media (min-width:1121px){.sh-bar{width:min(82.5rem,calc(100% - 2*var(--gutter)))}
+.langwrap{width:132px}}
+html[lang=hi] h1,html[lang=hi] h2,html[lang=pa] h1,html[lang=pa] h2{line-height:1.32}
