@@ -2395,3 +2395,6 @@ html[lang=zh] .hero h1{line-height:1.3!important}
 html .hero h1,html .hero h1:not(.tx-accent-host){visibility:visible!important;animation:none!important;opacity:1!important;transform:none!important;transition:none!important}
 html .hero h1 .tx-w{opacity:1!important;transform:none!important;transition:none!important}
 html .hero .hero-sub{opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+/* Footer small print readable enough for everyone (contrast at least 4.5:1, Google's accessibility check) */
+html:not([data-theme=dark]):not(.sky-night) footer.f2 .f2-brand p,html:not([data-theme=dark]):not(.sky-night) footer.f2 .f2-copy{color:#535b6f}
+html:not([data-theme=dark]):not(.sky-night) footer.f2 .f2-fine{color:#555d72}

@@ -44,7 +44,7 @@ en:{
  "greet.m":"Good morning","greet.a":"Good afternoon","greet.e":"Good evening",
  "biz.other":"Something else","t.other1":"Chasing the same information every week","t.other2":"Copying details between two systems","t.other3":"Sending the same update to customers",
  "wd.swipe":"Swipe to see more",
- "wd.more":"Learn more",
+ "wd.more":"See the service",
  "nav.guides":"Guides","kh.eyebrow":"Knowledge hub","kh.title":"Learn before you automate","kh.lead":"Practical, plain-English guides for New Zealand businesses: what to automate first, how it works and what to watch for.","kh.all":"Browse all guides","kh.ind":"Industries","kh.read":"Read the guide","kh.g1k":"Start here · 5 min read","kh.g1t":"How to choose what to automate first","kh.g2k":"Money · 8 min read","kh.g2t":"How to automate quotes and invoices","kh.g3k":"Bookings · 7 min read","kh.g3t":"How to reduce no-shows with booking reminders","kh.g4k":"Customers · 8 min read","kh.g4t":"AI customer replies for small business","kh.g5k":"Numbers · 8 min read","kh.g5t":"Your business numbers, every week","ins.btn":"Add to home screen","ins.tip":"Tap the Share button in Safari, then choose <b>Add to Home Screen</b>.","foot.services":"Services","foot.industries":"Industries","ticker.label":"What we automate",
  "tf.eyebrow":"Before and after","tf.title":"See your business transformed","tf.lead":"Drag the handle to swap paper piles and late nights for systems that do most of the work for you. Tap any dot to see what changes.","tf.before":"Before","tf.after":"With Ambs","tf.hint":"Tap a dot to see what changes.","tf.drag":"Drag to compare",
  "priv.t":"Privacy","priv.b":"This site keeps your language and theme choice on your device until you close the browser. Details you send through the contact form reach us through a form service and are saved in our client system so we can reply. We don't sell them or use them for marketing without your agreement. If we don't end up working together, they are deleted after 12 months. Questions: call +64 22 099 9578.",
@@ -772,7 +772,7 @@ if("IntersectionObserver" in window && !reduced){
   function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
   afterPaint(measure);
   if("ResizeObserver" in window) new ResizeObserver(measure).observe(document.body); else window.addEventListener("resize",measure);
-  window.addEventListener("scroll",onScroll,{passive:true});frame();
+  window.addEventListener("scroll",onScroll,{passive:true});afterPaint(frame);
   if(reducedMo||!("IntersectionObserver" in window))return;
   const cards=document.querySelectorAll(".cell,.step,.acr,.tcell,.why-col,.about-story,.docket,.faq-item,.grp");
   cards.forEach(el=>el.classList.add("rvi"));
@@ -1465,7 +1465,7 @@ try{
   addEventListener("scroll",function(){if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});
   var rz;addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(layout,120);});
   if("IntersectionObserver" in window)new IntersectionObserver(function(es){visible=es[0].isIntersecting;run();},{threshold:.15}).observe(wd);
-  layout();
+  afterPaint(layout);
 })();
 }catch(e){if(window.console)console.error(e);}
 
@@ -1535,7 +1535,7 @@ try{
   addEventListener("resize",later);addEventListener("load",fit);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
   if("ResizeObserver" in window)new ResizeObserver(later).observe(copy);
-  fit();
+  afterPaint(fit);
 })();
 }catch(e){if(window.console)console.error(e);}
 
@@ -1645,7 +1645,7 @@ try{
   stages.forEach(function(g){mo.observe(g.closest(".wd-panel"),{attributes:true,attributeFilter:["class"]});});
   document.addEventListener("visibilitychange",sync);
   var rz;addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(avail,200);});
-  avail();sync();
+  afterPaint(function(){avail();sync();});
 })();
 }catch(e){if(window.console)console.error(e);}
 
