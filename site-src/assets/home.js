@@ -1405,8 +1405,8 @@ try{
   /* animations run only where they can be seen: the current service on laptops, every open one in view on phones */
   var settled=panels.map(function(){return false;}),settleT=[];
   function run(){panels.forEach(function(p,k){p.classList.toggle("vis",mode==="list"&&inView[k]);p.classList.toggle("run",mode==="list"?(isOpen[k]&&inView[k]&&(settled[k]||!("IntersectionObserver" in window))):(visible&&k===cur));});}
-  /* a panel counts as settled a moment after it opens, once its height has finished easing */
-  function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:2300);}
+  /* a panel counts as settled as its 1.4s unfold lands (the last 0.2s barely moves), so the steps start straight after */
+  function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:1200);}
   var glider=document.createElement("span");glider.className="wd-glider";glider.setAttribute("aria-hidden","true");tabRow.insertBefore(glider,tabRow.firstChild);tabRow.classList.add("has-glider");
   function glide(i){var t=tabs[i];if(!t)return;glider.style.setProperty("--gy",t.offsetTop+"px");glider.style.setProperty("--gh",t.offsetHeight+"px");}
   function copyIn(k,delay){var c=panels[k]&&panels[k].querySelector(".wd-copy");if(!c||!window.textOpen)return;
