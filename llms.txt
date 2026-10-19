@@ -1,0 +1,52 @@
+# Ambs Solutions
+
+> Auckland-based AI automation for NZ businesses: quotes and invoices, customer replies, bookings and reminders, websites and dashboards. Free first session.
+
+Auckland, NZ · Phone +64 22 099 9578 · Email hello@ambs.co.nz.
+
+- [Home](https://ambs.co.nz/): what we do, how it works, common questions and the hours calculator
+- [Book a free session](https://ambs.co.nz/#book)
+
+## Services
+
+- [Services](https://ambs.co.nz/services): AI and business automation, website design, staff and customer portals and live dashboards for New Zealand small businesses. Built around the tools you already use.
+- [AI automation](https://ambs.co.nz/services/ai-automation): Quotes, replies, bookings, data and reporting that run themselves, built around the tools you already use.
+- [Websites, portals and dashboards](https://ambs.co.nz/services/websites-and-portals): Fast multilingual websites, staff and customer portals, and live dashboards you own.
+
+## Industries
+
+- [Industries](https://ambs.co.nz/industries): Automation for New Zealand cafés, trades, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery businesses.
+- [Cafés and takeaways](https://ambs.co.nz/industries/cafes-and-takeaways): Rosters, supplier orders and review replies, handled.
+- [Trades and building](https://ambs.co.nz/industries/trades-and-building): Quotes from site notes, invoices into your accounts, late payments chased.
+- [Clinics and salons](https://ambs.co.nz/industries/clinics-and-salons): Reminders and rebooking, client forms and missed-call follow-ups.
+- [Shops and dairies](https://ambs.co.nz/industries/shops-and-dairies): Stock counts, price updates and a daily sales summary.
+- [Advisers and accountants](https://ambs.co.nz/industries/advisers-and-accountants): Document chasing, file notes from calls and compliance records.
+- [Transport and delivery](https://ambs.co.nz/industries/transport-and-delivery): Run sheets, proof of delivery and fuel and mileage logs.
+- [Cleaning and home services](https://ambs.co.nz/industries/cleaning-and-home-services): Visit reminders, quotes from enquiry photos and invoices for repeat work.
+- [Law firms and conveyancers](https://ambs.co.nz/industries/law-firms): Client onboarding, file notes from calls and key date reminders.
+
+## Guides
+
+- [Guides](https://ambs.co.nz/guides): Practical guides for NZ small businesses: what to automate first, invoicing, booking reminders, AI replies, app connections, dashboards and privacy.
+- [How to choose what to automate first](https://ambs.co.nz/guides/how-to-choose-what-to-automate-first): A simple way to find the task likely to give you the most hours back.
+- [Automate quotes and invoices](https://ambs.co.nz/guides/automate-quotes-and-invoices): From site notes to a priced quote, and from an approved job to an invoice in your accounts.
+- [Reduce no-shows with booking reminders](https://ambs.co.nz/guides/reduce-no-shows-with-booking-reminders): Confirmations, reminders and rebooking messages that run without anyone chasing.
+- [AI customer replies for small business](https://ambs.co.nz/guides/ai-customer-replies-for-small-business): Answer the same questions quickly, in your customer's language, while a person handles the rest.
+- [Connect your business apps](https://ambs.co.nz/guides/connect-your-business-apps): Stop retyping the same job into three systems. How app connections work and where to start.
+- [Your business numbers, every week](https://ambs.co.nz/guides/weekly-business-numbers-dashboard): What to track, where the numbers come from, and how to get them on your phone every Monday.
+- [The Privacy Act 2020 and automation](https://ambs.co.nz/guides/privacy-act-2020-and-automation): What New Zealand businesses should check before automating anything that touches personal information.
+- [Websites that turn visitors into calls](https://ambs.co.nz/guides/websites-that-turn-visitors-into-calls): What makes a small-business website earn enquiries, from speed to languages to the contact form.
+- [Automation glossary](https://ambs.co.nz/guides/automation-glossary): Plain-English meanings of the automation and AI terms you will hear.
+- [AI for small business in New Zealand](https://ambs.co.nz/guides/ai-for-small-business-nz): Practical, honest ways AI can take work off a small team, and what to keep with people.
+- [Client portals for small business](https://ambs.co.nz/guides/client-portals): When a portal beats email, what to put in it, and how to keep it secure.
+
+## Locations
+
+- [Locations](https://ambs.co.nz/locations): Ambs Solutions helps businesses across New Zealand with AI automation, websites, portals and dashboards. See what we do in your area.
+- [Auckland](https://ambs.co.nz/locations/auckland): AI automation, websites and portals for Auckland businesses, from the people who build them.
+
+## Optional
+
+- [Privacy policy](https://ambs.co.nz/privacy)
+- [Terms](https://ambs.co.nz/terms)
+- [Sitemap](https://ambs.co.nz/sitemap.xml)

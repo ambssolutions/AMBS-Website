@@ -521,6 +521,25 @@ def build_sitemap():
     x='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url>\n    <loc>{BASE}{u if u!="/" else "/"}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{f}</changefreq>\n    <priority>{pr}</priority>\n  </url>\n' for u,pr,f in rows)+'</urlset>\n'
     open(os.path.join(OUT,'sitemap.xml'),'w').write(x)
 
+def build_llms():
+    """llms.txt: a plain guide to the site for AI assistants (PageSpeed's "Agentic browsing" check). Made from the site's own content on every build, so editor changes keep it current."""
+    biz=json.load(open(os.path.join(SRC,'content','site.json'),encoding='utf8'))
+    ih=open(os.path.join(OUT,'index.html'),encoding='utf8').read()
+    md=re.search(r'<meta name="description" content="([^"]*)"',ih)
+    def unesc(t): return html.unescape(t) if t else ''
+    L=['# Ambs Solutions','',f'> {unesc(md.group(1)) if md else HUB["services"]["desc"]}','']
+    L.append(' · '.join(x for x in (biz.get('location',''),f"Phone {biz['phone']}" if biz.get('phone') else '',f"Email {biz['email']}" if biz.get('email') else '') if x)+'.')
+    L+=['',f'- [Home]({BASE}/): what we do, how it works, common questions and the hours calculator',f'- [Book a free session]({BASE}/#book)']
+    for sec in ('services','industries','guides','news','locations'):
+        items=[p for p in PAGES if p[0]==sec]
+        if not items: continue
+        hub=HUB.get(sec,{})
+        L+=['',f'## {SECTION[sec][0]}','']
+        if hub.get('desc'): L.append(f'- [{SECTION[sec][0]}]({BASE}{url(sec)}): {hub["desc"]}')
+        L+=[f'- [{t}]({BASE}{url(sc,sl)}): {b}' for sc,sl,t,b,*_ in items]
+    L+=['','## Optional','',f'- [Privacy policy]({BASE}/privacy)',f'- [Terms]({BASE}/terms)',f'- [Sitemap]({BASE}/sitemap.xml)','']
+    open(os.path.join(OUT,'llms.txt'),'w',encoding='utf8').write('\n'.join(L))
+
 MENU_INDENT={'main':'      ','drawer':'    ','company':'        ','explore':'        '}
 def home_menus(h):
     """Menu and footer links on the homepage, between <!--ed:menu:NAME--> markers."""
@@ -785,7 +804,7 @@ if __name__=='__main__':
         elif not os.path.exists(path): print(f'MISSING {p[0]}/{p[1]}')
     for s in ('services','industries','guides')+tuple(s_ for s_ in ('news','locations') if any(p[0]==s_ for p in PAGES)): build_hub(s)
     for slug,d in CUSTOM.items(): build_custom(slug,d,rb['pages'].get(slug,''))
-    build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap()
+    build_404(); build_booked(); build_legal('privacy'); build_legal('terms'); build_sitemap(); build_llms()
     for f in ('index.html','email-signature.html'): stamp_ga(os.path.join(OUT,f))
     _ip=os.path.join(OUT,'index.html');_ih=open(_ip,encoding='utf8').read()
     _ih2=re.sub(r'<!--fonts-->.*?<!--/fonts-->',lambda m:FONT_HEAD,_ih,flags=re.S)
