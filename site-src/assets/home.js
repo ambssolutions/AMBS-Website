@@ -697,7 +697,8 @@ if("IntersectionObserver" in window && !reduced){
       weather();
     }).catch(weather);
   }
-  sky();mood(0);locate();
+  /* the live weather is looked up once the page has loaded, so it never competes with the first screen */
+  sky();mood(0);if(document.readyState==="complete")setTimeout(locate,0);else addEventListener("load",()=>setTimeout(locate,0));
 
 
   setInterval(sky,60000);
