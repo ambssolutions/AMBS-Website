@@ -756,8 +756,14 @@ def chat_tag(iv):
     lab=(CHAT.get('labels') or {}).get('launcher','Ask us')
     nu=CHAT.get('nudge') or {}
     ntr={l:t['ed.chat.nudge'] for l,t in _tr_files().items() if t.get('ed.chat.nudge')}
-    nudge=(f' data-nudge="{e(nu.get("text",""))}" data-nudge-after="{int(nu.get("delay",15) or 15)}"'+(' data-nudge-open="1"' if nu.get('open',True) else '')+(f' data-nudge-tr="{e(json.dumps(ntr,ensure_ascii=False))}"' if ntr else '')) if nu.get('enabled',True) and nu.get('text') else ''
-    return f'<!--chat--><script src="/assets/chat.js?v={_v("chat.js")}" data-index="/assets/chat-index.json?v={iv}" data-label="{e(lab)}"{nudge} defer></script><!--/chat-->'
+    # the chat script is fetched only once the page has loaded, so it never competes with the first screen (Google's speed test counts everything fetched before it)
+    at={'src':f'/assets/chat.js?v={_v("chat.js")}','data-index':f'/assets/chat-index.json?v={iv}','data-label':lab}
+    if nu.get('enabled',True) and nu.get('text'):
+        at.update({'data-nudge':nu.get('text',''),'data-nudge-after':str(int(nu.get('delay',15) or 15))})
+        if nu.get('open',True): at['data-nudge-open']='1'
+        if ntr: at['data-nudge-tr']=json.dumps(ntr,ensure_ascii=False)
+    js=json.dumps(at,ensure_ascii=False).replace('</','<\\/')
+    return '<!--chat--><script>(function(a){function go(){var s=document.createElement("script");for(var k in a)s.setAttribute(k,a[k]);document.body.appendChild(s)}if(document.readyState==="complete")go();else addEventListener("load",go)})('+js+')</script><!--/chat-->'
 def stamp_chat(path,tag):
     if not os.path.exists(path): return
     h=open(path,encoding='utf8').read();h=re.sub(r'<!--chat-->.*?<!--/chat-->\n?','',h,flags=re.S)

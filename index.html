@@ -163,7 +163,7 @@ window.ambsLangFont=function(l){if(!/^(zh|hi|pa)$/.test(l||"")||window.__ambsLF)
 var k=document.createElement("link");k.rel="preload";k.as="fetch";k.crossOrigin="anonymous";k.href="/assets/i18n/"+l+".json?v="+(d.getAttribute("data-i18nv")||"");document.head.appendChild(k);
 setTimeout(function(){d.classList.remove("i18n-wait");},2500);}catch(e){}})();</script>
 <style>html.i18n-wait body{visibility:hidden}</style>
-<link rel="stylesheet" href="/assets/home.css?v=e530c7ff">
+<link rel="stylesheet" href="/assets/home.css?v=e559509e">
 <script>
 /* Theme is decided before first paint, so the page never flashes the wrong one.
    An explicit choice by the visitor wins; otherwise we follow the device. */
@@ -257,7 +257,7 @@ setTimeout(function(){d.classList.remove("i18n-wait");},2500);}catch(e){}})();</
         
         <p class="wxline" id="wxline" hidden></p>
         <h1 data-i18n="hero.h1">We solve your operational headaches
-with easy-to-use AI.</h1>
+with easy-to-use AI.</h1><script>/* the heading is split into words here, as soon as it arrives, so it shows straight away (home.js does the same after a language change) */(function(h){if(!h||h.querySelector(".tx-w"))return;h.classList.add("tx-accent-host");function esc(x){return x.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}var L=h.textContent.split("\n"),o="",n=0,ac=L.length>1;L.forEach(function(line,li){if(li)o+="<br>";var cj=/[\u3400-\u9fff]/.test(line),P=cj?Array.from(line):line.split(/(\s+)/),W=P.filter(function(w){return w&&!/^\s+$/.test(w)}),kf=(ac&&li===L.length-1&&W.length>=3&&!cj)?W.length-2:-1,wn=0;P.forEach(function(w){if(!w)return;if(/^\s+$/.test(w)){o+=" ";return}if(wn===kf)o+='<span class="tx-keep">';o+='<span class="tx-w'+(ac&&li===L.length-1?" tx-accent":"")+'" style="--wi:'+(n++)+'">'+esc(w)+"</span>";wn++;if(kf>=0&&wn===W.length)o+="</span>"})});h.innerHTML=o})(document.currentScript&&document.currentScript.previousElementSibling)</script>
         <p class="hero-sub" data-i18n="hero.sub">You bring the business problems, we bring the solutions. We handle the admin automation, source the right software and build a simplified system.</p>
         <div class="hero-cta">
           <a class="btn btn--sun" href="#book" data-i18n="hero.cta1">Book a free session</a>
@@ -702,7 +702,7 @@ back a week</span>
 </footer>
 
 <button class="totop" id="totop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
-<script src="/assets/home.js?v=93405b2e"></script>
-<!--chat--><script src="/assets/chat.js?v=0c5384ed" data-index="/assets/chat-index.json?v=d4774a6d" data-label="Ask us" data-nudge="Kia ora! I&#x27;m Ambs Bot, and I can answer your questions about automation, websites, pricing and our free session. Can I help you with anything?" data-nudge-after="12" data-nudge-open="1" data-nudge-tr="{&quot;hi&quot;: &quot;नमस्ते! मैं Ambs Bot हूँ, और ऑटोमेशन, वेबसाइट, कीमत और हमारे मुफ़्त सत्र के बारे में आपके सवालों के जवाब दे सकता हूँ। क्या मैं आपकी कोई मदद कर सकता हूँ?&quot;, &quot;mi&quot;: &quot;Kia ora! Ko Ambs Bot ahau, ā, ka taea e au te whakautu i ō pātai mō te whakaaunoa, ngā paetukutuku, ngā utu me tō mātou wā kore utu. He āwhina ka taea e au?&quot;, &quot;pa&quot;: &quot;ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ Ambs Bot ਹਾਂ, ਅਤੇ ਆਟੋਮੇਸ਼ਨ, ਵੈੱਬਸਾਈਟਾਂ, ਕੀਮਤ ਅਤੇ ਸਾਡੇ ਮੁਫ਼ਤ ਸੈਸ਼ਨ ਬਾਰੇ ਤੁਹਾਡੇ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਦੇ ਸਕਦਾ ਹਾਂ। ਕੀ ਮੈਂ ਤੁਹਾਡੀ ਕੋਈ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?&quot;, &quot;zh&quot;: &quot;您好！我是 Ambs Bot，可以解答关于自动化、网站、价格和免费咨询的问题。有什么可以帮您的吗？&quot;}" defer></script><!--/chat-->
+<script src="/assets/home.js?v=f35a5c0b"></script>
+<!--chat--><script>(function(a){function go(){var s=document.createElement("script");for(var k in a)s.setAttribute(k,a[k]);document.body.appendChild(s)}if(document.readyState==="complete")go();else addEventListener("load",go)})({"src": "/assets/chat.js?v=0c5384ed", "data-index": "/assets/chat-index.json?v=6ee100f8", "data-label": "Ask us", "data-nudge": "Kia ora! I'm Ambs Bot, and I can answer your questions about automation, websites, pricing and our free session. Can I help you with anything?", "data-nudge-after": "12", "data-nudge-open": "1", "data-nudge-tr": "{\"hi\": \"नमस्ते! मैं Ambs Bot हूँ, और ऑटोमेशन, वेबसाइट, कीमत और हमारे मुफ़्त सत्र के बारे में आपके सवालों के जवाब दे सकता हूँ। क्या मैं आपकी कोई मदद कर सकता हूँ?\", \"mi\": \"Kia ora! Ko Ambs Bot ahau, ā, ka taea e au te whakautu i ō pātai mō te whakaaunoa, ngā paetukutuku, ngā utu me tō mātou wā kore utu. He āwhina ka taea e au?\", \"pa\": \"ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ Ambs Bot ਹਾਂ, ਅਤੇ ਆਟੋਮੇਸ਼ਨ, ਵੈੱਬਸਾਈਟਾਂ, ਕੀਮਤ ਅਤੇ ਸਾਡੇ ਮੁਫ਼ਤ ਸੈਸ਼ਨ ਬਾਰੇ ਤੁਹਾਡੇ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਦੇ ਸਕਦਾ ਹਾਂ। ਕੀ ਮੈਂ ਤੁਹਾਡੀ ਕੋਈ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?\", \"zh\": \"您好！我是 Ambs Bot，可以解答关于自动化、网站、价格和免费咨询的问题。有什么可以帮您的吗？\"}"})</script><!--/chat-->
 </body>
 </html>
