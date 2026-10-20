@@ -1169,7 +1169,7 @@ function button(href,label,icon,mode,col){var c=Object.assign({},S.colors);if(co
    so the Gmail copy shows each button as a picture of itself: same look, same link, its words as the picture's alt text. The pictures go
    online with the others (offline() → putOnline) and are kept in S.btnPics by look; until then the Gmail copy uses the normal button.
    S.btnPicGmail=false (Buttons → "Gmail copy") keeps normal buttons. */
-var BTN_NEED={},BTN_ICON={};
+var BTN_NEED={},BTN_ICON={},BTN_AUTO=0;
 function btnPicOn(){return COPY_GMAIL&&S.btnPicGmail!==false&&(S.btnStyle==="filled"||S.btnStyle==="outline")}
 function btnPicKey(sp){var t=JSON.stringify(sp),h=0;for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;return(h>>>0).toString(36)}
 function btnPicData(sp){var im=null;if(sp.ic){im=BTN_ICON[sp.ic];if(!im){im=BTN_ICON[sp.ic]=new Image();im.onload=function(){if(STEPS[STEP]&&STEPS[STEP].id==="copy")go(STEP)};im.src=sp.ic}if(!im.complete||!im.naturalWidth)return null}
@@ -2126,14 +2126,18 @@ var COPY_STEPS={
     '<h3>iPhone or iPad</h3><ol class="bigsteps"><li>Press <b>Copy signature</b> above (in Safari).</li><li>Open <b>Settings → Apps → Mail → Signature</b>.</li><li>Delete the old text and paste. If the layout looks plain, shake the phone and tap <b>Undo Change Attributes</b>.</li></ol>'},
   other:{n:"Other",ic:"⋯",btn:"Copy signature",html:
     '<ol class="bigsteps"><li>Press <b>Copy signature</b> and paste it into your email app’s signature setting.</li><li>If your app asks for <b>HTML code</b> instead, press <b>Copy HTML code</b> and paste that.</li></ol>'}};
-function drawCopy(body){var mi=missing(),off=offline(),full=emailHtml().length,len=gmailHtml().length,two=!!S.mob&&full!==len,pct=Math.min(100,Math.round(len/100));
+function drawCopy(body){var mi=missing(),off=offline(),bpNote='',full=emailHtml().length,len=gmailHtml().length,two=!!S.mob&&full!==len,pct=Math.min(100,Math.round(len/100));
   checkPics(function(bad){if(!bad.length)return;var box=body.querySelector(".copybox");if(!box||box.querySelector(".picwarn"))return;box.insertBefore(h2('<p class="warn picwarn">'+esc(warnPics(bad))+'</p>'),box.firstChild);var ok=box.querySelector(".okmsg");if(ok)ok.remove()});
   var pf=COPY_STEPS[COPY_FOR]?COPY_FOR:"";
   var pick=h2('<div class="copyfor"><h3>Where will you use this signature?</h3><div class="cf-row">'+Object.keys(COPY_STEPS).map(function(k){var x=COPY_STEPS[k];return'<button type="button" class="cf'+(k===pf?" on":"")+'" data-k="'+k+'" aria-pressed="'+(k===pf)+'"><span>'+x.ic+'</span>'+esc(x.n)+'</button>'}).join("")+'</div></div>');
   pick.querySelectorAll(".cf").forEach(function(b){b.addEventListener("click",function(){COPY_FOR=b.dataset.k;try{localStorage.setItem("ambs-sig-copyfor",COPY_FOR)}catch(e){}go(STEP)})});
   body.appendChild(pick);if(!pf)return;var P=COPY_STEPS[pf];
-  body.appendChild(h2('<div class="copybox">'+(mi.length?'<div class="warn"><p>Before you copy: your '+esc(mi.join(" and "))+(mi.length>1?" need":" needs")+' to be online, or the email leaves '+(mi.length>1?"them":"it")+' out. Email apps can only show pictures that are on a website.</p>'+
-    (off.length?(onAmbs()?'<button type="button" class="btn small" data-c="online">Put '+(off.length>1?"them":"it")+' online for me</button><small>Uses your website editor sign-in. Takes about a minute.</small>':'<small>Open this builder at <b>ambs.co.nz/email-signature</b> (signed in to the website editor) to put '+(off.length>1?"them":"it")+' online with one click. Or download '+(off.length>1?"them":"it")+', put '+(off.length>1?"them":"it")+' on your website and paste the web address in.</small>'):'')+'</div>':'<p class="okmsg">Everything is ready to copy, including your pictures.</p>')+
+  /* button pictures for Gmail (btnPicsNeeded): put online by themselves once per visit when signed in on ambs.co.nz, or with the button */
+  var bp=pf==="gmail"?off.filter(function(x){return/^button-/.test(x.k)}):[];
+  if(bp.length&&!mi.length){mi=[];var bpNote='<div class="warn"><p>For Gmail, your button'+(bp.length>1?"s become pictures":" becomes a picture")+' so '+(bp.length>1?"they keep their":"it keeps its")+' colour in Gmail’s dark mode on iPhone. '+(bp.length>1?"They need":"It needs")+' to be online first, or Gmail gets the normal button.</p>'+
+    (onAmbs()?'<button type="button" class="btn small" data-c="online">'+(BTN_AUTO?"Putting it online…":"Put it online for me")+'</button><small>Uses your website editor sign-in. Takes about a minute.</small>':'<small>Open this builder at <b>ambs.co.nz/email-signature</b> (signed in to the website editor) to put it online with one click.</small>')+'</div>'}
+  body.appendChild(h2('<div class="copybox">'+(bpNote||"")+(mi.length?'<div class="warn"><p>Before you copy: your '+esc(mi.join(" and "))+(mi.length>1?" need":" needs")+' to be online, or the email leaves '+(mi.length>1?"them":"it")+' out. Email apps can only show pictures that are on a website.</p>'+
+    (off.length?(onAmbs()?'<button type="button" class="btn small" data-c="online">Put '+(off.length>1?"them":"it")+' online for me</button><small>Uses your website editor sign-in. Takes about a minute.</small>':'<small>Open this builder at <b>ambs.co.nz/email-signature</b> (signed in to the website editor) to put '+(off.length>1?"them":"it")+' online with one click. Or download '+(off.length>1?"them":"it")+', put '+(off.length>1?"them":"it")+' on your website and paste the web address in.</small>'):'')+'</div>':(bpNote?'':'<p class="okmsg">Everything is ready to copy, including your pictures.</p>'))+
   (pf==="gmail"?'<div class="sizebar'+(len>10000?" over":len>8500?" near":"")+'"><div><b>Gmail size:</b> '+len.toLocaleString()+' of 10,000 characters'+(len>10000?" — too long for Gmail. Turn off a part, shorten the disclaimer, or use fewer icons.":len>8500?" — close to Gmail’s limit.":"")+'</div><i style="width:'+pct+'%"></i></div>':'')+
   '<div class="acts"><button type="button" class="btn bigcopy" data-c="main">📋 '+esc(P.btn)+'</button>'+(pf==="other"?'<button type="button" class="btn sec" data-c="code">Copy HTML code</button>':'')+'</div>'+
   '<div class="how">'+P.html+'</div>'+
@@ -2142,6 +2146,7 @@ function drawCopy(body){var mi=missing(),off=offline(),full=emailHtml().length,l
   body.appendChild(codePanel());
   body.querySelector('[data-c="main"]').addEventListener("click",function(){if(P.gm)copyGmail(this);else copySig(this)});
   var ob=body.querySelector('[data-c="online"]');if(ob)ob.addEventListener("click",function(){putOnline(ob)});
+  if(ob&&bpNote&&onAmbs()&&edSession()&&!BTN_AUTO){BTN_AUTO=1;putOnline(ob,function(){go(STEP)})}
   body.querySelectorAll('[data-c="code"]').forEach(function(b){b.addEventListener("click",function(){copyCode(b)})})}
 
 /* arrange board: every line of the signature is a row; drop pieces into the same row to put them side by side */
@@ -3165,7 +3170,7 @@ function evenSpacing(G){G=G||10;var NR=2,PASSES=8;
     if(c.mob){S=canonical(c);Object.assign(S,JSON.parse(JSON.stringify(c.mob)));run(PHONE_W);c.mob.st=S.st;c.mob.lineGapL=S.lineGapL;c.mob.lineGapR=S.lineGapR}
     S=c}catch(e){S=keep;throw e}finally{barH=kb}
   if(wasMob)syncActive();save();update();toast("Even spacing: "+G+"px between every part"+(c.mob?", on laptops and phones.":"."))}
-function copyGmail(b){COPY_GMAIL=true;try{copySig(b)}finally{COPY_GMAIL=false}}
+function copyGmail(b){if(btnPicsNeeded().length)toast("Your button picture isn’t online yet, so Gmail gets the normal button (it turns purple in dark mode on iPhone). Press Put it online first.");COPY_GMAIL=true;try{copySig(b)}finally{COPY_GMAIL=false}}
 function gmailHtml(){COPY_GMAIL=true;try{return emailHtml()}finally{COPY_GMAIL=false}}
 function copySig(b){b=b||$("copySig");var html=emailHtml(),clip=$("clip");var off=offline();checkPics(function(bad){if(bad.length)toast(warnPics(bad))});if(off.length)toast("Heads up: your "+off.map(function(i){return i.label}).join(" and ")+" isn’t online yet, so it’s left out. Go to Copy and use → Put it online.");else if(!COPY_GMAIL&&html.length>10000&&gmailHtml().length<=10000)toast("Copied both layouts for Outlook and Apple Mail. For Gmail, press Copy for Gmail: it fits Gmail’s 10,000 limit.");
   var fallback=function(){clip.innerHTML=html;var r=document.createRange();r.selectNodeContents(clip);var s=getSelection();s.removeAllRanges();s.addRange(r);var ok=false;try{ok=document.execCommand("copy")}catch(e){}s.removeAllRanges();clip.innerHTML="";flash(b,ok?"Copied ✓":"Copy didn’t work. Try Copy HTML code")};
