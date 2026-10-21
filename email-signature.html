@@ -1183,8 +1183,16 @@ function btnPicData(sp){var im=null;if(sp.ic){im=BTN_ICON[sp.ic];if(!im){im=BTN_
   g.fillStyle=sp.filled?"#ffffff":sp.col;g.textBaseline="middle";g.fillText(sp.t,x0+iw,sp.h/2+.5);
   try{return cv.toDataURL("image/png")}catch(e){return null}}
 /* the button pictures the Gmail copy still needs */
+/* a button picture is online at a fixed address (button-<look>.png), so one made for any signature is found again by every
+   copy of the builder with the same button; it's looked for once per visit (BTN_ON: "wait" while looking, "no" when missing) */
+var BTN_ON={};
+function btnPicUrl(k){return"https://ambs.co.nz/assets/email/made/button-"+k+".png"}
 function btnPicsNeeded(){var out=[];if(S.btnPicGmail===false)return out;BTN_NEED={};gmailHtml();
-  Object.keys(BTN_NEED).forEach(function(k){if(S.btnPics&&url(S.btnPics[k]))return;var d=btnPicData(BTN_NEED[k]);if(d)out.push({k:"button-"+k,label:"button picture",src:d,set:function(u){S.btnPics=Object.assign({},S.btnPics);S.btnPics[k]=u}})});return out}
+  Object.keys(BTN_NEED).forEach(function(k){if(S.btnPics&&url(S.btnPics[k]))return;
+    if(!BTN_ON[k]){BTN_ON[k]="wait";var im=new Image();im.onload=function(){S.btnPics=Object.assign({},S.btnPics);S.btnPics[k]=btnPicUrl(k);BTN_ON[k]="yes";save();update();if(STEPS[STEP]&&STEPS[STEP].id==="copy")go(STEP)};
+      im.onerror=function(){BTN_ON[k]="no";if(STEPS[STEP]&&STEPS[STEP].id==="copy")go(STEP)};im.src=btnPicUrl(k)+"?t="+Date.now()}
+    if(BTN_ON[k]==="wait")return;
+    var d=btnPicData(BTN_NEED[k]);if(d)out.push({k:"button-"+k,name:"button-"+k,label:"button picture",src:d,set:function(u){S.btnPics=Object.assign({},S.btnPics);S.btnPics[k]=u}})});return out}
 function contactIcon(kind,mode,csz){var st=S.contactIcons;if(st==="none")return"";var sz=Math.max(13,Math.round((csz||S.textSize)*1.15));
   if(st==="letters"){var pp=pal(),L={mobile:["M",pp[3%pp.length]],phone:["P",pp[2%pp.length]],email:["E",pp[4%pp.length]],web:["W",pp[5%pp.length]],location:["A",pp[0]]}[kind],own=S.letterCols&&S.letterCols[kind];return'<b style="color:'+(own||(S.contactLabels?S.colors.letters:L[1]))+';font-size:'+(csz||S.textSize)+'px;">'+L[0]+'</b>'}
   return'<img src="'+esc(iconSrc(kind,st,mode,embL("icons")))+'" width="'+sz+'" height="'+sz+'" alt="" style="display:block;border:0;width:'+sz+'px;height:'+sz+'px;">'}
@@ -3110,7 +3118,7 @@ function putOnline(btn,done){var list=offline();if(!list.length){if(done)done();
   var label=btn?btn.textContent:"";if(btn){btn.disabled=true;btn.textContent="Putting it online…"}
   var fail=function(msg){if(btn){btn.disabled=false;btn.textContent=label}toast(msg)};
   edToken().then(function(tok){return list.reduce(function(pr,it){return pr.then(function(){var m=/^data:image\/[a-z+]+;base64,(.*)$/i.exec(it.src||"");if(!m)throw new Error("That "+it.label+" could not be read.");
-    return fetch("/api/media",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:JSON.stringify({action:"email-asset",name:(S.company||"signature")+"-"+it.k,base64:m[1]})})
+    return fetch("/api/media",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:JSON.stringify({action:"email-asset",name:it.name||(S.company||"signature")+"-"+it.k,base64:m[1]})})
       .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||"Upload failed");it.set(j.url);it.url=j.url})})})},Promise.resolve())})
   .then(function(){save();update();drawFlow();if(btn)btn.textContent="Going live… (about a minute)";
     /* the website takes about a minute to publish a new picture; wait until it answers */
