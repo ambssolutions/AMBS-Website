@@ -1101,6 +1101,24 @@ function makeLogoEmb(cb){var key=logoEmbKey(),lv=embL("logo"),src=S.logoData||(i
     var svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="'+W+'" height="'+(H+pad)+'" viewBox="0 0 '+W+' '+(H+pad)+'"><defs>'+f+'</defs><image xlink:href="'+flat+'" href="'+flat+'" x="0" y="0" width="'+W+'" height="'+H+'" filter="url(#e)"/></svg>';
     var si=new Image();si.onload=function(){var c=document.createElement("canvas");c.width=W;c.height=H+pad;c.getContext("2d").drawImage(si,0,0);try{LOGO_EMB[key]=c.toDataURL("image/png")}catch(err){LOGO_EMB[key]=""}delete LOGO_EMB_BUSY[key];if(cb)cb();else update()};
     si.onerror=function(){delete LOGO_EMB_BUSY[key]};si.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg)};im.src=src}
+/* "White card" behind the logo: the card is drawn into the logo picture itself (online as made/logocard-<look>.png), so it
+   stays white in every app's dark mode, Gmail included, which recolours backgrounds but never pictures. On a white email it
+   can't be seen. Kept in S.logoCards by look; found again at its fixed address by any copy of the builder (LCARD_ON). */
+var LCARD={},LCARD_ON={};
+function logoCardOn(){return S.logoBg==="white"&&!!S.logoShow}
+function logoCardBase(){return S.logoData?"d"+S.logoData.length+S.logoData.slice(-60):url(S.logoUrl)||(isAmbsLogo()?"ambs":"")}
+function logoCardSpec(w,h){var p=Math.max(8,Math.round(w*.08));return{w:w,h:h,p:p,r:10,k:btnPicKey({b:logoCardBase(),w:w,h:h,p:p})}}
+function logoCardUrl(k){return HOST+"made/logocard-"+k+".png"}
+function logoCardMake(sp){var k=sp.k;if(LCARD[k]!==undefined)return LCARD[k];LCARD[k]=null;
+  var src=S.logoData||(isAmbsLogo()?AMBS_LOGO:url(S.logoUrl));if(!src){LCARD[k]=false;return null}
+  var im=new Image();if(!/^data:/.test(src))im.crossOrigin="anonymous";
+  im.onload=function(){try{var s=2,W=sp.w+2*sp.p,H=sp.h+2*sp.p,cv=document.createElement("canvas");cv.width=W*s;cv.height=H*s;var g=cv.getContext("2d");g.scale(s,s);
+      var r=sp.r;g.beginPath();g.moveTo(r,0);g.arcTo(W,0,W,H,r);g.arcTo(W,H,0,H,r);g.arcTo(0,H,0,0,r);g.arcTo(0,0,W,0,r);g.closePath();g.fillStyle="#ffffff";g.fill();
+      g.drawImage(im,sp.p,sp.p,sp.w,sp.h);LCARD[k]=cv.toDataURL("image/png")}catch(e){LCARD[k]=false}update()};
+  im.onerror=function(){LCARD[k]=false};im.src=src;return null}
+function logoCardCheck(k){if(LCARD_ON[k])return;LCARD_ON[k]="wait";var im=new Image();
+  im.onload=function(){LCARD_ON[k]="yes";S.logoCards=Object.assign({},S.logoCards);S.logoCards[k]=logoCardUrl(k);save();update();if(STEPS[STEP]&&STEPS[STEP].id==="copy")go(STEP)};
+  im.onerror=function(){LCARD_ON[k]="no";if(STEPS[STEP]&&STEPS[STEP].id==="copy")go(STEP)};im.src=logoCardUrl(k)+"?t="+Date.now()}
 function logoInner(mode,w){w=w||S.logoSize;var h=Math.round(w*(S.logoRatio||0.365)),src,lv=embL("logo"),key=logoEmbKey();
   var an=animLogo(mode);if(an){src=an;h=Math.round(w*(S.logoAnimRatio||S.logoRatio||0.365))}
   else if(lv&&(isAmbsLogo()||S.logoData)){var eh=Math.round(h*1.12);
@@ -1109,9 +1127,14 @@ function logoInner(mode,w){w=w||S.logoSize;var h=Math.round(w*(S.logoRatio||0.36
   else if(mode==="email")src=isAmbsLogo()&&!S.logoData?HOST+"logo.png":url(S.logoUrl);
   else if(S.logoData)src=S.logoData;
   else src=S.logoUrl==="https://ambs.co.nz/logo-400.png"?AMBS_LOGO:url(S.logoUrl);
+  var card=false;
+  if(logoCardOn()&&!an){var cs=logoCardSpec(w,h),cw=w+2*cs.p,ch=h+2*cs.p;
+    if(mode==="email"){if(S.logoCards&&url(S.logoCards[cs.k])){src=S.logoCards[cs.k];w=cw;h=ch;card=true}else logoCardCheck(cs.k)}
+    else{var cd=logoCardMake(cs);if(cd){src=cd;w=cw;h=ch;card=true}}}
   var pic=img(src,w,h,S.company||"Logo");
-  /* dark mode logo: shown instead of the normal one by email apps in dark mode (Apple Mail, Outlook for Mac, new Outlook) */
-  if(mode==="email"&&darkExtras()&&url(S.logoDarkUrl)){var dh=Math.round(w*(S.logoDarkRatio||S.logoRatio||0.365));
+  /* dark mode logo: shown instead of the normal one by email apps in dark mode (Apple Mail, Outlook for Mac, new Outlook); not needed on the white card */
+  if(card){}
+  else if(mode==="email"&&darkExtras()&&url(S.logoDarkUrl)){var dh=Math.round(w*(S.logoDarkRatio||S.logoRatio||0.365));
     pic=pic.replace("<img ",'<img class="dkl" ')+'<!--[if !mso]><!--><img class="dkd" src="'+esc(url(S.logoDarkUrl))+'" width="'+w+'" height="'+dh+'" alt="'+esc(S.company||"Logo")+'" style="display:none;border:0;width:'+w+'px;height:'+dh+'px;max-height:0;overflow:hidden;mso-hide:all;"><!--<![endif]-->'}
   else if(mode!=="email"&&S.darkOn&&S.pvMode==="dark"&&darkLogoSrc(true))pic=img(darkLogoSrc(true),w,Math.round(w*(S.logoDarkRatio||S.logoRatio||0.365)),S.company||"Logo");
   var link=url(S.website);return(link?'<a href="'+esc(link)+'" style="text-decoration:none;">':"")+pic+(link?"</a>":"")}
@@ -1567,7 +1590,7 @@ var ITEM={
     ?[["select","signoffStyle","Style",SO_STYLES],["hand"],["select","signoff","Words",Object.keys(SIGNOFFS).map(function(k){return[SIGNOFFS[k].text,SIGNOFFS[k].text]})],["seg","signoffAnimColor","Ink",INKS],["seg","signoffLoop","Writes itself",[["3","3 times"],["forever","Over and over"]]],["range","signoffSize","Size",18,44],["replay"],["note","It writes itself in Gmail, Apple Mail and the new Outlook: 3 times then stays written, or over and over with a 3-second pause. Older Outlook on Windows shows it already written."]]
     :[["select","signoffStyle","Style",SO_STYLES],["text","signoff","Words"],["range","st.signoff.size","Size",10,44,function(){return soPlainSize()}],["color","st.signoff.color","Colour"],["bi","signoff"]]},
   photo:function(){return[["check","photoShow","Show a photo of me"],["file","photoFile","Choose a photo"],["seg","photoShape","Shape",[["circle","Circle"],["rounded","Rounded"],["square","Square"]]],["range","photoSize","Size",56,160],["text","photoUrl","Photo web address (used in the email)"],["note","To show in emails your photo has to be online. Put it on your website, then right-click it, choose “Copy image address” and paste it above."]]},
-  logo:function(){return[["animlogo"],["logomatch"],["seg","logoWhere","Where",[["off","No logo"],["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"]]],["range","logoSize","Size",30,220],["seg","emb.logo","Embossed",EMB_OPTS],["seg","logoBg","Behind the logo",[["none","Nothing"],["brand","Brand colour tile"],["light","Grey tile"]]],["seg","divider","Line beside it",[["rainbow","Brand stripe"],["solid","One colour"],["none","None"]]],["linebox"],["file","logoFile","Try a different logo"],["text","logoUrl","Logo web address"]]},
+  logo:function(){return[["animlogo"],["logomatch"],["seg","logoWhere","Where",[["off","No logo"],["left","Left"],["right","Right"],["top","Above"],["bottom","Below"],["social","By the icons"]]],["range","logoSize","Size",30,220],["seg","emb.logo","Embossed",EMB_OPTS],["seg","logoBg","Behind the logo",[["none","Nothing"],["white","White card"],["brand","Brand colour tile"],["light","Grey tile"]]],["seg","divider","Line beside it",[["rainbow","Brand stripe"],["solid","One colour"],["none","None"]]],["linebox"],["file","logoFile","Try a different logo"],["text","logoUrl","Logo web address"]]},
   name:function(){return[["text","name","Name"],["color","st.name.color","Colour"],["range","st.name.size","Size",12,32,function(){return S.nameSize}],["bi","name"]]},
   role:function(){return[["text","role","Role"],["text","company","Business"],["color","st.role.color","Colour"],["range","st.role.size","Size",10,22,function(){return S.textSize}],["bi","role"]]},
   contact:function(){return[["text","mobile","Mobile"],["text","phone","Office phone"],["text","email","Email"],["text","website","Website"],["text","location","Address"],["seg","contactLayout","Layout",[["stack","One per line"],["pairs","Two per line"],["smart","Mixed"],["line","One line"]]],["range","contactGap","Gap between phone, email and website",0,24,function(){return contactGap()}],["range","contactIconGap","Gap between each icon and its words",0,24,function(){return cIconGap()}],["text","contactSep","Mark between them on one line (· | / or leave empty)"],["cicons","contactIcons","Icons"],["lettercols"],["check","contactLabels","Letters in one colour"],["color","st.contact.color","Text colour"],["range","st.contact.size","Size",10,20,function(){return S.textSize}],["bi","contact"]]},
@@ -2141,7 +2164,7 @@ function drawCopy(body){var mi=missing(),off=offline(),bpNote='',full=emailHtml(
   pick.querySelectorAll(".cf").forEach(function(b){b.addEventListener("click",function(){COPY_FOR=b.dataset.k;try{localStorage.setItem("ambs-sig-copyfor",COPY_FOR)}catch(e){}go(STEP)})});
   body.appendChild(pick);if(!pf)return;var P=COPY_STEPS[pf];
   /* button pictures for Gmail (btnPicsNeeded): put online by themselves once per visit when signed in on ambs.co.nz, or with the button */
-  var bp=pf==="gmail"?off.filter(function(x){return/^button-/.test(x.k)}):[];
+  var bp=off.filter(function(x){return(pf==="gmail"&&/^button-/.test(x.k))||/^logocard-/.test(x.k)});
   if(bp.length&&!mi.length){mi=[];var bpNote='<div class="warn"><p>For Gmail, your button'+(bp.length>1?"s become pictures":" becomes a picture")+' so '+(bp.length>1?"they keep their":"it keeps its")+' colour in Gmail’s dark mode on iPhone. '+(bp.length>1?"They need":"It needs")+' to be online first, or Gmail gets the normal button.</p>'+
     (onAmbs()?'<button type="button" class="btn small" data-c="online">'+(BTN_AUTO?"Putting it online…":"Put it online for me")+'</button><small>Uses your website editor sign-in. Takes about a minute.</small>':'<small>Open this builder at <b>ambs.co.nz/email-signature</b> (signed in to the website editor) to put it online with one click.</small>')+'</div>'}
   body.appendChild(h2('<div class="copybox">'+(bpNote||"")+(mi.length?'<div class="warn"><p>Before you copy: your '+esc(mi.join(" and "))+(mi.length>1?" need":" needs")+' to be online, or the email leaves '+(mi.length>1?"them":"it")+' out. Email apps can only show pictures that are on a website.</p>'+
@@ -3111,6 +3134,8 @@ function offline(){var out=[];
   if(S.logoShow&&!(S.logoAnim&&hasAnim())&&S.logoData&&(!url(S.logoUrl)||(url(S.logoUrl)==="https://ambs.co.nz/logo-400.png"&&!/ambs/i.test(S.company||""))))out.push({k:"logo",label:"logo",src:S.logoData,set:function(u){S.logoUrl=u}});
   if(S.darkOn&&S.logoShow&&S.logoDarkData&&!url(S.logoDarkUrl))out.push({k:"logo-dark",label:"dark mode logo",src:S.logoDarkData,set:function(u){S.logoDarkUrl=u}});
   var lk=logoEmbKey();if(S.logoShow&&lk&&S.logoData&&S.logoEmbKey!==lk&&LOGO_EMB[lk])out.push({k:"logo-embossed",label:"embossed logo",src:LOGO_EMB[lk],set:function(u){S.logoEmbUrl=u;S.logoEmbKey=lk}});
+  if(logoCardOn()){var ck=logoCardSpec(S.logoSize,Math.round(S.logoSize*(S.logoRatio||0.365))).k;
+    if(!(S.logoCards&&url(S.logoCards[ck]))){logoCardCheck(ck);if(LCARD_ON[ck]==="no"&&LCARD[ck])out.push({k:"logocard-"+ck,name:"logocard-"+ck,label:"logo on its white card",src:LCARD[ck],set:function(u){S.logoCards=Object.assign({},S.logoCards);S.logoCards[ck]=u}})}}
   btnPicsNeeded().forEach(function(x){out.push(x)});
   return out}
 function putOnline(btn,done){var list=offline();if(!list.length){if(done)done();return}
