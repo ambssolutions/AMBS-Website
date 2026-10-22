@@ -445,7 +445,11 @@
     if(/^\s*sat\s*(shri|sri|shree|shrine|shiri|siri|sree)(\s+a+[kh][a-z]*)?(\s+ji)?[\s!.]*$/i.test(String(t)))return "sat sri akal";
     /* letters held down or doubled: "sat shhrrririi kaalllalalalal" */
     if(/^\s*sa+t+\s+s+h*r+[ri]*\s+(a+|k+a+)[a-z]*(\s+ji)?[\s!.]*$/i.test(String(t)))return "sat sri akal";return String(t).replace(/\bsat\s*(shri|sri|shree|shrine|shiri|siri|sree|sir|shri\.?)\s*a+k+a+l+(\s*ji)?\b|\bsa?t?\s*sri\s*akaa?l\b/gi,"sat sri akal")}
-  function answer(q){q=fixGreet(q);var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
+  /* letters held down: "liiiiiiii krdeeee ho?" -> "li krde ho?" (no English or romanised word has a letter three times in a row);
+     then "li" (k and l sit side by side) is "ki" when the message is Punjabi or Hindi in English letters */
+  function fixStretch(t){t=String(t);if(!/^[\x00-\x7F]+$/.test(t)||!/([a-z])\1\1/i.test(t))return t;t=t.replace(/([a-z])\1{2,}/gi,function(m,c){return /^www$/i.test(m)?m:c});
+    return /^(pa|hi)$/.test(romanLang(t))?t.replace(/\bli\b/gi,"ki"):t}
+  function answer(q){q=fixStretch(fixGreet(q));var s=q.trim(),sl=scriptLang(s),rl0=romanLang(s),rl=state.noRoman?"":rl0,sq=s;
     /* a greeting in front of a question isn't part of the question ("Kia ora, how much does it cost?") */
     sq=s.replace(/^(hi+|hello+|hey+|kia ora|morena|mōrena|namaste|nihao|ni hao|sat s(h)?ri akal|g'?day|good (morning|afternoon|evening))( (there|team|ji))?[\s,.!-]+(?=\S)/i,"")||s;
     /* still understood after "Reply in English"; only the reply language stays English */
