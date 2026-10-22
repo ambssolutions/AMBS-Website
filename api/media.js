@@ -58,8 +58,8 @@ export default async function handler(req, res) {
       if (!ext) return send(res, 400, { error: "That picture could not be read. Use a GIF, PNG or JPG." });
       if (bytes(b.base64) > MAX) return send(res, 400, { error: "That picture is over 3 MB. Make it smaller or use a still picture." });
       const base = String(b.name || "picture").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "picture";
-      /* a Gmail button picture has a fixed address made from its look (button-<key>.png), so the builder finds it again */
-      const path = "assets/email/made/" + base + (/^button-[a-z0-9]{3,10}$/.test(base) && ext === "png" ? "" : "-" + Date.now().toString(36)) + "." + ext;
+      /* a Gmail button picture or a logo on its white card has a fixed address made from its look (button-/logocard-<key>.png), so the builder finds it again */
+      const path = "assets/email/made/" + base + (/^(button|logocard)-[a-z0-9]{3,10}$/.test(base) && ext === "png" ? "" : "-" + Date.now().toString(36)) + "." + ext;
       await commitFiles(head, { [path]: { base64: b.base64 }, "version.json": await nextVersion(head) }, "Website editor: add email signature picture " + path + by);
       return send(res, 200, { ok: true, path, url: "https://ambs.co.nz/" + path });
     }
