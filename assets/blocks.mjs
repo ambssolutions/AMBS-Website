@@ -19,19 +19,26 @@ export const BLOCK_TYPES = {
   video: "Video",
   columns: "Two columns",
   form: "Contact form",
-  webcalc: "Website calculator",
+  webcalc: "Website ROI calculator",
 };
 
-/* Website calculator: the sliders' ranges, the starting numbers and the wording the numbers use.
-   Shared by the page (drawn once here) and /assets/webcalc.js (redrawn as the sliders move). */
+/* Website ROI calculator: the ranges, the starting numbers and the wording the numbers use.
+   Shared by the page (drawn once here, so the numbers show even without scripts) and /assets/webcalc.js
+   (redrawn as people move the sliders). Wording can be changed per block in the editor (block.words). */
 export const CALC_RANGES = {
   visitors: { min: 20, max: 1000, step: 10, start: 150 },
   enquiry: { min: 0.5, max: 8, step: 0.5, start: 2 },
   win: { min: 10, max: 70, step: 5, start: 35 },
-  job: { min: 500, max: 30000, step: 500, start: 5000 },
+  job: { min: 100, max: 100000, step: 100, start: 5000 },
   cost: { min: 500, max: 15000, step: 250, start: 3000 },
 };
+export const CALC_JOBS = [500, 2000, 5000, 10000, 25000];
+export const CALC_PERIODS = { month: 1, year: 12, three: 36 };
 export const CALC_TEXT = {
+  stepJob: "What is an average job worth to you?",
+  stepJobHint: "Tap an amount or type your own",
+  stepSite: "How your website does each month",
+  stepCost: "What the website costs",
   visitors: "Website visitors a month",
   enquiry: "Visitors who send an enquiry",
   enquiryHint: "Quote form, call or email from the site",
@@ -39,75 +46,78 @@ export const CALC_TEXT = {
   job: "Average job value",
   cost: "Website cost",
   costHint: "Put in your real quote",
-  leads: "Leads a month",
-  jobs: "Jobs won",
-  month: "Work a month",
-  year: "estimated extra work a year",
-  amonth: "{n} a month",
-  every: "1 every {n} months",
+  pMonth: "Month",
+  pYear: "Year",
+  pThree: "3 years",
+  perMonth: "a month",
+  perYear: "a year",
+  perThree: "over 3 years",
+  big: "of work your website could bring in {per}",
+  say: "At {job} a job, that is about {money} of work a month.",
+  flowHead: "Every month",
+  flowVisitors: "Visitors",
+  flowLeads: "Enquiries",
+  flowJobs: "Jobs won",
+  flowWork: "Work",
   payFirst: "Pays for itself in the first month",
   payIn: "Pays for itself in about {n} months",
   payNone: "Move the sliders to see when it pays for itself",
-  legendCost: "Website cost",
+  legendCost: "Website cost {n}",
   legendPaid: "Paid for",
   legendOwed: "Still paying it off",
   axis: "Month",
 };
+/* fill {n} or {name} in a piece of wording */
+export function calcFill(str, n) {
+  str = String(str ?? "");
+  if (n && typeof n === "object") return str.replace(/\{(\w+)\}/g, (m, k) => (k in n ? n[k] : m));
+  return n === undefined ? str : str.replace("{n}", n);
+}
 export function calcNumber(k, v) {
-  const r = CALC_RANGES[k], n = parseFloat(v);
+  const r = CALC_RANGES[k], n = parseFloat(String(v ?? "").replace(/[^0-9.]/g, ""));
   return isFinite(n) ? Math.min(r.max, Math.max(r.min, n)) : r.start;
 }
-const money = (n) => "$" + Math.round(n).toLocaleString("en-NZ");
-/* the results for a set of slider values; t(key, n) gives the wording */
-export function calcFigures(v, t) {
+export const calcMoney = (n) => "$" + Math.round(n).toLocaleString("en-NZ");
+const per = { month: "perMonth", year: "perYear", three: "perThree" };
+/* the results for a set of values; t(key, n) gives the wording; period is month, year or three */
+export function calcFigures(v, t, period) {
+  period = CALC_PERIODS[period] ? period : "year";
   const leads = v.visitors * v.enquiry / 100, jobs = leads * v.win / 100, month = jobs * v.job;
   const pay = month > 0 ? Math.ceil(v.cost / month) : Infinity;
+  const one = (n) => (n < 10 ? n.toFixed(1) : String(Math.round(n)));
+  const bigN = month * CALC_PERIODS[period];
   return {
-    visitors: v.visitors.toLocaleString("en-NZ"), enquiry: v.enquiry + "%", win: v.win + "%", job: money(v.job), cost: money(v.cost),
-    leads: leads < 10 ? leads.toFixed(1) : String(Math.round(leads)),
-    jobs: jobs >= 10 ? t("amonth", Math.round(jobs)) : jobs >= 0.75 ? t("amonth", jobs.toFixed(1)) : jobs > 0 ? t("every", Math.round(1 / jobs)) : "0",
-    month: money(month), year: money(month * 12),
+    visitors: v.visitors.toLocaleString("en-NZ"), enquiry: v.enquiry + "%", win: v.win + "%", job: calcMoney(v.job), cost: calcMoney(v.cost),
+    fv: v.visitors.toLocaleString("en-NZ"), fl: one(leads), fj: one(jobs), fw: calcMoney(month),
+    big: calcMoney(bigN), bigN, bigLabel: t("big", { per: t(per[period]) }),
+    bar: calcMoney(bigN) + " " + t(per[period]),
+    say: t("say", { job: calcMoney(v.job), money: calcMoney(month) }),
     pay: pay <= 1 ? t("payFirst") : pay < Infinity ? t("payIn", pay) : t("payNone"),
+    legendCost: t("legendCost", calcMoney(v.cost)),
     perMonth: month,
   };
 }
 /* the 12-month chart as SVG markup: work won added up, month by month, against the website cost */
 export function calcChart(month, cost, t) {
-  const L = 56, R = 592, T = 34, B = 182, W = R - L, H = B - T;
+  const L = 58, R = 594, T = 12, B = 176, W = R - L, H = B - T;
   const top = Math.max(month * 12, cost), max = top * 1.08 || 1;
   const y = (val) => B - (val / max) * H;
-  const tx = (x, yy, s, cls, anchor) => '<text x="' + x + '" y="' + yy + '"' + (cls ? ' class="' + cls + '"' : "") + (anchor ? ' text-anchor="' + anchor + '"' : "") + ">" + esc(s) + "</text>";
+  const tx = (x, yy, s, anchor) => '<text x="' + x + '" y="' + yy + '"' + (anchor ? ' text-anchor="' + anchor + '"' : "") + ">" + esc(s) + "</text>";
   let s = "";
   for (const f of [0, 0.5, 1]) {
     const val = top * f, yy = y(val).toFixed(1);
-    s += '<line class="g" x1="' + L + '" x2="' + R + '" y1="' + yy + '" y2="' + yy + '"/>' + tx(L - 8, (+yy + 4).toFixed(1), val >= 1000 ? "$" + Math.round(val / 1000) + "k" : "$" + Math.round(val), "", "end");
+    s += '<line class="g" x1="' + L + '" x2="' + R + '" y1="' + yy + '" y2="' + yy + '"/>' + tx(L - 8, (+yy + 5).toFixed(1), val >= 1000 ? "$" + Math.round(val / 1000) + "k" : "$" + Math.round(val), "end");
   }
   const bw = W / 12;
   for (let m = 1; m <= 12; m++) {
-    const cum = month * m, x = (L + (m - 1) * bw + bw * 0.18).toFixed(1), h = Math.max(B - y(cum), 0);
-    s += '<rect class="' + (cum >= cost && cum > 0 ? "paid" : "owed") + '" x="' + x + '" y="' + (B - h).toFixed(1) + '" width="' + (bw * 0.64).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="4"/>' + tx((+x + bw * 0.32).toFixed(1), B + 16, m, "", "middle");
+    const cum = month * m, x = (L + (m - 1) * bw + bw * 0.16).toFixed(1), h = Math.max(B - y(cum), 0);
+    s += '<rect class="' + (cum >= cost && cum > 0 ? "paid" : "owed") + '" x="' + x + '" y="' + (B - h).toFixed(1) + '" width="' + (bw * 0.68).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="4"/>' + tx((+x + bw * 0.34).toFixed(1), B + 20, m, "middle");
   }
   const cy = y(cost).toFixed(1);
   s += '<line class="cost" x1="' + L + '" x2="' + R + '" y1="' + cy + '" y2="' + cy + '"/>';
-  s += '<line class="cost" x1="' + L + '" x2="' + (L + 28) + '" y1="13" y2="13"/>' + tx(L + 36, 18, t("legendCost") + " " + money(cost), "k cost-t");
-  s += '<rect class="paid" x="' + (L + 232) + '" y="5" width="15" height="15" rx="3"/>' + tx(L + 253, 18, t("legendPaid"), "k");
-  s += '<rect class="owed" x="' + (L + 344) + '" y="5" width="15" height="15" rx="3"/>' + tx(L + 365, 18, t("legendOwed"), "k");
-  s += tx(R, 210, t("axis"), "", "end");
+  s += tx(R, 216, t("axis"), "end");
   return s;
 }
-
-/* kinds of question a contact form can ask */
-export const FORM_FIELDS = {
-  name: "Name",
-  email: "Email",
-  phone: "Phone",
-  text: "Short answer",
-  message: "Long answer",
-  select: "Dropdown",
-  checkbox: "Tick box",
-  date: "Date",
-};
-
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const attr = (s) => esc(s).replace(/"/g, "&quot;");
 const href = (u) => {
@@ -229,26 +239,38 @@ export function renderBlocks(blocks, opts = {}) {
     } else if (t === "webcalc") {
       const cid = idp + "c" + ++nf;
       const word = (k) => String((b.words || {})[k] || "").trim() || CALC_TEXT[k];
-      const fill = (k, n) => word(k).replace("{n}", n);
+      const fill = (k, n) => calcFill(word(k), n);
       const v = {};
       for (const k in CALC_RANGES) v[k] = calcNumber(k, (b.start || {})[k]);
-      const fig = calcFigures(v, fill);
+      const fig = calcFigures(v, fill, "year");
       const ctl = (k, hint) => {
         const r = CALC_RANGES[k];
         return '<div class="blk-calc-ctl' + (k === "cost" ? " blk-calc-ctl--cost" : "") + '"><label for="' + cid + "-" + k + '">' + T("span", word(k)) + '<output data-o="' + k + '">' + esc(fig[k]) + "</output></label>" +
           '<input type="range" id="' + cid + "-" + k + '" data-k="' + k + '" min="' + r.min + '" max="' + r.max + '" step="' + r.step + '" value="' + v[k] + '">' + (hint ? T("small", word(hint)) : "") + "</div>";
       };
-      const res = (k) => "<div>" + T("span", word(k)) + '<b data-r="' + k + '">' + esc(fig[k]) + "</b></div>";
-      const tpl = ["amonth", "every", "payFirst", "payIn", "payNone", "legendCost", "legendPaid", "legendOwed", "axis"].map((k) => T("span", word(k), "", ' data-tpl="' + k + '"')).join("");
-      out.push('<div class="blk blk-calc" data-webcalc>' + T("h2", b.heading, "blk-h") + T("p", b.text, "blk-calc-lead") +
-        '<div class="blk-calc-grid"><div class="blk-calc-in">' + ctl("visitors") + ctl("enquiry", "enquiryHint") + ctl("win") + ctl("job") + ctl("cost", "costHint") + "</div>" +
-        '<div class="blk-calc-out"><div class="blk-calc-mini">' + res("leads") + res("jobs") + res("month") + "</div>" +
-        '<p class="blk-calc-big"><b data-r="year">' + esc(fig.year) + "</b>" + T("span", word("year")) + "</p>" +
+      const step = (n, k, inner) => '<fieldset class="blk-calc-step"><legend><span class="blk-calc-n" aria-hidden="true">' + n + "</span>" + T("span", word(k)) + "</legend>" + inner + "</fieldset>";
+      const chips = CALC_JOBS.map((j) => '<button type="button" class="blk-calc-chip" data-job="' + j + '" aria-pressed="' + (j === v.job) + '">' + calcMoney(j) + "</button>").join("");
+      const jobIn = '<div class="blk-calc-chips" role="group">' + chips + "</div>" +
+        '<label class="blk-calc-money" for="' + cid + '-job"><span aria-hidden="true">$</span><input type="text" inputmode="numeric" autocomplete="off" id="' + cid + '-job" data-k="job" value="' + Math.round(v.job).toLocaleString("en-NZ") + '" aria-label="' + attr(word("job")) + '"></label>' +
+        T("small", word("stepJobHint"), "blk-calc-hint");
+      const per = ["month", "year", "three"].map((p) => '<button type="button" data-p="' + p + '" aria-pressed="' + (p === "year") + '">' + T("span", word({ month: "pMonth", year: "pYear", three: "pThree" }[p])) + "</button>").join("");
+      const flow = [["fv", "flowVisitors"], ["fl", "flowLeads"], ["fj", "flowJobs"], ["fw", "flowWork"]].map((x) => '<li><b data-r="' + x[0] + '">' + esc(fig[x[0]]) + "</b>" + T("span", word(x[1])) + "</li>").join("");
+      const tpl = Object.keys(CALC_TEXT).filter((k) => /^(per|big|say|pay|legend|axis)/.test(k)).map((k) => T("span", word(k), "", ' data-tpl="' + k + '"')).join("");
+      out.push('<div class="blk blk-calc" data-webcalc data-period="year">' + T("h2", b.heading, "blk-h") + T("p", b.text, "blk-calc-lead") +
+        '<p class="blk-calc-bar" aria-hidden="true"><b data-r="bar">' + esc(fig.bar) + "</b></p>" +
+        '<div class="blk-calc-grid"><div class="blk-calc-in">' +
+        step(1, "stepJob", jobIn) + step(2, "stepSite", ctl("visitors") + ctl("enquiry", "enquiryHint") + ctl("win")) + step(3, "stepCost", ctl("cost", "costHint")) + "</div>" +
+        '<div class="blk-calc-out"><div class="blk-calc-card">' +
+        '<div class="blk-calc-period" role="group">' + per + "</div>" +
+        '<p class="blk-calc-big" aria-live="polite"><b data-r="big">' + esc(fig.big) + '</b><span data-r="bigLabel">' + esc(fig.bigLabel) + "</span></p>" +
+        '<p class="blk-calc-say" data-r="say">' + esc(fig.say) + "</p>" +
+        T("p", word("flowHead"), "blk-calc-flow-h") + '<ol class="blk-calc-flow">' + flow + "</ol>" +
         '<p class="blk-calc-pay" data-r="pay">' + esc(fig.pay) + "</p>" +
-        '<svg class="blk-calc-chart" viewBox="0 0 600 212" role="img" aria-label="' + attr(word("legendPaid") + ", " + word("legendOwed")) + '">' + calcChart(fig.perMonth, v.cost, fill) + "</svg>" +
+        '<p class="blk-calc-legend"><span class="lc"><i></i><span data-r="legendCost">' + esc(fig.legendCost) + '</span></span><span class="lp"><i></i>' + T("span", word("legendPaid")) + '</span><span class="lo"><i></i>' + T("span", word("legendOwed")) + "</span></p>" +
+        '<svg class="blk-calc-chart" viewBox="0 0 600 222" role="img" aria-label="' + attr(word("legendPaid") + ", " + word("legendOwed")) + '">' + calcChart(fig.perMonth, v.cost, fill) + "</svg>" +
         T("p", b.note, "blk-calc-note") +
         (b.button && b.button.label ? '<p class="blk-btns blk-btns--center"><a class="blk-btn" ' + linkAttrs(b.button.link) + ">" + T("span", b.button.label) + "</a></p>" : "") +
-        '</div></div><div class="blk-calc-words" hidden>' + tpl + "</div></div>");
+        '</div></div></div><div class="blk-calc-words" hidden>' + tpl + "</div></div>");
     } else if (t === "columns") {
       out.push('<div class="blk blk-cols"><div>' + T("h3", b.leftHeading, "blk-h3") + R(b.left) + "</div><div>" + T("h3", b.rightHeading, "blk-h3") + R(b.right) + "</div></div>");
     }

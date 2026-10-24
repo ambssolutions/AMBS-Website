@@ -1,15 +1,15 @@
 {
- "h1": "What could a website bring in?",
- "eyebrow": "Website calculator",
- "lead": "Most customers look a business up before they call. Put in your own numbers to see what a good website could be worth to you, and when it pays for itself.",
- "title": "Website Calculator: What Could a Website Bring In? | Ambs Solutions",
- "description": "Work out what a website could bring in for your trade or small business. Move the sliders to match your visitors, enquiries and job value, and see when it pays for itself.",
+ "h1": "How much business could your website bring in?",
+ "eyebrow": "Website ROI calculator",
+ "lead": "Start with what a job is worth to you. Move a few sliders and see the work a good website could bring in each month and each year, and when it pays for itself.",
+ "title": "Website ROI Calculator: How Much Business Could a Website Bring In? | Ambs Solutions",
+ "description": "Free website ROI calculator for New Zealand trades and small businesses. Enter your average job value and see how much business a website could bring in, and when it pays for itself.",
  "cta": true,
  "blocks": [
   {
    "type": "webcalc",
-   "heading": "Try it with your own numbers",
-   "text": "The sliders start as an example for a cabinet maker. Move them to match a normal month for your business.",
+   "heading": "Work it out for your business",
+   "text": "Start with what a typical job is worth to you, then move the sliders to match a normal month.",
    "note": "Example figures to show how the sum works, not a promise. Results depend on your trade, your area and the website.",
    "start": {
     "visitors": 150,

@@ -1701,32 +1701,32 @@
   "pa": "auto",
   "mi": "auto"
  },
- "ed.c-website-calculator.eyebrow": {
+ "ed.c-roi-calculator.eyebrow": {
   "hi": "needs",
   "mi": "needs",
   "pa": "needs",
   "zh": "needs",
-  "_en": "Website calculator"
+  "_en": "Website ROI calculator"
  },
- "ed.c-website-calculator.title": {
+ "ed.c-roi-calculator.title": {
   "hi": "needs",
   "mi": "needs",
   "pa": "needs",
   "zh": "needs",
-  "_en": "What could a website bring in?"
+  "_en": "How much business could your website bring in?"
  },
- "ed.c-website-calculator.lead": {
+ "ed.c-roi-calculator.lead": {
   "hi": "needs",
   "mi": "needs",
   "pa": "needs",
   "zh": "needs",
-  "_en": "Move a few sliders to see what a good website could be worth to your business, and when it pays for itself."
+  "_en": "Tell us what a job is worth to you and see the work a good website could bring in, and when it pays for itself."
  },
- "ed.c-website-calculator.1": {
+ "ed.c-roi-calculator.1": {
   "hi": "needs",
   "mi": "needs",
   "pa": "needs",
   "zh": "needs",
-  "_en": "Open the calculator"
+  "_en": "Work out my numbers"
  }
 }
