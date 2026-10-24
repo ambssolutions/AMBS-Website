@@ -200,3 +200,10 @@ html[data-theme=dark] .blk-calc-chart .owed{fill:#3d4870}
   .blk-calc-money{max-width:none}
 }
 @media (prefers-reduced-motion:reduce){.blk-calc-bar,.blk-calc-chip{transition:none}}
+
+/* centred sections, like the rest of the site: headings and cards centred; questions keep their text left-aligned in a centred column */
+.blk-cards>.blk-h,.blk-faq>.blk-h,.blk-calc>.blk-h{text-align:center;text-wrap:balance}
+.blk-calc-lead{text-align:center;margin-left:auto;margin-right:auto}
+.blk-card-body{align-items:center;text-align:center}
+.blk-card-go{align-self:center}
+.blk-faq{max-width:760px;width:100%;margin-left:auto;margin-right:auto}
