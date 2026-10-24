@@ -270,6 +270,22 @@
    "link_label": "Websites and portals"
   },
   {
+   "id": "roi_calc",
+   "q": "What does the Website ROI calculator do?",
+   "also": "calculator, roi calculator, website roi calculator, website calculator, business calculator, the calculator, your calculator, do you have a calculator, calculator on your website, what does the calculator do, how does the calculator work, how do i use the calculator, job value",
+   "a": "It works out how much business a website could bring in for you. Pick what an average job is worth, then set your website visitors, how many people enquire and how many jobs you win. It shows your enquiries, jobs and work each month, the total for a year or 3 years, and when the website pays for itself. The numbers are examples to show how the sum works, not a promise.",
+   "link": "/website-roi-calculator",
+   "link_label": "Open the Website ROI calculator"
+  },
+  {
+   "id": "web_worth",
+   "q": "Is a website worth it for my business?",
+   "also": "how much business could a website bring in, how much business could my website bring in, how much work could a website bring in, how much could a website make me, how much money could a website make, how many jobs could a website bring, how many leads from a website, how many enquiries from a website, is a website worth it, website worth it, is a website worth the money, website return on investment, website roi, will a website pay for itself, when will a website pay for itself, how long for a website to pay for itself, what is my website worth, is it worth getting a website, do i need a website, should i get a website, website for my trade worth it",
+   "a": "That depends on what a job is worth to you and how many people find your site, so it is not the same for everyone. Our Website ROI calculator works it out with your own numbers: your job value, website visitors, enquiries and jobs won. It shows the work a website could bring in each month and each year, and when it pays for itself.",
+   "link": "/website-roi-calculator",
+   "link_label": "Work out your numbers"
+  },
+  {
    "id": "value",
    "q": "Is it worth the money?",
    "also": "worth it, worth the money, value, return on investment, roi, cheaper than an admin person, cheaper than staff, admin person, do it myself, compare, beat a quote, another agency, cheaper, big it company, why not just, why not use, part timer, worth the coin, is it worth it, how many hours will it save, save me hours, how much time will it save, why would i pay you, cheaper tools",
