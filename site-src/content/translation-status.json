@@ -1728,5 +1728,68 @@
   "pa": "needs",
   "zh": "needs",
   "_en": "Work out my numbers"
+ },
+ "ed.chat.qa.roi_calc.q": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "What does the Website ROI calculator do?"
+ },
+ "ed.chat.qa.roi_calc.a": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "It works out how much business a website could bring in for you. Pick what an average job is worth, then set your website visitors, how many people enquire and how many jobs you win. It shows your enquiries, jobs and work each month, the total for a year or 3 years, and when the website pays for itself. The numbers are examples to show how the sum works, not a promise."
+ },
+ "ed.chat.qa.roi_calc.also": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "calculator, roi calculator, website roi calculator, website calculator, business calculator, the calculator, your calculator, do you have a calculator, calculator on your website, what does the calculator do, how does the calculator work, how do i use the calculator, job value, calculate my website roi, calculate my roi, calculate website roi, calculate roi, work out my roi, work out my website roi"
+ },
+ "ed.chat.qa.roi_calc.ll": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Open the Website ROI calculator"
+ },
+ "ed.chat.qa.web_worth.q": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Is a website worth it for my business?"
+ },
+ "ed.chat.qa.web_worth.a": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "That depends on what a job is worth to you and how many people find your site, so it is not the same for everyone. Our Website ROI calculator works it out with your own numbers: your job value, website visitors, enquiries and jobs won. It shows the work a website could bring in each month and each year, and when it pays for itself."
+ },
+ "ed.chat.qa.web_worth.also": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "how much business could a website bring in, how much business could my website bring in, how much work could a website bring in, how much could a website make me, how much money could a website make, how many jobs could a website bring, how many leads from a website, how many enquiries from a website, is a website worth it, website worth it, is a website worth the money, website return on investment, website roi, will a website pay for itself, when will a website pay for itself, how long for a website to pay for itself, what is my website worth, is it worth getting a website, do i need a website, should i get a website, website for my trade worth it"
+ },
+ "ed.chat.qa.web_worth.ll": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Work out your numbers"
+ },
+ "ed.chat.sugg.6": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Calculate my website ROI"
  }
 }
