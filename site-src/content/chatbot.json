@@ -8,7 +8,8 @@
   "How does it work?",
   "What happens in the free session?",
   "Which software do you work with?",
-  "Do you work outside Auckland?"
+  "Do you work outside Auckland?",
+  "Calculate my website ROI"
  ],
  "not_found": "I couldn't find a precise answer to that on our website. Our team can answer it properly: book a free session, leave your question for us, or contact us directly.",
  "nudge": {
@@ -272,7 +273,7 @@
   {
    "id": "roi_calc",
    "q": "What does the Website ROI calculator do?",
-   "also": "calculator, roi calculator, website roi calculator, website calculator, business calculator, the calculator, your calculator, do you have a calculator, calculator on your website, what does the calculator do, how does the calculator work, how do i use the calculator, job value",
+   "also": "calculator, roi calculator, website roi calculator, website calculator, business calculator, the calculator, your calculator, do you have a calculator, calculator on your website, what does the calculator do, how does the calculator work, how do i use the calculator, job value, calculate my website roi, calculate my roi, calculate website roi, calculate roi, work out my roi, work out my website roi",
    "a": "It works out how much business a website could bring in for you. Pick what an average job is worth, then set your website visitors, how many people enquire and how many jobs you win. It shows your enquiries, jobs and work each month, the total for a year or 3 years, and when the website pays for itself. The numbers are examples to show how the sum works, not a promise.",
    "link": "/website-roi-calculator",
    "link_label": "Open the Website ROI calculator"

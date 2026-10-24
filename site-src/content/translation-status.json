@@ -1748,7 +1748,7 @@
   "mi": "needs",
   "pa": "needs",
   "zh": "needs",
-  "_en": "calculator, roi calculator, website roi calculator, website calculator, business calculator, the calculator, your calculator, do you have a calculator, calculator on your website, what does the calculator do, how does the calculator work, how do i use the calculator, job value"
+  "_en": "calculator, roi calculator, website roi calculator, website calculator, business calculator, the calculator, your calculator, do you have a calculator, calculator on your website, what does the calculator do, how does the calculator work, how do i use the calculator, job value, calculate my website roi, calculate my roi, calculate website roi, calculate roi, work out my roi, work out my website roi"
  },
  "ed.chat.qa.roi_calc.ll": {
   "hi": "needs",
@@ -1784,5 +1784,12 @@
   "pa": "needs",
   "zh": "needs",
   "_en": "Work out your numbers"
+ },
+ "ed.chat.sugg.6": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Calculate my website ROI"
  }
 }

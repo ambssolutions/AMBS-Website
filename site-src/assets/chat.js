@@ -77,7 +77,7 @@
     var i=out.indexOf("what automate services");if(i>=0&&content>0)out.splice(i,1);
     if(i<0&&!content&&/\b(skde|sakde|skte|sakte|skda|sakda|skta|sakta|kroge|karoge|doge)\b/.test(w))out.push("what automate services");
     return out.join(" ")}
-  function sugg(){var b=BT();return((lang()!=="en"&&b.suggestions)||(DATA&&DATA.bot&&DATA.bot.suggestions)||[]).slice(0,6)}
+  function sugg(){var b=BT();return((lang()!=="en"&&b.suggestions)||(DATA&&DATA.bot&&DATA.bot.suggestions)||[]).slice(0,7)}
   function BT(){return DATA&&DATA.bot_tr&&DATA.bot_tr[lang()]||{}}
   function L(k){var b=DATA&&DATA.bot||{},lab=b.labels||{},v=k==="greeting"||k==="not_found"?b[k]:lab[k],tr=TR[lang()],bt=BT();
     /* lines translated through the website's translation queue come first */
