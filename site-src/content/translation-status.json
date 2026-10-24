@@ -1700,5 +1700,33 @@
   "hi": "auto",
   "pa": "auto",
   "mi": "auto"
+ },
+ "ed.c-website-calculator.eyebrow": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Website calculator"
+ },
+ "ed.c-website-calculator.title": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "What could a website bring in?"
+ },
+ "ed.c-website-calculator.lead": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Move a few sliders to see what a good website could be worth to your business, and when it pays for itself."
+ },
+ "ed.c-website-calculator.1": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Open the calculator"
  }
 }

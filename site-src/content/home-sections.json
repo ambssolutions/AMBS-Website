@@ -2,6 +2,7 @@
  "order": [
   "automate",
   "transform",
+  "c-website-calculator",
   "why",
   "about",
   "how",
@@ -11,5 +12,25 @@
   "book"
  ],
  "hidden": [],
- "custom": {}
+ "custom": {
+  "c-website-calculator": {
+   "eyebrow": "Website calculator",
+   "title": "What could a website bring in?",
+   "lead": "Move a few sliders to see what a good website could be worth to your business, and when it pays for itself.",
+   "style": "tinted",
+   "blocks": [
+    {
+     "type": "buttons",
+     "center": true,
+     "items": [
+      {
+       "label": "Open the calculator",
+       "link": "/website-calculator",
+       "style": "primary"
+      }
+     ]
+    }
+   ]
+  }
+ }
 }

@@ -33,6 +33,14 @@ export function cleanBlocks(blocks) {
       case "form": return { type: "form", name: s(b.name, 80), heading: s(b.heading, 200), text: s(b.text, 600), button: s(b.button, 60), thanks: s(b.thanks, 400),
         fields: list(b.fields, 15, (x) => ({ type: FIELD_TYPES.includes(x?.type) ? x.type : "text", label: s(x?.label, 120), required: !!x?.required, wide: !!x?.wide,
           ...(x?.type === "select" ? { options: list(x?.options, 20, (o) => s(o, 80).trim()).filter(Boolean) } : {}) })).filter((x) => x.label.trim()) };
+      case "webcalc": {
+        const num = (v) => { const n = parseFloat(v); return isFinite(n) ? n : ""; };
+        const start = {}, words = {};
+        for (const k of ["visitors", "enquiry", "win", "job", "cost"]) if (num(b.start?.[k]) !== "") start[k] = num(b.start[k]);
+        for (const [k, v] of Object.entries(b.words || {})) if (/^[a-zA-Z]{2,20}$/.test(k) && s(v, 120).trim()) words[k] = s(v, 120).trim();
+        return { type: "webcalc", heading: s(b.heading, 200), text: s(b.text, 600), note: s(b.note, 400), start, words,
+          button: { label: s(b.button?.label, 60), link: link(b.button?.link) } };
+      }
       default: return null;
     }
   }).filter(Boolean);

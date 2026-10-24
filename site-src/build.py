@@ -163,6 +163,11 @@ def _v(name):
     return hashlib.md5(open(os.path.join(SRC,'assets',name),'rb').read()).hexdigest()[:8]
 CSSV=_v('pages.css');JSV=_v('pages.js');BLV=_v('blocks.css');FMV=_v('forms.js')
 FORMS_JS=f'<script src="/assets/forms.js?v={FMV}" defer></script>'
+# website calculator blocks: webcalc.js imports blocks.mjs, so the copy on the site names blocks.mjs by version too
+BMV=_v('blocks.mjs')
+WEBCALC_SRC=open(os.path.join(SRC,'assets','webcalc.js'),encoding='utf8').read().replace('"./blocks.mjs"','"./blocks.mjs?v='+BMV+'"')
+WCV=hashlib.md5(WEBCALC_SRC.encode()).hexdigest()[:8]
+WEBCALC_JS=f'<script type="module" src="/assets/webcalc.js?v={WCV}"></script>'
 THEME="""<script>(function(){var t=null;try{t=sessionStorage.getItem("ambs:theme")}catch(e){}if(t!=="dark"&&t!=="light"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}document.documentElement.dataset.theme=t})();</script>"""
 def head(title,desc,canon,ld,ogtype='website',blocks=False):
     return f'''<!doctype html>
@@ -507,6 +512,7 @@ def build_custom(slug,d,blocks_html):
 </main>
 '''+footer()
     if 'data-blk-form' in blocks_html: out=out.replace('</body>',FORMS_JS+'\n</body>',1)
+    if 'data-webcalc' in blocks_html: out=out.replace('</body>',WEBCALC_JS+'\n</body>',1)
     open(os.path.join(OUT,slug+'.html'),'w',encoding='utf8').write(out)
 
 def render_blocks(pages,sections):
@@ -620,6 +626,9 @@ def stamp_home(custom_html=None,strings=None):
     # contact forms in homepage sections need their script
     h=re.sub(r'<script src="/assets/forms\.js\?v=[A-Za-z0-9]+" defer></script>\n','',h)
     if any('data-blk-form' in x for x in custom_html.values()): h=h.replace('</body>',FORMS_JS+'\n</body>',1)
+    # website calculators in homepage sections need theirs
+    h=re.sub(r'<script type="module" src="/assets/webcalc\.js\?v=[A-Za-z0-9]+"></script>\n','',h)
+    if any('data-webcalc' in x for x in custom_html.values()): h=h.replace('</body>',WEBCALC_JS+'\n</body>',1)
     h=re.sub(r'home\.css\?v=[A-Za-z0-9]+','home.css?v='+_v('home.css'),h)
     h=re.sub(r'home\.js\?v=[A-Za-z0-9]+','home.js?v='+_v('home.js'),h)
     if langs:
@@ -843,7 +852,7 @@ def privacy_check():
                 if 'ld+json' in m.group(1): continue  # Google's page data (social profile links), not something the page loads
                 for h in re.findall(r'https?://([a-z0-9.-]+\.[a-z]{2,})',m.group(2)): add(h,w)
     # the scripts every public page runs, and what the server asks on a visitor's behalf
-    for f in ('assets/home.js','assets/chat.js','assets/forms.js','assets/pages.js','assets/chat-index.json','api/weather.js'):
+    for f in ('assets/home.js','assets/chat.js','assets/forms.js','assets/webcalc.js','assets/pages.js','assets/chat-index.json','api/weather.js'):
         fp=os.path.join(OUT,f)
         if os.path.exists(fp):
             for h in re.findall(r'https?://([a-z0-9.-]+\.[a-z]{2,})',open(fp,encoding='utf8',errors='ignore').read()): add(h,f)
@@ -866,6 +875,7 @@ if __name__=='__main__':
     legal_dates()
     os.makedirs(os.path.join(OUT,'assets'),exist_ok=True)
     for f in ('pages.css','pages.js','blocks.css','blocks.mjs','forms.js'): open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
+    open(os.path.join(OUT,'assets','webcalc.js'),'w',encoding='utf8').write(WEBCALC_SRC)
     secs={k:v for k,v in HOMESEC.get('custom',{}).items()}
     rb=render_blocks({k:v.get('blocks',[]) for k,v in CUSTOM.items()},secs)
     stamp_home(rb['sections'],dict(rb['strings'],**chat_strings()))
