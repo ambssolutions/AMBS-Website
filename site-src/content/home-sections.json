@@ -2,6 +2,7 @@
  "order": [
   "automate",
   "transform",
+  "c-roi-calculator",
   "why",
   "about",
   "how",
@@ -11,5 +12,25 @@
   "book"
  ],
  "hidden": [],
- "custom": {}
+ "custom": {
+  "c-roi-calculator": {
+   "eyebrow": "Website ROI calculator",
+   "title": "How much business could your website bring in?",
+   "lead": "Tell us what a job is worth to you and see the work a good website could bring in, and when it pays for itself.",
+   "style": "tinted",
+   "blocks": [
+    {
+     "type": "buttons",
+     "center": true,
+     "items": [
+      {
+       "label": "Work out my numbers",
+       "link": "/website-roi-calculator",
+       "style": "primary"
+      }
+     ]
+    }
+   ]
+  }
+ }
 }

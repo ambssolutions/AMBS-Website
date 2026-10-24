@@ -1,0 +1,73 @@
+{
+ "h1": "How much business could your website bring in?",
+ "eyebrow": "Website ROI calculator",
+ "lead": "Start with what a job is worth to you. Move a few sliders and see the work a good website could bring in each month and each year, and when it pays for itself.",
+ "title": "Website ROI Calculator: How Much Business Could a Website Bring In? | Ambs Solutions",
+ "description": "Free website ROI calculator for New Zealand trades and small businesses. Enter your average job value and see how much business a website could bring in, and when it pays for itself.",
+ "cta": true,
+ "blocks": [
+  {
+   "type": "webcalc",
+   "heading": "Work it out for your business",
+   "text": "Start with what a typical job is worth to you, then move the sliders to match a normal month.",
+   "note": "Example figures to show how the sum works, not a promise. Results depend on your trade, your area and the website.",
+   "start": {
+    "visitors": 150,
+    "enquiry": 2,
+    "win": 35,
+    "job": 5000,
+    "cost": 3000
+   },
+   "words": {},
+   "button": {
+    "label": "Book a free session",
+    "link": "/#book"
+   }
+  },
+  {
+   "type": "cards",
+   "heading": "Three ways a website moves these numbers",
+   "items": [
+    {
+     "title": "More visitors",
+     "text": "A page for each service and area you cover, and a Google Business Profile that links to your site, so locals find you when they search.",
+     "link": "/services/websites-and-portals"
+    },
+    {
+     "title": "More enquiries",
+     "text": "Tap to call and a short quote form on every page, sized for phones, so people get in touch while they are keen.",
+     "link": "/guides/websites-that-turn-visitors-into-calls"
+    },
+    {
+     "title": "More jobs won",
+     "text": "Real photos of your work, Google reviews and clear details, so people trust you before the first call.",
+     "link": "/industries/trades-and-building"
+    }
+   ]
+  },
+  {
+   "type": "faq",
+   "heading": "Common questions",
+   "items": [
+    {
+     "q": "Are these real figures?",
+     "a": "No. The sliders start with example numbers to show how the sum works. In a free session we look at your business and work out an estimate together."
+    },
+    {
+     "q": "Where do I find my website visitor numbers?",
+     "a": "Google Analytics or Google Search Console shows how many people visit your site each month. If you do not have a website yet, start the visitors slider low."
+    },
+    {
+     "q": "What does the website cost slider mean?",
+     "a": "Put in the price you have been quoted for a website. The chart shows the month when the work it brings in adds up to more than that price."
+    },
+    {
+     "q": "Does this work for my trade?",
+     "a": "Yes. The sum is the same for any business that takes enquiries: builders, electricians, plumbers, cabinet makers, cafés, clinics and more. Change the job value to suit your work."
+    }
+   ]
+  }
+ ],
+ "draft": false,
+ "updated": "2026-10-24"
+}

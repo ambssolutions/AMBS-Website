@@ -1700,5 +1700,33 @@
   "hi": "auto",
   "pa": "auto",
   "mi": "auto"
+ },
+ "ed.c-roi-calculator.eyebrow": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Website ROI calculator"
+ },
+ "ed.c-roi-calculator.title": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "How much business could your website bring in?"
+ },
+ "ed.c-roi-calculator.lead": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Tell us what a job is worth to you and see the work a good website could bring in, and when it pays for itself."
+ },
+ "ed.c-roi-calculator.1": {
+  "hi": "needs",
+  "mi": "needs",
+  "pa": "needs",
+  "zh": "needs",
+  "_en": "Work out my numbers"
  }
 }
