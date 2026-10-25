@@ -95,6 +95,12 @@ export default async function handler(req, res) {
       return send(res, 200, { ok: true });
     }
 
+    if (b.action === "favicon") {
+      if (!isPng(b.fav) || bytes(b.fav) > 512 * 1024) return send(res, 400, { error: "The tab icon could not be prepared" });
+      await commitFiles(head, { "favicon-light.png": { base64: b.fav }, "favicon-dark.png": { base64: b.fav }, "version.json": await nextVersion(head) }, "Website editor: new browser tab icon" + by);
+      return send(res, 200, { ok: true });
+    }
+
     if (b.action === "social") {
       if (!isPng(b.png)) return send(res, 400, { error: "The picture could not be prepared. Try a JPG or PNG." });
       if (bytes(b.png) > MAX) return send(res, 400, { error: "That picture is too large" });
