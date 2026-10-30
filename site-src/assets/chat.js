@@ -380,7 +380,7 @@
     /* the same, typed in English letters */
     ["greet",/^(namaste|namaskar|sat s(h)?ri akal|ssa|ni ?hao|salaam)( (ji|veer|paji|bhai|bro|sir|ji veer))?[!.\s]*$/i],
     ["weather",/\b(mausam|mosam|baarish|barish)\b/i],["offtopic",/\b(cricket|rugby|football|match (da|ka|di|ki)? ?score|score (of|in) the (match|game)|who won the)\b/i],
-    ["how_are_you",/^(aap |tusi |tussi )?(kaise ho|kaise hain|kaisa hai|kya haal( hai)?|ki haal( aa| hai| chaal)?|kidda|kiddan|kida|kive ho|kiven ho|ni hao ma|nihao ma)( (aap|ji|veer|paji|paaji|bhai|bhaiya|tusi|aa|hai))*[?!.\s]*$/i],
+    ["how_are_you",/^((haanji|hanji|haji|han ji|ha ji|oye) )?(aap |tusi |tussi )?(kaise ho|kaise hain|kaisa hai|kya haal( hai)?|ki haal( aa| hai| chaal)?|kidda|kiddan|kida|kive ho|kiven ho|ni hao ma|nihao ma)( (chal(a|da|di|e)|chl(a|da)|aa|hai))?( (aap|ji|veer|paji|paaji|bhai|bhaiya|tusi|aa|hai))*[?!.\s]*$/i],
     ["human",/\b(insaan|insan|banda) (ho|aa|hai)|\b(bot|robot) (ho|aa|hai)\b|\bzhen ?ren\b/i],
     ["who",/^(aap kaun (ho|hain)|tusi kaun (ho|o)|ni shi shei)[?!\s]*$/i],
     ["thanks",/^((bahut |bohat |bhut )?(dhanyavad|dhanyawad|dhanwad|dhanwaad|dhanvaad|shukriya|shukria|thanks ji)|(hao de )?xie ?xie( ni)?)( ji)?[!.\s]*$/i],
