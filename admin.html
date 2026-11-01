@@ -106,6 +106,9 @@ nav.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--g
 nav.tabs button:hover{color:var(--ink)}
 .narrow{max-width:860px;padding-top:24px;padding-bottom:120px}
 /* forms */
+.vs-big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.vs-big b{font-size:3rem;line-height:1;color:var(--green)}.vs-big span{font-weight:700;font-size:1.1rem}.vs-sub{color:var(--muted);margin:6px 0 14px}
+.vs-bars{display:flex;align-items:flex-end;gap:3px;height:70px}.vs-bars span{flex:1;background:var(--green);border-radius:3px 3px 0 0;min-width:2px}.vs-bars span.z{background:var(--line)}.vs-axis{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-top:4px}
+.vs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 16px}.vs-list table{width:100%;border-collapse:collapse}.vs-list td{padding:7px 0;border-top:1px solid var(--line)}.vs-list td.vs-n{text-align:right;font-weight:700;width:3em}.vs-steps{padding-left:1.3em}.vs-steps li{margin:0 0 10px;line-height:1.5}
 .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:16px}
 /* Chat helper: one section at a time, picked from the buttons along the top */
 .chsub{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 14px}
@@ -398,6 +401,7 @@ header.top .who{margin-left:4px}
     <button type="button" role="tab" data-tab="chat" aria-selected="false">Chat helper</button>
     <button type="button" role="tab" data-tab="calc" aria-selected="false">Hours calculator</button>
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
+    <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors now</button>
   </nav>
   <label class="tabpick"><span>Editing</span><select id="tabPick" aria-label="What to edit"></select></label></div>
   </header>
@@ -432,6 +436,7 @@ header.top .who{margin-left:4px}
   <section id="tab-sections" class="tab hidden"><div class="wrap narrow" id="hsMain"></div></section>
   <section id="tab-menus" class="tab hidden"><div class="wrap narrow" id="mnMain"></div></section>
   <section id="tab-history" class="tab hidden"><div class="wrap narrow" id="hiMain"></div></section>
+  <section id="tab-visitors" class="tab hidden"><div class="wrap narrow" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-calc" class="tab hidden"><div class="wrap narrow" id="ccMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
 </div>
 <input type="file" id="filePick" accept="image/*" class="hidden">
@@ -883,7 +888,7 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit})[name]()}
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
 /* ---------- phones ---------- */
@@ -1778,6 +1783,38 @@ function historyInit(){var m=$("hiMain");m.innerHTML='<p class="empty"><span cla
         go(false).catch(function(e){if(/changed again later/.test(e.message)&&confirm(e.message+" Undo anyway?"))return go(true);throw e}).then(function(x){if(x){toast("Undone. "+LIVE_NOTE);historyInit()}else busy(b,false)}).catch(function(e){busy(b,false);fail(e)})});
       p.appendChild(r)});
     m.appendChild(p)}).catch(fail)}
+
+/* ======================= VISITORS NOW ======================= */
+/* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).
+   Refreshes every 30 seconds while this tab is open. Until the Google connection is set up it shows the steps. */
+var VS_EVENTS=[["page_view","Pages viewed"],["book_click","Book a call clicks"],["booking_confirmed","Calls booked"],["generate_lead","Messages sent"],["phone_click","Phone taps"],["email_click","Email taps"]];
+var vsTimer=null;
+function visitorsInit(){
+  var m=$("vsMain");
+  function list(title,rows,empty){return '<div class="panel vs-list"><h3>'+title+'</h3>'+(rows.length?'<table><tbody>'+rows.map(function(r){return'<tr><td>'+esc(r.name)+'</td><td class="vs-n">'+r.n+'</td></tr>'}).join("")+'</tbody></table>':'<p class="help">'+empty+'</p>')+'</div>'}
+  function draw(j){
+    if(j.setup){m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="help">This shows who is on ambs.co.nz right now, straight from Google Analytics. It needs a one-time, read-only connection to Google first. Do these steps on a computer:</p><ol class="vs-steps">'+
+      '<li>Go to <b>console.cloud.google.com</b> (signed in with the Google account that owns your Analytics). Create a project called <b>AMBS website</b>.</li>'+
+      '<li>In that project, open <b>APIs &amp; Services → Library</b>, search for <b>Google Analytics Data API</b> and press <b>Enable</b>.</li>'+
+      '<li>Open <b>IAM &amp; Admin → Service accounts → Create service account</b>. Name it <b>ambs-visitors</b>, then press <b>Done</b> (skip the optional steps).</li>'+
+      '<li>Open the new account → <b>Keys → Add key → Create new key → JSON</b>. A file downloads. Keep it private.</li>'+
+      '<li>Copy the account’s email (it ends in <b>.iam.gserviceaccount.com</b>). In <b>analytics.google.com → Admin → Property access management</b>, press <b>+</b>, add that email with the role <b>Viewer</b>.</li>'+
+      '<li>In <b>Analytics → Admin → Property details</b>, copy the <b>Property ID</b> (a number like 512345678).</li>'+
+      '<li>In <b>vercel.com</b> → your website project → <b>Settings → Environment Variables</b>, add <b>GA_PROPERTY_ID</b> = that number, and <b>GA_SERVICE_ACCOUNT</b> = everything inside the downloaded file. Save, then redeploy.</li></ol>'+
+      '<p class="help">Still to do: '+[!j.has.property?"GA_PROPERTY_ID":"",!j.has.key?"GA_SERVICE_ACCOUNT":""].filter(Boolean).join(" and ")+'. Never paste the key into an email or chat.</p></div>';return}
+    var max=Math.max.apply(null,j.perMin.concat([1]));
+    var bars=j.perMin.map(function(n,i){return'<span title="'+(29-i)+' min ago: '+n+'" style="height:'+Math.max(4,Math.round(n/max*100))+'%"'+(n?'':' class="z"')+'></span>'}).join("");
+    var ev={};j.events.forEach(function(e){ev[e.name]=e.n});
+    var evRows=VS_EVENTS.filter(function(e){return ev[e[0]]}).map(function(e){return{name:e[1],n:ev[e[0]]}});
+    var t=new Date(j.at);
+    m.innerHTML='<div class="panel vs-top"><div class="vs-big"><b>'+j.now+'</b><span>'+(j.now===1?"person":"people")+' on the website right now</span></div>'+
+      '<div class="vs-sub">'+j.last30+' in the last 30 minutes</div><div class="vs-bars" aria-label="People each minute, last 30 minutes">'+bars+'</div><div class="vs-axis"><span>30 min ago</span><span>now</span></div>'+
+      '<p class="help">Updates every 30 seconds · last checked '+t.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+'. Google doesn’t say who people are, only where and what they look at. Your own visits count too.</p></div>'+
+      '<div class="vs-grid">'+list("Pages they’re on",j.pages,"Nobody in the last 30 minutes.")+list("Where they are",j.places,"Nobody in the last 30 minutes.")+list("Phone or computer",j.devices.map(function(d){return{name:({mobile:"Phone",desktop:"Computer",tablet:"Tablet"})[d.name]||d.name,n:d.n}}),"Nobody in the last 30 minutes.")+list("What they did (last 30 minutes)",evRows,"No clicks yet.")+'</div>';
+  }
+  function load(){api("settings",{action:"visitors"}).then(draw).catch(function(e){if(e.message==="signin")return;m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="msg err">'+esc(e.message)+'</p></div>'})}
+  load();clearInterval(vsTimer);vsTimer=setInterval(function(){if(current==="visitors"&&document.visibilityState==="visible")load()},30000);
+}
 
 /* ======================= CALCULATOR ======================= */
 function calcInit(){
