@@ -11,7 +11,7 @@
    { action: "replace", path, base64 }                     swap a photo for a new one at the same address, so it changes everywhere it is used
    { action: "stock-search", q, page }                     free stock photos from Openverse (CC0 / public domain only, so no credit is needed)
    { action: "stock-get", url }                            fetch one of those photos so the editor can resize it and upload it as usual */
-import { requireEditor, send, readBody, headSha, commitFiles, listPaths, readBlob, readFile, nextVersion } from "./_lib.js";
+import { requireEditor, send, readBody, headSha, commitFiles, listPaths, readBlob, readFile, nextVersion, can, NO_ACCESS } from "./_lib.js";
 
 const DIR = "assets/uploads/";
 const MAX = 3 * 1024 * 1024;
@@ -60,6 +60,7 @@ export default async function handler(req, res) {
   try {
     const b = await readBody(req);
     /* the email signature builder asks this to confirm the person is signed in as an editor */
+    if (["logo", "social", "icons", "favicon"].includes(b.action) && !can(who, "design")) return send(res, 403, { error: NO_ACCESS });
     if (b.action === "check") return send(res, 200, { ok: true, email: who.email });
     if (b.action === "stock-search") return send(res, 200, await stockSearch(b.q, b.page));
     if (b.action === "stock-get") return send(res, 200, await stockGet(b.url));
