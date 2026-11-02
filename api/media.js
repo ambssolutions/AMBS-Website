@@ -6,7 +6,9 @@
    { action: "email-asset", name, base64 }                  a picture for the email signature builder (banner, photo, logo); GIF, PNG or JPG
    { action: "logo", png, webp, png400, webp400 }          replace the logo (the editor renders each size)
    { action: "social", png }                               replace the picture shown when the site is shared
-   { action: "icons", icon192, icon512, mask192, mask512, apple, fav }   replace the app and browser icons */
+   { action: "icons", icon192, icon512, mask192, mask512, apple, fav }   replace the app and browser icons
+   { action: "stock-search", q, page }                     free stock photos from Openverse (CC0 / public domain only, so no credit is needed)
+   { action: "stock-get", url }                            fetch one of those photos so the editor can resize it and upload it as usual */
 import { requireEditor, send, readBody, headSha, commitFiles, listPaths, readBlob, nextVersion } from "./_lib.js";
 
 const DIR = "assets/uploads/";
@@ -18,6 +20,36 @@ function isGif(b64) { return Buffer.from(String(b64).slice(0, 8), "base64").slic
 function isJpg(b64) { const b = Buffer.from(String(b64).slice(0, 8), "base64"); return b[0] === 0xff && b[1] === 0xd8; }
 function isPng(b64) { return Buffer.from(String(b64).slice(0, 12), "base64").slice(1, 4).toString() === "PNG"; }
 
+/* free stock photos: Openverse (openverse.org) lists openly licensed photos from Flickr, Wikimedia and others.
+   Only CC0 and public domain are asked for, so the site never needs to credit anyone. */
+async function stockSearch(q, page) {
+  q = String(q || "").trim().slice(0, 100);
+  if (!q) return { results: [] };
+  const u = "https://api.openverse.org/v1/images/?q=" + encodeURIComponent(q) + "&license=cc0,pdm&page_size=24&mature=false&page=" + Math.max(1, Math.min(20, parseInt(page, 10) || 1));
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 12000);
+  try {
+    const r = await fetch(u, { signal: ctl.signal, headers: { "User-Agent": "AMBS website editor (ambs.co.nz)" } });
+    if (!r.ok) return { results: [], error: "The free photo library didn't answer (" + r.status + "). Try again in a minute." };
+    const j = await r.json();
+    return { count: j.result_count || 0, pages: j.page_count || 1, results: (j.results || []).filter((x) => x.url && /^https:/.test(x.url)).map((x) => ({
+      id: x.id, thumb: x.thumbnail || x.url, url: x.url, title: x.title || "", creator: x.creator || "", license: (x.license || "").toUpperCase(), landing: x.foreign_landing_url || "", w: x.width || 0, h: x.height || 0 })) };
+  } catch (e) { return { results: [], error: "The free photo library didn't answer. Try again in a minute." }; }
+  finally { clearTimeout(t); }
+}
+async function stockGet(url) {
+  url = String(url || "");
+  if (!/^https:\/\//.test(url)) throw Object.assign(new Error("That photo address isn't allowed."), { status: 400 });
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
+  try {
+    const r = await fetch(url, { signal: ctl.signal, redirect: "follow", headers: { "User-Agent": "AMBS website editor (ambs.co.nz)" } });
+    const type = (r.headers.get("content-type") || "").split(";")[0].trim();
+    if (!r.ok || !/^image\/(jpeg|png|webp|gif)$/.test(type)) throw Object.assign(new Error("That photo couldn't be fetched. Pick another one."), { status: 400 });
+    const buf = Buffer.from(await r.arrayBuffer());
+    if (buf.length > 10 * 1024 * 1024) throw Object.assign(new Error("That photo is too large. Pick another one."), { status: 400 });
+    return { type, base64: buf.toString("base64") };
+  } finally { clearTimeout(t); }
+}
+
 export default async function handler(req, res) {
   const who = await requireEditor(req, res);
   if (!who) return;
@@ -25,6 +57,8 @@ export default async function handler(req, res) {
     const b = await readBody(req);
     /* the email signature builder asks this to confirm the person is signed in as an editor */
     if (b.action === "check") return send(res, 200, { ok: true, email: who.email });
+    if (b.action === "stock-search") return send(res, 200, await stockSearch(b.q, b.page));
+    if (b.action === "stock-get") return send(res, 200, await stockGet(b.url));
     const head = await headSha();
     const by = " (" + who.email + ")";
 
@@ -110,6 +144,7 @@ export default async function handler(req, res) {
 
     send(res, 400, { error: "Unknown action" });
   } catch (e) {
+    if (e.status === 400) return send(res, 400, { error: e.message });
     if (e.status === 409 || e.status === 422) return send(res, 409, { error: "The website changed while saving. Please try again." });
     send(res, 500, { error: String(e.message || e) });
   }

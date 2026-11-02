@@ -227,6 +227,7 @@ body.mode-visual #onPageBtn{display:none}
 .ds-pbar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}.ds-pbar select{max-width:200px}
 .ds-frame{height:calc(100vh - 160px);min-height:520px;display:flex;justify-content:center;background:var(--bg)}.ds-frame iframe{width:100%;height:100%;border:0;background:#fff;transition:width .25s}
 @media (max-width:1100px){.ds-grid{grid-template-columns:1fr}.ds-prev{position:static}.ds-frame{height:70vh}}
+.quick{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 4px}
 .side{display:none}
 @media (min-width:1024px){
   #app{padding-left:248px}
@@ -489,6 +490,10 @@ header.top .who{margin-left:4px}
   dialog{width:calc(100vw - 16px);max-height:calc(100vh - 16px)}
 }
 @keyframes sheetUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.stockbox{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--soft,rgba(24,119,224,.04))}
+.stock-q{display:flex;gap:8px}.stock-q .t{flex:1;min-width:0}.stock-note{margin:8px 0 10px}
+.stock-grid{max-height:46vh;overflow:auto}.stock-grid .ph.busy{opacity:.55;pointer-events:none}.stock-more{margin-top:10px;text-align:center}
+.stock-grid.photos{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}@media(max-width:600px){.stock-grid.photos{grid-template-columns:1fr 1fr;gap:8px}.stock-grid .meta b{font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -697,7 +702,7 @@ function saveDraft(){
 }
 function cur(k,f){var d=draft[k];if(d&&typeof d[f]==="string")return d[f];var it=byKey[k];return f==="en"?it.en:it.tr[f]}
 /* for Edit on page (another script on this page) */
-window.edW={items:function(){return items},byKey:function(){return byKey},draft:function(){return draft},cur:cur,saveDraft:function(){saveDraft()},nChanges:function(){return nChanges()},render:function(){render()},label:function(k){return label(k)}};
+window.edW={items:function(){return items},byKey:function(){return byKey},draft:function(){return draft},cur:cur,saveDraft:function(){saveDraft()},nChanges:function(){return nChanges()},render:function(){render()},label:function(k){return label(k)},ops:function(){return ops()},keysFor:function(id,n){return keysFor(id,n)}};
 function isRev(k,l){var d=draft[k];if(d&&d.rev&&l in d.rev)return d.rev[l];return byKey[k].status[l]==="reviewed"}
 function enChanged(k){var d=draft[k];return !!(d&&typeof d.en==="string"&&d.en!==byKey[k].en)}
 function changedKeys(){return Object.keys(draft).filter(function(k){return byKey[k]})}
@@ -1128,6 +1133,24 @@ function uploadPhoto(file){
   return loadImg(file).then(function(img){var c=shrink(img,1600);return toB64(c,"image/webp",.82).then(function(r){
     return api("media",{action:"upload",name:file.name,base64:r.b64}).then(function(j){fresh[j.url]={src:URL.createObjectURL(r.blob),w:c.width,h:c.height};return j})})});
 }
+/* free stock photos (Openverse, CC0 / public domain only): search, tap one, and it is resized and added to your photos like an upload */
+function stockPanel(box,onDone){
+  box.innerHTML='<form class="stock-q"><input class="t" type="search" placeholder="Search free photos, e.g. office, tradie, coffee, Auckland" aria-label="Search free stock photos" maxlength="100"><button type="submit" class="btn primary">Search</button></form><p class="help stock-note">Free to use with no credit needed (public domain and CC0 photos from Openverse). Tap a photo to add it to your photos.</p><div class="photos pick stock-grid"></div><div class="stock-more hidden"><button type="button" class="btn soft">More photos</button></div>';
+  var f=box.querySelector("form"),q=box.querySelector("input"),grid=box.querySelector(".stock-grid"),more=box.querySelector(".stock-more"),page=1,last="";
+  function run(add){var term=q.value.trim();if(!term)return;if(!add){page=1;grid.innerHTML='<p class="empty"><span class="spin"></span> Searching…</p>'}last=term;more.classList.add("hidden");
+    api("media",{action:"stock-search",q:term,page:page}).then(function(j){if(!add)grid.innerHTML="";
+      if(j.error&&!j.results.length){grid.innerHTML='<p class="empty">'+esc(j.error)+'</p>';return}
+      if(!j.results.length&&!add){grid.innerHTML='<p class="empty">No free photos found for “'+esc(term)+'”. Try a simpler word.</p>';return}
+      j.results.forEach(function(p){var c=h('<button type="button" class="ph"><img alt="" loading="lazy" referrerpolicy="no-referrer"><span class="meta"><b></b></span></button>');c.querySelector("img").src=p.thumb;c.querySelector("b").textContent=(p.title||term).slice(0,40);c.title=(p.title||"")+(p.creator?" · "+p.creator:"")+" · "+p.license;
+        c.addEventListener("click",function(){if(c.disabled)return;c.disabled=true;c.classList.add("busy");var m=c.querySelector("b"),was=m.textContent;m.textContent="Adding…";
+          api("media",{action:"stock-get",url:p.url}).then(function(r){var bin=atob(r.base64),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+            var name=(p.title||term).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,30)||"stock";
+            return uploadPhoto(new File([u],"stock-"+name+".jpg",{type:r.type}))}).then(function(j){toast("Added to your photos.");onDone(j)})
+          .catch(function(e){c.disabled=false;c.classList.remove("busy");m.textContent=was;fail(e)})});grid.appendChild(c)});
+      if(page<(j.pages||1))more.classList.remove("hidden")}).catch(function(e){grid.innerHTML="";fail(e)})}
+  f.addEventListener("submit",function(e){e.preventDefault();run(false)});
+  more.querySelector("button").addEventListener("click",function(){page++;run(true)});
+}
 function pickFile(multiple){return new Promise(function(ok){var f=$("filePick");f.value="";f.multiple=!!multiple;f.onchange=function(){ok(Array.prototype.slice.call(f.files))};f.click()})}
 function photoSrc(url){return fresh[url]?fresh[url].src:url}
 
@@ -1189,6 +1212,10 @@ function newPage(){
     return api("pages",{action:"create",section:sec,title:t,slug:sec==="page"?$("npSlug").value.trim():"",start:start})}).then(function(j){linksList=null;return api("pages",{action:"list"}).then(function(l){site=l;pagesNav();openPage(j.section,j.slug);toast("Draft created. It goes on the website when you press Publish.")})}).catch(function(e){busy(b,false);fail(e)})});
 }
 
+/* "＋ New …" from Home or the Edit on page picker: open Pages & news once its list has loaded, then the New page form
+   with the kind already chosen (news post, guide, page…) */
+function edNew(kind){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain")){newPage();var sel=$("npSec");if(sel&&kind){sel.value=kind;sel.dispatchEvent(new Event("change"))}}else if(Date.now()-t0<15000)setTimeout(go,120)};go()}
+window.edNew=edNew;
 /* the shape of an earlier post: its headings stay (in [brackets]), its words become starter text */
 var STARTER=/\[(Write this part here|Point|Key point \d+|Question|Answer|Tip heading|Write the tip here|Photo here[^\]]*)\]/;
 function skeleton(d){
@@ -1443,7 +1470,7 @@ function wireRte(bar,rte){
 /* photo chooser used by the article editor */
 function choosePhoto(){
   return new Promise(function(done){
-    var dlg=h('<dialog aria-label="Choose a photo"><div class="hd"><h2>Choose a photo</h2></div><div class="bd"><button type="button" class="btn soft" id="cpUp">Upload a new photo</button> <button type="button" class="btn cam-only" id="cpCam">Take a photo</button><div class="photos pick" style="margin-top:14px"><p class="empty"><span class="spin"></span> Loading…</p></div></div><div class="ft"><button type="button" class="btn" id="cpX">Cancel</button></div></dialog>');
+    var dlg=h('<dialog aria-label="Choose a photo"><div class="hd"><h2>Choose a photo</h2></div><div class="bd"><button type="button" class="btn soft" id="cpUp">Upload a new photo</button> <button type="button" class="btn cam-only" id="cpCam">Take a photo</button> <button type="button" class="btn" id="cpStock">Free stock photos</button><div class="stockbox hidden" id="cpStockBox"></div><div class="photos pick" style="margin-top:14px"><p class="empty"><span class="spin"></span> Loading…</p></div></div><div class="ft"><button type="button" class="btn" id="cpX">Cancel</button></div></dialog>');
     document.body.appendChild(dlg);dlg.showModal();
     var fin=function(v){dlg.close();dlg.remove();done(v)};
     dlg.querySelector("#cpX").addEventListener("click",function(){fin(null)});
@@ -1455,6 +1482,7 @@ function choosePhoto(){
     list();
     dlg.querySelector("#cpCam").addEventListener("click",function(){var b=this,inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.setAttribute("capture","environment");
       inp.onchange=function(){var f=inp.files&&inp.files[0];if(!f)return;busy(b,true,"Uploading…");uploadPhoto(f).then(function(j){busy(b,false);fin({url:j.url,path:j.path})}).catch(function(e){busy(b,false);fail(e)})};inp.click()});
+    dlg.querySelector("#cpStock").addEventListener("click",function(){var bx=dlg.querySelector("#cpStockBox");if(!bx.firstChild)stockPanel(bx,function(j){fin({url:j.url,path:j.path})});bx.classList.toggle("hidden");var q=bx.querySelector("input");if(q&&!bx.classList.contains("hidden"))q.focus()});
     dlg.querySelector("#cpUp").addEventListener("click",function(){var b=this;pickFile(false).then(function(fs){if(!fs.length)return;busy(b,true,"Uploading…");uploadPhoto(fs[0]).then(function(j){busy(b,false);fin({url:j.url,path:j.path})}).catch(function(e){busy(b,false);fail(e)})})});
   });
 }
@@ -1491,7 +1519,7 @@ function openHubs(){
 /* ======================= PHOTOS & LOGO ======================= */
 function photosInit(){
   var m=$("phMain");m.innerHTML='';
-  var up=h('<div class="panel"><h3>Photos</h3><p class="help">Upload photos to use in your pages. They are resized and compressed automatically so the site stays fast. To put a photo in a page, open the page and press “Photo” above the article.</p><button type="button" class="btn primary" id="phAdd">Upload photos</button><div class="photos" id="phGrid" style="margin-top:16px"><p class="empty"><span class="spin"></span> Loading…</p></div></div>');
+  var up=h('<div class="panel"><h3>Photos</h3><p class="help">Upload photos to use in your pages. They are resized and compressed automatically so the site stays fast. To put a photo in a page, open the page and press “Photo” above the article.</p><button type="button" class="btn primary" id="phAdd">Upload photos</button> <button type="button" class="btn" id="phStock">Free stock photos</button><div class="stockbox hidden" id="phStockBox"></div><div class="photos" id="phGrid" style="margin-top:16px"><p class="empty"><span class="spin"></span> Loading…</p></div></div>');
   m.appendChild(up);
   var lg=h('<div class="panel"><h3>Logo</h3><p class="help">Shown at the top and bottom of every page. Use a PNG with a see-through background for the best result. It is fitted into the same space, so a wide logo works best.</p><div class="logo-prev"><div style="background:#fff"><img src="/logo-400.webp" alt="Current logo on white"></div><div style="background:#0d1122"><img src="/logo-400.webp" alt="Current logo on dark"></div></div><div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" id="lgPick">Choose a new logo</button><button type="button" class="btn primary hidden" id="lgSave">Use this logo</button></div></div>');
   m.appendChild(lg);
@@ -1516,6 +1544,7 @@ function photosInit(){
       c.querySelector("button").addEventListener("click",function(){var b=this;if(!confirm(p.usedOn.length?"This photo is used on "+p.usedOn.join(", ")+". Delete it anyway? It will disappear from those pages.":"Delete this photo?"))return;busy(b,true,"Deleting…");api("media",{action:"delete",path:p.path}).then(function(){toast("Photo deleted.");grid()}).catch(function(e){busy(b,false);fail(e)})});
       g.appendChild(c)})}).catch(fail)}
   grid();
+  $("phStock").addEventListener("click",function(){var bx=$("phStockBox");if(!bx.firstChild)stockPanel(bx,function(){grid()});bx.classList.toggle("hidden");var q=bx.querySelector("input");if(q&&!bx.classList.contains("hidden"))q.focus()});
   $("phAdd").addEventListener("click",function(){var b=this;pickFile(true).then(function(fs){if(!fs.length)return;busy(b,true,"Uploading "+fs.length+"…");
     fs.reduce(function(p,f){return p.then(function(){return uploadPhoto(f)})},Promise.resolve()).then(function(){busy(b,false);toast(fs.length+" photo"+(fs.length>1?"s":"")+" uploaded. "+LIVE_NOTE);grid()}).catch(function(e){busy(b,false);fail(e);grid()})})});
   var newLogo=null;
@@ -1984,6 +2013,31 @@ function openOnPage(){
       el.addEventListener("paste",function(e){e.preventDefault();var t=(e.clipboardData||w.clipboardData).getData("text/plain");d.execCommand("insertText",false,t)});
     });
     d.addEventListener("focusout",function(e){setTimeout(function(){if(!d.activeElement||!d.activeElement.hasAttribute||!d.activeElement.hasAttribute("data-ed"))chip.hidden=true},150)});
+    /* lists on the page (questions, steps, Why us rows, About letters, trust points, What we do points): + Add and ✕ Remove,
+       recorded as the same add/remove operations the list views use (draft.__ops), so Review & publish handles them */
+    var LISTRE=[[/^faq\.[qa](\d+)$/,"faq"],[/^how\.s(\d+)[td]$/,"how"],[/^why\.o(\d+)$/,"why.o"],[/^why\.n(\d+)$/,"why.n"],[/^about\.a(\d+)[td]$/,"about"],[/^trust\.u(\d+)[td]$/,"trust"],[/^auto\.c(\d+)p(\d+)$/,"pts"]];
+    var NAMES={faq:"question",how:"step","why.o":"row","why.n":"row",about:"letter",trust:"point",pts:"point"};
+    var groups={};
+    d.querySelectorAll("[data-ed]").forEach(function(el){var k=el.getAttribute("data-ed");LISTRE.some(function(r){var m=k.match(r[0]);if(!m)return false;var id=r[1]==="pts"?"pts:"+m[1]:r[1],n=+(r[1]==="pts"?m[2]:m[1]);var g=id+"|"+n;(groups[g]=groups[g]||{id:id,n:n,els:[]}).els.push(el);return true})});
+    function lca(els){if(els.length===1){var e=els[0];return e.closest("li,details,article,.row,.card")||e}var a=els[0];while(a&&!els.every(function(x){return a.contains(x)}))a=a.parentElement;return a}
+    var lastOf={};Object.keys(groups).forEach(function(g){var it=groups[g];it.box=lca(it.els);if(!lastOf[it.id]||it.n>lastOf[it.id].n)lastOf[it.id]=it});
+    var tb=d.createElement("div");tb.id="ed-tb";tb.hidden=true;tb.innerHTML='<button type="button" data-a="add">+ Add</button><button type="button" data-a="rm">✕ Remove</button>';d.body.appendChild(tb);
+    var st2=d.createElement("style");st2.textContent='#ed-tb{position:absolute;z-index:2147483646;display:flex;gap:4px;background:#14172b;border-radius:999px;padding:4px;box-shadow:0 8px 20px -8px rgba(0,0,0,.5)}#ed-tb button{all:unset;cursor:pointer;color:#fff;font:700 12px/1 system-ui,sans-serif;padding:6px 10px;border-radius:999px}#ed-tb button:hover{background:#139918}.ed-rm{opacity:.35;outline:2px dashed #b42318;outline-offset:4px}.ed-new{outline:2px dashed #139918;outline-offset:4px}';d.head.appendChild(st2);
+    var hov=null;
+    function placeTb(it){var r=it.box.getBoundingClientRect();tb.style.top=(r.top+w.scrollY+4)+"px";tb.style.left=Math.max(8,r.right+w.scrollX-170)+"px";tb.hidden=false;hov=it;
+      var rm=isRm(it);tb.querySelector("[data-a=rm]").textContent=rm?"↺ Keep":"✕ Remove";tb.querySelector("[data-a=add]").textContent="+ Add "+NAMES[it.id.indexOf("pts:")===0?"pts":it.id]}
+    function isRm(it){return W.ops().remove.some(function(r){return r.list===it.id&&r.n===it.n})}
+    Object.keys(groups).forEach(function(g){var it=groups[g];it.box.addEventListener("mouseenter",function(){placeTb(it)});if(isRm(it))it.box.classList.add("ed-rm")});
+    tb.addEventListener("mousedown",function(e){e.preventDefault()});
+    tb.querySelector("[data-a=rm]").addEventListener("click",function(){if(!hov)return;var o=W.ops(),it=hov;
+      if(isRm(it)){o.remove=o.remove.filter(function(r){return!(r.list===it.id&&r.n===it.n)});it.box.classList.remove("ed-rm")}else{o.remove.push({list:it.id,n:it.n});it.box.classList.add("ed-rm")}saveDraft();cnt();placeTb(it)});
+    tb.querySelector("[data-a=add]").addEventListener("click",function(){if(!hov)return;var last=lastOf[hov.id];var keys=W.keysFor(hov.id,last.n),entry={list:hov.id,en:keys.map(function(){return""})};W.ops().add.push(entry);saveDraft();cnt();
+      var c=last.box.cloneNode(true);c.classList.remove("ed-rm");c.classList.add("ed-new");c.querySelectorAll("[data-ed]").forEach(function(x){var k=x.getAttribute("data-ed"),i=keys.indexOf(k);x.removeAttribute("data-ed");x.textContent="";x.setAttribute("data-ph",i===0?"Type the new "+NAMES[hov.id.indexOf("pts:")===0?"pts":hov.id]+" here":"…and its text");
+        x.contentEditable="true";x.addEventListener("input",function(){entry.en[i]=x.innerText.trim();saveDraft()});x.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();x.blur()}})});
+      if(c.tagName==="DETAILS")c.open=true;last.box.parentNode.insertBefore(c,lastNew(hov.id,last.box).nextSibling);c.setAttribute("data-new",hov.id);
+      var f=c.querySelector("[contenteditable]");if(f){f.focus();f.scrollIntoView({block:"center"})}});
+    function lastNew(id,box){var all=[].slice.call(d.querySelectorAll('[data-new="'+id+'"]'));return all.length?all[all.length-1]:box}
+    var st3=d.createElement("style");st3.textContent='[data-ph]:empty::before{content:attr(data-ph);opacity:.45}';d.head.appendChild(st3);
     chip.querySelector("[data-a=undo]").addEventListener("mousedown",function(e){e.preventDefault();if(!curEl)return;var k=curEl.getAttribute("data-ed"),draft=W.draft();if(draft[k])delete draft[k].en;curEl.textContent=byKey[k].en;curEl.classList.remove("ed-chg");saveDraft();cnt()});
     d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a,button,[role=button]");if(!a||a.closest("#ed-chip"))return;if(e.target.closest("[data-ed]")||a.hasAttribute("data-ed")){e.preventDefault();return}
       if(a.tagName==="A"&&/^#/.test(a.getAttribute("href")||""))return;if(a.tagName==="A"){e.preventDefault();}},true);
@@ -1998,7 +2052,8 @@ function opPicker(sel,current,leave){
     (j.pages||[]).filter(function(p){return OP_SEC[p.section]&&edLive(p)}).concat((j.legal||[]).map(function(p){return Object.assign({},p)})).forEach(function(p){(groups[p.section]=groups[p.section]||[]).push(p)});
     Object.keys(OP_SEC).forEach(function(k){if(!groups[k])return;var og=document.createElement("optgroup");og.label=OP_SEC[k];groups[k].forEach(function(p){var o=document.createElement("option");o.value=p.section+"/"+p.slug;o.textContent=p.title;og.appendChild(o)});sel.appendChild(og)});
     sel.value=current}).catch(function(){});
-  sel.addEventListener("change",function(){var v=sel.value;if(leave()===false){sel.value=current;return}if(!v)openOnPage();else{var i=v.indexOf("/");openPageOnPage(v.slice(0,i),v.slice(i+1))}})}
+  var nw=document.createElement("option");nw.value="+new";nw.textContent="＋ New page or news post…";sel.insertBefore(nw,sel.firstChild.nextSibling);
+  sel.addEventListener("change",function(){var v=sel.value;if(leave()===false){sel.value=current;return}if(v==="+new"){document.querySelectorAll(".op").forEach(function(x){x.remove()});document.body.style.overflow="";edNew("news");return}if(!v)openOnPage();else{var i=v.indexOf("/");openPageOnPage(v.slice(0,i),v.slice(i+1))}})}
 
 /* Edit on page for guide, service, industry, location, news and legal pages: the live page in a frame, with the
    label, heading, introduction, "In short" points, questions and article text typeable in place, and article and
@@ -2074,6 +2129,7 @@ function modeSwitch(short){return '<div class="mode-sw" role="group" aria-label=
 function modeSync(){var m=edMode();document.querySelectorAll("[data-mode]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===m))});document.body.classList.toggle("mode-visual",m==="visual")}
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mode]");if(!b)return;try{localStorage.setItem("ambs-ed-mode",b.dataset.mode)}catch(x){}modeSync();toast(b.dataset.mode==="visual"?"On the page: the homepage and your pages open ready to click and type.":"With forms: you\u2019ll see the lists and forms. Edit on page is still one button away.")});
 window.edMode=edMode;
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-new]");if(!b)return;e.preventDefault();edNew(b.dataset.new)});
 /* the Website ROI calculator is a block page (site-src/content/custom/website-roi-calculator.json): open it straight from Home or the menu */
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-roi]");if(!b)return;e.preventDefault();if(!loaded.pages){open={section:"page",slug:"website-roi-calculator"};show("pages")}else{show("pages");openPage("page","website-roi-calculator")}});
 
@@ -2146,7 +2202,8 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
   var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+modeSwitch()+'</div>'+
-    '<div class="kpis" id="hmKpi" hidden></div>';
+    '<div class="kpis" id="hmKpi" hidden></div>'+
+    '<div class="quick"><button type="button" class="btn primary" data-new="news">＋ Write a news post</button><button type="button" class="btn" data-new="page">＋ Add a page</button><button type="button" class="btn" data-new="guides">＋ Add a guide</button></div>';
   EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
   h+='<h3 class="dash-h">Tools</h3><div class="tiles"><button type="button" class="tile" data-roi="1"><span class="tile-i">'+ico("calc")+'</span><b>Website ROI calculator</b><span>The calculator page at ambs.co.nz/website-roi-calculator</span></button><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
   m.innerHTML=h;modeSync();
