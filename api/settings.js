@@ -70,7 +70,9 @@ export default async function handler(req, res) {
       const put = (n, v) => sbRpc(who.token, "site_secret_set", { p_name: n, p_value: v });
       try {
         if (b.action === "conn-remove") { for (const n of SVC) await put(n, ""); return send(res, 200, { ok: true }); }
-        const v = b.values && typeof b.values === "object" ? b.values : {};
+        let v = b.values && typeof b.values === "object" ? b.values : {};
+        if (b.fromVercel) { v = {}; for (const n of SVC) if (process.env[n]) v[n] = process.env[n];   // copied on the server, never sent to the browser
+          if (!Object.keys(v).length) return send(res, 200, { error: "Vercel has no keys for this connection." }); }
         const val = (n) => String(v[n] == null ? "" : v[n]).trim();
         let note = "";
         if (b.svc === "ga") {
