@@ -698,7 +698,7 @@ header.top .who .nt-bar{justify-content:space-between}
 .vs-range .btn[aria-pressed=true],.vs-range .btn.primary{box-shadow:var(--emb-sh)!important;filter:none!important}
 
 /* Stats and Connections */
-.st-stats{grid-template-columns:repeat(5,minmax(0,1fr))!important}a.st-tile{text-decoration:none;color:var(--ink)}a.st-tile:hover{border-color:var(--green)}
+.st-stats{grid-template-columns:repeat(5,minmax(0,1fr))!important}button.st-tile{font:inherit;text-align:left;cursor:pointer;color:var(--ink)}button.st-tile:hover{border-color:var(--green)}
 @media (max-width:1180px){.st-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media (max-width:640px){.st-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.vs-range.st-range{grid-template-columns:repeat(3,1fr)!important}}
 .st-col{cursor:default}.st-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important}
@@ -713,6 +713,21 @@ header.top .who .nt-bar{justify-content:space-between}
 .cn-body{padding:12px 16px 16px}.cn-body .f{display:block;margin:0 0 10px}.cn-body .f span{display:block;font-size:.82rem;font-weight:700;margin-bottom:4px}.cn-body input,.cn-body textarea{width:100%;box-sizing:border-box;font:inherit;font-size:16px;font-weight:400;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.6rem .75rem;min-height:44px}.cn-body input::placeholder,.cn-body textarea::placeholder{color:var(--muted);font-weight:400}.cn-body textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;resize:vertical}
 .cn-acts{display:flex;gap:8px;flex-wrap:wrap}.cn-how{margin:0 0 12px}.cn-how summary{cursor:pointer;font-weight:700;font-size:.88rem;color:var(--green)}.cn-msg.ok{color:var(--green)}
 @media (max-width:640px){.cn-card>summary{padding:12px;gap:10px;min-height:58px}.cn-ic{width:34px;height:34px;font-size:17px}.cn-t b{font-size:.94rem}.cn-on,.cn-off,.cn-built{font-size:.7rem;padding:3px 7px}}
+
+/* Leads */
+.ld-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}.ld-tools input{flex:1;min-width:220px;max-width:520px;font:inherit;font-size:16px;padding:.65rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+.ld-list{display:grid;gap:10px}.ld-row{padding:0!important;margin:0!important;overflow:hidden}
+.ld-row>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer}.ld-row>summary::-webkit-details-marker{display:none}.ld-row[open]>summary{border-bottom:1px solid var(--line)}
+.ld-av{width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:800;color:var(--green);background:var(--ok-bg)}
+.ld-main{flex:1;min-width:0;display:flex;flex-direction:column}.ld-main b{font-size:.98rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ld-main span{font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ld-side{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:4px}.ld-side em{font-style:normal;font-size:.8rem;color:var(--muted)}
+.ld-st,.ld-rep{font-style:normal;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}.ld-st{background:var(--line);color:var(--ink)}.ld-st.s-n{background:var(--ok-bg);color:var(--green)}.ld-st.s-w{background:var(--ok-bg);color:var(--green)}.ld-st.s-l{color:var(--muted)}.ld-rep{border:1px solid var(--line);color:var(--muted)}
+.ld-body{padding:14px 16px 16px}.ld-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px 18px;margin-bottom:12px}
+.ld-f span,.ld-msg>span,.ld-reps>span{display:block;font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}.ld-f b,.ld-f a{font-size:.95rem;word-break:break-word}.ld-f a{color:var(--green);font-weight:700}
+.ld-msg p{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--bg,rgba(0,0,0,.03));border:1px solid var(--line);line-height:1.5}
+.ld-reps{margin-bottom:12px}.ld-rp{border-left:0;padding:6px 0;border-top:1px solid var(--line)}.ld-rp em{font-style:normal;font-size:.8rem;color:var(--muted)}.ld-rp p{margin:4px 0 0;line-height:1.45}
+.ld-page{margin:0 0 12px;word-break:break-all}.ld-acts{display:flex;gap:8px;flex-wrap:wrap}.ld-acts a.btn{text-decoration:none}
+@media (max-width:640px){.ld-row>summary{padding:10px 12px;gap:10px}.ld-av{width:34px;height:34px}.ld-body{padding:12px}.ld-fields{grid-template-columns:1fr 1fr}.ld-acts .btn{flex:1;text-align:center}.ld-acts .btn.primary{flex-basis:100%}}
 </style>
 </head>
 <body>
@@ -773,6 +788,7 @@ header.top .who .nt-bar{justify-content:space-between}
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
     <button type="button" role="tab" data-tab="health" aria-selected="false">Site health</button>
     <button type="button" role="tab" data-tab="stats" aria-selected="false">Stats</button>
+    <button type="button" role="tab" data-tab="leads" aria-selected="false">Leads</button>
     <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors now</button>
     <button type="button" role="tab" data-tab="conns" aria-selected="false">Connections</button>
     <button type="button" role="tab" data-tab="seo" aria-selected="false">Google search (SEO)</button>
@@ -819,6 +835,7 @@ header.top .who .nt-bar{justify-content:space-between}
   <section id="tab-design" class="tab hidden"><div class="wrap dash" id="dsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-seo" class="tab hidden"><div class="wrap dash" id="seoMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-stats" class="tab hidden"><div class="wrap dash" id="stMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+  <section id="tab-leads" class="tab hidden"><div class="wrap dash" id="ldMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-conns" class="tab hidden"><div class="wrap dash" id="cnMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-visitors" class="tab hidden"><div class="wrap dash" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-calc" class="tab hidden"><div class="wrap narrow" id="ccMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
@@ -1353,7 +1370,7 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,stats:statsInit,conns:connsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,stats:statsInit,leads:leadsInit,conns:connsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
   sideSync();window.scrollTo(0,0)
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
@@ -2856,12 +2873,12 @@ function designInit(){
 /* ======================= MENU AND HOME ======================= */
 /* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
    a dashboard with the key numbers and a tile for every part. EDMENU is the one list both are drawn from. */
-var ICO={stats:'M4 20V10M10 20V4M16 20v-7M22 20H2',conns:'M9 15l6-6M7.5 12.5l-2 2a3.5 3.5 0 0 0 5 5l2-2M16.5 11.5l2-2a3.5 3.5 0 0 0-5-5l-2 2',home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18',redirects:'M4 7h11l-3-3M15 7l-3 3M20 17H9l3-3M9 17l3 3',health:'M3 12h4l2-5 4 10 2-5h6'};
+var ICO={leads:'M4 6h16v12H4zM4 7l8 6 8-6',stats:'M4 20V10M10 20V4M16 20v-7M22 20H2',conns:'M9 15l6-6M7.5 12.5l-2 2a3.5 3.5 0 0 0 5 5l2-2M16.5 11.5l2-2a3.5 3.5 0 0 0-5-5l-2 2',home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18',redirects:'M4 7h11l-3-3M15 7l-3 3M20 17H9l3-3M9 17l3 3',health:'M3 12h4l2-5 4 10 2-5h6'};
 var EDMENU=[["",[["home","Home","Your dashboard"]]],
   ["Edit your website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["design","Colours & fonts","Brand colours, fonts and buttons for the whole website"]]],
   ["Website settings",[["sections","Homepage sections","Order, hide or add homepage sections"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["redirects","Redirects","Send old addresses to the right page"],["conns","Connections","Analytics, Search Console, forms, bookings and keys"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"],["roi","Website ROI calculator","The calculator page at ambs.co.nz/website-roi-calculator"]]],
-  ["Insights",[["stats","Stats","Leads, button clicks and chat at a glance"],["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
+  ["Insights",[["stats","Stats","Leads, button clicks and chat at a glance"],["leads","Leads","Every enquiry from the website, with what they filled in"],["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 var CHOOSE={wording:["Homepage","Click any words on your real homepage and type. Add questions, steps and more from the panel.","Every line of the homepage in all 5 languages, with search."],
   pages:["Pages & news","Open a page and type straight on it, with tools to add text, buttons and photos.","All of a page’s settings in one form: Google wording, questions, related pages and more."],
   design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
@@ -3083,7 +3100,7 @@ function statsInit(){
   function lbl(d){return (ST_RANGES.filter(function(r){return r[0]===d})[0]||[0,d+" days"])[1]}
   function change(now,was){if(!was)return now?'<span class="vs-ch up">new</span>':'<span class="vs-ch">–</span>';var d=Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';return'<span class="vs-ch '+(d>0?'up':'down')+'">'+(d>0?'▲ ':'▼ ')+Math.abs(d)+'%</span>'}
   function head(){return '<div class="dash-head"><div><h2>Stats</h2><p class="help">Leads, button clicks and chat at a glance. ▲▼ compare with the same length of time before.</p></div><div class="vs-range st-range" role="group" aria-label="Time period">'+ST_RANGES.map(function(r){return'<button type="button" class="btn'+(stRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(stRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
-  function tile(n,label,ch,go,title){return (go?'<a class="vs-stat st-tile" href="'+go+'" target="_blank" rel="noopener" title="'+esc(title||"")+'">':'<div class="vs-stat st-tile">')+'<b>'+n+'</b><span>'+label+'</span>'+ch+(go?'</a>':'</div>')}
+  function tile(n,label,ch,go,title){return (go?'<button type="button" class="vs-stat st-tile" data-go="'+go.slice(1)+'" title="'+esc(title||"")+'">':'<div class="vs-stat st-tile">')+'<b>'+n+'</b><span>'+label+'</span>'+ch+(go?'</button>':'</div>')}
   function rows(list,empty){var mx=Math.max.apply(null,list.map(function(r){return r.n}).concat([1]));
     return list.length?'<ul class="vs-rows">'+list.map(function(r){return'<li><div class="vs-pick static"><span class="vs-l">'+esc(r.name)+'</span><b>'+r.n+'</b><i style="width:'+Math.max(3,Math.round(r.n/mx*100))+'%"></i></div></li>'}).join("")+'</ul>':'<p class="help">'+empty+'</p>'}
   function bars(j){var L=j.leads||{},cols=[],now=new Date(j.to);
@@ -3101,7 +3118,7 @@ function statsInit(){
     var ev=function(k){return E.error||E.setup?"–":(N[k]||0)},evc=function(k){return E.error||E.setup?"":change(N[k]||0,B[k]||0)};
     var portal="https://portal.ambs.co.nz/";
     var html=head()+'<div class="vs-stats st-stats">'+
-      tile(L?L.leads:"–","Leads received",L?change(L.leads,P.leads||0):"",portal,"Open Leads in your portal")+
+      tile(L?L.leads:"–","Leads received",L?change(L.leads,P.leads||0):"","#leads","See every lead")+
       tile(L?L.sends:"–","Forms sent",L?change(L.sends,P.sends||0):"")+
       tile(ev("booking_confirmed"),"Calls booked",evc("booking_confirmed"))+
       tile(ev("book_click"),"“Book a call” clicks",evc("book_click"))+
@@ -3115,7 +3132,7 @@ function statsInit(){
     else if(L){html+='<div class="panel"><div class="vs-ph"><h3>Leads · last '+lbl(j.days)+'</h3><span class="vs-key">'+L.leads+' '+(L.leads===1?"person":"people")+(L.sends>L.leads?' · '+L.sends+' forms sent':'')+'</span></div>'+bars(j)+
         '<p class="help">From your portal’s Leads (every website form and chat message lands there, the same ones that email you through Web3Forms). Someone who sends the form twice counts once as a lead; deleted leads aren’t counted.</p></div>';
       html+='<div class="vs-grid st-grid"><div class="panel vs-list"><h3>Where leads came from</h3>'+rows(L.forms||[],"No forms sent in this period.")+'</div>'+
-        '<div class="panel vs-list"><h3>Latest leads</h3>'+((L.latest||[]).length?'<ul class="st-latest">'+L.latest.map(function(x){return'<li><b>'+esc(x.name)+'</b><span>'+esc([x.service,x.form].filter(Boolean).join(" · "))+'</span><em>'+esc(ago(x.at))+'</em></li>'}).join("")+'</ul><a class="btn" style="white-space:nowrap" href="'+portal+'" target="_blank" rel="noopener">Open in the portal ↗</a>':'<p class="help">No new leads in this period.</p>')+'</div>'+
+        '<div class="panel vs-list"><h3>Latest leads</h3>'+((L.latest||[]).length?'<ul class="st-latest">'+L.latest.map(function(x){return'<li><b>'+esc(x.name)+'</b><span>'+esc([x.service,x.form].filter(Boolean).join(" · "))+'</span><em>'+esc(ago(x.at))+'</em></li>'}).join("")+'</ul><button type="button" class="btn" style="white-space:nowrap" data-go="leads">See every lead →</button>':'<p class="help">No new leads in this period.</p>')+'</div>'+
         '<div class="panel vs-list"><h3>Chat helper</h3><ul class="vs-rows"><li><div class="vs-pick static"><span class="vs-l">Questions asked</span><b>'+L.chat.asked+'</b></div></li><li><div class="vs-pick static"><span class="vs-l">Still need an answer</span><b>'+L.chat.unanswered+'</b></div></li></ul>'+(L.chat.unanswered?'<button type="button" class="btn" data-go="chat">Answer them →</button>':'')+'</div>';
       html+='<div class="panel vs-list"><h3>Button clicks</h3>'+(E.setup?'<p class="help">Connect Google Analytics reports to see clicks.</p><button type="button" class="btn" data-go="conns">Open Connections →</button>':E.error?'<p class="msg err">'+esc(E.error)+'</p>':rows([["booking_confirmed","Calls booked"],["book_click","“Book a call” clicks"],["phone_click","Phone taps"],["email_click","Email taps"],["generate_lead","Messages sent"],["chat_open","Chat opened"],["chat_question","Chat questions typed"],["chat_auto_open","Chat opened by itself"]].map(function(e){return{name:e[1],n:N[e[0]]||0}}).filter(function(x){return x.n}),"No clicks in this period."))+
         (E.setup||E.error?'':'<p class="help">From Google Analytics. Visitors who block analytics, and devices set not to count, aren’t included.</p>')+'</div></div>'}
@@ -3126,6 +3143,43 @@ function statsInit(){
     if(!m.querySelector(".dash-head"))m.innerHTML=head();m.querySelectorAll(".st-range .btn").forEach(function(b){b.classList.toggle("primary",+b.dataset.r===r)});
     if(!m.querySelector(".vs-loading"))m.querySelector(".dash-head").insertAdjacentHTML("afterend",'<p class="empty vs-loading"><span class="spin"></span> Loading…</p>');wire();
     api("settings",{action:"stats",days:r}).then(function(j){stCache[r]={t:Date.now(),j:j};if(stRange===r)draw(j)}).catch(function(e){if(e.message!=="signin")m.innerHTML=head()+'<p class="msg err">'+esc(e.message)+'</p>';wire()})}
+  load();
+}
+
+/* ======================= LEADS (Insights → Leads) =======================
+   Every enquiry sent from the website (forms and chat messages), read from the portal's Leads through the database
+   function website_leads (api/settings "leads"). Repeat sends the portal merged into an earlier lead sit under that lead.
+   Tap a lead to see everything they filled in, with Call, Email and Open in the portal (portal.ambs.co.nz/#lead=<id>). */
+var ldRange=30,ldQ="",ldCache={};
+var LD_STATUS={new:["New","n"],contacted:["Contacted","c"],quoted:["Quoted","q"],converted:["Became a client","w"],won:["Won","w"],lost:["Not going ahead","l"]};
+var LD_LANG={zh:"Chinese",hi:"Hindi",pa:"Punjabi",mi:"te reo Māori"};
+function leadsInit(){
+  var m=$("ldMain"),PORTAL="https://portal.ambs.co.nz/";
+  function head(){return '<div class="dash-head"><div><h2>Leads</h2><p class="help">Every enquiry from the website’s forms and chat. Tap one to see everything they filled in.</p></div><div class="vs-range st-range" role="group" aria-label="Time period">'+ST_RANGES.map(function(r){return'<button type="button" class="btn'+(ldRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(ldRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'+
+    '<div class="ld-tools"><input type="search" id="ldSearch" placeholder="Search name, email, phone, message…" aria-label="Search leads" value="'+esc(ldQ)+'"><span class="help" id="ldCount"></span></div>'}
+  function when(iso){var d=new Date(iso),s=(Date.now()-d)/1000;return s<3600?Math.max(1,Math.round(s/60))+" min ago":s<86400?Math.round(s/3600)+" h ago":d.toLocaleDateString([],{day:"numeric",month:"short",year:d.getFullYear()===new Date().getFullYear()?undefined:"numeric"})}
+  function full(iso){return new Date(iso).toLocaleString([],{weekday:"short",day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})}
+  function group(rows){var byId={},out=[];rows.forEach(function(r){byId[r.id]=r;r.repeats=[]});
+    rows.forEach(function(r){var p=r.merged_into&&byId[r.merged_into];if(p)p.repeats.push(r);else out.push(r)});return out}
+  function match(r,q){if(!q)return true;var t=[r.name,r.email,r.phone,r.company,r.service,r.message,r.form].concat(r.repeats.map(function(x){return x.message})).join(" ").toLowerCase();return q.toLowerCase().split(/\s+/).every(function(w){return t.indexOf(w)>=0})}
+  function row(r){var st=LD_STATUS[r.status]||(r.status?[r.status,"n"]:null),who=r.name||r.email||r.phone||"Someone",tel=String(r.phone||"").replace(/[^\d+]/g,"");
+    var f=function(l,v,href){return v?'<div class="ld-f"><span>'+l+'</span>'+(href?'<a href="'+href+'">'+esc(v)+'</a>':'<b>'+esc(v)+'</b>')+'</div>':''};
+    return '<details class="panel ld-row"><summary><span class="ld-av" aria-hidden="true">'+esc((who.trim()[0]||"?").toUpperCase())+'</span><span class="ld-main"><b>'+esc(who)+'</b><span>'+esc([r.service,r.form].filter(function(x,i,a){return x&&a.indexOf(x)===i}).join(" · "))+'</span></span><span class="ld-side"><em>'+esc(when(r.at))+'</em>'+(st?'<i class="ld-st s-'+st[1]+'">'+esc(st[0])+'</i>':'')+(r.repeats.length?'<i class="ld-rep">+'+r.repeats.length+' more</i>':'')+'</span></summary>'+
+      '<div class="ld-body"><div class="ld-fields">'+f("Name",r.name)+f("Email",r.email,r.email?"mailto:"+r.email:"")+f("Phone",r.phone,tel?"tel:"+tel:"")+f("Company",r.company)+f("Looking for",r.service)+f("Sent from",r.form)+f("Language",LD_LANG[r.language]||"")+f("When",full(r.at))+'</div>'+
+      (r.message?'<div class="ld-msg"><span>Message</span><p>'+esc(r.message).replace(/\n/g,"<br>")+'</p></div>':'')+
+      (r.repeats.length?'<div class="ld-reps"><span>Sent again</span>'+r.repeats.map(function(x){return'<div class="ld-rp"><em>'+esc(full(x.at))+' · '+esc(x.form)+'</em>'+(x.message?'<p>'+esc(x.message).replace(/\n/g,"<br>")+'</p>':'')+'</div>'}).join("")+'</div>':'')+
+      (r.page?'<p class="help ld-page">Page: '+esc(r.page.replace(/^https?:\/\//,""))+'</p>':'')+
+      '<div class="ld-acts">'+(tel?'<a class="btn" href="tel:'+tel+'">📞 Call</a>':'')+(r.email?'<a class="btn" href="mailto:'+esc(r.email)+'">✉️ Email</a>':'')+'<a class="btn primary" href="'+PORTAL+'#lead='+encodeURIComponent(r.id)+'" target="_blank" rel="noopener">Open in the portal ↗</a></div></div></details>'}
+  function draw(j){var rows=group(j.rows||[]),list=rows.filter(function(r){return match(r,ldQ)}),sends=(j.rows||[]).length;
+    var body=j.error==="needsDb"?'<div class="panel"><p class="help">This page needs a one-time database update. It’s added when this change goes live.</p></div>':j.error?'<p class="msg err">'+esc(j.error)+'</p>':
+      list.length?'<div class="ld-list">'+list.map(row).join("")+'</div>':'<div class="panel"><p class="help">'+(ldQ?'No leads match “'+esc(ldQ)+'”.':'No enquiries from the website in this period.')+'</p></div>';
+    var box=$("ldBody");if(!box){m.innerHTML=head()+'<div id="ldBody"></div>';box=$("ldBody");wire()}
+    box.innerHTML=body;var c=$("ldCount");if(c)c.textContent=j.error?"":rows.length+" lead"+(rows.length===1?"":"s")+(sends>rows.length?" · "+sends+" forms sent":"")+(ldQ?" · "+list.length+" shown":"")}
+  function wire(){m.querySelectorAll(".st-range [data-r]").forEach(function(b){b.addEventListener("click",function(){var r=+b.dataset.r;if(r===ldRange)return;ldRange=r;m.querySelectorAll(".st-range .btn").forEach(function(x){var on=+x.dataset.r===r;x.classList.toggle("primary",on);x.setAttribute("aria-pressed",String(on))});load()})});
+    var s=$("ldSearch");if(s)s.addEventListener("input",function(){ldQ=s.value.trim();if(ldCache[ldRange])draw(ldCache[ldRange].j)})}
+  function load(){var r=ldRange;if(ldCache[r]&&Date.now()-ldCache[r].t<60000)return draw(ldCache[r].j);
+    if(!$("ldBody")){m.innerHTML=head()+'<div id="ldBody"></div>';wire()}$("ldBody").innerHTML='<p class="empty"><span class="spin"></span> Loading…</p>';
+    api("settings",{action:"leads",days:r}).then(function(j){ldCache[r]={t:Date.now(),j:j};if(ldRange===r)draw(j)}).catch(function(e){if(e.message!=="signin")$("ldBody").innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
   load();
 }
 

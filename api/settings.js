@@ -10,6 +10,7 @@
        the questions visitors typed into the chat (Supabase table chat_questions, read through admin-only functions)
    { action: "test", test: "psi"|"security"|"cert"|"response"|"sharing"|"index", url, strategy }   Site health → Speed & security (see _tests.js)
    { action: "stats", days: 1|7|30|90|180|365 }   Insights → Stats: leads and chat questions (database function website_stats) and button clicks (Google Analytics events), each with the period before
+   { action: "leads", days }   Insights → Leads: every website enquiry with its details (database function website_leads)
    { action: "conns" } / { action: "conn-save", svc: "ga"|"gsc"|"psi", values } / { action: "conn-remove", svc }   Website settings → Connections: keys kept in Supabase Vault (see _keys.js)
    { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
 import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, statsEvents, gaCheck } from "./_ga.js";
@@ -50,6 +51,11 @@ export default async function handler(req, res) {
       ]);
       const missing = (x) => x && x.error && /website_stats|PGRST202|404/.test(x.error);
       return send(res, 200, { days, from: from.toISOString(), to: to.toISOString(), leads: cur, leadsBefore: prev, events: ev, needsDb: missing(cur) });
+    }
+    if (b.action === "leads") {   // Insights → Leads: every website enquiry in the period with what they filled in (database function website_leads)
+      const days = [1, 7, 30, 90, 180, 365].includes(+b.days) ? +b.days : 30, to = new Date(), from = new Date(to - days * 86400000);
+      try { return send(res, 200, { days, rows: (await sbRpc(who.token, "website_leads", { p_from: from.toISOString(), p_to: to.toISOString() })) || [] }); }
+      catch (e) { return send(res, 200, { days, rows: [], error: /website_leads|PGRST202|404/.test(e.message) ? "needsDb" : e.message }); }
     }
     if (b.action === "conns") {
       let saved = [], vault = true;
