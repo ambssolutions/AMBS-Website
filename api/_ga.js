@@ -209,10 +209,12 @@ async function siteBasics() {
 export async function seoReport(days) {
   const c = conn();
   if (c.setup) return c;
-  const n = [7, 28, 90].includes(+days) ? +days : 28;
+  const n = [1, 7, 28, 90].includes(+days) ? +days : 28;
   const t = await accessToken(c.sa);
   const day = (k) => new Date(Date.now() - k * 86400000).toISOString().slice(0, 10);
-  const cur = { startDate: day(n + 2), endDate: day(0) }, prev = { startDate: day(2 * n + 2), endDate: day(n + 3) };
+  /* 24 hours: Google's fresh (not yet final) figures; searches, pages and places cover today and yesterday */
+  const cur = n === 1 ? { startDate: day(1), endDate: day(0) } : { startDate: day(n + 2), endDate: day(0) },
+    prev = n === 1 ? { startDate: day(3), endDate: day(2) } : { startDate: day(2 * n + 2), endDate: day(n + 3) };
   const sites = process.env.GSC_SITE ? [process.env.GSC_SITE] : SITES;
   let site = "", last = "";
   for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
@@ -222,13 +224,26 @@ export async function seoReport(days) {
     q([], 1), q([], 1, prev), q(["date"], 500), q(["query"], 250), q(["page"], 50), q(["country"], 10), q(["device"], 5), siteBasics(),
     fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/sitemaps", { headers: { Authorization: "Bearer " + t } }).then((r) => r.ok ? r.json() : {}).catch(() => ({})),
   ]);
-  const sum = (rows) => rows[0] ? { clicks: rows[0].clicks, shown: rows[0].shown, ctr: rows[0].ctr, pos: rows[0].pos } : { clicks: 0, shown: 0, ctr: 0, pos: 0 };
+  let sum = (rows) => rows[0] ? { clicks: rows[0].clicks, shown: rows[0].shown, ctr: rows[0].ctr, pos: rows[0].pos } : { clicks: 0, shown: 0, ctr: 0, pos: 0 };
+  let hourly = null;
+  if (n === 1) {
+    /* hour by hour for the last 48 hours: the last 24 against the 24 before */
+    try {
+      const hrs = (await q(["hour"], 200, { startDate: day(3), endDate: day(0), dataState: "hourly_all" })).sort((a, b) => a.k[0] < b.k[0] ? -1 : 1);
+      if (hrs.length) {
+        const add = (rs) => { const cl = rs.reduce((a, r) => a + r.clicks, 0), sh = rs.reduce((a, r) => a + r.shown, 0), ps = rs.reduce((a, r) => a + r.pos * r.shown, 0);
+          return { clicks: cl, shown: sh, ctr: sh ? cl / sh : 0, pos: sh ? Math.round(ps / sh * 10) / 10 : 0 }; };
+        const last = hrs.slice(-24), before = hrs.slice(-48, -24);
+        hourly = { cur: add(last), prev: add(before), rows: last.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })) };
+      }
+    } catch (e) { hourly = null; }
+  }
   const row = (r) => ({ name: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos });
   const qs = queries.map(row);
   return {
     site, days: n, from: cur.startDate, to: cur.endDate,
-    totals: sum(tot), before: sum(totPrev),
-    daily: daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })),
+    totals: hourly ? hourly.cur : sum(tot), before: hourly ? hourly.prev : sum(totPrev), hourly: !!hourly,
+    daily: hourly ? hourly.rows : daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })),
     queries: qs.slice(0, 50),
     nearly: qs.filter((r) => r.pos > 7 && r.pos <= 20 && r.shown >= 2).sort((a, b) => b.shown - a.shown).slice(0, 8),
     lowclick: qs.filter((r) => r.shown >= 15 && r.ctr < 0.02 && r.pos <= 10).sort((a, b) => b.shown - a.shown).slice(0, 8),
