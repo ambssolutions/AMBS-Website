@@ -910,3 +910,7 @@ footer.f2 .f2-social a:hover,footer.f2 .f2-social a:focus-visible{color:#fff;bac
 footer.f2 .f2-social svg{width:19px;height:19px;fill:currentColor}
 html[data-theme=dark] footer.f2 .f2-social a{color:#d7dbe6;border-color:rgba(215,219,230,.25)}
 @media (prefers-color-scheme:dark){html:not([data-theme=light]) footer.f2 .f2-social a{color:#d7dbe6;border-color:rgba(215,219,230,.25)}}
+
+/* buttons added in the editor's article text (Button in the toolbar) */
+.prose .art-btns{margin:1.6em 0}.prose .art-btns--center{text-align:center}.prose .art-btns--right{text-align:right}
+.prose .art-btns .btn{text-decoration:none}.prose .art-btns .btn--ghost{border:2px solid currentColor;background:transparent}
