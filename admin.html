@@ -200,6 +200,14 @@ dialog::backdrop{background:rgba(13,17,34,.45);backdrop-filter:blur(4px)}
 }
 .tile{border:1px solid var(--line)}.tile:hover .tile-i{background:var(--green)}.tile:hover .tile-i svg{stroke:#fff}.tile-i{transition:background .2s}.tile-i svg{transition:stroke .2s}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.op{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column}
+.op-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:var(--card);box-shadow:0 1px 0 var(--line)}
+.op-t{display:flex;flex-direction:column;margin-right:auto;min-width:0}.op-t b{font-size:1rem}.op-t span{color:var(--muted);font-size:.84rem}
+.op-dev{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}.op-dev button{border:0;background:none;border-radius:999px;padding:.35rem .8rem;font-weight:700;color:var(--muted);cursor:pointer}.op-dev button.on{background:var(--ink);color:var(--card)}
+.op-n{font-weight:700;color:var(--muted);font-size:.9rem}
+.op-stage{flex:1;min-height:0;display:flex;justify-content:center;overflow:auto}.op-stage.dev{padding:18px 0}
+.op-stage iframe{width:100%;height:100%;border:0;background:#fff;transition:width .25s}.op-stage.dev iframe{border-radius:24px;box-shadow:0 0 0 10px #14172b,0 30px 60px -20px rgba(0,0,0,.5)}
+@media (max-width:760px){.op-dev,.op-t span,#opPrev{display:none}.op-t b{font-size:.92rem}.op-bar{gap:6px;padding:8px 10px}.op-bar .btn{padding:.45rem .8rem;font-size:.88rem}.op-n{display:none}}
 .side{display:none}
 @media (min-width:1024px){
   #app{padding-left:248px}
@@ -533,6 +541,7 @@ header.top .who{margin-left:4px}
     <div class="bar-acts">
     <button class="btn" id="discard" type="button" disabled>Discard<span class="dsk"> changes</span></button>
     <button class="btn" id="preview" type="button" disabled>Preview</button>
+    <button class="btn" id="onPageBtn" type="button" data-go="onpage">✎ Edit on page</button>
     <button class="btn primary" id="review" type="button" disabled>Review &amp; publish</button>
     </div>
   </div></div>
@@ -666,6 +675,8 @@ function saveDraft(){
   store.set("ambs-ed-draft",JSON.stringify(draft));updateBar();
 }
 function cur(k,f){var d=draft[k];if(d&&typeof d[f]==="string")return d[f];var it=byKey[k];return f==="en"?it.en:it.tr[f]}
+/* for Edit on page (another script on this page) */
+window.edW={items:function(){return items},byKey:function(){return byKey},draft:function(){return draft},cur:cur,saveDraft:function(){saveDraft()},nChanges:function(){return nChanges()},render:function(){render()},label:function(k){return label(k)}};
 function isRev(k,l){var d=draft[k];if(d&&d.rev&&l in d.rev)return d.rev[l];return byKey[k].status[l]==="reviewed"}
 function enChanged(k){var d=draft[k];return !!(d&&typeof d.en==="string"&&d.en!==byKey[k].en)}
 function changedKeys(){return Object.keys(draft).filter(function(k){return byKey[k]})}
@@ -1909,12 +1920,60 @@ function historyInit(){var m=$("hiMain");m.innerHTML='<p class="empty"><span cla
       p.appendChild(r)});
     m.appendChild(p)}).catch(fail)}
 
+/* ======================= EDIT ON PAGE ======================= */
+/* The real homepage in a frame (same site, so the editor can reach into it). Every element with data-i18n becomes
+   typeable; each change goes into the same draft as the Homepage wording list (English only, translations queue as
+   usual), so Preview, Review & publish and Discard work the same. Links, the chat helper and Google Analytics are
+   paused inside the frame. Phone / Tablet / Laptop resize the frame. */
+function openOnPage(){
+  var W=window.edW,items=W.items(),byKey=W.byKey(),cur=W.cur,label=W.label,saveDraft=W.saveDraft,nChanges=W.nChanges,render=W.render;
+  if(!items.length){toast("Still loading the wording, try again in a moment.");return}
+  try{sessionStorage.setItem("ambs:lang","en");sessionStorage.setItem("ambs:chat-quiet","1")}catch(e){}
+  var ov=document.createElement("div");ov.className="op";
+  ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click any text and type. Links are paused.</span></div>'+
+    '<div class="op-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="820">Tablet</button><button type="button" data-w="0" class="on">Laptop</button></div>'+
+    '<span class="op-n" id="opN"></span><button type="button" class="btn" id="opPrev">Preview</button><button type="button" class="btn primary" id="opRev">Review &amp; publish</button><button type="button" class="btn" id="opDone">Done</button></div>'+
+    '<div class="op-stage"><iframe id="opFrame" title="Your homepage, editable" src="/?chat=nolog&amp;onpage=1"></iframe></div>';
+  document.body.appendChild(ov);document.body.style.overflow="hidden";
+  var fr=$("opFrame"),cnt=function(){var n=nChanges();$("opN").textContent=n?n+" change"+(n===1?"":"s"):"No changes yet";$("opRev").disabled=!n;$("opPrev").disabled=!n};cnt();
+  ov.querySelectorAll(".op-dev button").forEach(function(b){b.addEventListener("click",function(){ov.querySelectorAll(".op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%";ov.querySelector(".op-stage").classList.toggle("dev",!!+b.dataset.w)})});
+  function close(){ov.remove();document.body.style.overflow="";render()}
+  $("opDone").addEventListener("click",close);
+  $("opRev").addEventListener("click",function(){close();$("review").click()});
+  $("opPrev").addEventListener("click",function(){$("preview").click()});
+  fr.addEventListener("load",function(){
+    var w=fr.contentWindow,d=fr.contentDocument;if(!d)return;
+    try{(d.documentElement.innerHTML.match(/G-[A-Z0-9]{6,}/g)||[]).forEach(function(id){w["ga-disable-"+id]=true})}catch(e){}
+    var st=d.createElement("style");st.textContent='[data-ed]{cursor:text;border-radius:6px;transition:box-shadow .15s,background .15s}[data-ed]:hover{box-shadow:0 0 0 2px rgba(19,153,24,.55);background:rgba(220,242,198,.25)}[data-ed]:focus{outline:none;box-shadow:0 0 0 3px #139918,0 0 0 7px rgba(19,153,24,.18);background:rgba(255,255,255,.08)}[data-ed].ed-chg{box-shadow:0 0 0 2px rgba(19,153,24,.35)}'+
+      '#ed-chip{position:absolute;z-index:2147483646;background:#14172b;color:#fff;font:600 12px/1.2 system-ui,sans-serif;border-radius:999px;padding:5px 6px 5px 12px;display:flex;gap:8px;align-items:center;box-shadow:0 8px 20px -8px rgba(0,0,0,.5);pointer-events:auto}#ed-chip button{all:unset;cursor:pointer;background:#2a2f4a;border-radius:999px;padding:3px 9px}#ed-chip button:hover{background:#139918}[hidden]{display:none!important}';
+    d.head.appendChild(st);
+    var chip=d.createElement("div");chip.id="ed-chip";chip.hidden=true;chip.innerHTML='<span></span><button type="button" data-a="undo">↺ Undo</button>';d.body.appendChild(chip);var curEl=null;
+    function place(el){var r=el.getBoundingClientRect();chip.style.top=(r.top+w.scrollY-34)+"px";chip.style.left=Math.max(8,r.left+w.scrollX)+"px";chip.hidden=false}
+    d.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n"),it=byKey[k];if(!it)return;
+      el.setAttribute("data-ed",k);el.setAttribute("spellcheck","true");
+      try{el.contentEditable="plaintext-only"}catch(e){el.contentEditable="true"}
+      if(el.contentEditable!=="plaintext-only")el.contentEditable="true";
+      var v=cur(k,"en");if(el.textContent.trim()!==v.trim())el.textContent=v;
+      el.classList.toggle("ed-chg",!!(W.draft()[k]&&typeof W.draft()[k].en==="string"));
+      el.addEventListener("focus",function(){curEl=el;chip.querySelector("span").textContent=label(k);place(el)});
+      el.addEventListener("input",function(){var t=el.innerText.replace(/\u00a0/g," ").replace(/\n+$/,"");var draft=W.draft(),dd=draft[k]||(draft[k]={});if(t===it.en)delete dd.en;else dd.en=t;el.classList.toggle("ed-chg",t!==it.en);saveDraft();cnt();place(el)});
+      el.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();el.blur()}if(e.key==="Escape"){el.blur()}});
+      el.addEventListener("paste",function(e){e.preventDefault();var t=(e.clipboardData||w.clipboardData).getData("text/plain");d.execCommand("insertText",false,t)});
+    });
+    d.addEventListener("focusout",function(e){setTimeout(function(){if(!d.activeElement||!d.activeElement.hasAttribute||!d.activeElement.hasAttribute("data-ed"))chip.hidden=true},150)});
+    chip.querySelector("[data-a=undo]").addEventListener("mousedown",function(e){e.preventDefault();if(!curEl)return;var k=curEl.getAttribute("data-ed"),draft=W.draft();if(draft[k])delete draft[k].en;curEl.textContent=byKey[k].en;curEl.classList.remove("ed-chg");saveDraft();cnt()});
+    d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a,button,[role=button]");if(!a||a.closest("#ed-chip"))return;if(e.target.closest("[data-ed]")||a.hasAttribute("data-ed")){e.preventDefault();return}
+      if(a.tagName==="A"&&/^#/.test(a.getAttribute("href")||""))return;if(a.tagName==="A"){e.preventDefault();}},true);
+    w.addEventListener("scroll",function(){if(curEl&&!chip.hidden)place(curEl)},{passive:true});
+  });
+}
+
 /* ======================= MENU AND HOME ======================= */
 /* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
    a dashboard with the key numbers and a tile for every part. EDMENU is the one list both are drawn from. */
-var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18'};
+var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18'};
 var EDMENU=[["",[["home","Home","Your dashboard"]]],
-  ["Website",[["wording","Homepage wording","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"]]],
+  ["Website",[["onpage","Edit on page","Click any text on your homepage and type over it"],["wording","Homepage wording","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"]]],
   ["Insights",[["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 function ico(k){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
@@ -1923,7 +1982,7 @@ function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){i
   EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
   h+='<div class="side-h">Shortcuts</div><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
   sd.innerHTML=h;sideSync()})();
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();show(b.dataset.go)});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();if(b.dataset.go==="onpage")return openOnPage();show(b.dataset.go)});
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
   var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div><a class="btn" href="/" target="_blank" rel="noopener">View website ↗</a></div>'+
