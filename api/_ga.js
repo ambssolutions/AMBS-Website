@@ -80,6 +80,7 @@ function dimFilter(f, rt) {
 export async function visitorsPeriod(days, f) {
   const c = conn();
   if (c.setup) return c;
+  if (+days === 1) return visitors24(c, f);
   const n = [7, 28, 90].includes(+days) ? +days : 7;
   const t = await accessToken(c.sa);
   const cur = { startDate: n + "daysAgo", endDate: "today" }, prev = { startDate: 2 * n + "daysAgo", endDate: (n + 1) + "daysAgo" };
@@ -107,6 +108,44 @@ export async function visitorsPeriod(days, f) {
     pages: named(pages), sources: named(sources), places: named(places), devices: named(devices),
     events: events.map((x) => ({ name: x.k[0], n: x.v[0] })),
   };
+}
+
+/* Visitors → 24 hours: the last 24 whole and current hours (New Zealand time, the property's time zone) against the
+   24 before, hour by hour. Totals and top lists use a dateHour filter so a visitor is counted once across the hours. */
+function nzHours(back, count) {
+  const out = [], now = Date.now();
+  for (let i = back + count - 1; i >= back; i--) {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-NZ", { timeZone: "Pacific/Auckland", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date(now - i * 3600000)).map((x) => [x.type, x.value]));
+    out.push(p.year + p.month + p.day + p.hour);
+  }
+  return out;
+}
+async function visitors24(c, f) {
+  const t = await accessToken(c.sa);
+  const curH = nzHours(0, 24), prevH = nzHours(24, 24);
+  const df = dimFilter(f, false);
+  const hf = (hours) => { const h = { filter: { fieldName: "dateHour", inListFilter: { values: hours } } }; return df ? { andGroup: { expressions: [df, h] } } : h; };
+  const range = [{ startDate: "2daysAgo", endDate: "today" }];
+  const DM = ["activeUsers", "newUsers", "sessions", "screenPageViews"];
+  const M = ["activeUsers", "newUsers", "sessions", "screenPageViews", "averageSessionDuration", "engagementRate"];
+  const one = (dims, metrics, limit, order) => runReport(c.id, t, { dateRanges: range, dimensions: dims.map((name) => ({ name })), metrics: metrics.map((name) => ({ name })), limit: limit || 10, orderBys: order ? [{ metric: { metricName: order }, desc: true }] : undefined, dimensionFilter: hf(curH) });
+  const [tot, totPrev, hourly, pages, sources, places, devices, events] = await Promise.all([
+    runReport(c.id, t, { dateRanges: range, metrics: M.map((name) => ({ name })), dimensionFilter: hf(curH) }),
+    runReport(c.id, t, { dateRanges: range, metrics: M.map((name) => ({ name })), dimensionFilter: hf(prevH) }),
+    runReport(c.id, t, { dateRanges: range, dimensions: [{ name: "dateHour" }], metrics: DM.map((name) => ({ name })), limit: 100, dimensionFilter: hf(curH.concat(prevH)) }),
+    one(["pageTitle"], ["screenPageViews"], 10, "screenPageViews"),
+    one(["sessionDefaultChannelGroup"], ["sessions"], 10, "sessions"),
+    one(["city", "country"], ["activeUsers"], 10, "activeUsers"),
+    one(["deviceCategory"], ["activeUsers"], 5, "activeUsers"),
+    one(["eventName"], ["eventCount"], 50, "eventCount"),
+  ]);
+  const pick = (rows) => { const o = {}; M.forEach((m, i) => { o[m] = rows.length ? rows[0].v[i] : 0; }); return o; };
+  const named = (rows) => rows.map((x) => ({ name: x.k.filter((s) => s && s !== "(not set)").join(", "), n: x.v[0] })).filter((x) => x.name);
+  const byH = Object.fromEntries(hourly.map((x) => [x.k[0], x.v.slice(0, 4)]));
+  const zero = [0, 0, 0, 0];
+  const daily = curH.map((h, i) => ({ d: h.slice(0, 4) + "-" + h.slice(4, 6) + "-" + h.slice(6, 8) + "T" + h.slice(8, 10), now: byH[h] || zero, before: byH[prevH[i]] || zero }));
+  return { days: 1, totals: pick(tot), before: pick(totPrev), daily, filter: f && f.f ? f : null,
+    pages: named(pages), sources: named(sources), places: named(places), devices: named(devices), events: events.map((x) => ({ name: x.k[0], n: x.v[0] })) };
 }
 
 /* nthDay counts days from each range's own start, so day i of this period sits next to day i of the period before.
