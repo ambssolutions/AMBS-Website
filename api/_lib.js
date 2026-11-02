@@ -48,7 +48,7 @@ export async function sbRpc(token, fn, args) {
     body: JSON.stringify(args || {}),
   });
   const t = await r.text();
-  if (!r.ok) throw new Error("Couldn't load the questions (" + r.status + "): " + t.slice(0, 200));
+  if (!r.ok) throw new Error("The database said no (" + r.status + "): " + t.slice(0, 200));
   return t ? JSON.parse(t) : null;
 }
 

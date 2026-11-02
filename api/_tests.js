@@ -9,6 +9,7 @@
      response  how fast the server answers (3 tries), page size and compression.
      sharing   the title, description and picture Facebook, LinkedIn and WhatsApp show for a link.
      index     handled in _ga.js (inspectUrl), through the Search Console connection. */
+import { key as keyOf } from "./_keys.js";
 import tls from "node:tls";
 
 const HOST = "ambs.co.nz";
@@ -44,7 +45,7 @@ function field(le) {
 }
 
 export async function psi(url, strategy) {
-  const key = process.env.PAGESPEED_KEY || "";
+  const key = keyOf("PAGESPEED_KEY");
   const q = new URLSearchParams({ url, strategy: strategy === "desktop" ? "desktop" : "mobile", locale: "en" });
   CATS.forEach((c) => q.append("category", c[0]));
   if (key) q.set("key", key);

@@ -696,6 +696,23 @@ header.top .who .nt-bar{justify-content:space-between}
 .tabpick select{border:1px solid var(--emb-line)!important;background:var(--emb-bg)!important;box-shadow:var(--emb-sh)!important;color:var(--ink);padding:.65rem .9rem}
 .tabpick select:focus:not(:focus-visible){border-color:var(--emb-line)!important;box-shadow:var(--emb-sh)!important}
 .vs-range .btn[aria-pressed=true],.vs-range .btn.primary{box-shadow:var(--emb-sh)!important;filter:none!important}
+
+/* Stats and Connections */
+.st-stats{grid-template-columns:repeat(5,minmax(0,1fr))!important}a.st-tile{text-decoration:none;color:var(--ink)}a.st-tile:hover{border-color:var(--green)}
+@media (max-width:1180px){.st-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (max-width:640px){.st-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.vs-range.st-range{grid-template-columns:repeat(3,1fr)!important}}
+.st-col{cursor:default}.st-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important}
+.st-latest{list-style:none;margin:0 0 12px;padding:0}.st-latest li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)}.st-latest li:last-child{border-bottom:0}
+.st-latest b{font-size:.95rem}.st-latest span{grid-column:1;font-size:.82rem;color:var(--muted)}.st-latest em{grid-column:2;grid-row:1;font-style:normal;font-size:.8rem;color:var(--muted)}
+.cn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:12px;align-items:start}
+.cn-card{padding:0!important;margin:0!important;overflow:hidden}.cn-card>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;min-height:66px;box-sizing:border-box}
+.cn-card>summary::-webkit-details-marker{display:none}.cn-card>summary::after{content:"›";color:var(--muted);font-size:1.25rem;transition:transform .15s;flex:none}.cn-card[open]>summary::after{transform:rotate(90deg)}.cn-card[open]>summary{border-bottom:1px solid var(--line)}
+.cn-ic{width:38px;height:38px;flex:none;display:grid;place-items:center;font-size:19px;border-radius:11px;background:var(--emb-bg,var(--card));box-shadow:var(--emb-sh,none);border:1px solid var(--emb-line,var(--line))}
+.cn-t{flex:1;min-width:0;display:flex;flex-direction:column}.cn-t b{font-size:.98rem}.cn-t span{font-size:.8rem;color:var(--muted);line-height:1.35}
+.cn-on,.cn-off,.cn-built{flex:none;font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}.cn-on{color:var(--green);background:var(--ok-bg)}.cn-off{color:var(--muted);background:var(--line)}.cn-built{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.cn-body{padding:12px 16px 16px}.cn-body .f{display:block;margin:0 0 10px}.cn-body .f span{display:block;font-size:.82rem;font-weight:700;margin-bottom:4px}.cn-body input,.cn-body textarea{width:100%;box-sizing:border-box;font:inherit;font-size:16px;font-weight:400;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.6rem .75rem;min-height:44px}.cn-body input::placeholder,.cn-body textarea::placeholder{color:var(--muted);font-weight:400}.cn-body textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;resize:vertical}
+.cn-acts{display:flex;gap:8px;flex-wrap:wrap}.cn-how{margin:0 0 12px}.cn-how summary{cursor:pointer;font-weight:700;font-size:.88rem;color:var(--green)}.cn-msg.ok{color:var(--green)}
+@media (max-width:640px){.cn-card>summary{padding:12px;gap:10px;min-height:58px}.cn-ic{width:34px;height:34px;font-size:17px}.cn-t b{font-size:.94rem}.cn-on,.cn-off,.cn-built{font-size:.7rem;padding:3px 7px}}
 </style>
 </head>
 <body>
@@ -755,7 +772,9 @@ header.top .who .nt-bar{justify-content:space-between}
     <button type="button" role="tab" data-tab="calc" aria-selected="false">Hours calculator</button>
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
     <button type="button" role="tab" data-tab="health" aria-selected="false">Site health</button>
+    <button type="button" role="tab" data-tab="stats" aria-selected="false">Stats</button>
     <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors now</button>
+    <button type="button" role="tab" data-tab="conns" aria-selected="false">Connections</button>
     <button type="button" role="tab" data-tab="seo" aria-selected="false">Google search (SEO)</button>
   </nav>
   <label class="tabpick"><span>Go to</span><select id="tabPick" aria-label="What to edit"></select></label></div>
@@ -799,6 +818,8 @@ header.top .who .nt-bar{justify-content:space-between}
   <section id="tab-health" class="tab hidden"><div class="wrap dash" id="hlMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-design" class="tab hidden"><div class="wrap dash" id="dsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-seo" class="tab hidden"><div class="wrap dash" id="seoMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+  <section id="tab-stats" class="tab hidden"><div class="wrap dash" id="stMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+  <section id="tab-conns" class="tab hidden"><div class="wrap dash" id="cnMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-visitors" class="tab hidden"><div class="wrap dash" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-calc" class="tab hidden"><div class="wrap narrow" id="ccMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
 </div>
@@ -1332,7 +1353,7 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,stats:statsInit,conns:connsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
   sideSync();window.scrollTo(0,0)
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
@@ -2835,12 +2856,12 @@ function designInit(){
 /* ======================= MENU AND HOME ======================= */
 /* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
    a dashboard with the key numbers and a tile for every part. EDMENU is the one list both are drawn from. */
-var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18',redirects:'M4 7h11l-3-3M15 7l-3 3M20 17H9l3-3M9 17l3 3',health:'M3 12h4l2-5 4 10 2-5h6'};
+var ICO={stats:'M4 20V10M10 20V4M16 20v-7M22 20H2',conns:'M9 15l6-6M7.5 12.5l-2 2a3.5 3.5 0 0 0 5 5l2-2M16.5 11.5l2-2a3.5 3.5 0 0 0-5-5l-2 2',home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18',redirects:'M4 7h11l-3-3M15 7l-3 3M20 17H9l3-3M9 17l3 3',health:'M3 12h4l2-5 4 10 2-5h6'};
 var EDMENU=[["",[["home","Home","Your dashboard"]]],
   ["Edit your website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["design","Colours & fonts","Brand colours, fonts and buttons for the whole website"]]],
-  ["Website settings",[["sections","Homepage sections","Order, hide or add homepage sections"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["redirects","Redirects","Send old addresses to the right page"]]],
+  ["Website settings",[["sections","Homepage sections","Order, hide or add homepage sections"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["redirects","Redirects","Send old addresses to the right page"],["conns","Connections","Analytics, Search Console, forms, bookings and keys"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"],["roi","Website ROI calculator","The calculator page at ambs.co.nz/website-roi-calculator"]]],
-  ["Insights",[["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
+  ["Insights",[["stats","Stats","Leads, button clicks and chat at a glance"],["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 var CHOOSE={wording:["Homepage","Click any words on your real homepage and type. Add questions, steps and more from the panel.","Every line of the homepage in all 5 languages, with search."],
   pages:["Pages & news","Open a page and type straight on it, with tools to add text, buttons and photos.","All of a page’s settings in one form: Google wording, questions, related pages and more."],
   design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
@@ -3051,6 +3072,111 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
   try{navigator.clipboard.writeText(u).then(ok,function(){prompt("Open this link once on the other device:",u)})}catch(x){prompt("Open this link once on the other device:",u)}});
 
 /* ======================= VISITORS NOW ======================= */
+/* ======================= STATS (Insights → Stats) =======================
+   Leads, button clicks and chat at a glance for 24 hours to 12 months, each against the period before. Separate from
+   Visitors and Google search. Leads and chat questions come from the database (website_stats: the portal's Leads with
+   source "website", the chat log); clicks come from the Google Analytics events the pages send. api/settings "stats". */
+var stRange=7,stCache={};
+var ST_RANGES=[[1,"24 hours"],[7,"7 days"],[30,"30 days"],[90,"3 months"],[180,"6 months"],[365,"12 months"]];
+function statsInit(){
+  var m=$("stMain");
+  function lbl(d){return (ST_RANGES.filter(function(r){return r[0]===d})[0]||[0,d+" days"])[1]}
+  function change(now,was){if(!was)return now?'<span class="vs-ch up">new</span>':'<span class="vs-ch">–</span>';var d=Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';return'<span class="vs-ch '+(d>0?'up':'down')+'">'+(d>0?'▲ ':'▼ ')+Math.abs(d)+'%</span>'}
+  function head(){return '<div class="dash-head"><div><h2>Stats</h2><p class="help">Leads, button clicks and chat at a glance. ▲▼ compare with the same length of time before.</p></div><div class="vs-range st-range" role="group" aria-label="Time period">'+ST_RANGES.map(function(r){return'<button type="button" class="btn'+(stRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(stRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
+  function tile(n,label,ch,go,title){return (go?'<a class="vs-stat st-tile" href="'+go+'" target="_blank" rel="noopener" title="'+esc(title||"")+'">':'<div class="vs-stat st-tile">')+'<b>'+n+'</b><span>'+label+'</span>'+ch+(go?'</a>':'</div>')}
+  function rows(list,empty){var mx=Math.max.apply(null,list.map(function(r){return r.n}).concat([1]));
+    return list.length?'<ul class="vs-rows">'+list.map(function(r){return'<li><div class="vs-pick static"><span class="vs-l">'+esc(r.name)+'</span><b>'+r.n+'</b><i style="width:'+Math.max(3,Math.round(r.n/mx*100))+'%"></i></div></li>'}).join("")+'</ul>':'<p class="help">'+empty+'</p>'}
+  function bars(j){var L=j.leads||{},cols=[],now=new Date(j.to);
+    if(j.days===1){var hm={};(L.by_hour||[]).forEach(function(x){hm[x.h]=x.n});
+      for(var i=23;i>=0;i--){var t=new Date(now-i*3600000),k=nzKey(t,true);cols.push({label:t.toLocaleTimeString([],{hour:"numeric"}),n:hm[k]||0})}}
+    else{var dm={};(L.by_day||[]).forEach(function(x){dm[x.d]=x.n});var step=j.days>90?7:1,n=Math.ceil(j.days/step);
+      for(var w=n-1;w>=0;w--){var s=0,first=null;for(var k2=0;k2<step;k2++){var t2=new Date(now-(w*step+k2)*86400000),key=nzKey(t2);s+=dm[key]||0;first=t2}
+        cols.push({label:(step>1?"Week of ":"")+first.toLocaleDateString([],{day:"numeric",month:"short"}),n:s})}}
+    var mx=Math.max.apply(null,cols.map(function(c){return c.n}).concat([1]));
+    return '<div class="vs-chart" role="img" aria-label="Leads over time"><div class="vs-cols">'+cols.map(function(c){return'<div class="vs-col st-col" title="'+esc(c.label+": "+c.n)+'"><i class="now'+(c.n?'':' z')+'" style="height:'+(c.n?Math.max(4,Math.round(c.n/mx*100)):0)+'%"></i></div>'}).join("")+'</div></div><div class="vs-axis"><span>'+esc(cols[0]?cols[0].label:"")+'</span><span>'+(j.days===1?"now":"today")+'</span></div>'}
+  function nzKey(t,hour){var p={};new Intl.DateTimeFormat("en-NZ",{timeZone:"Pacific/Auckland",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",hourCycle:"h23"}).formatToParts(t).forEach(function(x){p[x.type]=x.value});return p.year+"-"+p.month+"-"+p.day+(hour?"T"+p.hour:"")}
+  function ago(iso){var s=(Date.now()-new Date(iso))/1000;return s<3600?Math.max(1,Math.round(s/60))+" min ago":s<86400?Math.round(s/3600)+" h ago":new Date(iso).toLocaleDateString([],{day:"numeric",month:"short"})}
+  function draw(j){
+    var L=j.leads&&!j.leads.error?j.leads:null,P=j.leadsBefore&&!j.leadsBefore.error?j.leadsBefore:{},E=j.events||{},N=E.now||{},B=E.before||{};
+    var ev=function(k){return E.error||E.setup?"–":(N[k]||0)},evc=function(k){return E.error||E.setup?"":change(N[k]||0,B[k]||0)};
+    var portal="https://portal.ambs.co.nz/";
+    var html=head()+'<div class="vs-stats st-stats">'+
+      tile(L?L.leads:"–","Leads received",L?change(L.leads,P.leads||0):"",portal,"Open Leads in your portal")+
+      tile(L?L.sends:"–","Forms sent",L?change(L.sends,P.sends||0):"")+
+      tile(ev("booking_confirmed"),"Calls booked",evc("booking_confirmed"))+
+      tile(ev("book_click"),"“Book a call” clicks",evc("book_click"))+
+      tile(ev("phone_click"),"Phone taps",evc("phone_click"))+
+      tile(ev("email_click"),"Email taps",evc("email_click"))+
+      tile(ev("chat_open"),"Chat opened",evc("chat_open"))+
+      tile(L?L.chat.asked:"–","Chat questions",L?change(L.chat.asked,(P.chat||{}).asked||0):"")+
+      tile(ev("generate_lead"),"Messages sent (Analytics)",evc("generate_lead"))+
+      tile(ev("page_view"),"Pages viewed",evc("page_view"))+'</div>';
+    if(j.needsDb)html+='<div class="panel"><h3>Leads and chat</h3><p class="help">Leads and chat questions need a one-time database update. It’s added when this change goes live.</p></div>';
+    else if(L){html+='<div class="panel"><div class="vs-ph"><h3>Leads · last '+lbl(j.days)+'</h3><span class="vs-key">'+L.leads+' '+(L.leads===1?"person":"people")+(L.sends>L.leads?' · '+L.sends+' forms sent':'')+'</span></div>'+bars(j)+
+        '<p class="help">From your portal’s Leads (every website form and chat message lands there, the same ones that email you through Web3Forms). Someone who sends the form twice counts once as a lead; deleted leads aren’t counted.</p></div>';
+      html+='<div class="vs-grid st-grid"><div class="panel vs-list"><h3>Where leads came from</h3>'+rows(L.forms||[],"No forms sent in this period.")+'</div>'+
+        '<div class="panel vs-list"><h3>Latest leads</h3>'+((L.latest||[]).length?'<ul class="st-latest">'+L.latest.map(function(x){return'<li><b>'+esc(x.name)+'</b><span>'+esc([x.service,x.form].filter(Boolean).join(" · "))+'</span><em>'+esc(ago(x.at))+'</em></li>'}).join("")+'</ul><a class="btn" style="white-space:nowrap" href="'+portal+'" target="_blank" rel="noopener">Open in the portal ↗</a>':'<p class="help">No new leads in this period.</p>')+'</div>'+
+        '<div class="panel vs-list"><h3>Chat helper</h3><ul class="vs-rows"><li><div class="vs-pick static"><span class="vs-l">Questions asked</span><b>'+L.chat.asked+'</b></div></li><li><div class="vs-pick static"><span class="vs-l">Still need an answer</span><b>'+L.chat.unanswered+'</b></div></li></ul>'+(L.chat.unanswered?'<button type="button" class="btn" data-go="chat">Answer them →</button>':'')+'</div>';
+      html+='<div class="panel vs-list"><h3>Button clicks</h3>'+(E.setup?'<p class="help">Connect Google Analytics reports to see clicks.</p><button type="button" class="btn" data-go="conns">Open Connections →</button>':E.error?'<p class="msg err">'+esc(E.error)+'</p>':rows([["booking_confirmed","Calls booked"],["book_click","“Book a call” clicks"],["phone_click","Phone taps"],["email_click","Email taps"],["generate_lead","Messages sent"],["chat_open","Chat opened"],["chat_question","Chat questions typed"],["chat_auto_open","Chat opened by itself"]].map(function(e){return{name:e[1],n:N[e[0]]||0}}).filter(function(x){return x.n}),"No clicks in this period."))+
+        (E.setup||E.error?'':'<p class="help">From Google Analytics. Visitors who block analytics, and devices set not to count, aren’t included.</p>')+'</div></div>'}
+    else html+='<div class="panel"><p class="msg err">'+esc((j.leads&&j.leads.error)||"Couldn’t load the leads.")+'</p></div>';
+    m.innerHTML=html;wire()}
+  function wire(){m.querySelectorAll(".st-range [data-r]").forEach(function(b){b.addEventListener("click",function(){var r=+b.dataset.r;if(r===stRange)return;stRange=r;load()})})}
+  function load(){var r=stRange;if(stCache[r]&&Date.now()-stCache[r].t<120000)return draw(stCache[r].j);
+    if(!m.querySelector(".dash-head"))m.innerHTML=head();m.querySelectorAll(".st-range .btn").forEach(function(b){b.classList.toggle("primary",+b.dataset.r===r)});
+    if(!m.querySelector(".vs-loading"))m.querySelector(".dash-head").insertAdjacentHTML("afterend",'<p class="empty vs-loading"><span class="spin"></span> Loading…</p>');wire();
+    api("settings",{action:"stats",days:r}).then(function(j){stCache[r]={t:Date.now(),j:j};if(stRange===r)draw(j)}).catch(function(e){if(e.message!=="signin")m.innerHTML=head()+'<p class="msg err">'+esc(e.message)+'</p>';wire()})}
+  load();
+}
+
+/* ======================= CONNECTIONS (Website settings → Connections) =======================
+   Every outside service the website uses, in one place. The Google keys (Analytics reports, Search Console, PageSpeed)
+   are pasted here and kept encrypted in Supabase Vault (database functions site_secret_*), so nothing needs adding in
+   Vercel; a Vercel variable with the same name still works as a fallback. Only GITHUB_TOKEN (it saves every change)
+   and the sign-in settings stay in Vercel. api/settings "conns", "conn-save", "conn-remove". */
+function connsInit(){
+  var m=$("cnMain");
+  function src(k){return k.from==="editor"?'<span class="cn-on">✓ Connected</span>':k.from==="vercel"?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Not set up</span>'}
+  function where(k){return k.from==="editor"?'Saved here'+(k.at?' · '+new Date(k.at).toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"}):'')+(k.note?' · by '+esc(k.note):''):k.from==="vercel"?'From Vercel (old setup). Save it here to manage it in the editor.':''}
+  function card(o){return '<details class="panel cn-card"'+(o.open?' open':'')+' data-svc="'+(o.svc||"")+'"><summary><span class="cn-ic" aria-hidden="true">'+o.icon+'</span><span class="cn-t"><b>'+o.name+'</b><span>'+o.by+'</span></span>'+o.status+'</summary><div class="cn-body">'+o.body+'</div></details>'}
+  function draw(j){var K=j.keys||{},ga=K.GA_PROPERTY_ID||{},sa=K.GA_SERVICE_ACCOUNT||{},gs=K.GSC_SITE||{},ps=K.PAGESPEED_KEY||{};
+    var gaOn=ga.from&&sa.from,acts=function(svc,on,ed){return'<div class="cn-acts"><button type="button" class="btn primary" data-save="'+svc+'">'+(on?'Save &amp; check':'Connect')+'</button>'+(ed?'<button type="button" class="btn danger" data-remove="'+svc+'">Remove</button>':'')+'</div><p class="help cn-msg" id="cnm-'+svc+'"></p>'};
+    var built=function(t){return'<span class="cn-built">'+t+'</span>'};
+    m.innerHTML='<div class="dash-head"><div><h2>Connections</h2><p class="help">Every service the website uses. Keys pasted here are checked, then kept encrypted in the database. Only the last characters are ever shown, and nothing needs adding in Vercel.</p></div></div>'+
+      (j.vault?'':'<div class="panel"><p class="help">Saving keys here needs a one-time database update. It’s added when this change goes live; until then the keys in Vercel keep working.</p></div>')+
+      '<div class="cn-grid">'+
+      card({svc:"ga",icon:"📊",name:"Google Analytics reports",by:"Visitors, Stats and Home",status:src({from:gaOn?(ga.from==="editor"||sa.from==="editor"?"editor":"vercel"):""}),body:
+        '<p class="help">'+(gaOn?where(sa.from==="editor"?sa:ga)+(sa.hint?'<br>Service account: '+esc(sa.hint):''):'Shows who visits, what they click and the numbers on Home. Read-only.')+'</p>'+
+        '<label class="f"><span>Property number</span><input id="cn_GA_PROPERTY_ID" inputmode="numeric" value="'+esc(ga.from==="editor"?ga.hint:"")+'" placeholder="'+(ga.from==="vercel"?"Now from Vercel":"e.g. 512345678")+'"></label>'+
+        '<label class="f"><span>Service account key (.json)</span><textarea id="cn_GA_SERVICE_ACCOUNT" rows="3" spellcheck="false" autocomplete="off" placeholder="'+(sa.from?"Leave empty to keep the saved key":"Paste everything in the downloaded .json file")+'"></textarea></label>'+
+        '<details class="cn-how"><summary>How to get these</summary><ol class="vs-steps"><li><b>console.cloud.google.com</b> → a project → <b>APIs &amp; Services → Library</b> → enable <b>Google Analytics Data API</b> (and <b>Search Console API</b>).</li><li><b>IAM &amp; Admin → Service accounts → Create</b>, then <b>Keys → Add key → JSON</b>. A file downloads.</li><li>In <b>analytics.google.com → Admin → Property access management</b>, add the account’s email as <b>Viewer</b>.</li><li><b>Admin → Property details</b>: copy the Property ID (a number).</li></ol></details>'+acts("ga",gaOn,ga.from==="editor"||sa.from==="editor")})+
+      card({svc:"gsc",icon:"🔎",name:"Google Search Console",by:"Google search (SEO) and page checks",status:gaOn?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Needs Analytics key</span>',body:
+        '<p class="help">Uses the same service account. Add its email in <b>search.google.com/search-console → Settings → Users and permissions</b> (Restricted). '+(gs.from?where(gs):'Without a site set, it tries sc-domain:ambs.co.nz, then the https addresses.')+'</p>'+
+        '<label class="f"><span>Site (optional)</span><input id="cn_GSC_SITE" value="'+esc(gs.from==="editor"?gs.hint:"")+'" placeholder="sc-domain:ambs.co.nz"></label>'+acts("gsc",true,gs.from==="editor")})+
+      card({svc:"psi",icon:"⚡",name:"PageSpeed",by:"Site health → Speed & security",status:src(ps),body:
+        '<p class="help">'+(ps.from?where(ps)+(ps.hint?' · '+esc(ps.hint):''):'Google’s shared allowance for speed tests is usually used up; a free key of your own fixes that.')+'</p>'+
+        '<label class="f"><span>API key</span><input id="cn_PAGESPEED_KEY" type="password" autocomplete="off" placeholder="'+(ps.from?"Leave empty to keep the saved key":"AIza…")+'"></label>'+
+        '<details class="cn-how"><summary>How to get it</summary><ol class="vs-steps"><li><b>console.cloud.google.com → APIs &amp; Services → Library</b> → enable <b>PageSpeed Insights API</b>.</li><li><b>Credentials → Create credentials → API key</b>, then copy it.</li></ol></details>'+acts("psi",!!ps.from,ps.from==="editor")})+
+      card({icon:"🏷️",name:"Google Analytics tag",by:"Counts visits on every page",status:built("In Details"),body:'<p class="help">The measurement ID (G-…) that every page loads. Change or turn it off in Business details.</p><button type="button" class="btn" data-go="business">Open Business details →</button>'})+
+      card({icon:"✉️",name:"Website forms",by:"Web3Forms",status:built("✓ Built in"),body:'<p class="help">Every form and chat message is emailed to you through Web3Forms and also saved in your portal’s Leads. No key to manage: the form key is public by design.</p><a class="btn" href="https://app.web3forms.com/" target="_blank" rel="noopener">Web3Forms dashboard ↗</a>'})+
+      card({icon:"🗂️",name:"AMBS portal",by:"Leads and sign-in",status:built("✓ Built in"),body:'<p class="help">Website enquiries arrive in the portal’s Leads, and Stats counts them from there. Editor sign-in uses the portal’s admin logins.</p><a class="btn" href="https://portal.ambs.co.nz/" target="_blank" rel="noopener">Open the portal ↗</a>'})+
+      card({icon:"📅",name:"Bookings",by:"Zoho Bookings",status:built("✓ Built in"),body:'<p class="help">The booking box on the homepage. Calls booked show in Stats.</p><a class="btn" href="https://bookings.zoho.com.au/" target="_blank" rel="noopener">Zoho Bookings ↗</a>'})+
+      card({icon:"💬",name:"Chat helper log",by:"Supabase",status:built("✓ Built in"),body:'<p class="help">Questions visitors type are saved (emails and phone numbers masked) and listed in Chat helper.</p><button type="button" class="btn" data-go="chat">Open Chat helper →</button>'})+
+      card({icon:"👥",name:"Social profiles",by:"Facebook, Instagram, LinkedIn…",status:built("In Details"),body:'<p class="help">The icons in every footer and Google’s business details.</p><button type="button" class="btn" data-go="business">Open Business details →</button>'})+
+      card({icon:"🔐",name:"Publishing",by:"GitHub, through Vercel",status:j.github?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Missing</span>',body:'<p class="help">This is what saves every change you make, so its key has to stay in Vercel (GITHUB_TOKEN), together with the sign-in settings.</p>'})+
+      '</div>';
+    wire()}
+  function wire(){
+    m.querySelectorAll("[data-save]").forEach(function(b){b.addEventListener("click",function(){var svc=b.dataset.save,msg=$("cnm-"+svc),vals={};
+      ({ga:["GA_PROPERTY_ID","GA_SERVICE_ACCOUNT"],gsc:["GSC_SITE"],psi:["PAGESPEED_KEY"]})[svc].forEach(function(n){var i=$("cn_"+n);if(i)vals[n]=i.value});
+      b.disabled=true;msg.className="help cn-msg";msg.textContent="Checking…";
+      api("settings",{action:"conn-save",svc:svc,values:vals}).then(function(j){b.disabled=false;if(j.error){msg.className="msg err cn-msg";msg.textContent=j.error;return}
+        toast("Connected");stCache={};load(svc,"✓ "+(j.note||"Saved"))}).catch(function(e){b.disabled=false;msg.className="msg err cn-msg";msg.textContent=e.message})})});
+    m.querySelectorAll("[data-remove]").forEach(function(b){b.addEventListener("click",function(){if(!confirm("Remove the key saved here? A key in Vercel, if any, is used again."))return;
+      api("settings",{action:"conn-remove",svc:b.dataset.remove}).then(function(){toast("Removed");load()}).catch(function(e){toast(e.message)})})})}
+  function load(open,note){api("settings",{action:"conns"}).then(function(j){draw(j);if(open){var d=m.querySelector('[data-svc="'+open+'"]');if(d){d.open=true;var mm=$("cnm-"+open);if(mm&&note){mm.className="help cn-msg ok";mm.textContent=note}}}}).catch(function(e){if(e.message!=="signin")m.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
+  load();
+}
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).
    Refreshes every 30 seconds while this tab is open. Until the Google connection is set up it shows the steps. */
 var VS_EVENTS=[["page_view","Pages viewed"],["book_click","Book a call clicks"],["booking_confirmed","Calls booked"],["generate_lead","Messages sent"],["phone_click","Phone taps"],["email_click","Email taps"]];
@@ -3095,8 +3221,8 @@ function visitorsInit(){
       '<li>Open the new account → <b>Keys → Add key → Create new key → JSON</b>. A file downloads. Keep it private.</li>'+
       '<li>Copy the account’s email (it ends in <b>.iam.gserviceaccount.com</b>). In <b>analytics.google.com → Admin → Property access management</b>, press <b>+</b>, add that email with the role <b>Viewer</b>.</li>'+
       '<li>In <b>Analytics → Admin → Property details</b>, copy the <b>Property ID</b> (a number like 512345678).</li>'+
-      '<li>In <b>vercel.com</b> → your website project → <b>Settings → Environment Variables</b>, add <b>GA_PROPERTY_ID</b> = that number, and <b>GA_SERVICE_ACCOUNT</b> = everything inside the downloaded file. Save, then redeploy.</li></ol>'+
-      '<p class="help">Still to do: '+[!j.has.property?"GA_PROPERTY_ID":"",!j.has.key?"GA_SERVICE_ACCOUNT":""].filter(Boolean).join(" and ")+'. Never paste the key into an email or chat.</p></div>'}
+      '<li>Open <b>Website settings → Connections → Google Analytics reports</b>, paste that number and everything inside the downloaded file, and press <b>Connect</b>.</li></ol><button type="button" class="btn primary" data-go="conns">Open Connections →</button>'+
+      '<p class="help">Never paste the key into an email or chat.</p></div>'}
   function drawNow(j){
     var t=new Date(j.at),ev30={};j.events.forEach(function(e){ev30[e.name]=e.n});
     var cols=j.perMin.map(function(n,i){return{label:(29-i)===0?"This minute":(29-i)+" min ago",n:n}});
