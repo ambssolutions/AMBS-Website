@@ -182,7 +182,7 @@ body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .item,.panel{border:1px solid var(--line)!important;border-radius:var(--radius);box-shadow:0 1px 2px rgba(20,23,43,.04),0 12px 28px -22px rgba(20,23,43,.32);transition:box-shadow .2s,border-color .2s}
 .item:focus-within{border-color:rgba(19,153,24,.45)!important;box-shadow:var(--ring),0 12px 28px -22px rgba(20,23,43,.32)}
 input[type=text],input[type=email],input[type=url],input[type=tel],input[type=number],input[type=search],input[type=password],textarea,select,.t{border-radius:12px;border:1px solid var(--line);transition:border-color .15s,box-shadow .15s}
-input:focus,textarea:focus,select:focus,.t:focus{outline:none;border-color:var(--green)!important;box-shadow:var(--ring)}
+input:focus,textarea:focus,.t:focus,select:focus-visible{outline:none;border-color:var(--green)!important;box-shadow:var(--ring)}select:focus:not(:focus-visible){outline:none}
 .btn{transition:transform .12s,box-shadow .15s,border-color .15s,background .15s;border-width:1px}
 .btn:not(:disabled):active{transform:scale(.97)}
 .btn.primary{box-shadow:0 6px 16px -8px rgba(19,153,24,.7)}.btn.primary:not(:disabled):hover{box-shadow:0 10px 22px -10px rgba(19,153,24,.8);transform:translateY(-1px)}
@@ -684,6 +684,18 @@ header.top .who .nt-bar{justify-content:space-between}
 .nt-lbl{display:grid;gap:2px;font-weight:700;font-size:.86rem;color:var(--ink)}.nt-lbl small{font-weight:400;color:var(--muted);font-size:.84rem;line-height:1.35}.nt .nt-lbl{font-size:1rem}.nt .nt-tg{flex-basis:46px;height:26px}.nt .nt-tg::after{width:20px;height:20px}.nt .nt-sw input:checked+.nt-tg::after{transform:translateX(20px)}
 .nt-bar .nt-lbl{white-space:nowrap}
 @media(prefers-color-scheme:dark){.nt-tg{background:#3a4258}}
+
+/* number tiles: every number on the same line across a row, whatever the label length (labels that wrap to two lines
+   sit at the bottom of their row, just above the number). Rows: label · number · small note */
+@supports (grid-template-rows:subgrid){
+.dash .kpis:not(#hmKpi0)>.kpi,.dash .vs-stats>.vs-stat{display:grid!important;grid-template-rows:subgrid;grid-row:span 3;row-gap:6px;align-content:start}
+.dash .kpis:not(#hmKpi0)>.kpi>span:not(.kpi-when),.dash .vs-stats>.vs-stat>span:not(.vs-ch){align-self:end;line-height:1.3}
+.dash .kpis:not(#hmKpi0)>.kpi>b,.dash .vs-stats>.vs-stat>b{align-self:start}}
+
+/* the phone "Go to" picker: one clean embossed edge, no green outline and glow after picking */
+.tabpick select{border:1px solid var(--emb-line)!important;background:var(--emb-bg)!important;box-shadow:var(--emb-sh)!important;color:var(--ink);padding:.65rem .9rem}
+.tabpick select:focus:not(:focus-visible){border-color:var(--emb-line)!important;box-shadow:var(--emb-sh)!important}
+.vs-range .btn[aria-pressed=true],.vs-range .btn.primary{box-shadow:var(--emb-sh)!important;filter:none!important}
 </style>
 </head>
 <body>
@@ -1328,7 +1340,7 @@ document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventList
 var isPhone=function(){return window.matchMedia("(max-width:760px)").matches};
 /* the tabs as one picker */
 (function(){var tp=$("tabPick");document.querySelectorAll(".tabs [data-tab]").forEach(function(b){var o=document.createElement("option");o.value=b.dataset.tab;o.textContent=b.textContent;tp.appendChild(o)});
-  tp.value=current||"wording";tp.addEventListener("change",function(){var v=tp.value;if(window.edGo&&{wording:1,pages:1,design:1}[v]&&v!==current){tp.value=current;window.edGo(v);return}show(v);window.scrollTo(0,0)})})();
+  tp.value=current||"wording";tp.addEventListener("change",function(){var v=tp.value;try{tp.blur()}catch(e){}if(window.edGo&&{wording:1,pages:1,design:1}[v]&&v!==current){tp.value=current;window.edGo(v);return}show(v);window.scrollTo(0,0)})})();
 /* email, view site, change password and sign out behind one button */
 (function(){var btn=$("acctBtn"),box=$("whoBox");
   var set=function(on){box.classList.toggle("open",on);btn.setAttribute("aria-expanded",String(on))};
