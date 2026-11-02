@@ -653,6 +653,9 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
 .nt-tg{flex:0 0 46px;height:26px;border-radius:99px;background:#cfd5e1;position:relative;box-shadow:inset 0 1px 3px rgba(20,23,43,.25);transition:background .2s}
 .nt-tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:linear-gradient(180deg,#fff,#eef1f6);box-shadow:0 1px 3px rgba(20,23,43,.35);transition:transform .2s}
 .nt-sw input:checked+.nt-tg{background:var(--green)}.nt-sw input:checked+.nt-tg::after{transform:translateX(20px)}.nt-sw input:focus-visible+.nt-tg{outline:3px solid var(--focus);outline-offset:2px}
+.nt-bar{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--emb-line);background:var(--emb-bg);box-shadow:var(--emb-sh);border-radius:99px;padding:6px 12px;font:inherit;font-size:.85rem;font-weight:700;color:var(--ink);cursor:pointer;margin-right:6px;white-space:nowrap}
+.nt-bar:hover{box-shadow:var(--emb-sh-hi)}.nt-dot{width:9px;height:9px;border-radius:50%;background:#8a94a6;box-shadow:inset 0 1px 1px rgba(0,0,0,.2)}.nt-bar[aria-pressed=true] .nt-dot{background:var(--green)}.nt-bar .sm{display:none}
+header.top .who .nt-bar{justify-content:flex-start}
 .nt-t{display:grid;gap:2px}.nt-t small{color:var(--muted);font-size:.84rem;line-height:1.35}.nt-more{border:0;background:none;font:inherit;font-weight:700;font-size:.88rem;color:var(--blue);cursor:pointer;padding:4px 0}
 @media(prefers-color-scheme:dark){.nt{background:linear-gradient(180deg,#232a3d,#1a2031);border-color:#2c3247;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.3)}.nt-tg{background:#3a4258}}
 /* ---- Embossed widgets (Nov 2026: the owner prefers raised, clean tiles over flat cards or coloured side strips) ---- */
@@ -710,7 +713,7 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
     <h1>Website editor</h1>
     <button class="find-btn" id="findBtn" type="button" aria-label="Search the whole website"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="dsk">Search the whole site</span></button>
     <button class="acct-btn" id="acctBtn" type="button" aria-label="Account and sign out" aria-expanded="false" aria-controls="whoBox"><span aria-hidden="true">☰</span></button>
-    <div class="who" id="whoBox"><span id="whoEmail"></span><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
+    <div class="who" id="whoBox"><button type="button" class="nt-bar" id="ntBar" data-ntbar aria-pressed="false"></button><span id="whoEmail"></span><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
   </div>
   <div class="wrap"><nav class="tabs" role="tablist" aria-label="What to edit">
     <button type="button" role="tab" data-tab="home" aria-selected="true">Home</button>
@@ -3006,13 +3009,17 @@ function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.
    its questions (build.py ga_snippet, chat.js logQ). Another phone or computer: open ambs.co.nz/?notrack=1 once (?notrack=0 undoes it).
    A device that signs in to the editor is switched off by itself the first time; the switch turns it back on. */
 try{if(localStorage.getItem("ambs:notrack-set")===null){localStorage.setItem("ambs:notrack","1");localStorage.setItem("ambs:notrack-set","1")}}catch(e){}
+function ntBarDraw(){var b=$("ntBar");if(!b)return;var on=ntOn();b.setAttribute("aria-pressed",String(on));b.title=on?"Your visits from this device aren’t counted in Google Analytics. Click to count them again.":"Your visits from this device are counted. Click to stop counting them.";
+  b.innerHTML='<span class="nt-dot" aria-hidden="true"></span><span class="lg">'+(on?"This device not counted":"This device counted")+'</span>'}
+function ntSet(on){try{if(on)localStorage.setItem("ambs:notrack","1");else localStorage.removeItem("ambs:notrack");localStorage.setItem("ambs:notrack-set","1")}catch(x){}
+  document.querySelectorAll(".nt").forEach(function(n){n.outerHTML=ntStrip()});ntBarDraw();toast(on?"This device won’t be counted in your visitor numbers.":"This device is counted again.")}
 function ntOn(){try{return localStorage.getItem("ambs:notrack")==="1"}catch(e){return false}}
 function ntStrip(){var on=ntOn();return'<div class="nt"><label class="nt-sw"><input type="checkbox" data-nt'+(on?" checked":"")+'><span class="nt-tg" aria-hidden="true"></span><span class="nt-t"><b>Don’t count my visits on this device</b><small>'+
   (on?"Visits from this phone or computer aren’t sent to Google Analytics, and questions you type into the chat aren’t saved.":"Visits from this device are counted like everyone else’s.")+'</small></span></label>'+
   '<button type="button" class="nt-more" data-ntlink>Another phone or computer? Copy its link</button></div>'}
-document.addEventListener("change",function(e){if(!e.target.matches||!e.target.matches("[data-nt]"))return;var on=e.target.checked;
-  try{if(on)localStorage.setItem("ambs:notrack","1");else localStorage.removeItem("ambs:notrack");localStorage.setItem("ambs:notrack-set","1")}catch(x){}
-  document.querySelectorAll(".nt").forEach(function(n){n.outerHTML=ntStrip()});toast(on?"This device won’t be counted any more.":"This device is counted again.")});
+document.addEventListener("change",function(e){if(!e.target.matches||!e.target.matches("[data-nt]"))return;ntSet(e.target.checked)});
+document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("[data-ntbar]"))ntSet(!ntOn())});
+ntBarDraw();
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-ntlink]");if(!b)return;var u="https://ambs.co.nz/?notrack=1";
   var ok=function(){toast("Link copied. Open it once on the other phone or computer, in each browser you use there.")};
   try{navigator.clipboard.writeText(u).then(ok,function(){prompt("Open this link once on the other device:",u)})}catch(x){prompt("Open this link once on the other device:",u)}});
