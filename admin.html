@@ -573,6 +573,9 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
 .kpi span.kpi-when{font-size:.74rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;display:block;margin-top:2px}
 @media(max-width:640px){#hmKpi0 .kpi{width:100%;box-sizing:border-box}}
 @media(max-width:640px){.vs-range{box-sizing:border-box}.vs-range .btn{padding:.45rem .2rem;font-size:.82rem;min-width:0;text-align:center;justify-content:center}}
+.os-cat{margin:8px 0 10px}.os-cat>b{display:block;font-size:.8rem;margin-bottom:6px}.os-jump{display:flex;flex-wrap:wrap;gap:6px}.os-jump button{border:1px solid var(--line);background:var(--bg,#f4f6fb);border-radius:99px;padding:.4rem .7rem;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;color:inherit}.os-jump button:hover{border-color:#139918;background:#eefaef}
+.os-ctx{background:linear-gradient(180deg,rgba(19,153,24,.06),transparent);margin:0 -14px;padding:12px 14px!important;border-bottom:1px solid var(--line)}.os-ctx h4{color:#17761a!important}
+@media(max-width:760px){.op-t{display:none}.op-pick{max-width:none!important;flex:1 1 100%;width:100%;box-sizing:border-box}.op-bar .btn{flex:1 1 auto;padding:.5rem .45rem!important;font-size:.8rem!important;min-width:0;justify-content:center;white-space:nowrap}}
 </style>
 </head>
 <body>
@@ -2177,13 +2180,34 @@ function openOnPage(){
     '<span class="op-n" id="opN"></span><button type="button" class="btn" id="opPrev">Preview</button><button type="button" class="btn primary" id="opRev">Review &amp; publish</button><button type="button" class="btn op-tools" data-tools>＋ Tools</button><button type="button" class="btn" data-look title="Colours, fonts and buttons">🎨 Look</button><button type="button" class="btn" id="opDone">Done</button></div>'+
     '<div class="op-stage"><iframe id="opFrame" title="Your homepage, editable" src="/?chat=nolog&amp;onpage=1"></iframe></div>';
   document.body.appendChild(ov);
-  var hs=h('<aside class="op-side" aria-label="Homepage tools"><div class="os-g"><h4>Add to the homepage</h4><p class="help">New items go at the end of their list. Type straight into them.</p><div class="os-add">'+
-    [["faq","?","Question"],["how","1","Step"],["why.o","✓","Why us row"],["trust","★","Trust point"],["about","A","About letter"]].map(function(x){return'<button type="button" data-hp="'+x[0]+'"><i>'+x[1]+'</i>'+x[2]+'</button>'}).join("")+'</div><p class="help">Hover over any item on the page for <b>+ Add</b> and <b>✕ Remove</b> right there.</p></div>'+
+  /* the panel shows what can be changed in the part of the homepage you clicked, and where to change what can't be changed here */
+  var HCTX=[["header","Top bar","Type on the menu words to change them. Order, links and new items are in Menus.",[["go","menus","Menus"]]],
+    ["#docket","Price card (hours calculator)","The tasks, hours and prices on this card come from the hours calculator.",[["go","calc","Hours calculator"]]],
+    [".hero","Top of the homepage","Click the heading, the line under it or a button's words and type. Click a button for its look.",[]],
+    ["#automate","What we do","Type on any card's words. Hover a point for + Add or ✕ Remove. Card photos and new cards are in the list view.",[["go","wording","Cards & photos (list)"]]],
+    ["#transform","Before and after","Click any words and type.",[]],
+    ["#why","Why us","Type on any row. Add a row here, or hover a row for ✕ Remove.",[["add","why.o","＋ Add a row"]]],
+    ["#about","About us","Type on any letter's words.",[["add","about","＋ Add a letter"]]],
+    ["#how","How it works","Type on any step.",[["add","how","＋ Add a step"]]],
+    [".trust","Tools strip","Type on any point.",[["add","trust","＋ Add a point"]]],
+    ["#knowledge","Guides strip","The guides shown here come from Pages & news.",[["go","pages","Pages & news"]]],
+    ["#faq","Questions","Type on any question or answer.",[["add","faq","＋ Add a question"]]],
+    ["#book","Booking and contact","Type on the words here. Phone, email and address are in Business details.",[["go","business","Business details"]]],
+    ["footer","Footer","Links are in Menus; phone, email, address and social profiles in Business details.",[["go","menus","Menus"],["go","business","Business details"]]],
+    ["section","Your own section","Sections built from blocks are changed in Homepage sections.",[["go","sections","Homepage sections"]]]];
+  var hs=h('<aside class="op-side" aria-label="Homepage tools"></aside>');
+  function hsDraw(c){hs.innerHTML='<div class="os-g os-ctx"><h4>'+(c?esc(c[1]):"This part of the page")+'</h4><p class="help">'+(c?esc(c[2]):"Click any part of the homepage to see what you can change there.")+'</p>'+
+      (c?c[3].map(function(x){return'<button type="button" class="btn '+(x[0]==="add"?"primary":"")+' os-full" data-'+(x[0]==="add"?"hp":"hgo")+'="'+x[1]+'">'+(x[0]==="go"?esc(x[2])+" →":esc(x[2]))+'</button>'}).join(""):'')+'</div>'+
+    '<div class="os-g"><h4>All parts of the homepage</h4>'+[["add","✎ Type and add here"],["here","✎ Type here"],["go","↗ Set in another place"]].map(function(g){var list=HCTX.filter(function(x){var k=x[3].some(function(a){return a[0]==="add"})?"add":x[3].some(function(a){return a[0]==="go"})?"go":"here";return k===g[0]&&x[0]!=="section"});
+      return list.length?'<div class="os-cat"><b>'+g[1]+'</b><div class="os-jump">'+list.map(function(x){return'<button type="button" data-jump="'+x[0]+'">'+esc(x[1])+'</button>'}).join("")+'</div></div>':''}).join("")+'</div>'+
     '<div class="os-g"><h4>Look</h4><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button></div>'+
-    '<div class="os-g"><h4>Homepage</h4><button type="button" class="btn os-full" data-hgo="sections">Sections: order, hide, add</button><button type="button" class="btn os-full" data-hgo="wording">☰ All wording (list)</button><button type="button" class="btn os-full" data-hgo="photos">Photos &amp; logo</button></div></aside>');
-  ov.appendChild(hs);ov.classList.add("has-side");opSize(ov);
-  hs.querySelectorAll("[data-hp]").forEach(function(b){b.addEventListener("click",function(){ov.classList.remove("side-open");ov.hpAdd&&ov.hpAdd(b.dataset.hp)})});
-  hs.querySelectorAll("[data-hgo]").forEach(function(b){b.addEventListener("click",function(){var dn=ov.querySelector("#opDone");if(dn)dn.click();if(!document.body.contains(ov))show(b.dataset.hgo)})});document.body.style.overflow="hidden";
+    '<div class="os-g"><h4>Homepage</h4><button type="button" class="btn os-full" data-hgo="sections">Sections: order, hide, add →</button><button type="button" class="btn os-full" data-hgo="wording">☰ All wording (list) →</button></div>';
+    hs.querySelectorAll("[data-hp]").forEach(function(b){b.addEventListener("click",function(){ov.classList.remove("side-open");ov.hpAdd&&ov.hpAdd(b.dataset.hp)})});
+    hs.querySelectorAll("[data-hgo]").forEach(function(b){b.addEventListener("click",function(){var dn=ov.querySelector("#opDone");if(dn)dn.click();if(!document.body.contains(ov))show(b.dataset.hgo)})});
+    hs.querySelectorAll("[data-jump]").forEach(function(b){b.addEventListener("click",function(){var f=$("opFrame"),d=f&&f.contentDocument,el=d&&d.querySelector(b.dataset.jump);if(el){el.scrollIntoView({behavior:"smooth",block:"start"});var c2=HCTX.filter(function(x){return x[0]===b.dataset.jump})[0];hsDraw(c2)}})})}
+  hsDraw(null);ov.appendChild(hs);ov.classList.add("has-side");opSize(ov);
+  (function(){var f=$("opFrame");if(!f)return;f.addEventListener("load",function(){var d=f.contentDocument;if(!d)return;
+    d.addEventListener("click",function(e){var t=e.target;for(var i=0;i<HCTX.length;i++){var el=t.closest&&t.closest(HCTX[i][0]);if(el){hsDraw(HCTX[i]);return}}},true)})})();document.body.style.overflow="hidden";
   opPicker($("opPick"),"",function(){close()});
   var fr=$("opFrame"),cnt=function(){var n=nChanges();$("opN").textContent=n?n+" change"+(n===1?"":"s"):"No changes yet";$("opRev").disabled=!n;$("opPrev").disabled=!n};cnt();
   ov.querySelectorAll(".op-dev button").forEach(function(b){b.addEventListener("click",function(){ov.querySelectorAll(".op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%";ov.querySelector(".op-stage").classList.toggle("dev",!!+b.dataset.w)})});
@@ -2271,18 +2295,39 @@ function openPageOnPage(sec,slug){
   var dirty=0,sha="",meta=null,card=null,src=null,parts=[],photo=undefined,pairs=[],sel=null;
   /* the panel down the left: add parts, move or delete the chosen part, Google wording, look and more */
   var sideEl=h('<aside class="op-side" aria-label="Page tools"></aside>');ov.appendChild(sideEl);ov.classList.add("has-side");opSize(ov);
+  /* what can be changed in the part of the page that was clicked; parts set elsewhere say where, with a button to go there */
+  var pctx=null,PCTX=[["header","Top bar","Its words, links and order are in Menus.",[["go","menus","Menus"]]],
+    [".crumbs","Breadcrumbs","Made from the page’s place on the website, nothing to change here.",[]],
+    [".phero,.news-hero","Top of the page","Click the small label, the heading or the introduction and type."+(sec==="news"?" Click the photo to change it.":""),[]],
+    [".takeaways","In short","Click a point and type. To add or remove points, use the form.",[["form","","☰ Edit in the form"]]],
+    [".faq,#questions","Common questions","Click a question or answer and type. To add or remove questions, use the form.",[["form","","☰ Edit in the form"]]],
+    ["article.prose","article",""],
+    [".toc,.toc-box","On this page","Made from your headings automatically. Add a heading to the article and it appears here.",[]],
+    [".cta","Booking box","The same on every page. Its words are in Business details → Wording on every page.",[["go","business","Business details"]]],
+    [".related,.keep,.more","Keep reading","Choose the related pages in the form.",[["form","","☰ Edit in the form"]]],
+    ["footer","Footer","Links are in Menus; phone, email, address and social profiles in Business details.",[["go","menus","Menus"],["go","business","Business details"]]]];
+  function pageParts(){var f=$("opFrame"),d=f&&f.contentDocument,has=function(c){return!d||c[0].split(",").some(function(x){return d.querySelector(x)})};
+    var cat={here:[],form:[],else:[]};PCTX.forEach(function(c,i){if(!has(c)||c[0]===".crumbs"||c[0]===".toc,.toc-box")return;var nm=c[1]==="article"?"Article text":c[1];
+      var k=c[1]==="article"||c[0].indexOf("phero")>=0?"here":c[3]&&c[3].some(function(x){return x[0]==="form"})?"form":c[3]&&c[3].length?"else":"here";cat[k].push('<button type="button" data-part="'+i+'">'+esc(nm)+'</button>')});
+    return[["here","✎ Edit here on the page"],["form","☰ Type here, add or remove in the form"],["else","↗ Set in another place"]].filter(function(g){return cat[g[0]].length}).map(function(g){return'<div class="os-cat"><b>'+g[1]+'</b><div class="os-jump">'+cat[g[0]].join("")+'</div></div>'}).join("")}
   function side(){var s0=sel,K={P:"Paragraph",H2:"Heading",H3:"Subheading",UL:"List",OL:"List",FIGURE:"Photo",DIV:"Tip box"},nm=s0?(s0.se.matches("p.art-btns")?"Button":K[s0.se.tagName]||"Part"):"";
-    sideEl.innerHTML='<div class="os-g"><h4>Add to the page</h4><p class="help">Adds under the part you clicked, or at the end of the article.</p><div class="os-add">'+
+    var inArt=!pctx||pctx[1]==="article";
+    var ctxH=inArt?'':'<div class="os-g os-ctx"><h4>'+esc(pctx[1])+'</h4><p class="help">'+esc(pctx[2])+'</p>'+pctx[3].map(function(x){return'<button type="button" class="btn os-full" '+(x[0]==="go"?'data-pgo="'+x[1]+'">'+esc(x[2])+' →':'data-form>'+esc(x[2]))+'</button>'}).join("")+'<button type="button" class="btn link os-full" data-art>＋ Add to the article instead</button></div>';
+    sideEl.innerHTML=ctxH+(inArt?'<div class="os-g"><h4>Add to the article</h4><p class="help">'+(s0?'Adds under the chosen '+nm.toLowerCase()+'.':'Click a part of the article first, or it goes at the end.')+'</p><div class="os-add">'+
       [["p","¶","Text"],["h2","H","Heading"],["h3","h","Subheading"],["ul","•","List"],["tip","💡","Tip box"],["button","▭","Button"],["photo","🖼","Photo"]].map(function(x){return'<button type="button" data-add="'+x[0]+'"><i>'+x[1]+'</i>'+x[2]+'</button>'}).join("")+'</div></div>'+
-      '<div class="os-g"><h4>Chosen part</h4>'+(s0?'<p class="os-sel">'+nm+'</p><div class="os-row"><button type="button" class="btn" data-mv="-1">↑ Up</button><button type="button" class="btn" data-mv="1">↓ Down</button><button type="button" class="btn danger" data-del>Delete</button></div>'+(nm==="Button"?'<button type="button" class="btn soft os-full" data-ebtn>Change button &amp; link</button>':''):'<p class="help">Click any part of the article to move or delete it.</p>')+'</div>'+
+      (s0?'<div class="os-g"><h4>Chosen part</h4><p class="os-sel">'+nm+'</p><div class="os-row"><button type="button" class="btn" data-mv="-1">↑ Up</button><button type="button" class="btn" data-mv="1">↓ Down</button><button type="button" class="btn danger" data-del>Delete</button></div>'+(nm==="Button"?'<button type="button" class="btn soft os-full" data-ebtn>Change button &amp; link</button>':'')+'</div>':''):'')+
+      '<div class="os-g"><h4>All parts of this page</h4>'+pageParts()+'</div>'+
       '<div class="os-g"><h4>On Google</h4><div class="os-goog"></div></div>'+
       '<div class="os-g"><h4>Look</h4><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button></div>'+
       '<div class="os-g"><h4>More</h4><button type="button" class="btn os-full" data-form>☰ All settings (form)</button><a class="btn os-full" href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">👁 View on the website</a></div>';
     sideEl.querySelectorAll("[data-add]").forEach(function(b){b.addEventListener("click",function(){ov.opAdd&&ov.opAdd(b.dataset.add)})});
+    sideEl.querySelectorAll("[data-pgo]").forEach(function(b){b.addEventListener("click",function(){if(leave()!==false)show(b.dataset.pgo)})});
+    sideEl.querySelectorAll("[data-art]").forEach(function(b){b.addEventListener("click",function(){pctx=null;side()})});
+    sideEl.querySelectorAll("[data-part]").forEach(function(b){b.addEventListener("click",function(){var c=PCTX[+b.dataset.part],f=$("opFrame"),d=f&&f.contentDocument,el=d&&d.querySelector(c[0].split(",")[0])||(d&&d.querySelector(c[0]));if(el)el.scrollIntoView({behavior:"smooth",block:"start"});pctx=c;if(c[1]==="article")pctx=null;side();ov.classList.remove("side-open")})});
     sideEl.querySelectorAll("[data-mv]").forEach(function(b){b.addEventListener("click",function(){ov.opMove(+b.dataset.mv)})});
     var dl=sideEl.querySelector("[data-del]");if(dl)dl.addEventListener("click",function(){ov.opDel()});
     var eb=sideEl.querySelector("[data-ebtn]");if(eb)eb.addEventListener("click",function(){var a=sel&&sel.el.querySelector("a");if(a)a.click()});
-    sideEl.querySelector("[data-form]").addEventListener("click",function(){if(leave()!==false){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain")){forceForm=true;openPage(sec,slug)}else if(Date.now()-t0<15000)setTimeout(go,120)};go()}});
+    sideEl.querySelectorAll("[data-form]").forEach(function(fb){fb.addEventListener("click",function(){if(leave()!==false){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain")){forceForm=true;openPage(sec,slug)}else if(Date.now()-t0<15000)setTimeout(go,120)};go()}})});
     if(meta){var g=sideEl.querySelector(".os-goog"),ti=h('<label class="os-l">Title in Google<input class="t" maxlength="70"></label>'),de=h('<label class="os-l">Description in Google<textarea class="t" rows="3" maxlength="170"></textarea></label>');
       var tI=ti.querySelector("input"),dI=de.querySelector("textarea");tI.value=meta.title||"";dI.value=meta.description||"";var o1=tI.value,o2=dI.value,c1=false,c2=false;
       tI.addEventListener("input",function(){meta.title=tI.value;var now=tI.value!==o1;if(now!==c1){dirty+=now?1:-1;c1=now;n()}});dI.addEventListener("input",function(){meta.description=dI.value;var now=dI.value!==o2;if(now!==c2){dirty+=now?1:-1;c2=now;n()}});
@@ -2359,6 +2404,7 @@ function openPageOnPage(sec,slug){
     var fmt=d.createElement("div");fmt.id="ed-fmt";fmt.hidden=true;fmt.innerHTML='<button type="button" data-f="bold" title="Bold"><b>B</b></button><button type="button" data-f="italic" title="Italic"><em>I</em></button><button type="button" data-f="link" title="Add a link">🔗 Link</button><button type="button" data-f="unlink" title="Remove the link">Unlink</button><i></i><button type="button" data-f="h2" title="Make it a heading">H</button><button type="button" data-f="h3" title="Make it a subheading">h</button><button type="button" data-f="p" title="Make it normal text">¶</button>';d.body.appendChild(fmt);
     fmt.addEventListener("mousedown",function(e){e.preventDefault()});
     var fmtEl=null;function fmtAt(el){var r=el.getBoundingClientRect();fmt.style.top=Math.max(w.scrollY+4,r.top+w.scrollY-44)+"px";fmt.style.left=Math.max(8,r.left+w.scrollX)+"px";fmt.hidden=false;fmtEl=el}
+    d.addEventListener("click",function(e){var t=e.target;for(var i=0;i<PCTX.length;i++){if(t.closest&&t.closest(PCTX[i][0])){var nc=PCTX[i][1]==="article"?null:PCTX[i];if(nc!==pctx){pctx=nc;side()}return}}},true);
     d.addEventListener("focusin",function(e){var el=e.target.closest&&e.target.closest("article.prose [data-ed]");if(el&&pairs.some(function(x){return x.el===el})){fmtAt(el)}else fmt.hidden=true});
     w.addEventListener("scroll",function(){if(fmtEl&&!fmt.hidden)fmtAt(fmtEl)},{passive:true});
     fmt.addEventListener("click",function(e){var b=e.target.closest("button");if(!b||!fmtEl)return;var f=b.dataset.f,pr=pairs.filter(function(x){return x.el===fmtEl})[0];if(!pr)return;
