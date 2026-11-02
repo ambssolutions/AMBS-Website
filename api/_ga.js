@@ -10,7 +10,8 @@ let tok = null, tokFor = ""; // { value, exp }, and which service account it bel
 
 const b64u = (s) => Buffer.from(s).toString("base64").replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
 
-async function accessToken(sa) {
+async function accessToken(sa, write) {
+  if (write) return writeToken(sa);
   if (tokFor !== sa.client_email) tok = null;
   if (tok && Date.now() < tok.exp - 60000) return tok.value;
   const now = Math.floor(Date.now() / 1000);
@@ -26,6 +27,18 @@ async function accessToken(sa) {
   if (!r.ok) throw new Error("Google didn't accept the connection key (" + (j.error_description || j.error || r.status) + ").");
   tok = { value: j.access_token, exp: Date.now() + (j.expires_in || 3600) * 1000 }; tokFor = sa.client_email;
   return tok.value;
+}
+
+/* Search Console's one write the editor uses: sending the sitemap again (Google search (SEO) → On Google). */
+async function writeToken(sa) {
+  const now = Math.floor(Date.now() / 1000), head = b64u(JSON.stringify({ alg: "RS256", typ: "JWT" }));
+  const claim = b64u(JSON.stringify({ iss: sa.client_email, scope: "https://www.googleapis.com/auth/webmasters", aud: "https://oauth2.googleapis.com/token", iat: now, exp: now + 3600 }));
+  const sig = crypto.createSign("RSA-SHA256").update(head + "." + claim).sign(sa.private_key).toString("base64").replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
+  const r = await fetch("https://oauth2.googleapis.com/token", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=" + head + "." + claim + "." + sig });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error("Google didn't accept the connection key (" + (j.error_description || j.error || r.status) + ").");
+  return j.access_token;
 }
 
 async function report(id, t, body) {
@@ -358,4 +371,21 @@ export async function gaCheck(id, raw) {
     throw new Error(/403|permission/i.test(e.message) ? "Google says " + sa.client_email + " can't see property " + id + ". Add it as a Viewer in Analytics → Admin → Property access management." : e.message); });
   tok = null;
   return "Google Analytics answered for property " + String(id).replace(/\D/g, "") + " as " + sa.client_email;
+}
+
+/* Send the sitemap to Google again, so it looks at new and changed pages sooner. Needs the service account to have
+   Full permission in Search Console (Settings → Users and permissions); with Restricted, Google says no and the editor says how. */
+export async function submitSitemap() {
+  const c = conn();
+  if (c.setup) return c;
+  const t = await accessToken(c.sa, true);
+  const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
+  let last = "", status = 0;
+  for (const site of sites) {
+    const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/sitemaps/" + encodeURIComponent("https://ambs.co.nz/sitemap.xml"), { method: "PUT", headers: { Authorization: "Bearer " + t } });
+    if (r.ok) return { ok: true, site, at: new Date().toISOString() };
+    const j = await r.json().catch(() => ({})); last = (j.error && j.error.message) || String(r.status); status = r.status;
+    if (r.status !== 403 && r.status !== 404) break;
+  }
+  return status === 403 ? { needsFull: true, email: c.sa.client_email, why: last } : { error: "Google didn't take the sitemap: " + last };
 }

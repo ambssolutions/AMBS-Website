@@ -3,7 +3,7 @@
    { action: "menus", menus: { main, drawer, company, explore } }
    { action: "sections", order, hidden, custom: { id: section } }
    Both save page sources ("Editor source:"), so the GitHub workflow rebuilds and publishes the site. */
-import { requireEditor, send, readBody, headSha, readFile, commitFiles, readEnglish } from "./_lib.js";
+import { requireEditor, send, readBody, headSha, readFile, commitFiles, readEnglish, can, NO_ACCESS } from "./_lib.js";
 import { cleanSection } from "./_blocks.js";
 
 const MENUS = "site-src/content/menus.json";
@@ -34,6 +34,8 @@ export default async function handler(req, res) {
     const secsF = await readFile(SECS, head);
     const secs = secsF ? JSON.parse(secsF.text) : { order: [], hidden: [], custom: {} };
 
+    const LA = { get: ["sections", "menus"], menus: "menus", sections: "sections" }[b.action];
+    if (LA && !can(who, LA)) return send(res, 403, { error: NO_ACCESS });
     if (b.action === "get") {
       const en = readEnglish((await readFile("site-src/assets/home.js", head)).text);
       const html = (await readFile("index.html", head)).text;

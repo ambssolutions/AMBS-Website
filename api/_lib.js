@@ -36,30 +36,46 @@ export async function requireEditor(req, res) {
   const user = await r.json();
   const allowed = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
   const email = String(user.email || "").toLowerCase();
-  let role = allowed.includes(email) ? "owner" : "";
-  if (!role) { try { role = (await sbRpc(token, "website_editor_ok", {})) || ""; } catch (e) { role = ""; } }   // invited through Website settings → Editors
+  let role = allowed.includes(email) ? "owner" : "", areas = PARTS;
+  if (!role) {   // invited through Website settings → Editors: their level and the parts the owner chose for it
+    try { const acc = await sbRpc(token, "website_editor_access", {}); if (acc && acc.role) { role = acc.role; areas = acc.areas || []; } } catch (e) { role = ""; }
+  }
   if (!role) { send(res, 403, { error: "This account is not allowed to edit the website." }); return null; }
-  /* "See it as": the owner looks at the editor with someone else's level; every request is then limited the same way */
+  /* "See it as": the owner looks at the editor with a level's parts; every request is then limited the same way */
   const as = String(req.headers["x-view-as"] || "");
-  const viewAs = role === "owner" && ROLES[as] ? as : "";
-  const who = { email, token, role: viewAs || role, realRole: role, viewAs };
+  let viewAs = "";
+  if (role === "owner" && LEVELS.includes(as)) {
+    try { const rows = (await sbRpc(token, "website_levels_list", {})) || []; const r = rows.find((x) => x.role === as); if (r) { viewAs = as; areas = r.areas || []; } } catch (e) {}
+  }
+  if (role === "owner") ownerProof(token);
+  const who = { email, token, role: viewAs || role, realRole: role, viewAs, areas };
   const need = AREA_OF(req);
   if (need && !can(who, need)) { send(res, 403, { error: NO_ACCESS }); return null; }
   return who;
 }
 
-/* What each level may do. owner = everything. editor = the website's wording, pages, photos, menus, sections, colours,
-   business details, chat helper and history (not Leads, Stats, Visitors, SEO, Connections or Editors).
-   writer = pages and news (with photos and history). Areas are checked on every request (AREA_OF, and settings.js per action). */
-export const ROLES = {
-  editor: ["home", "pages", "photos", "layout", "design", "business", "chat", "calc", "history", "health", "publish", "signature"],
-  writer: ["pages", "photos", "history", "health"],
-};
+/* The owner chooses which parts of the editor each level sees (Website settings → Editors → Levels; table website_levels).
+   A part is a menu item: PARTS below. Connections and Editors are always the owner's only. Checked on every request:
+   AREA_OF() for whole endpoints, and per action in settings.js, pages.js, layout.js, history.js and media.js. */
+export const PARTS = ["wording", "pages", "design", "sections", "menus", "redirects", "photos", "business", "chat", "calc", "health", "history", "signature", "stats", "leads", "visitors", "seo"];
+const LEVELS = ["editor", "writer"];
 export const NO_ACCESS = "Your level doesn't include this part of the editor. Ask the website owner if you need it.";
-export function can(who, area) { return who.role === "owner" || (ROLES[who.role] || []).includes(area); }
+export function can(who, area) {
+  if (who.role === "owner") return true;
+  return [].concat(area).some((a) => (who.areas || []).includes(a));
+}
+/* the server's proof for site_secret_get_server: a fingerprint of its own GitHub key, which no browser has.
+   The owner's requests store its fingerprint (site_server_proof_set) so invited people's Visitors, Stats and Google search work */
+export const serverProof = () => crypto.createHash("sha256").update(String(process.env.GITHUB_TOKEN || "") + ":ambs-editor-proof").digest("hex");
+let proofSet = false;
+function ownerProof(token) {
+  if (proofSet || !process.env.GITHUB_TOKEN) return; proofSet = true;
+  const h = crypto.createHash("sha256").update(serverProof()).digest("hex");
+  sbRpc(token, "site_server_proof_set", { p_hash: h }).catch(() => { proofSet = false; });
+}
 function AREA_OF(req) {
   const f = String(req.url || "").split("?")[0].replace(/^\/api\//, "").replace(/\.js$/, "");
-  return { content: "home", publish: "home", layout: "layout", pages: "pages", media: "photos", history: "history", signatures: "signature", siteinfo: "signature" }[f] || "";
+  return { content: "wording", publish: "wording", media: ["photos", "pages"], history: "history", signatures: "signature", siteinfo: "signature" }[f] || "";
 }
 
 /* A database function in the AMBS Supabase project, called as the signed-in person (it checks they're an admin). */
@@ -325,3 +341,25 @@ export function cleanBody(html) {
     .trim();
 }
 
+
+/* When the keys that can run out do (Website settings → Connections, and the warning on Home):
+   GITHUB_TOKEN (GitHub sends its expiry date with every answer), the Google service account key (Google publishes each
+   key's certificate with its validity dates) and the website's padlock certificate. Nothing secret is sent back. */
+export async function keyExpiry(saJson) {
+  const out = {};
+  const gh = fetch(GH, { headers: { Authorization: "Bearer " + (process.env.GITHUB_TOKEN || ""), Accept: "application/vnd.github+json" }, signal: AbortSignal.timeout(6000) })
+    .then((r) => { const h = r.headers.get("github-authentication-token-expiration"); out.github = r.ok ? { ok: true, expires: h ? new Date(h.replace(" UTC", "Z").replace(/ ([+-]\d\d)(\d\d)$/, "$1:$2").replace(" ", "T")).toISOString() : null } : { ok: false, error: "GitHub said " + r.status }; })
+    .catch((e) => { out.github = { ok: false, error: e.message }; });
+  let sa = null; try { sa = saJson ? JSON.parse(saJson) : null; } catch (e) {}
+  const g = !sa || !sa.client_email ? Promise.resolve() : fetch("https://www.googleapis.com/service_accounts/v1/metadata/x509/" + encodeURIComponent(sa.client_email), { signal: AbortSignal.timeout(6000) })
+    .then((r) => r.json()).then((certs) => { const pem = certs && certs[sa.private_key_id];
+      if (!pem) { out.google = { ok: false, error: "Google no longer has this key. It may have been deleted; make a new one." }; return; }
+      const c = new crypto.X509Certificate(pem), to = new Date(c.validTo);
+      out.google = { ok: true, expires: to.getFullYear() >= 9999 ? null : to.toISOString(), id: String(sa.private_key_id || "").slice(0, 8) }; })
+    .catch((e) => { out.google = { ok: false, error: e.message }; });
+  const tls = new Promise((res) => { import("node:tls").then(({ default: tlsm }) => { const so = tlsm.connect({ host: "ambs.co.nz", port: 443, servername: "ambs.co.nz", timeout: 6000 }, () => {
+      const c = so.getPeerCertificate(); out.padlock = { ok: true, expires: c && c.valid_to ? new Date(c.valid_to).toISOString() : null, issuer: c && c.issuer ? c.issuer.O || c.issuer.CN || "" : "" }; so.end(); res(); });
+    so.on("error", (e) => { out.padlock = { ok: false, error: e.message }; res(); }); so.on("timeout", () => { so.destroy(); out.padlock = { ok: false, error: "timed out" }; res(); }); }); });
+  await Promise.all([gh, g, tls]);
+  return out;
+}

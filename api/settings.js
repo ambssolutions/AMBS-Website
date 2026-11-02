@@ -13,11 +13,11 @@
    { action: "leads", days }   Insights → Leads: every website enquiry with its details (database function website_leads)
    { action: "conns" } / { action: "conn-save", svc: "ga"|"gsc"|"psi", values } / { action: "conn-remove", svc }   Website settings → Connections: keys kept in Supabase Vault (see _keys.js)
    { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
-import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, statsEvents, gaCheck } from "./_ga.js";
+import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, statsEvents, gaCheck, submitSitemap } from "./_ga.js";
 import { loadKeys, keyFrom, KEY_NAMES, key } from "./_keys.js";
 import { psi, security, cert, response, sharing, okUrl } from "./_tests.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
-import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion, can, NO_ACCESS } from "./_lib.js";
+import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion, can, NO_ACCESS, PARTS, keyExpiry } from "./_lib.js";
 
 const SITE_JSON = "site-src/content/site.json";
 const CHAT_JSON = "site-src/content/chatbot.json";
@@ -40,21 +40,25 @@ export default async function handler(req, res) {
   if (!who) return;
   try {
     const b = await readBody(req);
-    /* what each level may do here (see ROLES in _lib.js); "get" and "me" are for everyone signed in */
-    const AREA = { stats: "owner", leads: "owner", conns: "owner", "conn-save": "owner", "conn-remove": "owner", visitors: "owner", searches: "owner", seo: "owner",
-      editors: "owner", "editor-invite": "owner", "editor-role": "owner", "editor-remove": "owner", analytics: "owner",
-      test: "health", theme: "design", business: "business", profiles: "business", sitetext: "business",
+    /* which part of the editor each action belongs to (see PARTS in _lib.js); "get" and "me" are for everyone signed in */
+    const AREA = { stats: "stats", leads: "leads", visitors: "visitors", searches: ["visitors", "seo"], seo: "seo", index: "seo", "index-requests": "seo", "index-mark": "seo", sitemap: "seo",
+      conns: "owner", "conn-save": "owner", "conn-remove": "owner", editors: "owner", "editor-invite": "owner", "editor-role": "owner", "editor-remove": "owner", "level-set": "owner",
+      test: ["health", "seo"], theme: "design", business: "business", profiles: "business", sitetext: "business", analytics: "business",
       chatlog: "chat", chatlogset: "chat", chatget: "chat", chatbot: "chat", calculator: "calc" }[b.action];
     if (AREA && !(AREA === "owner" ? who.role === "owner" : can(who, AREA))) return send(res, 403, { error: NO_ACCESS });
-    if (b.action === "me") return send(res, 200, { email: who.email, role: who.role, realRole: who.realRole, viewAs: who.viewAs });
-    if (b.action === "editors") return send(res, 200, { editors: (await sbRpc(who.token, "website_editors_list", {})) || [], owners: (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean) });
+    if (b.action === "me") return send(res, 200, { email: who.email, role: who.role, realRole: who.realRole, viewAs: who.viewAs, areas: who.areas });
+    if (b.action === "level-set") { await sbRpc(who.token, "website_level_set", { p_role: b.role === "writer" ? "writer" : "editor", p_areas: (Array.isArray(b.areas) ? b.areas : []).filter((x) => PARTS.includes(x)) }); return send(res, 200, { ok: true }); }
+    if (b.action === "index-requests") return send(res, 200, { requests: (await sbRpc(who.token, "website_index_requests_list", {})) || [] });
+    if (b.action === "index-mark") { await sbRpc(who.token, "website_index_request_mark", { p_url: String(b.url || ""), p_clear: !!b.clear }); return send(res, 200, { ok: true }); }
+    if (b.action === "editors") return send(res, 200, { levels: (await sbRpc(who.token, "website_levels_list", {})) || [], editors: (await sbRpc(who.token, "website_editors_list", {})) || [], owners: (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean) });
     if (b.action === "editor-invite") {   // Website settings → Editors: a private one-time link the owner sends themselves (no email is sent from here)
       const t = await sbRpc(who.token, "website_editor_invite", { p_email: String(b.email || ""), p_name: String(b.name || ""), p_role: b.role === "writer" ? "writer" : "editor" });
       return send(res, 200, { ok: true, link: "https://ambs.co.nz/admin#invite=" + t });
     }
     if (b.action === "editor-role") { await sbRpc(who.token, "website_editor_set_role", { p_email: String(b.email || ""), p_role: b.role === "writer" ? "writer" : "editor" }); return send(res, 200, { ok: true }); }
     if (b.action === "editor-remove") { await sbRpc(who.token, "website_editor_remove", { p_email: String(b.email || "") }); return send(res, 200, { ok: true }); }
-    await loadKeys(who.token);
+    await loadKeys(who, [].concat(AREA || [])[0]);
+    if (b.action === "expiry") return send(res, 200, who.realRole === "owner" ? await keyExpiry(key("GA_SERVICE_ACCOUNT")) : {});   // Home's warning
     if (b.action === "stats") {
       const days = [1, 7, 30, 90, 180, 365].includes(+b.days) ? +b.days : 7, to = new Date(), span = days * 86400000;
       const from = new Date(to - span), pfrom = new Date(to - 2 * span);
@@ -82,7 +86,8 @@ export default async function handler(req, res) {
       const keys = Object.fromEntries(KEY_NAMES.map((n) => [n, { from: keyFrom(n), hint: keyFrom(n) === "vercel" ? vHint(n) : by[n] ? by[n].hint : "", at: by[n] ? by[n].updated_at : "", note: by[n] ? String(by[n].note || "").replace(/^by\s*/, "") : "" }]));
       const sb = { project: (process.env.SUPABASE_URL || "https://onunconxcvkwowtgalxn.supabase.co").replace(/^https:\/\/|\.supabase\.co.*$/g, ""), ok: false, ms: 0 };
       try { const t0 = Date.now(); await sbRpc(who.token, "website_editor_ok", {}); sb.ok = true; sb.ms = Date.now() - t0; } catch (e) { sb.error = e.message.slice(0, 120); }
-      return send(res, 200, { vault, keys, github: !!process.env.GITHUB_TOKEN, supabase: sb });
+      const expiry = await keyExpiry(key("GA_SERVICE_ACCOUNT")).catch(() => ({}));
+      return send(res, 200, { vault, keys, github: !!process.env.GITHUB_TOKEN, supabase: sb, expiry });
     }
     if (b.action === "conn-save" || b.action === "conn-remove") {
       const SVC = { ga: ["GA_PROPERTY_ID", "GA_SERVICE_ACCOUNT"], gsc: ["GSC_SITE"], psi: ["PAGESPEED_KEY"] }[b.svc];
@@ -125,7 +130,8 @@ export default async function handler(req, res) {
       if (!run) return send(res, 400, { error: "Unknown test." });
       return send(res, 200, await run());
     }
-    if (b.action === "seo") return send(res, 200, await seoReport(b.days));   // the SEO page: Search Console and the site's own basics
+    if (b.action === "seo") return send(res, 200, await seoReport(b.days));
+    if (b.action === "sitemap") return send(res, 200, await submitSitemap());   // Google search (SEO) → On Google → Send sitemap to Google   // the SEO page: Search Console and the site's own basics
     if (b.action === "visitors") {   // live, from Google Analytics; nothing read from GitHub. filter: { f, v } narrows it to one page, source, town or device
       const f = b.filter && typeof b.filter === "object" ? { f: String(b.filter.f || ""), v: String(b.filter.v || "").slice(0, 300) } : null;
       return send(res, 200, b.days ? await visitorsPeriod(b.days, f) : await visitorsNow(f));

@@ -759,7 +759,14 @@ svg.sel .cm-n:not(.near){opacity:.35}svg.sel .cm-e:not(.on) path{opacity:.35}svg
 .cmap-info{margin-top:12px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.cmap-info:empty{display:none}
 .cmap-i-h{display:flex;gap:12px;align-items:flex-start;flex:1;min-width:240px}.cmap-i-ic{font-size:26px;line-height:1}.cmap-info p{margin:4px 0 0}
 @media (max-width:640px){.cm-n .t{font-size:12.5px}.cm-n .s{font-size:10.5px}.cmap-info .btn{width:100%}}
-.gx-n{color:var(--muted);font-size:.8rem;margin-top:4px}.gx-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.gx-head h3{margin:0 0 4px}.gx-kpis{margin:14px 0}
+.gx-n{color:var(--muted);font-size:.8rem;margin-top:4px}.kx-list{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.kx-list li{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh)}
+.kx-list li>span{font-weight:700}.kx-ok>span{color:var(--green)}.kx-warn>span,li.kx-warn>span{color:#b45309}.kx-bad>span{color:#c0262d}.kx-na>span{color:var(--muted)}
+div.kx-warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);color:#7a4b00}
+.gx-btns{display:flex;gap:8px;flex-wrap:wrap}.gx-filt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 4px}.gx-filt button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;font-weight:650;cursor:pointer;color:var(--ink)}
+.gx-filt button span{color:var(--muted);font-weight:700;margin-left:2px}.gx-filt button.on{background:var(--emb-bg);box-shadow:var(--emb-sh);border-color:transparent}.gx-filt button.warn span{color:#b45309}.gx-q{margin-left:auto;max-width:240px;height:38px}
+.gx-rq{font-size:.82rem;color:#7a4b00;margin-top:2px}.gx-rq .btn.link{font-size:.8rem;padding:0 4px}.gx-none{padding:14px 0}
+@media (max-width:760px){.gx-q{margin-left:0;max-width:none;width:100%}}
+.gx-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.gx-head h3{margin:0 0 4px}.gx-kpis{margin:14px 0}
 .gx-list{list-style:none;margin:0;padding:0}.gx-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.gx-who{display:flex;flex-direction:column;gap:2px;min-width:0}.gx-who .hl-url{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .gx-st{font-size:.82rem;font-weight:700;white-space:nowrap}.gx-st.ok{color:var(--green)}.gx-st.bad{color:#b45309}.gx-st.na,.gx-st.wait{color:var(--muted)}.gx-acts{display:flex;gap:6px}
 @media (max-width:760px){.gx-row{grid-template-columns:1fr auto}.gx-acts{grid-column:1/-1}}
@@ -767,6 +774,10 @@ svg.sel .cm-n:not(.near){opacity:.35}svg.sel .cm-e:not(.on) path{opacity:.35}svg
 .eds-row{display:grid;grid-template-columns:1fr 130px auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.eds-row:first-child{border-top:0}.eds-who{display:flex;flex-direction:column;min-width:0}.eds-who b{overflow:hidden;text-overflow:ellipsis}
 .eds-acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.eds-out{grid-column:1/-1}.eds-out:empty{display:none}.eds-lv.own{font-size:.8rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--emb-bg);box-shadow:var(--emb-sh);justify-self:start}
 .eds-link{margin-top:12px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh)}.eds-copy{display:flex;gap:8px;margin:8px 0}.eds-copy input{flex:1;min-width:0;font-size:.85rem}.eds-send{display:flex;gap:8px;flex-wrap:wrap}
+.eds-levels2{display:grid;grid-template-columns:1fr 1.6fr 1.6fr;gap:12px;align-items:start}.eds-lvh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.eds-parts{border:0;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 14px}.eds-parts legend{font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;font-weight:800;color:var(--muted);padding:0;margin-bottom:4px}
+.eds-parts .check{display:flex;align-items:center;gap:6px;font-size:.9rem;min-height:32px}.eds-lvf{display:flex;align-items:center;gap:10px;margin-top:10px}
+@media (max-width:1100px){.eds-levels2{grid-template-columns:1fr}}
 .eds-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.eds-lvl{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh)}.eds-lvl .btn{margin-top:auto;align-self:flex-start}
 #vaBar{position:fixed;left:0;right:0;bottom:0;z-index:300;display:flex;gap:12px;align-items:center;justify-content:center;padding:10px 16px;background:#3b2a6b;color:#fff;font-size:.9rem;box-shadow:0 -4px 16px rgba(0,0,0,.2)}#vaBar .btn{flex:none}body.va-on{padding-bottom:64px}
 @media (max-width:760px){.eds-form{grid-template-columns:1fr}.eds-row{grid-template-columns:1fr}.eds-acts{justify-content:flex-start}.eds-levels{grid-template-columns:1fr}#vaBar{font-size:.8rem;justify-content:space-between}}
@@ -2997,6 +3008,8 @@ function homeInit(){
   h+='<h3 class="dash-h">Tools</h3><div class="tiles"><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
   m.innerHTML=h;modeSync();
   api("pages",{action:"health"}).then(function(j){var k=$("hmHealth");if(k)k.innerHTML=healthTile(j)}).catch(function(){var k=$("hmHealth");if(k)k.remove()});
+  if(!window.ED_ME||window.ED_ME.role==="owner")api("settings",{action:"expiry"}).then(function(E){var warn=[["Publishing key (GitHub)",E.github,30],["Google service account key",E.google,30],["Padlock certificate",E.padlock,7]].filter(function(x){var d=x[1]&&x[1].ok?kxDays(x[1].expires):null;return d!==null&&d<x[2]});
+    if(!warn.length)return;var hd=m.querySelector(".dash-top");if(!hd)return;hd.insertAdjacentHTML("beforebegin",'<div class="kx-warn" role="alert">⚠ '+warn.map(function(x){var d=kxDays(x[1].expires);return'<b>'+x[0]+'</b> '+(d<0?'has run out':'runs out in '+d+' day'+(d===1?'':'s'))}).join(" · ")+'. <button type="button" class="btn link" data-go="conns">See Connections →</button></div>')}).catch(function(){});
   Promise.all([api("settings",{action:"visitors"}),api("settings",{action:"visitors",days:7})]).then(function(r){var a=r[0],b=r[1];if(a.setup||b.setup)return;
     var ev={};(b.events||[]).forEach(function(e){ev[e.name]=e.n});var k=$("hmKpi");if(!k)return;
     var tile=function(n,l,go){return'<button type="button" class="kpi" data-go="visitors"><b>'+n+'</b><span>'+l+'</span></button>'};
@@ -3032,15 +3045,15 @@ function healthInit(){
       '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p class="help hl-when">Last checked '+healthWhen(j.checked)+' (New Zealand time)</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
     var checks=j.checks||[],pp=j.perPage||[];
     h1+='<section class="panel ts-sumbox"><div class="ts-sumh"><h3>Speed &amp; security</h3><span class="help" id="tsSumWhen"></span><button type="button" class="ts-go" id="tsSumGo">See details →</button></div><div class="ts-sum" id="tsSum"></div></section>';
-    h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button><button type="button" data-v="tests" aria-selected="false">Speed &amp; security</button><button type="button" data-v="google" aria-selected="false">On Google</button></div>';
-    h1+='<div class="hl-v" data-v="tests" hidden><div id="tsBox"></div></div><div class="hl-v" data-v="google" hidden><div id="gxBox"></div></div>';
+    h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button><button type="button" data-v="tests" aria-selected="false">Speed &amp; security</button></div>';
+    h1+='<div class="hl-v" data-v="tests" hidden><div id="tsBox"></div></div>';
     h1+='<div class="panel hl-v" data-v="checks" hidden><ul class="hl-checks">'+checks.map(function(c){var ok=!c.failed;return'<li class="'+(c.total?ok?"ok":"bad":"na")+'"><i aria-hidden="true">'+(c.total?ok?"✓":"✕":"–")+'</i><b>'+esc(c.name)+'</b><span>'+(!c.total?"Nothing to check":ok?"All "+c.total+" pass":c.failed+" of "+c.total+" to fix")+'</span></li>'}).join("")+'</ul></div>';
     h1+='<div class="panel hl-v" data-v="pages" hidden><ul class="hl-pages">'+pp.map(function(r,k){return'<li><div><b>'+esc(r.name)+'</b><span class="hl-url">'+esc(r.url)+'</span></div><span class="hl-res '+(r.issues?SEV[r.worst][1]:"ok")+'">'+(r.issues?r.issues+" to fix":"✓ All good")+'</span><button type="button" class="btn soft" data-p="'+k+'">'+(r.issues?"Fix":"Open")+'</button></li>'}).join("")+'</ul></div>';
     if(!j.issues.length)h1+='<div class="panel hl-v" data-v="fix"><p class="help">Everything looks great. 🎉 Every check passes on every page.</p></div>';
     else h1+='<div class="panel hl-v" data-v="fix"><ul class="hl-list">'+j.issues.map(function(i,k){return'<li class="'+SEV[i.sev][1]+'"><span class="hl-tag">'+SEV[i.sev][0]+'</span><div><b>'+esc(i.name)+'</b> <a href="'+esc(i.url)+'" target="_blank" rel="noopener" class="hl-url">'+esc(i.url)+'</a><p>'+esc(i.what)+'</p><p class="help">'+esc(i.fix)+'</p></div><button type="button" class="btn soft" data-k="'+k+'">Fix</button></li>'}).join("")+'</ul></div>';
     m.innerHTML=h1;$("hlRe").addEventListener("click",healthInit);
-    var tab=function(v){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x.dataset.v===v))});m.querySelectorAll(".hl-v").forEach(function(x){x.hidden=x.dataset.v!==v});HL_TAB=v;if(v==="tests")testsInit(pp);if(v==="google")gIndex(pp)};
-    m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){tab(b.dataset.v)})});if(HL_TAB!=="fix")tab(HL_TAB);
+    var tab=function(v){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x.dataset.v===v))});m.querySelectorAll(".hl-v").forEach(function(x){x.hidden=x.dataset.v!==v});HL_TAB=v;if(v==="tests")testsInit(pp);};
+    m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){tab(b.dataset.v)})});if(HL_TAB==="google")HL_TAB="fix";if(HL_TAB!=="fix")tab(HL_TAB);
     var toTests=function(){TS_URL=TS_HOME;tab("tests");var t=m.querySelector(".hl-tabs");if(t)t.scrollIntoView({behavior:"smooth",block:"start"})};
     $("tsSumGo").addEventListener("click",toTests);$("tsSum").addEventListener("click",function(e){if(e.target.closest("[data-sum]"))toTests()});
     tsSum();var hv=tsLoad()[TS_HOME]||{};if(!hv.at||Date.now()-hv.at>6*36e5)tsRunAll(TS_HOME);   /* results older than 6 hours refresh by themselves */
@@ -3062,31 +3075,51 @@ var GX_PLAIN={"Submitted and indexed":"On Google","Indexed, not submitted in sit
   "Alternate page with proper canonical tag":"Google lists the main version of this page instead. Nothing to do.",
   "Duplicate without user-selected canonical":"Google thinks this page is a copy of another one. Make its title and text more distinct.",
   "Duplicate, Google chose different canonical than user":"Google picked another page as the main version. Make this page’s text more distinct."};
-var gxRun=false;
-function gIndex(pp){var box=$("gxBox");if(!box)return;var KEY="ambs-gidx",load=function(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}},save=function(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
-  var list=[{name:"Homepage",url:"/"},{name:"Services",url:"/services"},{name:"Industries",url:"/industries"},{name:"Guides",url:"/guides"}].concat(pp.map(function(r){return{name:r.name,url:r.url}})),seen={};
-  list=list.filter(function(r){if(seen[r.url])return false;seen[r.url]=1;return true});
+var gxRun=false,gxFilter="all",gxQ="",gxReq={};
+/* pages to check: homepage, the section pages and every live page from the page list (api/pages "list") */
+function gxPages(l){var out=[{name:"Homepage",url:"/"},{name:"Services",url:"/services"},{name:"Industries",url:"/industries"},{name:"Guides",url:"/guides"}],seen={"/":1,"/services":1,"/industries":1,"/guides":1};
+  (l.pages||[]).filter(function(p){return!p.draft}).forEach(function(p){var u=p.section==="legal"||p.section==="page"?"/"+p.slug:"/"+p.section+"/"+p.slug;if(!seen[u]){seen[u]=1;out.push({name:p.h1||p.title||p.name||p.slug,url:u})}});
+  (l.custom||[]).filter(function(p){return!p.draft}).forEach(function(p){var u="/"+p.slug;if(!seen[u]){seen[u]=1;out.push({name:p.title||p.h1||p.slug,url:u})}});return out}
+function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}},save=function(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
   var full=function(u){return"https://ambs.co.nz"+u},day=function(t){return t?new Date(t).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric",timeZone:"Pacific/Auckland"}):""};
-  function draw(){var D=load(),R=D.r||{},on=0,off=0,un=0,setup=D.setup;
-    list.forEach(function(r){var x=R[r.url];if(!x)un++;else if(x.v==="PASS")on++;else off++});
-    var rows=list.map(function(r,k){var x=R[r.url],st=!x?(gxRun?'<span class="gx-st wait"><span class="spin"></span> Checking</span>':'<span class="gx-st na">Not checked</span>'):x.err?'<span class="gx-st na">Couldn’t check</span>':x.v==="PASS"?'<span class="gx-st ok">✓ On Google</span>':'<span class="gx-st bad">✕ Not on Google</span>';
+  var inspect=function(x,u){return"https://search.google.com/search-console/inspect?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+"&id="+encodeURIComponent(full(u))};
+  function kind(r,D){var x=(D.r||{})[r.url];return!x||x.err?"un":x.v==="PASS"?"on":"off"}
+  function draw(){var D=load(),R=D.r||{},n={all:list.length,on:0,off:0,req:0,un:0};
+    list.forEach(function(r){n[kind(r,D)]++;if(gxReq[full(r.url)]&&kind(r,D)!=="on")n.req++});
+    var shown=list.filter(function(r){var k=kind(r,D);if(gxFilter==="req"?!(gxReq[full(r.url)]&&k!=="on"):gxFilter!=="all"&&k!==gxFilter)return false;return!gxQ||(r.name+" "+r.url).toLowerCase().indexOf(gxQ)>=0});
+    var rows=shown.map(function(r){var k=list.indexOf(r),x=R[r.url],rq=gxReq[full(r.url)],st=!x?(gxRun?'<span class="gx-st wait"><span class="spin"></span> Checking</span>':'<span class="gx-st na">Not checked</span>'):x.err?'<span class="gx-st na">Couldn’t check</span>':x.v==="PASS"?'<span class="gx-st ok">✓ On Google</span>':'<span class="gx-st bad">✕ Not on Google</span>';
       var why=x&&!x.err?(x.v==="PASS"?(x.cov&&x.cov!=="Submitted and indexed"?GX_PLAIN[x.cov]||x.cov:""):(GX_PLAIN[x.cov]||x.cov||"Not listed yet")):x&&x.err?x.err:"";
-      return'<li class="gx-row"><div class="gx-who"><b>'+esc(r.name)+'</b><a class="hl-url" href="'+esc(full(r.url))+'" target="_blank" rel="noopener">'+esc(r.url)+'</a>'+(why?'<span class="help">'+esc(why)+'</span>':'')+(x&&x.crawled?'<span class="help">Google last visited '+day(x.crawled)+'</span>':'')+'</div>'+st+
-        '<div class="gx-acts">'+(x&&x.link?'<a class="btn soft" href="'+esc(x.link)+'" target="_blank" rel="noopener">Search Console ↗</a>':'')+'<button type="button" class="btn soft" data-one="'+k+'">Check</button></div></li>'}).join("");
-    box.innerHTML='<div class="panel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check every page')+'</button></div>'+
-      (setup?'<p class="msg err">'+setup+'</p>':'')+
-      '<div class="kpis gx-kpis"><div class="kpi"><span>On Google</span><b>'+on+'</b><small class="gx-n">of '+list.length+' pages</small></div><div class="kpi"><span>Not on Google yet</span><b>'+off+'</b><small class="gx-n">'+(off?'see why below':'none')+'</small></div><div class="kpi"><span>Not checked</span><b>'+un+'</b><small class="gx-n">&nbsp;</small></div></div>'+
-      '<ul class="gx-list">'+rows+'</ul><p class="help">New pages usually take from a few days to a few weeks to appear. Google decides what to list; good text, links from your other pages and the sitemap all help.</p></div>';
-    $("gxAll").addEventListener("click",function(){runAll(true)});
-    box.querySelectorAll("[data-one]").forEach(function(b){b.addEventListener("click",function(){var r=list[+b.dataset.one];busy(b,true,"…");one(r).then(function(){draw()})})})}
+      var off=x&&!x.err&&x.v!=="PASS";
+      return'<li class="gx-row"><div class="gx-who"><b>'+esc(r.name)+'</b><a class="hl-url" href="'+esc(full(r.url))+'" target="_blank" rel="noopener">'+esc(r.url)+'</a>'+(why?'<span class="help">'+esc(why)+'</span>':'')+(x&&x.crawled?'<span class="help">Google last visited '+day(x.crawled)+'</span>':'')+
+        (rq?'<span class="gx-rq">⏳ Indexing requested '+day(rq.requested_at)+(rq.requested_by?' by '+esc(rq.requested_by):'')+(x&&x.v==="PASS"?' · now on Google ✓':'')+' <button type="button" class="btn link" data-unreq="'+k+'">Clear</button></span>':'')+'</div>'+st+
+        '<div class="gx-acts">'+(off?'<a class="btn '+(rq?'soft':'primary')+'" href="'+esc(inspect(x,r.url))+'" target="_blank" rel="noopener" data-req="'+k+'">'+(rq?'Request again ↗':'Request indexing ↗')+'</a>':x&&x.link?'<a class="btn soft" href="'+esc(x.link)+'" target="_blank" rel="noopener">Search Console ↗</a>':'')+'<button type="button" class="btn soft" data-one="'+k+'">Check</button></div></li>'}).join("");
+    var F=[["all","All"],["on","On Google"],["off","Not on Google"],["req","Indexing requested"],["un","Not checked"]];
+    box.innerHTML='<div class="panel" id="gxPanel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><div class="gx-btns"><button type="button" class="btn" id="gxMap" title="Asks Google to read your sitemap again, so it looks at new and changed pages sooner">Send sitemap to Google</button><button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check every page')+'</button></div></div>'+
+      (D.setup?'<p class="msg err">'+D.setup+'</p>':'')+'<p class="help" id="gxMsg"></p>'+
+      '<div class="gx-filt" role="group" aria-label="Show">'+F.map(function(f){return'<button type="button" class="'+(gxFilter===f[0]?'on':'')+(f[0]==="off"&&n.off?' warn':'')+'" data-f="'+f[0]+'" aria-pressed="'+(gxFilter===f[0])+'">'+f[1]+' <span>'+n[f[0]]+'</span></button>'}).join("")+'<input type="search" class="t gx-q" id="gxQ" placeholder="Find a page…" aria-label="Find a page" value="'+esc(gxQ)+'"></div>'+
+      (rows?'<ul class="gx-list">'+rows+'</ul>':'<p class="help gx-none">'+(gxFilter==="off"?'Every checked page is on Google. 🎉':gxFilter==="req"?'No requests waiting.':'No pages match.')+'</p>')+
+      '<p class="help">To ask Google to list a page, press <b>Request indexing ↗</b>: Search Console opens on that page; press <b>Request indexing</b> there (Google only lets a person do this). It’s marked here so you can see what’s been asked. New pages usually take from a few days to a few weeks.</p></div>';
+    $("gxAll").addEventListener("click",function(){runAll()});
+    box.querySelectorAll("[data-f]").forEach(function(b){b.addEventListener("click",function(){gxFilter=b.dataset.f;draw()})});
+    var q=$("gxQ");q.addEventListener("input",function(){gxQ=q.value.trim().toLowerCase();var pos=q.selectionStart;draw();var q2=$("gxQ");q2.focus();try{q2.setSelectionRange(pos,pos)}catch(e){}});
+    box.querySelectorAll("[data-one]").forEach(function(b){b.addEventListener("click",function(){var r=list[+b.dataset.one];busy(b,true,"…");one(r).then(function(){draw()})})});
+    box.querySelectorAll("[data-req]").forEach(function(a){a.addEventListener("click",function(){var u=full(list[+a.dataset.req].url);gxReq[u]={requested_at:new Date().toISOString(),requested_by:(window.ED_ME&&window.ED_ME.email)||""};draw();
+      api("settings",{action:"index-mark",url:u}).then(function(){toast("Marked as requested. Press “Request indexing” in Search Console.")}).catch(fail)})});
+    box.querySelectorAll("[data-unreq]").forEach(function(b){b.addEventListener("click",function(){var u=full(list[+b.dataset.unreq].url);delete gxReq[u];draw();api("settings",{action:"index-mark",url:u,clear:true}).catch(fail)})});
+    $("gxMap").addEventListener("click",function(){var b=this,msg=$("gxMsg");busy(b,true,"Sending…");api("settings",{action:"sitemap"}).then(function(x){busy(b,false);
+      if(x.ok){msg.className="help ok";msg.textContent="✓ Sitemap sent to Google. It reads it again soon and picks up new and changed pages."}
+      else if(x.needsFull){msg.className="msg err";msg.innerHTML="Google needs one more permission for this: in <b>search.google.com/search-console → Settings → Users and permissions</b>, change "+esc(x.email||"the service account")+" from <b>Restricted</b> to <b>Full</b>, then press this again."}
+      else{msg.className="msg err";msg.textContent=x.setup?"Connect Google first (Website settings → Connections).":x.error||"Google didn’t take it."}}).catch(function(e){busy(b,false);fail(e)})});
+  }
   function one(r){return api("settings",{action:"test",test:"index",url:full(r.url)}).then(function(x){var D=load();D.r=D.r||{};
       if(x.setup||x.needs){D.setup=x.setup?"Connect Google first (Website settings → Connections → Google Analytics reports), then add the same account in Search Console.":"Add "+esc(x.email||"the service account")+" in Search Console → Settings → Users and permissions (Restricted), then check again.";save(D);return}
-      delete D.setup;D.r[r.url]={v:x.verdict,cov:x.coverage,crawled:x.crawled,link:x.link,at:Date.now()};save(D)})
+      delete D.setup;D.r[r.url]={v:x.verdict,cov:x.coverage,crawled:x.crawled,link:x.link,site:x.site,at:Date.now()};save(D)})
     .catch(function(e){var D=load();D.r=D.r||{};D.r[r.url]={err:e.message,at:Date.now()};save(D)})}
   function runAll(){if(gxRun)return;gxRun=true;var D=load();D.r={};save(D);draw();var i=0,live=0;
-    return new Promise(function(done){function next(){if(load().setup){gxRun=false;draw();return done()}if(i>=list.length){if(!live){gxRun=false;var D2=load();D2.at=Date.now();save(D2);draw();done()}return}
-      var r=list[i++];live++;one(r).then(function(){live--;if(document.body.contains(box))draw();next()})}for(var k=0;k<3;k++)next()})}
-  draw();var D=load();if(!gxRun&&(!D.at||Date.now()-D.at>24*36e5))runAll();
+    function next(){if(load().setup){gxRun=false;draw();return}if(i>=list.length){if(!live){gxRun=false;var D2=load();D2.at=Date.now();save(D2);if(document.body.contains(box))draw()}return}
+      var r=list[i++];live++;one(r).then(function(){live--;if(document.body.contains(box))draw();next()})}for(var k=0;k<3;k++)next()}
+  draw();api("settings",{action:"index-requests"}).then(function(j){gxReq={};(j.requests||[]).forEach(function(r){gxReq[r.url]=r});if(document.body.contains(box))draw()}).catch(function(){});
+  var D=load();if(!gxRun&&(!D.at||Date.now()-D.at>24*36e5))runAll();
 }
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
@@ -3311,6 +3344,18 @@ function leadsInit(){
    Vercel; a Vercel variable with the same name still works as a fallback. Only GITHUB_TOKEN (it saves every change)
    and the sign-in settings stay in Vercel. api/settings "conns", "conn-save", "conn-remove". */
 var cmapSel=null,cmapRO=null;
+/* When keys run out (api/_lib.js keyExpiry): the publishing key (GitHub), the Google service account key and the
+   padlock certificate, with days left; amber under 30 days, red under 7. The rest never expire. */
+function kxDays(t){return t?Math.floor((new Date(t)-Date.now())/864e5):null}
+function kxRow(name,x,never,note,amber){var d=x&&x.ok?kxDays(x.expires):null,cls=!x?"na":!x.ok?"bad":d===null?"ok":d<7?"bad":d<(amber||30)?"warn":"ok";
+  var when=!x?never:!x.ok?"Couldn’t check: "+esc(x.error||""):x.expires?new Date(x.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"})+" · "+(d<0?"expired "+(-d)+" days ago":d===0?"today":d+" days left"):"No expiry date";
+  return'<li class="kx-'+cls+'"><b>'+name+'</b><span>'+when+'</span>'+(note?'<small class="help">'+note+'</small>':'')+'</li>'}
+function keyDates(E,ps){return'<div class="panel kx"><div class="vs-ph"><h3>When keys run out</h3><span class="help">Checked just now</span></div><ul class="kx-list">'+
+  kxRow("Publishing key (GitHub)",E.github,"","Saves every change. When it runs out, make a new one at github.com → Settings → Developer settings → Fine-grained tokens, and put it in Vercel as GITHUB_TOKEN.")+
+  kxRow("Google service account key",E.google,"Not connected","Visitors, Stats and Google search. Make a new JSON key in Google Cloud → IAM → Service accounts → Keys, and paste it in Google Analytics reports below.")+
+  kxRow("Padlock certificate (https)",E.padlock,"","Vercel renews it by itself about a month before it runs out.",7)+
+  kxRow("PageSpeed key",ps&&ps.from?{ok:true,expires:null}:null,"Not connected","")+
+  '<li class="kx-ok"><b>Web3Forms, Supabase, Zoho Bookings</b><span>No expiry date</span></li></ul></div>'}
 function connsInit(){
   var m=$("cnMain");
   function src(k){return k.from==="editor"?'<span class="cn-on">✓ Connected</span>':k.from==="vercel"?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Not set up</span>'}
@@ -3323,7 +3368,7 @@ function connsInit(){
     var built=function(t){return'<span class="cn-built">'+t+'</span>'};
     m.innerHTML='<div class="dash-head"><div><h2>Connections</h2><p class="help">Every service the website uses. Keys pasted here are checked, then kept encrypted in the database. Only the last characters are ever shown, and nothing needs adding in Vercel.</p></div></div>'+
       (j.vault?'':'<div class="panel"><p class="help">Saving keys here needs a one-time database update. It’s added when this change goes live; until then the keys in Vercel keep working.</p></div>')+
-      '<div class="panel cmap-p"><div class="cmap-hd"><h3>How it all connects</h3><span class="help">Tap any part to see what it does and whether it’s working.</span></div><div id="cmap"></div><div id="cmapInfo" class="cmap-info" aria-live="polite"></div></div>'+
+      keyDates(j.expiry||{},ps)+'<div class="panel cmap-p"><div class="cmap-hd"><h3>How it all connects</h3><span class="help">Tap any part to see what it does and whether it’s working.</span></div><div id="cmap"></div><div id="cmapInfo" class="cmap-info" aria-live="polite"></div></div>'+
       '<div class="cn-grid">'+
       card({svc:"ga",icon:"📊",name:"Google Analytics reports",by:"Visitors, Stats and Home",sub:gaOn?sub({from:sa.from==="editor"||ga.from==="editor"?"editor":"vercel",hint:[ga.hint?"Property "+ga.hint:"",sa.hint].filter(Boolean).join(" · ")},""):"",status:src({from:gaOn?(ga.from==="editor"||sa.from==="editor"?"editor":"vercel"):""}),body:
         '<p class="help">'+(gaOn?where(sa.from==="editor"?sa:ga)+(ga.hint?'<br>Property: '+esc(ga.hint):'')+(sa.hint?'<br>Service account: '+esc(sa.hint):''):'Shows who visits, what they click and the numbers on Home. Read-only.')+'</p>'+
@@ -3412,17 +3457,19 @@ function connsInit(){
    here). Database functions website_editor_* (site-src/sql/2026-11-website-editors.sql); api/settings "editors",
    "editor-invite", "editor-role", "editor-remove", "me". Levels are checked on the server too (ROLES in api/_lib.js). */
 var LEVELS={owner:["Owner","Everything, including Leads, Stats, Visitors, Connections and Editors."],
-  editor:["Editor","The website’s wording, pages and news, photos, menus, sections, colours, business details, chat helper and history. Not Leads, Stats, Visitors, Google search, Connections or Editors."],
-  writer:["Writer","Pages, guides and news only, with photos. Can’t change the homepage, menus, colours, business details or settings."]};
-/* which parts of the editor each level sees (keep in step with ROLES in api/_lib.js) */
-var TAB_AREA={wording:"home",onpage:"home",pages:"pages",design:"design",sections:"layout",menus:"layout",redirects:"layout",photos:"photos",business:"business",chat:"chat",calc:"calc",health:"health",history:"history",
-  stats:"owner",leads:"owner",visitors:"owner",seo:"owner",conns:"owner",editors:"owner"};
-var ROLE_AREAS={editor:["home","pages","photos","layout","design","business","chat","calc","history","health"],writer:["pages","photos","history","health"]};
-function canTab(role,t){var a=TAB_AREA[t];if(!a||role==="owner")return true;if(a==="owner")return false;return(ROLE_AREAS[role]||[]).indexOf(a)>=0}
-window.edRole=function(me){var role=me.role||"owner",st=$("roleCss");if(!st){st=document.createElement("style");st.id="roleCss";document.head.appendChild(st)}
+  editor:["Editor",""],writer:["Writer",""]};
+/* Each menu item is a "part"; the owner chooses which parts each level gets (Editors → Levels, api/_lib.js PARTS).
+   Connections and Editors are always the owner's only. */
+var PARTS=[["Edit your website",[["wording","Homepage"],["pages","Pages & news"],["design","Colours & fonts"]]],["Website settings",[["sections","Homepage sections"],["menus","Menus"],["photos","Photos & logo"],["redirects","Redirects"]]],
+  ["Business",[["business","Business details"],["chat","Chat helper"],["calc","Hours calculator"],["signature","Email signature"]]],["Insights",[["stats","Stats"],["leads","Leads"],["health","Site health"],["visitors","Visitors now"],["seo","Google search (SEO)"],["history","History (and undo)"]]]];
+var TAB_AREA={wording:"wording",onpage:"wording",pages:"pages",design:"design",sections:"sections",menus:"menus",redirects:"redirects",photos:"photos",business:"business",chat:"chat",calc:"calc",health:"health",history:"history",
+  stats:"stats",leads:"leads",visitors:"visitors",seo:"seo",conns:"owner",editors:"owner",signature:"signature"};
+var ME_AREAS=null;
+function canTab(role,t){var a=TAB_AREA[t];if(!a||role==="owner")return true;if(a==="owner")return false;return(ME_AREAS||[]).indexOf(a)>=0}
+window.edRole=function(me){var role=me.role||"owner",st=$("roleCss");ME_AREAS=me.areas||[];if(!st){st=document.createElement("style");st.id="roleCss";document.head.appendChild(st)}
   var hide=Object.keys(TAB_AREA).filter(function(t){return!canTab(role,t)});
   st.textContent=hide.length?hide.map(function(t){return'#side .side-row:has([data-go="'+t+'"]),[data-go="'+t+'"],[data-tab="'+t+'"],[data-way="'+t+'"],#tabPick option[value="'+t+'"]'}).join(",")+'{display:none!important}'+
-    (canTab(role,"pages")?'':'[data-new]{display:none!important}'):"";
+    (canTab(role,"pages")?'':'[data-new]{display:none!important}')+(canTab(role,"signature")?'':'a[href="/email-signature"]{display:none!important}'):"";
   /* a group with nothing left in it disappears */
   document.querySelectorAll("#side .side-g").forEach(function(g){var any=[].some.call(g.querySelectorAll("[data-go]"),function(b){return canTab(role,b.dataset.go)});g.style.display=any||g.querySelector("[data-roi]")&&canTab(role,"pages")?"":"none"});
   var rb=document.querySelector("#side [data-roi]");if(rb)rb.style.display=canTab(role,"pages")?"":"none";
@@ -3441,7 +3488,9 @@ function editorsInit(){
   function wireLink(box,link,body){var i=box.querySelector("input");box.querySelector("[data-copy]").addEventListener("click",function(){i.select();(navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject()).then(function(){toast("Link copied")}).catch(function(){document.execCommand("copy");toast("Link copied")})});
     var sh=box.querySelector("[data-share]");if(sh)sh.addEventListener("click",function(){navigator.share({title:"Edit ambs.co.nz",text:body,url:link}).catch(function(){})});
     box.querySelector("[data-copymsg]").addEventListener("click",function(){var t=decodeURIComponent((box.querySelector("a[href^=mailto]").getAttribute("href").split("&body=")[1]||""));(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast("Message copied")}).catch(function(){toast("Couldn’t copy. Copy the link instead.")})})}
-  function draw(j){var now=Date.now();
+  function draw(j){var now=Date.now(),LV={};(j.levels||[]).forEach(function(l){LV[l.role]=l.areas||[]});
+    var names=function(k){var out=[];PARTS.forEach(function(g){g[1].forEach(function(p){if((LV[k]||[]).indexOf(p[0])>=0)out.push(p[1])})});return out};
+    var desc=function(k){var n=names(k);return k==="owner"?LEVELS.owner[1]:n.length?"Can see: "+n.join(", ")+".":"Nothing chosen yet."};
     var rows=j.owners.map(function(e){return'<div class="eds-row"><div class="eds-who"><b>'+esc(e)+'</b><span class="help">Owner · set in Vercel (ADMIN_EMAILS)</span></div><span class="eds-lv own">Owner</span><span></span></div>'}).join("")+
       j.editors.map(function(r){var st=r.accepted_at?'Joined '+when(r.accepted_at)+(r.last_seen?' · last in '+when(r.last_seen):''):r.link_expires&&new Date(r.link_expires)>now?'Invited '+when(r.invited_at)+' · link works until '+when(r.link_expires):'Invite link expired · make a new one';
         return'<div class="eds-row" data-e="'+esc(r.email)+'" data-n="'+esc(r.name||"")+'"><div class="eds-who"><b>'+esc(r.name||r.email)+'</b><span class="help">'+(r.name?esc(r.email)+' · ':'')+st+'</span></div>'+
@@ -3449,14 +3498,21 @@ function editorsInit(){
           '<div class="eds-acts"><button type="button" class="btn" data-as="'+r.role+'">👁 See it as</button><button type="button" class="btn" data-relink>'+(r.accepted_at?'New link':'New link')+'</button><button type="button" class="btn danger" data-del>Remove</button></div><div class="eds-out"></div></div>'}).join("");
     m.innerHTML='<div class="dash-head"><div><h2>Editors</h2><p class="help">Invite people to work on the website, choose what they can change, and see the editor exactly as they will.</p></div></div>'+
       '<div class="panel"><h3>Invite someone</h3><div class="eds-form"><label class="f"><span>Name</span><input class="t" id="edsName" autocomplete="off" placeholder="e.g. Priya Singh"></label><label class="f"><span>Email</span><input class="t" id="edsEmail" type="email" autocomplete="off" placeholder="name@example.com"></label>'+
-      '<label class="f"><span>Level</span><select class="t" id="edsRole"><option value="editor">Editor</option><option value="writer">Writer</option></select></label><button type="button" class="btn primary" id="edsGo">Make invite link</button></div><p class="help" id="edsLvHelp">'+LEVELS.editor[1]+'</p><div id="edsOut"></div></div>'+
+      '<label class="f"><span>Level</span><select class="t" id="edsRole"><option value="editor">Editor</option><option value="writer">Writer</option></select></label><button type="button" class="btn primary" id="edsGo">Make invite link</button></div><p class="help" id="edsLvHelp">'+esc(desc("editor"))+'</p><div id="edsOut"></div></div>'+
       '<div class="panel"><h3>Who can edit</h3><div class="eds-list">'+rows+'</div>'+(j.editors.length?'':'<p class="help">Nobody invited yet.</p>')+'</div>'+
-      '<div class="panel"><h3>Levels</h3><div class="eds-levels">'+["owner","editor","writer"].map(function(k){return'<div class="eds-lvl"><b>'+LEVELS[k][0]+'</b><span class="help">'+LEVELS[k][1]+'</span>'+(k==="owner"?'':'<button type="button" class="btn" data-as="'+k+'">👁 See the editor as '+(k==="editor"?'an':'a')+' '+LEVELS[k][0]+'</button>')+'</div>'}).join("")+'</div>'+
-      '<p class="help">“See it as” keeps you signed in as yourself and shows only what that level can see and do, so you can check their menus, screens and buttons. The server applies the same limits. Press <b>Exit</b> on the bar at the top to come back.</p></div>';
-    $("edsRole").addEventListener("change",function(){$("edsLvHelp").textContent=LEVELS[this.value][1]});
+      '<div class="panel"><h3>Levels: what each one can see</h3><p class="help">Tick the parts of the editor each level gets. Everyone with that level sees only those parts, and the server allows nothing else. Connections and Editors are always yours only.</p><div class="eds-levels2">'+
+        '<div class="eds-lvl"><b>Owner</b><span class="help">'+LEVELS.owner[1]+'</span></div>'+
+        ["editor","writer"].map(function(k){return'<div class="eds-lvl" data-lv="'+k+'"><div class="eds-lvh"><b>'+LEVELS[k][0]+'</b><button type="button" class="btn" data-as="'+k+'">👁 See it as '+(k==="editor"?'an':'a')+' '+LEVELS[k][0]+'</button></div>'+
+          PARTS.map(function(g){return'<fieldset class="eds-parts"><legend>'+g[0]+'</legend>'+g[1].map(function(p){return'<label class="check"><input type="checkbox" value="'+p[0]+'"'+((LV[k]||[]).indexOf(p[0])>=0?' checked':'')+'> '+esc(p[1])+'</label>'}).join("")+'</fieldset>'}).join("")+
+          '<div class="eds-lvf"><button type="button" class="btn primary" data-lvsave="'+k+'">Save '+LEVELS[k][0]+' level</button><span class="help" data-lvmsg></span></div></div>'}).join("")+'</div>'+
+      '<p class="help">“See it as” keeps you signed in as yourself and shows only what that level can see and do, so you can check their menus, screens and buttons. The server applies the same limits. Press <b>Exit</b> on the bar at the bottom to come back.</p></div>';
+    $("edsRole").addEventListener("change",function(){$("edsLvHelp").textContent=desc(this.value)});
     $("edsGo").addEventListener("click",function(){var b=this,n=$("edsName").value.trim(),e=$("edsEmail").value.trim(),r=$("edsRole").value;if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){toast("Type their email address");$("edsEmail").focus();return}
       busy(b,true,"Making the link…");api("settings",{action:"editor-invite",email:e,name:n,role:r}).then(function(x){busy(b,false);var o=$("edsOut");o.innerHTML=linkBox(x.link,n,e,r);wireLink(o,x.link,decodeURIComponent(o.querySelector("a[href^=mailto]").getAttribute("href").split("&body=")[1]));$("edsName").value=$("edsEmail").value="";
         api("settings",{action:"editors"}).then(function(j2){var keep=o.innerHTML;draw(j2);var o2=$("edsOut");o2.innerHTML=keep;wireLink(o2,x.link,"")})}).catch(function(err){busy(b,false);fail(err)})});
+    m.querySelectorAll("[data-lvsave]").forEach(function(b){var box=b.closest("[data-lv]"),msg=box.querySelector("[data-lvmsg]");box.querySelectorAll("input").forEach(function(i){i.addEventListener("change",function(){msg.textContent="Not saved yet"})});
+      b.addEventListener("click",function(){var k=b.dataset.lvsave,areas=[].map.call(box.querySelectorAll("input:checked"),function(i){return i.value});
+        busy(b,true);api("settings",{action:"level-set",role:k,areas:areas}).then(function(){busy(b,false);msg.textContent="";toast(LEVELS[k][0]+" level saved. It applies the next time they open a page.");LV[k]=areas;$("edsLvHelp").textContent=desc($("edsRole").value)}).catch(function(e){busy(b,false);fail(e)})})});
     m.querySelectorAll("[data-as]").forEach(function(b){b.addEventListener("click",function(){var row=b.closest(".eds-row");seeAs(b.dataset.as,row?row.dataset.n||row.dataset.e:"")})});
     m.querySelectorAll(".eds-role").forEach(function(sel){sel.addEventListener("change",function(){var row=sel.closest(".eds-row");api("settings",{action:"editor-role",email:row.dataset.e,role:sel.value}).then(function(){toast("Level changed to "+LEVELS[sel.value][0]);row.querySelector("[data-as]").dataset.as=sel.value}).catch(fail)})});
     m.querySelectorAll("[data-relink]").forEach(function(b){b.addEventListener("click",function(){var row=b.closest(".eds-row");if(!confirm("Make a new invite link for "+(row.dataset.n||row.dataset.e)+"? Any earlier link stops working. If they’ve already joined, the new link lets them choose a new password."))return;
@@ -3555,6 +3611,9 @@ function visitorsInit(){
 /* Search Console through api/settings "seo" (seoReport in api/_ga.js): totals against the period before, clicks each day,
    chances to improve, every search (sortable, searchable), pages, countries, devices, sitemaps and the site's own basics. */
 var seoRange="28",seoSort="shown",seoCache={};
+var gxList=null;
+function gxFill(){var b=$("gxBox");if(!b)return;if(gxList)return gIndex(gxList,b);b.innerHTML='<div class="panel"><p class="empty"><span class="spin"></span> Loading your pages…</p></div>';
+  api("pages",{action:"list"}).then(function(l){gxList=gxPages(l);var b2=$("gxBox");if(b2)gIndex(gxList,b2)}).catch(function(e){var b2=$("gxBox");if(b2)b2.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
 function seoInit(){
   var m=$("seoMain");
   var CTRY={nzl:"New Zealand",aus:"Australia",usa:"United States",gbr:"United Kingdom",ind:"India",can:"Canada",sgp:"Singapore",phl:"Philippines",pak:"Pakistan",chn:"China"};
@@ -3581,6 +3640,7 @@ function seoInit(){
       '<div class="vs-chart"><div class="vs-tip" hidden></div><div class="vs-cols">'+j.daily.map(function(d,i){return'<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(fd(d.d)+": shown "+d.shown+", clicked "+d.clicks)+'"><i class="was" style="height:'+(d.shown?Math.max(3,Math.round(d.shown/mx*100)):0)+'%"></i><i class="now'+(d.clicks?'':' z')+'" style="height:'+Math.max(2,Math.round(d.clicks/mx*100))+'%"></i></button>'}).join("")+'</div></div>'+
       (j.daily.length?'<div class="vs-axis"><span>'+fd(j.daily[0].d)+'</span><span>'+fd(j.daily[j.daily.length-1].d)+'</span></div>':'')+
       '<p class="help">▲▼ compare with the '+lbl+' before. For “Average place”, smaller is better: 1 is the top of Google, 1–10 is the first page.</p></div>'+
+      '<div id="gxBox"></div>'+
       '<div class="seo-two"><div class="panel seo-op"><h3>Nearly on Google’s first page</h3><p class="help">Searches where you’re just below the first page. A guide or a few words on the matching page can lift them.</p>'+tbl(j.nearly,"Search","None right now.")+'</div>'+
       '<div class="panel seo-op"><h3>Shown a lot, few clicks</h3><p class="help">People see you but don’t click. A clearer page title or description usually helps.</p>'+tbl(j.lowclick,"Search","None right now.")+'</div></div>'+
       '<div class="panel"><div class="vs-ph"><h3>Every search that showed your site</h3><input class="seo-find" id="seoFind" type="search" placeholder="Filter searches…" aria-label="Filter searches"></div><div id="seoQ">'+tbl(sorted(j.queries),"Search","No searches yet.")+'</div><p class="help">Tap Shown, Clicks or Place to sort. Hover or tap a row to see its click rate. Google hides very rare searches.</p></div>'+
@@ -3591,7 +3651,7 @@ function seoInit(){
         '<div class="panel vs-list"><h3>Sitemaps</h3>'+(j.sitemaps.length?'<ul class="seo-ck">'+j.sitemaps.map(function(sm){var ok=!sm.errors;return'<li class="'+(ok?'ok':'no')+'"><span>'+(ok?'✓':'!')+'</span><div><b>'+esc(sm.path.replace(/^https?:\/\/[^/]+/,""))+'</b><small>'+(sm.pending?'Waiting for Google · ':'')+(sm.last?'Read by Google '+new Date(sm.last).toLocaleDateString():'Not read yet')+(sm.errors?' · '+sm.errors+' errors':'')+(sm.warnings?' · '+sm.warnings+' warnings':'')+'</small></div></li>'}).join("")+'</ul>':'<p class="help">No sitemap sent to Google yet. In Search Console → Sitemaps, add <b>sitemap.xml</b>.</p>')+'</div>'+
       '</div>'+
       '<div class="panel"><div class="vs-ph"><h3>Website basics</h3><span class="vs-key">'+good+' of '+j.basics.length+' good</span></div>'+basics(j.basics)+'</div>';
-    wire();
+    wire();gxFill();
     var ch=m.querySelector(".vs-chart"),tip=ch&&ch.querySelector(".vs-tip");
     if(ch)ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var d=j.daily[+b.dataset.i];ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")});b.classList.add("on");tip.innerHTML='<b>'+d.clicks+' clicks</b><span>shown '+d.shown+' times</span><span>'+fd(d.d)+'</span>';tip.hidden=false;var r=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(r.left-R.left+r.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("focus",f);b.addEventListener("click",f)});
     if(ch)ch.addEventListener("mouseleave",function(){tip.hidden=true});

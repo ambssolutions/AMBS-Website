@@ -30,7 +30,6 @@ export default async function handler(req, res) {
       const items = commits.filter((c) => isEditor(c.commit.message)).slice(0, 40).map((c) => ({ sha: c.sha, date: c.commit.author.date, ...describe(c.commit.message) }));
       return send(res, 200, { items });
     }
-    if (b.action === "undo" && !can(who, "layout")) return send(res, 403, { error: "Undo is for the website owner and editors. Ask them to undo this change." });
     if (b.action === "undo") {
       if (!/^[0-9a-f]{40}$/.test(b.sha || "")) return send(res, 400, { error: "Unknown change" });
       const c = await gh("/commits/" + b.sha);
