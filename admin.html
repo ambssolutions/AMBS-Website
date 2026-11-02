@@ -204,10 +204,10 @@ dialog::backdrop{background:rgba(13,17,34,.45);backdrop-filter:blur(4px)}
 .op-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:var(--card);box-shadow:0 1px 0 var(--line)}
 .op-t{display:flex;flex-direction:column;margin-right:auto;min-width:0}.op-t b{font-size:1rem}.op-t span{color:var(--muted);font-size:.84rem}
 .op-dev{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}.op-dev button{border:0;background:none;border-radius:999px;padding:.35rem .8rem;font-weight:700;color:var(--muted);cursor:pointer}.op-dev button.on{background:var(--ink);color:var(--card)}
-.op-n{font-weight:700;color:var(--muted);font-size:.9rem}
+.op-n{font-weight:700;color:var(--muted);font-size:.9rem}.op-pick{max-width:240px;border-radius:999px!important;padding:.45rem .9rem;border:1px solid var(--line);background:var(--bg);font-weight:700}
 .op-stage{flex:1;min-height:0;display:flex;justify-content:center;overflow:auto}.op-stage.dev{padding:18px 0}
 .op-stage iframe{width:100%;height:100%;border:0;background:#fff;transition:width .25s}.op-stage.dev iframe{border-radius:24px;box-shadow:0 0 0 10px #14172b,0 30px 60px -20px rgba(0,0,0,.5)}
-@media (max-width:760px){.op-dev,.op-t span,#opPrev{display:none}.op-t b{font-size:.92rem}.op-bar{gap:6px;padding:8px 10px}.op-bar .btn{padding:.45rem .8rem;font-size:.88rem}.op-n{display:none}}
+@media (max-width:760px){.op-dev,.op-t span,#opPrev{display:none}.op-pick{max-width:42vw}.op-t b{font-size:.92rem}.op-bar{gap:6px;padding:8px 10px}.op-bar .btn{padding:.45rem .8rem;font-size:.88rem}.op-n{display:none}}
 .side{display:none}
 @media (min-width:1024px){
   #app{padding-left:248px}
@@ -1208,7 +1208,8 @@ function faqEditor(items){
 function renderPage(sec,slug,d){
   var meta=d.meta,m=$("pgMain"),card=d.card||{};m.innerHTML="";
   var live=sec==="legal"||edLive(card),sch=sec==="legal"?"":edSched(card);
-  var top=h('<div><h2 class="sec">'+esc(meta.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">'+(sec==="legal"?"Legal page":esc(SEC[sec]))+(live?' · <a href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p></div>');m.appendChild(top);
+  var top=h('<div><h2 class="sec">'+esc(meta.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">'+(sec==="legal"?"Legal page":esc(SEC[sec]))+(live?' · <a href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p>'+(live?'<button type="button" class="btn soft" id="pgOnPage">✎ Edit on page</button>':'')+'</div>');m.appendChild(top);
+  if(live)$("pgOnPage").addEventListener("click",function(){openPageOnPage(sec,slug)});
   /* the build lists outside services the website uses that this policy doesn't name yet (build.py privacy_check) */
   var pm=(site&&site.privacy_missing)||[];
   if(sec==="legal"&&slug==="privacy"&&pm.length)m.appendChild(h('<div class="msg" style="background:var(--amber-bg);color:var(--amber);margin:0 0 14px"><b>This policy doesn\u2019t mention '+pm.map(function(x){return esc(x.name)}).join(", ")+' yet.</b> The website uses '+(pm.length>1?"them":"it")+', so add a line saying what visitors\u2019 details go there and why. Ask Claude to draft it if you like.</div>'));
@@ -1930,11 +1931,12 @@ function openOnPage(){
   if(!items.length){toast("Still loading the wording, try again in a moment.");return}
   try{sessionStorage.setItem("ambs:lang","en");sessionStorage.setItem("ambs:chat-quiet","1")}catch(e){}
   var ov=document.createElement("div");ov.className="op";
-  ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click any text and type. Links are paused.</span></div>'+
+  ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click any text and type. Links are paused.</span></div><select class="op-pick" id="opPick" aria-label="Page to edit"><option value="">Homepage</option></select>'+
     '<div class="op-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="820">Tablet</button><button type="button" data-w="0" class="on">Laptop</button></div>'+
     '<span class="op-n" id="opN"></span><button type="button" class="btn" id="opPrev">Preview</button><button type="button" class="btn primary" id="opRev">Review &amp; publish</button><button type="button" class="btn" id="opDone">Done</button></div>'+
     '<div class="op-stage"><iframe id="opFrame" title="Your homepage, editable" src="/?chat=nolog&amp;onpage=1"></iframe></div>';
   document.body.appendChild(ov);document.body.style.overflow="hidden";
+  opPicker($("opPick"),"",function(){close()});
   var fr=$("opFrame"),cnt=function(){var n=nChanges();$("opN").textContent=n?n+" change"+(n===1?"":"s"):"No changes yet";$("opRev").disabled=!n;$("opPrev").disabled=!n};cnt();
   ov.querySelectorAll(".op-dev button").forEach(function(b){b.addEventListener("click",function(){ov.querySelectorAll(".op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%";ov.querySelector(".op-stage").classList.toggle("dev",!!+b.dataset.w)})});
   function close(){ov.remove();document.body.style.overflow="";render()}
@@ -1967,6 +1969,81 @@ function openOnPage(){
     w.addEventListener("scroll",function(){if(curEl&&!chip.hidden)place(curEl)},{passive:true});
   });
 }
+
+/* The page picker in both Edit on page views: Homepage plus every live page, grouped by section. */
+var OP_SEC={services:"Services",industries:"Industries",guides:"Guides",locations:"Locations",news:"News",legal:"Legal"};
+function opPicker(sel,current,leave){
+  api("pages",{action:"list"}).then(function(j){var groups={};
+    (j.pages||[]).filter(function(p){return OP_SEC[p.section]&&edLive(p)}).concat((j.legal||[]).map(function(p){return Object.assign({},p)})).forEach(function(p){(groups[p.section]=groups[p.section]||[]).push(p)});
+    Object.keys(OP_SEC).forEach(function(k){if(!groups[k])return;var og=document.createElement("optgroup");og.label=OP_SEC[k];groups[k].forEach(function(p){var o=document.createElement("option");o.value=p.section+"/"+p.slug;o.textContent=p.title;og.appendChild(o)});sel.appendChild(og)});
+    sel.value=current}).catch(function(){});
+  sel.addEventListener("change",function(){var v=sel.value;if(leave()===false){sel.value=current;return}if(!v)openOnPage();else{var i=v.indexOf("/");openPageOnPage(v.slice(0,i),v.slice(i+1))}})}
+
+/* Edit on page for guide, service, industry, location, news and legal pages: the live page in a frame, with the
+   label, heading, introduction, "In short" points, questions and article text typeable in place, and article and
+   news photos swapped by clicking them. Saving sends the same page save as the form (api/pages "save"), keeping the
+   page's draft or live state; the hourly rebuild isn't needed, the save itself rebuilds the page. */
+function openPageOnPage(sec,slug){
+  var ov=document.createElement("div");ov.className="op";
+  ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click text to type · click a photo to change it</span></div><select class="op-pick" id="opPick" aria-label="Page to edit"><option value="">Homepage</option></select>'+
+    '<div class="op-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="820">Tablet</button><button type="button" data-w="0" class="on">Laptop</button></div>'+
+    '<span class="op-n" id="opN">Loading…</span><button type="button" class="btn primary" id="opSave" disabled>Save &amp; publish</button><button type="button" class="btn" id="opDone">Done</button></div>'+
+    '<div class="op-stage"><p class="empty"><span class="spin"></span> Opening the page…</p></div>';
+  document.querySelectorAll(".op").forEach(function(x){x.remove()});document.body.appendChild(ov);document.body.style.overflow="hidden";
+  var dirty=0,sha="",meta=null,card=null,src=null,parts=[],photo=undefined;
+  var n=function(){$("opN").textContent=dirty?dirty+" change"+(dirty===1?"":"s")+" not saved":"All saved";$("opSave").disabled=!dirty};
+  var leave=function(){if(dirty&&!confirm("Leave without saving your changes on this page?"))return false;ov.remove();document.body.style.overflow=""};
+  opPicker($("opPick"),sec+"/"+slug,leave);
+  $("opDone").addEventListener("click",leave);
+  ov.querySelectorAll(".op-dev button").forEach(function(b){b.addEventListener("click",function(){ov.querySelectorAll(".op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});var fr=$("opFrame");if(fr)fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%";ov.querySelector(".op-stage").classList.toggle("dev",!!+b.dataset.w)})});
+  api("pages",{action:"get",section:sec,slug:slug}).then(function(d){
+    meta=JSON.parse(JSON.stringify(d.meta));card=d.card||{};sha=d.sha;src=new DOMParser().parseFromString("<div id=r>"+(d.body||"")+"</div>","text/html").getElementById("r");
+    ov.querySelector(".op-stage").innerHTML='<iframe id="opFrame" title="Your page, editable" src="'+pageUrl(sec,slug)+'?chat=nolog&amp;onpage=1&amp;t='+Date.now()+'"></iframe>';n();
+    try{sessionStorage.setItem("ambs:lang","en");sessionStorage.setItem("ambs:chat-quiet","1")}catch(e){}
+    $("opFrame").addEventListener("load",wireFrame)}).catch(function(e){if(e.message!=="signin")ov.querySelector(".op-stage").innerHTML='<p class="msg err" style="margin:20px">'+esc(e.message)+'</p>'});
+  function wireFrame(){
+    var fr=$("opFrame"),w=fr.contentWindow,d=fr.contentDocument;if(!d)return;
+    try{(d.documentElement.innerHTML.match(/G-[A-Z0-9]{6,}/g)||[]).forEach(function(id){w["ga-disable-"+id]=true})}catch(e){}
+    var st=d.createElement("style");st.textContent='[data-ed]{cursor:text;border-radius:6px;transition:box-shadow .15s}[data-ed]:hover{box-shadow:0 0 0 2px rgba(19,153,24,.55)}[data-ed]:focus{outline:none;box-shadow:0 0 0 3px #139918,0 0 0 7px rgba(19,153,24,.18)}[data-ed].ed-chg{box-shadow:0 0 0 2px rgba(19,153,24,.35)}img[data-edimg]{cursor:pointer;transition:filter .15s,outline .15s}img[data-edimg]:hover{outline:3px solid #139918;outline-offset:3px;filter:brightness(.85)}'+
+      '#ed-chip{position:absolute;z-index:2147483646;background:#14172b;color:#fff;font:600 12px/1.2 system-ui,sans-serif;border-radius:999px;padding:5px 12px;pointer-events:none;box-shadow:0 8px 20px -8px rgba(0,0,0,.5)}[hidden]{display:none!important}';
+    d.head.appendChild(st);
+    var chip=d.createElement("div");chip.id="ed-chip";chip.hidden=true;d.body.appendChild(chip);
+    function show(el,txt){var r=el.getBoundingClientRect();chip.textContent=txt;chip.style.top=(r.top+w.scrollY-30)+"px";chip.style.left=Math.max(8,r.left+w.scrollX)+"px";chip.hidden=false}
+    function plain(el,name,get,set){if(!el)return;el.setAttribute("data-ed","1");el.setAttribute("spellcheck","true");try{el.contentEditable="plaintext-only"}catch(e){}if(el.contentEditable!=="plaintext-only")el.contentEditable="true";
+      var orig=get();el.addEventListener("focus",function(){show(el,name)});
+      el.addEventListener("input",function(){var t=el.innerText.replace(/\u00a0/g," ").replace(/\n+$/,"");set(t);var was=el.classList.contains("ed-chg"),now=t!==orig;el.classList.toggle("ed-chg",now);if(now!==was)dirty+=now?1:-1;n()});
+      el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();el.blur()}})}
+    var q=function(x){return d.querySelector(x)};
+    if(sec!=="legal"&&q(".phero .eyebrow")&&meta.eyebrow!==undefined)plain(q(".phero .eyebrow"),"Small label",function(){return meta.eyebrow||""},function(v){meta.eyebrow=v});
+    plain(q(".phero h1"),"Page heading",function(){return meta.h1},function(v){meta.h1=v});
+    if(meta.lead!==undefined)plain(q(".phero .plead"),"Introduction",function(){return meta.lead},function(v){meta.lead=v});
+    d.querySelectorAll(".takeaways li").forEach(function(li,i){if(meta.takeaways&&meta.takeaways[i]!==undefined)plain(li,"In short · point "+(i+1),function(){return meta.takeaways[i]},function(v){meta.takeaways[i]=v})});
+    d.querySelectorAll(".faq details").forEach(function(det,i){if(!meta.faq||!meta.faq[i])return;det.open=true;var sm=det.querySelector("summary"),pp=det.querySelector("p");
+      sm.addEventListener("click",function(e){e.preventDefault()});
+      plain(sm,"Question "+(i+1),function(){return meta.faq[i][0]},function(v){meta.faq[i][0]=v});plain(pp,"Answer "+(i+1),function(){return meta.faq[i][1]},function(v){meta.faq[i][1]=v})});
+    /* article text: each top-level part of the saved body matched to the same text on the page */
+    var norm=function(x){return(x.textContent||"").replace(/\s+/g," ").trim()};
+    var cands=[].slice.call(d.querySelectorAll("article.prose > *")).filter(function(el){return!el.matches(".takeaways,.faq,#questions")});
+    var ci=0;[].slice.call(src.children).forEach(function(se,si){var t=norm(se);if(!t&&!se.querySelector("img"))return;
+      for(var k=ci;k<cands.length;k++){if(cands[k].tagName===se.tagName&&norm(cands[k])===t){var el=cands[k];ci=k+1;
+        if(se.querySelector("img")||se.tagName==="FIGURE"){el.querySelectorAll("img").forEach(function(im,ii){wireImg(im,function(url){var sim=se.querySelectorAll("img")[ii];if(sim){sim.setAttribute("src",url);im.src=url;dirty++;n()}})});if(!t)return}
+        el.setAttribute("data-ed","1");el.contentEditable="true";el.setAttribute("spellcheck","true");
+        var orig=se.innerHTML,label=/^H[1-6]$/.test(se.tagName)?"Heading":se.tagName==="UL"||se.tagName==="OL"?"List":"Paragraph";
+        el.addEventListener("focus",function(){show(el,label+" · Ctrl+B bold, Ctrl+I italic")});
+        el.addEventListener("input",function(){var c=el.cloneNode(true);c.querySelectorAll("[contenteditable],[data-ed],[spellcheck]").forEach(function(x){x.removeAttribute("contenteditable");x.removeAttribute("data-ed");x.removeAttribute("spellcheck")});se.innerHTML=c.innerHTML.replace(/&nbsp;(?=[^\s<])/g," ").replace(/<br>$/,"");var was=el.classList.contains("ed-chg"),now=se.innerHTML!==orig;el.classList.toggle("ed-chg",now);if(now!==was)dirty+=now?1:-1;n()});
+        el.addEventListener("paste",function(e){e.preventDefault();d.execCommand("insertText",false,(e.clipboardData||w.clipboardData).getData("text/plain"))});
+        return}}});
+    var hero=q(".news-hero img");if(hero&&sec==="news")wireImg(hero,function(url){photo=url;hero.src=url;dirty++;n()});
+    function wireImg(im,done){im.setAttribute("data-edimg","1");im.title="Click to change this photo";im.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();choosePhoto().then(function(pp){if(pp&&pp.url)done(pp.url)})})}
+    d.addEventListener("focusout",function(){setTimeout(function(){var a=d.activeElement;if(!a||!a.hasAttribute||!a.hasAttribute("data-ed"))chip.hidden=true},150)});
+    d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(a&&!/^#/.test(a.getAttribute("href")||""))e.preventDefault()},true);
+  }
+  $("opSave").addEventListener("click",function(){var b=this;busy(b,true,"Saving…");
+    var body={action:"save",section:sec,slug:slug,sha:sha,meta:meta,body:src.innerHTML,draft:!!card.draft,schedule:card.publish_at||""};if(photo!==undefined)body.card={photo:photo};
+    api("pages",body).then(function(){return api("pages",{action:"get",section:sec,slug:slug})}).then(function(d){sha=d.sha;dirty=0;photo=undefined;n();busy(b,false);
+      var f=$("opFrame");if(f)f.contentDocument.querySelectorAll(".ed-chg").forEach(function(x){x.classList.remove("ed-chg")});toast("Saved. The page updates on the website in about a minute.")}).catch(function(e){busy(b,false);fail(e)})});
+}
+window.edOpenPage=openPageOnPage;
 
 /* ======================= MENU AND HOME ======================= */
 /* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
