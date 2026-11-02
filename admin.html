@@ -619,6 +619,8 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
 @media(max-width:760px){.dash-top .quick .lg{display:none!important}.dash-top .quick .sm{display:inline!important}.dash-top .quick .btn{white-space:nowrap}
   .dash-top #hmKpi0 .kpi{padding:12px 16px!important;display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center}.dash-top #hmKpi0 .kpi b{grid-row:1/3;grid-column:1;font-size:1.8rem!important}.dash-top #hmKpi0 .kpi span{grid-column:2}}
 .dash-top .quick .sm{display:none}
+.rte a:not(.btn){cursor:pointer}
+.cv-tog[aria-pressed=true]{background:#eefaef;border-color:#9fdca2;color:#17761a}@media(max-width:760px){.cv-tog{display:none}}
 </style>
 </head>
 <body>
@@ -1168,25 +1170,60 @@ function compareView(beforeUrl,afterHtml,opts){opts=opts||{};
   cv.querySelectorAll("[data-w]").forEach(function(b){b.addEventListener("click",function(){w=+b.dataset.w;lay()})});
   var close=function(){cv.remove();removeEventListener("resize",lay)};cv.querySelector("[data-x]").addEventListener("click",close);addEventListener("resize",lay);lay();
   /* scroll together, by how far down the page */
-  var lock=false;function sync(from,to){try{var a=from.contentWindow,b=to.contentWindow;a.addEventListener("scroll",function(){if(lock)return;lock=true;var ra=a.scrollY/Math.max(1,a.document.documentElement.scrollHeight-a.innerHeight);b.scrollTo(0,ra*(b.document.documentElement.scrollHeight-b.innerHeight));requestAnimationFrame(function(){lock=false})},{passive:true})}catch(e){}}
+  /* one scroll for both: moving either page moves the other by the same amount, and when you stop, the other lines up on the same part */
+  var together=true,busyUntil=0;
+  function pathOf(el){var p=[];while(el&&el.parentElement&&el.tagName!=="BODY"){var i=0,x=el;while((x=x.previousElementSibling))if(!/^(DEL|MARK|SCRIPT|STYLE)$/.test(x.tagName))i++;p.unshift(el.tagName+":"+i);el=el.parentElement}return p}
+  function byPath(d,p){var el=d.body;for(var k=0;k<p.length&&el;k++){var t=p[k].split(":"),i=+t[1],kids=[].filter.call(el.children,function(x){return!/^(DEL|MARK|SCRIPT|STYLE)$/.test(x.tagName)});el=kids[i];if(!el||el.tagName!==t[0])return null}return el}
+  function align(fromW,toW){try{var fd=fromW.document,x=fromW.innerWidth/2,el=fd.elementFromPoint(x,90);while(el&&el.parentElement&&!/^(P|H1|H2|H3|LI|SECTION|FIGURE|DETAILS|UL|OL|ARTICLE|HEADER|FOOTER|DIV)$/.test(el.tagName))el=el.parentElement;
+      if(!el)return;var key=el.getAttribute("data-i18n"),tgt=key?toW.document.querySelector('[data-i18n="'+key+'"]'):null;if(!tgt&&el.id)tgt=toW.document.getElementById(el.id);if(!tgt)tgt=byPath(toW.document,pathOf(el));if(!tgt)return;
+      var dy=tgt.getBoundingClientRect().top-el.getBoundingClientRect().top;if(Math.abs(dy)>2)moveTo(toW,toW.scrollY+dy)}catch(e){}}
+  /* scroll the other page straight away (the website scrolls smoothly, which would make the two chase each other) and ignore the scroll that causes */
+  function moveTo(w2,y){w2.__cmpTo=Math.max(0,Math.round(y));w2.scrollTo({top:w2.__cmpTo,behavior:"instant"})}
+  function calm(f){try{var st=f.contentDocument.createElement("style");st.textContent="html,body{scroll-behavior:auto!important}";f.contentDocument.head.appendChild(st)}catch(e){}}
+  function sync(from,to){try{calm(from);var a=from.contentWindow,b=to.contentWindow,last=a.scrollY,t=null;
+    a.addEventListener("scroll",function(){var y=a.scrollY,dy=y-last;last=y;
+      if(a.__cmpTo!==undefined&&Math.abs(y-a.__cmpTo)<3){a.__cmpTo=undefined;return}a.__cmpTo=undefined;
+      if(!together||!dy)return;moveTo(b,b.scrollY+dy);clearTimeout(t);t=setTimeout(function(){align(a,b)},200)},{passive:true})}catch(e){}}
+  var tb=h('<button type="button" class="btn cv-tog" aria-pressed="true">⇅ Scroll together</button>');cv.querySelector(".cv-bar").insertBefore(tb,cv.querySelector(".cv-mode"));
+  tb.addEventListener("click",function(){together=!together;tb.setAttribute("aria-pressed",String(together))});
   fb.addEventListener("load",function(){try{(fb.contentDocument.documentElement.innerHTML.match(/G-[A-Z0-9]{6,}/g)||[]).forEach(function(id){fb.contentWindow["ga-disable-"+id]=true})}catch(e){}sync(fb,fa);if(fa.contentDocument&&fa.contentDocument.readyState==="complete")sync(fa,fb)});
   fa.addEventListener("load",function(){sync(fa,fb);setTimeout(hl,opts.scripts?1200:0)});
-  function hl(){var ad=fa.contentDocument,k=ad?ad.querySelectorAll(".cmp-chg").length:0,hb=cv.querySelector(".cv-hl");if(!k)return;hb.hidden=false;hb.querySelector("span").textContent=k;
+  function hl(){var ad=fa.contentDocument,k=ad?ad.querySelectorAll(".cmp-chg,.cmp-txt").length:0,hb=cv.querySelector(".cv-hl");if(!k)return;hb.hidden=false;hb.querySelector("span").textContent=k;
     hb.addEventListener("click",function(){var on=hb.getAttribute("aria-pressed")!=="true";hb.setAttribute("aria-pressed",String(on));ad.documentElement.classList.toggle("cmp-off",!on)});
-    var first=ad.querySelector(".cmp-chg");if(first)setTimeout(function(){first.scrollIntoView({block:"center"})},300)}
+    var first=ad.querySelector(".cmp-txt,.cmp-chg");if(first)setTimeout(function(){first.scrollIntoView({block:"center"})},300)}
 }
+/* word by word: wraps new words in <mark class="cmp-ins"> and puts removed words back as <del class="cmp-del">,
+   inside the element as it is now (keeps bold, links…). Also sent into the homepage preview as text. */
+function markDiff(el,old){var doc=el.ownerDocument,cur=el.textContent||"";
+  var tok=function(x){var out=[],re=/\S+/g,m;while((m=re.exec(x)))out.push({w:m[0],s:m.index,e:m.index+m[0].length});return out};
+  var A=tok(String(old||"")).map(function(x){return x.w}),B=tok(cur),n=A.length,m=B.length;if(!n&&!m)return 0;if(n*m>300000)return-1;
+  var dp=[];for(var i=0;i<=n;i++)dp.push(new Uint16Array(m+1));
+  for(i=n-1;i>=0;i--)for(var j=m-1;j>=0;j--)dp[i][j]=A[i]===B[j].w?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+  var ops=[],ins=null,del=null;i=0;j=0;
+  while(i<n||j<m){if(i<n&&j<m&&A[i]===B[j].w){ins=null;del=null;i++;j++}
+    else if(j<m&&(i>=n||dp[i][j+1]>=dp[i+1][j])){if(ins)ins.e=B[j].e;else{ins={t:"ins",s:B[j].s,e:B[j].e};ops.push(ins)}j++}
+    else{var pos=j<m?B[j].s:cur.length;if(del&&del.s===pos)del.text+=" "+A[i];else{del={t:"del",s:pos,text:A[i]};ops.push(del)}i++}}
+  var locate=function(pos){var w=doc.createTreeWalker(el,4),nd,acc=0,last=null;while((nd=w.nextNode())){var L=nd.nodeValue.length;if(pos<=acc+L)return{n:nd,o:pos-acc};acc+=L;last=nd}return last?{n:last,o:last.nodeValue.length}:null};
+  ops.sort(function(a,b){return b.s-a.s||(a.t==="ins"?-1:1)});
+  ops.forEach(function(op){if(op.t==="ins"){var a=locate(op.s),b=locate(op.e);if(!a||!b)return;if(a.n!==b.n)b={n:a.n,o:a.n.nodeValue.length};if(b.o<=a.o)return;
+      var r=doc.createRange();r.setStart(a.n,a.o);r.setEnd(b.n,b.o);var mk=doc.createElement("mark");mk.className="cmp-ins";try{r.surroundContents(mk)}catch(e){}}
+    else{var p=locate(op.s);if(!p)return;var dl=doc.createElement("del");dl.className="cmp-del";dl.textContent=op.text+" ";var tn=p.n.splitText(p.o);tn.parentNode.insertBefore(dl,tn)}});
+  return ops.length}
+var CMP_CSS="html:not(.cmp-off) mark.cmp-ins{background:#ffe066;color:inherit;border-radius:3px;box-shadow:0 0 0 2px #ffe066}del.cmp-del{color:#c62828;background:#ffe3e3;text-decoration:line-through;border-radius:3px;padding:0 2px}html.cmp-off del.cmp-del{display:none}html.cmp-off mark.cmp-ins{background:none;box-shadow:none}";
 /* a copy of the page being edited, as it looks now, without the editor's outlines and controls */
 function cleanCopy(d){var c=d.documentElement.cloneNode(true);c.querySelectorAll("#ed-chip,#ed-tb,#ed-fmt,script").forEach(function(x){x.remove()});
   c.querySelectorAll("[contenteditable],[data-ed],[data-edimg],[spellcheck]").forEach(function(x){x.removeAttribute("contenteditable");x.removeAttribute("data-ed");x.removeAttribute("data-edimg");x.removeAttribute("spellcheck")});
   c.querySelectorAll(".ed-sel").forEach(function(x){x.classList.remove("ed-sel")});
-  c.querySelectorAll(".ed-chg").forEach(function(x){x.classList.remove("ed-chg");x.classList.add("cmp-chg");x.setAttribute("data-cmp","Changed")});
+  c.querySelectorAll(".ed-chg").forEach(function(x){x.classList.remove("ed-chg");var o=x.getAttribute("data-orig");x.removeAttribute("data-orig");
+    if(o!==null&&!x.querySelector("img")){var k=markDiff(x,o);if(k>0){x.classList.add("cmp-txt");return}}x.classList.add("cmp-chg");x.setAttribute("data-cmp","Changed")});
+  c.querySelectorAll("[data-orig]").forEach(function(x){x.removeAttribute("data-orig")});
   c.querySelectorAll(".ed-new,[data-new]").forEach(function(x){x.classList.remove("ed-new");x.classList.add("cmp-chg","cmp-new");x.setAttribute("data-cmp","New")});
   c.querySelectorAll(".ed-rm").forEach(function(x){x.classList.remove("ed-rm");x.classList.add("cmp-chg","cmp-rm");x.setAttribute("data-cmp","Removed")});
   var hs=d.createElement("style");hs.textContent="html:not(.cmp-off) .cmp-chg{outline:3px solid #f5b800!important;outline-offset:4px;border-radius:6px;background:rgba(255,214,0,.16)!important;position:relative}"+
     "html:not(.cmp-off) .cmp-chg::after{content:attr(data-cmp);position:absolute;top:-12px;right:-6px;z-index:5;font:700 11px/1 system-ui,sans-serif;letter-spacing:.03em;padding:4px 8px;border-radius:99px;background:#f5b800;color:#2b2100;pointer-events:none}"+
     "html:not(.cmp-off) .cmp-new{outline-color:#19b91e!important;background:rgba(36,179,40,.1)!important}html:not(.cmp-off) .cmp-new::after{background:#19b91e;color:#fff}"+
     "html:not(.cmp-off) .cmp-rm{outline-color:#e53935!important;background:rgba(229,57,53,.06)!important;opacity:.5;text-decoration:line-through}html:not(.cmp-off) .cmp-rm::after{background:#e53935;color:#fff}html.cmp-off .cmp-rm{display:none!important}"+
-    "img.cmp-chg::after{display:none}";c.querySelector("head").appendChild(hs);
+    "img.cmp-chg::after{display:none}"+CMP_CSS;c.querySelector("head").appendChild(hs);
   /* parts that fade in as the page scrolls stay visible in the copy (its scripts are off) */
   var st=d.createElement("style");st.textContent=".reveal,.tx-w,.rv,.rvi,.rvt,.tx-up,.rise,.fade-up,[data-reveal]{opacity:1!important;transform:none!important;transition:none!important;visibility:visible!important}";c.querySelector("head").appendChild(st);
   c.querySelectorAll(".reveal,.tx-w").forEach(function(x){x.classList.add("in")});
@@ -1723,6 +1760,36 @@ function bodyOut(rte){
   Array.prototype.slice.call(c.childNodes).forEach(function(n){if(n.nodeType===3&&n.textContent.trim()){var p=document.createElement("p");p.textContent=n.textContent;n.replaceWith(p)}else if(n.nodeType===1&&n.tagName==="DIV"&&!n.className){var p2=document.createElement("p");p2.innerHTML=n.innerHTML;n.replaceWith(p2)}});
   return c.innerHTML.replace(/<\/(p|h2|h3|ul|ol|figure|div|table|blockquote)>(?!\n)/g,"</$1>\n");
 }
+/* 🔗 the link box: words, web address (your pages are listed), open in a new tab, remove. Used by the Link button in every
+   text toolbar and by clicking a link in the text (form and Edit on page). */
+function linkDialog(cur){siteLinks();cur=cur||{};
+  return new Promise(function(done){
+    var dlg=h('<dialog aria-label="Link"><div class="hd"><h2>'+(cur.el?"Change link":"Add a link")+'</h2></div><div class="bd">'+
+      '<div class="fld"><label for="lkT">Words</label><input class="t" id="lkT" maxlength="200"></div>'+
+      '<div class="fld"><label for="lkU">Goes to</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem">Pick one of your pages, or paste a web address, email (mailto:) or phone (tel:).</p><input class="t" id="lkU" list="siteLinks" placeholder="/services or https://…"></div>'+
+      '<label class="chk"><input type="checkbox" id="lkN"> Open in a new tab</label>'+(cur.href?'<p class="help" style="margin-top:10px"><a href="'+esc(cur.href)+'" target="_blank" rel="noopener">Open it to check ↗</a></p>':'')+'</div>'+
+      '<div class="ft">'+(cur.el?'<button type="button" class="btn danger" id="lkDel">Remove link</button><span class="sp"></span>':'')+'<button type="button" class="btn" id="lkX">Cancel</button><button type="button" class="btn primary" id="lkOk">'+(cur.el?"Save":"Add link")+'</button></div></dialog>');
+    document.body.appendChild(dlg);dlg.showModal();var t=dlg.querySelector("#lkT"),u=dlg.querySelector("#lkU"),nw=dlg.querySelector("#lkN");
+    t.value=cur.text||"";u.value=cur.href||"";nw.checked=!!cur.newTab;
+    u.addEventListener("input",function(){if(/^https?:\/\//i.test(u.value)&&!/ambs\.co\.nz/i.test(u.value)&&!cur.el)nw.checked=true});
+    var fin=function(r){dlg.close();dlg.remove();done(r)};
+    dlg.querySelector("#lkX").addEventListener("click",function(){fin(null)});dlg.addEventListener("cancel",function(){fin(null)});
+    var del=dlg.querySelector("#lkDel");if(del)del.addEventListener("click",function(){fin({remove:true})});
+    dlg.querySelector("#lkOk").addEventListener("click",function(){var tx=t.value.trim(),hr=u.value.trim();if(!hr){u.focus();return toast("Add where the link goes",true)}if(!tx){t.focus();return toast("Add the words for the link",true)}
+      hr=hr.replace(/^https?:\/\/(www\.)?ambs\.co\.nz(?=\/|$)/i,"")||"/";if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(hr))hr=(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(hr)?"mailto:":/^[+\d][\d\s-]{6,}$/.test(hr)?"tel:":"https://")+hr.replace(/\s+/g,"");
+      fin({text:tx,href:hr,newTab:nw.checked})});
+    (cur.el?u:(t.value?u:t)).focus()})}
+function setLinkAttrs(a,v){a.setAttribute("href",v.href);if(v.newTab){a.setAttribute("target","_blank");a.setAttribute("rel","noopener")}else{a.removeAttribute("target");a.removeAttribute("rel")}if(v.text&&a.textContent!==v.text)a.textContent=v.text}
+/* change or remove a link already in the text */
+function editLink(a,changed){linkDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",newTab:a.getAttribute("target")==="_blank"}).then(function(v){if(!v)return;
+  if(v.remove){var p=a.parentNode;while(a.firstChild)p.insertBefore(a.firstChild,a);a.remove()}else setLinkAttrs(a,v);changed()})}
+/* the Link button: edits the link the cursor is in, or makes the selected words (or new words) a link */
+function linkAction(doc,root,changed){var sel=doc.getSelection(),rg=sel.rangeCount?sel.getRangeAt(0).cloneRange():null;
+  var n=rg&&rg.startContainer,a=n&&(n.nodeType===1?n:n.parentElement);a=a&&a.closest&&a.closest("a");if(a&&root.contains(a)&&!a.classList.contains("btn"))return editLink(a,changed);
+  var txt=rg?rg.toString():"";linkDialog({text:txt}).then(function(v){if(!v||v.remove)return;
+    var na=doc.createElement("a");setLinkAttrs(na,v);na.textContent=v.text;
+    if(rg&&root.contains(rg.commonAncestorContainer)){rg.deleteContents();rg.insertNode(na)}else{var last=root.lastElementChild||root;last.appendChild(doc.createTextNode(" "));last.appendChild(na)}
+    var r2=doc.createRange();r2.setStartAfter(na);r2.collapse(true);sel.removeAllRanges();sel.addRange(r2);changed()})}
 /* a button in the article text: words, link, look and where it sits (left, centre, right) */
 function btnHtml(v){return'<p class="art-btns'+(v.align?" art-btns--"+v.align:"")+'"><a class="btn '+(v.look==="ghost"?"btn--ghost":"btn--go")+'" href="'+esc(v.href)+'"'+(/^https?:/.test(v.href)?' target="_blank" rel="noopener"':'')+'>'+esc(v.text)+'</a></p>'}
 function buttonDialog(cur,opts){siteLinks();opts=opts||{};cur=cur||{text:"Book a free session",href:"/#book",look:"go",align:""};
@@ -1762,6 +1829,7 @@ function buttonDialog(cur,opts){siteLinks();opts=opts||{};cur=cur||{text:"Book a
 function wireRte(bar,rte){
   try{document.execCommand("defaultParagraphSeparator",false,"p")}catch(e){}
   /* click a button in the text to change or remove it */
+  rte.addEventListener("click",function(e){var l=e.target.closest&&e.target.closest("a:not(.btn)");if(l&&rte.contains(l)){e.preventDefault();editLink(l,markDirty);return}});
   rte.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a.btn");if(!a||!rte.contains(a))return;e.preventDefault();var p=a.closest("p.art-btns");
     buttonDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",look:a.classList.contains("btn--ghost")?"ghost":"go",align:p&&p.classList.contains("art-btns--center")?"center":p&&p.classList.contains("art-btns--right")?"right":""}).then(function(v){if(!v)return;
       var box=p||a;if(v.remove){box.remove()}else{var tmp=document.createElement("div");tmp.innerHTML=btnHtml(v);box.replaceWith(tmp.firstChild)}markDirty()})});
@@ -1773,7 +1841,7 @@ function wireRte(bar,rte){
     else if(c==="bold"||c==="italic"||c==="undo"||c==="redo"||c==="unlink")document.execCommand(c);
     else if(c==="ul")document.execCommand("insertUnorderedList");
     else if(c==="ol")document.execCommand("insertOrderedList");
-    else if(c==="link"){var u=prompt("Link to (a page on this site like /guides/automation-glossary, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;document.execCommand("createLink",false,u)}}
+    else if(c==="link")return linkAction(document,rte,markDirty);
     else if(c==="tip")document.execCommand("insertHTML",false,'<div class="callout callout--tip"><p>Tip: write your tip here.</p></div><p><br></p>');
     else if(c==="button"){var sl=window.getSelection(),rg=sl.rangeCount?sl.getRangeAt(0).cloneRange():null;buttonDialog(null).then(function(v){if(!v||v.remove)return;rte.focus();if(rg){sl.removeAllRanges();sl.addRange(rg)}
       document.execCommand("insertHTML",false,btnHtml(v)+'<p><br></p>');markDirty()})}
@@ -2071,11 +2139,12 @@ function bRich(label,obj,key){
   try{document.execCommand("defaultParagraphSeparator",false,"p")}catch(e){}
   var sync=function(){obj[key]=bodyOut(r);markDirty()};
   r.addEventListener("input",sync);
+  r.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(a&&r.contains(a)){e.preventDefault();editLink(a,sync)}});
   r.addEventListener("paste",function(e){smartPaste(e,{h2:false},r);sync()});
   bar.addEventListener("mousedown",function(e){if(e.target.closest("button"))e.preventDefault()});
   bar.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var c=b.dataset.c;r.focus();
     if(c==="p"||c==="h3")document.execCommand("formatBlock",false,"<"+c+">");else if(c==="ul")document.execCommand("insertUnorderedList");else if(c==="ol")document.execCommand("insertOrderedList");
-    else if(c==="link"){var u=prompt("Link to (a page on this site like /guides, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;document.execCommand("createLink",false,u)}}
+    else if(c==="link")return linkAction(document,r,sync);
     else document.execCommand(c);sync()});
   return el}
 function bPhoto(label,obj,key,altKey){
@@ -2490,7 +2559,7 @@ function openPageOnPage(sec,slug){
     var chip=d.createElement("div");chip.id="ed-chip";chip.hidden=true;d.body.appendChild(chip);
     function show(el,txt){var r=el.getBoundingClientRect();chip.textContent=txt;chip.style.top=(r.top+w.scrollY-30)+"px";chip.style.left=Math.max(8,r.left+w.scrollX)+"px";chip.hidden=false}
     function plain(el,name,get,set){if(!el)return;el.setAttribute("data-ed","1");el.setAttribute("spellcheck","true");try{el.contentEditable="plaintext-only"}catch(e){}if(el.contentEditable!=="plaintext-only")el.contentEditable="true";
-      var orig=get();el.addEventListener("focus",function(){show(el,name)});
+      var orig=get();el.setAttribute("data-orig",orig);el.addEventListener("focus",function(){show(el,name)});
       el.addEventListener("input",function(){var t=el.innerText.replace(/\u00a0/g," ").replace(/\n+$/,"");set(t);var was=el.classList.contains("ed-chg"),now=t!==orig;el.classList.toggle("ed-chg",now);if(now!==was)dirty+=now?1:-1;n()});
       el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();el.blur()}})}
     var q=function(x){return d.querySelector(x)};
@@ -2510,7 +2579,7 @@ function openPageOnPage(sec,slug){
         if(se.matches&&se.matches("p.art-btns")){var a=el.querySelector("a");if(a){a.setAttribute("data-edimg","1");a.title="Click to change this button";a.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();pick(el,se);editBtn(el,se)})}return}
         if(se.querySelector("img")||se.tagName==="FIGURE"){el.querySelectorAll("img").forEach(function(im,ii){wireImg(im,function(url){var sim=se.querySelectorAll("img")[ii];if(sim){sim.setAttribute("src",url);im.src=url;im.classList.add("ed-chg");dirty++;n()}})});if(!t)return}
         el.setAttribute("data-ed","1");el.contentEditable="true";el.setAttribute("spellcheck","true");
-        var orig=se.innerHTML,label=/^H[1-6]$/.test(se.tagName)?"Heading":se.tagName==="UL"||se.tagName==="OL"?"List":"Paragraph";
+        el.setAttribute("data-orig",(el.textContent||"").replace(/\s+/g," ").trim());var orig=se.innerHTML,label=/^H[1-6]$/.test(se.tagName)?"Heading":se.tagName==="UL"||se.tagName==="OL"?"List":"Paragraph";
         el.addEventListener("focus",function(){show(el,label+" · Ctrl+B bold, Ctrl+I italic")});
         el.addEventListener("input",function(){var c=el.cloneNode(true);c.querySelectorAll("[contenteditable],[data-ed],[spellcheck]").forEach(function(x){x.removeAttribute("contenteditable");x.removeAttribute("data-ed");x.removeAttribute("spellcheck")});se.innerHTML=c.innerHTML.replace(/&nbsp;(?=[^\s<])/g," ").replace(/<br>$/,"");var was=el.classList.contains("ed-chg"),now=se.innerHTML!==orig;el.classList.toggle("ed-chg",now);if(now!==was)dirty+=now?1:-1;n()});
         el.addEventListener("paste",function(e){e.preventDefault();d.execCommand("insertText",false,(e.clipboardData||w.clipboardData).getData("text/plain"))});
@@ -2547,7 +2616,7 @@ function openPageOnPage(sec,slug){
     w.addEventListener("scroll",function(){if(fmtEl&&!fmt.hidden)fmtAt(fmtEl)},{passive:true});
     fmt.addEventListener("click",function(e){var b=e.target.closest("button");if(!b||!fmtEl)return;var f=b.dataset.f,pr=pairs.filter(function(x){return x.el===fmtEl})[0];if(!pr)return;
       if(f==="bold"||f==="italic"||f==="unlink"){d.execCommand(f);fmtEl.dispatchEvent(new Event("input"))}
-      else if(f==="link"){var u=prompt("Link to (a page on this site like /services/ai-automation, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;d.execCommand("createLink",false,u);fmtEl.dispatchEvent(new Event("input"))}}
+      else if(f==="link"){var fe=fmtEl;linkAction(d,fe,function(){fe.dispatchEvent(new Event("input"))})}
       else{var tag=f.toUpperCase();if(pr.se.tagName===tag||/^(UL|OL|DIV|FIGURE)$/.test(pr.se.tagName))return toast(/^(UL|OL|DIV|FIGURE)$/.test(pr.se.tagName)?"Lists, tip boxes and photos keep their own shape.":"It already is.");
         var ns=document.createElement(f),ne=d.createElement(f);ns.innerHTML=pr.se.innerHTML;ne.innerHTML=pr.se.innerHTML;pr.se.replaceWith(ns);fmtEl.replaceWith(ne);pairs=pairs.filter(function(x){return x!==pr});wirePart(ne,ns);pick(ne,ns);ne.classList.add("ed-chg");dirty++;n();ne.focus()}});
     /* buttons that are part of the page design: open the button box (shape, size and style for every button) */
@@ -2557,7 +2626,8 @@ function openPageOnPage(sec,slug){
     var hero=q(".news-hero img");if(hero&&sec==="news")wireImg(hero,function(url){photo=url;hero.src=url;dirty++;n()});
     function wireImg(im,done){im.setAttribute("data-edimg","1");im.title="Click to change this photo";im.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();choosePhoto().then(function(pp){if(pp&&pp.url)done(pp.url)})})}
     d.addEventListener("focusout",function(){setTimeout(function(){var a=d.activeElement;if(!a||!a.hasAttribute||!a.hasAttribute("data-ed"))chip.hidden=true},150)});
-    d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(a&&!/^#/.test(a.getAttribute("href")||""))e.preventDefault()},true);
+    d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(a&&!/^#/.test(a.getAttribute("href")||""))e.preventDefault();
+      var part=a&&!a.classList.contains("btn")&&a.closest("article.prose [data-ed]");if(part&&pairs.some(function(x){return x.el===part})){e.stopPropagation();editLink(a,function(){part.dispatchEvent(new Event("input"))})}},true);
   }
   siteLinks().then(function(){drawOpFlags()}).catch(function(){});
   $("opSave").addEventListener("click",function(){var b=this;if(!flagConfirm(opFlags(),"Save and publish"))return;busy(b,true,"Saving…");
@@ -2601,8 +2671,9 @@ function themeCss(css,t){var mv=thMoves(t);if(!mv.length)return css;var hx=funct
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-cmp]");if(!b)return;var ov=b.closest(".op"),f=ov&&ov.querySelector("#opFrame"),d=f&&f.contentDocument;if(!d)return;
   var path=f.contentWindow.location.pathname||"/";
   if(path==="/"&&window.edHomePreview){var t=b.textContent;b.disabled=true;b.textContent="Preparing…";window.edHomePreview().then(function(r){
-      var mark='<style>html:not(.cmp-off) .cmp-chg{outline:3px solid #f5b800!important;outline-offset:4px;border-radius:6px;background:rgba(255,214,0,.16)!important;position:relative}html:not(.cmp-off) .cmp-chg::after{content:"Changed";position:absolute;top:-12px;right:-6px;z-index:5;font:700 11px/1 system-ui,sans-serif;padding:4px 8px;border-radius:99px;background:#f5b800;color:#2b2100;pointer-events:none}</style>'+
-        '<script>(function(){var K='+JSON.stringify(r.keys).replace(/</g,"\\u003c")+';function m(){K.forEach(function(k){document.querySelectorAll("[data-i18n=\\""+k+"\\"]").forEach(function(e){e.classList.add("cmp-chg")})})}addEventListener("load",function(){m();setTimeout(m,800)})})()<\/script>';
+      var BY=(window.edW&&window.edW.byKey&&window.edW.byKey())||{},OLD={};r.keys.forEach(function(k){if(BY[k])OLD[k]=BY[k].en||""});
+      var mark='<style>'+CMP_CSS+'html:not(.cmp-off) .cmp-chg{outline:3px solid #f5b800!important;outline-offset:4px;border-radius:6px;background:rgba(255,214,0,.16)!important;position:relative}html:not(.cmp-off) .cmp-chg::after{content:"Changed";position:absolute;top:-12px;right:-6px;z-index:5;font:700 11px/1 system-ui,sans-serif;padding:4px 8px;border-radius:99px;background:#f5b800;color:#2b2100;pointer-events:none}</style>'+
+        '<script>(function(){var markDiff='+markDiff.toString()+';var O='+JSON.stringify(OLD).replace(/</g,"\\u003c")+',done=false;function m(){if(done)return;done=true;Object.keys(O).forEach(function(k){document.querySelectorAll("[data-i18n=\\""+k+"\\"]").forEach(function(e){var c=markDiff(e,O[k]);if(c>0)e.classList.add("cmp-txt");else if(c<0)e.classList.add("cmp-chg")})})}addEventListener("load",function(){setTimeout(m,900)})})()<\/script>';
       var html=showPreview(r.html,r.js,"",null,true).replace(/<\/body>/i,mark+"</body>");compareView("/",html,{scripts:true})}).catch(fail).then(function(){b.disabled=false;b.textContent=t});return}
   compareView(path,cleanCopy(d),{scripts:false})});
 var OS_OPEN=(function(){try{return JSON.parse(localStorage.getItem("ambs-os-open")||"{}")}catch(e){return{}}})();
@@ -2693,17 +2764,17 @@ var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wordin
 var EDMENU=[["",[["home","Home","Your dashboard"]]],
   ["Edit your website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["design","Colours & fonts","Brand colours, fonts and buttons for the whole website"]]],
   ["Website settings",[["sections","Homepage sections","Order, hide or add homepage sections"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["redirects","Redirects","Send old addresses to the right page"]]],
-  ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"]]],
+  ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"],["roi","Website ROI calculator","The calculator page at ambs.co.nz/website-roi-calculator"]]],
   ["Insights",[["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 var CHOOSE={wording:["Homepage","Click any words on your real homepage and type. Add questions, steps and more from the panel.","Every line of the homepage in all 5 languages, with search."],
   pages:["Pages & news","Open a page and type straight on it, with tools to add text, buttons and photos.","All of a page’s settings in one form: Google wording, questions, related pages and more."],
   design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
 function ways(t){return CHOOSE[t]?'<span class="ways"><button type="button" data-way="'+t+'" data-m="visual" title="'+esc(CHOOSE[t][0])+' on the page" aria-label="'+esc(CHOOSE[t][0])+' on the page">✎</button><button type="button" data-way="'+t+'" data-m="forms" title="'+esc(CHOOSE[t][0])+' with the form" aria-label="'+esc(CHOOSE[t][0])+' with the form">☰</button></span>':''}
-function ico(k){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
+function ico(k){if(k==="roi")k="calc";return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
 function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side"))b.setAttribute("aria-current",String(b.dataset.go===current))})}
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
-  EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return CHOOSE[t[0]]?'<div class="side-row"><button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'+ways(t[0])+'</div>':'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
-  h+='<div class="side-h">Shortcuts</div><button type="button" data-roi="1">'+ico("calc")+'<span>Website ROI calculator</span></button><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
+  EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){if(t[0]==="roi")return'<button type="button" data-roi="1">'+ico("roi")+'<span>'+t[1]+'</span></button>';return CHOOSE[t[0]]?'<div class="side-row"><button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'+ways(t[0])+'</div>':'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
+  h+='<div class="side-h">Shortcuts</div><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
   sd.innerHTML=h;var b0=sd.querySelector(".side-brand");sideSync();modeSync()})();
 /* Homepage, Pages & news and Colours & fonts can be changed on the real page or with the form: opening one asks which,
    unless "Remember my choice" was ticked (ambs-ed-choice in this browser). Each screen has a switch at the top to change it. */
@@ -2731,8 +2802,8 @@ function homeInit(){
   var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+''+'</div>'+
     '<div class="dash-top"><div class="kpis" id="hmKpi0"><button type="button" class="kpi" data-go="health" id="hmHealth"><b>…</b><span>site health</span></button></div>'+
     '<div class="quick"><button type="button" class="btn primary" data-new="news"><span class="lg">＋ Write a news post</span><span class="sm">＋ News post</span></button><button type="button" class="btn" data-new="page"><span class="lg">＋ Add a page</span><span class="sm">＋ Page</span></button><button type="button" class="btn" data-new="guides"><span class="lg">＋ Add a guide</span><span class="sm">＋ Guide</span></button></div></div><div class="kpis" id="hmKpi" hidden></div>';
-  EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return CHOOSE[t[0]]?'<div class="tile tile-2" role="button" tabindex="0" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span><span class="tile-ways"><button type="button" data-way="'+t[0]+'" data-m="visual">✎ On page</button><button type="button" data-way="'+t[0]+'" data-m="forms">☰ Form</button></span></div>':'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
-  h+='<h3 class="dash-h">Tools</h3><div class="tiles"><button type="button" class="tile" data-roi="1"><span class="tile-i">'+ico("calc")+'</span><b>Website ROI calculator</b><span>The calculator page at ambs.co.nz/website-roi-calculator</span></button><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
+  EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){if(t[0]==="roi")return'<button type="button" class="tile" data-roi="1"><span class="tile-i">'+ico("roi")+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>';return CHOOSE[t[0]]?'<div class="tile tile-2" role="button" tabindex="0" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span><span class="tile-ways"><button type="button" data-way="'+t[0]+'" data-m="visual">✎ On page</button><button type="button" data-way="'+t[0]+'" data-m="forms">☰ Form</button></span></div>':'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
+  h+='<h3 class="dash-h">Tools</h3><div class="tiles"><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
   m.innerHTML=h;modeSync();
   api("pages",{action:"health"}).then(function(j){var k=$("hmHealth");if(k)k.innerHTML=healthTile(j)}).catch(function(){var k=$("hmHealth");if(k)k.remove()});
   Promise.all([api("settings",{action:"visitors"}),api("settings",{action:"visitors",days:7})]).then(function(r){var a=r[0],b=r[1];if(a.setup||b.setup)return;
