@@ -253,3 +253,32 @@ export async function seoReport(days) {
     basics,
   };
 }
+
+/* One page as Google sees it (Search Console URL Inspection): indexed or not, last crawl, canonical, rich results. */
+export async function inspectUrl(url) {
+  const c = conn();
+  if (c.setup) return c;
+  const t = await accessToken(c.sa);
+  const sites = process.env.GSC_SITE ? [process.env.GSC_SITE] : SITES;
+  let last = "";
+  for (const site of sites) {
+    const r = await fetch("https://searchconsole.googleapis.com/v1/urlInspection/index:inspect", {
+      method: "POST", headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" },
+      body: JSON.stringify({ inspectionUrl: url, siteUrl: site, languageCode: "en-NZ" }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) {
+      const x = j.inspectionResult || {}, ix = x.indexStatusResult || {}, rr = x.richResultsResult || {};
+      return {
+        site, link: x.inspectionResultLink || "",
+        verdict: ix.verdict || "", coverage: ix.coverageState || "", crawled: ix.lastCrawlTime || "", fetch: ix.pageFetchState || "",
+        robots: ix.robotsTxtState || "", indexing: ix.indexingState || "", canonical: ix.googleCanonical || "", userCanonical: ix.userCanonical || "",
+        rich: { verdict: rr.verdict || "", items: (rr.detectedItems || []).map((d) => ({ type: d.richResultType, names: (d.items || []).map((i) => i.name).filter(Boolean).slice(0, 4),
+          issues: (d.items || []).flatMap((i) => (i.issues || []).map((s) => ({ msg: s.issueMessage, sev: s.severity }))).slice(0, 6) })) },
+      };
+    }
+    last = (j.error && j.error.message) || String(r.status);
+    if (r.status !== 403 && r.status !== 404) break;
+  }
+  return { needs: true, email: c.sa.client_email, why: last };
+}
