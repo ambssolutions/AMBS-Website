@@ -22,6 +22,18 @@ export const BLOCK_TYPES = {
   webcalc: "Website ROI calculator",
 };
 
+/* kinds of question a contact form can ask */
+export const FORM_FIELDS = {
+  name: "Name",
+  email: "Email",
+  phone: "Phone",
+  text: "Short answer",
+  message: "Long answer",
+  select: "Dropdown",
+  checkbox: "Tick box",
+  date: "Date",
+};
+
 /* Website ROI calculator: the ranges, the starting numbers and the wording the numbers use.
    Shared by the page (drawn once here, so the numbers show even without scripts) and /assets/webcalc.js
    (redrawn as people move the sliders). Wording can be changed per block in the editor (block.words). */

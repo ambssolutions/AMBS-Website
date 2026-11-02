@@ -954,6 +954,56 @@ def privacy_check():
     for x in missing: print('PRIVACY POLICY doesn\'t mention:',x['name'],'('+x['host']+', used on '+x['where']+')')
 
 
+# ---- Content Security Policy (the "security settings" grade in /admin → Site health → Speed & security) ----
+# Every public page may only run its own scripts and the few outside services it really uses.
+# The small scripts written inside the pages are allowed one by one by their fingerprint (sha256), worked out here
+# on every build, so the website's own edits keep working; scripts injected by anyone else are refused by the browser.
+# Written into vercel.json for every page except /admin, /email-signature, /invoice and /api (the editor tools keep their own rules).
+CSP_SKIP=('admin.html','email-signature.html')
+CSP_SRC='/((?!admin|email-signature|invoice|api/).*)'
+CSP_BASE={
+ 'default-src':["'self'"],
+ 'script-src':["'self'",'https://www.googletagmanager.com'],
+ 'style-src':["'self'","'unsafe-inline'",'https://fonts.googleapis.com'],
+ 'font-src':["'self'",'https://fonts.gstatic.com','data:'],
+ 'img-src':["'self'",'data:','blob:','https:'],
+ 'connect-src':["'self'",'https://api.web3forms.com','https://portal.ambs.co.nz','https://*.supabase.co','https://*.google-analytics.com','https://*.analytics.google.com','https://*.googletagmanager.com','https://fonts.googleapis.com','https://fonts.gstatic.com'],
+ 'frame-src':["'self'",'https://ambs.zohobookings.com.au','https://www.youtube-nocookie.com','https://www.youtube.com','https://player.vimeo.com'],
+ 'media-src':["'self'",'blob:','data:'],
+ 'worker-src':["'self'"],
+ 'manifest-src':["'self'"],
+ 'object-src':["'none'"],
+ 'base-uri':["'self'"],
+ 'form-action':["'self'",'https://api.web3forms.com'],
+ 'upgrade-insecure-requests':[],
+}
+def csp_hashes():
+    import base64,hashlib
+    hs=set()
+    for root,dirs,files in os.walk(OUT):
+        dirs[:]=[d for d in dirs if d not in ('node_modules','site-src','api','.git','.github','invoice')]
+        for f in files:
+            if not f.endswith('.html') or (root==OUT and f in CSP_SKIP): continue
+            h=open(os.path.join(root,f),encoding='utf8').read()
+            for m in re.finditer(r'<script(\s[^>]*)?>(.*?)</script\s*>',h,re.S|re.I):
+                a=m.group(1) or ''
+                if re.search(r'\ssrc=',a) or re.search(r'type="application/(ld\+)?json"',a): continue
+                hs.add("'sha256-"+base64.b64encode(hashlib.sha256(m.group(2).encode('utf8')).digest()).decode()+"'")
+    return sorted(hs)
+def csp_value():
+    d={k:list(v) for k,v in CSP_BASE.items()}
+    d['script-src']+=csp_hashes()
+    return '; '.join((k+' '+' '.join(v)).strip() for k,v in d.items())
+def csp_update():
+    vp=os.path.join(OUT,'vercel.json')
+    v=json.load(open(vp,encoding='utf8'));val=csp_value()
+    hdrs=v.setdefault('headers',[])
+    blk=next((x for x in hdrs if x.get('source')==CSP_SRC),None)
+    if not blk: blk={'source':CSP_SRC,'headers':[]};hdrs.append(blk)
+    blk['headers']=[x for x in blk['headers'] if x.get('key')!='Content-Security-Policy']+[{'key':'Content-Security-Policy','value':val}]
+    out=json.dumps(v,indent=2,ensure_ascii=False)+'\n'
+    if out!=open(vp,encoding='utf8').read(): open(vp,'w',encoding='utf8').write(out); print('security policy: updated,',len(csp_hashes()),'page scripts allowed')
+
 if __name__=='__main__':
     legal_dates()
     os.makedirs(os.path.join(OUT,'assets'),exist_ok=True)
@@ -993,4 +1043,5 @@ if __name__=='__main__':
             if f.endswith('.html') and f not in ('admin.html','email-signature.html'): stamp_chat(os.path.join(root,f),tag)
     print('chat helper:',nd,'answers indexed')
     privacy_check()
+    csp_update()
     print('done, total words',total)

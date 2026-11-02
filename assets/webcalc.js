@@ -2,7 +2,7 @@
    3 years switch, numbers that count to their new value, and a small results bar that stays in view on phones.
    The sums and the chart come from blocks.mjs, the same code that drew the block on the page, so the two always match.
    The wording comes from the block's hidden [data-tpl] lines, so it follows the language the visitor picked. */
-import { CALC_RANGES, calcNumber, calcFigures, calcChart, calcFill } from "./blocks.mjs?v=47faba2b";
+import { CALC_RANGES, calcNumber, calcFigures, calcChart, calcFill } from "./blocks.mjs?v=024af652";
 
 const still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
