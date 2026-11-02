@@ -17,7 +17,7 @@ import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, stat
 import { loadKeys, keyFrom, KEY_NAMES, key } from "./_keys.js";
 import { psi, security, cert, response, sharing, okUrl } from "./_tests.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
-import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
+import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion, can, NO_ACCESS } from "./_lib.js";
 
 const SITE_JSON = "site-src/content/site.json";
 const CHAT_JSON = "site-src/content/chatbot.json";
@@ -40,6 +40,20 @@ export default async function handler(req, res) {
   if (!who) return;
   try {
     const b = await readBody(req);
+    /* what each level may do here (see ROLES in _lib.js); "get" and "me" are for everyone signed in */
+    const AREA = { stats: "owner", leads: "owner", conns: "owner", "conn-save": "owner", "conn-remove": "owner", visitors: "owner", searches: "owner", seo: "owner",
+      editors: "owner", "editor-invite": "owner", "editor-role": "owner", "editor-remove": "owner", analytics: "owner",
+      test: "health", theme: "design", business: "business", profiles: "business", sitetext: "business",
+      chatlog: "chat", chatlogset: "chat", chatget: "chat", chatbot: "chat", calculator: "calc" }[b.action];
+    if (AREA && !(AREA === "owner" ? who.role === "owner" : can(who, AREA))) return send(res, 403, { error: NO_ACCESS });
+    if (b.action === "me") return send(res, 200, { email: who.email, role: who.role, realRole: who.realRole, viewAs: who.viewAs });
+    if (b.action === "editors") return send(res, 200, { editors: (await sbRpc(who.token, "website_editors_list", {})) || [], owners: (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean) });
+    if (b.action === "editor-invite") {   // Website settings → Editors: a private one-time link the owner sends themselves (no email is sent from here)
+      const t = await sbRpc(who.token, "website_editor_invite", { p_email: String(b.email || ""), p_name: String(b.name || ""), p_role: b.role === "writer" ? "writer" : "editor" });
+      return send(res, 200, { ok: true, link: "https://ambs.co.nz/admin#invite=" + t });
+    }
+    if (b.action === "editor-role") { await sbRpc(who.token, "website_editor_set_role", { p_email: String(b.email || ""), p_role: b.role === "writer" ? "writer" : "editor" }); return send(res, 200, { ok: true }); }
+    if (b.action === "editor-remove") { await sbRpc(who.token, "website_editor_remove", { p_email: String(b.email || "") }); return send(res, 200, { ok: true }); }
     await loadKeys(who.token);
     if (b.action === "stats") {
       const days = [1, 7, 30, 90, 180, 365].includes(+b.days) ? +b.days : 7, to = new Date(), span = days * 86400000;
@@ -61,8 +75,14 @@ export default async function handler(req, res) {
       let saved = [], vault = true;
       try { saved = (await sbRpc(who.token, "site_secret_status", {})) || []; } catch (e) { vault = false; }
       const by = Object.fromEntries(saved.map((r) => [r.name, r]));
-      const keys = Object.fromEntries(KEY_NAMES.map((n) => [n, { from: keyFrom(n), hint: by[n] ? by[n].hint : "", at: by[n] ? by[n].updated_at : "", note: by[n] ? String(by[n].note || "").replace(/^by\s*/, "") : "" }]));
-      return send(res, 200, { vault, keys, github: !!process.env.GITHUB_TOKEN });
+      /* a key kept in Vercel shows which account it is too: the property number, the service account's email, the Search Console site, a key's last 4 */
+      const vHint = (n) => { const v = String(process.env[n] || ""); if (!v) return "";
+        if (n === "GA_SERVICE_ACCOUNT") { try { return JSON.parse(v).client_email || ""; } catch (e) { return ""; } }
+        return n === "PAGESPEED_KEY" ? "••••" + v.slice(-4) : v.slice(0, 80); };
+      const keys = Object.fromEntries(KEY_NAMES.map((n) => [n, { from: keyFrom(n), hint: keyFrom(n) === "vercel" ? vHint(n) : by[n] ? by[n].hint : "", at: by[n] ? by[n].updated_at : "", note: by[n] ? String(by[n].note || "").replace(/^by\s*/, "") : "" }]));
+      const sb = { project: (process.env.SUPABASE_URL || "https://onunconxcvkwowtgalxn.supabase.co").replace(/^https:\/\/|\.supabase\.co.*$/g, ""), ok: false, ms: 0 };
+      try { const t0 = Date.now(); await sbRpc(who.token, "website_editor_ok", {}); sb.ok = true; sb.ms = Date.now() - t0; } catch (e) { sb.error = e.message.slice(0, 120); }
+      return send(res, 200, { vault, keys, github: !!process.env.GITHUB_TOKEN, supabase: sb });
     }
     if (b.action === "conn-save" || b.action === "conn-remove") {
       const SVC = { ga: ["GA_PROPERTY_ID", "GA_SERVICE_ACCOUNT"], gsc: ["GSC_SITE"], psi: ["PAGESPEED_KEY"] }[b.svc];

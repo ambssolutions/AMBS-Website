@@ -36,8 +36,30 @@ export async function requireEditor(req, res) {
   const user = await r.json();
   const allowed = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
   const email = String(user.email || "").toLowerCase();
-  if (!allowed.includes(email)) { send(res, 403, { error: "This account is not allowed to edit the website." }); return null; }
-  return { email, token };
+  let role = allowed.includes(email) ? "owner" : "";
+  if (!role) { try { role = (await sbRpc(token, "website_editor_ok", {})) || ""; } catch (e) { role = ""; } }   // invited through Website settings → Editors
+  if (!role) { send(res, 403, { error: "This account is not allowed to edit the website." }); return null; }
+  /* "See it as": the owner looks at the editor with someone else's level; every request is then limited the same way */
+  const as = String(req.headers["x-view-as"] || "");
+  const viewAs = role === "owner" && ROLES[as] ? as : "";
+  const who = { email, token, role: viewAs || role, realRole: role, viewAs };
+  const need = AREA_OF(req);
+  if (need && !can(who, need)) { send(res, 403, { error: NO_ACCESS }); return null; }
+  return who;
+}
+
+/* What each level may do. owner = everything. editor = the website's wording, pages, photos, menus, sections, colours,
+   business details, chat helper and history (not Leads, Stats, Visitors, SEO, Connections or Editors).
+   writer = pages and news (with photos and history). Areas are checked on every request (AREA_OF, and settings.js per action). */
+export const ROLES = {
+  editor: ["home", "pages", "photos", "layout", "design", "business", "chat", "calc", "history", "health", "publish", "signature"],
+  writer: ["pages", "photos", "history", "health"],
+};
+export const NO_ACCESS = "Your level doesn't include this part of the editor. Ask the website owner if you need it.";
+export function can(who, area) { return who.role === "owner" || (ROLES[who.role] || []).includes(area); }
+function AREA_OF(req) {
+  const f = String(req.url || "").split("?")[0].replace(/^\/api\//, "").replace(/\.js$/, "");
+  return { content: "home", publish: "home", layout: "layout", pages: "pages", media: "photos", history: "history", signatures: "signature", siteinfo: "signature" }[f] || "";
 }
 
 /* A database function in the AMBS Supabase project, called as the signed-in person (it checks they're an admin). */
@@ -48,7 +70,9 @@ export async function sbRpc(token, fn, args) {
     body: JSON.stringify(args || {}),
   });
   const t = await r.text();
-  if (!r.ok) throw new Error("The database said no (" + r.status + "): " + t.slice(0, 200));
+  if (!r.ok) { let j = null; try { j = JSON.parse(t); } catch (e) {}
+    if (j && j.code === "P0001" && j.message && j.message !== "not allowed") throw new Error(j.message);   // our own plain-words messages
+    throw new Error("The database said no (" + r.status + "): " + t.slice(0, 200)); }
   return t ? JSON.parse(t) : null;
 }
 

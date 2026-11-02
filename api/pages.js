@@ -10,7 +10,7 @@
    Saves start "Editor source:" (a GitHub workflow rebuilds and publishes the pages) or, for drafts that
    are not on the website, "Editor draft:" (saved, nothing published). */
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS } from "./_sitetext.js";
-import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths, readEnglish, nextVersion } from "./_lib.js";
+import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths, readEnglish, nextVersion, can, NO_ACCESS } from "./_lib.js";
 import { cleanBlocks } from "./_blocks.js";
 
 const SECTIONS = ["guides", "industries", "services", "news", "locations", "legal"];
@@ -134,6 +134,7 @@ export default async function handler(req, res) {
       return send(res, 200, { redirects: redirectList(v) });
     }
 
+    if (b.action === "redirects-save" && !can(who, "layout")) return send(res, 403, { error: NO_ACCESS });
     if (b.action === "redirects-save") {
       const v = await readVercel(head);
       const live = new Set(["/", "/services", "/industries", "/guides", "/news", "/locations", "/privacy", "/terms", "/booking-confirmed", "/email-signature", "/404",

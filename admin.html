@@ -743,6 +743,33 @@ header.top .who .nt-bar{justify-content:space-between}
 @media (max-width:640px){.kpi.hh{min-width:0;width:100%;padding:12px 14px!important;gap:12px}.hh-ring,.hh-ring svg{width:56px;height:56px}.hh-ring b{font-size:1.1rem!important}}
 
 /* Side menu brand: logo with "Website editor" on one line under it */
+#side .side-g>.side-h{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:0;cursor:pointer;font:inherit;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;padding:14px 12px 4px;border-radius:8px;text-align:left}
+#side .side-g>.side-h:hover{color:var(--ink);background:none;transform:none}#side .side-g>.side-h svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .35s ease}
+#side .side-g.shut>.side-h svg{transform:rotate(-90deg)}
+#side .side-items{display:grid;grid-template-rows:1fr;transition:grid-template-rows .45s ease,opacity .35s ease}#side .side-items>div{overflow:hidden;min-height:0;display:flex;flex-direction:column;gap:2px}
+#side .side-g.shut .side-items{grid-template-rows:0fr;opacity:0}
+@media (prefers-reduced-motion:reduce){#side .side-items,#side .side-g>.side-h svg{transition:none}}
+.cmap-hd{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.cmap-hd h3{margin:0}#cmap{margin:10px 0 0}#cmap svg{width:100%;height:auto;display:block;overflow:visible}
+.cm-e path{fill:none;stroke:var(--line);stroke-width:2;color:var(--line);transition:stroke .25s,opacity .25s}.cm-e.rd path{stroke-dasharray:5 5}.cm-e text{font-size:12px;fill:var(--muted);font-weight:600;paint-order:stroke;stroke:var(--card);stroke-width:4px;transition:opacity .25s}
+.cm-n{cursor:pointer;outline:none}.cm-n rect{fill:var(--card);stroke:var(--line);stroke-width:1.5;filter:drop-shadow(0 2px 4px rgba(15,23,42,.08));transition:stroke .2s,opacity .25s}.cm-n.main rect{stroke:var(--green);stroke-width:2}
+.cm-n text{fill:var(--ink)}.cm-n .ic{font-size:20px}.cm-n .t{font-size:14px;font-weight:800}.cm-n .s{font-size:11px;fill:var(--muted)}
+.cm-n:hover rect,.cm-n:focus-visible rect{stroke:var(--green)}.cm-n.on rect{stroke:var(--green);stroke-width:2.5}
+.dot.d1{fill:#1e9e5a}.dot.d0{fill:#d08a16}.dot.d2{fill:#9aa6b8}
+svg.sel .cm-n:not(.near){opacity:.35}svg.sel .cm-e:not(.on) path{opacity:.35}svg.sel .cm-e:not(.on) text{opacity:.25}svg.sel .cm-e.on path{stroke:var(--green);stroke-width:2.5}svg.sel .cm-e.on text{fill:var(--ink)}
+.cmap-info{margin-top:12px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.cmap-info:empty{display:none}
+.cmap-i-h{display:flex;gap:12px;align-items:flex-start;flex:1;min-width:240px}.cmap-i-ic{font-size:26px;line-height:1}.cmap-info p{margin:4px 0 0}
+@media (max-width:640px){.cm-n .t{font-size:12.5px}.cm-n .s{font-size:10.5px}.cmap-info .btn{width:100%}}
+.gx-n{color:var(--muted);font-size:.8rem;margin-top:4px}.gx-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.gx-head h3{margin:0 0 4px}.gx-kpis{margin:14px 0}
+.gx-list{list-style:none;margin:0;padding:0}.gx-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.gx-who{display:flex;flex-direction:column;gap:2px;min-width:0}.gx-who .hl-url{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gx-st{font-size:.82rem;font-weight:700;white-space:nowrap}.gx-st.ok{color:var(--green)}.gx-st.bad{color:#b45309}.gx-st.na,.gx-st.wait{color:var(--muted)}.gx-acts{display:flex;gap:6px}
+@media (max-width:760px){.gx-row{grid-template-columns:1fr auto}.gx-acts{grid-column:1/-1}}
+.eds-form{display:grid;grid-template-columns:1fr 1.3fr 150px auto;gap:10px;align-items:end}.eds-form .f{margin:0}.eds-form .btn{height:44px}
+.eds-row{display:grid;grid-template-columns:1fr 130px auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.eds-row:first-child{border-top:0}.eds-who{display:flex;flex-direction:column;min-width:0}.eds-who b{overflow:hidden;text-overflow:ellipsis}
+.eds-acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.eds-out{grid-column:1/-1}.eds-out:empty{display:none}.eds-lv.own{font-size:.8rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--emb-bg);box-shadow:var(--emb-sh);justify-self:start}
+.eds-link{margin-top:12px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh)}.eds-copy{display:flex;gap:8px;margin:8px 0}.eds-copy input{flex:1;min-width:0;font-size:.85rem}.eds-send{display:flex;gap:8px;flex-wrap:wrap}
+.eds-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.eds-lvl{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh)}.eds-lvl .btn{margin-top:auto;align-self:flex-start}
+#vaBar{position:fixed;left:0;right:0;bottom:0;z-index:300;display:flex;gap:12px;align-items:center;justify-content:center;padding:10px 16px;background:#3b2a6b;color:#fff;font-size:.9rem;box-shadow:0 -4px 16px rgba(0,0,0,.2)}#vaBar .btn{flex:none}body.va-on{padding-bottom:64px}
+@media (max-width:760px){.eds-form{grid-template-columns:1fr}.eds-row{grid-template-columns:1fr}.eds-acts{justify-content:flex-start}.eds-levels{grid-template-columns:1fr}#vaBar{font-size:.8rem;justify-content:space-between}}
 #side .side-brand{flex-direction:column;align-items:flex-start;gap:6px;padding:8px 12px 16px}
 #side .side-brand img{height:30px}
 #side .side-brand span{white-space:nowrap;font-size:.95rem;font-weight:800;letter-spacing:-.01em;line-height:1.1}
@@ -781,6 +808,18 @@ header.top .who .nt-bar{justify-content:space-between}
     <div id="resetMsg" class="msg err hidden" role="alert"></div>
     <button class="btn primary" type="submit" id="resetBtn">Save new password</button>
   </form>
+  <form id="inviteForm" class="hidden">
+    <p class="sub" id="invHi">Checking your invite…</p>
+    <label class="f" for="invEmail">Your email</label>
+    <input class="t" id="invEmail" type="email" readonly>
+    <label class="f" for="invPw1">Choose a password</label>
+    <input class="t" id="invPw1" type="password" autocomplete="new-password" minlength="10" required>
+    <label class="f" for="invPw2">Type it again</label>
+    <input class="t" id="invPw2" type="password" autocomplete="new-password" minlength="10" required>
+    <p class="help" style="margin:6px 0 0">At least 10 characters. A short sentence you can remember works well.</p>
+    <div id="invMsg" class="msg err hidden" role="alert"></div>
+    <button class="btn primary" type="submit" id="invBtn">Start editing</button>
+  </form>
 </section>
 
 <div id="app" class="hidden">
@@ -809,6 +848,7 @@ header.top .who .nt-bar{justify-content:space-between}
     <button type="button" role="tab" data-tab="leads" aria-selected="false">Leads</button>
     <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors now</button>
     <button type="button" role="tab" data-tab="conns" aria-selected="false">Connections</button>
+    <button type="button" role="tab" data-tab="editors" aria-selected="false">Editors</button>
     <button type="button" role="tab" data-tab="seo" aria-selected="false">Google search (SEO)</button>
   </nav>
   <label class="tabpick"><span>Go to</span><select id="tabPick" aria-label="What to edit"></select></label></div>
@@ -854,6 +894,7 @@ header.top .who .nt-bar{justify-content:space-between}
   <section id="tab-seo" class="tab hidden"><div class="wrap dash" id="seoMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-stats" class="tab hidden"><div class="wrap dash" id="stMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-leads" class="tab hidden"><div class="wrap dash" id="ldMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+  <section id="tab-editors" class="tab hidden"><div class="wrap dash" id="edsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-conns" class="tab hidden"><div class="wrap dash" id="cnMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-visitors" class="tab hidden"><div class="wrap dash" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-calc" class="tab hidden"><div class="wrap narrow" id="ccMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
@@ -897,9 +938,11 @@ function token(){
   return authFetch("token?grant_type=refresh_token",{refresh_token:session.refresh}).then(function(j){keep(j);return session.access}).catch(function(){saveSession(null);throw new Error("signin")});
 }
 function api(path,body){
-  return token().then(function(t){return fetch("/api/"+path,{method:"POST",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(body||{})})})
+  return token().then(function(t){var hd={Authorization:"Bearer "+t,"Content-Type":"application/json"},va=viewAs();if(va)hd["X-View-As"]=va.role;return fetch("/api/"+path,{method:"POST",headers:hd,body:JSON.stringify(body||{})})})
     .then(function(r){return r.json().catch(function(){return{error:"Unexpected reply ("+r.status+")"}}).then(function(j){if(r.status===401){saveSession(null);showLogin("Please sign in again.");throw new Error("signin")}if(!r.ok)throw new Error(j.error||("Error "+r.status));return j})});
 }
+/* "See it as" (Website settings → Editors): the owner looks at the editor with another level; the server limits every request the same way */
+function viewAs(){try{return JSON.parse(ss.get("ambs-ed-viewas")||"null")}catch(e){return null}}
 function showLogin(msg){showForm("loginForm");$("app").classList.add("hidden");$("login").classList.remove("hidden");var m=$("loginMsg");if(msg){m.textContent=msg;m.classList.remove("hidden")}else m.classList.add("hidden");}
 $("loginForm").addEventListener("submit",function(e){
   e.preventDefault();var b=$("loginBtn");b.disabled=true;b.textContent="Signing in…";
@@ -919,7 +962,7 @@ function setPassword(pw){
   return token().then(function(t){return fetch(SUPA+"/auth/v1/user",{method:"PUT",headers:{apikey:KEY,Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({password:pw})})})
     .then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok){var m=j.msg||j.message||j.error_description||"The password couldn't be changed";
       if(/different from the old/i.test(m))m="That's your current password. Choose a new one.";else if(/weak|pwned|leaked/i.test(m))m="That password is too easy to guess. Choose a longer or less common one.";else if(/reauthenticat/i.test(m))m="For safety, sign out and sign in again, then change your password.";throw new Error(m)}return j})})}
-function showForm(id){["loginForm","forgotForm","resetForm"].forEach(function(f){$(f).classList.toggle("hidden",f!==id)})}
+function showForm(id){["loginForm","forgotForm","resetForm","inviteForm"].forEach(function(f){$(f).classList.toggle("hidden",f!==id)})}
 $("forgotLink").addEventListener("click",function(){$("fEmail").value=$("email").value;$("forgotMsg").classList.add("hidden");showForm("forgotForm");$("fEmail").focus()});
 $("forgotBack").addEventListener("click",function(){showForm("loginForm")});
 $("forgotForm").addEventListener("submit",function(e){
@@ -983,6 +1026,7 @@ function start(){
   $("login").classList.add("hidden");$("app").classList.remove("hidden");
   if(window.edTabs)window.edTabs.reset();
   $("whoEmail").textContent=session&&session.email||"";
+  api("settings",{action:"me"}).then(function(me){window.ED_ME=me;if(window.edRole)window.edRole(me)}).catch(function(){});
   $("list").innerHTML='<p class="empty"><span class="spin"></span> Loading the website wording…</p>';
   api("content").then(function(j){
     items=j.items;byKey={};items.forEach(function(it){byKey[it.key]=it});
@@ -1222,6 +1266,17 @@ window.ED={api:api,esc:esc,store:store,autosize:autosize,confirmLeave:function()
   var hs=new URLSearchParams(location.hash.slice(1)),q=new URLSearchParams(location.search);
   if(hs.get("error")||q.get("error")){if(history.replaceState)history.replaceState(null,"",location.pathname);
     showLogin(/expired|invalid/i.test(hs.get("error_description")||q.get("error_description")||"")?"That link has expired or was already used. Press “Forgot password?” to get a new one.":"That link didn't work. Press “Forgot password?” to get a new one.");return}
+  if(hs.get("invite")){var tk=hs.get("invite"),rpc=function(fn,a){return fetch(SUPA+"/rest/v1/rpc/"+fn,{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify(a)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.message||"Something went wrong");return j})})};
+    if(history.replaceState)history.replaceState(null,"",location.pathname);saveSession(null);showLogin();showForm("inviteForm");
+    var LV={editor:"an editor (the website’s wording, pages, photos and settings)",writer:"a writer (pages and news)"};
+    rpc("website_invite_info",{p_token:tk}).then(function(r){var i=r&&r[0];if(!i){$("invHi").textContent="This invite link has already been used or was replaced by a newer one. If you’ve already set your password, sign in below.";$("inviteForm").querySelectorAll("input,button").forEach(function(x){x.disabled=true});showForm("loginForm");showLogin("That invite link has already been used. Sign in with your email and password, or ask for a new link.");return}
+      if(i.expired){showLogin("That invite link has expired. Ask the website owner for a new one.");return}
+      $("invHi").innerHTML="Kia ora"+(i.name?" "+esc(i.name.split(" ")[0]):"")+". You’ve been invited to edit <b>ambs.co.nz</b> as "+LV[i.role]+". Choose a password to start.";$("invEmail").value=i.email;$("email").value=i.email;$("invPw1").focus()}).catch(function(e){showLogin(e.message)});
+    $("inviteForm").addEventListener("submit",function(e){e.preventDefault();var a=$("invPw1").value,c=$("invPw2").value,m=$("invMsg"),b=$("invBtn"),bad=pwProblem(a,c);if(bad){m.textContent=bad;m.classList.remove("hidden");return}
+      b.disabled=true;b.textContent="Setting up…";rpc("website_invite_accept",{p_token:tk,p_password:a}).then(function(email){return authFetch("token?grant_type=password",{email:email,password:a})})
+        .then(function(j){keep(j);showForm("loginForm");start();setTimeout(function(){pwToast("Welcome! You’re signed in. Use this email and password next time.")},400)})
+        .catch(function(err){m.textContent=err.message;m.classList.remove("hidden");b.disabled=false;b.textContent="Start editing"})});
+    return}
   if(hs.get("type")==="recovery"&&hs.get("access_token")){
     keep({access_token:hs.get("access_token"),refresh_token:hs.get("refresh_token"),expires_in:+hs.get("expires_in")||3600});
     if(history.replaceState)history.replaceState(null,"",location.pathname);
@@ -1388,7 +1443,7 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,stats:statsInit,leads:leadsInit,conns:connsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,stats:statsInit,leads:leadsInit,conns:connsInit,editors:editorsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
   sideSync();window.scrollTo(0,0)
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
@@ -2891,10 +2946,10 @@ function designInit(){
 /* ======================= MENU AND HOME ======================= */
 /* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
    a dashboard with the key numbers and a tile for every part. EDMENU is the one list both are drawn from. */
-var ICO={leads:'M4 6h16v12H4zM4 7l8 6 8-6',stats:'M4 20V10M10 20V4M16 20v-7M22 20H2',conns:'M9 15l6-6M7.5 12.5l-2 2a3.5 3.5 0 0 0 5 5l2-2M16.5 11.5l2-2a3.5 3.5 0 0 0-5-5l-2 2',home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18',redirects:'M4 7h11l-3-3M15 7l-3 3M20 17H9l3-3M9 17l3 3',health:'M3 12h4l2-5 4 10 2-5h6'};
+var ICO={editors:'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1M17 3.5a4 4 0 0 1 0 7.5M22 21v-1a6 6 0 0 0-4-5.6',leads:'M4 6h16v12H4zM4 7l8 6 8-6',stats:'M4 20V10M10 20V4M16 20v-7M22 20H2',conns:'M9 15l6-6M7.5 12.5l-2 2a3.5 3.5 0 0 0 5 5l2-2M16.5 11.5l2-2a3.5 3.5 0 0 0-5-5l-2 2',home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18',redirects:'M4 7h11l-3-3M15 7l-3 3M20 17H9l3-3M9 17l3 3',health:'M3 12h4l2-5 4 10 2-5h6'};
 var EDMENU=[["",[["home","Home","Your dashboard"]]],
   ["Edit your website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["design","Colours & fonts","Brand colours, fonts and buttons for the whole website"]]],
-  ["Website settings",[["sections","Homepage sections","Order, hide or add homepage sections"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["redirects","Redirects","Send old addresses to the right page"],["conns","Connections","Analytics, Search Console, forms, bookings and keys"]]],
+  ["Website settings",[["sections","Homepage sections","Order, hide or add homepage sections"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["redirects","Redirects","Send old addresses to the right page"],["conns","Connections","Analytics, Search Console, forms, bookings and keys"],["editors","Editors","Invite people to edit the website, and see it as them"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"],["roi","Website ROI calculator","The calculator page at ambs.co.nz/website-roi-calculator"]]],
   ["Insights",[["stats","Stats","Leads, button clicks and chat at a glance"],["leads","Leads","Every enquiry from the website, with what they filled in"],["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 var CHOOSE={wording:["Homepage","Click any words on your real homepage and type. Add questions, steps and more from the panel.","Every line of the homepage in all 5 languages, with search."],
@@ -2902,11 +2957,16 @@ var CHOOSE={wording:["Homepage","Click any words on your real homepage and type.
   design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
 function ways(t){return CHOOSE[t]?'<span class="ways"><button type="button" data-way="'+t+'" data-m="visual" title="'+esc(CHOOSE[t][0])+' on the page" aria-label="'+esc(CHOOSE[t][0])+' on the page">✎</button><button type="button" data-way="'+t+'" data-m="forms" title="'+esc(CHOOSE[t][0])+' with the form" aria-label="'+esc(CHOOSE[t][0])+' with the form">☰</button></span>':''}
 function ico(k){if(k==="roi")k="calc";return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
-function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side"))b.setAttribute("aria-current",String(b.dataset.go===current))})}
+/* the menu's groups open and close (tap the group name); closed ones are remembered in this browser, and the group of the part you open always opens */
+function sideShut(){try{return JSON.parse(localStorage.getItem("ambs-side-shut")||"{}")||{}}catch(e){return{}}}
+function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side")){var on=b.dataset.go===current;b.setAttribute("aria-current",String(on));var g=on&&b.closest(".side-g.shut");if(g){g.classList.remove("shut");g.querySelector(".side-h").setAttribute("aria-expanded","true")}}})}
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
-  EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){if(t[0]==="roi")return'<button type="button" data-roi="1">'+ico("roi")+'<span>'+t[1]+'</span></button>';return CHOOSE[t[0]]?'<div class="side-row"><button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'+ways(t[0])+'</div>':'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
+  var shut=sideShut();
+  EDMENU.forEach(function(g){var gid=g[0]?g[0].toLowerCase().replace(/[^a-z]+/g,"-"):"";h+=(g[0]?'<div class="side-g'+(shut[gid]?' shut':'')+'" data-g="'+gid+'"><button type="button" class="side-h" aria-expanded="'+!shut[gid]+'">'+g[0]+'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="side-items"><div>':'')+g[1].map(function(t){if(t[0]==="roi")return'<button type="button" data-roi="1">'+ico("roi")+'<span>'+t[1]+'</span></button>';return CHOOSE[t[0]]?'<div class="side-row"><button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'+ways(t[0])+'</div>':'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")+(g[0]?'</div></div></div>':'')});
   h+='<div class="side-h">Shortcuts</div><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
-  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");sideSync();modeSync()})();
+  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");
+  sd.querySelectorAll(".side-g>.side-h").forEach(function(b){b.addEventListener("click",function(){var g=b.parentNode,on=!g.classList.toggle("shut");b.setAttribute("aria-expanded",String(on));var x=sideShut();if(on)delete x[g.dataset.g];else x[g.dataset.g]=1;try{localStorage.setItem("ambs-side-shut",JSON.stringify(x))}catch(e){}})});
+  sideSync();modeSync()})();
 /* Homepage, Pages & news and Colours & fonts can be changed on the real page or with the form: opening one asks which,
    unless "Remember my choice" was ticked (ambs-ed-choice in this browser). Each screen has a switch at the top to change it. */
 function edChoice(){try{return JSON.parse(localStorage.getItem("ambs-ed-choice")||"{}")}catch(e){return{}}}
@@ -2972,14 +3032,14 @@ function healthInit(){
       '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p class="help hl-when">Last checked '+healthWhen(j.checked)+' (New Zealand time)</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
     var checks=j.checks||[],pp=j.perPage||[];
     h1+='<section class="panel ts-sumbox"><div class="ts-sumh"><h3>Speed &amp; security</h3><span class="help" id="tsSumWhen"></span><button type="button" class="ts-go" id="tsSumGo">See details →</button></div><div class="ts-sum" id="tsSum"></div></section>';
-    h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button><button type="button" data-v="tests" aria-selected="false">Speed &amp; security</button></div>';
-    h1+='<div class="hl-v" data-v="tests" hidden><div id="tsBox"></div></div>';
+    h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button><button type="button" data-v="tests" aria-selected="false">Speed &amp; security</button><button type="button" data-v="google" aria-selected="false">On Google</button></div>';
+    h1+='<div class="hl-v" data-v="tests" hidden><div id="tsBox"></div></div><div class="hl-v" data-v="google" hidden><div id="gxBox"></div></div>';
     h1+='<div class="panel hl-v" data-v="checks" hidden><ul class="hl-checks">'+checks.map(function(c){var ok=!c.failed;return'<li class="'+(c.total?ok?"ok":"bad":"na")+'"><i aria-hidden="true">'+(c.total?ok?"✓":"✕":"–")+'</i><b>'+esc(c.name)+'</b><span>'+(!c.total?"Nothing to check":ok?"All "+c.total+" pass":c.failed+" of "+c.total+" to fix")+'</span></li>'}).join("")+'</ul></div>';
     h1+='<div class="panel hl-v" data-v="pages" hidden><ul class="hl-pages">'+pp.map(function(r,k){return'<li><div><b>'+esc(r.name)+'</b><span class="hl-url">'+esc(r.url)+'</span></div><span class="hl-res '+(r.issues?SEV[r.worst][1]:"ok")+'">'+(r.issues?r.issues+" to fix":"✓ All good")+'</span><button type="button" class="btn soft" data-p="'+k+'">'+(r.issues?"Fix":"Open")+'</button></li>'}).join("")+'</ul></div>';
     if(!j.issues.length)h1+='<div class="panel hl-v" data-v="fix"><p class="help">Everything looks great. 🎉 Every check passes on every page.</p></div>';
     else h1+='<div class="panel hl-v" data-v="fix"><ul class="hl-list">'+j.issues.map(function(i,k){return'<li class="'+SEV[i.sev][1]+'"><span class="hl-tag">'+SEV[i.sev][0]+'</span><div><b>'+esc(i.name)+'</b> <a href="'+esc(i.url)+'" target="_blank" rel="noopener" class="hl-url">'+esc(i.url)+'</a><p>'+esc(i.what)+'</p><p class="help">'+esc(i.fix)+'</p></div><button type="button" class="btn soft" data-k="'+k+'">Fix</button></li>'}).join("")+'</ul></div>';
     m.innerHTML=h1;$("hlRe").addEventListener("click",healthInit);
-    var tab=function(v){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x.dataset.v===v))});m.querySelectorAll(".hl-v").forEach(function(x){x.hidden=x.dataset.v!==v});HL_TAB=v;if(v==="tests")testsInit(pp)};
+    var tab=function(v){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x.dataset.v===v))});m.querySelectorAll(".hl-v").forEach(function(x){x.hidden=x.dataset.v!==v});HL_TAB=v;if(v==="tests")testsInit(pp);if(v==="google")gIndex(pp)};
     m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){tab(b.dataset.v)})});if(HL_TAB!=="fix")tab(HL_TAB);
     var toTests=function(){TS_URL=TS_HOME;tab("tests");var t=m.querySelector(".hl-tabs");if(t)t.scrollIntoView({behavior:"smooth",block:"start"})};
     $("tsSumGo").addEventListener("click",toTests);$("tsSum").addEventListener("click",function(e){if(e.target.closest("[data-sum]"))toTests()});
@@ -2989,6 +3049,44 @@ function healthInit(){
       if(i.section==="redirects")return show("redirects");show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(i.section,i.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
     var k=$("hmHealth");if(k){k.dataset.j=JSON.stringify({score:j.score,issues:j.issues,checked:j.checked});k.innerHTML=healthTile(j)}
   }).catch(fail);
+}
+/* Site health → On Google: whether Google has each live page in its index, from Search Console URL Inspection
+   (api/settings "test" with test "index" → inspectUrl() in api/_ga.js), three pages at a time so each fills in as it
+   arrives. Kept in this browser (ambs-gidx) and checked again by itself when the last full check is over a day old. */
+var GX_PLAIN={"Submitted and indexed":"On Google","Indexed, not submitted in sitemap":"On Google (not in the sitemap)",
+  "Discovered - currently not indexed":"Google knows the page but hasn’t visited it yet. This usually sorts itself out within a few weeks; links to it from your other pages help.",
+  "Crawled - currently not indexed":"Google visited but hasn’t listed it yet. Pages with more useful, original text and links from other pages are listed sooner.",
+  "URL is unknown to Google":"Google hasn’t found this page yet. It’s in your sitemap, so it should come; to hurry it, open it in Search Console and press “Request indexing”.",
+  "Page with redirect":"This address sends visitors to another page, so Google lists that page instead. Nothing to do.",
+  "Excluded by ‘noindex’ tag":"The page asks Google not to list it.","Not found (404)":"Google found a broken address here. Add a redirect if the page moved.",
+  "Alternate page with proper canonical tag":"Google lists the main version of this page instead. Nothing to do.",
+  "Duplicate without user-selected canonical":"Google thinks this page is a copy of another one. Make its title and text more distinct.",
+  "Duplicate, Google chose different canonical than user":"Google picked another page as the main version. Make this page’s text more distinct."};
+var gxRun=false;
+function gIndex(pp){var box=$("gxBox");if(!box)return;var KEY="ambs-gidx",load=function(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}},save=function(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
+  var list=[{name:"Homepage",url:"/"},{name:"Services",url:"/services"},{name:"Industries",url:"/industries"},{name:"Guides",url:"/guides"}].concat(pp.map(function(r){return{name:r.name,url:r.url}})),seen={};
+  list=list.filter(function(r){if(seen[r.url])return false;seen[r.url]=1;return true});
+  var full=function(u){return"https://ambs.co.nz"+u},day=function(t){return t?new Date(t).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric",timeZone:"Pacific/Auckland"}):""};
+  function draw(){var D=load(),R=D.r||{},on=0,off=0,un=0,setup=D.setup;
+    list.forEach(function(r){var x=R[r.url];if(!x)un++;else if(x.v==="PASS")on++;else off++});
+    var rows=list.map(function(r,k){var x=R[r.url],st=!x?(gxRun?'<span class="gx-st wait"><span class="spin"></span> Checking</span>':'<span class="gx-st na">Not checked</span>'):x.err?'<span class="gx-st na">Couldn’t check</span>':x.v==="PASS"?'<span class="gx-st ok">✓ On Google</span>':'<span class="gx-st bad">✕ Not on Google</span>';
+      var why=x&&!x.err?(x.v==="PASS"?(x.cov&&x.cov!=="Submitted and indexed"?GX_PLAIN[x.cov]||x.cov:""):(GX_PLAIN[x.cov]||x.cov||"Not listed yet")):x&&x.err?x.err:"";
+      return'<li class="gx-row"><div class="gx-who"><b>'+esc(r.name)+'</b><a class="hl-url" href="'+esc(full(r.url))+'" target="_blank" rel="noopener">'+esc(r.url)+'</a>'+(why?'<span class="help">'+esc(why)+'</span>':'')+(x&&x.crawled?'<span class="help">Google last visited '+day(x.crawled)+'</span>':'')+'</div>'+st+
+        '<div class="gx-acts">'+(x&&x.link?'<a class="btn soft" href="'+esc(x.link)+'" target="_blank" rel="noopener">Search Console ↗</a>':'')+'<button type="button" class="btn soft" data-one="'+k+'">Check</button></div></li>'}).join("");
+    box.innerHTML='<div class="panel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check every page')+'</button></div>'+
+      (setup?'<p class="msg err">'+setup+'</p>':'')+
+      '<div class="kpis gx-kpis"><div class="kpi"><span>On Google</span><b>'+on+'</b><small class="gx-n">of '+list.length+' pages</small></div><div class="kpi"><span>Not on Google yet</span><b>'+off+'</b><small class="gx-n">'+(off?'see why below':'none')+'</small></div><div class="kpi"><span>Not checked</span><b>'+un+'</b><small class="gx-n">&nbsp;</small></div></div>'+
+      '<ul class="gx-list">'+rows+'</ul><p class="help">New pages usually take from a few days to a few weeks to appear. Google decides what to list; good text, links from your other pages and the sitemap all help.</p></div>';
+    $("gxAll").addEventListener("click",function(){runAll(true)});
+    box.querySelectorAll("[data-one]").forEach(function(b){b.addEventListener("click",function(){var r=list[+b.dataset.one];busy(b,true,"…");one(r).then(function(){draw()})})})}
+  function one(r){return api("settings",{action:"test",test:"index",url:full(r.url)}).then(function(x){var D=load();D.r=D.r||{};
+      if(x.setup||x.needs){D.setup=x.setup?"Connect Google first (Website settings → Connections → Google Analytics reports), then add the same account in Search Console.":"Add "+esc(x.email||"the service account")+" in Search Console → Settings → Users and permissions (Restricted), then check again.";save(D);return}
+      delete D.setup;D.r[r.url]={v:x.verdict,cov:x.coverage,crawled:x.crawled,link:x.link,at:Date.now()};save(D)})
+    .catch(function(e){var D=load();D.r=D.r||{};D.r[r.url]={err:e.message,at:Date.now()};save(D)})}
+  function runAll(){if(gxRun)return;gxRun=true;var D=load();D.r={};save(D);draw();var i=0,live=0;
+    return new Promise(function(done){function next(){if(load().setup){gxRun=false;draw();return done()}if(i>=list.length){if(!live){gxRun=false;var D2=load();D2.at=Date.now();save(D2);draw();done()}return}
+      var r=list[i++];live++;one(r).then(function(){live--;if(document.body.contains(box))draw();next()})}for(var k=0;k<3;k++)next()})}
+  draw();var D=load();if(!gxRun&&(!D.at||Date.now()-D.at>24*36e5))runAll();
 }
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
@@ -3212,26 +3310,30 @@ function leadsInit(){
    are pasted here and kept encrypted in Supabase Vault (database functions site_secret_*), so nothing needs adding in
    Vercel; a Vercel variable with the same name still works as a fallback. Only GITHUB_TOKEN (it saves every change)
    and the sign-in settings stay in Vercel. api/settings "conns", "conn-save", "conn-remove". */
+var cmapSel=null,cmapRO=null;
 function connsInit(){
   var m=$("cnMain");
   function src(k){return k.from==="editor"?'<span class="cn-on">✓ Connected</span>':k.from==="vercel"?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Not set up</span>'}
-  function where(k){return k.from==="editor"?'Saved here'+(k.at?' · '+new Date(k.at).toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"}):'')+(k.note?' · by '+esc(k.note):''):k.from==="vercel"?'From Vercel (old setup). Save it here to manage it in the editor.':''}
-  function card(o){return '<details class="panel cn-card"'+(o.open?' open':'')+' data-svc="'+(o.svc||"")+'"><summary><span class="cn-ic" aria-hidden="true">'+o.icon+'</span><span class="cn-t"><b>'+o.name+'</b><span>'+o.by+'</span></span>'+o.status+'</summary><div class="cn-body">'+o.body+'</div></details>'}
-  function draw(j){var K=j.keys||{},ga=K.GA_PROPERTY_ID||{},sa=K.GA_SERVICE_ACCOUNT||{},gs=K.GSC_SITE||{},ps=K.PAGESPEED_KEY||{};
+  function where(k){return k.from==="editor"?'Saved here'+(k.at?' · '+new Date(k.at).toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"}):'')+(k.note?' · by '+esc(k.note):''):k.from==="vercel"?'Kept in Vercel (its Environment Variables). It works as it is; ⇣ Move from Vercel brings it here so you can change it in the editor.':''}
+  /* the line under each card's name: where the key is kept and which account it is, so it shows without opening the card */
+  function sub(k,by){return k&&k.from?'<b class="cn-where'+(k.from==="vercel"?' v':'')+'">'+(k.from==="editor"?'In the editor':'In Vercel')+'</b>'+(k.hint?' · '+esc(k.hint):''):by}
+  function card(o){return '<details class="panel cn-card"'+(o.open?' open':'')+' data-svc="'+(o.svc||"")+'"><summary><span class="cn-ic" aria-hidden="true">'+o.icon+'</span><span class="cn-t"><b>'+o.name+'</b><span>'+(o.sub||o.by)+'</span></span>'+o.status+'</summary><div class="cn-body">'+o.body+'</div></details>'}
+  function draw(j){var K=j.keys||{},ga=K.GA_PROPERTY_ID||{},sa=K.GA_SERVICE_ACCOUNT||{},gs=K.GSC_SITE||{},ps=K.PAGESPEED_KEY||{},sb=j.supabase||{project:"onunconxcvkwowtgalxn"};
     var gaOn=ga.from&&sa.from,acts=function(svc,on,ed,vc){return'<div class="cn-acts"><button type="button" class="btn primary" data-save="'+svc+'">'+(on?'Save &amp; check':'Connect')+'</button>'+(vc?'<button type="button" class="btn" data-move="'+svc+'" title="Copies the keys Vercel has into the editor, checks them and saves them encrypted">⇣ Move from Vercel</button>':'')+(ed?'<button type="button" class="btn danger" data-remove="'+svc+'">Remove</button>':'')+'</div><p class="help cn-msg" id="cnm-'+svc+'"></p>'};
     var built=function(t){return'<span class="cn-built">'+t+'</span>'};
     m.innerHTML='<div class="dash-head"><div><h2>Connections</h2><p class="help">Every service the website uses. Keys pasted here are checked, then kept encrypted in the database. Only the last characters are ever shown, and nothing needs adding in Vercel.</p></div></div>'+
       (j.vault?'':'<div class="panel"><p class="help">Saving keys here needs a one-time database update. It’s added when this change goes live; until then the keys in Vercel keep working.</p></div>')+
+      '<div class="panel cmap-p"><div class="cmap-hd"><h3>How it all connects</h3><span class="help">Tap any part to see what it does and whether it’s working.</span></div><div id="cmap"></div><div id="cmapInfo" class="cmap-info" aria-live="polite"></div></div>'+
       '<div class="cn-grid">'+
-      card({svc:"ga",icon:"📊",name:"Google Analytics reports",by:"Visitors, Stats and Home",status:src({from:gaOn?(ga.from==="editor"||sa.from==="editor"?"editor":"vercel"):""}),body:
-        '<p class="help">'+(gaOn?where(sa.from==="editor"?sa:ga)+(sa.hint?'<br>Service account: '+esc(sa.hint):''):'Shows who visits, what they click and the numbers on Home. Read-only.')+'</p>'+
+      card({svc:"ga",icon:"📊",name:"Google Analytics reports",by:"Visitors, Stats and Home",sub:gaOn?sub({from:sa.from==="editor"||ga.from==="editor"?"editor":"vercel",hint:[ga.hint?"Property "+ga.hint:"",sa.hint].filter(Boolean).join(" · ")},""):"",status:src({from:gaOn?(ga.from==="editor"||sa.from==="editor"?"editor":"vercel"):""}),body:
+        '<p class="help">'+(gaOn?where(sa.from==="editor"?sa:ga)+(ga.hint?'<br>Property: '+esc(ga.hint):'')+(sa.hint?'<br>Service account: '+esc(sa.hint):''):'Shows who visits, what they click and the numbers on Home. Read-only.')+'</p>'+
         '<label class="f"><span>Property number</span><input id="cn_GA_PROPERTY_ID" inputmode="numeric" value="'+esc(ga.from==="editor"?ga.hint:"")+'" placeholder="'+(ga.from==="vercel"?"Now from Vercel":"e.g. 512345678")+'"></label>'+
         '<label class="f"><span>Service account key (.json)</span><textarea id="cn_GA_SERVICE_ACCOUNT" rows="3" spellcheck="false" autocomplete="off" placeholder="'+(sa.from?"Leave empty to keep the saved key":"Paste everything in the downloaded .json file")+'"></textarea></label>'+
         '<details class="cn-how"><summary>How to get these</summary><ol class="vs-steps"><li><b>console.cloud.google.com</b> → a project → <b>APIs &amp; Services → Library</b> → enable <b>Google Analytics Data API</b> (and <b>Search Console API</b>).</li><li><b>IAM &amp; Admin → Service accounts → Create</b>, then <b>Keys → Add key → JSON</b>. A file downloads.</li><li>In <b>analytics.google.com → Admin → Property access management</b>, add the account’s email as <b>Viewer</b>.</li><li><b>Admin → Property details</b>: copy the Property ID (a number).</li></ol></details>'+acts("ga",gaOn,ga.from==="editor"||sa.from==="editor",ga.from==="vercel"||sa.from==="vercel")})+
-      card({svc:"gsc",icon:"🔎",name:"Google Search Console",by:"Google search (SEO) and page checks",status:gaOn?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Needs Analytics key</span>',body:
+      card({svc:"gsc",icon:"🔎",name:"Google Search Console",by:"Google search (SEO) and page checks",sub:gs.from?sub(gs,""):gaOn?'<b class="cn-where">Same account</b> · tries sc-domain:ambs.co.nz':"",status:gaOn?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Needs Analytics key</span>',body:
         '<p class="help">Uses the same service account. Add its email in <b>search.google.com/search-console → Settings → Users and permissions</b> (Restricted). '+(gs.from?where(gs):'Without a site set, it tries sc-domain:ambs.co.nz, then the https addresses.')+'</p>'+
         '<label class="f"><span>Site (optional)</span><input id="cn_GSC_SITE" value="'+esc(gs.from==="editor"?gs.hint:"")+'" placeholder="sc-domain:ambs.co.nz"></label>'+acts("gsc",true,gs.from==="editor")})+
-      card({svc:"psi",icon:"⚡",name:"PageSpeed",by:"Site health → Speed & security",status:src(ps),body:
+      card({svc:"psi",icon:"⚡",name:"PageSpeed",by:"Site health → Speed & security",sub:sub(ps,""),status:src(ps),body:
         '<p class="help">'+(ps.from?where(ps)+(ps.hint?' · '+esc(ps.hint):''):'Google’s shared allowance for speed tests is usually used up; a free key of your own fixes that.')+'</p>'+
         '<label class="f"><span>API key</span><input id="cn_PAGESPEED_KEY" type="password" autocomplete="off" placeholder="'+(ps.from?"Leave empty to keep the saved key":"AIza…")+'"></label>'+
         '<details class="cn-how"><summary>How to get it</summary><ol class="vs-steps"><li><b>console.cloud.google.com → APIs &amp; Services → Library</b> → enable <b>PageSpeed Insights API</b>.</li><li><b>Credentials → Create credentials → API key</b>, then copy it.</li></ol></details>'+acts("psi",!!ps.from,ps.from==="editor")})+
@@ -3241,9 +3343,11 @@ function connsInit(){
       card({icon:"📅",name:"Bookings",by:"Zoho Bookings",status:built("✓ Built in"),body:'<p class="help">The booking box on the homepage. Calls booked show in Stats.</p><a class="btn" href="https://bookings.zoho.com.au/" target="_blank" rel="noopener">Zoho Bookings ↗</a>'})+
       card({icon:"💬",name:"Chat helper log",by:"Supabase",status:built("✓ Built in"),body:'<p class="help">Questions visitors type are saved (emails and phone numbers masked) and listed in Chat helper.</p><button type="button" class="btn" data-go="chat">Open Chat helper →</button>'})+
       card({icon:"👥",name:"Social profiles",by:"Facebook, Instagram, LinkedIn…",status:built("In Details"),body:'<p class="help">The icons in every footer and Google’s business details.</p><button type="button" class="btn" data-go="business">Open Business details →</button>'})+
+      card({svc:"supabase",icon:"🗄️",name:"Supabase",by:"Sign-in, leads, chat log and saved keys",sub:sb.ok?'<b class="cn-where">Project</b> · '+esc(sb.project)+' · answered in '+sb.ms+' ms':"",status:sb.ok?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Not answering</span>',body:
+        '<p class="help">The database behind the editor and the portal: your editor sign-in and Editors, the Leads and Stats numbers (from the portal’s records), the Chat helper’s question log, and the keys saved on this page (encrypted in Supabase Vault). Its address and public key are built into the editor; only the website owner’s settings in Vercel can change them.</p>'+(sb.ok?'':'<p class="msg err">'+esc(sb.error||"It didn’t answer just now.")+'</p>')+'<a class="btn" href="https://supabase.com/dashboard/project/'+encodeURIComponent(sb.project)+'" target="_blank" rel="noopener">Supabase dashboard ↗</a>'})+
       card({icon:"🔐",name:"Publishing",by:"GitHub, through Vercel",status:j.github?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Missing</span>',body:'<p class="help">This is what saves every change you make, so its key has to stay in Vercel (GITHUB_TOKEN), together with the sign-in settings.</p>'})+
       '</div>';
-    wire()}
+    wire();cmap(j,gaOn,ps,sb)}
   function wire(){
     m.querySelectorAll("[data-save]").forEach(function(b){b.addEventListener("click",function(){var svc=b.dataset.save,msg=$("cnm-"+svc),vals={};
       ({ga:["GA_PROPERTY_ID","GA_SERVICE_ACCOUNT"],gsc:["GSC_SITE"],psi:["PAGESPEED_KEY"]})[svc].forEach(function(n){var i=$("cn_"+n);if(i)vals[n]=i.value});
@@ -3255,7 +3359,112 @@ function connsInit(){
         toast("Moved into the editor");stCache={};load(svc,"✓ Moved. Managed here now; the Vercel copy can be deleted. "+(j.note||""))}).catch(function(e){b.disabled=false;msg.className="msg err cn-msg";msg.textContent=e.message})})});
     m.querySelectorAll("[data-remove]").forEach(function(b){b.addEventListener("click",function(){if(!confirm("Remove the key saved here? A key in Vercel, if any, is used again."))return;
       api("settings",{action:"conn-remove",svc:b.dataset.remove}).then(function(){toast("Removed");load()}).catch(function(e){toast(e.message)})})})}
+  /* The interactive picture: every part of the website and how they're linked. Laptop: a wide map; phone: two columns.
+     Tap (or Tab + Enter) a part to light up its links and read what it does, its status and where to manage it. */
+  function cmap(j,gaOn,ps,sb){var box=$("cmap"),info=$("cmapInfo");if(!box)return;
+    var ST={github:j.github,ga:!!gaOn,gsc:!!gaOn,psi:!!(ps&&ps.from),supabase:!!sb.ok};
+    var N={you:["🧑‍💻","You","The editor at /admin","You change words, pages, photos and settings here. Every save goes to GitHub, and Vercel puts it live.",{go:"home",l:"Go to Home"}],
+      github:["🔐","GitHub","Keeps every version","Stores the website’s files and every change ever made, so History can undo anything. Needs GITHUB_TOKEN in Vercel.",{svc:"publishing",l:"See Publishing"}],
+      vercel:["▲","Vercel","Builds and hosts it","Turns each change into the live website in about 2 minutes and runs the editor’s server parts. Also keeps GITHUB_TOKEN and the owner list (ADMIN_EMAILS).",{href:"https://vercel.com/dashboard",l:"Vercel dashboard ↗"}],
+      site:["🌐","ambs.co.nz","Your website","Every page visitors see, in 5 languages, with the chat helper, forms and booking box.",{href:"/",l:"Open the website ↗"}],
+      visitors:["👥","Visitors","Phones, computers","People who open the website. Google Analytics counts them without identifying anyone.",{go:"visitors",l:"Open Visitors now"}],
+      chat:["💬","Ambs Bot","Chat on every page","Answers questions from the website’s own wording, right in the visitor’s browser. Questions it gets are saved (emails and phone numbers masked) for you to answer.",{go:"chat",l:"Open Chat helper"}],
+      web3:["✉️","Web3Forms","Emails you messages","Every form and chat message is emailed to you through Web3Forms.",{svc:"web3",l:"See Website forms"}],
+      zoho:["📅","Zoho Bookings","The booking box","Visitors pick a time for a call. Calls booked show in Stats.",{svc:"zoho",l:"See Bookings"}],
+      portal:["🗂️","AMBS portal","Leads and clients","Every enquiry from the website lands in the portal’s Leads, where you follow it up.",{href:"https://portal.ambs.co.nz/",l:"Open the portal ↗"}],
+      supabase:["🗄️","Supabase","The database","Your editor sign-in and Editors, the portal’s records (Leads, Stats), the chat question log and the keys on this page (encrypted).",{svc:"supabase",l:"See Supabase"}],
+      ga:["📊","Google Analytics","Visits and clicks","The tag on every page counts visits and button clicks; the editor reads the numbers for Visitors, Stats and Home.",{svc:"ga",l:"See Analytics reports"}],
+      gsc:["🔎","Search Console","Your place on Google","Searches you appear for, your place in Google and whether each page is indexed.",{go:"seo",l:"Open Google search (SEO)"}],
+      psi:["⚡","PageSpeed","Speed tests","Google’s speed test for any page, shown in Site health.",{go:"health",l:"Open Site health"}]};
+    var E=[["you","github","saves"],["github","vercel","builds"],["vercel","site","publishes"],["visitors","site","visit"],["site","chat","asks"],["site","web3","messages"],["site","zoho","bookings"],["site","portal","new leads"],["portal","supabase","stores"],["chat","supabase","logs"],["site","ga","counts visits"],["you","ga","reads",1],["you","gsc","reads",1],["you","psi","tests",1],["you","supabase","signs in",1]];
+    var wide=box.clientWidth>=640,W=wide?1000:360,bw=wide?176:156,bh=wide?60:56;
+    var P=wide?{you:[120,60],github:[390,60],vercel:[660,60],visitors:[900,170],site:[660,250],chat:[390,340],web3:[900,300],zoho:[900,420],portal:[660,430],supabase:[390,450],ga:[120,250],gsc:[120,360],psi:[120,470]}
+      :{you:[90,40],github:[270,40],visitors:[90,140],vercel:[270,140],site:[180,240],chat:[90,340],web3:[270,340],supabase:[90,440],portal:[270,440],ga:[90,540],zoho:[270,540],gsc:[90,640],psi:[270,640]};
+    var H=wide?520:690;
+    /* the editor's own reads go round the left edge on laptops so they don't cross the boxes */
+    function path(a,b,side){var A=P[a],B=P[b];if(wide&&side&&a==="you"&&b!=="supabase")return"M"+(A[0]-bw/2)+","+A[1]+" C"+(A[0]-bw/2-60)+","+A[1]+" "+(B[0]-bw/2-60)+","+B[1]+" "+(B[0]-bw/2)+","+B[1];
+      if(wide&&a==="you"&&b==="supabase")return"M"+(A[0]+60)+","+(A[1]+bh/2)+" C255,170 255,"+B[1]+" "+(B[0]-bw/2)+","+B[1];return"M"+A[0]+","+A[1]+" L"+B[0]+","+B[1]}
+    var svg='<svg viewBox="0 0 '+W+' '+H+'" role="group" aria-label="How the website’s parts connect"><defs><marker id="cmA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10z" fill="currentColor"/></marker></defs><g class="cm-edges">'+
+      E.map(function(e,i){var A=P[e[0]],B=P[e[1]],mx=(A[0]+B[0])/2,my=(A[1]+B[1])/2;if(wide&&e[3]&&e[1]!=="supabase"){mx=A[0]-bw/2-46;my=(A[1]+B[1])/2}if(wide&&e[0]==="you"&&e[1]==="supabase"){mx=255;my=330}
+        return'<g class="cm-e'+(e[3]?' rd':'')+'" data-a="'+e[0]+'" data-b="'+e[1]+'"><path d="'+path(e[0],e[1],e[3])+'"/>'+(wide?'<text x="'+mx+'" y="'+(my-6)+'" text-anchor="middle">'+e[2]+'</text>':'')+'</g>'}).join("")+'</g><g class="cm-nodes">'+
+      Object.keys(P).map(function(k){var n=N[k],x=P[k][0]-bw/2,y=P[k][1]-bh/2,ok=ST[k]===undefined?2:ST[k]?1:0;
+        return'<g class="cm-n'+(k==="site"?' main':'')+'" data-k="'+k+'" tabindex="0" role="button" aria-label="'+esc(n[1]+": "+n[2])+'"><rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="14"/>'+
+          '<text class="ic" x="'+(x+22)+'" y="'+(y+bh/2+6)+'" text-anchor="middle">'+n[0]+'</text><text class="t" x="'+(x+42)+'" y="'+(y+bh/2-3)+'">'+esc(wide?n[1]:({ga:"Analytics",gsc:"Google search",zoho:"Bookings",portal:"Portal",web3:"Web3Forms"}[k]||n[1]))+'</text><text class="s" x="'+(x+42)+'" y="'+(y+bh/2+14)+'">'+esc(n[2])+'</text>'+
+          '<circle class="dot d'+ok+'" cx="'+(x+bw-12)+'" cy="'+(y+12)+'" r="5"/></g>'}).join("")+'</g></svg>';
+    box.innerHTML=svg;
+    function pick(k){var g=box.querySelector("svg");box.querySelectorAll(".cm-n").forEach(function(n){n.classList.toggle("on",n.dataset.k===k)});
+      var near={};near[k]=1;box.querySelectorAll(".cm-e").forEach(function(e){var hit=e.dataset.a===k||e.dataset.b===k;e.classList.toggle("on",hit);if(hit){near[e.dataset.a]=1;near[e.dataset.b]=1}});
+      g.classList.add("sel");box.querySelectorAll(".cm-n").forEach(function(n){n.classList.toggle("near",!!near[n.dataset.k])});
+      var n=N[k],ok=ST[k]===undefined?'<span class="cn-built">Built in</span>':ST[k]?'<span class="cn-on">✓ Working</span>':'<span class="cn-off">Not set up</span>',a=n[4],links=E.filter(function(e){return e[0]===k||e[1]===k}).map(function(e){return e[0]===k?N[e[1]][1]+' ('+e[2]+')':N[e[0]][1]+' ('+e[2]+')'});
+      info.innerHTML='<div class="cmap-i-h"><span class="cmap-i-ic">'+n[0]+'</span><div><b>'+esc(n[1])+'</b> '+ok+'<p class="help">'+esc(n[3])+'</p><p class="help"><b>Linked to:</b> '+esc(links.join(" · "))+'</p></div></div>'+
+        (a.go?'<button type="button" class="btn" data-go="'+a.go+'">'+esc(a.l)+' →</button>':a.svc?'<button type="button" class="btn" data-card="'+a.svc+'">'+esc(a.l)+' ↓</button>':'<a class="btn" href="'+a.href+'" target="_blank" rel="noopener">'+esc(a.l)+'</a>');
+      var c=info.querySelector("[data-card]");if(c)c.addEventListener("click",function(){var d=m.querySelector('.cn-card[data-svc="'+c.dataset.card+'"]')||[].filter.call(m.querySelectorAll(".cn-card"),function(x){return x.textContent.indexOf({publishing:"Publishing",web3:"Website forms",zoho:"Bookings"}[c.dataset.card]||"~")>=0})[0];if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"center"})}})}
+    box.querySelectorAll(".cm-n").forEach(function(n){n.addEventListener("click",function(){pick(n.dataset.k)});n.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(n.dataset.k)}})});
+    pick(cmapSel||"site");box.querySelectorAll(".cm-n").forEach(function(n){n.addEventListener("click",function(){cmapSel=n.dataset.k})});
+    if(!cmapRO&&window.ResizeObserver){var lastW=wide;cmapRO=new ResizeObserver(function(){var w=box.clientWidth>=640;if(w!==lastW){lastW=w;cmap(j,gaOn,ps,sb)}});cmapRO.observe(box)}
+  }
   function load(open,note){api("settings",{action:"conns"}).then(function(j){draw(j);if(open){var d=m.querySelector('[data-svc="'+open+'"]');if(d){d.open=true;var mm=$("cnm-"+open);if(mm&&note){mm.className="help cn-msg ok";mm.textContent=note}}}}).catch(function(e){if(e.message!=="signin")m.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
+  load();
+}
+/* ======================= EDITORS (Website settings → Editors) =======================
+   The owner (ADMIN_EMAILS in Vercel) invites people with a level and can "See it as" any level. An invite is a private
+   one-time link (7 days) the owner sends themselves; the person opens it and chooses a password (no email is sent from
+   here). Database functions website_editor_* (site-src/sql/2026-11-website-editors.sql); api/settings "editors",
+   "editor-invite", "editor-role", "editor-remove", "me". Levels are checked on the server too (ROLES in api/_lib.js). */
+var LEVELS={owner:["Owner","Everything, including Leads, Stats, Visitors, Connections and Editors."],
+  editor:["Editor","The website’s wording, pages and news, photos, menus, sections, colours, business details, chat helper and history. Not Leads, Stats, Visitors, Google search, Connections or Editors."],
+  writer:["Writer","Pages, guides and news only, with photos. Can’t change the homepage, menus, colours, business details or settings."]};
+/* which parts of the editor each level sees (keep in step with ROLES in api/_lib.js) */
+var TAB_AREA={wording:"home",onpage:"home",pages:"pages",design:"design",sections:"layout",menus:"layout",redirects:"layout",photos:"photos",business:"business",chat:"chat",calc:"calc",health:"health",history:"history",
+  stats:"owner",leads:"owner",visitors:"owner",seo:"owner",conns:"owner",editors:"owner"};
+var ROLE_AREAS={editor:["home","pages","photos","layout","design","business","chat","calc","history","health"],writer:["pages","photos","history","health"]};
+function canTab(role,t){var a=TAB_AREA[t];if(!a||role==="owner")return true;if(a==="owner")return false;return(ROLE_AREAS[role]||[]).indexOf(a)>=0}
+window.edRole=function(me){var role=me.role||"owner",st=$("roleCss");if(!st){st=document.createElement("style");st.id="roleCss";document.head.appendChild(st)}
+  var hide=Object.keys(TAB_AREA).filter(function(t){return!canTab(role,t)});
+  st.textContent=hide.length?hide.map(function(t){return'#side .side-row:has([data-go="'+t+'"]),[data-go="'+t+'"],[data-tab="'+t+'"],[data-way="'+t+'"],#tabPick option[value="'+t+'"]'}).join(",")+'{display:none!important}'+
+    (canTab(role,"pages")?'':'[data-new]{display:none!important}'):"";
+  /* a group with nothing left in it disappears */
+  document.querySelectorAll("#side .side-g").forEach(function(g){var any=[].some.call(g.querySelectorAll("[data-go]"),function(b){return canTab(role,b.dataset.go)});g.style.display=any||g.querySelector("[data-roi]")&&canTab(role,"pages")?"":"none"});
+  var rb=document.querySelector("#side [data-roi]");if(rb)rb.style.display=canTab(role,"pages")?"":"none";
+  if(!canTab(role,current)&&typeof show==="function")show("home");
+  var bn=$("vaBar");if(me.viewAs){var va=viewAsGet()||{};if(!bn){bn=document.createElement("div");bn.id="vaBar";bn.setAttribute("role","status");document.body.appendChild(bn);document.body.classList.add("va-on")}
+    bn.innerHTML='<span>👁 You’re seeing the editor as <b>'+esc(va.name||LEVELS[role][0])+'</b> ('+LEVELS[role][0]+'). Only what they can see and do works. Nothing changes for them.</span><button type="button" class="btn" id="vaExit">Exit</button>';
+    $("vaExit").addEventListener("click",function(){try{sessionStorage.removeItem("ambs-ed-viewas")}catch(e){}location.reload()})}
+};
+function viewAsGet(){try{return JSON.parse(sessionStorage.getItem("ambs-ed-viewas")||"null")}catch(e){return null}}
+function seeAs(role,name){try{sessionStorage.setItem("ambs-ed-viewas",JSON.stringify({role:role,name:name||""}))}catch(e){}location.reload()}
+function editorsInit(){
+  var m=$("edsMain"),when=function(t){return t?new Date(t).toLocaleString([],{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):""};
+  function linkBox(link,name,email,role){var first=(name||"").split(" ")[0],body="Kia ora"+(first?" "+first:"")+",\n\nI’ve invited you to edit our website, ambs.co.nz, as "+(role==="writer"?"a writer (pages and news)":"an editor")+". Open this link, choose a password and you’re in:\n\n"+link+"\n\nThe link works once and lasts 7 days. After that, sign in at https://ambs.co.nz/admin with your email and password.\n";
+    return'<div class="eds-link"><p class="help"><b>Send this link to '+esc(name||email)+'.</b> It works once, for 7 days. Nothing is emailed from here, so send it yourself:</p><div class="eds-copy"><input class="t" readonly value="'+esc(link)+'" aria-label="Invite link"><button type="button" class="btn primary" data-copy>Copy link</button></div>'+
+      '<div class="eds-send"><a class="btn" href="mailto:'+encodeURIComponent(email)+'?subject='+encodeURIComponent("You’re invited to edit ambs.co.nz")+'&body='+encodeURIComponent(body)+'">✉ Email it</a>'+(navigator.share?'<button type="button" class="btn" data-share>↗ Share…</button>':'')+'<button type="button" class="btn" data-copymsg>Copy a message with the link</button></div></div>';}
+  function wireLink(box,link,body){var i=box.querySelector("input");box.querySelector("[data-copy]").addEventListener("click",function(){i.select();(navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject()).then(function(){toast("Link copied")}).catch(function(){document.execCommand("copy");toast("Link copied")})});
+    var sh=box.querySelector("[data-share]");if(sh)sh.addEventListener("click",function(){navigator.share({title:"Edit ambs.co.nz",text:body,url:link}).catch(function(){})});
+    box.querySelector("[data-copymsg]").addEventListener("click",function(){var t=decodeURIComponent((box.querySelector("a[href^=mailto]").getAttribute("href").split("&body=")[1]||""));(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast("Message copied")}).catch(function(){toast("Couldn’t copy. Copy the link instead.")})})}
+  function draw(j){var now=Date.now();
+    var rows=j.owners.map(function(e){return'<div class="eds-row"><div class="eds-who"><b>'+esc(e)+'</b><span class="help">Owner · set in Vercel (ADMIN_EMAILS)</span></div><span class="eds-lv own">Owner</span><span></span></div>'}).join("")+
+      j.editors.map(function(r){var st=r.accepted_at?'Joined '+when(r.accepted_at)+(r.last_seen?' · last in '+when(r.last_seen):''):r.link_expires&&new Date(r.link_expires)>now?'Invited '+when(r.invited_at)+' · link works until '+when(r.link_expires):'Invite link expired · make a new one';
+        return'<div class="eds-row" data-e="'+esc(r.email)+'" data-n="'+esc(r.name||"")+'"><div class="eds-who"><b>'+esc(r.name||r.email)+'</b><span class="help">'+(r.name?esc(r.email)+' · ':'')+st+'</span></div>'+
+          '<select class="t eds-role" aria-label="Level for '+esc(r.name||r.email)+'"><option value="editor"'+(r.role==="editor"?" selected":"")+'>Editor</option><option value="writer"'+(r.role==="writer"?" selected":"")+'>Writer</option></select>'+
+          '<div class="eds-acts"><button type="button" class="btn" data-as="'+r.role+'">👁 See it as</button><button type="button" class="btn" data-relink>'+(r.accepted_at?'New link':'New link')+'</button><button type="button" class="btn danger" data-del>Remove</button></div><div class="eds-out"></div></div>'}).join("");
+    m.innerHTML='<div class="dash-head"><div><h2>Editors</h2><p class="help">Invite people to work on the website, choose what they can change, and see the editor exactly as they will.</p></div></div>'+
+      '<div class="panel"><h3>Invite someone</h3><div class="eds-form"><label class="f"><span>Name</span><input class="t" id="edsName" autocomplete="off" placeholder="e.g. Priya Singh"></label><label class="f"><span>Email</span><input class="t" id="edsEmail" type="email" autocomplete="off" placeholder="name@example.com"></label>'+
+      '<label class="f"><span>Level</span><select class="t" id="edsRole"><option value="editor">Editor</option><option value="writer">Writer</option></select></label><button type="button" class="btn primary" id="edsGo">Make invite link</button></div><p class="help" id="edsLvHelp">'+LEVELS.editor[1]+'</p><div id="edsOut"></div></div>'+
+      '<div class="panel"><h3>Who can edit</h3><div class="eds-list">'+rows+'</div>'+(j.editors.length?'':'<p class="help">Nobody invited yet.</p>')+'</div>'+
+      '<div class="panel"><h3>Levels</h3><div class="eds-levels">'+["owner","editor","writer"].map(function(k){return'<div class="eds-lvl"><b>'+LEVELS[k][0]+'</b><span class="help">'+LEVELS[k][1]+'</span>'+(k==="owner"?'':'<button type="button" class="btn" data-as="'+k+'">👁 See the editor as '+(k==="editor"?'an':'a')+' '+LEVELS[k][0]+'</button>')+'</div>'}).join("")+'</div>'+
+      '<p class="help">“See it as” keeps you signed in as yourself and shows only what that level can see and do, so you can check their menus, screens and buttons. The server applies the same limits. Press <b>Exit</b> on the bar at the top to come back.</p></div>';
+    $("edsRole").addEventListener("change",function(){$("edsLvHelp").textContent=LEVELS[this.value][1]});
+    $("edsGo").addEventListener("click",function(){var b=this,n=$("edsName").value.trim(),e=$("edsEmail").value.trim(),r=$("edsRole").value;if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){toast("Type their email address");$("edsEmail").focus();return}
+      busy(b,true,"Making the link…");api("settings",{action:"editor-invite",email:e,name:n,role:r}).then(function(x){busy(b,false);var o=$("edsOut");o.innerHTML=linkBox(x.link,n,e,r);wireLink(o,x.link,decodeURIComponent(o.querySelector("a[href^=mailto]").getAttribute("href").split("&body=")[1]));$("edsName").value=$("edsEmail").value="";
+        api("settings",{action:"editors"}).then(function(j2){var keep=o.innerHTML;draw(j2);var o2=$("edsOut");o2.innerHTML=keep;wireLink(o2,x.link,"")})}).catch(function(err){busy(b,false);fail(err)})});
+    m.querySelectorAll("[data-as]").forEach(function(b){b.addEventListener("click",function(){var row=b.closest(".eds-row");seeAs(b.dataset.as,row?row.dataset.n||row.dataset.e:"")})});
+    m.querySelectorAll(".eds-role").forEach(function(sel){sel.addEventListener("change",function(){var row=sel.closest(".eds-row");api("settings",{action:"editor-role",email:row.dataset.e,role:sel.value}).then(function(){toast("Level changed to "+LEVELS[sel.value][0]);row.querySelector("[data-as]").dataset.as=sel.value}).catch(fail)})});
+    m.querySelectorAll("[data-relink]").forEach(function(b){b.addEventListener("click",function(){var row=b.closest(".eds-row");if(!confirm("Make a new invite link for "+(row.dataset.n||row.dataset.e)+"? Any earlier link stops working. If they’ve already joined, the new link lets them choose a new password."))return;
+      busy(b,true,"…");api("settings",{action:"editor-invite",email:row.dataset.e,name:row.dataset.n,role:row.querySelector(".eds-role").value}).then(function(x){busy(b,false);var o=row.querySelector(".eds-out");o.innerHTML=linkBox(x.link,row.dataset.n,row.dataset.e,row.querySelector(".eds-role").value);wireLink(o,x.link,"")}).catch(function(e){busy(b,false);fail(e)})})});
+    m.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){var row=b.closest(".eds-row");if(!confirm("Remove "+(row.dataset.n||row.dataset.e)+"? They won’t be able to sign in to the editor any more."))return;
+      api("settings",{action:"editor-remove",email:row.dataset.e}).then(function(){toast("Removed");load()}).catch(fail)})});
+  }
+  function load(){api("settings",{action:"editors"}).then(draw).catch(function(e){if(e.message!=="signin")m.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
   load();
 }
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).
