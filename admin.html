@@ -594,6 +594,17 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
 .os-d>summary::-webkit-details-marker{display:none}.os-d>summary:after{content:"＋";font-size:1rem;color:var(--muted)}.os-d[open]>summary:after{content:"−"}.os-d[open]{padding-bottom:12px!important}.os-d>summary:hover{color:var(--ink,#14172b)}
 .os-small{font-size:.86rem!important;padding:.3rem 0!important}
 .cv-hl[aria-pressed=true]{background:#fff4c2;border-color:#f5b800;color:#5a4400}.cv-hl span{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:99px;background:#f5b800;color:#2b2100;font-size:.78rem}
+.ch-ways{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ch-way{display:flex;flex-direction:column;gap:6px;text-align:left;border:1.5px solid var(--line);background:var(--card,#fff);border-radius:16px;padding:18px;font:inherit;color:inherit;cursor:pointer}
+.ch-way:hover,.ch-way:focus-visible{border-color:#139918;background:#eefaef;outline:none}.ch-way b{font-size:1.1rem}.ch-way span{font-size:.88rem;color:var(--muted)}.ch-rem{margin-top:14px}
+@media(max-width:600px){.ch-ways{grid-template-columns:1fr}}
+.way-sw{display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap;margin:6px 0 8px;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--card,#fff)}.way-sw>span{font-size:.78rem;font-weight:700;color:var(--muted);padding:0 6px 0 8px}
+.way-sw button{border:0;background:none;border-radius:999px;padding:.4rem .85rem;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer;color:var(--muted)}.way-sw button[aria-pressed=true]{background:var(--ink,#14172b);color:#fff}.way-sw .way-ask{font-weight:600;font-size:.78rem;text-decoration:underline}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .way-sw button[aria-pressed=true]{background:#e8ebf5;color:#14172b}}
+.side-row{position:relative;display:flex;align-items:center}.side-row>button[data-go]{flex:1;min-width:0}.ways{display:flex;gap:2px;position:absolute;right:6px;top:50%;transform:translateY(-50%)}
+.ways button{border:1px solid var(--line);background:var(--card,#fff);width:28px;height:28px;border-radius:8px;font:inherit;font-size:.82rem;cursor:pointer;color:var(--muted);padding:0;display:grid;place-items:center}.ways button:hover{border-color:#139918;color:#17761a;background:#eefaef}
+.tile-2{cursor:pointer}.tile-ways{display:flex!important;gap:6px;margin-top:10px;flex-wrap:wrap}.tile-ways button{border:1px solid var(--line);background:var(--bg,#f4f6fb);border-radius:99px;padding:.4rem .75rem;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;color:var(--ink,#14172b)}.tile-ways button:hover{border-color:#139918;background:#eefaef;color:#17761a}
+.ways{opacity:0;pointer-events:none;transition:opacity .15s}.side-row:hover .ways,.side-row:has(:focus-visible) .ways{opacity:1;pointer-events:auto}.side-row:hover>button[data-go],.side-row:has(:focus-visible)>button[data-go]{padding-right:70px!important}.side-row>button[data-go] span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ways button{width:26px;height:26px}
+.tile-ways{flex-wrap:wrap}.tile-ways button{white-space:nowrap}@media(max-width:640px){.tile-ways{gap:4px}.tile-ways button{padding:.35rem .6rem;font-size:.76rem}}
 </style>
 </head>
 <body>
@@ -1203,7 +1214,7 @@ document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventList
 var isPhone=function(){return window.matchMedia("(max-width:760px)").matches};
 /* the tabs as one picker */
 (function(){var tp=$("tabPick");document.querySelectorAll(".tabs [data-tab]").forEach(function(b){var o=document.createElement("option");o.value=b.dataset.tab;o.textContent=b.textContent;tp.appendChild(o)});
-  tp.value=current||"wording";tp.addEventListener("change",function(){if(tp.value==="wording"&&window.edMode&&window.edMode()==="visual"){tp.value=current;openOnPage();return}show(tp.value);window.scrollTo(0,0)})})();
+  tp.value=current||"wording";tp.addEventListener("change",function(){var v=tp.value;if(window.edGo&&{wording:1,pages:1,design:1}[v]&&v!==current){tp.value=current;window.edGo(v);return}show(v);window.scrollTo(0,0)})})();
 /* email, view site, change password and sign out behind one button */
 (function(){var btn=$("acctBtn"),box=$("whoBox");
   var set=function(on){box.classList.toggle("open",on);btn.setAttribute("aria-expanded",String(on))};
@@ -1330,6 +1341,7 @@ $("pgBack").addEventListener("click",function(){if(!leaveOk())return;open=null;m
 function plMenu(btn,r,live){
   document.querySelectorAll(".pl-menu").forEach(function(x){x.remove()});
   var items=[];if(live)items.push(["view","👁  View on the website"]);items.push(["link","🔗  Copy its link"]);
+  if(live&&r.sec!=="page")items.push(edMode()==="visual"?["form","☰  Edit with the form"]:["onpage","✎  Edit on the page"]);
   if(r.sec!=="page")items.push(["google","🔍  Google title & description"]);
   if(r.sec!=="legal"){items.push(["dup","⧉  Duplicate"]);items.push(["del","🗑  Delete"])}
   var mn=h('<div class="pl-menu" role="menu">'+items.map(function(x){return'<button type="button" role="menuitem" data-a="'+x[0]+'"'+(x[0]==="del"?' class="danger"':'')+'>'+x[1]+'</button>'}).join("")+'</div>');
@@ -1337,6 +1349,8 @@ function plMenu(btn,r,live){
   var close=function(){mn.remove();document.removeEventListener("click",close)};setTimeout(function(){document.addEventListener("click",close)});
   mn.addEventListener("click",function(e){var a=e.target.closest("button");if(!a)return;close();var full="https://ambs.co.nz"+r.url;
     if(a.dataset.a==="view")window.open(r.url,"_blank","noopener");
+    else if(a.dataset.a==="form"){forceForm=true;openPage(r.sec,r.slug);window.scrollTo(0,0)}
+    else if(a.dataset.a==="onpage")openPageOnPage(r.sec,r.slug);
     else if(a.dataset.a==="link"){(navigator.clipboard?navigator.clipboard.writeText(full):Promise.reject()).then(function(){toast("Link copied: "+full)}).catch(function(){prompt("Copy this link:",full)})}
     else if(a.dataset.a==="google"){openPage(r.sec,r.slug);var t0=Date.now(),go=function(){var g=$("seoTitle");if(g){g.scrollIntoView({block:"center"});g.focus()}else if(Date.now()-t0<10000)setTimeout(go,150)};go()}
     else if(a.dataset.a==="dup"){var t=prompt("Name of the copy:","Copy of "+r.title);if(!t||!t.trim())return;toast("Making a copy…");
@@ -1356,7 +1370,7 @@ function pagesHome(){
     site.legal.map(function(p){return{sec:"legal",slug:p.slug,title:p.title,url:"/"+p.slug}}));
   var count={all:rows.length};rows.forEach(function(r){count[r.sec]=(count[r.sec]||0)+1});
   var chips=[["all","All"],["page","Pages"],["services","Services"],["industries","Industries"],["guides","Guides"],["locations","Locations"],["news","News"],["legal","Legal"]].filter(function(c){return count[c[0]]});
-  m.innerHTML='<div class="pl-head"><div><h2>Pages &amp; news</h2><p class="help">'+(edMode()==="visual"?'You edit <b>on the page</b>: click a page to open it and type on it, with the tools on the left. <b>☰ Edit with form</b> is still there for every setting.':'You edit <b>with forms</b>: click a page to see all its settings. <b>✎ Edit on page</b> is still there to click and type on the real page.')+'</p></div><div class="pl-acts"><button type="button" class="btn" id="plHubs"><span class="lg">Section pages &amp; service cards</span><span class="sm">Section pages</span></button><button type="button" class="btn primary" id="plNew"><span class="lg">＋ New page or post</span><span class="sm">＋ New</span></button></div></div>'+
+  m.innerHTML='<div class="pl-head"><div><h2>Pages &amp; news</h2>'+waySwitch("pages",edMode())+'</div><div class="pl-acts"><button type="button" class="btn" id="plHubs"><span class="lg">Section pages &amp; service cards</span><span class="sm">Section pages</span></button><button type="button" class="btn primary" id="plNew"><span class="lg">＋ New page or post</span><span class="sm">＋ New</span></button></div></div>'+
     '<div class="pl-tools"><input class="t" type="search" id="plQ" placeholder="Find a page" aria-label="Find a page"><div class="pl-chips" role="group" aria-label="Show">'+chips.map(function(c){return'<button type="button" data-f="'+c[0]+'" aria-pressed="'+(pgFilter===c[0])+'">'+c[1]+' <span>'+count[c[0]]+'</span></button>'}).join("")+'</div></div><ul class="pl-list" id="plList"></ul>';
   var q=$("plQ");q.value=pgQ;
   function draw(){var t=pgQ.trim().toLowerCase(),list=$("plList");
@@ -1364,12 +1378,12 @@ function pagesHome(){
     list.innerHTML=vis.length?"":'<li class="pl-empty">No pages match.</li>';
     vis.forEach(function(r){var live=!r.p||edLive(r.p),sch=r.p&&edSched(r.p),onp=live&&r.sec!=="page";
       var vis=edMode()==="visual",opB=onp?'<button type="button" class="btn '+(vis?"primary":"")+' pl-op"><span class="lg">✎ Edit on page</span><span class="sm">✎ On page</span></button>':'',fmB='<button type="button" class="btn '+(!vis||!onp?"soft":"")+' pl-fm">'+(r.sec==="page"?"✎ Edit blocks":'<span class="lg">☰ Edit with form</span><span class="sm">☰ Form</span>')+'</button>';
-      var li=h('<li><div class="pl-main"><span class="pl-kind k-'+r.sec+'">'+KIND[r.sec]+'</span><button type="button" class="pl-title"></button><span class="pl-url"></span></div><span class="pl-state '+(live?"on":sch?"sch":"draft")+'">'+(live?"Live":sch?"Scheduled":"Draft")+'</span><div class="pl-btns'+(onp?'':' one')+'">'+(vis?opB+fmB:fmB+opB)+'<button type="button" class="btn pl-more" aria-haspopup="menu" aria-label="More for this page" title="More">⋯</button></div></li>');
+      var li=h('<li><div class="pl-main"><span class="pl-kind k-'+r.sec+'">'+KIND[r.sec]+'</span><button type="button" class="pl-title"></button><span class="pl-url"></span></div><span class="pl-state '+(live?"on":sch?"sch":"draft")+'">'+(live?"Live":sch?"Scheduled":"Draft")+'</span><div class="pl-btns'+(onp?'':' one')+'">'+(onp?(vis?opB:fmB):fmB)+'<button type="button" class="btn pl-more" aria-haspopup="menu" aria-label="More for this page" title="More">⋯</button></div></li>');
       li.querySelector(".pl-more").addEventListener("click",function(e){e.stopPropagation();plMenu(this,r,live)});
       li.querySelector(".pl-title").textContent=r.title;li.querySelector(".pl-url").textContent="ambs.co.nz"+r.url;
       var form=function(){forceForm=true;openPage(r.sec,r.slug);window.scrollTo(0,0)};
       li.querySelector(".pl-title").addEventListener("click",onp&&edMode()==="visual"?function(){openPageOnPage(r.sec,r.slug)}:form);
-      li.querySelector(".pl-fm").addEventListener("click",form);var o=li.querySelector(".pl-op");if(o)o.addEventListener("click",function(){openPageOnPage(r.sec,r.slug)});
+      var fb=li.querySelector(".pl-fm");if(fb)fb.addEventListener("click",form);var o=li.querySelector(".pl-op");if(o)o.addEventListener("click",function(){openPageOnPage(r.sec,r.slug)});
       list.appendChild(li)})}
   q.addEventListener("input",function(){pgQ=q.value;draw()});
   m.querySelectorAll(".pl-chips button").forEach(function(b){b.addEventListener("click",function(){pgFilter=b.dataset.f;m.querySelectorAll(".pl-chips button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});draw()})});
@@ -2634,7 +2648,7 @@ function designInit(){
     var sw=function(k,name,hint){return'<div class="ds-c"><label for="ds-'+k+'"><b>'+name+'</b><span>'+hint+'</span></label><div class="ds-pick"><input type="color" id="ds-'+k+'" value="'+cur[k]+'"><input type="text" class="t" data-hex="'+k+'" value="'+cur[k]+'" maxlength="7" aria-label="'+name+' code"></div></div>'};
     var seg=function(k,name,opts){return'<div class="ds-seg"><b>'+name+'</b><div role="group" aria-label="'+name+'">'+opts.map(function(o){return'<button type="button" data-bk="'+k+'" data-bv="'+o[0]+'" aria-pressed="'+((cur[k]||"")===o[0])+'">'+o[1]+'</button>'}).join("")+'</div></div>'};
     var fsel=function(k,name,hint){return'<div class="ds-c"><label for="ds-'+k+'"><b>'+name+'</b><span>'+hint+'</span></label><select id="ds-'+k+'" class="t"><option value="">AMBS original</option>'+TH_FONTS.map(function(f){return'<option'+(cur[k]===f?' selected':'')+'>'+f+'</option>'}).join("")+'</select></div>'};
-    m.innerHTML='<div class="dash-head"><div><h2>Colours &amp; fonts</h2><p class="help">Change your brand colours and fonts for the whole website. The preview shows your real site with the new look before you publish.</p></div></div>'+
+    m.innerHTML='<div class="dash-head"><div><h2>Colours &amp; fonts</h2>'+waySwitch("design","forms")+'<p class="help">Change your brand colours and fonts for the whole website. The preview shows your real site with the new look before you publish.</p></div></div>'+
       '<div class="ds-grid"><div class="ds-side"><div class="panel"><h3>Ready-made looks</h3><div class="ds-pre">'+TH_PRESETS.map(function(p,i){return'<button type="button" class="ds-p" data-p="'+i+'"><span class="dots"><i style="background:'+p[1].blue+'"></i><i style="background:'+p[1].green+'"></i><i style="background:'+p[1].purple+'"></i></span>'+p[0]+'</button>'}).join("")+'</div></div>'+
       '<div class="panel"><h3>Colours</h3>'+sw("blue","Main colour","Links, headings accents, highlights")+sw("green","Button colour","Buttons, ticks and calls to action")+sw("purple","Accent colour","Small touches and gradients")+'</div>'+
       '<div class="panel"><h3>Fonts</h3>'+fsel("heading_font","Headings","Titles and big text")+fsel("body_font","Body text","Paragraphs, menus and buttons")+'<p class="help">Fonts other than the original load from Google Fonts.</p></div>'+
@@ -2666,19 +2680,43 @@ var EDMENU=[["",[["home","Home","Your dashboard"]]],
   ["Website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["design","Colours & fonts","Brand colours and fonts for the whole website"],["redirects","Redirects","Send old addresses to the right page"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"]]],
   ["Insights",[["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
+var CHOOSE={wording:["Homepage","Click any words on your real homepage and type. Add questions, steps and more from the panel.","Every line of the homepage in all 5 languages, with search."],
+  pages:["Pages & news","Open a page and type straight on it, with tools to add text, buttons and photos.","All of a page’s settings in one form: Google wording, questions, related pages and more."],
+  design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
+function ways(t){return CHOOSE[t]?'<span class="ways"><button type="button" data-way="'+t+'" data-m="visual" title="'+esc(CHOOSE[t][0])+' on the page" aria-label="'+esc(CHOOSE[t][0])+' on the page">✎</button><button type="button" data-way="'+t+'" data-m="forms" title="'+esc(CHOOSE[t][0])+' with the form" aria-label="'+esc(CHOOSE[t][0])+' with the form">☰</button></span>':''}
 function ico(k){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
 function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side"))b.setAttribute("aria-current",String(b.dataset.go===current))})}
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
-  EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
+  EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return CHOOSE[t[0]]?'<div class="side-row"><button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'+ways(t[0])+'</div>':'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
   h+='<div class="side-h">Shortcuts</div><button type="button" data-roi="1">'+ico("calc")+'<span>Website ROI calculator</span></button><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
-  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");b0.insertAdjacentHTML("afterend",'<div class="side-mode">'+modeSwitch(1)+'</div>');sideSync();modeSync()})();
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();if(b.dataset.go==="onpage"||(b.dataset.go==="wording"&&edMode()==="visual"&&!b.closest("#tab-wording")))return openOnPage();show(b.dataset.go)});
+  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");sideSync();modeSync()})();
+/* Homepage, Pages & news and Colours & fonts can be changed on the real page or with the form: opening one asks which,
+   unless "Remember my choice" was ticked (ambs-ed-choice in this browser). Each screen has a switch at the top to change it. */
+function edChoice(){try{return JSON.parse(localStorage.getItem("ambs-ed-choice")||"{}")}catch(e){return{}}}
+function edRemember(tab,mode){var c=edChoice();if(mode)c[tab]=mode;else delete c[tab];try{localStorage.setItem("ambs-ed-choice",JSON.stringify(c))}catch(e){}}
+function edDo(tab,mode){edRemember(tab,mode);if(tab==="pages"){try{localStorage.setItem("ambs-ed-mode",mode)}catch(e){}show("pages");if(typeof pagesHome==="function"&&!open&&$("plList"))pagesHome();return}
+  if(mode==="forms")return show(tab);
+  openOnPage();if(tab==="design"){var t0=Date.now(),go=function(){var b=document.querySelector(".op .op-side [data-look]"),f=document.querySelector(".op #opFrame");if(b&&f&&f.contentDocument&&f.contentDocument.readyState==="complete"){var d=b.closest("details");if(d)d.open=true;b.click()}else if(Date.now()-t0<15000)setTimeout(go,200)};setTimeout(go,600)}}
+function edGo(tab){var c=edChoice()[tab];if(c)return edDo(tab,c);var x=CHOOSE[tab];
+  var dlg=h('<dialog class="ch-dlg" aria-label="How do you want to edit '+esc(x[0])+'?"><div class="hd"><h2>'+esc(x[0])+'</h2><p class="help">How do you want to edit it?</p></div><div class="bd"><div class="ch-ways">'+
+    '<button type="button" class="ch-way" data-m="visual"><b>✎ On the page</b><span>'+esc(x[1])+'</span></button><button type="button" class="ch-way" data-m="forms"><b>☰ With the form</b><span>'+esc(x[2])+'</span></button></div>'+
+    '</div><div class="ft"><span class="help" style="margin-right:auto">Next time it opens this way straight away. Switch any time with ✎ / ☰ beside it in the menu.</span><button type="button" class="btn" data-x>Cancel</button></div></dialog>');
+  document.body.appendChild(dlg);dlg.showModal();var close=function(){dlg.close();dlg.remove()};dlg.querySelector("[data-x]").addEventListener("click",close);dlg.addEventListener("cancel",close);
+  dlg.querySelectorAll("[data-m]").forEach(function(b){b.addEventListener("click",function(){close();edDo(tab,b.dataset.m)})});
+  var last=(tab==="pages"?edMode():"")||"visual";var pre=dlg.querySelector('[data-m="'+last+'"]');if(pre)pre.focus()}
+window.edGo=edGo;
+/* the switch at the top of each of those screens */
+function waySwitch(tab,mode){var x=CHOOSE[tab],rem=edChoice()[tab];return'<div class="way-sw" role="group" aria-label="How you edit '+esc(x[0])+'"><span>Edit</span><button type="button" data-way="'+tab+'" data-m="visual" aria-pressed="'+(mode==="visual")+'">✎ On the page</button><button type="button" data-way="'+tab+'" data-m="forms" aria-pressed="'+(mode==="forms")+'">☰ With the form</button>'+'</div>'}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-way]");if(b){e.preventDefault();e.stopPropagation();edDo(b.dataset.way,b.dataset.m);return}
+  var a=e.target.closest&&e.target.closest("[data-ask]");if(a){edRemember(a.dataset.ask,null);a.remove();toast("It will ask each time.")}});
+document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("[data-way]"))return;var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();var g=b.dataset.go;if(g==="onpage")return openOnPage();
+  if(CHOOSE[g]&&!b.closest("#tab-"+g)&&!b.closest(".op"))return edGo(g);show(g)});
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
-  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+modeSwitch()+'</div>'+
+  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+''+'</div>'+
     '<div class="kpis" id="hmKpi0"><button type="button" class="kpi" data-go="health" id="hmHealth"><b>…</b><span>site health</span></button></div><div class="kpis" id="hmKpi" hidden></div>'+
     '<div class="quick"><button type="button" class="btn primary" data-new="news">＋ Write a news post</button><button type="button" class="btn" data-new="page">＋ Add a page</button><button type="button" class="btn" data-new="guides">＋ Add a guide</button></div>';
-  EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
+  EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return CHOOSE[t[0]]?'<div class="tile tile-2" role="button" tabindex="0" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span><span class="tile-ways"><button type="button" data-way="'+t[0]+'" data-m="visual">✎ On page</button><button type="button" data-way="'+t[0]+'" data-m="forms">☰ Form</button></span></div>':'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
   h+='<h3 class="dash-h">Tools</h3><div class="tiles"><button type="button" class="tile" data-roi="1"><span class="tile-i">'+ico("calc")+'</span><b>Website ROI calculator</b><span>The calculator page at ambs.co.nz/website-roi-calculator</span></button><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
   m.innerHTML=h;modeSync();
   api("pages",{action:"health"}).then(function(j){var k=$("hmHealth");if(k)k.innerHTML=healthTile(j)}).catch(function(){var k=$("hmHealth");if(k)k.remove()});
@@ -2833,7 +2871,7 @@ function seoInit(){
   var m=$("seoMain");
   var CTRY={nzl:"New Zealand",aus:"Australia",usa:"United States",gbr:"United Kingdom",ind:"India",can:"Canada",sgp:"Singapore",phl:"Philippines",pak:"Pakistan",chn:"China"};
   var pct=function(x){return(Math.round(x*1000)/10)+"%"};
-  function head(){return '<div class="dash-head"><div><h2>Google search</h2><p class="help">From Google Search Console, about 2–3 days behind. What people searched, where you showed up, and what to improve.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(seoRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(seoRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
+  function head(){return '<div class="dash-head"><div><h2>Google search</h2><p class="help">From Google Search Console, about 2–3 days behind. What people searched, where you showed up, and what to improve.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["1","24 hours"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(seoRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(seoRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
   function change(now,was,lowerBetter,isPct){if(!was)return now?'<span class="vs-ch up">new</span>':'';var d=isPct?Math.round((now-was)*1000)/10:lowerBetter?Math.round((now-was)*10)/10:Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';var good=lowerBetter?d<0:d>0;return'<span class="vs-ch '+(good?'up':'down')+'">'+(d>0?'▲ ':'▼ ')+Math.abs(d)+(isPct?' pts':lowerBetter?'':'%')+'</span>'}
   function tbl(rows,cols,empty){if(!rows.length)return'<p class="help">'+empty+'</p>';var mx=Math.max.apply(null,rows.map(function(r){return r.shown}).concat([1]));
     return '<div class="vs-sq seo-t"><div class="vs-sq-h"><span>'+cols+'</span><button type="button" data-s="shown"'+(seoSort==="shown"?' class="on"':'')+'>Shown</button><button type="button" data-s="clicks"'+(seoSort==="clicks"?' class="on"':'')+'>Clicks</button><button type="button" data-s="pos"'+(seoSort==="pos"?' class="on"':'')+'>Place</button></div>'+
@@ -2844,13 +2882,14 @@ function seoInit(){
     if(j.setup){m.innerHTML=head()+'<div class="panel"><p class="help">Connect Google Analytics first (Visitors now shows the steps).</p></div>';wire();return}
     if(j.needs){m.innerHTML=head()+'<div class="panel"><h3>Connect Search Console (one time, about 2 minutes)</h3><ol class="vs-steps"><li>Open <b>search.google.com/search-console</b> and pick <b>ambs.co.nz</b>.</li><li><b>Settings → Users and permissions → Add user</b>. Paste <b>'+esc(j.email)+'</b>, choose <b>Restricted</b>, press <b>Add</b>.</li><li>In Google Cloud Shell, run <code>gcloud services enable searchconsole.googleapis.com --project=ambs-website</code>.</li><li>Come back here and press <b>Check again</b>.</li></ol><button type="button" class="btn primary" id="seoRetry">Check again</button></div><div class="panel"><h3>Website basics</h3>'+basics(j.basics||[])+'</div>';
       wire();$("seoRetry").addEventListener("click",function(){seoCache={};load()});return}
-    var T=j.totals,B=j.before,lbl=j.days===90?"3 months":j.days+" days";
+    var T=j.totals,B=j.before,lbl=j.days===90?"3 months":j.days===1?"24 hours":j.days+" days";
     var kpi=function(n,l,ch){return'<div class="vs-stat"><b>'+n+'</b><span>'+l+'</span>'+ch+'</div>'};
     var mx=Math.max.apply(null,j.daily.map(function(d){return d.shown}).concat([1]));
-    var fd=function(d){return new Date(d+"T12:00:00").toLocaleDateString([], {day:"numeric",month:"short"})};
+    var fd=function(d){if(String(d).indexOf("T")>0){var x=new Date(d);return x.toLocaleTimeString([], {hour:"numeric"})+(x.toDateString()!==new Date().toDateString()?" "+x.toLocaleDateString([], {weekday:"short"}):"")}return new Date(d+"T12:00:00").toLocaleDateString([], {day:"numeric",month:"short"})};
     var good=j.basics.filter(function(b){return b.ok}).length;
     m.innerHTML=head()+'<div class="vs-stats seo-k">'+kpi(T.clicks,"Clicks from Google",change(T.clicks,B.clicks))+kpi(T.shown,"Times shown in Google",change(T.shown,B.shown))+kpi(pct(T.ctr),"Click rate",change(T.ctr,B.ctr,false,true))+kpi(T.pos||"–","Average place",change(T.pos,B.pos,true))+'</div>'+
-      '<div class="panel"><div class="vs-ph"><h3>Each day · last '+lbl+'</h3><span class="vs-key"><i class="k-was"></i>Shown <i class="k-now"></i>Clicked</span></div>'+
+      (j.days===1?'<p class="help seo-24">Last 24 hours uses Google’s newest figures, which can still change for a day or two'+(j.hourly?'':' (shown day by day; hour by hour wasn’t available)')+'. Searches, pages and places below cover today and yesterday.</p>':'')+
+      '<div class="panel"><div class="vs-ph"><h3>'+(j.hourly?'Each hour':'Each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-was"></i>Shown <i class="k-now"></i>Clicked</span></div>'+
       '<div class="vs-chart"><div class="vs-tip" hidden></div><div class="vs-cols">'+j.daily.map(function(d,i){return'<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(fd(d.d)+": shown "+d.shown+", clicked "+d.clicks)+'"><i class="was" style="height:'+(d.shown?Math.max(3,Math.round(d.shown/mx*100)):0)+'%"></i><i class="now'+(d.clicks?'':' z')+'" style="height:'+Math.max(2,Math.round(d.clicks/mx*100))+'%"></i></button>'}).join("")+'</div></div>'+
       (j.daily.length?'<div class="vs-axis"><span>'+fd(j.daily[0].d)+'</span><span>'+fd(j.daily[j.daily.length-1].d)+'</span></div>':'')+
       '<p class="help">▲▼ compare with the '+lbl+' before. For “Average place”, smaller is better: 1 is the top of Google, 1–10 is the first page.</p></div>'+
