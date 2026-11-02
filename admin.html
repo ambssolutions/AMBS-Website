@@ -494,6 +494,25 @@ header.top .who{margin-left:4px}
 .stock-q{display:flex;gap:8px}.stock-q .t{flex:1;min-width:0}.stock-note{margin:8px 0 10px}
 .stock-grid{max-height:46vh;overflow:auto}.stock-grid .ph.busy{opacity:.55;pointer-events:none}.stock-more{margin-top:10px;text-align:center}
 .stock-grid.photos{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}@media(max-width:600px){.stock-grid.photos{grid-template-columns:1fr 1fr;gap:8px}.stock-grid .meta b{font-size:.8rem}}
+.serp{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card,#fff)}
+.serp-k{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.serp-card{font-family:Arial,Helvetica,sans-serif;max-width:600px}.serp-site{display:flex;gap:10px;align-items:center}.serp-site img{width:26px;height:26px;border-radius:50%;border:1px solid #dadce0;padding:3px;background:#fff}
+.serp-site span{display:flex;flex-direction:column;line-height:1.25}.serp-site b{font-size:14px;font-weight:400;color:#202124}.serp-site i{font-style:normal;font-size:12px;color:#4d5156;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60vw}
+.serp-t{color:#1a0dab;font-size:20px;line-height:1.3;margin:6px 0 3px}.serp-d{color:#4d5156;font-size:14px;line-height:1.58}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .serp-card{background:#202124;padding:12px;border-radius:10px}:root:not([data-theme=light]) .serp-site b{color:#e8eaed}:root:not([data-theme=light]) .serp-site i,:root:not([data-theme=light]) .serp-d{color:#bdc1c6}:root:not([data-theme=light]) .serp-t{color:#99c3ff}}
+.serp-tips{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px;font-size:.88rem}.serp-tips li{padding-left:22px;position:relative}.serp-tips li:before{position:absolute;left:0;font-weight:700}
+.serp-tips .ok:before{content:"✓";color:#1f9d34}.serp-tips .warn:before{content:"!";color:#c77700;left:5px}.serp-tips .bad:before{content:"✕";color:#d33}
+.ph .ph-alt{margin-top:8px;font-size:.88rem;padding:8px 10px;min-height:0}.ph .ph-act{display:flex;gap:8px;flex-wrap:wrap;margin:0 10px 10px}.ph .ph-act button{margin:0}
+.rd-head,.rd-row{display:grid;grid-template-columns:1fr 24px 1fr 40px;gap:8px;align-items:center}.rd-head{font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px}.rd-row{margin-bottom:8px}.rd-arrow{text-align:center;color:var(--muted)}
+@media(max-width:640px){.rd-head{display:none}.rd-row{grid-template-columns:1fr 40px;padding:10px;border:1px solid var(--line);border-radius:12px}.rd-row .rd-arrow{display:none}.rd-row .rd-t{grid-column:1}.rd-row .x{grid-row:1/3;grid-column:2}}
+.hl-top{display:flex;gap:28px;align-items:center;flex-wrap:wrap}.hl-score{--c:#1f9d34;width:132px;height:132px;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(closest-side,var(--card,#fff) 79%,transparent 80% 100%),conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0)}
+.hl-score.warn{--c:#e08a00}.hl-score.bad{--c:#d33}.hl-score b{font-size:2.4rem;line-height:1}.hl-score span{font-size:.8rem;color:var(--muted)}
+.hl-sum p{margin:4px 0;display:flex;gap:8px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}.dot.bad{background:#d33}.dot.warn{background:#e08a00}.dot.low{background:#8a94a6}
+.hl-list{list-style:none;margin:0;padding:0}.hl-list li{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}.hl-list li:first-child{border-top:0}
+.hl-list p{margin:3px 0}.hl-url{font-size:.82rem;color:var(--muted)}.hl-tag{font-size:.74rem;font-weight:700;padding:4px 9px;border-radius:99px;white-space:nowrap}
+.hl-list .bad .hl-tag{background:#fde8e8;color:#b42318}.hl-list .warn .hl-tag{background:#fff2dc;color:#9a5b00}.hl-list .low .hl-tag{background:#eef1f5;color:#4a5265}
+@media(max-width:640px){.hl-list li{grid-template-columns:1fr auto}.hl-list .hl-tag{grid-column:1/3;justify-self:start}}
+.kpi small{font-size:.55em;color:var(--muted);font-weight:600}#hmKpi0{margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -547,10 +566,12 @@ header.top .who{margin-left:4px}
     <button type="button" role="tab" data-tab="menus" aria-selected="false">Menus</button>
     <button type="button" role="tab" data-tab="photos" aria-selected="false">Photos &amp; logo</button>
     <button type="button" role="tab" data-tab="design" aria-selected="false">Colours &amp; fonts</button>
+    <button type="button" role="tab" data-tab="redirects" aria-selected="false">Redirects</button>
     <button type="button" role="tab" data-tab="business" aria-selected="false">Business details</button>
     <button type="button" role="tab" data-tab="chat" aria-selected="false">Chat helper</button>
     <button type="button" role="tab" data-tab="calc" aria-selected="false">Hours calculator</button>
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
+    <button type="button" role="tab" data-tab="health" aria-selected="false">Site health</button>
     <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors now</button>
     <button type="button" role="tab" data-tab="seo" aria-selected="false">Google search (SEO)</button>
   </nav>
@@ -590,6 +611,8 @@ header.top .who{margin-left:4px}
   <section id="tab-sections" class="tab hidden"><div class="wrap narrow" id="hsMain"></div></section>
   <section id="tab-menus" class="tab hidden"><div class="wrap narrow" id="mnMain"></div></section>
   <section id="tab-history" class="tab hidden"><div class="wrap narrow" id="hiMain"></div></section>
+  <section id="tab-redirects" class="tab hidden"><div class="wrap dash" id="rdMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+  <section id="tab-health" class="tab hidden"><div class="wrap dash" id="hlMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-design" class="tab hidden"><div class="wrap dash" id="dsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-seo" class="tab hidden"><div class="wrap dash" id="seoMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-visitors" class="tab hidden"><div class="wrap dash" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
@@ -1046,7 +1069,7 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,home:homeInit,seo:seoInit,design:designInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
   sideSync();window.scrollTo(0,0)
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
@@ -1237,6 +1260,18 @@ function openPage(sec,slug){
 function fld(id,label,value,opts){opts=opts||{};var tag=opts.area?'<textarea class="t" id="'+id+'" rows="'+(opts.rows||2)+'"></textarea>':'<input class="t" id="'+id+'">';
   var el=h('<div class="fld"><label for="'+id+'"><span>'+esc(label)+'</span>'+(opts.max?'<span class="cnt"></span>':'')+'</label>'+(opts.help?'<p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)">'+esc(opts.help)+'</p>':'')+tag+'</div>');
   var inp=el.querySelector(opts.area?"textarea":"input");inp.value=value||"";inp.addEventListener("input",markDirty);if(opts.area)inp.addEventListener("input",function(){ED.autosize(inp)});if(opts.max)counter(inp,opts.max);return el}
+/* how the page looks in Google, updated as you type, with simple tips */
+function serpPreview(tIn,dIn,path){
+  var el=h('<div class="serp" aria-live="polite"><div class="serp-k">Preview in Google</div><div class="serp-card"><div class="serp-site"><img src="/favicon-light.png" alt=""><span><b>Ambs Solutions</b><i></i></span></div><div class="serp-t"></div><div class="serp-d"></div></div><ul class="serp-tips"></ul></div>');
+  el.querySelector("i").textContent="https://ambs.co.nz"+(path==="/"?"":path.replace(/\//g," › ").replace(/^ › /," › "));
+  var cut=function(v,n){return v.length>n?v.slice(0,n).replace(/\s+\S*$/,"")+" …":v};
+  function up(){var t=tIn.value.trim(),d=dIn.value.trim(),tips=[];
+    el.querySelector(".serp-t").textContent=cut(t||"(no title yet)",60);el.querySelector(".serp-d").textContent=cut(d||"Google will pick some text from the page. Write your own so people want to click.",158);
+    tips.push(!t?["bad","Add a title."]:t.length>60?["warn","Title is "+t.length+" characters; Google shows about 60. Move the important words to the front."]:t.length<30?["warn","Title is short. Add what you do and where, e.g. “… in Auckland”."]:["ok","Title length is good ("+t.length+")."]);
+    tips.push(!d?["bad","Add a description."]:d.length>158?["warn","Description is "+d.length+" characters; Google shows about 155."]:d.length<110?["warn","Description could say more (aim for 120–155 characters)."]:["ok","Description length is good ("+d.length+")."]);
+    if(t&&d){var w=t.toLowerCase().split(/[^a-z0-9]+/).filter(function(x){return x.length>4&&["solutions","small","business"].indexOf(x)<0});if(w.length&&!w.some(function(x){return d.toLowerCase().indexOf(x)>=0}))tips.push(["warn","Use one of the title’s main words in the description too; Google shows it in bold."])}
+    el.querySelector(".serp-tips").innerHTML=tips.map(function(x){return'<li class="'+x[0]+'">'+esc(x[1])+'</li>'}).join("")}
+  tIn.addEventListener("input",up);dIn.addEventListener("input",up);up();return el}
 function listEditor(title,help,items,addLabel){
   var p=h('<div class="panel"><h3>'+esc(title)+'</h3><p class="help">'+esc(help)+'</p><div class="items"></div><button type="button" class="add">+ '+esc(addLabel)+'</button></div>');
   var box=p.querySelector(".items");
@@ -1299,7 +1334,7 @@ function renderPage(sec,slug,d){
     m.appendChild(cp);
   }
   var gp=h('<div class="panel"><h3>On Google</h3><p class="help">The title and description people see in Google search results and when the page is shared.</p></div>');
-  gp.appendChild(fld("seoTitle","Title in Google",meta.title,{max:65}));gp.appendChild(fld("seoDesc","Description in Google",meta.description,{area:true,max:160}));m.appendChild(gp);
+  gp.appendChild(fld("seoTitle","Title in Google",meta.title,{max:65}));gp.appendChild(fld("seoDesc","Description in Google",meta.description,{area:true,max:160}));gp.appendChild(serpPreview(gp.querySelector("#seoTitle"),gp.querySelector("#seoDesc"),sec==="legal"?"/"+slug:"/"+sec+"/"+slug));m.appendChild(gp);
   var act=h('<div class="actions">'+(sec!=="legal"?'<button type="button" class="btn danger" id="pgDel">Delete page</button>':'')+'<span class="sp"></span><button type="button" class="btn" id="pgPrev">Preview</button>'+(sec!=="legal"?'<button type="button" class="btn" id="pgDraft">'+(live?"Take off the website (draft)":"Save draft")+'</button>':'')+(live?'':'<button type="button" class="btn" id="pgLater">'+(sch?"Change schedule":"Publish later…")+'</button>')+'<button type="button" class="btn primary" id="pgSave">'+(live?"Save &amp; publish":"Publish now")+'</button></div>');
   m.appendChild(act);
   m.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
@@ -1325,7 +1360,7 @@ function renderPage(sec,slug,d){
   if($("pgDraft"))$("pgDraft").addEventListener("click",function(){savePage(this,true)});
   if($("pgLater")){var sb=scheduleBox(act,sch,function(b,when){savePage(b,true,when)});$("pgLater").addEventListener("click",function(){sb.classList.toggle("hidden");if(!sb.classList.contains("hidden"))sb.querySelector("input").focus()})}
   var del=$("pgDel");if(del)del.addEventListener("click",function(){
-    if(!confirm("Delete “"+(meta.h1||slug)+"” from the website? You can bring it back from History."))return;busy(del,true,"Deleting…");
+    if(!confirm("Delete “"+(meta.h1||slug)+"” from the website?\n\nAnyone using its old address is sent to the "+SEC[sec]+" page instead (change that in Redirects). You can bring the page back from History."))return;busy(del,true,"Deleting…");
     api("pages",{action:"delete",section:sec,slug:slug}).then(function(){dirty=false;open=null;toast("Page deleted. "+LIVE_NOTE);pagesInit()}).catch(function(e){busy(del,false);fail(e)});
   });
 }
@@ -1460,7 +1495,7 @@ function wireRte(bar,rte){
     else if(c==="link"){var u=prompt("Link to (a page on this site like /guides/automation-glossary, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;document.execCommand("createLink",false,u)}}
     else if(c==="tip")document.execCommand("insertHTML",false,'<div class="callout callout--tip"><p>Tip: write your tip here.</p></div><p><br></p>');
     else if(c==="photo"){var sel=window.getSelection(),range=sel.rangeCount?sel.getRangeAt(0).cloneRange():null;choosePhoto().then(function(ph){if(!ph)return;rte.focus();if(range){sel.removeAllRanges();sel.addRange(range)}
-      var alt=prompt("Describe the photo in a few words (read out to people who can't see it):","")||"";var cap=prompt("Caption under the photo (optional):","")||"";
+      var alt=prompt("Describe the photo in a few words (read out to people who can't see it):",ph.alt||"")||"";if(alt&&!ph.alt&&ph.path)api("media",{action:"describe",path:ph.path,alt:alt}).catch(function(){});var cap=prompt("Caption under the photo (optional):","")||"";
       var dims=fresh[ph.url]?' width="'+fresh[ph.url].w+'" height="'+fresh[ph.url].h+'"':(ph.w?' width="'+ph.w+'" height="'+ph.h+'"':"");
       document.execCommand("insertHTML",false,'<figure><img src="'+esc(photoSrc(ph.url))+'"'+(fresh[ph.url]?' data-ed-src="'+esc(ph.url)+'"':'')+' alt="'+esc(alt)+'" loading="lazy"'+dims+'>'+(cap?'<figcaption>'+esc(cap)+'</figcaption>':'')+'</figure><p><br></p>');markDirty()})}
     markDirty();
@@ -1493,7 +1528,7 @@ function openHubs(){
   var hubs=site.hubs;
   ["services","industries","guides","locations"].filter(function(s){return hubs[s]}).forEach(function(sec){var p=h('<div class="panel"><h3>'+SEC[sec]+' page <a href="/'+sec+'" target="_blank" rel="noopener" style="font-size:.85rem;font-weight:600">View</a></h3></div>');
     p.appendChild(fld("hb-"+sec+"-h1","Heading",hubs[sec].h1,{max:90}));p.appendChild(fld("hb-"+sec+"-lead","Introduction",hubs[sec].lead,{area:true,max:320}));
-    p.appendChild(fld("hb-"+sec+"-title","Title in Google",hubs[sec].title,{max:65}));p.appendChild(fld("hb-"+sec+"-desc","Description in Google",hubs[sec].desc,{area:true,max:160}));m.appendChild(p)});
+    p.appendChild(fld("hb-"+sec+"-title","Title in Google",hubs[sec].title,{max:65}));p.appendChild(fld("hb-"+sec+"-desc","Description in Google",hubs[sec].desc,{area:true,max:160}));p.appendChild(serpPreview(p.querySelector("#hb-"+sec+"-title"),p.querySelector("#hb-"+sec+"-desc"),"/"+sec));m.appendChild(p)});
   site.service_cards.forEach(function(c,i){var p=h('<div class="panel"><h3>Service card: '+esc(c.title)+'</h3><p class="help">Shown on the Services page.</p><div class="grid2"></div></div>');var g=p.querySelector(".grid2");
     g.appendChild(fld("sc"+i+"label","Small label",c.label,{max:30}));g.appendChild(fld("sc"+i+"title","Title",c.title,{max:60}));
     p.appendChild(fld("sc"+i+"text","Text",c.text,{area:true,max:200}));p.appendChild(fld("sc"+i+"button","Button wording",c.button,{max:40}));
@@ -1539,9 +1574,12 @@ function photosInit(){
     return Promise.all(set.map(function(x){return toB64(x[1],"image/png")})).then(function(r){newIcons={};set.forEach(function(x,i){newIcons[x[0]]=r[i].b64});$("icPrev").src=URL.createObjectURL(r[1].blob);$("icFav").src=URL.createObjectURL(r[5].blob);$("icSave").classList.remove("hidden")})}).catch(fail)})});
   $("icSave").addEventListener("click",function(){var b=this;if(!newIcons)return;busy(b,true);api("media",Object.assign({action:"icons"},newIcons)).then(function(){busy(b,false);b.classList.add("hidden");toast("New icon saved. "+LIVE_NOTE)}).catch(function(e){busy(b,false);fail(e)})});
   function grid(){api("media",{action:"list"}).then(function(j){var g=$("phGrid");g.innerHTML=j.photos.length?"":'<p class="empty">No photos uploaded yet.</p>';
-    j.photos.slice().reverse().forEach(function(p){var c=h('<div class="ph"><img alt="" loading="lazy"><div class="meta"><b>'+esc(p.path.split("/").pop())+'</b><span>'+Math.round(p.size/1024)+' KB</span><span>'+(p.usedOn.length?"Used on: "+esc(p.usedOn.join(", ")):"Not used on a page yet")+'</span></div><button type="button" class="btn danger">Delete</button></div>');
+    j.photos.slice().reverse().forEach(function(p){var c=h('<div class="ph"><img alt="" loading="lazy"><div class="meta"><b>'+esc(p.path.split("/").pop())+'</b><span>'+Math.round(p.size/1024)+' KB</span><span>'+(p.usedOn.length?"Used on: "+esc(p.usedOn.join(", ")):"Not used on a page yet")+'</span><input class="t ph-alt" maxlength="200" placeholder="Describe this photo (for Google and screen readers)" aria-label="Photo description"></div><div class="ph-act">'+(/\.webp$/.test(p.path)?'<button type="button" class="btn soft ph-rep" title="Upload a new photo in its place; every page using it changes">Replace</button>':'')+'<button type="button" class="btn danger ph-del">Delete</button></div></div>');
       c.querySelector("img").src=photoSrc(p.url);
-      c.querySelector("button").addEventListener("click",function(){var b=this;if(!confirm(p.usedOn.length?"This photo is used on "+p.usedOn.join(", ")+". Delete it anyway? It will disappear from those pages.":"Delete this photo?"))return;busy(b,true,"Deleting…");api("media",{action:"delete",path:p.path}).then(function(){toast("Photo deleted.");grid()}).catch(function(e){busy(b,false);fail(e)})});
+      var al=c.querySelector(".ph-alt");al.value=p.alt||"";al.addEventListener("change",function(){api("media",{action:"describe",path:p.path,alt:al.value}).then(function(){toast(al.value.trim()?"Description saved. It is filled in when you put this photo in a page.":"Description removed.")}).catch(fail)});
+      var rp=c.querySelector(".ph-rep");if(rp)rp.addEventListener("click",function(){var b=this;pickFile(false).then(function(fs){if(!fs.length)return;if(p.usedOn.length&&!confirm("Replace this photo on "+p.usedOn.join(", ")+"?"))return;busy(b,true,"Replacing…");
+        loadImg(fs[0]).then(function(img){var cv=shrink(img,1600);return toB64(cv,"image/webp",.82).then(function(r){return api("media",{action:"replace",path:p.path,base64:r.b64}).then(function(){fresh[p.url]={src:URL.createObjectURL(r.blob),w:cv.width,h:cv.height};toast("Photo replaced everywhere it is used. "+LIVE_NOTE);grid()})})}).catch(function(e){busy(b,false);fail(e)})})});
+      c.querySelector(".ph-del").addEventListener("click",function(){var b=this;if(!confirm(p.usedOn.length?"This photo is used on "+p.usedOn.join(", ")+". Delete it anyway? It will disappear from those pages.":"Delete this photo?"))return;busy(b,true,"Deleting…");api("media",{action:"delete",path:p.path}).then(function(){toast("Photo deleted.");grid()}).catch(function(e){busy(b,false);fail(e)})});
       g.appendChild(c)})}).catch(fail)}
   grid();
   $("phStock").addEventListener("click",function(){var bx=$("phStockBox");if(!bx.firstChild)stockPanel(bx,function(){grid()});bx.classList.toggle("hidden");var q=bx.querySelector("input");if(q&&!bx.classList.contains("hidden"))q.focus()});
@@ -1761,7 +1799,7 @@ function bPhoto(label,obj,key,altKey){
   var el=h('<div class="fld"><label><span>'+esc(label)+'</span></label><div class="bph"><div class="cthumb"></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn">Choose photo</button><button type="button" class="btn danger">Remove</button></div></div></div>');
   var th=el.querySelector(".cthumb"),bs=el.querySelectorAll("button");
   var draw=function(){th.innerHTML=obj[key]?'<img alt="" src="'+esc(photoSrc(obj[key]))+'">':"<span>None</span>";bs[1].style.display=obj[key]?"":"none"};draw();
-  bs[0].addEventListener("click",function(){choosePhoto().then(function(p){if(!p)return;obj[key]=p.url;if(altKey&&!obj[altKey]){var a=prompt("Describe the photo in a few words (read out to people who can't see it):","");if(a)obj[altKey]=a}draw();markDirty()})});
+  bs[0].addEventListener("click",function(){choosePhoto().then(function(p){if(!p)return;obj[key]=p.url;if(altKey&&(!obj[altKey]||p.alt)){var a=prompt("Describe the photo in a few words (read out to people who can't see it):",p.alt||obj[altKey]||"");if(a)obj[altKey]=a}draw();markDirty()})});
   bs[1].addEventListener("click",function(){obj[key]="";draw();markDirty()});
   return el}
 function bList(label,arr,make,fields,addLabel,max){
@@ -1858,7 +1896,7 @@ function renderCustom(slug,d){
   head.appendChild(bFld("Small label above the heading (optional)",c,"eyebrow"));head.appendChild(bFld("Page heading",c,"h1"));head.appendChild(bFld("Introduction (optional)",c,"lead",{area:true}));m.appendChild(head);
   var bp=h('<div class="panel"><h3>Page content</h3><p class="help">Build the page from blocks. Each block uses the website’s own design, so it matches the rest of the site on phones and laptops.</p></div>');bp.appendChild(blockEditor(c.blocks));m.appendChild(bp);
   var op=h('<div class="panel"><h3>Bottom of the page and Google</h3></div>');var ck=h('<label class="chk" style="margin:0 0 6px"><input type="checkbox"> Show the “Book a free session” box at the bottom</label>');ck.querySelector("input").checked=c.cta!==false;ck.querySelector("input").addEventListener("change",function(e){c.cta=e.target.checked;markDirty()});op.appendChild(ck);
-  op.appendChild(bFld("Title in Google",c,"title"));op.appendChild(bFld("Description in Google",c,"description",{area:true}));m.appendChild(op);
+  op.appendChild(bFld("Title in Google",c,"title"));op.appendChild(bFld("Description in Google",c,"description",{area:true}));var ti=op.querySelectorAll(".fld");op.appendChild(serpPreview(ti[ti.length-2].querySelector("input"),ti[ti.length-1].querySelector("textarea"),"/"+slug));m.appendChild(op);
   m.appendChild(h('<p class="help" style="color:var(--muted);font-size:.9rem">To link to this page from the menu or footer, add “/'+esc(slug)+'” in the Menus tab.</p>'));
   var act=h('<div class="actions"><button type="button" class="btn danger" id="cpDel">Delete page</button><span class="sp"></span><button type="button" class="btn" id="cpPrev">Preview</button><button type="button" class="btn" id="cpDraft">'+(live?"Take off the website (draft)":"Save draft")+'</button>'+(live?'':'<button type="button" class="btn" id="cpLater">'+(sch?"Change schedule":"Publish later…")+'</button>')+'<button type="button" class="btn primary" id="cpPub">'+(live?"Save &amp; publish":"Publish now")+'</button></div>');m.appendChild(act);
   function go(draft,b,when){if(!String(c.h1||"").trim()){toast("The page needs a heading",true);return}if(draft&&live&&!confirm("Take this page off the website? It stays here as a draft."))return;busy(b,true);
@@ -2187,11 +2225,11 @@ function designInit(){
 /* ======================= MENU AND HOME ======================= */
 /* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
    a dashboard with the key numbers and a tile for every part. EDMENU is the one list both are drawn from. */
-var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18'};
+var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18',redirects:'M4 7h11l-3-3M15 7l-3 3M20 17H9l3-3M9 17l3 3',health:'M3 12h4l2-5 4 10 2-5h6'};
 var EDMENU=[["",[["home","Home","Your dashboard"]]],
-  ["Website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["design","Colours & fonts","Brand colours and fonts for the whole website"]]],
+  ["Website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["design","Colours & fonts","Brand colours and fonts for the whole website"],["redirects","Redirects","Send old addresses to the right page"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"]]],
-  ["Insights",[["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
+  ["Insights",[["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 function ico(k){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
 function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side"))b.setAttribute("aria-current",String(b.dataset.go===current))})}
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
@@ -2202,16 +2240,61 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
   var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+modeSwitch()+'</div>'+
-    '<div class="kpis" id="hmKpi" hidden></div>'+
+    '<div class="kpis" id="hmKpi0"><button type="button" class="kpi" data-go="health" id="hmHealth"><b>…</b><span>site health</span></button></div><div class="kpis" id="hmKpi" hidden></div>'+
     '<div class="quick"><button type="button" class="btn primary" data-new="news">＋ Write a news post</button><button type="button" class="btn" data-new="page">＋ Add a page</button><button type="button" class="btn" data-new="guides">＋ Add a guide</button></div>';
   EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
   h+='<h3 class="dash-h">Tools</h3><div class="tiles"><button type="button" class="tile" data-roi="1"><span class="tile-i">'+ico("calc")+'</span><b>Website ROI calculator</b><span>The calculator page at ambs.co.nz/website-roi-calculator</span></button><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
   m.innerHTML=h;modeSync();
+  api("pages",{action:"health"}).then(function(j){var k=$("hmHealth");if(k)k.innerHTML=healthTile(j)}).catch(function(){var k=$("hmHealth");if(k)k.remove()});
   Promise.all([api("settings",{action:"visitors"}),api("settings",{action:"visitors",days:7})]).then(function(r){var a=r[0],b=r[1];if(a.setup||b.setup)return;
     var ev={};(b.events||[]).forEach(function(e){ev[e.name]=e.n});var k=$("hmKpi");if(!k)return;
     var tile=function(n,l,go){return'<button type="button" class="kpi" data-go="visitors"><b>'+n+'</b><span>'+l+'</span></button>'};
     k.innerHTML=tile(a.now,"on the website now")+tile(b.totals.activeUsers,"visitors, last 7 days")+tile(b.totals.sessions,"visits, last 7 days")+tile((ev.book_click||0)+(ev.booking_confirmed?" · "+ev.booking_confirmed+" booked":""),"Book a call clicks, 7 days");k.hidden=false}).catch(function(){});
 }
+
+/* ======================= REDIRECTS ======================= */
+/* Old address → new page, kept in vercel.json through api/pages "redirects" / "redirects-save" (goes live in about a minute).
+   Deleting a page adds one by itself (to its section page). */
+function redirectsInit(){
+  var m=$("rdMain");api("pages",{action:"redirects"}).then(function(j){
+    m.innerHTML='<div class="dash-head"><div><h2>Redirects</h2><p class="help">When a page moves or is deleted, send its old address to the right page, so links, bookmarks and Google never hit “page not found”. Deleting a page adds one here by itself.</p></div></div><div class="panel"><div class="rd-head"><span>Old address</span><span></span><span>Send visitors to</span><span></span></div><div class="rd-list"></div><button type="button" class="add">+ Add a redirect</button><datalist id="rdLinks"></datalist></div><div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="rdSave">Save &amp; publish</button></div>';
+    var list=m.querySelector(".rd-list"),dl=$("rdLinks");
+    api("pages",{action:"list"}).then(function(l){var o=["/","/services","/industries","/guides","/news","/privacy","/terms"];l.pages.filter(function(p){return!p.draft}).forEach(function(p){o.push("/"+p.section+"/"+p.slug)});l.custom.filter(function(p){return!p.draft}).forEach(function(p){o.push("/"+p.slug)});dl.innerHTML=o.map(function(x){return'<option value="'+esc(x)+'">'}).join("")}).catch(function(){});
+    function row(r){var e=h('<div class="rd-row"><input class="t rd-f" placeholder="/old-page" aria-label="Old address"><span class="rd-arrow" aria-hidden="true">→</span><input class="t rd-t" list="rdLinks" placeholder="/new-page or https://…" aria-label="Send visitors to"><button type="button" class="x" aria-label="Remove">✕</button></div>');
+      e.querySelector(".rd-f").value=r.from||"";e.querySelector(".rd-t").value=r.to||"";e.querySelector(".x").addEventListener("click",function(){e.remove();markDirty()});e.querySelectorAll("input").forEach(function(i){i.addEventListener("input",markDirty)});list.appendChild(e);return e}
+    (j.redirects.length?j.redirects:[{}]).forEach(row);
+    m.querySelector(".add").addEventListener("click",function(){row({}).querySelector("input").focus()});
+    $("rdSave").addEventListener("click",function(){var b=this,out=[].map.call(list.querySelectorAll(".rd-row"),function(e){return{from:e.querySelector(".rd-f").value,to:e.querySelector(".rd-t").value}});busy(b,true);
+      api("pages",{action:"redirects-save",redirects:out}).then(function(r){dirty=false;busy(b,false);toast("Redirects saved. They work in about a minute.");list.innerHTML="";(r.redirects.length?r.redirects:[{}]).forEach(row)}).catch(function(e){busy(b,false);fail(e)})});
+  }).catch(fail);
+}
+
+/* ======================= SITE HEALTH ======================= */
+/* One score for the whole website (api/pages "health"): titles and descriptions in Google, duplicate titles,
+   photos without a description, thin pages, links to missing pages and redirects that go nowhere. Each item opens the page to fix it. */
+var SEV={high:["Fix first","bad"],mid:["Worth fixing","warn"],low:["Nice to have","low"]};
+function healthInit(){
+  var m=$("hlMain");m.innerHTML='<p class="empty"><span class="spin"></span> Checking every page…</p>';
+  api("pages",{action:"health"}).then(function(j){
+    var n={high:0,mid:0,low:0};j.issues.forEach(function(i){n[i.sev]++});var col=j.score>=90?"ok":j.score>=70?"warn":"bad";
+    var h1='<div class="dash-head"><div><h2>Site health</h2><p class="help">Every live page checked for what Google and visitors need. Fix the red ones first.</p></div><button type="button" class="btn" id="hlRe">Check again</button></div>'+
+      '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
+    if(!j.issues.length)h1+='<div class="panel"><p class="help">Everything looks great. 🎉</p></div>';
+    else h1+='<div class="panel"><ul class="hl-list">'+j.issues.map(function(i,k){return'<li class="'+SEV[i.sev][1]+'"><span class="hl-tag">'+SEV[i.sev][0]+'</span><div><b>'+esc(i.name)+'</b> <a href="'+esc(i.url)+'" target="_blank" rel="noopener" class="hl-url">'+esc(i.url)+'</a><p>'+esc(i.what)+'</p><p class="help">'+esc(i.fix)+'</p></div><button type="button" class="btn soft" data-k="'+k+'">Fix</button></li>'}).join("")+'</ul></div>';
+    var U=encodeURIComponent("https://ambs.co.nz/"),tools=[["Speed test","Google PageSpeed: speed, accessibility and SEO scores for phone and laptop","https://pagespeed.web.dev/analysis?url="+U],
+      ["Google rich results","Checks the business details Google reads from the page","https://search.google.com/test/rich-results?url="+U],
+      ["Search Console","Google’s own report: pages indexed, errors and searches","https://search.google.com/search-console?resource_id=sc-domain%3Aambs.co.nz"],
+      ["Security headers","Checks the website’s security settings","https://securityheaders.com/?q=ambs.co.nz&followRedirects=on"],
+      ["SSL certificate","Checks the padlock (https) certificate","https://www.ssllabs.com/ssltest/analyze.html?d=ambs.co.nz"],
+      ["Sharing preview","How links to the website look on Facebook and LinkedIn","https://www.opengraph.xyz/url/"+U]];
+    h1+='<h3 class="dash-h">More free checks</h3><div class="tiles">'+tools.map(function(t){return'<a class="tile" href="'+t[2]+'" target="_blank" rel="noopener"><span class="tile-i">'+ico("health")+'</span><b>'+t[0]+'</b><span>'+t[1]+'</span></a>'}).join("")+'</div>';
+    m.innerHTML=h1;$("hlRe").addEventListener("click",healthInit);
+    m.querySelectorAll(".hl-list button").forEach(function(b){b.addEventListener("click",function(){var i=j.issues[+b.dataset.k];
+      if(i.section==="redirects")return show("redirects");show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(i.section,i.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
+    var k=$("hmHealth");if(k)k.innerHTML=healthTile(j);
+  }).catch(fail);
+}
+function healthTile(j){return'<b>'+j.score+'<small>/100</small></b><span>site health'+(j.issues.length?" · "+j.issues.filter(function(i){return i.sev==="high"}).length+" to fix first":"")+'</span>'}
 
 /* ======================= VISITORS NOW ======================= */
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).

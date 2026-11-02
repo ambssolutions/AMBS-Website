@@ -10,7 +10,7 @@
    Saves start "Editor source:" (a GitHub workflow rebuilds and publishes the pages) or, for drafts that
    are not on the website, "Editor draft:" (saved, nothing published). */
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS } from "./_sitetext.js";
-import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths, readEnglish } from "./_lib.js";
+import { requireEditor, send, readBody, headSha, readFile, commitFiles, cleanBody, listPaths, readEnglish, nextVersion } from "./_lib.js";
 import { cleanBlocks } from "./_blocks.js";
 
 const SECTIONS = ["guides", "industries", "services", "news", "locations", "legal"];
@@ -81,6 +81,21 @@ function tidyCustom(d, before) {
   };
 }
 
+
+/* Redirects live in vercel.json ("redirects"), so Vercel answers them before any page: an old address sends visitors and Google to the new one. */
+const VERCEL_JSON = "vercel.json";
+const RX_FROM = /^\/[A-Za-z0-9._~\-\/]*$/;
+const RX_TO = /^(\/[A-Za-z0-9._~\-\/#?=&%]*|https:\/\/[^\s"<>]+)$/;
+const BLOCKED = /^\/(admin|api|assets|site-src|invoice)(\/|$)/;
+async function readVercel(head) { return JSON.parse((await readFile(VERCEL_JSON, head)).text); }
+const redirectList = (v) => (v.redirects || []).map((r) => ({ from: r.source, to: r.destination, permanent: r.permanent !== false }));
+function vercelWith(v, list) {
+  const next = { ...v };
+  if (list.length) next.redirects = list.map((r) => ({ source: r.from, destination: r.to, permanent: r.permanent !== false })); else delete next.redirects;
+  return JSON.stringify(next, null, 2) + "\n";
+}
+const pagePath = (section, slug) => (section === "page" ? "/" + slug : "/" + section + "/" + slug);
+
 export default async function handler(req, res) {
   const who = await requireEditor(req, res);
   if (!who) return;
@@ -89,6 +104,11 @@ export default async function handler(req, res) {
     const head = await headSha();
     const site = JSON.parse((await readFile(PAGES_JSON, head)).text);
     const by = " (" + who.email + ")";
+    /* a new page at an address that has a redirect: drop the redirect so the page can show */
+    const freeAddress = async (sec, slug) => {
+      const v = await readVercel(head), list = redirectList(v), from = pagePath(sec, slug);
+      return list.some((r) => r.from === from) ? { [VERCEL_JSON]: vercelWith(v, list.filter((r) => r.from !== from)) } : {};
+    };
     const save = (files, what, publishes) => commitFiles(head, files, (publishes ? "Editor source: " : "Editor draft: ") + what + by);
 
     if (b.action === "list") {
@@ -105,6 +125,90 @@ export default async function handler(req, res) {
       let privacy_missing = [];
       try { privacy_missing = JSON.parse((await readFile("site-src/content/privacy-check.json", head)).text).missing || []; } catch (e) {}
       return send(res, 200, { now: nowNZ(), pages: site.pages, custom, legal, privacy_missing, hubs: site.hubs, service_cards: site.service_cards, service_steps: site.service_steps, icons: ICONS });
+    }
+
+
+    if (b.action === "redirects") {
+      const v = await readVercel(head);
+      return send(res, 200, { redirects: redirectList(v) });
+    }
+
+    if (b.action === "redirects-save") {
+      const v = await readVercel(head);
+      const live = new Set(["/", "/services", "/industries", "/guides", "/news", "/locations", "/privacy", "/terms", "/booking-confirmed", "/email-signature", "/404",
+        ...site.pages.filter((p) => !p.draft).map((p) => pagePath(p.section, p.slug)),
+        ...(await listPaths(head)).filter((x) => /^site-src\/content\/custom\/[a-z0-9-]+\.json$/.test(x.path)).map((x) => "/" + x.path.split("/").pop().replace(/\.json$/, ""))]);
+      const seen = new Set(), list = [];
+      for (const r of (Array.isArray(b.redirects) ? b.redirects : []).slice(0, 300)) {
+        let from = String(r.from || "").trim(), to = String(r.to || "").trim();
+        if (!from && !to) continue;
+        from = from.replace(/^https?:\/\/(www\.)?ambs\.co\.nz/i, "") || "/";
+        to = to.replace(/^https?:\/\/(www\.)?ambs\.co\.nz(?=\/|$)/i, "") || "/";
+        if (!from.startsWith("/")) from = "/" + from;
+        if (from.length > 1) from = from.replace(/\/+$/, "");
+        if (!RX_FROM.test(from) || from === "/") return send(res, 400, { error: "“" + from + "” isn't an address on this website. Start it with /, like /old-page." });
+        if (BLOCKED.test(from)) return send(res, 400, { error: "“" + from + "” is used by the website itself and can't be sent elsewhere." });
+        if (live.has(from)) return send(res, 400, { error: "“" + from + "” is a live page. Take that page off the website first, or pick another old address." });
+        if (!RX_TO.test(to)) return send(res, 400, { error: "Send “" + from + "” to a page on this website (like /services) or a full https:// address." });
+        if (to === from) return send(res, 400, { error: "“" + from + "” can't send visitors to itself." });
+        if (seen.has(from)) return send(res, 400, { error: "“" + from + "” is listed twice." });
+        seen.add(from); list.push({ from, to, permanent: r.permanent !== false });
+      }
+      const text = vercelWith(v, list);
+      if (text === JSON.stringify(v, null, 2) + "\n") return send(res, 400, { error: "Nothing has changed" });
+      await commitFiles(head, { [VERCEL_JSON]: text, "version.json": await nextVersion(head) }, "Website editor: redirects" + by);
+      return send(res, 200, { ok: true, redirects: list });
+    }
+
+    if (b.action === "health") {
+      const issues = [];
+      const add = (sev, page, what, fix) => issues.push({ sev, ...page, what, fix });
+      const known = new Set(["/", "/services", "/industries", "/guides", "/news", "/locations", "/privacy", "/terms", "/booking-confirmed", "/email-signature"]);
+      const all = [];
+      for (const p of site.pages) { known.add(pagePath(p.section, p.slug)); all.push({ section: p.section, slug: p.slug, draft: !!p.draft }); }
+      for (const f of (await listPaths(head)).filter((x) => /^site-src\/content\/custom\/[a-z0-9-]+\.json$/.test(x.path))) {
+        const slug = f.path.split("/").pop().replace(/\.json$/, ""); known.add("/" + slug); all.push({ section: "page", slug, path: f.path });
+      }
+      all.push({ section: "legal", slug: "privacy" }, { section: "legal", slug: "terms" });
+      const v = await readVercel(head);
+      for (const r of redirectList(v)) known.add(r.from);
+      const titles = {};
+      await Promise.all(all.map(async (pg) => {
+        const f = await readFile(pg.section === "page" ? pg.path : src(pg.section, pg.slug), head);
+        if (!f) return;
+        let meta, body;
+        if (pg.section === "page") { const d = JSON.parse(f.text); meta = d; body = JSON.stringify(d.blocks || []); pg.draft = !!d.draft; }
+        else ({ meta, body } = parse(f.text));
+        if (pg.draft) return;
+        const ref = { section: pg.section, slug: pg.slug, name: meta.h1 || pg.slug, url: pg.section === "legal" ? "/" + pg.slug : pagePath(pg.section, pg.slug) };
+        const t = String(meta.title || "").trim(), d = String(meta.description || "").trim();
+        if (!t) add("high", ref, "No title in Google", "Write a title of 30–60 characters with the main words people search for.");
+        else if (t.length > 65) add("mid", ref, "Title in Google is " + t.length + " characters, so Google cuts it short", "Keep it under 60 characters.");
+        else if (t.length < 25) add("low", ref, "Title in Google is short (" + t.length + " characters)", "Add the service and place, for example “… | Auckland NZ”.");
+        if (t) (titles[t.toLowerCase()] = titles[t.toLowerCase()] || []).push(ref);
+        if (!d) add("high", ref, "No description in Google", "Write 120–155 characters saying what the page offers and who it's for.");
+        else if (d.length > 165) add("low", ref, "Description is " + d.length + " characters, so Google cuts it short", "Keep it under 155 characters.");
+        else if (d.length < 70) add("mid", ref, "Description is short (" + d.length + " characters)", "Aim for 120–155 characters.");
+        if (pg.section !== "page") {
+          const imgs = body.match(/<img\b[^>]*>/gi) || [];
+          const noAlt = imgs.filter((i) => !/\balt\s*=\s*"[^"]+"/i.test(i)).length;
+          if (noAlt) add("mid", ref, noAlt + (noAlt > 1 ? " photos have" : " photo has") + " no description", "Describe each photo in a few words. Google and screen readers use it.");
+          const words = body.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+          if (pg.section !== "legal" && words < 300) add("low", ref, "Only " + words + " words of article text", "Pages with 500+ helpful words usually rank better.");
+        }
+        const links = [...(pg.section === "page" ? body.matchAll(/"(\/[a-z0-9\-\/]*)(?:[#?][^"]*)?"/gi) : body.matchAll(/href="(\/[^"#?]*)/gi))].map((m) => m[1].replace(/\/+$/, "") || "/");
+        const broken = [...new Set(links.filter((l) => !known.has(l) && !/^\/(assets|api)\//.test(l) && !/\.[a-z0-9]+$/i.test(l)))];
+        if (broken.length) add("high", ref, "Link to a missing page: " + broken.slice(0, 3).join(", "), "Change the link, or add a redirect from that address in Redirects.");
+      }));
+      for (const list of Object.values(titles)) if (list.length > 1) list.forEach((ref) => add("mid", ref, "Same title in Google as " + list.filter((x) => x !== ref).map((x) => x.name).join(", "), "Give every page its own title."));
+      for (const r of redirectList(v)) if (r.to.startsWith("/") && !known.has(r.to.split(/[#?]/)[0].replace(/\/+$/, "") || "/"))
+        add("mid", { section: "redirects", slug: "", name: "Redirect " + r.from, url: r.from }, "Sends visitors to " + r.to + ", which doesn't exist", "Change where it goes in Redirects.");
+      const order = { high: 0, mid: 1, low: 2 };
+      issues.sort((a, b2) => order[a.sev] - order[b2.sev]);
+      const pages = all.filter((p) => !p.draft).length;
+      const pen = issues.reduce((n, i) => n + (i.sev === "high" ? 6 : i.sev === "mid" ? 3 : 1), 0);
+      const score = Math.max(0, Math.min(100, Math.round(100 - pen * 20 / Math.max(pages, 1))));
+      return send(res, 200, { score, pages, issues });
     }
 
     if (b.action === "search") {
@@ -246,7 +350,7 @@ export default async function handler(req, res) {
         /* "start from": a copy of another page's blocks */
         const copy = b.start && Array.isArray(b.start.blocks) ? cleanBlocks(b.start.blocks) : [];
         if (copy.length) d.blocks = copy;
-        await save({ [src("page", slug)]: JSON.stringify(d, null, 1) + "\n" }, "new page /" + slug, false);
+        await save({ [src("page", slug)]: JSON.stringify(d, null, 1) + "\n", ...(await freeAddress("page", slug)) }, "new page /" + slug, false);
         return send(res, 200, { ok: true, section: sec, slug });
       }
       /* "start from a previous post": the editor sends the old post's shape with starter text in place of its words */
@@ -268,7 +372,7 @@ export default async function handler(req, res) {
       const body = (st && cleanBody(str(st.body, 60000))) || "<h2>" + title.replace(/[<&>]/g, "") + "</h2>\n<p>Start writing here.</p>";
       await save({
         [src(sec, slug)]: serialise(meta, body),
-        [PAGES_JSON]: JSON.stringify(site, null, 1) + "\n",
+        [PAGES_JSON]: JSON.stringify(site, null, 1) + "\n", ...(await freeAddress(sec, slug)),
       }, "new page " + sec + "/" + slug, false);
       return send(res, 200, { ok: true, section: sec, slug });
     }
@@ -283,6 +387,12 @@ export default async function handler(req, res) {
       if (b.section !== "page") {
         site.pages = site.pages.filter((p) => !(p.section === b.section && p.slug === b.slug));
         files[PAGES_JSON] = JSON.stringify(site, null, 1) + "\n";
+      }
+      /* send the old address to the section page (or the homepage), so links and Google don't hit a missing page */
+      if (b.redirect !== false) {
+        const v = await readVercel(head), list = redirectList(v), from = pagePath(b.section, b.slug);
+        const to = b.section === "page" ? "/" : "/" + b.section;
+        if (!list.some((r) => r.from === from)) { list.push({ from, to, permanent: true }); files[VERCEL_JSON] = vercelWith(v, list); }
       }
       await save(files, "delete page " + b.section + "/" + b.slug, true);
       return send(res, 200, { ok: true });

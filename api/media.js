@@ -7,12 +7,16 @@
    { action: "logo", png, webp, png400, webp400 }          replace the logo (the editor renders each size)
    { action: "social", png }                               replace the picture shown when the site is shared
    { action: "icons", icon192, icon512, mask192, mask512, apple, fav }   replace the app and browser icons
+   { action: "describe", path, alt }                       save a photo's description (offered whenever the photo is put in a page)
+   { action: "replace", path, base64 }                     swap a photo for a new one at the same address, so it changes everywhere it is used
    { action: "stock-search", q, page }                     free stock photos from Openverse (CC0 / public domain only, so no credit is needed)
    { action: "stock-get", url }                            fetch one of those photos so the editor can resize it and upload it as usual */
-import { requireEditor, send, readBody, headSha, commitFiles, listPaths, readBlob, nextVersion } from "./_lib.js";
+import { requireEditor, send, readBody, headSha, commitFiles, listPaths, readBlob, readFile, nextVersion } from "./_lib.js";
 
 const DIR = "assets/uploads/";
 const MAX = 3 * 1024 * 1024;
+const ALT_JSON = "site-src/content/photos.json";   /* { "assets/uploads/x.webp": "description" } */
+async function alts(head) { try { return JSON.parse((await readFile(ALT_JSON, head)).text); } catch (e) { return {}; } }
 
 function bytes(b64) { return Math.floor(String(b64 || "").length * 3 / 4); }
 function isWebp(b64) { const b = Buffer.from(String(b64).slice(0, 24), "base64"); return b.slice(0, 4).toString() === "RIFF" && b.slice(8, 12).toString() === "WEBP"; }
@@ -73,8 +77,29 @@ export default async function handler(req, res) {
         const text = await readBlob(p.sha);
         for (const ph of photos) if (text.includes(ph.url)) (used[ph.path] = used[ph.path] || []).push(p.path.replace("site-src/content/", "").replace(/\.html$/, ""));
       }));
-      photos.forEach((p) => { p.usedOn = used[p.path] || []; });
+      const a = await alts(head);
+      photos.forEach((p) => { p.usedOn = used[p.path] || []; p.alt = a[p.path] || ""; });
       return send(res, 200, { photos });
+    }
+
+    if (b.action === "describe") {
+      const path = String(b.path || "");
+      if (!path.startsWith(DIR) || !/^[a-z0-9/_.-]+$/i.test(path)) return send(res, 400, { error: "Unknown photo" });
+      const a = await alts(head), alt = String(b.alt || "").replace(/\s+/g, " ").trim().slice(0, 200);
+      if ((a[path] || "") === alt) return send(res, 200, { ok: true });
+      if (alt) a[path] = alt; else delete a[path];
+      await commitFiles(head, { [ALT_JSON]: JSON.stringify(a, null, 1) + "\n" }, "Editor draft: photo description " + path + by);
+      return send(res, 200, { ok: true });
+    }
+
+    if (b.action === "replace") {
+      const path = String(b.path || "");
+      if (!path.startsWith(DIR) || !/^[a-z0-9/_.-]+\.webp$/i.test(path)) return send(res, 400, { error: "Only photos uploaded in the editor can be replaced." });
+      if (!(await listPaths(head)).some((f) => f.path === path)) return send(res, 400, { error: "That photo is no longer on the website." });
+      if (!isWebp(b.base64)) return send(res, 400, { error: "That photo could not be read. Try a JPG or PNG." });
+      if (bytes(b.base64) > MAX) return send(res, 400, { error: "That photo is too large even after resizing." });
+      await commitFiles(head, { [path]: { base64: b.base64 }, "version.json": await nextVersion(head) }, "Website editor: replace photo " + path + by);
+      return send(res, 200, { ok: true, path, url: "/" + path });
     }
 
     if (b.action === "upload") {
