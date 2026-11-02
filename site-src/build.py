@@ -159,8 +159,62 @@ def find(path):
     sec,slug=path.split('/'); return next((p for p in PAGES if p[0]==sec and p[1]==slug),None)
 
 import hashlib
+# Colours & fonts (website editor → Colours & fonts, "theme" in site.json). The style sheets keep the AMBS colours in
+# site-src; the copies on the site have every blue, green and purple shade moved to the chosen colours (theme_css), and
+# a chosen heading or body font is loaded from Google Fonts and set on --display/--body (theme_head). The same recolouring
+# runs in the editor's live preview (themeCss() in admin.html), so keep the two in step.
+THEME_BASE={'blue':'#1877E0','green':'#24B328','purple':'#7B2FBE'}
+LOOK=json.load(open(os.path.join(SRC,'content','site.json'),encoding='utf8')).get('theme') or {}
+THEME_FONTS={'Inter':'400;500;600;700;800','Poppins':'400;500;600;700;800','Montserrat':'400;500;600;700;800','DM Sans':'400;500;600;700;800','Plus Jakarta Sans':'400;500;600;700;800','Manrope':'400;500;600;700;800','Outfit':'400;500;600;700;800','Nunito':'400;600;700;800','Lato':'400;700;900','Open Sans':'400;600;700;800','Raleway':'400;600;700;800','Work Sans':'400;500;600;700;800','Space Grotesk':'400;500;600;700','Sora':'400;600;700;800','Playfair Display':'400;600;700;800','Merriweather':'400;700;900','Lora':'400;500;600;700'}
+def _hsl(r,g,b):
+    import colorsys
+    h,l,s_=colorsys.rgb_to_hls(r/255,g/255,b/255);return h*360,s_,l
+def _rgb(h,s_,l):
+    import colorsys
+    r,g,b=colorsys.hls_to_rgb((h%360)/360,max(0,min(1,l)),max(0,min(1,s_)));return round(r*255),round(g*255),round(b*255)
+def _hex(c):
+    c=c.lstrip('#');c=''.join(x*2 for x in c) if len(c)==3 else c;return int(c[0:2],16),int(c[2:4],16),int(c[4:6],16)
+def theme_moves():
+    out=[]
+    for k,base in THEME_BASE.items():
+        want=(LOOK.get(k) or '').strip()
+        if not re.fullmatch(r'#[0-9a-fA-F]{6}',want) or want.upper()==base.upper(): continue
+        bh,bs,bl=_hsl(*_hex(base));th,ts,tl=_hsl(*_hex(want));out.append((bh,th-bh,(ts/bs) if bs else 1,tl-bl,bl))
+    return out
+def theme_colour(r,g,b,moves):
+    h,s_,l=_hsl(r,g,b)
+    if s_<0.22 or l<0.06 or l>0.97: return None
+    best=None
+    for bh,dh,sk,dl,bl in moves:
+        d=abs((h-bh+180)%360-180)
+        if d<=28 and (best is None or d<best[0]): best=(d,dh,sk,dl,bl)
+    if not best: return None
+    _,dh,sk,dl,bl=best
+    return _rgb(h+dh,s_*sk,l+dl*max(0,1-abs(l-bl)*1.6))
+def theme_css(css):
+    moves=theme_moves()
+    if not moves: return css
+    def hx(m):
+        c=theme_colour(*_hex(m.group(0)),moves)
+        return m.group(0) if c is None else '#%02X%02X%02X'%c
+    def rg(m):
+        c=theme_colour(int(m.group(2)),int(m.group(3)),int(m.group(4)),moves)
+        return m.group(0) if c is None else m.group(1)+'(%d,%d,%d'%c+m.group(5)
+    css=re.sub(r'#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9a-fA-F])',hx,css)
+    return re.sub(r'(rgba?)\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(\s*[,)])',rg,css)
+def theme_head():
+    hf,bf=(LOOK.get('heading_font') or '').strip(),(LOOK.get('body_font') or '').strip()
+    hf=hf if hf in THEME_FONTS else '';bf=bf if bf in THEME_FONTS else ''
+    if not hf and not bf: return ''
+    fams='&'.join('family='+f.replace(' ','+')+':wght@'+THEME_FONTS[f] for f in dict.fromkeys(x for x in (hf,bf) if x))
+    tail=',Arial,"Noto Sans SC","Noto Sans Devanagari","Noto Sans Gurmukhi",sans-serif'
+    css=('--display:"'+hf+'"'+tail+';' if hf else '')+('--body:"'+bf+'"'+tail+';--mono:"'+bf+'"'+tail+';' if bf else '')
+    return ('<!--theme--><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?'+fams+'&display=swap">'
+            '<style>html:root{'+css+'}</style><!--/theme-->')
+THEME_KEY=hashlib.md5(json.dumps([LOOK.get(k) for k in ('blue','green','purple')]).encode()).hexdigest()[:4] if theme_moves() else ''
 def _v(name):
-    return hashlib.md5(open(os.path.join(SRC,'assets',name),'rb').read()).hexdigest()[:8]
+    h=hashlib.md5(open(os.path.join(SRC,'assets',name),'rb').read()).hexdigest()[:8]
+    return h[:4]+THEME_KEY if THEME_KEY and (name.endswith('.css') or name=='chat.js') else h
 CSSV=_v('pages.css');JSV=_v('pages.js');BLV=_v('blocks.css');FMV=_v('forms.js')
 FORMS_JS=f'<script src="/assets/forms.js?v={FMV}" defer></script>'
 # website calculator blocks: webcalc.js imports blocks.mjs, so the copy on the site names blocks.mjs by version too
@@ -209,7 +263,7 @@ def head(title,desc,canon,ld,ogtype='website',blocks=False):
 <link rel="manifest" href="/manifest.webmanifest">
 {THEME}
 {FONT_HEAD}
-<link rel="stylesheet" href="/assets/pages.css?v={CSSV}">{chr(10)+'<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'">' if blocks else ''}
+<link rel="stylesheet" href="/assets/pages.css?v={CSSV}">{chr(10)+'<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'">' if blocks else ''}{theme_head()}
 <script type="application/ld+json">{json.dumps(ld,ensure_ascii=False)}</script>
 {ga_snippet()}
 </head>
@@ -611,7 +665,9 @@ def stamp_home(custom_html=None,strings=None):
     menu_strings={menu_key(it):it.get('label','') for n in MENU_INDENT for it in MENUS.get(n,[]) if menu_key(it).startswith('ed.')}
     if os.path.isdir(i18n_dir): sync_ed_strings(dict(menu_strings,**(strings or {})))
     langs=sorted(f for f in os.listdir(i18n_dir) if f.endswith('.json')) if os.path.isdir(i18n_dir) else []
-    for f in names: open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
+    for f in names:
+        t=open(os.path.join(SRC,'assets',f),encoding='utf8').read()
+        open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(theme_css(t) if f.endswith('.css') else t)
     if langs:
         os.makedirs(os.path.join(OUT,'assets','i18n'),exist_ok=True)
         for f in langs: open(os.path.join(OUT,'assets','i18n',f),'w',encoding='utf8').write(open(os.path.join(i18n_dir,f),encoding='utf8').read())
@@ -630,6 +686,9 @@ def stamp_home(custom_html=None,strings=None):
     h=re.sub(r'<script type="module" src="/assets/webcalc\.js\?v=[A-Za-z0-9]+"></script>\n','',h)
     if any('data-webcalc' in x for x in custom_html.values()): h=h.replace('</body>',WEBCALC_JS+'\n</body>',1)
     h=re.sub(r'home\.css\?v=[A-Za-z0-9]+','home.css?v='+_v('home.css'),h)
+    h=re.sub(r'<!--theme-->.*?<!--/theme-->','',h,flags=re.S)
+    th=theme_head()
+    if th: h=re.sub(r'(<link rel="stylesheet" href="/assets/home\.css\?v=[A-Za-z0-9]+">)',lambda m:m.group(1)+th,h,count=1)
     h=re.sub(r'home\.js\?v=[A-Za-z0-9]+','home.js?v='+_v('home.js'),h)
     if langs:
         lv=hashlib.md5(b''.join(open(os.path.join(i18n_dir,f),'rb').read() for f in langs)).hexdigest()[:8]
@@ -874,7 +933,9 @@ def privacy_check():
 if __name__=='__main__':
     legal_dates()
     os.makedirs(os.path.join(OUT,'assets'),exist_ok=True)
-    for f in ('pages.css','pages.js','blocks.css','blocks.mjs','forms.js'): open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(open(os.path.join(SRC,'assets',f),encoding='utf8').read())
+    for f in ('pages.css','pages.js','blocks.css','blocks.mjs','forms.js'):
+        t=open(os.path.join(SRC,'assets',f),encoding='utf8').read()
+        open(os.path.join(OUT,'assets',f),'w',encoding='utf8').write(theme_css(t) if f.endswith('.css') else t)
     open(os.path.join(OUT,'assets','webcalc.js'),'w',encoding='utf8').write(WEBCALC_SRC)
     secs={k:v for k,v in HOMESEC.get('custom',{}).items()}
     rb=render_blocks({k:v.get('blocks',[]) for k,v in CUSTOM.items()},secs)
@@ -899,7 +960,7 @@ if __name__=='__main__':
         h=open(idx,encoding='utf8').read();h2=re.sub(r'"sameAs": \[[^\]]*\]','"sameAs": '+json.dumps(PROFILES),h,count=1)
         h2=re.sub(r'<!--soc-->.*?<!--/soc-->','<!--soc-->'+social_html()+'<!--/soc-->',h2,count=1,flags=re.S)
         if h2!=h: open(idx,'w',encoding='utf8').write(h2)
-    open(os.path.join(OUT,'assets','chat.js'),'w',encoding='utf8').write(open(os.path.join(SRC,'assets','chat.js'),encoding='utf8').read())
+    open(os.path.join(OUT,'assets','chat.js'),'w',encoding='utf8').write(theme_css(open(os.path.join(SRC,'assets','chat.js'),encoding='utf8').read()))
     iv,nd=build_chat_index();tag=chat_tag(iv)
     # the chat helper goes on every public page (not the editor or the email signature builder)
     for root,dirs,files in os.walk(OUT):

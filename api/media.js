@@ -6,17 +6,53 @@
    { action: "email-asset", name, base64 }                  a picture for the email signature builder (banner, photo, logo); GIF, PNG or JPG
    { action: "logo", png, webp, png400, webp400 }          replace the logo (the editor renders each size)
    { action: "social", png }                               replace the picture shown when the site is shared
-   { action: "icons", icon192, icon512, mask192, mask512, apple, fav }   replace the app and browser icons */
-import { requireEditor, send, readBody, headSha, commitFiles, listPaths, readBlob, nextVersion } from "./_lib.js";
+   { action: "icons", icon192, icon512, mask192, mask512, apple, fav }   replace the app and browser icons
+   { action: "describe", path, alt }                       save a photo's description (offered whenever the photo is put in a page)
+   { action: "replace", path, base64 }                     swap a photo for a new one at the same address, so it changes everywhere it is used
+   { action: "stock-search", q, page }                     free stock photos from Openverse (CC0 / public domain only, so no credit is needed)
+   { action: "stock-get", url }                            fetch one of those photos so the editor can resize it and upload it as usual */
+import { requireEditor, send, readBody, headSha, commitFiles, listPaths, readBlob, readFile, nextVersion } from "./_lib.js";
 
 const DIR = "assets/uploads/";
 const MAX = 3 * 1024 * 1024;
+const ALT_JSON = "site-src/content/photos.json";   /* { "assets/uploads/x.webp": "description" } */
+async function alts(head) { try { return JSON.parse((await readFile(ALT_JSON, head)).text); } catch (e) { return {}; } }
 
 function bytes(b64) { return Math.floor(String(b64 || "").length * 3 / 4); }
 function isWebp(b64) { const b = Buffer.from(String(b64).slice(0, 24), "base64"); return b.slice(0, 4).toString() === "RIFF" && b.slice(8, 12).toString() === "WEBP"; }
 function isGif(b64) { return Buffer.from(String(b64).slice(0, 8), "base64").slice(0, 3).toString() === "GIF"; }
 function isJpg(b64) { const b = Buffer.from(String(b64).slice(0, 8), "base64"); return b[0] === 0xff && b[1] === 0xd8; }
 function isPng(b64) { return Buffer.from(String(b64).slice(0, 12), "base64").slice(1, 4).toString() === "PNG"; }
+
+/* free stock photos: Openverse (openverse.org) lists openly licensed photos from Flickr, Wikimedia and others.
+   Only CC0 and public domain are asked for, so the site never needs to credit anyone. */
+async function stockSearch(q, page) {
+  q = String(q || "").trim().slice(0, 100);
+  if (!q) return { results: [] };
+  const u = "https://api.openverse.org/v1/images/?q=" + encodeURIComponent(q) + "&license=cc0,pdm&page_size=24&mature=false&page=" + Math.max(1, Math.min(20, parseInt(page, 10) || 1));
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 12000);
+  try {
+    const r = await fetch(u, { signal: ctl.signal, headers: { "User-Agent": "AMBS website editor (ambs.co.nz)" } });
+    if (!r.ok) return { results: [], error: "The free photo library didn't answer (" + r.status + "). Try again in a minute." };
+    const j = await r.json();
+    return { count: j.result_count || 0, pages: j.page_count || 1, results: (j.results || []).filter((x) => x.url && /^https:/.test(x.url)).map((x) => ({
+      id: x.id, thumb: x.thumbnail || x.url, url: x.url, title: x.title || "", creator: x.creator || "", license: (x.license || "").toUpperCase(), landing: x.foreign_landing_url || "", w: x.width || 0, h: x.height || 0 })) };
+  } catch (e) { return { results: [], error: "The free photo library didn't answer. Try again in a minute." }; }
+  finally { clearTimeout(t); }
+}
+async function stockGet(url) {
+  url = String(url || "");
+  if (!/^https:\/\//.test(url)) throw Object.assign(new Error("That photo address isn't allowed."), { status: 400 });
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
+  try {
+    const r = await fetch(url, { signal: ctl.signal, redirect: "follow", headers: { "User-Agent": "AMBS website editor (ambs.co.nz)" } });
+    const type = (r.headers.get("content-type") || "").split(";")[0].trim();
+    if (!r.ok || !/^image\/(jpeg|png|webp|gif)$/.test(type)) throw Object.assign(new Error("That photo couldn't be fetched. Pick another one."), { status: 400 });
+    const buf = Buffer.from(await r.arrayBuffer());
+    if (buf.length > 10 * 1024 * 1024) throw Object.assign(new Error("That photo is too large. Pick another one."), { status: 400 });
+    return { type, base64: buf.toString("base64") };
+  } finally { clearTimeout(t); }
+}
 
 export default async function handler(req, res) {
   const who = await requireEditor(req, res);
@@ -25,6 +61,8 @@ export default async function handler(req, res) {
     const b = await readBody(req);
     /* the email signature builder asks this to confirm the person is signed in as an editor */
     if (b.action === "check") return send(res, 200, { ok: true, email: who.email });
+    if (b.action === "stock-search") return send(res, 200, await stockSearch(b.q, b.page));
+    if (b.action === "stock-get") return send(res, 200, await stockGet(b.url));
     const head = await headSha();
     const by = " (" + who.email + ")";
 
@@ -39,8 +77,29 @@ export default async function handler(req, res) {
         const text = await readBlob(p.sha);
         for (const ph of photos) if (text.includes(ph.url)) (used[ph.path] = used[ph.path] || []).push(p.path.replace("site-src/content/", "").replace(/\.html$/, ""));
       }));
-      photos.forEach((p) => { p.usedOn = used[p.path] || []; });
+      const a = await alts(head);
+      photos.forEach((p) => { p.usedOn = used[p.path] || []; p.alt = a[p.path] || ""; });
       return send(res, 200, { photos });
+    }
+
+    if (b.action === "describe") {
+      const path = String(b.path || "");
+      if (!path.startsWith(DIR) || !/^[a-z0-9/_.-]+$/i.test(path)) return send(res, 400, { error: "Unknown photo" });
+      const a = await alts(head), alt = String(b.alt || "").replace(/\s+/g, " ").trim().slice(0, 200);
+      if ((a[path] || "") === alt) return send(res, 200, { ok: true });
+      if (alt) a[path] = alt; else delete a[path];
+      await commitFiles(head, { [ALT_JSON]: JSON.stringify(a, null, 1) + "\n" }, "Editor draft: photo description " + path + by);
+      return send(res, 200, { ok: true });
+    }
+
+    if (b.action === "replace") {
+      const path = String(b.path || "");
+      if (!path.startsWith(DIR) || !/^[a-z0-9/_.-]+\.webp$/i.test(path)) return send(res, 400, { error: "Only photos uploaded in the editor can be replaced." });
+      if (!(await listPaths(head)).some((f) => f.path === path)) return send(res, 400, { error: "That photo is no longer on the website." });
+      if (!isWebp(b.base64)) return send(res, 400, { error: "That photo could not be read. Try a JPG or PNG." });
+      if (bytes(b.base64) > MAX) return send(res, 400, { error: "That photo is too large even after resizing." });
+      await commitFiles(head, { [path]: { base64: b.base64 }, "version.json": await nextVersion(head) }, "Website editor: replace photo " + path + by);
+      return send(res, 200, { ok: true, path, url: "/" + path });
     }
 
     if (b.action === "upload") {
@@ -110,6 +169,7 @@ export default async function handler(req, res) {
 
     send(res, 400, { error: "Unknown action" });
   } catch (e) {
+    if (e.status === 400) return send(res, 400, { error: e.message });
     if (e.status === 409 || e.status === 422) return send(res, 409, { error: "The website changed while saving. Please try again." });
     send(res, 500, { error: String(e.message || e) });
   }
