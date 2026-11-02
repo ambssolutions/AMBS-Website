@@ -728,6 +728,19 @@ header.top .who .nt-bar{justify-content:space-between}
 .ld-reps{margin-bottom:12px}.ld-rp{border-left:0;padding:6px 0;border-top:1px solid var(--line)}.ld-rp em{font-style:normal;font-size:.8rem;color:var(--muted)}.ld-rp p{margin:4px 0 0;line-height:1.45}
 .ld-page{margin:0 0 12px;word-break:break-all}.ld-acts{display:flex;gap:8px;flex-wrap:wrap}.ld-acts a.btn{text-decoration:none}
 @media (max-width:640px){.ld-row>summary{padding:10px 12px;gap:10px}.ld-av{width:34px;height:34px}.ld-body{padding:12px}.ld-fields{grid-template-columns:1fr 1fr}.ld-acts .btn{flex:1;text-align:center}.ld-acts .btn.primary{flex-basis:100%}}
+
+/* Home: Site health tile (score ring + what it means) */
+.kpi.hh{display:flex!important;flex-direction:row;align-items:center;gap:14px;padding:14px 16px!important;min-width:260px;text-align:left;grid-template-rows:none!important}
+.kpi.hh>*{grid-row:auto!important}
+.hh-ring{position:relative;width:64px;height:64px;flex:none}.hh-ring svg{width:64px;height:64px;transform:rotate(-90deg)}
+.hh-ring circle{fill:none;stroke-width:6}.hh-track{stroke:var(--line)}.hh-arc{stroke-linecap:round;transition:stroke-dasharray .6s ease}
+.hh-ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:1.25rem!important;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.hh-txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.hh-t{font-size:.72rem!important;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kpi.hh .hh-s,.kpi.hh .hh-m,.kpi.hh .hh-w{text-transform:none;letter-spacing:0}.hh-s{font-size:1rem;font-weight:800;line-height:1.25}
+.hh-m{font-size:.84rem;color:var(--muted)}.hh-sp{font-style:normal;font-weight:800}.hh-sp.g{color:var(--green)}.hh-sp.a{color:#c98a00}.hh-sp.r{color:#d33}
+.hh-w{font-size:.78rem;color:var(--muted)}.hh-go{font-size:1.4rem;color:var(--muted);flex:none}
+@media (max-width:640px){.kpi.hh{min-width:0;width:100%;padding:12px 14px!important;gap:12px}.hh-ring,.hh-ring svg{width:56px;height:56px}.hh-ring b{font-size:1.1rem!important}}
 </style>
 </head>
 <body>
@@ -2913,7 +2926,7 @@ document.addEventListener("click",function(e){if(e.target.closest&&e.target.clos
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
   var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+''+'</div>'+
-    '<div class="dash-top"><div class="kpis" id="hmKpi0"><button type="button" class="kpi" data-go="health" id="hmHealth"><b>…</b><span>site health</span></button></div>'+
+    '<div class="dash-top"><div class="kpis" id="hmKpi0"><button type="button" class="kpi hh" data-go="health" id="hmHealth" aria-label="Site health"><span class="hh-txt"><span class="hh-t">Site health</span><span class="hh-w">Checking…</span></span></button></div>'+
     '<div class="quick"><button type="button" class="btn primary" data-new="news"><span class="lg">＋ Write a news post</span><span class="sm">＋ News post</span></button><button type="button" class="btn" data-new="page"><span class="lg">＋ Add a page</span><span class="sm">＋ Page</span></button><button type="button" class="btn" data-new="guides"><span class="lg">＋ Add a guide</span><span class="sm">＋ Guide</span></button></div></div><div class="kpis" id="hmKpi" hidden></div>';
   EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){if(t[0]==="roi")return'<button type="button" class="tile" data-roi="1"><span class="tile-i">'+ico("roi")+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>';return CHOOSE[t[0]]?'<div class="tile tile-2" role="button" tabindex="0" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span><span class="tile-ways"><button type="button" data-way="'+t[0]+'" data-m="visual">✎ On page</button><button type="button" data-way="'+t[0]+'" data-m="forms">☰ Form</button></span></div>':'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
   h+='<h3 class="dash-h">Tools</h3><div class="tiles"><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
@@ -2975,7 +2988,13 @@ function healthInit(){
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
 function healthTile(j){var t=tsLoad()["https://ambs.co.nz/"],sp=t&&t.psi_mobile&&t.psi_mobile.scores?t.psi_mobile.scores[0].score:null;
-  return'<b>'+j.score+'<small>/100</small></b><span>site health'+(j.issues.length?" · "+j.issues.filter(function(i){return i.sev==="high"}).length+" to fix first":"")+(sp!=null?" · phone speed "+sp:"")+'</span><span class="kpi-when">Checked '+healthWhen(j.checked)+'</span>'}
+  var sc=+j.score||0,hi=j.issues.filter(function(i){return i.sev==="high"}).length,n=j.issues.length,col=sc>=90?"var(--green)":sc>=70?"#c98a00":"#d33";
+  var C=2*Math.PI*26,dash=(C*sc/100).toFixed(1);
+  var state=!n?"All clear":hi?hi+" to fix first":n+" small thing"+(n===1?"":"s")+" to improve";
+  var spc=sp==null?"":sp>=90?"g":sp>=50?"a":"r";
+  return '<span class="hh-ring" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" class="hh-track"/><circle cx="32" cy="32" r="26" class="hh-arc" style="stroke:'+col+';stroke-dasharray:'+dash+' '+C.toFixed(1)+'"/></svg><b>'+sc+'</b></span>'+
+    '<span class="hh-txt"><span class="hh-t">Site health</span><span class="hh-s" style="color:'+(n&&hi?"#d33":col)+'">'+(n?"":"✓ ")+esc(state)+'</span>'+
+    (sp!=null?'<span class="hh-m">Phone speed <i class="hh-sp '+spc+'">'+sp+'</i></span>':'')+'<span class="hh-w">Checked '+healthWhen(j.checked)+'</span></span><span class="hh-go" aria-hidden="true">›</span>'}
 
 /* ---- Speed & security: real results from Google PageSpeed, Mozilla Observatory, the certificate, the server, Google's index and the sharing card.
    Each test is its own api/settings "test" request (api/_tests.js), run side by side; results are kept in this browser (ambs-tests) with the time. */
@@ -3194,7 +3213,7 @@ function connsInit(){
   function where(k){return k.from==="editor"?'Saved here'+(k.at?' · '+new Date(k.at).toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"}):'')+(k.note?' · by '+esc(k.note):''):k.from==="vercel"?'From Vercel (old setup). Save it here to manage it in the editor.':''}
   function card(o){return '<details class="panel cn-card"'+(o.open?' open':'')+' data-svc="'+(o.svc||"")+'"><summary><span class="cn-ic" aria-hidden="true">'+o.icon+'</span><span class="cn-t"><b>'+o.name+'</b><span>'+o.by+'</span></span>'+o.status+'</summary><div class="cn-body">'+o.body+'</div></details>'}
   function draw(j){var K=j.keys||{},ga=K.GA_PROPERTY_ID||{},sa=K.GA_SERVICE_ACCOUNT||{},gs=K.GSC_SITE||{},ps=K.PAGESPEED_KEY||{};
-    var gaOn=ga.from&&sa.from,acts=function(svc,on,ed){return'<div class="cn-acts"><button type="button" class="btn primary" data-save="'+svc+'">'+(on?'Save &amp; check':'Connect')+'</button>'+(ed?'<button type="button" class="btn danger" data-remove="'+svc+'">Remove</button>':'')+'</div><p class="help cn-msg" id="cnm-'+svc+'"></p>'};
+    var gaOn=ga.from&&sa.from,acts=function(svc,on,ed,vc){return'<div class="cn-acts"><button type="button" class="btn primary" data-save="'+svc+'">'+(on?'Save &amp; check':'Connect')+'</button>'+(vc?'<button type="button" class="btn" data-move="'+svc+'" title="Copies the keys Vercel has into the editor, checks them and saves them encrypted">⇣ Move from Vercel</button>':'')+(ed?'<button type="button" class="btn danger" data-remove="'+svc+'">Remove</button>':'')+'</div><p class="help cn-msg" id="cnm-'+svc+'"></p>'};
     var built=function(t){return'<span class="cn-built">'+t+'</span>'};
     m.innerHTML='<div class="dash-head"><div><h2>Connections</h2><p class="help">Every service the website uses. Keys pasted here are checked, then kept encrypted in the database. Only the last characters are ever shown, and nothing needs adding in Vercel.</p></div></div>'+
       (j.vault?'':'<div class="panel"><p class="help">Saving keys here needs a one-time database update. It’s added when this change goes live; until then the keys in Vercel keep working.</p></div>')+
@@ -3203,7 +3222,7 @@ function connsInit(){
         '<p class="help">'+(gaOn?where(sa.from==="editor"?sa:ga)+(sa.hint?'<br>Service account: '+esc(sa.hint):''):'Shows who visits, what they click and the numbers on Home. Read-only.')+'</p>'+
         '<label class="f"><span>Property number</span><input id="cn_GA_PROPERTY_ID" inputmode="numeric" value="'+esc(ga.from==="editor"?ga.hint:"")+'" placeholder="'+(ga.from==="vercel"?"Now from Vercel":"e.g. 512345678")+'"></label>'+
         '<label class="f"><span>Service account key (.json)</span><textarea id="cn_GA_SERVICE_ACCOUNT" rows="3" spellcheck="false" autocomplete="off" placeholder="'+(sa.from?"Leave empty to keep the saved key":"Paste everything in the downloaded .json file")+'"></textarea></label>'+
-        '<details class="cn-how"><summary>How to get these</summary><ol class="vs-steps"><li><b>console.cloud.google.com</b> → a project → <b>APIs &amp; Services → Library</b> → enable <b>Google Analytics Data API</b> (and <b>Search Console API</b>).</li><li><b>IAM &amp; Admin → Service accounts → Create</b>, then <b>Keys → Add key → JSON</b>. A file downloads.</li><li>In <b>analytics.google.com → Admin → Property access management</b>, add the account’s email as <b>Viewer</b>.</li><li><b>Admin → Property details</b>: copy the Property ID (a number).</li></ol></details>'+acts("ga",gaOn,ga.from==="editor"||sa.from==="editor")})+
+        '<details class="cn-how"><summary>How to get these</summary><ol class="vs-steps"><li><b>console.cloud.google.com</b> → a project → <b>APIs &amp; Services → Library</b> → enable <b>Google Analytics Data API</b> (and <b>Search Console API</b>).</li><li><b>IAM &amp; Admin → Service accounts → Create</b>, then <b>Keys → Add key → JSON</b>. A file downloads.</li><li>In <b>analytics.google.com → Admin → Property access management</b>, add the account’s email as <b>Viewer</b>.</li><li><b>Admin → Property details</b>: copy the Property ID (a number).</li></ol></details>'+acts("ga",gaOn,ga.from==="editor"||sa.from==="editor",ga.from==="vercel"||sa.from==="vercel")})+
       card({svc:"gsc",icon:"🔎",name:"Google Search Console",by:"Google search (SEO) and page checks",status:gaOn?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Needs Analytics key</span>',body:
         '<p class="help">Uses the same service account. Add its email in <b>search.google.com/search-console → Settings → Users and permissions</b> (Restricted). '+(gs.from?where(gs):'Without a site set, it tries sc-domain:ambs.co.nz, then the https addresses.')+'</p>'+
         '<label class="f"><span>Site (optional)</span><input id="cn_GSC_SITE" value="'+esc(gs.from==="editor"?gs.hint:"")+'" placeholder="sc-domain:ambs.co.nz"></label>'+acts("gsc",true,gs.from==="editor")})+
@@ -3226,6 +3245,9 @@ function connsInit(){
       b.disabled=true;msg.className="help cn-msg";msg.textContent="Checking…";
       api("settings",{action:"conn-save",svc:svc,values:vals}).then(function(j){b.disabled=false;if(j.error){msg.className="msg err cn-msg";msg.textContent=j.error;return}
         toast("Connected");stCache={};load(svc,"✓ "+(j.note||"Saved"))}).catch(function(e){b.disabled=false;msg.className="msg err cn-msg";msg.textContent=e.message})})});
+    m.querySelectorAll("[data-move]").forEach(function(b){b.addEventListener("click",function(){var svc=b.dataset.move,msg=$("cnm-"+svc);b.disabled=true;msg.className="help cn-msg";msg.textContent="Copying the keys from Vercel and checking them…";
+      api("settings",{action:"conn-save",svc:svc,fromVercel:true}).then(function(j){b.disabled=false;if(j.error){msg.className="msg err cn-msg";msg.textContent=j.error;return}
+        toast("Moved into the editor");stCache={};load(svc,"✓ Moved. Managed here now; the Vercel copy can be deleted. "+(j.note||""))}).catch(function(e){b.disabled=false;msg.className="msg err cn-msg";msg.textContent=e.message})})});
     m.querySelectorAll("[data-remove]").forEach(function(b){b.addEventListener("click",function(){if(!confirm("Remove the key saved here? A key in Vercel, if any, is used again."))return;
       api("settings",{action:"conn-remove",svc:b.dataset.remove}).then(function(){toast("Removed");load()}).catch(function(e){toast(e.message)})})})}
   function load(open,note){api("settings",{action:"conns"}).then(function(j){draw(j);if(open){var d=m.querySelector('[data-svc="'+open+'"]');if(d){d.open=true;var mm=$("cnm-"+open);if(mm&&note){mm.className="help cn-msg ok";mm.textContent=note}}}}).catch(function(e){if(e.message!=="signin")m.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
