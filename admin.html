@@ -106,8 +106,48 @@ nav.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--g
 nav.tabs button:hover{color:var(--ink)}
 .narrow{max-width:860px;padding-top:24px;padding-bottom:120px}
 /* forms */
+/* dashboard look: Home, Visitors */
+.dash{padding-top:24px;padding-bottom:120px}
+.dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.dash-head h2{margin:0;font-size:1.6rem;letter-spacing:-.01em}.dash-head .help{margin:2px 0 0}
+.dash-h{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:26px 0 10px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;cursor:pointer;color:var(--ink);text-decoration:none;transition:border-color .15s,transform .15s,box-shadow .15s}
+.tile:hover,.tile:focus-visible{border-color:var(--green);box-shadow:var(--shadow);transform:translateY(-1px)}
+.tile b{font-size:1.02rem}.tile>span:last-child{color:var(--muted);font-size:.88rem;line-height:1.4}
+.tile-i{width:40px;height:40px;border-radius:12px;background:var(--ok-bg);display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.tile-i svg,.side svg{width:22px;height:22px;fill:none;stroke:var(--green);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;color:var(--ink)}
+.kpi b{font-size:1.9rem;line-height:1.1}.kpi span{color:var(--muted);font-size:.86rem}.kpi:hover{border-color:var(--green)}
+.vs-rows{list-style:none;margin:0;padding:0}.vs-rows li{position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;margin-bottom:4px;overflow:hidden}.vs-rows li i{position:absolute;left:0;top:0;bottom:0;background:var(--ok-bg);z-index:0;border-radius:10px}.vs-rows .vs-l,.vs-rows b{position:relative;z-index:1}.vs-rows .vs-l{flex:1;min-width:0}
+.vs-kpis{margin-bottom:16px}.kpi.live b{color:var(--green)}.vs-stats{grid-template-columns:repeat(6,minmax(0,1fr))!important;margin:0 0 16px!important}.vs-stat{background:var(--card)}
+@media (max-width:1180px){.vs-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+.vs-range{margin:0!important}.vs-range .btn{padding:.4rem .85rem;font-size:.9rem}
+.vs-grid{gap:16px!important}.vs-list{margin-bottom:0}.vs-bars{height:110px!important}
+.side{display:none}
+@media (min-width:1024px){
+  #app{padding-left:248px}
+  .side{display:flex;flex-direction:column;gap:2px;position:fixed;left:0;top:0;bottom:0;width:248px;overflow-y:auto;background:var(--card);border-right:1px solid var(--line);padding:14px 12px 24px;z-index:40}
+  .side-brand{display:flex;align-items:center;gap:10px;padding:6px 10px 14px;text-decoration:none;color:var(--ink);font-weight:800}.side-brand img{height:26px;width:auto}
+  .side-h{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;padding:14px 12px 4px}
+  .side button,.side>a:not(.side-brand){display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;border-radius:12px;padding:.55rem .75rem;font-weight:650;color:var(--muted);cursor:pointer;text-align:left;text-decoration:none;font-size:.92rem}
+  .side button:hover,.side>a:not(.side-brand):hover{background:var(--bg);color:var(--ink)}
+  .side button[aria-current=true]{background:var(--ok-bg);color:var(--ink)}
+  .side svg{width:20px;height:20px;flex:0 0 auto}
+  nav.tabs{display:none}
+  header.top>.wrap{max-width:none;padding-left:24px;padding-right:24px}
+  header.top>.wrap>img,header.top>.wrap>h1{display:none}
+  header.top .find-btn{margin-left:0}
+  header.top .who{margin-left:auto!important}
+  header.top>.wrap+.wrap{display:none}
+  .side button,.side>a:not(.side-brand){white-space:nowrap}
+}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi b{font-size:1.5rem}.tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{padding:14px}.tile>span:last-child{font-size:.82rem}.dash-head h2{font-size:1.3rem}.dash{padding-top:14px}}
 .vs-big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.vs-big b{font-size:3rem;line-height:1;color:var(--green)}.vs-big span{font-weight:700;font-size:1.1rem}.vs-sub{color:var(--muted);margin:6px 0 14px}
 .vs-bars{display:flex;align-items:flex-end;gap:3px;height:70px}.vs-bars span{flex:1;background:var(--green);border-radius:3px 3px 0 0;min-width:2px}.vs-bars span.z{background:var(--line)}.vs-axis{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-top:4px}
+@media (max-width:640px){.vs-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+.vs-range{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.vs-range .btn{padding:.45rem .95rem}
+.vs-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:6px 0 10px}.vs-stat{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}.vs-stat b{font-size:1.6rem;line-height:1.1}.vs-stat span{color:var(--muted);font-size:.88rem}.vs-ch{font-size:.8rem;font-weight:700;color:var(--muted)}.vs-ch.up{color:var(--green)}.vs-ch.down{color:var(--red)}
 .vs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 16px}.vs-list table{width:100%;border-collapse:collapse}.vs-list td{padding:7px 0;border-top:1px solid var(--line)}.vs-list td.vs-n{text-align:right;font-weight:700;width:3em}.vs-steps{padding-left:1.3em}.vs-steps li{margin:0 0 10px;line-height:1.5}
 .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:16px}
 /* Chat helper: one section at a time, picked from the buttons along the top */
@@ -389,10 +429,11 @@ header.top .who{margin-left:4px}
     <h1>Website editor</h1>
     <button class="find-btn" id="findBtn" type="button" aria-label="Search the whole website"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="dsk">Search the whole site</span></button>
     <button class="acct-btn" id="acctBtn" type="button" aria-label="Account and sign out" aria-expanded="false" aria-controls="whoBox"><span aria-hidden="true">☰</span></button>
-    <div class="who" id="whoBox"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
+    <div class="who" id="whoBox"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="visitorsBtn" type="button">Visitors now</button><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
   </div>
   <div class="wrap"><nav class="tabs" role="tablist" aria-label="What to edit">
-    <button type="button" role="tab" data-tab="wording" aria-selected="true">Homepage wording</button>
+    <button type="button" role="tab" data-tab="home" aria-selected="true">Home</button>
+    <button type="button" role="tab" data-tab="wording" aria-selected="false">Homepage wording</button>
     <button type="button" role="tab" data-tab="sections" aria-selected="false">Homepage sections</button>
     <button type="button" role="tab" data-tab="pages" aria-selected="false">Pages &amp; news</button>
     <button type="button" role="tab" data-tab="menus" aria-selected="false">Menus</button>
@@ -403,9 +444,11 @@ header.top .who{margin-left:4px}
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
     <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors now</button>
   </nav>
-  <label class="tabpick"><span>Editing</span><select id="tabPick" aria-label="What to edit"></select></label></div>
+  <label class="tabpick"><span>Go to</span><select id="tabPick" aria-label="What to edit"></select></label></div>
   </header>
-  <section id="tab-wording" class="tab">
+  <aside class="side" id="side" aria-label="Editor menu"></aside>
+  <section id="tab-home" class="tab"><div class="wrap dash" id="hmMain"></div></section>
+  <section id="tab-wording" class="tab hidden">
   <div class="bar"><div class="wrap">
     <input class="t" id="search" type="search" placeholder="Search the wording…" aria-label="Search the wording">
     <span class="count" id="count" aria-live="polite">No changes</span>
@@ -436,7 +479,7 @@ header.top .who{margin-left:4px}
   <section id="tab-sections" class="tab hidden"><div class="wrap narrow" id="hsMain"></div></section>
   <section id="tab-menus" class="tab hidden"><div class="wrap narrow" id="mnMain"></div></section>
   <section id="tab-history" class="tab hidden"><div class="wrap narrow" id="hiMain"></div></section>
-  <section id="tab-visitors" class="tab hidden"><div class="wrap narrow" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
+  <section id="tab-visitors" class="tab hidden"><div class="wrap dash" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-calc" class="tab hidden"><div class="wrap narrow" id="ccMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
 </div>
 <input type="file" id="filePick" accept="image/*" class="hidden">
@@ -814,7 +857,7 @@ window.ED={api:api,esc:esc,store:store,autosize:autosize,confirmLeave:function()
 "use strict";
 var ED=window.ED,api=ED.api,esc=ED.esc;
 var $=function(id){return document.getElementById(id)};
-var loaded={wording:true},current="wording",dirty=false,fresh={};
+var loaded={wording:true},current="home",dirty=false,fresh={};
 var LIVE_NOTE="Live on ambs.co.nz in about 2 minutes.";
 var ICON_NAMES={auto:"Lightning",web:"Website",cafe:"Coffee cup",trades:"Tools",clinic:"Medical cross",retail:"Shop",adviser:"Document",transport:"Truck",guide:"Book",shield:"Shield",chart:"Chart",chat:"Speech bubble",cal:"Calendar",link:"Link",invoice:"Invoice",book:"Open book",target:"Target"};
 var SEC={guides:"Guides",industries:"Industries",services:"Services",news:"News",locations:"Locations",legal:"Legal pages",page:"Pages"};
@@ -888,9 +931,11 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,home:homeInit})[name]()}
+  sideSync();window.scrollTo(0,0)
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
+$("visitorsBtn").addEventListener("click",function(){show("visitors");window.scrollTo(0,0)});
 /* ---------- phones ---------- */
 var isPhone=function(){return window.matchMedia("(max-width:760px)").matches};
 /* the tabs as one picker */
@@ -958,6 +1003,8 @@ function phoneActions(act){
 new MutationObserver(function(ms){ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,function(n){if(n.nodeType!==1)return;
   if(n.classList.contains("actions"))phoneActions(n);n.querySelectorAll&&n.querySelectorAll(".actions").forEach(phoneActions)})})}).observe(document.body,{childList:true,subtree:true});
 window.edTabs={reset:function(){loaded={wording:true};if(current!=="wording"){var c=current;current="";show(c)}}};
+window.edShow=function(t){show(t)};
+setTimeout(function(){if(current==="home"&&!loaded.home){loaded.home=true;homeInit()}},0);
 
 /* ---------- reading pictures in the browser ---------- */
 function loadImg(file){return new Promise(function(ok,no){var u=URL.createObjectURL(file),i=new Image();i.onload=function(){ok(i)};i.onerror=function(){no(new Error("That file isn't a picture this browser can open. Try a JPG or PNG."))};i.src=u})}
@@ -1784,16 +1831,52 @@ function historyInit(){var m=$("hiMain");m.innerHTML='<p class="empty"><span cla
       p.appendChild(r)});
     m.appendChild(p)}).catch(fail)}
 
+/* ======================= MENU AND HOME ======================= */
+/* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
+   a dashboard with the key numbers and a tile for every part. EDMENU is the one list both are drawn from. */
+var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18'};
+var EDMENU=[["",[["home","Home","Your dashboard"]]],
+  ["Website",[["wording","Homepage wording","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"]]],
+  ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"]]],
+  ["Insights",[["visitors","Visitors now","Who's on the website and how they found you"],["history","History","Every change, with undo"]]]];
+function ico(k){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
+function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side"))b.setAttribute("aria-current",String(b.dataset.go===current))})}
+(function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
+  EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
+  h+='<div class="side-h">Shortcuts</div><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
+  sd.innerHTML=h;sideSync()})();
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();show(b.dataset.go)});
+function homeInit(){
+  var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
+  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div><a class="btn" href="/" target="_blank" rel="noopener">View website ↗</a></div>'+
+    '<div class="kpis" id="hmKpi" hidden></div>';
+  EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
+  h+='<h3 class="dash-h">Tools</h3><div class="tiles"><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
+  m.innerHTML=h;
+  Promise.all([api("settings",{action:"visitors"}),api("settings",{action:"visitors",days:7})]).then(function(r){var a=r[0],b=r[1];if(a.setup||b.setup)return;
+    var ev={};(b.events||[]).forEach(function(e){ev[e.name]=e.n});var k=$("hmKpi");if(!k)return;
+    var tile=function(n,l,go){return'<button type="button" class="kpi" data-go="visitors"><b>'+n+'</b><span>'+l+'</span></button>'};
+    k.innerHTML=tile(a.now,"on the website now")+tile(b.totals.activeUsers,"visitors, last 7 days")+tile(b.totals.sessions,"visits, last 7 days")+tile((ev.book_click||0)+(ev.booking_confirmed?" · "+ev.booking_confirmed+" booked":""),"Book a call clicks, 7 days");k.hidden=false}).catch(function(){});
+}
+
 /* ======================= VISITORS NOW ======================= */
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).
    Refreshes every 30 seconds while this tab is open. Until the Google connection is set up it shows the steps. */
 var VS_EVENTS=[["page_view","Pages viewed"],["book_click","Book a call clicks"],["booking_confirmed","Calls booked"],["generate_lead","Messages sent"],["phone_click","Phone taps"],["email_click","Email taps"]];
-var vsTimer=null;
+var vsTimer=null,vsRange="now";
 function visitorsInit(){
   var m=$("vsMain");
-  function list(title,rows,empty){return '<div class="panel vs-list"><h3>'+title+'</h3>'+(rows.length?'<table><tbody>'+rows.map(function(r){return'<tr><td>'+esc(r.name)+'</td><td class="vs-n">'+r.n+'</td></tr>'}).join("")+'</tbody></table>':'<p class="help">'+empty+'</p>')+'</div>'}
-  function draw(j){
-    if(j.setup){m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="help">This shows who is on ambs.co.nz right now, straight from Google Analytics. It needs a one-time, read-only connection to Google first. Do these steps on a computer:</p><ol class="vs-steps">'+
+  var DEV={mobile:"Phone",desktop:"Computer",tablet:"Tablet"};
+  function list(title,rows,empty){var mx=Math.max.apply(null,rows.map(function(r){return r.n}).concat([1]));return '<div class="panel vs-list"><h3>'+title+'</h3>'+(rows.length?'<ul class="vs-rows">'+rows.map(function(r){return'<li><span class="vs-l">'+esc(r.name)+'</span><b>'+r.n+'</b><i style="width:'+Math.max(3,Math.round(r.n/mx*100))+'%"></i></li>'}).join("")+'</ul>':'<p class="help">'+empty+'</p>')+'</div>'}
+  function evRows(events){var ev={};events.forEach(function(e){ev[e.name]=e.n});return VS_EVENTS.filter(function(e){return ev[e[0]]}).map(function(e){return{name:e[1],n:ev[e[0]]}})}
+  function devs(rows){return rows.map(function(d){return{name:DEV[d.name]||d.name,n:d.n}})}
+  function bars(vals,tips){var max=Math.max.apply(null,vals.concat([1]));return vals.map(function(n,i){return'<span title="'+esc(tips[i])+': '+n+'" style="height:'+Math.max(4,Math.round(n/max*100))+'%"'+(n?'':' class="z"')+'></span>'}).join("")}
+  function pills(){return '<div class="dash-head"><div><h2>Visitors</h2><p class="help">From Google Analytics. Nobody is identified.</p></div>'+pill2()+'</div>'}
+  function pill2(){return '<div class="vs-range" role="group" aria-label="Time period">'+[["now","Right now"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div>'}
+  function wire(){m.querySelectorAll(".vs-range [data-r]").forEach(function(b){b.addEventListener("click",function(){if(vsRange===b.dataset.r)return;vsRange=b.dataset.r;m.querySelector(".dash-head").insertAdjacentHTML("afterend",'<p class="empty"><span class="spin"></span> Loading…</p>');load()})})}
+  function change(now,was,pct){if(!was)return now?'<span class="vs-ch up">new</span>':'';var d=pct?Math.round((now-was)*100):Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';return'<span class="vs-ch '+(d>0?'up':'down')+'">'+(d>0?'▲ ':'▼ ')+Math.abs(d)+(pct?' pts':'%')+'</span>'}
+  function mins(sec){sec=Math.round(sec);return sec<60?sec+'s':Math.floor(sec/60)+'m '+(sec%60)+'s'}
+  function setup(j){m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="help">This shows who is on ambs.co.nz, straight from Google Analytics. It needs a one-time, read-only connection to Google first. Do these steps on a computer:</p><ol class="vs-steps">'+
       '<li>Go to <b>console.cloud.google.com</b> (signed in with the Google account that owns your Analytics). Create a project called <b>AMBS website</b>.</li>'+
       '<li>In that project, open <b>APIs &amp; Services → Library</b>, search for <b>Google Analytics Data API</b> and press <b>Enable</b>.</li>'+
       '<li>Open <b>IAM &amp; Admin → Service accounts → Create service account</b>. Name it <b>ambs-visitors</b>, then press <b>Done</b> (skip the optional steps).</li>'+
@@ -1801,19 +1884,28 @@ function visitorsInit(){
       '<li>Copy the account’s email (it ends in <b>.iam.gserviceaccount.com</b>). In <b>analytics.google.com → Admin → Property access management</b>, press <b>+</b>, add that email with the role <b>Viewer</b>.</li>'+
       '<li>In <b>Analytics → Admin → Property details</b>, copy the <b>Property ID</b> (a number like 512345678).</li>'+
       '<li>In <b>vercel.com</b> → your website project → <b>Settings → Environment Variables</b>, add <b>GA_PROPERTY_ID</b> = that number, and <b>GA_SERVICE_ACCOUNT</b> = everything inside the downloaded file. Save, then redeploy.</li></ol>'+
-      '<p class="help">Still to do: '+[!j.has.property?"GA_PROPERTY_ID":"",!j.has.key?"GA_SERVICE_ACCOUNT":""].filter(Boolean).join(" and ")+'. Never paste the key into an email or chat.</p></div>';return}
-    var max=Math.max.apply(null,j.perMin.concat([1]));
-    var bars=j.perMin.map(function(n,i){return'<span title="'+(29-i)+' min ago: '+n+'" style="height:'+Math.max(4,Math.round(n/max*100))+'%"'+(n?'':' class="z"')+'></span>'}).join("");
-    var ev={};j.events.forEach(function(e){ev[e.name]=e.n});
-    var evRows=VS_EVENTS.filter(function(e){return ev[e[0]]}).map(function(e){return{name:e[1],n:ev[e[0]]}});
+      '<p class="help">Still to do: '+[!j.has.property?"GA_PROPERTY_ID":"",!j.has.key?"GA_SERVICE_ACCOUNT":""].filter(Boolean).join(" and ")+'. Never paste the key into an email or chat.</p></div>'}
+  function drawNow(j){
     var t=new Date(j.at);
-    m.innerHTML='<div class="panel vs-top"><div class="vs-big"><b>'+j.now+'</b><span>'+(j.now===1?"person":"people")+' on the website right now</span></div>'+
-      '<div class="vs-sub">'+j.last30+' in the last 30 minutes</div><div class="vs-bars" aria-label="People each minute, last 30 minutes">'+bars+'</div><div class="vs-axis"><span>30 min ago</span><span>now</span></div>'+
-      '<p class="help">Updates every 30 seconds · last checked '+t.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+'. Google doesn’t say who people are, only where and what they look at. Your own visits count too.</p></div>'+
-      '<div class="vs-grid">'+list("Pages they’re on",j.pages,"Nobody in the last 30 minutes.")+list("Where they are",j.places,"Nobody in the last 30 minutes.")+list("Phone or computer",j.devices.map(function(d){return{name:({mobile:"Phone",desktop:"Computer",tablet:"Tablet"})[d.name]||d.name,n:d.n}}),"Nobody in the last 30 minutes.")+list("What they did (last 30 minutes)",evRows,"No clicks yet.")+'</div>';
-  }
-  function load(){api("settings",{action:"visitors"}).then(draw).catch(function(e){if(e.message==="signin")return;m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="msg err">'+esc(e.message)+'</p></div>'})}
-  load();clearInterval(vsTimer);vsTimer=setInterval(function(){if(current==="visitors"&&document.visibilityState==="visible")load()},30000);
+    var ev30={};j.events.forEach(function(e){ev30[e.name]=e.n});
+    m.innerHTML=pills()+'<div class="kpis vs-kpis"><div class="kpi live"><b>'+j.now+'</b><span>on the website now</span></div><div class="kpi"><b>'+j.last30+'</b><span>in the last 30 minutes</span></div><div class="kpi"><b>'+(ev30.page_view||0)+'</b><span>pages viewed, 30 min</span></div><div class="kpi"><b>'+((ev30.book_click||0)+(ev30.phone_click||0)+(ev30.email_click||0)+(ev30.generate_lead||0))+'</b><span>clicks to contact you, 30 min</span></div></div>'+
+      '<div class="panel vs-top"><h3>People each minute</h3><div class="vs-bars" aria-label="People each minute, last 30 minutes">'+bars(j.perMin,j.perMin.map(function(n,i){return(29-i)+' min ago'}))+'</div><div class="vs-axis"><span>30 min ago</span><span>now</span></div>'+
+      '<p class="help">Updates every 30 seconds · last checked '+t.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+'. Google doesn’t say who people are, only where and what they look at. Your own visits count too. Visitors with ad blockers aren’t counted.</p></div>'+
+      '<div class="vs-grid">'+list("Pages they’re on",j.pages,"Nobody in the last 30 minutes.")+list("Where they are",j.places,"Nobody in the last 30 minutes.")+list("Phone or computer",devs(j.devices),"Nobody in the last 30 minutes.")+list("What they did (last 30 minutes)",evRows(j.events),"No clicks yet.")+'</div>';
+    wire()}
+  function drawPeriod(j){
+    var T=j.totals,B=j.before,lbl=j.days===90?"3 months":j.days+" days";
+    var card=function(n,label,ch){return'<div class="vs-stat"><b>'+n+'</b><span>'+label+'</span>'+ch+'</div>'};
+    var fd=function(d){var x=new Date(+d.slice(0,4),+d.slice(4,6)-1,+d.slice(6,8));return x.toLocaleDateString([], {day:"numeric",month:"short"})};
+    m.innerHTML=pills()+'<div class="vs-stats">'+
+      card(T.activeUsers,"Visitors",change(T.activeUsers,B.activeUsers))+card(T.newUsers,"New visitors",change(T.newUsers,B.newUsers))+card(T.sessions,"Visits",change(T.sessions,B.sessions))+card(T.screenPageViews,"Pages viewed",change(T.screenPageViews,B.screenPageViews))+
+      card(mins(T.averageSessionDuration),"Average visit",change(T.averageSessionDuration,B.averageSessionDuration))+card(Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div><div class="panel"><h3>Visitors each day · last '+lbl+'</h3>'+
+      '<p class="help">▲▼ compare with the '+lbl+' before. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p>'+
+      (j.daily.length?'<div class="vs-bars" aria-label="Visitors each day">'+bars(j.daily.map(function(d){return d.n}),j.daily.map(function(d){return fd(d.d)}))+'</div><div class="vs-axis"><span>'+fd(j.daily[0].d)+'</span><span>today</span></div>':'')+'</div>'+
+      '<div class="vs-grid">'+list("Top pages (views)",j.pages,"No visits yet.")+list("How they found you",j.sources.map(function(r){return{name:({"Organic Search":"Google and other search","Direct":"Typed in or bookmarked","Organic Social":"Social media","Referral":"Links on other websites","Paid Search":"Search ads","Paid Social":"Social media ads","Email":"Email","Unassigned":"Other"})[r.name]||r.name,n:r.n}}),"No visits yet.")+list("Where they are",j.places,"No visits yet.")+list("Phone or computer",devs(j.devices),"No visits yet.")+list("What they did",evRows(j.events),"No clicks yet.")+'</div>';
+    wire()}
+  function load(){var r=vsRange;api("settings",r==="now"?{action:"visitors"}:{action:"visitors",days:+r}).then(function(j){if(r!==vsRange)return;if(j.setup)return setup(j);(r==="now"?drawNow:drawPeriod)(j)}).catch(function(e){if(e.message==="signin")return;m.innerHTML=pills()+'<div class="panel"><h3>Visitors</h3><p class="msg err">'+esc(e.message)+'</p></div>';wire()})}
+  load();clearInterval(vsTimer);vsTimer=setInterval(function(){if(current==="visitors"&&vsRange==="now"&&document.visibilityState==="visible")load()},30000);
 }
 
 /* ======================= CALCULATOR ======================= */
