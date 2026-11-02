@@ -535,6 +535,12 @@ header.top .who{margin-left:4px}
 .pl-menu button{all:unset;cursor:pointer;padding:.7rem .85rem;border-radius:10px;font-size:.95rem;white-space:pre}.pl-menu button:hover,.pl-menu button:focus-visible{background:rgba(24,119,224,.08)}.pl-menu .danger{color:#c62828}
 @media(max-width:760px){.pl-btns .pl-more{flex:0 0 auto}}
 .kpi .kpi-when{font-size:.74rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;display:block;margin-top:2px}.hl-when{margin:2px 0 6px!important}
+.ts-sumbox{margin:0 0 14px}.ts-sumh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}.ts-sumh h3{margin:0;font-size:1.05rem}.ts-sumh small{font-weight:500}.ts-sumh #tsSumWhen{font-size:.85rem}.ts-go{margin-left:auto;border:0;background:none;font:inherit;font-weight:700;color:var(--link,#1a56db);cursor:pointer;padding:6px 0}
+.ts-sum{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.ts-chip{display:grid;gap:3px;text-align:left;border:1px solid var(--line);border-left:4px solid #8a94a6;border-radius:12px;padding:10px 12px;background:var(--card,#fff);font:inherit;color:inherit;cursor:pointer;min-width:0}
+.ts-chip:hover{border-color:#c5cbd8}.ts-chip.ok{border-left-color:#1f9d34}.ts-chip.warn{border-left-color:#e08a00}.ts-chip.bad{border-left-color:#d33}
+.ts-cn{font-size:.78rem;font-weight:700;color:var(--muted)}.ts-chip b{font-size:1.25rem;line-height:1.2;display:flex;align-items:center;min-height:1.5rem}.ts-chip.ok b{color:#17761a}.ts-chip.warn b{color:#9a5b00}.ts-chip.bad b{color:#b42318}.ts-cnote{font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1200px){.ts-sum{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){.ts-sum{grid-template-columns:repeat(2,minmax(0,1fr))}.ts-sumh{gap:4px 10px}.ts-sumh #tsSumWhen{order:3;flex-basis:100%}.hl-top{gap:16px;flex-wrap:nowrap}.hl-top .hl-score{width:96px;height:96px;flex:0 0 96px}.hl-top .hl-score b{font-size:1.8rem}.hl-sum p{font-size:.92rem;margin:2px 0}.hl-sum .hl-when{font-size:.8rem}.ts-chip b{font-size:1.1rem}}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .ts-chip.ok b{color:#5fd06a}:root:not([data-theme=light]) .ts-chip.warn b{color:#f2b544}:root:not([data-theme=light]) .ts-chip.bad b{color:#ff8a80}}
 .ts-bar{display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin-bottom:14px}.ts-pg{display:grid;gap:4px;flex:1 1 220px;max-width:420px}.ts-pg select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font:inherit;background:var(--card,#fff);color:inherit}.ts-bar .btn{min-height:44px}.ts-when{margin-left:auto}
 .ts-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}.ts-c{margin:0;min-width:0}#ts-psi{grid-row:span 2}
 .ts-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.ts-h h3{margin:0;font-size:1.05rem}.ts-st{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);white-space:nowrap}
@@ -2856,6 +2862,7 @@ function healthInit(){
     var h1='<div class="dash-head"><div><h2>Site health</h2><p class="help">Every live page checked for what Google and visitors need. Fix the red ones first.</p></div><button type="button" class="btn" id="hlRe">Check again</button></div>'+
       '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p class="help hl-when">Last checked '+healthWhen(j.checked)+' (New Zealand time)</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
     var checks=j.checks||[],pp=j.perPage||[];
+    h1+='<section class="panel ts-sumbox"><div class="ts-sumh"><h3>Speed &amp; security</h3><span class="help" id="tsSumWhen"></span><button type="button" class="ts-go" id="tsSumGo">See details →</button></div><div class="ts-sum" id="tsSum"></div></section>';
     h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button><button type="button" data-v="tests" aria-selected="false">Speed &amp; security</button></div>';
     h1+='<div class="hl-v" data-v="tests" hidden><div id="tsBox"></div></div>';
     h1+='<div class="panel hl-v" data-v="checks" hidden><ul class="hl-checks">'+checks.map(function(c){var ok=!c.failed;return'<li class="'+(c.total?ok?"ok":"bad":"na")+'"><i aria-hidden="true">'+(c.total?ok?"✓":"✕":"–")+'</i><b>'+esc(c.name)+'</b><span>'+(!c.total?"Nothing to check":ok?"All "+c.total+" pass":c.failed+" of "+c.total+" to fix")+'</span></li>'}).join("")+'</ul></div>';
@@ -2865,6 +2872,9 @@ function healthInit(){
     m.innerHTML=h1;$("hlRe").addEventListener("click",healthInit);
     var tab=function(v){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x.dataset.v===v))});m.querySelectorAll(".hl-v").forEach(function(x){x.hidden=x.dataset.v!==v});HL_TAB=v;if(v==="tests")testsInit(pp)};
     m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){tab(b.dataset.v)})});if(HL_TAB!=="fix")tab(HL_TAB);
+    var toTests=function(){TS_URL=TS_HOME;tab("tests");var t=m.querySelector(".hl-tabs");if(t)t.scrollIntoView({behavior:"smooth",block:"start"})};
+    $("tsSumGo").addEventListener("click",toTests);$("tsSum").addEventListener("click",function(e){if(e.target.closest("[data-sum]"))toTests()});
+    tsSum();var hv=tsLoad()[TS_HOME]||{};if(!hv.at||Date.now()-hv.at>6*36e5)tsRunAll(TS_HOME);   /* results older than 6 hours refresh by themselves */
     m.querySelectorAll(".hl-pages button").forEach(function(b){b.addEventListener("click",function(){var r=pp[+b.dataset.p];show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(r.section,r.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
     m.querySelectorAll(".hl-list button").forEach(function(b){b.addEventListener("click",function(){var i=j.issues[+b.dataset.k];
       if(i.section==="redirects")return show("redirects");show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(i.section,i.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
@@ -2878,7 +2888,7 @@ function healthTile(j){var t=tsLoad()["https://ambs.co.nz/"],sp=t&&t.psi_mobile&
 
 /* ---- Speed & security: real results from Google PageSpeed, Mozilla Observatory, the certificate, the server, Google's index and the sharing card.
    Each test is its own api/settings "test" request (api/_tests.js), run side by side; results are kept in this browser (ambs-tests) with the time. */
-var HL_TAB="fix",TS_URL="https://ambs.co.nz/",TS_PSI="psi_mobile";
+var HL_TAB="fix",TS_HOME="https://ambs.co.nz/",TS_URL=TS_HOME,TS_PSI="psi_mobile",TS_LAST={},TS_BUSY={};
 function tsLoad(){try{return JSON.parse(localStorage.getItem("ambs-tests")||"{}")}catch(e){return{}}}
 function tsSave(u,k,v){try{var a=tsLoad();a[u]=a[u]||{};a[u][k]=v;a[u].at=Date.now();localStorage.setItem("ambs-tests",JSON.stringify(a))}catch(e){}}
 var TS=[["psi_mobile","Google speed test"],["security","Security settings"],["cert","Padlock (https)"],["response","Server speed"],["index","On Google"],["sharing","Sharing preview"]];
@@ -2895,13 +2905,29 @@ function testsInit(pp){
   $("tsRun").addEventListener("click",function(){tsRunAll()});
   if(!have.at)tsRunAll();
 }
-function tsRunAll(){var b=$("tsRun");if(b){b.disabled=true;b.textContent="Testing…"}var left=TS.length;
-  var done=function(){if(--left)return;if(b){b.disabled=false;b.textContent="▶ Run all tests"}var w=$("tsWhen");if(w)w.textContent="Last run "+healthWhen(Date.now());var k=$("hmHealth");if(k&&k.dataset.j)try{k.innerHTML=healthTile(JSON.parse(k.dataset.j))}catch(e){}};
-  TS.forEach(function(t){var k=t[0]==="psi_mobile"?TS_PSI:t[0];tsRun(k).then(done,done)})}
-function tsRun(k){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return Promise.resolve();
-  c.querySelector(".ts-st").innerHTML='<span class="spin"></span>'+(id==="psi"?" about 30 seconds":"");
-  var body={action:"test",test:id,url:TS_URL};if(id==="psi")body.strategy=k==="psi_desktop"?"desktop":"mobile";
-  var u=TS_URL;return api("settings",body).then(function(j){if(!j.error&&!j.needsKey&&!j.needs&&!j.setup)tsSave(u,k,j);if(u===TS_URL)tsDraw(k,j)}).catch(function(e){if(u===TS_URL)tsDraw(k,{error:e.message||String(e)})})}
+function tsRunAll(url){var u=url||TS_URL,mine=u===TS_URL,b=$("tsRun");if(mine&&b){b.disabled=true;b.textContent="Testing…"}var left=TS.length;
+  var done=function(){if(--left)return;var b=$("tsRun");if(b&&u===TS_URL){b.disabled=false;b.textContent="▶ Run all tests";var w=$("tsWhen");if(w)w.textContent="Last run "+healthWhen(Date.now())}
+    var k=$("hmHealth");if(k&&k.dataset.j)try{k.innerHTML=healthTile(JSON.parse(k.dataset.j))}catch(e){}tsSum()};
+  TS.forEach(function(t){var k=t[0]==="psi_mobile"&&u===TS_URL?TS_PSI:t[0];tsRun(k,u).then(done,done)})}
+/* one test for one page; draws its card when that page is showing and the summary when it is the homepage */
+function tsRun(k,url){var id=k.split("_")[0],u=url||TS_URL,key=u+"|"+k;if(TS_BUSY[key])return TS_BUSY[key];
+  var c=u===TS_URL&&$("ts-"+id);if(c)c.querySelector(".ts-st").innerHTML='<span class="spin"></span>'+(id==="psi"?" about 30 seconds":"");
+  var body={action:"test",test:id,url:u};if(id==="psi")body.strategy=k==="psi_desktop"?"desktop":"mobile";
+  var fin=function(j){delete TS_BUSY[key];TS_LAST[key]=j;var nd=j.needsKey?"key":j.needs||j.setup?"google":"";if(!j.error)tsSave(u,"need_"+k,nd);if(!j.error&&!nd)tsSave(u,k,j);if(u===TS_URL&&$("ts-"+id))tsDraw(k,j);if(u===TS_HOME)tsSum()};
+  TS_BUSY[key]=api("settings",body).then(fin).catch(function(e){fin({error:e.message||String(e)})});if(u===TS_HOME)tsSum();return TS_BUSY[key]}
+/* the row at the top of Site health: one result per test for the homepage, from the last run (kept in this browser) */
+function tsSum(){var box=$("tsSum");if(!box)return;var have=tsLoad()[TS_HOME]||{},w=$("tsSumWhen");
+  if(w)w.textContent="Homepage"+(have.at?" · last run "+healthWhen(have.at):"");
+  box.innerHTML=TS.map(function(t){var k=t[0],busy=TS_BUSY[TS_HOME+"|"+k],last=TS_LAST[TS_HOME+"|"+k],j=have[k],v="–",note="",c="na";
+    var nd=have["need_"+k];if(nd){v="Set up";note=nd==="key"?"needs a free key":"needs Google access";c="warn"}
+    else if(j){if(k==="psi_mobile"){var p=j.scores&&j.scores[0].score;v=p==null?"–":p+"";note="phone speed"+(j.scores&&j.scores[1]&&j.scores[1].score!=null?" · accessibility "+j.scores[1].score:"");c=tsCol(p)}
+      else if(k==="security"){v=j.grade||"–";note=j.passed+" of "+j.total+" checks";c=j.score>=90?"ok":j.score>=60?"warn":"bad"}
+      else if(k==="cert"){v=j.valid?"✓ Secure":"Problem";note=j.days!=null?j.days+" days left":"";c=!j.valid?"bad":j.days<14?"warn":"ok"}
+      else if(k==="response"){v=j.first+" ms";note="to answer · "+Math.round(j.size/1024)+" KB";c=j.first<400?"ok":j.first<900?"warn":"bad"}
+      else if(k==="index"){var on=j.verdict==="PASS";v=on?"✓ Listed":"Not yet";note=j.crawled?"visited "+healthWhen(j.crawled):"";c=on?"ok":"warn"}
+      else if(k==="sharing"){var n=(j.checks||[]).filter(function(x){return x.ok}).length,a=(j.checks||[]).length;v=n+" of "+a;note="sharing checks pass";c=n===a?"ok":"warn"}}
+    else if(last&&last.error){v="Didn’t finish";c="bad"}
+    return'<button type="button" class="ts-chip '+c+'" data-sum="'+k+'"><span class="ts-cn">'+t[1]+'</span><b>'+(busy&&!j?'<span class="spin"></span>':esc(v))+'</b><span class="ts-cnote">'+(busy?(j?"updating…":"testing…"):esc(note))+'</span></button>'}).join("")}
 function tsRow(ok,name,note){return'<li class="'+(ok===null?"na":ok?"ok":"bad")+'"><i aria-hidden="true">'+(ok===null?"–":ok?"✓":"✕")+'</i><b>'+esc(name)+'</b><span>'+esc(note||"")+'</span></li>'}
 function tsLink(u,t){return'<a class="ts-more" href="'+esc(u)+'" target="_blank" rel="noopener">'+(t||"Full report")+' ↗</a>'}
 function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.querySelector(".ts-st"),b=c.querySelector(".ts-b"),h="",badge="";
