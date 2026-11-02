@@ -13,7 +13,7 @@ async function accessToken(sa) {
   if (tok && Date.now() < tok.exp - 60000) return tok.value;
   const now = Math.floor(Date.now() / 1000);
   const head = b64u(JSON.stringify({ alg: "RS256", typ: "JWT" }));
-  const claim = b64u(JSON.stringify({ iss: sa.client_email, scope: "https://www.googleapis.com/auth/analytics.readonly", aud: "https://oauth2.googleapis.com/token", iat: now, exp: now + 3600 }));
+  const claim = b64u(JSON.stringify({ iss: sa.client_email, scope: "https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/webmasters.readonly", aud: "https://oauth2.googleapis.com/token", iat: now, exp: now + 3600 }));
   const sig = crypto.createSign("RSA-SHA256").update(head + "." + claim).sign(sa.private_key).toString("base64").replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
   const r = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
@@ -63,18 +63,32 @@ async function runReport(id, t, body) {
   return (j.rows || []).map((x) => ({ k: (x.dimensionValues || []).map((d) => d.value), v: (x.metricValues || []).map((d) => +d.value || 0) }));
 }
 
-export async function visitorsPeriod(days) {
+/* A filter picked on the dashboard (a page, a source, a town or a device): { f: "page"|"source"|"place"|"device", v: "..." }.
+   Realtime has no "source", so it is ignored there. Towns arrive as "Auckland, New Zealand" and filter on the town. */
+const FDIM = { page: "pageTitle", source: "sessionDefaultChannelGroup", place: "city", device: "deviceCategory" };
+const FDIM_RT = { page: "unifiedScreenName", place: "city", device: "deviceCategory" };
+function dimFilter(f, rt) {
+  if (!f || !f.f || !f.v) return undefined;
+  const name = (rt ? FDIM_RT : FDIM)[f.f];
+  if (!name) return undefined;
+  const value = f.f === "place" ? String(f.v).split(",")[0].trim() : String(f.v);
+  return { filter: { fieldName: name, stringFilter: { matchType: "EXACT", value } } };
+}
+
+export async function visitorsPeriod(days, f) {
   const c = conn();
   if (c.setup) return c;
   const n = [7, 28, 90].includes(+days) ? +days : 7;
   const t = await accessToken(c.sa);
   const cur = { startDate: n + "daysAgo", endDate: "today" }, prev = { startDate: 2 * n + "daysAgo", endDate: (n + 1) + "daysAgo" };
-  const one = (dims, metrics, limit, order) => runReport(c.id, t, { dateRanges: [cur], dimensions: dims.map((name) => ({ name })), metrics: metrics.map((name) => ({ name })), limit: limit || 10, orderBys: order ? [{ metric: { metricName: order }, desc: true }] : undefined });
+  const df = dimFilter(f, false);
+  const one = (dims, metrics, limit, order) => runReport(c.id, t, { dateRanges: [cur], dimensions: dims.map((name) => ({ name })), metrics: metrics.map((name) => ({ name })), limit: limit || 10, orderBys: order ? [{ metric: { metricName: order }, desc: true }] : undefined, dimensionFilter: df });
+  const DM = ["activeUsers", "newUsers", "sessions", "screenPageViews"];
   const M = ["activeUsers", "newUsers", "sessions", "screenPageViews", "averageSessionDuration", "engagementRate"];
   const [tot, totPrev, daily, pages, sources, places, devices, events] = await Promise.all([
-    runReport(c.id, t, { dateRanges: [cur], metrics: M.map((name) => ({ name })) }),
-    runReport(c.id, t, { dateRanges: [prev], metrics: M.map((name) => ({ name })) }),
-    runReport(c.id, t, { dateRanges: [cur], dimensions: [{ name: "date" }], metrics: [{ name: "activeUsers" }], orderBys: [{ dimension: { dimensionName: "date" } }], limit: 100 }),
+    runReport(c.id, t, { dateRanges: [cur], metrics: M.map((name) => ({ name })), dimensionFilter: df }),
+    runReport(c.id, t, { dateRanges: [prev], metrics: M.map((name) => ({ name })), dimensionFilter: df }),
+    runReport(c.id, t, { dateRanges: [cur, prev], dimensions: [{ name: "nthDay" }], metrics: DM.map((name) => ({ name })), orderBys: [{ dimension: { dimensionName: "nthDay" } }], limit: 400, dimensionFilter: df }),
     one(["pageTitle"], ["screenPageViews"], 10, "screenPageViews"),
     one(["sessionDefaultChannelGroup"], ["sessions"], 10, "sessions"),
     one(["city", "country"], ["activeUsers"], 10, "activeUsers"),
@@ -86,25 +100,42 @@ export async function visitorsPeriod(days) {
   return {
     days: n,
     totals: pick(tot), before: pick(totPrev),
-    daily: daily.map((x) => ({ d: x.k[0], n: x.v[0] })),
+    daily: dailyRows(daily, n),
+    filter: f && f.f ? f : null,
     pages: named(pages), sources: named(sources), places: named(places), devices: named(devices),
     events: events.map((x) => ({ name: x.k[0], n: x.v[0] })),
   };
 }
 
-export async function visitorsNow() {
+/* nthDay counts days from each range's own start, so day i of this period sits next to day i of the period before.
+   With two date ranges Google adds a "dateRange" dimension (date_range_0 = this period, date_range_1 = before). */
+function dailyRows(rows, n) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const d = new Date(Date.now() - (n - 1 - i) * 86400000);
+    out.push({ d: d.toISOString().slice(0, 10), now: [0, 0, 0, 0], before: [0, 0, 0, 0] });
+  }
+  rows.forEach((x) => {
+    const i = parseInt(x.k[0], 10), which = x.k[1] === "date_range_1" ? "before" : "now";
+    if (out[i]) out[i][which] = x.v.slice(0, 4);
+  });
+  return out;
+}
+
+export async function visitorsNow(f) {
   const c = conn();
   if (c.setup) return c;
   const id = c.id, t = await accessToken(c.sa);
   const last5 = [{ startMinutesAgo: 4, endMinutesAgo: 0 }];
+  const df = dimFilter(f, true), rp = (b) => report(id, t, Object.assign(b, df ? { dimensionFilter: df } : {}));
   const [now, half, pages, places, devices, events, minutes] = await Promise.all([
-    report(id, t, { metrics: users, minuteRanges: last5 }),
-    report(id, t, { metrics: users }),
-    report(id, t, { dimensions: [{ name: "unifiedScreenName" }], metrics: users, limit: 10 }),
-    report(id, t, { dimensions: [{ name: "city" }, { name: "country" }], metrics: users, limit: 10 }),
-    report(id, t, { dimensions: [{ name: "deviceCategory" }], metrics: users }),
-    report(id, t, { dimensions: [{ name: "eventName" }], metrics: [{ name: "eventCount" }], limit: 50 }),
-    report(id, t, { dimensions: [{ name: "minutesAgo" }], metrics: users, limit: 30 }),
+    rp({ metrics: users, minuteRanges: last5 }),
+    rp({ metrics: users }),
+    rp({ dimensions: [{ name: "unifiedScreenName" }], metrics: users, limit: 10 }),
+    rp({ dimensions: [{ name: "city" }, { name: "country" }], metrics: users, limit: 10 }),
+    rp({ dimensions: [{ name: "deviceCategory" }], metrics: users }),
+    rp({ dimensions: [{ name: "eventName" }], metrics: [{ name: "eventCount" }], limit: 50 }),
+    rp({ dimensions: [{ name: "minutesAgo" }], metrics: users, limit: 30 }),
   ]);
   const perMin = new Array(30).fill(0);
   minutes.forEach((x) => { const m = parseInt(x.k[0], 10); if (m >= 0 && m < 30) perMin[29 - m] = x.v[0]; });
@@ -116,6 +147,94 @@ export async function visitorsNow() {
     places: places.map((x) => ({ name: [x.k[0], x.k[1]].filter((s) => s && s !== "(not set)").join(", "), n: x.v[0] })).filter((x) => x.name).slice(0, 8),
     devices: top(devices),
     events: events.map((x) => ({ name: x.k[0], n: x.v[0] })),
+    filter: df ? f : null,
     at: new Date().toISOString(),
+  };
+}
+
+/* What people typed into Google before seeing or visiting the site, from Google Search Console (the same read-only
+   login, added as a user in Search Console → Settings → Users and permissions; Search Console API enabled in the
+   Google Cloud project). Google shares these about 2–3 days late, and hides very rare searches. */
+const SITES = ["sc-domain:ambs.co.nz", "https://ambs.co.nz/", "https://www.ambs.co.nz/"];
+export async function searchQueries(days) {
+  const c = conn();
+  if (c.setup) return c;
+  const n = [7, 28, 90].includes(+days) ? +days : 28;
+  const t = await accessToken(c.sa);
+  const day = (k) => new Date(Date.now() - k * 86400000).toISOString().slice(0, 10);
+  const sites = process.env.GSC_SITE ? [process.env.GSC_SITE] : SITES;
+  let last = "";
+  for (const site of sites) {
+    const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/searchAnalytics/query", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" },
+      body: JSON.stringify({ startDate: day(n + 2), endDate: day(0), dimensions: ["query"], rowLimit: 25, dataState: "all" }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) return { site, days: n, rows: (j.rows || []).map((x) => ({ q: x.keys[0], clicks: x.clicks, shown: x.impressions, pos: Math.round(x.position * 10) / 10 })) };
+    last = (j.error && j.error.message) || String(r.status);
+    if (r.status !== 403 && r.status !== 404) break;
+  }
+  return { needs: true, email: c.sa.client_email, why: last };
+}
+
+/* Everything for the SEO page, from Search Console plus a quick look at the live site:
+   totals now and the period before, clicks and times shown each day, searches, pages, countries, devices,
+   chances (searches close to page 1, or shown a lot but rarely clicked), sitemaps and the site's own basics. */
+async function gsc(t, site, body) {
+  const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/searchAnalytics/query", {
+    method: "POST", headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ dataState: "all" }, body)),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error((j.error && j.error.message) || String(r.status)); e.status = r.status; throw e; }
+  return (j.rows || []).map((x) => ({ k: x.keys || [], clicks: x.clicks, shown: x.impressions, ctr: x.ctr, pos: Math.round(x.position * 10) / 10 }));
+}
+async function siteBasics() {
+  const out = [];
+  const get = async (u) => { try { const r = await fetch(u, { signal: AbortSignal.timeout(6000), headers: { "User-Agent": "AMBS-editor-check" } }); return { ok: r.ok, status: r.status, text: r.ok ? await r.text() : "" }; } catch (e) { return { ok: false, status: 0, text: "" }; } };
+  const [home, robots, map, llms] = await Promise.all([get("https://ambs.co.nz/"), get("https://ambs.co.nz/robots.txt"), get("https://ambs.co.nz/sitemap.xml"), get("https://ambs.co.nz/llms.txt")]);
+  const title = (home.text.match(/<title>([^<]*)<\/title>/i) || [])[1] || "";
+  const desc = (home.text.match(/<meta name="description" content="([^"]*)"/i) || [])[1] || "";
+  const urls = (map.text.match(/<loc>/g) || []).length;
+  out.push({ name: "Homepage title", ok: title.length >= 30 && title.length <= 65, note: title ? title.length + " characters: " + title : "missing" });
+  out.push({ name: "Homepage description", ok: desc.length >= 70 && desc.length <= 160, note: desc ? desc.length + " characters" : "missing" });
+  out.push({ name: "robots.txt", ok: robots.ok && !/Disallow:\s*\/\s*$/m.test(robots.text), note: robots.ok ? (/sitemap/i.test(robots.text) ? "lets Google in and points to the sitemap" : "lets Google in") : "not found" });
+  out.push({ name: "Sitemap", ok: map.ok && urls > 0, note: map.ok ? urls + " pages listed" : "not found" });
+  out.push({ name: "Google business data (schema)", ok: /application\/ld\+json/i.test(home.text), note: /LocalBusiness|ProfessionalService|Organization/.test(home.text) ? "business details marked up for Google" : "not found" });
+  out.push({ name: "Guide for AI assistants (llms.txt)", ok: llms.ok, note: llms.ok ? "found" : "not found" });
+  out.push({ name: "Sharing picture", ok: /property="og:image"/i.test(home.text), note: /property="og:image"/i.test(home.text) ? "set" : "missing" });
+  out.push({ name: "Phone-friendly", ok: /name="viewport"/i.test(home.text), note: "fits phone screens" });
+  return out;
+}
+export async function seoReport(days) {
+  const c = conn();
+  if (c.setup) return c;
+  const n = [7, 28, 90].includes(+days) ? +days : 28;
+  const t = await accessToken(c.sa);
+  const day = (k) => new Date(Date.now() - k * 86400000).toISOString().slice(0, 10);
+  const cur = { startDate: day(n + 2), endDate: day(0) }, prev = { startDate: day(2 * n + 2), endDate: day(n + 3) };
+  const sites = process.env.GSC_SITE ? [process.env.GSC_SITE] : SITES;
+  let site = "", last = "";
+  for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
+  if (!site) return { needs: true, email: c.sa.client_email, why: last, basics: await siteBasics() };
+  const q = (dims, limit, range) => gsc(t, site, Object.assign({ dimensions: dims, rowLimit: limit || 25 }, range || cur));
+  const [tot, totPrev, daily, queries, pages, countries, devices, basics, maps] = await Promise.all([
+    q([], 1), q([], 1, prev), q(["date"], 500), q(["query"], 250), q(["page"], 50), q(["country"], 10), q(["device"], 5), siteBasics(),
+    fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/sitemaps", { headers: { Authorization: "Bearer " + t } }).then((r) => r.ok ? r.json() : {}).catch(() => ({})),
+  ]);
+  const sum = (rows) => rows[0] ? { clicks: rows[0].clicks, shown: rows[0].shown, ctr: rows[0].ctr, pos: rows[0].pos } : { clicks: 0, shown: 0, ctr: 0, pos: 0 };
+  const row = (r) => ({ name: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos });
+  const qs = queries.map(row);
+  return {
+    site, days: n, from: cur.startDate, to: cur.endDate,
+    totals: sum(tot), before: sum(totPrev),
+    daily: daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })),
+    queries: qs.slice(0, 50),
+    nearly: qs.filter((r) => r.pos > 7 && r.pos <= 20 && r.shown >= 2).sort((a, b) => b.shown - a.shown).slice(0, 8),
+    lowclick: qs.filter((r) => r.shown >= 15 && r.ctr < 0.02 && r.pos <= 10).sort((a, b) => b.shown - a.shown).slice(0, 8),
+    pages: pages.map(row).map((r) => Object.assign(r, { name: r.name.replace(/^https?:\/\/(www\.)?ambs\.co\.nz/, "") || "/" })),
+    countries: countries.map(row), devices: devices.map(row),
+    sitemaps: (maps.sitemap || []).map((m) => ({ path: m.path, last: m.lastDownloaded, errors: +m.errors || 0, warnings: +m.warnings || 0, pending: !!m.isPending })),
+    basics,
   };
 }

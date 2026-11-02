@@ -7,8 +7,8 @@
    { action: "chatget" } / { action: "chatbot", data: {...} }   the "Ask us" chat helper (site-src/content/chatbot.json)
    { action: "chatlog", limit } / { action: "chatlogset", ids: [...], done: true|false, del: true } / { action: "chatlogset", ids, note } / { action: "chatlogset", ids, status: "skip"|"open", note }
        the questions visitors typed into the chat (Supabase table chat_questions, read through admin-only functions)
-   { action: "visitors", days? }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
-import { visitorsNow, visitorsPeriod } from "./_ga.js";
+   { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
+import { visitorsNow, visitorsPeriod, searchQueries, seoReport } from "./_ga.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
 import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
 
@@ -33,7 +33,12 @@ export default async function handler(req, res) {
   if (!who) return;
   try {
     const b = await readBody(req);
-    if (b.action === "visitors") return send(res, 200, b.days ? await visitorsPeriod(b.days) : await visitorsNow());   // live, from Google Analytics; nothing read from GitHub
+    if (b.action === "searches") return send(res, 200, await searchQueries(b.days));   // Google search words, from Search Console
+    if (b.action === "seo") return send(res, 200, await seoReport(b.days));   // the SEO page: Search Console and the site's own basics
+    if (b.action === "visitors") {   // live, from Google Analytics; nothing read from GitHub. filter: { f, v } narrows it to one page, source, town or device
+      const f = b.filter && typeof b.filter === "object" ? { f: String(b.filter.f || ""), v: String(b.filter.v || "").slice(0, 300) } : null;
+      return send(res, 200, b.days ? await visitorsPeriod(b.days, f) : await visitorsNow(f));
+    }   // live, from Google Analytics; nothing read from GitHub
     const head = await headSha();
     const by = " (" + who.email + ")";
     const details = JSON.parse((await readFile(SITE_JSON, head)).text);
