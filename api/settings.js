@@ -9,8 +9,11 @@
    { action: "chatlog", limit } / { action: "chatlogset", ids: [...], done: true|false, del: true } / { action: "chatlogset", ids, note } / { action: "chatlogset", ids, status: "skip"|"open", note }
        the questions visitors typed into the chat (Supabase table chat_questions, read through admin-only functions)
    { action: "test", test: "psi"|"security"|"cert"|"response"|"sharing"|"index", url, strategy }   Site health → Speed & security (see _tests.js)
+   { action: "stats", days: 1|7|30|90|180|365 }   Insights → Stats: leads and chat questions (database function website_stats) and button clicks (Google Analytics events), each with the period before
+   { action: "conns" } / { action: "conn-save", svc: "ga"|"gsc"|"psi", values } / { action: "conn-remove", svc }   Website settings → Connections: keys kept in Supabase Vault (see _keys.js)
    { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
-import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl } from "./_ga.js";
+import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, statsEvents, gaCheck } from "./_ga.js";
+import { loadKeys, keyFrom, KEY_NAMES, key } from "./_keys.js";
 import { psi, security, cert, response, sharing, okUrl } from "./_tests.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
 import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
@@ -36,6 +39,56 @@ export default async function handler(req, res) {
   if (!who) return;
   try {
     const b = await readBody(req);
+    await loadKeys(who.token);
+    if (b.action === "stats") {
+      const days = [1, 7, 30, 90, 180, 365].includes(+b.days) ? +b.days : 7, to = new Date(), span = days * 86400000;
+      const from = new Date(to - span), pfrom = new Date(to - 2 * span);
+      const [cur, prev, ev] = await Promise.all([
+        sbRpc(who.token, "website_stats", { p_from: from.toISOString(), p_to: to.toISOString() }).catch((e) => ({ error: e.message })),
+        sbRpc(who.token, "website_stats", { p_from: pfrom.toISOString(), p_to: from.toISOString() }).catch((e) => ({ error: e.message })),
+        statsEvents(days).catch((e) => ({ error: e.message })),
+      ]);
+      const missing = (x) => x && x.error && /website_stats|PGRST202|404/.test(x.error);
+      return send(res, 200, { days, from: from.toISOString(), to: to.toISOString(), leads: cur, leadsBefore: prev, events: ev, needsDb: missing(cur) });
+    }
+    if (b.action === "conns") {
+      let saved = [], vault = true;
+      try { saved = (await sbRpc(who.token, "site_secret_status", {})) || []; } catch (e) { vault = false; }
+      const by = Object.fromEntries(saved.map((r) => [r.name, r]));
+      const keys = Object.fromEntries(KEY_NAMES.map((n) => [n, { from: keyFrom(n), hint: by[n] ? by[n].hint : "", at: by[n] ? by[n].updated_at : "", note: by[n] ? String(by[n].note || "").replace(/^by\s*/, "") : "" }]));
+      return send(res, 200, { vault, keys, github: !!process.env.GITHUB_TOKEN });
+    }
+    if (b.action === "conn-save" || b.action === "conn-remove") {
+      const SVC = { ga: ["GA_PROPERTY_ID", "GA_SERVICE_ACCOUNT"], gsc: ["GSC_SITE"], psi: ["PAGESPEED_KEY"] }[b.svc];
+      if (!SVC) return send(res, 400, { error: "Unknown connection." });
+      const put = (n, v) => sbRpc(who.token, "site_secret_set", { p_name: n, p_value: v });
+      try {
+        if (b.action === "conn-remove") { for (const n of SVC) await put(n, ""); return send(res, 200, { ok: true }); }
+        const v = b.values && typeof b.values === "object" ? b.values : {};
+        const val = (n) => String(v[n] == null ? "" : v[n]).trim();
+        let note = "";
+        if (b.svc === "ga") {
+          const id = val("GA_PROPERTY_ID").replace(/\D/g, "") || String(key("GA_PROPERTY_ID")).replace(/\D/g, "");
+          const raw = val("GA_SERVICE_ACCOUNT") || key("GA_SERVICE_ACCOUNT");
+          if (!/^\d{6,12}$/.test(id)) return send(res, 200, { error: "The property number is the long number in Analytics → Admin → Property details (not the G- ID)." });
+          if (!raw) return send(res, 200, { error: "Paste the service account's JSON key." });
+          note = await gaCheck(id, raw).catch((e) => { throw Object.assign(e, { soft: true }); });
+          await put("GA_PROPERTY_ID", id);
+          if (val("GA_SERVICE_ACCOUNT")) await put("GA_SERVICE_ACCOUNT", JSON.stringify(JSON.parse(raw)));
+        } else if (b.svc === "gsc") {
+          const site = val("GSC_SITE");
+          if (site && !/^(sc-domain:[a-z0-9.-]+\.[a-z]{2,}|https:\/\/[a-z0-9.-]+\.[a-z]{2,}\/)$/i.test(site)) return send(res, 200, { error: "Use sc-domain:ambs.co.nz, or the address with a slash at the end, like https://ambs.co.nz/" });
+          await put("GSC_SITE", site);
+          note = site ? "Search Console will use " + site : "Back to trying sc-domain:ambs.co.nz, then the https addresses";
+        } else if (b.svc === "psi") {
+          const k = val("PAGESPEED_KEY");
+          if (!/^AIza[0-9A-Za-z_-]{35}$/.test(k)) return send(res, 200, { error: "A Google API key starts with AIza and is 39 characters long." });
+          await put("PAGESPEED_KEY", k);
+          note = "Saved. The next speed test in Site health → Speed & security uses it.";
+        }
+        return send(res, 200, { ok: true, note });
+      } catch (e) { return send(res, 200, { error: e.soft ? e.message : /site_secret|PGRST202|404/.test(e.message) ? "Connections need the database update first." : e.message }); }
+    }
     if (b.action === "searches") return send(res, 200, await searchQueries(b.days));   // Google search words, from Search Console
     if (b.action === "test") {   // one speed or security test on a public ambs.co.nz page; read-only
       const u = okUrl(b.url || "https://ambs.co.nz/");

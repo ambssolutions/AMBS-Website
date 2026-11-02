@@ -4,12 +4,14 @@
      GA_SERVICE_ACCOUNT   the whole JSON key of a Google Cloud service account that has Viewer access to that property
    Read-only: it asks Google for numbers and never changes anything in Analytics. */
 import crypto from "node:crypto";
+import { key } from "./_keys.js";
 
-let tok = null; // { value, exp }
+let tok = null, tokFor = ""; // { value, exp }, and which service account it belongs to
 
 const b64u = (s) => Buffer.from(s).toString("base64").replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
 
 async function accessToken(sa) {
+  if (tokFor !== sa.client_email) tok = null;
   if (tok && Date.now() < tok.exp - 60000) return tok.value;
   const now = Math.floor(Date.now() / 1000);
   const head = b64u(JSON.stringify({ alg: "RS256", typ: "JWT" }));
@@ -22,7 +24,7 @@ async function accessToken(sa) {
   });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error("Google didn't accept the connection key (" + (j.error_description || j.error || r.status) + ").");
-  tok = { value: j.access_token, exp: Date.now() + (j.expires_in || 3600) * 1000 };
+  tok = { value: j.access_token, exp: Date.now() + (j.expires_in || 3600) * 1000 }; tokFor = sa.client_email;
   return tok.value;
 }
 
@@ -45,10 +47,10 @@ const users = [{ name: "activeUsers" }];
 const top = (rows) => rows.map((x) => ({ name: x.k[0], n: x.v[0] })).filter((x) => x.name && x.name !== "(not set)").slice(0, 8);
 
 function conn() {
-  const id = String(process.env.GA_PROPERTY_ID || "").replace(/\D/g, "");
-  const raw = process.env.GA_SERVICE_ACCOUNT || "";
+  const id = String(key("GA_PROPERTY_ID")).replace(/\D/g, "");
+  const raw = key("GA_SERVICE_ACCOUNT");
   if (!id || !raw) return { setup: true, has: { property: !!id, key: !!raw } };
-  try { return { id, sa: JSON.parse(raw) }; } catch (e) { throw new Error("GA_SERVICE_ACCOUNT in Vercel isn't the whole JSON key file. Paste the file's full contents."); }
+  try { return { id, sa: JSON.parse(raw) }; } catch (e) { throw new Error("The Google service account key isn't the whole JSON key file. Paste the file's full contents in Website settings → Connections."); }
 }
 
 /* Totals and top lists for the last 7, 28 or 90 days, each compared with the period before. */
@@ -162,7 +164,7 @@ export async function searchQueries(days) {
   const n = [7, 28, 90].includes(+days) ? +days : 28;
   const t = await accessToken(c.sa);
   const day = (k) => new Date(Date.now() - k * 86400000).toISOString().slice(0, 10);
-  const sites = process.env.GSC_SITE ? [process.env.GSC_SITE] : SITES;
+  const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
   let last = "";
   for (const site of sites) {
     const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/searchAnalytics/query", {
@@ -215,7 +217,7 @@ export async function seoReport(days) {
   /* 24 hours: Google's fresh (not yet final) figures; searches, pages and places cover today and yesterday */
   const cur = n === 1 ? { startDate: day(1), endDate: day(0) } : { startDate: day(n + 2), endDate: day(0) },
     prev = n === 1 ? { startDate: day(3), endDate: day(2) } : { startDate: day(2 * n + 2), endDate: day(n + 3) };
-  const sites = process.env.GSC_SITE ? [process.env.GSC_SITE] : SITES;
+  const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
   let site = "", last = "";
   for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
   if (!site) return { needs: true, email: c.sa.client_email, why: last, basics: await siteBasics() };
@@ -259,7 +261,7 @@ export async function inspectUrl(url) {
   const c = conn();
   if (c.setup) return c;
   const t = await accessToken(c.sa);
-  const sites = process.env.GSC_SITE ? [process.env.GSC_SITE] : SITES;
+  const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
   let last = "";
   for (const site of sites) {
     const r = await fetch("https://searchconsole.googleapis.com/v1/urlInspection/index:inspect", {
@@ -281,4 +283,40 @@ export async function inspectUrl(url) {
     if (r.status !== 403 && r.status !== 404) break;
   }
   return { needs: true, email: c.sa.client_email, why: last };
+}
+
+/* Stats (Insights → Stats): how often the website's buttons and forms were used in a period, from the Google Analytics
+   events the pages send (book_click, phone_click, email_click, generate_lead, booking_confirmed, chat_open…), with the
+   period before. hours = 24 counts the last 24 hours hour by hour (the property's time zone, New Zealand). */
+export const STAT_EVENTS = ["book_click", "booking_confirmed", "generate_lead", "phone_click", "email_click", "chat_open", "chat_question", "chat_auto_open", "page_view"];
+export async function statsEvents(days) {
+  const c = conn();
+  if (c.setup) return c;
+  const t = await accessToken(c.sa);
+  const filter = { filter: { fieldName: "eventName", inListFilter: { values: STAT_EVENTS } } };
+  const add = (o, k, n) => { o[k] = (o[k] || 0) + n; };
+  const now = {}, before = {};
+  if (+days === 1) {
+    const rows = await runReport(c.id, t, { dateRanges: [{ startDate: "2daysAgo", endDate: "today" }], dimensions: [{ name: "dateHour" }, { name: "eventName" }], metrics: [{ name: "eventCount" }], dimensionFilter: filter, limit: 5000 });
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-NZ", { timeZone: "Pacific/Auckland", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date()).map((x) => [x.type, x.value]));
+    const nowH = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour);
+    rows.forEach((r) => { const h = r.k[0], at = Date.UTC(+h.slice(0, 4), +h.slice(4, 6) - 1, +h.slice(6, 8), +h.slice(8, 10)), ago = (nowH - at) / 3600000;
+      if (ago >= 0 && ago < 24) add(now, r.k[1], r.v[0]); else if (ago >= 24 && ago < 48) add(before, r.k[1], r.v[0]); });
+    return { days: 1, now, before };
+  }
+  const n = Math.max(2, Math.min(400, Math.round(+days) || 7));
+  const rows = await runReport(c.id, t, { dateRanges: [{ startDate: (n - 1) + "daysAgo", endDate: "today" }, { startDate: (2 * n - 1) + "daysAgo", endDate: n + "daysAgo" }], dimensions: [{ name: "eventName" }], metrics: [{ name: "eventCount" }], dimensionFilter: filter, limit: 100 });
+  rows.forEach((r) => add(r.k[1] === "date_range_1" ? before : now, r.k[0], r.v[0]));
+  return { days: n, now, before };
+}
+/* Connections → Google Analytics: check a property number and service account key work (one tiny report) */
+export async function gaCheck(id, raw) {
+  let sa; try { sa = JSON.parse(raw); } catch (e) { throw new Error("That isn't the whole JSON key file. Open the downloaded .json file and copy everything in it."); }
+  if (!sa.client_email || !sa.private_key) throw new Error("That JSON isn't a service account key (it needs client_email and private_key).");
+  tok = null;
+  const t = await accessToken(sa);
+  await runReport(String(id).replace(/\D/g, ""), t, { dateRanges: [{ startDate: "7daysAgo", endDate: "today" }], metrics: [{ name: "activeUsers" }] }).catch((e) => {
+    throw new Error(/403|permission/i.test(e.message) ? "Google says " + sa.client_email + " can't see property " + id + ". Add it as a Viewer in Analytics → Admin → Property access management." : e.message); });
+  tok = null;
+  return "Google Analytics answered for property " + String(id).replace(/\D/g, "") + " as " + sa.client_email;
 }
