@@ -668,19 +668,22 @@ header.top .who .nt-bar{justify-content:flex-start}
 .ch-fix{border-left:1px solid var(--emb-line)!important;border:1px solid var(--emb-line);background:var(--emb-bg)!important;box-shadow:var(--emb-sh)}
 
 /* Count / Don't count buttons (top bar, Visitors, Business details) */
-.nt-seg{display:inline-flex;gap:3px;padding:3px;border-radius:99px;background:rgba(20,23,43,.06);box-shadow:inset 0 1px 2px rgba(20,23,43,.12)}
-.nt-seg button{border:0;background:none;font:inherit;font-weight:700;font-size:.86rem;color:var(--muted);padding:6px 13px;border-radius:99px;cursor:pointer;white-space:nowrap}
-.nt-seg button[aria-pressed=true]{background:var(--emb-bg);color:var(--ink);box-shadow:var(--emb-sh)}
-.nt-seg button[data-ntset="0"][aria-pressed=true]{color:var(--green)}
-.nt-seg button:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
 .nt-bar{display:inline-flex;align-items:center;gap:8px;margin-right:6px;padding:0;border:0;background:none;box-shadow:none}.nt-bl{font-size:.82rem;font-weight:700;color:var(--muted);white-space:nowrap}
 header.top .who .nt-bar{justify-content:space-between}
 .nt{display:block}.nt-row{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}.nt-row .nt-t{flex:1 1 260px}
 .nt-links{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--emb-line)}
 .nt-btn{border:1px solid var(--emb-line);background:var(--emb-bg);box-shadow:var(--emb-sh);border-radius:99px;padding:7px 14px;font:inherit;font-weight:700;font-size:.85rem;color:var(--ink);cursor:pointer}.nt-btn:hover{box-shadow:var(--emb-sh-hi)}
-@media(prefers-color-scheme:dark){.nt-seg{background:rgba(255,255,255,.06)}}
-@media(max-width:760px){header.top .who .nt-bar{display:grid;gap:8px;margin:0;padding:.6rem .8rem}header.top .who .nt-seg{display:flex;width:100%;box-sizing:border-box}header.top .who .nt-seg button{flex:1;padding:9px 6px}}
-@media(max-width:560px){.nt-row .nt-seg{width:100%}.nt-row .nt-seg button{flex:1}.nt-links .nt-btn{flex:1 1 100%}}
+@media(max-width:760px){header.top .who .nt-bar{margin:0;padding:.7rem .8rem}}
+@media(max-width:560px){.nt-links .nt-btn{flex:1 1 40%}}
+
+/* the switch for this device */
+.nt-sw{position:relative;display:flex;align-items:center;gap:10px;cursor:pointer;min-width:0}.nt-sw input{position:absolute;opacity:0;width:1px;height:1px}
+.nt-tg{flex:0 0 42px;height:24px;border-radius:99px;background:#cfd5e1;position:relative;box-shadow:inset 0 1px 3px rgba(20,23,43,.25);transition:background .2s}
+.nt-tg::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:linear-gradient(180deg,#fff,#eef1f6);box-shadow:0 1px 3px rgba(20,23,43,.35);transition:transform .2s}
+.nt-sw input:checked+.nt-tg{background:var(--green)}.nt-sw input:checked+.nt-tg::after{transform:translateX(18px)}.nt-sw input:focus-visible+.nt-tg{outline:3px solid var(--focus);outline-offset:2px}
+.nt-lbl{display:grid;gap:2px;font-weight:700;font-size:.86rem;color:var(--ink)}.nt-lbl small{font-weight:400;color:var(--muted);font-size:.84rem;line-height:1.35}.nt .nt-lbl{font-size:1rem}.nt .nt-tg{flex-basis:46px;height:26px}.nt .nt-tg::after{width:20px;height:20px}.nt .nt-sw input:checked+.nt-tg::after{transform:translateX(20px)}
+.nt-bar .nt-lbl{white-space:nowrap}
+@media(prefers-color-scheme:dark){.nt-tg{background:#3a4258}}
 </style>
 </head>
 <body>
@@ -3020,16 +3023,16 @@ function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.
    its questions (build.py ga_snippet, chat.js logQ). Another phone or computer: open ambs.co.nz/?notrack=1 once (?notrack=0 undoes it).
    A device that signs in to the editor is switched off by itself the first time; the switch turns it back on. */
 try{if(localStorage.getItem("ambs:notrack-set")===null){localStorage.setItem("ambs:notrack","1");localStorage.setItem("ambs:notrack-set","1")}}catch(e){}
-/* two buttons, Count / Don't count, the one in use pressed in */
-function ntSeg(){var on=ntOn();return'<span class="nt-seg" role="group" aria-label="Count this device in the visitor numbers"><button type="button" data-ntset="0" aria-pressed="'+(!on)+'">Count</button><button type="button" data-ntset="1" aria-pressed="'+on+'">Don’t count</button></span>'}
-function ntBarDraw(){var b=$("ntBar");if(!b)return;b.title="Count this phone or computer in your visitor numbers (Google Analytics), or not";b.innerHTML='<span class="nt-bl">This device</span>'+ntSeg()}
+/* this device: a switch (on = not counted); other devices: Count / Don't count buttons that copy the link to open there */
+function ntTog(id,lbl){var on=ntOn();return'<label class="nt-sw"'+(id?' id="'+id+'"':'')+' title="Turn on so visits from this phone or computer aren’t counted in Google Analytics"><input type="checkbox" data-nt'+(on?" checked":"")+'><span class="nt-tg" aria-hidden="true"></span><span class="nt-lbl">'+lbl+'</span></label>'}
+function ntBarDraw(){var b=$("ntBar");if(!b)return;b.innerHTML=ntTog("","Don’t count this device")}
 function ntSet(on){try{if(on)localStorage.setItem("ambs:notrack","1");else localStorage.removeItem("ambs:notrack");localStorage.setItem("ambs:notrack-set","1")}catch(x){}
   document.querySelectorAll(".nt").forEach(function(n){n.outerHTML=ntStrip()});ntBarDraw();toast(on?"This device won’t be counted in your visitor numbers.":"This device is counted again.")}
 function ntOn(){try{return localStorage.getItem("ambs:notrack")==="1"}catch(e){return false}}
-function ntStrip(){var on=ntOn();return'<div class="nt"><div class="nt-row"><span class="nt-t"><b>Your visits on this device</b><small>'+
-  (on?"Not counted: this phone or computer isn’t sent to Google Analytics, and questions you type into the chat aren’t saved.":"Counted like everyone else’s visits.")+'</small></span>'+ntSeg()+'</div>'+
-  '<div class="nt-links"><span class="nt-lh">Another phone or computer? Copy a link and open it there once:</span><button type="button" class="nt-btn" data-ntlink="0">Copy “Count” link</button><button type="button" class="nt-btn" data-ntlink="1">Copy “Don’t count” link</button></div></div>'}
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-ntset]");if(!b)return;var off=b.dataset.ntset==="1";if(off===ntOn())return toast(off?"This device is already not counted.":"This device is already counted.");ntSet(off)});
+function ntStrip(){var on=ntOn();return'<div class="nt"><div class="nt-row">'+ntTog("","<b>Don’t count my visits on this device</b><small>"+
+  (on?"On: this phone or computer isn’t sent to Google Analytics, and questions you type into the chat aren’t saved.":"Off: visits from this device are counted like everyone else’s.")+"</small>")+'</div>'+
+  '<div class="nt-links"><span class="nt-lh">Another phone or computer? Copy a link and open it there once:</span><button type="button" class="nt-btn" data-ntlink="0">Count</button><button type="button" class="nt-btn" data-ntlink="1">Don’t count</button></div></div>'}
+document.addEventListener("change",function(e){if(e.target.matches&&e.target.matches("[data-nt]"))ntSet(e.target.checked)});
 ntBarDraw();
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-ntlink]");if(!b)return;var off=b.dataset.ntlink!=="0",u="https://ambs.co.nz/?notrack="+(off?"1":"0");
   var ok=function(){toast("Link copied. Open it once on the other phone or computer, in each browser you use there, and its visits "+(off?"stop being counted.":"are counted again."))};
