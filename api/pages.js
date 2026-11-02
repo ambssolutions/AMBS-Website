@@ -134,7 +134,9 @@ export default async function handler(req, res) {
       return send(res, 200, { redirects: redirectList(v) });
     }
 
-    if (b.action === "redirects-save" && !can(who, "layout")) return send(res, 403, { error: NO_ACCESS });
+    /* per action, the part of the editor it belongs to ("list" and "search" are read-only and used everywhere) */
+    const PA = { redirects: "redirects", "redirects-save": "redirects", health: "health", get: "pages", save: "pages", create: "pages", delete: "pages", hubs: "pages" }[b.action];
+    if (PA && !can(who, PA)) return send(res, 403, { error: NO_ACCESS });
     if (b.action === "redirects-save") {
       const v = await readVercel(head);
       const live = new Set(["/", "/services", "/industries", "/guides", "/news", "/locations", "/privacy", "/terms", "/booking-confirmed", "/email-signature", "/404",
