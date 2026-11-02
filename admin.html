@@ -565,6 +565,35 @@ header.top .who{margin-left:4px}
 .op-tools{display:none}
 @media(max-width:900px){.op.has-side .op-stage{margin-left:0}.op-side{display:none;top:auto;height:62vh;width:100%;border-right:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:0 -12px 30px rgba(14,18,40,.15)}.op.side-open .op-side{display:block}.op-tools{display:inline-flex}}
 @media(max-width:1500px){.op-t span{display:none}}
+.way2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;margin-bottom:4px}.way{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);background:var(--card,#fff);border-radius:16px;padding:14px 16px;font:inherit;color:inherit}
+button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,24,.12)}button.way:hover{background:#eefaef}.way b{font-size:1.02rem}.way span{font-size:.86rem;color:var(--muted)}.way.on{opacity:.8}
+@media(max-width:640px){.way2{grid-template-columns:1fr}}
+.pl-head .sm,.pl-btns .sm{display:none}
+@media(max-width:760px){.pl-head .lg,.pl-btns .lg{display:none!important}.pl-head .sm,.pl-btns .sm{display:inline}.pl-btns.one{grid-template-columns:1fr 48px}.pl-head .help{font-size:.92rem}}
+.kpi span.kpi-when{font-size:.74rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;display:block;margin-top:2px}
+@media(max-width:640px){#hmKpi0 .kpi{width:100%;box-sizing:border-box}}
+@media(max-width:640px){.vs-range{box-sizing:border-box}.vs-range .btn{padding:.45rem .2rem;font-size:.82rem;min-width:0;text-align:center;justify-content:center}}
+.os-cat{margin:8px 0 10px}.os-cat>b{display:block;font-size:.8rem;margin-bottom:6px}.os-jump{display:flex;flex-wrap:wrap;gap:6px}.os-jump button{border:1px solid var(--line);background:var(--bg,#f4f6fb);border-radius:99px;padding:.4rem .7rem;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;color:inherit}.os-jump button:hover{border-color:#139918;background:#eefaef}
+.os-ctx{background:linear-gradient(180deg,rgba(19,153,24,.06),transparent);margin:0 -14px;padding:12px 14px!important;border-bottom:1px solid var(--line)}.os-ctx h4{color:#17761a!important}
+@media(max-width:760px){.op-t{display:none}.op-pick{max-width:none!important;flex:1 1 100%;width:100%;box-sizing:border-box}.op-bar .btn{flex:1 1 auto;padding:.5rem .45rem!important;font-size:.8rem!important;min-width:0;justify-content:center;white-space:nowrap}}
+.flags{font-size:.9rem}.flags-h{margin:0 0 6px;font-weight:800;color:#b42318}.flags-h span{display:inline-block;min-width:20px;padding:0 6px;border-radius:99px;background:#fde8e8;color:#b42318;text-align:center;font-size:.78rem;margin-left:4px}
+.flags ul{list-style:none;margin:0;padding:0}.flags li{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;padding:7px 0 7px 22px;border-top:1px solid var(--line);position:relative}.flags li:first-child{border-top:0}
+.flags li:before{position:absolute;left:2px;top:7px;font-weight:800}.flags li.high:before{content:"⚑";color:#c62828}.flags li.mid:before{content:"!";color:#b26a00;left:6px}.flags li.low:before{content:"i";color:#5b6176;left:6px;font-style:italic}
+.flags li .btn.link{padding:0;white-space:nowrap;font-size:.85rem}.flags-ok{margin:0;color:#17761a;font-weight:600}
+.os-flags{background:#fff6f5;margin:0 -14px;padding:12px 14px!important;border-bottom:1px solid #f3d2cf}.flag-panel{border-color:#f3d2cf}.flag-hi{outline:3px solid #e53935!important;outline-offset:3px;transition:outline-color .3s}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .os-flags{background:rgba(229,57,53,.08);border-color:rgba(229,57,53,.3)}}
+.cv{position:fixed;inset:0;z-index:400;background:var(--bg,#eef1f6);display:flex;flex-direction:column}.cv-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:var(--card,#fff);box-shadow:0 1px 0 var(--line)}
+.cv .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--bg,#f4f6fb)}.cv .seg button{border:0;background:none;border-radius:999px;padding:.4rem .85rem;font:inherit;font-size:.88rem;font-weight:700;cursor:pointer;color:var(--muted)}.cv .seg button[aria-pressed=true]{background:var(--ink,#14172b);color:#fff}
+.cv-stage{flex:1;display:flex;justify-content:center;gap:16px;padding:12px 16px 0;overflow:hidden}.cv-pane{display:flex;flex-direction:column;align-items:flex-start;min-width:0}.cv-pane[hidden]{display:none}
+.cv-lab{font-size:.8rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;padding:4px 10px;border-radius:99px;background:var(--card,#fff);border:1px solid var(--line)}.cv-lab.after{color:#17761a;border-color:#9fdca2;background:#eefaef}
+.cv-fr{transform-origin:top left;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px -12px rgba(14,18,40,.35)}.cv-fr iframe{width:100%;height:100%;border:0;display:block}
+@media(max-width:760px){.cv-bar{gap:6px;padding:8px 10px}.cv-bar>b{width:100%}.cv .seg button{padding:.4rem .6rem;font-size:.8rem}.cv .cv-mode [data-m=both]{display:none}}
+.op-bar #opPrev{display:none}@media(max-width:1600px){.op-t{display:none}}
+.cv-x{order:9;margin-left:auto}@media(max-width:760px){.cv-bar>b{width:auto;flex:1}.cv-x{order:0}}
+.os-d{padding:0!important}.os-d>summary{list-style:none;cursor:pointer;padding:12px 0;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.os-d>summary::-webkit-details-marker{display:none}.os-d>summary:after{content:"＋";font-size:1rem;color:var(--muted)}.os-d[open]>summary:after{content:"−"}.os-d[open]{padding-bottom:12px!important}.os-d>summary:hover{color:var(--ink,#14172b)}
+.os-small{font-size:.86rem!important;padding:.3rem 0!important}
+.cv-hl[aria-pressed=true]{background:#fff4c2;border-color:#f5b800;color:#5a4400}.cv-hl span{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:99px;background:#f5b800;color:#2b2100;font-size:.78rem}
 </style>
 </head>
 <body>
@@ -639,10 +668,11 @@ header.top .who{margin-left:4px}
     <div class="bar-acts">
     <button class="btn" id="discard" type="button" disabled>Discard<span class="dsk"> changes</span></button>
     <button class="btn" id="preview" type="button" disabled>Preview</button>
-    <button class="btn primary" id="onPageBtn" type="button" data-go="onpage">✎ Edit on page</button>
+    <button class="btn" id="onPageBtn" type="button" data-go="onpage">✎ Edit on page</button>
     <button class="btn primary" id="review" type="button" disabled>Review &amp; publish</button>
     </div>
   </div></div>
+  <div class="wrap way2" role="group" aria-label="Two ways to edit the homepage"><button type="button" class="way" data-go="onpage"><b>✎ Edit on the page</b><span>Click any words on your real homepage and type. Add questions, steps and more from the panel on the left.</span></button><div class="way on" aria-current="true"><b>☰ Edit as a list</b><span>You’re here: every line of the homepage, in all 5 languages, with search.</span></div></div>
   <div class="wrap layout">
     <nav class="secs" id="secs" aria-label="Page sections"></nav>
     <main id="list"><p class="empty"><span class="spin"></span> Loading the website wording…</p></main>
@@ -1012,6 +1042,7 @@ function opsSummary(){var o=ops(),out=[];
   o.cards.link.forEach(function(x){out.push("Card link: "+cardTitle(x.n)+" → "+x.href)});if(o.tools)out.push("Tools strip: "+o.tools.join(", "));return out}
 /* what the publish button would send, without the review screen */
 function buildPayload(){var p={changes:{},status:{},ops:cleanOps()};changedKeys().forEach(function(k){var it=byKey[k],d=draft[k],c={was:it.en};if(enChanged(k))c.en=d.en;LANGS.forEach(function(L){var l=L[0];if(typeof d[l]==="string"&&d[l]!==it.tr[l])c[l]=d[l]});p.changes[k]=c});return p}
+window.edHomePreview=function(){var pl=buildPayload();pl.preview=true;return api("publish",pl).then(function(j){return{html:j.html,js:j.js,keys:Object.keys(pl.changes||{})}})};
 $("preview").addEventListener("click",function(){var b=this;b.disabled=true;var t=b.textContent;b.innerHTML='<span class="spin"></span> Preparing…';
   var pl=buildPayload();pl.preview=true;api("publish",pl).then(function(j){window.edShowPreview(j.html,j.js,"Homepage preview")}).catch(function(e){if(e.message!=="signin")alert(e.message)}).then(function(){b.disabled=false;b.textContent=t})});
 $("dlgPublish").addEventListener("click",function(){
@@ -1094,15 +1125,58 @@ window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();
 function leaveOk(){if(!dirty)return true;if(confirm("You have unsaved changes on this page. Leave without saving?")){dirty=false;return true}return false}
 
 /* ---------- preview: the page shown at phone, tablet or laptop size ---------- */
-function showPreview(html,js,title){
+/* ⇄ Before and after: the live page next to the changed one (side by side on laptops, Before / After tabs on phones),
+   at phone or laptop width, scrolling together. after = full HTML; scripts are off in the "after" copy of Edit on page
+   so the page shows exactly what was typed. */
+function compareView(beforeUrl,afterHtml,opts){opts=opts||{};
+  var cv=h('<div class="cv" role="dialog" aria-label="Before and after"><div class="cv-bar"><b>⇄ Before and after</b><button type="button" class="btn cv-x" data-x>Close</button><button type="button" class="btn cv-hl" aria-pressed="true" hidden>✎ Highlight changes <span></span></button><div class="seg cv-mode" role="group" aria-label="Show"><button type="button" data-m="both">Side by side</button><button type="button" data-m="before">Before</button><button type="button" data-m="after">After</button></div><div class="seg cv-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="1280">Laptop</button></div></div>'+
+    '<div class="cv-stage"><div class="cv-pane" data-p="before"><div class="cv-lab">Before · live on the website now</div><div class="cv-fr"><iframe title="Before" sandbox="allow-same-origin allow-scripts"></iframe></div></div><div class="cv-pane" data-p="after"><div class="cv-lab after">After · with your changes</div><div class="cv-fr"><iframe title="After" sandbox="allow-same-origin'+(opts.scripts?' allow-scripts':'')+'"></iframe></div></div></div></div>');
+  document.body.appendChild(cv);var fb=cv.querySelector('[data-p=before] iframe'),fa=cv.querySelector('[data-p=after] iframe'),stage=cv.querySelector(".cv-stage");
+  fb.src=beforeUrl+(beforeUrl.indexOf("?")<0?"?":"&")+"chat=nolog&onpage=1&t="+Date.now();
+  fa.srcdoc=String(afterHtml).replace(/<head>/i,'<head><base href="'+location.origin+'/" target="_blank">');
+  var mode=innerWidth<900?"after":"both",w=innerWidth<900?390:1280;
+  function lay(){cv.dataset.mode=mode;var panes=[].slice.call(cv.querySelectorAll(".cv-pane"));panes.forEach(function(pn){pn.hidden=mode!=="both"&&pn.dataset.p!==mode});
+    var vis=panes.filter(function(pn){return!pn.hidden}),pw=(stage.clientWidth-16*(vis.length+1))/vis.length,ph=stage.clientHeight-48,sc=Math.min(1,pw/w);
+    vis.forEach(function(pn){var fr=pn.querySelector(".cv-fr");fr.style.width=w+"px";fr.style.height=Math.round(ph/sc)+"px";fr.style.transform="scale("+sc+")";fr.style.marginBottom=(Math.round(ph/sc)*sc-Math.round(ph/sc))+"px";pn.style.width=Math.round(w*sc)+"px"});
+    cv.querySelectorAll("[data-m]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.m===mode))});cv.querySelectorAll("[data-w]").forEach(function(b){b.setAttribute("aria-pressed",String(+b.dataset.w===w))})}
+  cv.querySelectorAll("[data-m]").forEach(function(b){b.addEventListener("click",function(){mode=b.dataset.m;lay()})});
+  cv.querySelectorAll("[data-w]").forEach(function(b){b.addEventListener("click",function(){w=+b.dataset.w;lay()})});
+  var close=function(){cv.remove();removeEventListener("resize",lay)};cv.querySelector("[data-x]").addEventListener("click",close);addEventListener("resize",lay);lay();
+  /* scroll together, by how far down the page */
+  var lock=false;function sync(from,to){try{var a=from.contentWindow,b=to.contentWindow;a.addEventListener("scroll",function(){if(lock)return;lock=true;var ra=a.scrollY/Math.max(1,a.document.documentElement.scrollHeight-a.innerHeight);b.scrollTo(0,ra*(b.document.documentElement.scrollHeight-b.innerHeight));requestAnimationFrame(function(){lock=false})},{passive:true})}catch(e){}}
+  fb.addEventListener("load",function(){try{(fb.contentDocument.documentElement.innerHTML.match(/G-[A-Z0-9]{6,}/g)||[]).forEach(function(id){fb.contentWindow["ga-disable-"+id]=true})}catch(e){}sync(fb,fa);if(fa.contentDocument&&fa.contentDocument.readyState==="complete")sync(fa,fb)});
+  fa.addEventListener("load",function(){sync(fa,fb);setTimeout(hl,opts.scripts?1200:0)});
+  function hl(){var ad=fa.contentDocument,k=ad?ad.querySelectorAll(".cmp-chg").length:0,hb=cv.querySelector(".cv-hl");if(!k)return;hb.hidden=false;hb.querySelector("span").textContent=k;
+    hb.addEventListener("click",function(){var on=hb.getAttribute("aria-pressed")!=="true";hb.setAttribute("aria-pressed",String(on));ad.documentElement.classList.toggle("cmp-off",!on)});
+    var first=ad.querySelector(".cmp-chg");if(first)setTimeout(function(){first.scrollIntoView({block:"center"})},300)}
+}
+/* a copy of the page being edited, as it looks now, without the editor's outlines and controls */
+function cleanCopy(d){var c=d.documentElement.cloneNode(true);c.querySelectorAll("#ed-chip,#ed-tb,#ed-fmt,script").forEach(function(x){x.remove()});
+  c.querySelectorAll("[contenteditable],[data-ed],[data-edimg],[spellcheck]").forEach(function(x){x.removeAttribute("contenteditable");x.removeAttribute("data-ed");x.removeAttribute("data-edimg");x.removeAttribute("spellcheck")});
+  c.querySelectorAll(".ed-sel").forEach(function(x){x.classList.remove("ed-sel")});
+  c.querySelectorAll(".ed-chg").forEach(function(x){x.classList.remove("ed-chg");x.classList.add("cmp-chg");x.setAttribute("data-cmp","Changed")});
+  c.querySelectorAll(".ed-new,[data-new]").forEach(function(x){x.classList.remove("ed-new");x.classList.add("cmp-chg","cmp-new");x.setAttribute("data-cmp","New")});
+  c.querySelectorAll(".ed-rm").forEach(function(x){x.classList.remove("ed-rm");x.classList.add("cmp-chg","cmp-rm");x.setAttribute("data-cmp","Removed")});
+  var hs=d.createElement("style");hs.textContent="html:not(.cmp-off) .cmp-chg{outline:3px solid #f5b800!important;outline-offset:4px;border-radius:6px;background:rgba(255,214,0,.16)!important;position:relative}"+
+    "html:not(.cmp-off) .cmp-chg::after{content:attr(data-cmp);position:absolute;top:-12px;right:-6px;z-index:5;font:700 11px/1 system-ui,sans-serif;letter-spacing:.03em;padding:4px 8px;border-radius:99px;background:#f5b800;color:#2b2100;pointer-events:none}"+
+    "html:not(.cmp-off) .cmp-new{outline-color:#19b91e!important;background:rgba(36,179,40,.1)!important}html:not(.cmp-off) .cmp-new::after{background:#19b91e;color:#fff}"+
+    "html:not(.cmp-off) .cmp-rm{outline-color:#e53935!important;background:rgba(229,57,53,.06)!important;opacity:.5;text-decoration:line-through}html:not(.cmp-off) .cmp-rm::after{background:#e53935;color:#fff}html.cmp-off .cmp-rm{display:none!important}"+
+    "img.cmp-chg::after{display:none}";c.querySelector("head").appendChild(hs);
+  /* parts that fade in as the page scrolls stay visible in the copy (its scripts are off) */
+  var st=d.createElement("style");st.textContent=".reveal,.tx-w,.rv,.rvi,.rvt,.tx-up,.rise,.fade-up,[data-reveal]{opacity:1!important;transform:none!important;transition:none!important;visibility:visible!important}";c.querySelector("head").appendChild(st);
+  c.querySelectorAll(".reveal,.tx-w").forEach(function(x){x.classList.add("in")});
+  return"<!doctype html>"+c.outerHTML}
+function showPreview(html,js,title,before,docOnly){
   var doc=String(html).replace(/<head>/i,'<head><base href="'+location.origin+'/" target="_blank"><script>try{var sw={controller:null,ready:new Promise(function(){}),register:function(){return Promise.reject(new Error("preview"))},getRegistration:function(){return Promise.resolve(undefined)},getRegistrations:function(){return Promise.resolve([])},addEventListener:function(){},removeEventListener:function(){}};Object.defineProperty(navigator,"serviceWorker",{value:sw,configurable:true})}catch(e){}'+
     /* forms in the preview work but send nothing */
     'try{var F0=window.fetch;window.fetch=function(u){if(/web3forms|portal\\.ambs/.test(String(u)))return new Promise(function(ok){setTimeout(function(){ok(new Response(\'{"success":true}\'))},500)});return F0.apply(this,arguments)};navigator.sendBeacon=function(){return true}}catch(e){}<\/script>');
   doc=freshImgs(doc);
   if(/data-blk-form/.test(doc)&&!/assets\/forms\.js/.test(doc))doc=doc.replace(/<\/body>/i,'<script src="/assets/forms.js?v='+Date.now()+'" defer><\/script></body>');
   if(js){var u=URL.createObjectURL(new Blob([js],{type:"text/javascript"}));doc=doc.replace(/(<script[^>]*src=")\/assets\/home\.js\?v=[^"]*"/,"$1"+u+'"')}
+  if(docOnly)return doc;
   var pv=h('<div class="pv" role="dialog" aria-label="'+esc(title||"Preview")+'"><div class="pv-bar"><b>'+esc(title||"Preview")+'</b><button type="button" class="btn" data-w="390" aria-pressed="true">Phone</button><button type="button" class="btn" data-w="820" aria-pressed="false">Tablet</button><button type="button" class="btn" data-w="1280" aria-pressed="false">Laptop</button><button type="button" class="btn primary" data-x>Close preview</button></div><p class="pv-note">This is how it will look once published. Nothing has been published yet.</p><div class="pv-stage"><div class="pv-frame"><iframe title="Preview"></iframe></div></div></div>');
   document.body.appendChild(pv);document.body.style.overflow="hidden";
+  if(before){var cb=h('<button type="button" class="btn">⇄ Before / after</button>');var bar=pv.querySelector(".pv-bar"),last=bar.lastElementChild;bar.insertBefore(cb,last);cb.addEventListener("click",function(){compareView(before,doc,{scripts:true})})}
   var fr=pv.querySelector(".pv-frame"),ifr=pv.querySelector("iframe"),stage=pv.querySelector(".pv-stage");ifr.srcdoc=doc;
   function size(w){var avail=stage.clientWidth-32,sc=Math.min(1,avail/w),hh=Math.round((stage.clientHeight-32)/sc);fr.style.width=w+"px";fr.style.height=hh+"px";fr.style.transform="scale("+sc+")";fr.style.marginBottom=(hh*sc-hh)+"px";pv.querySelectorAll("[data-w]").forEach(function(b){b.setAttribute("aria-pressed",String(+b.dataset.w===w))})}
   var w=window.innerWidth<700?390:1280;size(w);
@@ -1282,18 +1356,19 @@ function pagesHome(){
     site.legal.map(function(p){return{sec:"legal",slug:p.slug,title:p.title,url:"/"+p.slug}}));
   var count={all:rows.length};rows.forEach(function(r){count[r.sec]=(count[r.sec]||0)+1});
   var chips=[["all","All"],["page","Pages"],["services","Services"],["industries","Industries"],["guides","Guides"],["locations","Locations"],["news","News"],["legal","Legal"]].filter(function(c){return count[c[0]]});
-  m.innerHTML='<div class="pl-head"><div><h2>Pages &amp; news</h2><p class="help">Every page on your website. <b>✎ Edit on page</b> lets you click and type on the real page; <b>☰ Edit with form</b> shows every setting, including Google wording.</p></div><div class="pl-acts"><button type="button" class="btn" id="plHubs">Section pages &amp; service cards</button><button type="button" class="btn primary" id="plNew">＋ New page or post</button></div></div>'+
+  m.innerHTML='<div class="pl-head"><div><h2>Pages &amp; news</h2><p class="help">'+(edMode()==="visual"?'You edit <b>on the page</b>: click a page to open it and type on it, with the tools on the left. <b>☰ Edit with form</b> is still there for every setting.':'You edit <b>with forms</b>: click a page to see all its settings. <b>✎ Edit on page</b> is still there to click and type on the real page.')+'</p></div><div class="pl-acts"><button type="button" class="btn" id="plHubs"><span class="lg">Section pages &amp; service cards</span><span class="sm">Section pages</span></button><button type="button" class="btn primary" id="plNew"><span class="lg">＋ New page or post</span><span class="sm">＋ New</span></button></div></div>'+
     '<div class="pl-tools"><input class="t" type="search" id="plQ" placeholder="Find a page" aria-label="Find a page"><div class="pl-chips" role="group" aria-label="Show">'+chips.map(function(c){return'<button type="button" data-f="'+c[0]+'" aria-pressed="'+(pgFilter===c[0])+'">'+c[1]+' <span>'+count[c[0]]+'</span></button>'}).join("")+'</div></div><ul class="pl-list" id="plList"></ul>';
   var q=$("plQ");q.value=pgQ;
   function draw(){var t=pgQ.trim().toLowerCase(),list=$("plList");
     var vis=rows.filter(function(r){return(pgFilter==="all"||r.sec===pgFilter)&&(!t||(r.title+" "+r.url).toLowerCase().indexOf(t)>=0)});
     list.innerHTML=vis.length?"":'<li class="pl-empty">No pages match.</li>';
     vis.forEach(function(r){var live=!r.p||edLive(r.p),sch=r.p&&edSched(r.p),onp=live&&r.sec!=="page";
-      var li=h('<li><div class="pl-main"><span class="pl-kind k-'+r.sec+'">'+KIND[r.sec]+'</span><button type="button" class="pl-title"></button><span class="pl-url"></span></div><span class="pl-state '+(live?"on":sch?"sch":"draft")+'">'+(live?"Live":sch?"Scheduled":"Draft")+'</span><div class="pl-btns">'+(onp?'<button type="button" class="btn soft pl-op">✎ <span class="lg">Edit </span>on page</button>':'')+'<button type="button" class="btn pl-fm">'+(r.sec==="page"?"✎ Edit blocks":'☰ <span class="lg">Edit with </span>form')+'</button><button type="button" class="btn pl-more" aria-haspopup="menu" aria-label="More for this page" title="More">⋯</button></div></li>');
+      var vis=edMode()==="visual",opB=onp?'<button type="button" class="btn '+(vis?"primary":"")+' pl-op"><span class="lg">✎ Edit on page</span><span class="sm">✎ On page</span></button>':'',fmB='<button type="button" class="btn '+(!vis||!onp?"soft":"")+' pl-fm">'+(r.sec==="page"?"✎ Edit blocks":'<span class="lg">☰ Edit with form</span><span class="sm">☰ Form</span>')+'</button>';
+      var li=h('<li><div class="pl-main"><span class="pl-kind k-'+r.sec+'">'+KIND[r.sec]+'</span><button type="button" class="pl-title"></button><span class="pl-url"></span></div><span class="pl-state '+(live?"on":sch?"sch":"draft")+'">'+(live?"Live":sch?"Scheduled":"Draft")+'</span><div class="pl-btns'+(onp?'':' one')+'">'+(vis?opB+fmB:fmB+opB)+'<button type="button" class="btn pl-more" aria-haspopup="menu" aria-label="More for this page" title="More">⋯</button></div></li>');
       li.querySelector(".pl-more").addEventListener("click",function(e){e.stopPropagation();plMenu(this,r,live)});
       li.querySelector(".pl-title").textContent=r.title;li.querySelector(".pl-url").textContent="ambs.co.nz"+r.url;
-      var form=function(){openPage(r.sec,r.slug);window.scrollTo(0,0)};
-      li.querySelector(".pl-title").addEventListener("click",onp?function(){openPageOnPage(r.sec,r.slug)}:form);
+      var form=function(){forceForm=true;openPage(r.sec,r.slug);window.scrollTo(0,0)};
+      li.querySelector(".pl-title").addEventListener("click",onp&&edMode()==="visual"?function(){openPageOnPage(r.sec,r.slug)}:form);
       li.querySelector(".pl-fm").addEventListener("click",form);var o=li.querySelector(".pl-op");if(o)o.addEventListener("click",function(){openPageOnPage(r.sec,r.slug)});
       list.appendChild(li)})}
   q.addEventListener("input",function(){pgQ=q.value;draw()});
@@ -1361,6 +1436,37 @@ function openPage(sec,slug){
 function fld(id,label,value,opts){opts=opts||{};var tag=opts.area?'<textarea class="t" id="'+id+'" rows="'+(opts.rows||2)+'"></textarea>':'<input class="t" id="'+id+'">';
   var el=h('<div class="fld"><label for="'+id+'"><span>'+esc(label)+'</span>'+(opts.max?'<span class="cnt"></span>':'')+'</label>'+(opts.help?'<p class="help" style="margin:-2px 0 6px;font-size:.82rem;color:var(--muted)">'+esc(opts.help)+'</p>':'')+tag+'</div>');
   var inp=el.querySelector(opts.area?"textarea":"input");inp.value=value||"";inp.addEventListener("input",markDirty);if(opts.area)inp.addEventListener("input",function(){ED.autosize(inp)});if(opts.max)counter(inp,opts.max);return el}
+/* ⚑ flags: anything odd while editing a page, so it can be put right before saving.
+   high = would look broken or wrong on the website; mid = worth fixing; low = a tip. "part" is the article part's index (for Show me). */
+var FLAG_STARTER=/start writing here|new paragraph\. click here and type|^new (sub)?heading$|^(first|second) point$|tip: write your tip here|\[(key point|question|answer|starter|[a-z ]{2,30})[^\]]*\]/i;
+function editFlags(o){var out=[],add=function(sev,msg,where){out.push({sev:sev,msg:msg,where:where||null})};
+  var t=String(o.title||"").trim(),dsc=String(o.description||"").trim(),known=(linksList||[]).map(function(l){return l[0].split("#")[0]||"/"});
+  if(o.h1!==undefined&&!String(o.h1).trim())add("high","The page has no heading.",{field:"h1"});
+  if(o.title!==undefined){if(!t)add("high","No title in Google.",{field:"title"});else if(t.length>65)add("mid","Title in Google is "+t.length+" characters; Google cuts it after about 60.",{field:"title"})}
+  if(o.description!==undefined){if(!dsc)add("mid","No description in Google.",{field:"description"});else if(dsc.length>165)add("low","Description in Google is "+dsc.length+" characters; Google shows about 155.",{field:"description"})}
+  if(FLAG_STARTER.test(String(o.h1||"")+" "+String(o.lead||"")))add("high","Starter text is still at the top of the page.",{field:"h1"});
+  (o.takeaways||[]).forEach(function(x,i){if(!String(x).trim())add("mid","“In short” point "+(i+1)+" is empty.",{field:"takeaways"});else if(FLAG_STARTER.test(x))add("high","“In short” point "+(i+1)+" still has starter text.",{field:"takeaways"})});
+  (o.faq||[]).forEach(function(q,i){if(!String(q[0]||"").trim()||!String(q[1]||"").trim())add("mid","Question "+(i+1)+" is missing its question or answer.",{field:"faq"});else if(FLAG_STARTER.test(q[0]+" "+q[1]))add("high","Question "+(i+1)+" still has starter text.",{field:"faq"})});
+  var box=document.createElement("div");box.innerHTML=typeof o.body==="string"?o.body:"";
+  [].slice.call(box.children).forEach(function(el,i){var tx=(el.textContent||"").replace(/\s+/g," ").trim(),w={part:i},tag=el.tagName;
+    if(!tx&&!el.querySelector("img"))add("mid","An empty "+(/^H/.test(tag)?"heading":"line")+" in the article.",w);
+    if(FLAG_STARTER.test(tx))add("high","Starter text in the article: “"+tx.slice(0,40)+(tx.length>40?"…":"")+"”.",w);
+    el.querySelectorAll("img").forEach(function(im){if(!String(im.getAttribute("alt")||"").trim())add("mid","A photo has no description (Google and screen readers need one).",w)});
+    el.querySelectorAll("a").forEach(function(a){var hr=String(a.getAttribute("href")||"").trim(),label=(a.textContent||"").trim();
+      if(!label)add("mid","A link has no words.",w);
+      if(!hr||hr==="#")add("high",(a.classList.contains("btn")?"The button “":"The link “")+label.slice(0,30)+"” doesn’t go anywhere.",w);
+      else if(hr[0]==="/"&&known.length){var path=hr.split(/[?#]/)[0].replace(/\/+$/,"")||"/";if(path.indexOf("/assets/")!==0&&known.indexOf(path)<0)add("high","“"+label.slice(0,30)+"” links to "+hr+", which isn’t a page on the website.",w)}
+      else if(/^https?:\/\/(www\.)?ambs\.co\.nz/i.test(hr))add("low","“"+label.slice(0,30)+"” uses a full ambs.co.nz address; a short one like /services is safer.",w)});
+    var words=tx.split(" ").filter(Boolean).length;if(tag==="P"&&words>130)add("low","A paragraph has "+words+" words; splitting it reads better on phones.",w);
+    if(tx.length>24&&tx===tx.toUpperCase()&&/[A-Z]/.test(tx))add("low","A part is in capitals; it reads as shouting.",w);
+    if(/^H[23]$/.test(tag)&&tx.length>110)add("low","A heading is very long ("+tx.length+" characters).",w)});
+  var order={high:0,mid:1,low:2};return out.sort(function(a,b){return order[a.sev]-order[b.sev]})}
+function flagList(list,onShow){var box=document.createElement("div");box.className="flags";
+  if(!list.length){box.innerHTML='<p class="flags-ok">✓ Nothing odd found.</p>';return box}
+  box.innerHTML='<p class="flags-h">⚑ Check before saving <span>'+list.length+'</span></p><ul>'+list.map(function(f,i){return'<li class="'+f.sev+'"><span>'+esc(f.msg)+'</span>'+(f.where&&onShow?'<button type="button" class="btn link" data-fi="'+i+'">Show me</button>':'')+'</li>'}).join("")+'</ul>';
+  box.querySelectorAll("[data-fi]").forEach(function(b){b.addEventListener("click",function(){onShow(list[+b.dataset.fi].where)})});return box}
+function flagConfirm(list,what){var hi=list.filter(function(f){return f.sev==="high"});if(!hi.length)return true;
+  return confirm(hi.length+(hi.length===1?" thing looks wrong":" things look wrong")+":\n\n• "+hi.slice(0,5).map(function(f){return f.msg}).join("\n• ")+"\n\n"+what+" anyway?")}
 /* how the page looks in Google, updated as you type, with simple tips */
 function serpPreview(tIn,dIn,path){
   var el=h('<div class="serp" aria-live="polite"><div class="serp-k">Preview in Google</div><div class="serp-card"><div class="serp-site"><img src="/favicon-light.png" alt=""><span><b>Ambs Solutions</b><i></i></span></div><div class="serp-t"></div><div class="serp-d"></div></div><ul class="serp-tips"></ul></div>');
@@ -1393,7 +1499,7 @@ function renderPage(sec,slug,d){
   var live=sec==="legal"||edLive(card),sch=sec==="legal"?"":edSched(card);
   var top=h('<div><h2 class="sec">'+esc(meta.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">'+(sec==="legal"?"Legal page":esc(SEC[sec]))+(live?' · <a href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p>'+(live?'<button type="button" class="btn soft" id="pgOnPage">✎ Edit on page</button>':'')+'</div>');m.appendChild(top);
   if(live)$("pgOnPage").addEventListener("click",function(){openPageOnPage(sec,slug)});
-  if(live&&edMode()==="visual"&&!document.querySelector(".op"))openPageOnPage(sec,slug);
+  if(live&&edMode()==="visual"&&!forceForm&&!document.querySelector(".op"))openPageOnPage(sec,slug);forceForm=false;
   /* the build lists outside services the website uses that this policy doesn't name yet (build.py privacy_check) */
   var pm=(site&&site.privacy_missing)||[];
   if(sec==="legal"&&slug==="privacy"&&pm.length)m.appendChild(h('<div class="msg" style="background:var(--amber-bg);color:var(--amber);margin:0 0 14px"><b>This policy doesn\u2019t mention '+pm.map(function(x){return esc(x.name)}).join(", ")+' yet.</b> The website uses '+(pm.length>1?"them":"it")+', so add a line saying what visitors\u2019 details go there and why. Ask Claude to draft it if you like.</div>'));
@@ -1457,7 +1563,13 @@ function renderPage(sec,slug,d){
     busy(b,true);
     api("pages",payload).then(function(){dirty=false;linksList=null;toast(when?"Scheduled. It goes on the website after "+whenText(when)+" (New Zealand time).":draft?(live?"Taken off the website. "+LIVE_NOTE:"Draft saved. Nothing has been published."):(live?"Saved. ":"Published. ")+LIVE_NOTE);return api("pages",{action:"list"}).then(function(l){site=l;pagesNav();openPage(sec,slug)})}).catch(function(e){busy(b,false);fail(e)});
   }
-  $("pgSave").addEventListener("click",function(){savePage(this,false)});
+  /* ⚑ flags, updated as you type */
+  var fl=h('<div class="panel flag-panel"></div>');m.insertBefore(fl,act);siteLinks().then(function(){drawFl()}).catch(function(){});
+  function curFlags(){var nm=collect();return editFlags({title:nm.title,description:nm.description,h1:nm.h1,lead:nm.lead,takeaways:nm.takeaways,faq:nm.faq,body:bodyOut(rte)})}
+  function drawFl(){fl.innerHTML="";fl.appendChild(flagList(curFlags(),function(wh){var el=null;if(wh.field==="h1")el=$("pgH1");else if(wh.field==="title")el=$("seoTitle");else if(wh.field==="description")el=$("seoDesc");else if(wh.part!==undefined)el=rte.children[wh.part];else if(wh.field==="takeaways")el=tk;else if(wh.field==="faq")el=fq;
+    if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flag-hi");setTimeout(function(){el.classList.remove("flag-hi")},1800);if(el.focus)el.focus()}}))}
+  var flT;m.addEventListener("input",function(){clearTimeout(flT);flT=setTimeout(drawFl,400)});
+  $("pgSave").addEventListener("click",function(){if(!flagConfirm(curFlags(),live?"Save and publish":"Publish"))return;savePage(this,false)});
   if($("pgDraft"))$("pgDraft").addEventListener("click",function(){savePage(this,true)});
   if($("pgLater")){var sb=scheduleBox(act,sch,function(b,when){savePage(b,true,when)});$("pgLater").addEventListener("click",function(){sb.classList.toggle("hidden");if(!sb.classList.contains("hidden"))sb.querySelector("input").focus()})}
   var del=$("pgDel");if(del)del.addEventListener("click",function(){
@@ -1486,7 +1598,7 @@ function previewPage(sec,slug,meta,body){
       var fq=(meta.faq||[]).length?'<h2 id="questions">Common questions</h2><div class="faq">'+meta.faq.map(function(x){return"<details><summary>"+esc(x[0])+"</summary><p>"+esc(x[1])+"</p></details>"}).join("")+"</div>":"";
       art.innerHTML=tk+freshImgs(body)+(calc?calc.outerHTML:"")+fq}
     if(meta.title)d.title=meta.title;
-    showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Page preview");
+    var lv=sec==="legal"||!!(site&&site.pages.some(function(p){return p.section===sec&&p.slug===slug&&edLive(p)}));showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Page preview",lv?pageUrl(sec,slug):null);
   });
 }
 
@@ -1585,26 +1697,40 @@ function bodyOut(rte){
 }
 /* a button in the article text: words, link, look and where it sits (left, centre, right) */
 function btnHtml(v){return'<p class="art-btns'+(v.align?" art-btns--"+v.align:"")+'"><a class="btn '+(v.look==="ghost"?"btn--ghost":"btn--go")+'" href="'+esc(v.href)+'"'+(/^https?:/.test(v.href)?' target="_blank" rel="noopener"':'')+'>'+esc(v.text)+'</a></p>'}
-function buttonDialog(cur){siteLinks();cur=cur||{text:"Book a free session",href:"/#book",look:"go",align:""};
+function buttonDialog(cur,opts){siteLinks();opts=opts||{};cur=cur||{text:"Book a free session",href:"/#book",look:"go",align:""};
   return new Promise(function(done){
-    var dlg=h('<dialog aria-label="Button"><div class="hd"><h2>'+(cur.el?"Change button":"Add a button")+'</h2></div><div class="bd">'+
+    var site=!!opts.site;
+    var dlg=h('<dialog aria-label="Button" class="bd-dlg"><div class="hd"><h2>'+(site?"Button":cur.el?"Change button":"Add a button")+'</h2></div><div class="bd">'+
+      (site?'<p class="help bd-site">'+esc(opts.siteNote||"This button is part of the page design. Click its words on the page to change them.")+'</p>':
       '<div class="fld"><label for="bdT">Words on the button</label><input class="t" id="bdT" maxlength="60"></div>'+
       '<div class="fld"><label for="bdH">Link</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem">A page on this site (pick from the list), /#book for booking, or a full web address.</p><input class="t" id="bdH" list="siteLinks" placeholder="/#book"></div>'+
       '<div class="ds-seg"><b>Look</b><div><button type="button" data-k="look" data-v="go">● Main colour</button><button type="button" data-k="look" data-v="ghost">○ Outline</button></div></div>'+
       '<div class="ds-seg"><b>Where it sits</b><div><button type="button" data-k="align" data-v="">⇤ Left</button><button type="button" data-k="align" data-v="center">↔ Centre</button><button type="button" data-k="align" data-v="right">⇥ Right</button></div></div>'+
-      '<div class="bd-prev"><span class="help">Preview</span><p class="art-btns"><a class="btn" href="#" tabindex="-1"></a></p></div></div>'+
-      '<div class="ft">'+(cur.el?'<button type="button" class="btn danger" id="bdDel">Remove button</button><span class="sp"></span>':'')+'<button type="button" class="btn" id="bdX">Cancel</button><button type="button" class="btn primary" id="bdOk">'+(cur.el?"Save":"Add button")+'</button></div></dialog>');
+      '<div class="bd-prev"><span class="help">Preview</span><p class="art-btns"><a class="btn" href="#" tabindex="-1"></a></p></div>')+
+      '<div class="bd-all"><h3>Every button on the website</h3><p class="help">Shape, size and style change all buttons together'+(opts.doc?' — watch the page behind this box':'')+'.</p>'+
+      [["button_shape","Shape",[["","● Pill"],["rounded","▢ Rounded"],["square","■ Square"]]],["button_size","Size",[["small","Small"],["","Normal"],["large","Large"]]],["button_style","Style",[["","Glossy"],["flat","Flat"],["raised","Raised"]]]].map(function(g){return'<div class="ds-seg"><b>'+g[1]+'</b><div>'+g[2].map(function(o){return'<button type="button" data-tk="'+g[0]+'" data-tv="'+o[0]+'">'+o[1]+'</button>'}).join("")+'</div></div>'}).join("")+'</div></div>'+
+      '<div class="ft">'+(cur.el&&!site?'<button type="button" class="btn danger" id="bdDel">Remove button</button><span class="sp"></span>':'')+'<button type="button" class="btn" id="bdX">Cancel</button><button type="button" class="btn primary" id="bdOk">'+(site?"Save":cur.el?"Save":"Add button")+'</button></div></dialog>');
     document.body.appendChild(dlg);dlg.showModal();var v={text:cur.text,href:cur.href,look:cur.look,align:cur.align};
-    var t=dlg.querySelector("#bdT"),u=dlg.querySelector("#bdH"),pv=dlg.querySelector(".bd-prev a"),pp=dlg.querySelector(".bd-prev p");t.value=v.text;u.value=v.href;
-    function draw(){pv.textContent=t.value||"Button";pv.className="btn "+(v.look==="ghost"?"btn--ghost":"btn--go");pp.className="art-btns"+(v.align?" art-btns--"+v.align:"");
-      dlg.querySelectorAll("[data-k]").forEach(function(b){b.setAttribute("aria-pressed",String(v[b.dataset.k]===b.dataset.v))})}
-    dlg.querySelectorAll("[data-k]").forEach(function(b){b.addEventListener("click",function(){v[b.dataset.k]=b.dataset.v;draw()})});t.addEventListener("input",draw);draw();
-    var fin=function(r){dlg.close();dlg.remove();done(r)};
+    /* the website's button look (shared with Colours & fonts and 🎨 Look); previewed live on the page in the frame */
+    var thSaved=null,th={},cache={};api("settings",{action:"get"}).then(function(j){thSaved=Object.assign({},j.business.theme||{});th=Object.assign({},TH_BASE,thSaved);drawT()}).catch(function(){});
+    function drawT(){dlg.querySelectorAll("[data-tk]").forEach(function(b){b.setAttribute("aria-pressed",String((th[b.dataset.tk]||"")===b.dataset.tv))});if(opts.doc)lookApply(opts.doc,th,cache);var pa=dlg.querySelector(".bd-prev a");if(pa){var sh={rounded:"12px",square:"4px"}[th.button_shape||""];pa.style.borderRadius=sh||"";pa.style.fontSize={small:".86rem",large:"1.08rem"}[th.button_size||""]||"";pa.style.padding={small:".7em 1.1em",large:"1.1em 1.9em"}[th.button_size||""]||"";pa.style.background=th.button_style==="flat"&&v.look!=="ghost"?(th.green||"#24B328"):"";pa.style.boxShadow=th.button_style==="raised"?"0 14px 28px -10px rgba(0,0,0,.45),inset 0 -3px 0 rgba(0,0,0,.18)":""}}
+    dlg.querySelectorAll("[data-tk]").forEach(function(b){b.addEventListener("click",function(){th[b.dataset.tk]=b.dataset.tv;drawT()})});
+    var thChanged=function(){return thSaved&&["button_shape","button_size","button_style"].some(function(k){return(th[k]||"")!==(thSaved[k]||"")})};
+    var saveTh=function(){if(!thChanged())return Promise.resolve();var t2={};["blue","green","purple"].forEach(function(k){if(String(th[k]).toUpperCase()!==TH_BASE[k])t2[k]=th[k]});["heading_font","body_font","button_shape","button_size","button_style"].forEach(function(k){if(th[k])t2[k]=th[k]});
+      return api("settings",{action:"theme",theme:t2}).then(function(){toast("Button look saved for the whole website. It updates in about 2 minutes.")})};
+    var t=dlg.querySelector("#bdT"),u=dlg.querySelector("#bdH"),pv=dlg.querySelector(".bd-prev a"),pp=dlg.querySelector(".bd-prev p");if(t){t.value=v.text;u.value=v.href}
+    function draw(){if(!t)return;pv.textContent=t.value||"Button";pv.className="btn "+(v.look==="ghost"?"btn--ghost":"btn--go");pp.className="art-btns"+(v.align?" art-btns--"+v.align:"");
+      dlg.querySelectorAll("[data-k]").forEach(function(b){b.setAttribute("aria-pressed",String(v[b.dataset.k]===b.dataset.v))});drawT()}
+    dlg.querySelectorAll("[data-k]").forEach(function(b){b.addEventListener("click",function(){v[b.dataset.k]=b.dataset.v;draw()})});if(t)t.addEventListener("input",draw);draw();
+    var fin=function(r){if(!r&&opts.doc&&thSaved)lookApply(opts.doc,Object.assign({},TH_BASE,thSaved),cache);dlg.close();dlg.remove();done(r)};
     dlg.querySelector("#bdX").addEventListener("click",function(){fin(null)});dlg.addEventListener("cancel",function(){fin(null)});
     var del=dlg.querySelector("#bdDel");if(del)del.addEventListener("click",function(){fin({remove:true})});
-    dlg.querySelector("#bdOk").addEventListener("click",function(){var tx=t.value.trim(),hr=u.value.trim();if(!tx){t.focus();return toast("Write the words on the button",true)}
-      if(!hr){u.focus();return toast("Add where the button goes",true)}if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(hr))hr="https://"+hr;fin({text:tx,href:hr,look:v.look,align:v.align})});
-    t.focus();t.select()})}
+    dlg.querySelector("#bdOk").addEventListener("click",function(){var ok=this;
+      if(site){busy(ok,true);saveTh().then(function(){fin({site:true})}).catch(function(e){busy(ok,false);fail(e)});return}
+      var tx=t.value.trim(),hr=u.value.trim();if(!tx){t.focus();return toast("Write the words on the button",true)}
+      if(!hr){u.focus();return toast("Add where the button goes",true)}if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(hr))hr="https://"+hr;
+      busy(ok,true);saveTh().then(function(){fin({text:tx,href:hr,look:v.look,align:v.align})}).catch(function(e){busy(ok,false);fail(e)})});
+    if(t){t.focus();t.select()}})}
 function wireRte(bar,rte){
   try{document.execCommand("defaultParagraphSeparator",false,"p")}catch(e){}
   /* click a button in the text to change or remove it */
@@ -1670,7 +1796,7 @@ function openHubs(){
       if(sec==="services"){d.querySelectorAll(".svc-card").forEach(function(c,i){if(!$("sc"+i+"title"))return;setText(c,".svc-k",v("sc"+i+"label"));setText(c,".svc-t",v("sc"+i+"title"));setText(c,".svc-d",v("sc"+i+"text"));var g=c.querySelector(".svc-go");if(g&&g.firstChild)g.firstChild.textContent=v("sc"+i+"button")+" ";
           var ul=c.querySelector(".svc-inc"),lis=ul?ul.querySelectorAll("li"):[],vals=$("sc"+i+"inc").values();vals.forEach(function(t,k){var li=lis[k]||lis[lis.length-1].cloneNode(true);if(!lis[k])ul.appendChild(li);li.lastChild.textContent=t});for(var k=vals.length;k<lis.length;k++)lis[k].remove()});
         d.querySelectorAll(".svc-steps li").forEach(function(li,i){if(!$("st"+i+"t"))return;setText(li,"b",v("st"+i+"t"));setText(li,"p",v("st"+i+"d"))})}
-      showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Preview")}).catch(fail).then(function(){busy(b,false)})});
+      showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Preview","/"+sec)}).catch(fail).then(function(){busy(b,false)})});
   m.querySelectorAll("textarea").forEach(function(t){requestAnimationFrame(function(){ED.autosize(t)})});
   $("hbSave").addEventListener("click",function(){var b=this,v=function(id){return $(id).value};
     var out={action:"hubs",hubs:{},service_cards:[],service_steps:[]};
@@ -2042,7 +2168,7 @@ function previewCustom(slug,c){
     var cta=c.cta!==false&&g&&g.querySelector("main section.cta")?'<div class="wrap">'+g.querySelector("main section.cta").outerHTML+'</div>':"";
     var main=d.querySelector("main");
     main.innerHTML='<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">'+esc(c.h1)+'</li></ol></nav></div><section class="phero"><div class="wrap">'+(c.eyebrow?'<p class="eyebrow">'+esc(c.eyebrow)+'</p>':'')+'<h1>'+esc(c.h1)+'</h1>'+(c.lead?'<p class="plead">'+esc(c.lead)+'</p>':'')+'</div></section><div class="wrap edpage"><div class="blk-flow">'+freshImgs(lib.renderBlocks(c.blocks))+'</div></div>'+cta;
-    d.title=c.title||c.h1;showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Page preview")})}
+    d.title=c.title||c.h1;showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Page preview",(site&&(site.custom||[]).some(function(p){return p.slug===slug&&edLive(p)}))?"/"+slug:null)})}
 
 /* ======================= HOMEPAGE SECTIONS ======================= */
 var lay=null;
@@ -2093,7 +2219,7 @@ function previewHome(o){
         list.forEach(function(it){var a=d.createElement("a");a.href=it.href;a.textContent=it.label;host.insertBefore(a,ref)})};
       fill(".navlinks",M.main);fill("#drawer",M.drawer,".nav-contact");
       var cols=d.querySelectorAll("footer nav.f2-col");if(cols[0])fill("footer nav.f2-col[aria-label=Company]",M.company);fill("footer nav.f2-col[aria-label=Explore]",M.explore)}
-    showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Homepage preview")})}
+    showPreview("<!doctype html>"+d.documentElement.outerHTML,null,"Homepage preview","/")})}
 
 /* ======================= MENUS ======================= */
 var MENU_NAMES={main:["Top menu (laptops)","The links across the top of every page on a laptop. Room for 6."],drawer:["Phone and tablet menu","The links in the menu that opens from the ☰ button."],company:["Footer: Company","The middle column at the bottom of every page."],explore:["Footer: Explore","The right-hand column at the bottom of every page."]};
@@ -2150,16 +2276,42 @@ function openOnPage(){
   var ov=document.createElement("div");ov.className="op";
   ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click any text and type. Links are paused.</span></div><select class="op-pick" id="opPick" aria-label="Page to edit"><option value="">Homepage</option></select>'+
     '<div class="op-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="820">Tablet</button><button type="button" data-w="0" class="on">Laptop</button></div>'+
-    '<span class="op-n" id="opN"></span><button type="button" class="btn" id="opPrev">Preview</button><button type="button" class="btn primary" id="opRev">Review &amp; publish</button><button type="button" class="btn op-tools" data-tools>＋ Tools</button><button type="button" class="btn" data-look title="Colours, fonts and buttons">🎨 Look</button><button type="button" class="btn" id="opDone">Done</button></div>'+
+    '<span class="op-n" id="opN"></span><button type="button" class="btn" id="opPrev">Preview</button><button type="button" class="btn primary" id="opRev">Review &amp; publish</button><button type="button" class="btn op-tools" data-tools>＋ Tools</button><button type="button" class="btn" data-cmp title="The live page next to your changes">⇄ Compare</button><button type="button" class="btn" id="opDone">Done</button></div>'+
     '<div class="op-stage"><iframe id="opFrame" title="Your homepage, editable" src="/?chat=nolog&amp;onpage=1"></iframe></div>';
   document.body.appendChild(ov);
-  var hs=h('<aside class="op-side" aria-label="Homepage tools"><div class="os-g"><h4>Add to the homepage</h4><p class="help">New items go at the end of their list. Type straight into them.</p><div class="os-add">'+
-    [["faq","?","Question"],["how","1","Step"],["why.o","✓","Why us row"],["trust","★","Trust point"],["about","A","About letter"]].map(function(x){return'<button type="button" data-hp="'+x[0]+'"><i>'+x[1]+'</i>'+x[2]+'</button>'}).join("")+'</div><p class="help">Hover over any item on the page for <b>+ Add</b> and <b>✕ Remove</b> right there.</p></div>'+
-    '<div class="os-g"><h4>Look</h4><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button></div>'+
-    '<div class="os-g"><h4>Homepage</h4><button type="button" class="btn os-full" data-hgo="sections">Sections: order, hide, add</button><button type="button" class="btn os-full" data-hgo="wording">☰ All wording (list)</button><button type="button" class="btn os-full" data-hgo="photos">Photos &amp; logo</button></div></aside>');
-  ov.appendChild(hs);ov.classList.add("has-side");opSize(ov);
-  hs.querySelectorAll("[data-hp]").forEach(function(b){b.addEventListener("click",function(){ov.classList.remove("side-open");ov.hpAdd&&ov.hpAdd(b.dataset.hp)})});
-  hs.querySelectorAll("[data-hgo]").forEach(function(b){b.addEventListener("click",function(){var dn=ov.querySelector("#opDone");if(dn)dn.click();if(!document.body.contains(ov))show(b.dataset.hgo)})});document.body.style.overflow="hidden";
+  /* the panel shows what can be changed in the part of the homepage you clicked, and where to change what can't be changed here */
+  var HCTX=[["header","Top bar","Type on the menu words to change them. Order, links and new items are in Menus.",[["go","menus","Menus"]]],
+    ["#docket","Price card (hours calculator)","The tasks, hours and prices on this card come from the hours calculator.",[["go","calc","Hours calculator"]]],
+    [".hero","Top of the homepage","Click the heading, the line under it or a button's words and type. Click a button for its look.",[]],
+    ["#automate","What we do","Type on any card's words. Hover a point for + Add or ✕ Remove. Card photos and new cards are in the list view.",[["go","wording","Cards & photos (list)"]]],
+    ["#transform","Before and after","Click any words and type.",[]],
+    ["#why","Why us","Type on any row. Add a row here, or hover a row for ✕ Remove.",[["add","why.o","＋ Add a row"]]],
+    ["#about","About us","Type on any letter's words.",[["add","about","＋ Add a letter"]]],
+    ["#how","How it works","Type on any step.",[["add","how","＋ Add a step"]]],
+    [".trust","Tools strip","Type on any point.",[["add","trust","＋ Add a point"]]],
+    ["#knowledge","Guides strip","The guides shown here come from Pages & news.",[["go","pages","Pages & news"]]],
+    ["#faq","Questions","Type on any question or answer.",[["add","faq","＋ Add a question"]]],
+    ["#book","Booking and contact","Type on the words here. Phone, email and address are in Business details.",[["go","business","Business details"]]],
+    ["footer","Footer","Links are in Menus; phone, email, address and social profiles in Business details.",[["go","menus","Menus"],["go","business","Business details"]]],
+    ["section","Your own section","Sections built from blocks are changed in Homepage sections.",[["go","sections","Homepage sections"]]]];
+  var hs=h('<aside class="op-side" aria-label="Homepage tools"></aside>');
+  function hFlags(){var f=$("opFrame"),d=f&&f.contentDocument,out=[];if(!d)return out;
+    d.querySelectorAll("[data-ed]").forEach(function(el){if(!(el.textContent||"").trim())out.push({sev:"high",msg:"Some words on the homepage are empty ("+(el.getAttribute("data-ed")||"")+").",where:{el:el}})});
+    d.querySelectorAll("[data-new] [contenteditable]").forEach(function(el){if(!(el.textContent||"").trim())out.push({sev:"high",msg:"A new item is still empty. Type into it, or it is left out.",where:{el:el}})});return out}
+  function drawHFlags(){var g=hs.querySelector(".os-flags");if(!g)return;var list=hFlags();g.innerHTML="";g.hidden=!list.length;if(list.length)g.appendChild(flagList(list,function(wh){wh.el.scrollIntoView({behavior:"smooth",block:"center"});wh.el.focus();ov.classList.remove("side-open")}))}
+  function hsDraw(c){hs.innerHTML='<div class="os-g os-flags" hidden></div><div class="os-g os-ctx"><h4>'+(c?esc(c[1]):"This part of the page")+'</h4><p class="help">'+(c?esc(c[2]):"Click any part of the homepage to see what you can change there.")+'</p>'+
+      (c?c[3].map(function(x){return'<button type="button" class="btn '+(x[0]==="add"?"primary":"")+' os-full" data-'+(x[0]==="add"?"hp":"hgo")+'="'+x[1]+'">'+(x[0]==="go"?esc(x[2])+" →":esc(x[2]))+'</button>'}).join(""):'')+'</div>'+
+    '<details class="os-g os-d" data-fold="hparts"'+(osOpen("hparts")?" open":"")+'><summary>All parts of the homepage</summary>'+[["add","✎ Type and add here"],["here","✎ Type here"],["go","↗ Set in another place"]].map(function(g){var list=HCTX.filter(function(x){var k=x[3].some(function(a){return a[0]==="add"})?"add":x[3].some(function(a){return a[0]==="go"})?"go":"here";return k===g[0]&&x[0]!=="section"});
+      return list.length?'<div class="os-cat"><b>'+g[1]+'</b><div class="os-jump">'+list.map(function(x){return'<button type="button" data-jump="'+x[0]+'">'+esc(x[1])+'</button>'}).join("")+'</div></div>':''}).join("")+'</details>'+
+    '<details class="os-g os-d" data-fold="hmore"'+(osOpen("hmore")?" open":"")+'><summary>Look and more</summary><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button><button type="button" class="btn os-full" data-hgo="sections">Sections: order, hide, add →</button><button type="button" class="btn os-full" data-hgo="wording">☰ All wording (list) →</button></details>';
+    hs.querySelectorAll("[data-hp]").forEach(function(b){b.addEventListener("click",function(){ov.classList.remove("side-open");ov.hpAdd&&ov.hpAdd(b.dataset.hp);setTimeout(drawHFlags,200)})});
+    drawHFlags();
+    hs.querySelectorAll("[data-hgo]").forEach(function(b){b.addEventListener("click",function(){var dn=ov.querySelector("#opDone");if(dn)dn.click();if(!document.body.contains(ov))show(b.dataset.hgo)})});
+    hs.querySelectorAll("[data-jump]").forEach(function(b){b.addEventListener("click",function(){var f=$("opFrame"),d=f&&f.contentDocument,el=d&&d.querySelector(b.dataset.jump);if(el){el.scrollIntoView({behavior:"smooth",block:"start"});var c2=HCTX.filter(function(x){return x[0]===b.dataset.jump})[0];hsDraw(c2)}})})}
+  hsDraw(null);ov.appendChild(hs);ov.classList.add("has-side");opSize(ov);
+  (function(){var f=$("opFrame");if(!f)return;f.addEventListener("load",function(){var d=f.contentDocument;if(!d)return;
+    d.addEventListener("click",function(e){var t=e.target;for(var i=0;i<HCTX.length;i++){var el=t.closest&&t.closest(HCTX[i][0]);if(el){hsDraw(HCTX[i]);return}}},true);
+    var hT;d.addEventListener("input",function(){clearTimeout(hT);hT=setTimeout(drawHFlags,300)});d.addEventListener("click",function(){setTimeout(drawHFlags,250)})})})();document.body.style.overflow="hidden";
   opPicker($("opPick"),"",function(){close()});
   var fr=$("opFrame"),cnt=function(){var n=nChanges();$("opN").textContent=n?n+" change"+(n===1?"":"s"):"No changes yet";$("opRev").disabled=!n;$("opPrev").disabled=!n};cnt();
   ov.querySelectorAll(".op-dev button").forEach(function(b){b.addEventListener("click",function(){ov.querySelectorAll(".op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%";ov.querySelector(".op-stage").classList.toggle("dev",!!+b.dataset.w)})});
@@ -2173,7 +2325,9 @@ function openOnPage(){
     var st=d.createElement("style");st.textContent='[data-ed]{cursor:text;border-radius:6px;transition:box-shadow .15s,background .15s}[data-ed]:hover{box-shadow:0 0 0 2px rgba(19,153,24,.55);background:rgba(220,242,198,.25)}[data-ed]:focus{outline:none;box-shadow:0 0 0 3px #139918,0 0 0 7px rgba(19,153,24,.18);background:rgba(255,255,255,.08)}[data-ed].ed-chg{box-shadow:0 0 0 2px rgba(19,153,24,.35)}'+
       '#ed-chip{position:absolute;z-index:2147483646;background:#14172b;color:#fff;font:600 12px/1.2 system-ui,sans-serif;border-radius:999px;padding:5px 6px 5px 12px;display:flex;gap:8px;align-items:center;box-shadow:0 8px 20px -8px rgba(0,0,0,.5);pointer-events:auto}#ed-chip button{all:unset;cursor:pointer;background:#2a2f4a;border-radius:999px;padding:3px 9px}#ed-chip button:hover{background:#139918}[hidden]{display:none!important}';
     d.head.appendChild(st);
-    var chip=d.createElement("div");chip.id="ed-chip";chip.hidden=true;chip.innerHTML='<span></span><button type="button" data-a="undo">↺ Undo</button>';d.body.appendChild(chip);var curEl=null;
+    var chip=d.createElement("div");chip.id="ed-chip";chip.hidden=true;chip.innerHTML='<span></span><button type="button" data-a="undo">↺ Undo</button><button type="button" data-a="btn" hidden>⚙ Button look</button>';d.body.appendChild(chip);var curEl=null;
+    chip.querySelector("[data-a=btn]").addEventListener("mousedown",function(e){e.preventDefault();if(!curEl)return;var a=curEl.closest(".btn")||curEl;
+      buttonDialog({text:a.textContent.trim(),href:a.getAttribute("href")||""},{doc:d,site:true,siteNote:"Type on the button to change its words. It opens "+(a.getAttribute("href")||"the form")+" (set by the homepage design). Here you can change how every button looks."})});
     function place(el){var r=el.getBoundingClientRect();chip.style.top=(r.top+w.scrollY-34)+"px";chip.style.left=Math.max(8,r.left+w.scrollX)+"px";chip.hidden=false}
     d.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n"),it=byKey[k];if(!it)return;
       el.setAttribute("data-ed",k);el.setAttribute("spellcheck","true");
@@ -2181,7 +2335,7 @@ function openOnPage(){
       if(el.contentEditable!=="plaintext-only")el.contentEditable="true";
       var v=cur(k,"en");if(el.textContent.trim()!==v.trim())el.textContent=v;
       el.classList.toggle("ed-chg",!!(W.draft()[k]&&typeof W.draft()[k].en==="string"));
-      el.addEventListener("focus",function(){curEl=el;chip.querySelector("span").textContent=label(k);place(el)});
+      el.addEventListener("focus",function(){curEl=el;chip.querySelector("span").textContent=label(k);chip.querySelector("[data-a=btn]").hidden=!el.closest(".btn,.blk-btn");place(el)});
       el.addEventListener("input",function(){var t=el.innerText.replace(/\u00a0/g," ").replace(/\n+$/,"");var draft=W.draft(),dd=draft[k]||(draft[k]={});if(t===it.en)delete dd.en;else dd.en=t;el.classList.toggle("ed-chg",t!==it.en);saveDraft();cnt();place(el)});
       el.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();el.blur()}if(e.key==="Escape"){el.blur()}});
       el.addEventListener("paste",function(e){e.preventDefault();var t=(e.clipboardData||w.clipboardData).getData("text/plain");d.execCommand("insertText",false,t)});
@@ -2239,30 +2393,57 @@ function openPageOnPage(sec,slug){
   var ov=document.createElement("div");ov.className="op";
   ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click text to type · click a photo to change it</span></div><select class="op-pick" id="opPick" aria-label="Page to edit"><option value="">Homepage</option></select>'+
     '<div class="op-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="820">Tablet</button><button type="button" data-w="0" class="on">Laptop</button></div>'+
-    '<span class="op-n" id="opN">Loading…</span><button type="button" class="btn primary" id="opSave" disabled>Save &amp; publish</button><button type="button" class="btn op-tools" data-tools>＋ Tools</button><button type="button" class="btn" data-look title="Colours, fonts and buttons">🎨 Look</button><button type="button" class="btn" id="opDone">Done</button></div>'+
+    '<span class="op-n" id="opN">Loading…</span><button type="button" class="btn primary" id="opSave" disabled>Save &amp; publish</button><button type="button" class="btn op-tools" data-tools>＋ Tools</button><button type="button" class="btn" data-cmp title="The live page next to your changes">⇄ Compare</button><button type="button" class="btn" id="opDone">Done</button></div>'+
     '<div class="op-stage"><p class="empty"><span class="spin"></span> Opening the page…</p></div>';
   document.querySelectorAll(".op").forEach(function(x){x.remove()});document.body.appendChild(ov);document.body.style.overflow="hidden";
   var dirty=0,sha="",meta=null,card=null,src=null,parts=[],photo=undefined,pairs=[],sel=null;
   /* the panel down the left: add parts, move or delete the chosen part, Google wording, look and more */
   var sideEl=h('<aside class="op-side" aria-label="Page tools"></aside>');ov.appendChild(sideEl);ov.classList.add("has-side");opSize(ov);
+  /* what can be changed in the part of the page that was clicked; parts set elsewhere say where, with a button to go there */
+  var pctx=null,PCTX=[["header","Top bar","Its words, links and order are in Menus.",[["go","menus","Menus"]]],
+    [".crumbs","Breadcrumbs","Made from the page’s place on the website, nothing to change here.",[]],
+    [".phero,.news-hero","Top of the page","Click the small label, the heading or the introduction and type."+(sec==="news"?" Click the photo to change it.":""),[]],
+    [".takeaways","In short","Click a point and type. To add or remove points, use the form.",[["form","","☰ Edit in the form"]]],
+    [".faq,#questions","Common questions","Click a question or answer and type. To add or remove questions, use the form.",[["form","","☰ Edit in the form"]]],
+    ["article.prose","article",""],
+    [".toc,.toc-box","On this page","Made from your headings automatically. Add a heading to the article and it appears here.",[]],
+    [".cta","Booking box","The same on every page. Its words are in Business details → Wording on every page.",[["go","business","Business details"]]],
+    [".related,.keep,.more","Keep reading","Choose the related pages in the form.",[["form","","☰ Edit in the form"]]],
+    ["footer","Footer","Links are in Menus; phone, email, address and social profiles in Business details.",[["go","menus","Menus"],["go","business","Business details"]]]];
+  function pageParts(){var f=$("opFrame"),d=f&&f.contentDocument,has=function(c){return!d||c[0].split(",").some(function(x){return d.querySelector(x)})};
+    var cat={here:[],form:[],else:[]};PCTX.forEach(function(c,i){if(!has(c)||c[0]===".crumbs"||c[0]===".toc,.toc-box")return;var nm=c[1]==="article"?"Article text":c[1];
+      var k=c[1]==="article"||c[0].indexOf("phero")>=0?"here":c[3]&&c[3].some(function(x){return x[0]==="form"})?"form":c[3]&&c[3].length?"else":"here";cat[k].push('<button type="button" data-part="'+i+'">'+esc(nm)+'</button>')});
+    return[["here","✎ Edit here on the page"],["form","☰ Type here, add or remove in the form"],["else","↗ Set in another place"]].filter(function(g){return cat[g[0]].length}).map(function(g){return'<div class="os-cat"><b>'+g[1]+'</b><div class="os-jump">'+cat[g[0]].join("")+'</div></div>'}).join("")}
   function side(){var s0=sel,K={P:"Paragraph",H2:"Heading",H3:"Subheading",UL:"List",OL:"List",FIGURE:"Photo",DIV:"Tip box"},nm=s0?(s0.se.matches("p.art-btns")?"Button":K[s0.se.tagName]||"Part"):"";
-    sideEl.innerHTML='<div class="os-g"><h4>Add to the page</h4><p class="help">Adds under the part you clicked, or at the end of the article.</p><div class="os-add">'+
+    var inArt=!pctx||pctx[1]==="article";
+    var ctxH=inArt?'':'<div class="os-g os-ctx"><h4>'+esc(pctx[1])+'</h4><p class="help">'+esc(pctx[2])+'</p>'+pctx[3].map(function(x){return'<button type="button" class="btn os-full" '+(x[0]==="go"?'data-pgo="'+x[1]+'">'+esc(x[2])+' →':'data-form>'+esc(x[2]))+'</button>'}).join("")+'<button type="button" class="btn link os-full os-small" data-art>＋ Add to the article</button></div>';
+    sideEl.innerHTML='<div class="os-g os-flags" hidden></div>'+ctxH+(inArt?'<div class="os-g"><h4>Add to the article</h4><p class="help">'+(s0?'Adds under the chosen '+nm.toLowerCase()+'.':'Click a part of the article first, or it goes at the end.')+'</p><div class="os-add">'+
       [["p","¶","Text"],["h2","H","Heading"],["h3","h","Subheading"],["ul","•","List"],["tip","💡","Tip box"],["button","▭","Button"],["photo","🖼","Photo"]].map(function(x){return'<button type="button" data-add="'+x[0]+'"><i>'+x[1]+'</i>'+x[2]+'</button>'}).join("")+'</div></div>'+
-      '<div class="os-g"><h4>Chosen part</h4>'+(s0?'<p class="os-sel">'+nm+'</p><div class="os-row"><button type="button" class="btn" data-mv="-1">↑ Up</button><button type="button" class="btn" data-mv="1">↓ Down</button><button type="button" class="btn danger" data-del>Delete</button></div>'+(nm==="Button"?'<button type="button" class="btn soft os-full" data-ebtn>Change button &amp; link</button>':''):'<p class="help">Click any part of the article to move or delete it.</p>')+'</div>'+
-      '<div class="os-g"><h4>On Google</h4><div class="os-goog"></div></div>'+
-      '<div class="os-g"><h4>Look</h4><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button></div>'+
-      '<div class="os-g"><h4>More</h4><button type="button" class="btn os-full" data-form>☰ All settings (form)</button><a class="btn os-full" href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">👁 View on the website</a></div>';
+      (s0?'<div class="os-g"><h4>Chosen part</h4><p class="os-sel">'+nm+'</p><div class="os-row"><button type="button" class="btn" data-mv="-1">↑ Up</button><button type="button" class="btn" data-mv="1">↓ Down</button><button type="button" class="btn danger" data-del>Delete</button></div>'+(nm==="Button"?'<button type="button" class="btn soft os-full" data-ebtn>Change button &amp; link</button>':'')+'</div>':''):'')+
+      '<details class="os-g os-d" data-fold="parts"'+(osOpen("parts")?" open":"")+'><summary>All parts of this page</summary>'+pageParts()+'</details>'+
+      '<details class="os-g os-d" data-fold="google"'+(osOpen("google")?" open":"")+'><summary>On Google</summary><div class="os-goog"></div></details>'+
+      '<details class="os-g os-d" data-fold="more"'+(osOpen("more")?" open":"")+'><summary>Look and more</summary><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button><button type="button" class="btn os-full" data-form>☰ All settings (form)</button><a class="btn os-full" href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">👁 View on the website</a></details>';
     sideEl.querySelectorAll("[data-add]").forEach(function(b){b.addEventListener("click",function(){ov.opAdd&&ov.opAdd(b.dataset.add)})});
+    sideEl.querySelectorAll("[data-pgo]").forEach(function(b){b.addEventListener("click",function(){if(leave()!==false)show(b.dataset.pgo)})});
+    sideEl.querySelectorAll("[data-art]").forEach(function(b){b.addEventListener("click",function(){pctx=null;side()})});
+    sideEl.querySelectorAll("[data-part]").forEach(function(b){b.addEventListener("click",function(){var c=PCTX[+b.dataset.part],f=$("opFrame"),d=f&&f.contentDocument,el=d&&d.querySelector(c[0].split(",")[0])||(d&&d.querySelector(c[0]));if(el)el.scrollIntoView({behavior:"smooth",block:"start"});pctx=c;if(c[1]==="article")pctx=null;side();ov.classList.remove("side-open")})});
     sideEl.querySelectorAll("[data-mv]").forEach(function(b){b.addEventListener("click",function(){ov.opMove(+b.dataset.mv)})});
     var dl=sideEl.querySelector("[data-del]");if(dl)dl.addEventListener("click",function(){ov.opDel()});
     var eb=sideEl.querySelector("[data-ebtn]");if(eb)eb.addEventListener("click",function(){var a=sel&&sel.el.querySelector("a");if(a)a.click()});
-    sideEl.querySelector("[data-form]").addEventListener("click",function(){if(leave()!==false){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(sec,slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()}});
+    sideEl.querySelectorAll("[data-form]").forEach(function(fb){fb.addEventListener("click",function(){if(leave()!==false){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain")){forceForm=true;openPage(sec,slug)}else if(Date.now()-t0<15000)setTimeout(go,120)};go()}})});
     if(meta){var g=sideEl.querySelector(".os-goog"),ti=h('<label class="os-l">Title in Google<input class="t" maxlength="70"></label>'),de=h('<label class="os-l">Description in Google<textarea class="t" rows="3" maxlength="170"></textarea></label>');
       var tI=ti.querySelector("input"),dI=de.querySelector("textarea");tI.value=meta.title||"";dI.value=meta.description||"";var o1=tI.value,o2=dI.value,c1=false,c2=false;
       tI.addEventListener("input",function(){meta.title=tI.value;var now=tI.value!==o1;if(now!==c1){dirty+=now?1:-1;c1=now;n()}});dI.addEventListener("input",function(){meta.description=dI.value;var now=dI.value!==o2;if(now!==c2){dirty+=now?1:-1;c2=now;n()}});
-      g.appendChild(ti);g.appendChild(de);g.appendChild(serpPreview(tI,dI,sec==="legal"?"/"+slug:"/"+sec+"/"+slug))}}
+      g.appendChild(ti);g.appendChild(de);g.appendChild(serpPreview(tI,dI,sec==="legal"?"/"+slug:"/"+sec+"/"+slug))}
+    drawOpFlags()}
   side();
-  var n=function(){$("opN").textContent=dirty?dirty+" change"+(dirty===1?"":"s")+" not saved":"All saved";$("opSave").disabled=!dirty};
+  var n=function(){$("opN").textContent=dirty?dirty+" change"+(dirty===1?"":"s")+" not saved":"All saved";$("opSave").disabled=!dirty;clearTimeout(n._t);n._t=setTimeout(drawOpFlags,300)};
+  function opFlags(){return meta&&src?editFlags({title:meta.title,description:meta.description,h1:meta.h1,lead:meta.lead,takeaways:meta.takeaways,faq:meta.faq,body:src.innerHTML}):[]}
+  function drawOpFlags(){var g=sideEl.querySelector(".os-flags");if(!g)return;var list=opFlags();g.innerHTML="";g.hidden=!list.length;if(!list.length)return;
+    g.appendChild(flagList(list,function(wh){var f=$("opFrame"),d=f&&f.contentDocument;if(!d)return;var el=null;
+      if(wh.part!==undefined){var se=src.children[wh.part],pr=pairs.filter(function(x){return x.se===se})[0];el=pr&&pr.el}
+      else if(wh.field==="h1")el=d.querySelector(".phero h1");else if(wh.field==="takeaways")el=d.querySelector(".takeaways");else if(wh.field==="faq")el=d.querySelector(".faq");else if(wh.field)el=sideEl.querySelector(".os-goog input,.os-goog textarea");
+      if(el){el.scrollIntoView({behavior:"smooth",block:"center"});if(el.ownerDocument===d){el.classList.add("ed-sel");setTimeout(function(){el.classList.remove("ed-sel")},1800)}else el.focus()}ov.classList.remove("side-open")}))}
   var leave=function(){if(dirty&&!confirm("Leave without saving your changes on this page?"))return false;ov.remove();document.body.style.overflow=""};
   opPicker($("opPick"),sec+"/"+slug,leave);
   $("opDone").addEventListener("click",leave);
@@ -2299,7 +2480,7 @@ function openPageOnPage(sec,slug){
       for(var k=ci;k<cands.length;k++){if(cands[k].tagName===se.tagName&&norm(cands[k])===t){var el=cands[k];ci=k+1;wirePart(el,se);return}}});
     function wirePart(el,se){var t=norm(se);pairs.push({el:el,se:se});el.addEventListener("mousedown",function(){pick(el,se)},true);el.addEventListener("focusin",function(){pick(el,se)});
         if(se.matches&&se.matches("p.art-btns")){var a=el.querySelector("a");if(a){a.setAttribute("data-edimg","1");a.title="Click to change this button";a.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();pick(el,se);editBtn(el,se)})}return}
-        if(se.querySelector("img")||se.tagName==="FIGURE"){el.querySelectorAll("img").forEach(function(im,ii){wireImg(im,function(url){var sim=se.querySelectorAll("img")[ii];if(sim){sim.setAttribute("src",url);im.src=url;dirty++;n()}})});if(!t)return}
+        if(se.querySelector("img")||se.tagName==="FIGURE"){el.querySelectorAll("img").forEach(function(im,ii){wireImg(im,function(url){var sim=se.querySelectorAll("img")[ii];if(sim){sim.setAttribute("src",url);im.src=url;im.classList.add("ed-chg");dirty++;n()}})});if(!t)return}
         el.setAttribute("data-ed","1");el.contentEditable="true";el.setAttribute("spellcheck","true");
         var orig=se.innerHTML,label=/^H[1-6]$/.test(se.tagName)?"Heading":se.tagName==="UL"||se.tagName==="OL"?"List":"Paragraph";
         el.addEventListener("focus",function(){show(el,label+" · Ctrl+B bold, Ctrl+I italic")});
@@ -2308,32 +2489,50 @@ function openPageOnPage(sec,slug){
     }
     /* the part last clicked: new parts go under it; it can move up or down or be deleted from the panel */
     function pick(el,se){if(sel&&sel.el!==el)sel.el.classList.remove("ed-sel");sel={el:el,se:se};el.classList.add("ed-sel");side()}
-    function editBtn(el,se){var a=se.querySelector("a");buttonDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",look:a.classList.contains("btn--ghost")?"ghost":"go",align:se.classList.contains("art-btns--center")?"center":se.classList.contains("art-btns--right")?"right":""}).then(function(v){if(!v)return;
+    function editBtn(el,se){var a=se.querySelector("a");buttonDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",look:a.classList.contains("btn--ghost")?"ghost":"go",align:se.classList.contains("art-btns--center")?"center":se.classList.contains("art-btns--right")?"right":""},{doc:d}).then(function(v){if(!v)return;
       if(v.remove){drop(el,se);return}var t2=document.createElement("div");t2.innerHTML=btnHtml(v);var ns=t2.firstChild;se.replaceWith(ns);var ne=d.importNode(ns,true);el.replaceWith(ne);pairs=pairs.filter(function(x){return x.el!==el});wirePart(ne,ns);pick(ne,ns);dirty++;n()})}
     function drop(el,se){se.remove();el.remove();pairs=pairs.filter(function(x){return x.el!==el});sel=null;dirty++;n();side()}
     var art=d.querySelector("article.prose");
     ov.opAdd=function(kind){if(!art)return toast("This page has no article text to add to.",true);
       var mk=function(html){var t2=document.createElement("div");t2.innerHTML=html;var ns=t2.firstElementChild,ne=d.importNode(ns,true);
         if(sel&&sel.se.parentNode){sel.se.after(ns);sel.el.after(ne)}else{var last=pairs.length?pairs[pairs.length-1]:null;src.appendChild(ns);if(last)last.el.after(ne);else{var stop=art.querySelector(".takeaways,.faq,#questions");art.insertBefore(ne,stop&&stop.parentNode===art?stop:null)}}
-        wirePart(ne,ns);pick(ne,ns);dirty++;n();ov.classList.remove("side-open");ne.scrollIntoView({block:"center",behavior:"smooth"});if(ne.contentEditable==="true"){ne.focus();var r=d.createRange();r.selectNodeContents(ne);var sl=w.getSelection();sl.removeAllRanges();sl.addRange(r)}};
+        wirePart(ne,ns);pick(ne,ns);ne.classList.add("ed-new");dirty++;n();ov.classList.remove("side-open");ne.scrollIntoView({block:"center",behavior:"smooth"});if(ne.contentEditable==="true"){ne.focus();var r=d.createRange();r.selectNodeContents(ne);var sl=w.getSelection();sl.removeAllRanges();sl.addRange(r)}};
       if(kind==="p")mk("<p>New paragraph. Click here and type.</p>");
       else if(kind==="h2")mk("<h2>New heading</h2>");else if(kind==="h3")mk("<h3>New subheading</h3>");
       else if(kind==="ul")mk("<ul><li>First point</li><li>Second point</li></ul>");
       else if(kind==="tip")mk('<div class="callout callout--tip"><p>Tip: write your tip here.</p></div>');
-      else if(kind==="button")buttonDialog(null).then(function(v){if(v&&!v.remove)mk(btnHtml(v))});
+      else if(kind==="button")buttonDialog(null,{doc:d}).then(function(v){if(v&&!v.remove)mk(btnHtml(v))});
       else if(kind==="photo")choosePhoto().then(function(ph){if(!ph)return;var alt=prompt("Describe the photo in a few words (read out to people who can't see it):",ph.alt||"")||"";
         mk('<figure><img src="'+esc(ph.url)+'" alt="'+esc(alt)+'" loading="lazy"'+(ph.w?' width="'+ph.w+'" height="'+ph.h+'"':'')+'></figure>')})};
     ov.opMove=function(dir){if(!sel)return;var se=sel.se,el=sel.el;if(dir<0){var ps=se.previousElementSibling;var pi=pairs.filter(function(x){return x.se===ps})[0];if(!ps||!pi)return toast("Already at the top of the article.");ps.before(se);pi.el.before(el)}
-      else{var nx=se.nextElementSibling;var ni=pairs.filter(function(x){return x.se===nx})[0];if(!nx||!ni)return toast("Already at the bottom of the article.");nx.after(se);ni.el.after(el)}dirty++;n();el.scrollIntoView({block:"center",behavior:"smooth"})};
+      else{var nx=se.nextElementSibling;var ni=pairs.filter(function(x){return x.se===nx})[0];if(!nx||!ni)return toast("Already at the bottom of the article.");nx.after(se);ni.el.after(el)}el.classList.add("ed-chg");dirty++;n();el.scrollIntoView({block:"center",behavior:"smooth"})};
     ov.opDel=function(){if(!sel)return;if(!confirm("Delete this part of the page?"))return;drop(sel.el,sel.se)};
-    var stS=d.createElement("style");stS.textContent=".ed-sel{outline:2px solid #1877e0!important;outline-offset:6px;border-radius:4px}a[data-edimg]{cursor:pointer}";d.head.appendChild(stS);
+    var stS=d.createElement("style");stS.textContent=".ed-sel{outline:2px solid #1877e0!important;outline-offset:6px;border-radius:4px}a[data-edimg]{cursor:pointer}"+
+      "#ed-fmt{position:absolute;z-index:2147483646;display:flex;gap:2px;background:#14172b;border-radius:12px;padding:4px;box-shadow:0 10px 24px -10px rgba(0,0,0,.55)}#ed-fmt[hidden]{display:none}#ed-fmt button{all:unset;cursor:pointer;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:7px 9px;border-radius:8px;min-width:14px;text-align:center}#ed-fmt button:hover{background:#139918}#ed-fmt i{width:1px;background:rgba(255,255,255,.25);margin:4px 2px}"+
+      ".btn:not([data-edimg]),.blk-btn{cursor:pointer}";d.head.appendChild(stS);
+    /* a small toolbar over the article text being typed in: bold, italic, link, heading or text */
+    var fmt=d.createElement("div");fmt.id="ed-fmt";fmt.hidden=true;fmt.innerHTML='<button type="button" data-f="bold" title="Bold"><b>B</b></button><button type="button" data-f="italic" title="Italic"><em>I</em></button><button type="button" data-f="link" title="Add a link">🔗 Link</button><button type="button" data-f="unlink" title="Remove the link">Unlink</button><i></i><button type="button" data-f="h2" title="Make it a heading">H</button><button type="button" data-f="h3" title="Make it a subheading">h</button><button type="button" data-f="p" title="Make it normal text">¶</button>';d.body.appendChild(fmt);
+    fmt.addEventListener("mousedown",function(e){e.preventDefault()});
+    var fmtEl=null;function fmtAt(el){var r=el.getBoundingClientRect();fmt.style.top=Math.max(w.scrollY+4,r.top+w.scrollY-44)+"px";fmt.style.left=Math.max(8,r.left+w.scrollX)+"px";fmt.hidden=false;fmtEl=el}
+    d.addEventListener("click",function(e){var t=e.target;for(var i=0;i<PCTX.length;i++){if(t.closest&&t.closest(PCTX[i][0])){var nc=PCTX[i][1]==="article"?null:PCTX[i];if(nc!==pctx){pctx=nc;side()}return}}},true);
+    d.addEventListener("focusin",function(e){var el=e.target.closest&&e.target.closest("article.prose [data-ed]");if(el&&pairs.some(function(x){return x.el===el})){fmtAt(el)}else fmt.hidden=true});
+    w.addEventListener("scroll",function(){if(fmtEl&&!fmt.hidden)fmtAt(fmtEl)},{passive:true});
+    fmt.addEventListener("click",function(e){var b=e.target.closest("button");if(!b||!fmtEl)return;var f=b.dataset.f,pr=pairs.filter(function(x){return x.el===fmtEl})[0];if(!pr)return;
+      if(f==="bold"||f==="italic"||f==="unlink"){d.execCommand(f);fmtEl.dispatchEvent(new Event("input"))}
+      else if(f==="link"){var u=prompt("Link to (a page on this site like /services/ai-automation, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;d.execCommand("createLink",false,u);fmtEl.dispatchEvent(new Event("input"))}}
+      else{var tag=f.toUpperCase();if(pr.se.tagName===tag||/^(UL|OL|DIV|FIGURE)$/.test(pr.se.tagName))return toast(/^(UL|OL|DIV|FIGURE)$/.test(pr.se.tagName)?"Lists, tip boxes and photos keep their own shape.":"It already is.");
+        var ns=document.createElement(f),ne=d.createElement(f);ns.innerHTML=pr.se.innerHTML;ne.innerHTML=pr.se.innerHTML;pr.se.replaceWith(ns);fmtEl.replaceWith(ne);pairs=pairs.filter(function(x){return x!==pr});wirePart(ne,ns);pick(ne,ns);ne.classList.add("ed-chg");dirty++;n();ne.focus()}});
+    /* buttons that are part of the page design: open the button box (shape, size and style for every button) */
+    d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest(".btn,.blk-btn");if(!a||a.hasAttribute("data-edimg")||a.closest("#ed-fmt,#ed-chip"))return;e.preventDefault();e.stopPropagation();
+      buttonDialog({text:a.textContent.trim(),href:a.getAttribute("href")||""},{doc:d,site:true,siteNote:"“"+a.textContent.trim()+"” is part of the page design and opens "+(a.getAttribute("href")||"a form")+". Its words are set in Business details → Wording on every page. Here you can change how every button looks."})},true);
     side();
     var hero=q(".news-hero img");if(hero&&sec==="news")wireImg(hero,function(url){photo=url;hero.src=url;dirty++;n()});
     function wireImg(im,done){im.setAttribute("data-edimg","1");im.title="Click to change this photo";im.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();choosePhoto().then(function(pp){if(pp&&pp.url)done(pp.url)})})}
     d.addEventListener("focusout",function(){setTimeout(function(){var a=d.activeElement;if(!a||!a.hasAttribute||!a.hasAttribute("data-ed"))chip.hidden=true},150)});
     d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(a&&!/^#/.test(a.getAttribute("href")||""))e.preventDefault()},true);
   }
-  $("opSave").addEventListener("click",function(){var b=this;busy(b,true,"Saving…");
+  siteLinks().then(function(){drawOpFlags()}).catch(function(){});
+  $("opSave").addEventListener("click",function(){var b=this;if(!flagConfirm(opFlags(),"Save and publish"))return;busy(b,true,"Saving…");
     var body={action:"save",section:sec,slug:slug,sha:sha,meta:meta,body:src.innerHTML,draft:!!card.draft,schedule:card.publish_at||""};if(photo!==undefined)body.card={photo:photo};
     api("pages",body).then(function(){return api("pages",{action:"get",section:sec,slug:slug})}).then(function(d){sha=d.sha;dirty=0;photo=undefined;n();busy(b,false);
       var f=$("opFrame");if(f)f.contentDocument.querySelectorAll(".ed-chg").forEach(function(x){x.classList.remove("ed-chg")});toast("Saved. The page updates on the website in about a minute.")}).catch(function(e){busy(b,false);fail(e)})});
@@ -2343,11 +2542,13 @@ window.edOpenPage=openPageOnPage;
 /* ======================= EDITING MODE ======================= */
 /* One switch (sidebar on laptops, Home on every screen): "On the page" opens the homepage and pages in Edit on page
    straight away; "With forms" keeps the lists and forms, with Edit on page one button away. Remembered on this device. */
-/* One way to work everywhere: each page has its own two buttons, "✎ Edit on page" and "☰ Edit with form", so there is no mode to remember. */
-function edMode(){return"forms"}
+/* "How you edit" (sidebar on laptops, Home on phones), remembered in this browser: On page opens the homepage and pages
+   in Edit on page with the tools panel; With form opens the lists and forms. Each page still offers the other way too. */
+function edMode(){try{return localStorage.getItem("ambs-ed-mode")||"visual"}catch(e){return"visual"}}
+var forceForm=false;
 function modeSwitch(short){return '<div class="mode-sw" role="group" aria-label="How you edit"><span class="mode-l">How you edit</span><div class="mode-b"><button type="button" data-mode="visual" title="Click text on your real pages and type">✎ '+(short?'On page':'On the page')+'</button><button type="button" data-mode="forms" title="Lists and forms, with every setting">☰ '+(short?'Forms':'With forms')+'</button></div></div>'}
 function modeSync(){var m=edMode();document.querySelectorAll("[data-mode]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===m))});document.body.classList.toggle("mode-visual",m==="visual")}
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mode]");if(!b)return;try{localStorage.setItem("ambs-ed-mode",b.dataset.mode)}catch(x){}modeSync();toast(b.dataset.mode==="visual"?"On the page: the homepage and your pages open ready to click and type.":"With forms: you\u2019ll see the lists and forms. Edit on page is still one button away.")});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mode]");if(!b)return;try{localStorage.setItem("ambs-ed-mode",b.dataset.mode)}catch(x){}modeSync();if($("plList")&&!open)pagesHome();toast(b.dataset.mode==="visual"?"On the page: the homepage and your pages open ready to click and type.":"With forms: you\u2019ll see the lists and forms. Edit on page is still one button away.")});
 window.edMode=edMode;
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-new]");if(!b)return;e.preventDefault();edNew(b.dataset.new)});
 /* the Website ROI calculator is a block page (site-src/content/custom/website-roi-calculator.json): open it straight from Home or the menu */
@@ -2369,6 +2570,16 @@ function thColour(r,g,b,mv){var c=thHsl(r,g,b),h=c[0],s=c[1],l=c[2];if(s<.22||l<
 function themeCss(css,t){var mv=thMoves(t);if(!mv.length)return css;var hx=function(n){return("0"+n.toString(16).toUpperCase()).slice(-2)};
   return css.replace(/#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9a-fA-F])/g,function(m){var c=thColour.apply(null,thHex(m).concat([mv]));return c?"#"+c.map(hx).join(""):m})
     .replace(/(rgba?)\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(\s*[,)])/g,function(m,f,r,g,b,tail){var c=thColour(+r,+g,+b,mv);return c?f+"("+c.join(",")+tail:m})}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-cmp]");if(!b)return;var ov=b.closest(".op"),f=ov&&ov.querySelector("#opFrame"),d=f&&f.contentDocument;if(!d)return;
+  var path=f.contentWindow.location.pathname||"/";
+  if(path==="/"&&window.edHomePreview){var t=b.textContent;b.disabled=true;b.textContent="Preparing…";window.edHomePreview().then(function(r){
+      var mark='<style>html:not(.cmp-off) .cmp-chg{outline:3px solid #f5b800!important;outline-offset:4px;border-radius:6px;background:rgba(255,214,0,.16)!important;position:relative}html:not(.cmp-off) .cmp-chg::after{content:"Changed";position:absolute;top:-12px;right:-6px;z-index:5;font:700 11px/1 system-ui,sans-serif;padding:4px 8px;border-radius:99px;background:#f5b800;color:#2b2100;pointer-events:none}</style>'+
+        '<script>(function(){var K='+JSON.stringify(r.keys).replace(/</g,"\\u003c")+';function m(){K.forEach(function(k){document.querySelectorAll("[data-i18n=\\""+k+"\\"]").forEach(function(e){e.classList.add("cmp-chg")})})}addEventListener("load",function(){m();setTimeout(m,800)})})()<\/script>';
+      var html=showPreview(r.html,r.js,"",null,true).replace(/<\/body>/i,mark+"</body>");compareView("/",html,{scripts:true})}).catch(fail).then(function(){b.disabled=false;b.textContent=t});return}
+  compareView(path,cleanCopy(d),{scripts:false})});
+var OS_OPEN=(function(){try{return JSON.parse(localStorage.getItem("ambs-os-open")||"{}")}catch(e){return{}}})();
+function osOpen(k){return OS_OPEN[k]!==undefined?OS_OPEN[k]:k==="parts"||k==="hparts"}
+document.addEventListener("toggle",function(e){var d=e.target;if(!d.matches||!d.matches("details[data-fold]"))return;OS_OPEN[d.dataset.fold]=d.open;try{localStorage.setItem("ambs-os-open",JSON.stringify(OS_OPEN))}catch(x){}},true);
 /* the panels sit just under the Edit on page bar, which can wrap onto two lines */
 function opSize(ov){var f=function(){var b=ov.querySelector(".op-bar");if(b)ov.style.setProperty("--osb",b.offsetHeight+"px")};requestAnimationFrame(f);addEventListener("resize",f)}
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-tools]");if(!b)return;var ov=b.closest(".op");if(ov)ov.classList.toggle("side-open")});
@@ -2460,11 +2671,11 @@ function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){i
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
   EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
   h+='<div class="side-h">Shortcuts</div><button type="button" data-roi="1">'+ico("calc")+'<span>Website ROI calculator</span></button><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
-  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");sideSync();modeSync()})();
+  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");b0.insertAdjacentHTML("afterend",'<div class="side-mode">'+modeSwitch(1)+'</div>');sideSync();modeSync()})();
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();if(b.dataset.go==="onpage"||(b.dataset.go==="wording"&&edMode()==="visual"&&!b.closest("#tab-wording")))return openOnPage();show(b.dataset.go)});
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
-  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+''+'</div>'+
+  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+modeSwitch()+'</div>'+
     '<div class="kpis" id="hmKpi0"><button type="button" class="kpi" data-go="health" id="hmHealth"><b>…</b><span>site health</span></button></div><div class="kpis" id="hmKpi" hidden></div>'+
     '<div class="quick"><button type="button" class="btn primary" data-new="news">＋ Write a news post</button><button type="button" class="btn" data-new="page">＋ Add a page</button><button type="button" class="btn" data-new="guides">＋ Add a guide</button></div>';
   EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
@@ -2675,7 +2886,7 @@ function calcInit(){
       b.tasks.forEach(function(k,i){var r=h('<tr><td>'+esc(k.name)+'</td><td style="text-align:right;white-space:nowrap"><input type="number" min="0" max="40" step="0.5" aria-label="Hours a week for '+esc(k.name)+'"> hr</td></tr>');var inp=r.querySelector("input");inp.value=k.hours;inp.dataset.b=b.id;inp.dataset.i=i;inp.addEventListener("input",markDirty);tb.appendChild(r)});p.appendChild(t)});
     var act=h('<div class="actions"><span class="sp"></span><button type="button" class="btn" id="ccPrev">Preview</button><button type="button" class="btn primary" id="ccSave">Save &amp; publish</button></div>');m.appendChild(p);m.appendChild(act);
     $("ccPrev").addEventListener("click",function(){var btn=this,hours={};p.querySelectorAll("input").forEach(function(i){(hours[i.dataset.b]=hours[i.dataset.b]||[])[+i.dataset.i]=parseFloat(i.value)});busy(btn,true,"Preparing…");
-      api("settings",{action:"calculator",hours:hours,preview:true}).then(function(r){showPreview(r.html,r.js,"Homepage preview")}).catch(fail).then(function(){busy(btn,false)})});
+      api("settings",{action:"calculator",hours:hours,preview:true}).then(function(r){showPreview(r.html,r.js,"Homepage preview","/")}).catch(fail).then(function(){busy(btn,false)})});
     $("ccSave").addEventListener("click",function(){var btn=this,hours={};p.querySelectorAll("input").forEach(function(i){(hours[i.dataset.b]=hours[i.dataset.b]||[])[+i.dataset.i]=parseFloat(i.value)});busy(btn,true);
       api("settings",{action:"calculator",hours:hours}).then(function(){dirty=false;busy(btn,false);toast("Saved. Live in about a minute.")}).catch(function(e){busy(btn,false);fail(e)})});
   }).catch(fail);
