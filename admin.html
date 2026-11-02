@@ -535,6 +535,22 @@ header.top .who{margin-left:4px}
 .pl-menu button{all:unset;cursor:pointer;padding:.7rem .85rem;border-radius:10px;font-size:.95rem;white-space:pre}.pl-menu button:hover,.pl-menu button:focus-visible{background:rgba(24,119,224,.08)}.pl-menu .danger{color:#c62828}
 @media(max-width:760px){.pl-btns .pl-more{flex:0 0 auto}}
 .kpi .kpi-when{font-size:.74rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;display:block;margin-top:2px}.hl-when{margin:2px 0 6px!important}
+.ts-bar{display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin-bottom:14px}.ts-pg{display:grid;gap:4px;flex:1 1 220px;max-width:420px}.ts-pg select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font:inherit;background:var(--card,#fff);color:inherit}.ts-bar .btn{min-height:44px}.ts-when{margin-left:auto}
+.ts-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}.ts-c{margin:0;min-width:0}#ts-psi{grid-row:span 2}
+.ts-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.ts-h h3{margin:0;font-size:1.05rem}.ts-st{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.ts-c h4{margin:14px 0 2px;font-size:.92rem}.ts-c h4 small{font-weight:500}.ts-sw{margin-bottom:10px;display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--bg,#f4f6fb)}.ts-sw button{border:0;background:none;border-radius:999px;padding:.45rem 1rem;font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;color:var(--muted)}.ts-sw button[aria-pressed=true]{background:var(--ink,#14172b);color:#fff}
+.ts-rings{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;justify-items:center;margin:6px 0 4px}.ts-rg{display:grid;justify-items:center;gap:6px;text-align:center}.ts-rg>span{font-size:.8rem;font-weight:700;line-height:1.2}.ts-ring.hl-score{width:76px;height:76px}.ts-ring.hl-score b{font-size:1.45rem}
+.hl-score.na{--c:#8a94a6}.ts-list li{padding:8px 0}.ts-list .warn i{background:#fff2dc;color:#9a5b00}.ts-list span{text-align:right;overflow-wrap:anywhere}
+.ts-list .ts-note{display:block;padding:0 0 10px 38px;border-top:0;font-size:.86rem;color:var(--muted)}
+.ts-fix{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}.ts-fix summary{cursor:pointer;font-weight:700;padding:6px 0}.ts-fix summary span{font-weight:500;color:var(--muted)}.ts-fix>ul:not(.hl-checks){margin:4px 0;padding-left:0;list-style:none}.ts-fix>ul:not(.hl-checks) li{padding:7px 0;border-top:1px solid var(--line);font-size:.92rem}
+.ts-cat{display:inline-block;font-size:.72rem;font-weight:700;background:#eef1f5;color:#4a5265;border-radius:99px;padding:2px 8px;margin-right:6px}
+.ts-big{display:flex;gap:16px;align-items:center;margin:4px 0 6px}.ts-big p{margin:0}.ts-grade{font-size:2.4rem;line-height:1;min-width:74px;height:74px;border-radius:18px;display:grid;place-items:center;padding:0 8px}.ts-grade small{font-size:.9rem;margin-left:2px}
+.ts-grade.ok{background:#e6f6e7;color:#17761a}.ts-grade.warn{background:#fff2dc;color:#9a5b00}.ts-grade.bad{background:#fde8e8;color:#b42318}
+.ts-more{display:inline-block;margin-top:10px;font-weight:700;font-size:.9rem;margin-right:14px}.ts-at{margin:10px 0 0}.ts-steps{padding-left:20px}.ts-steps li{margin:6px 0}.ts-issues{font-size:.88rem;color:#9a5b00}
+.ts-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:4px 0 8px;background:var(--bg,#f6f7fb)}.ts-card img,.ts-noimg{display:block;width:100%;max-height:220px;aspect-ratio:1.91/1;object-fit:cover;background:#eef1f5}.ts-noimg{display:grid;place-items:center;color:var(--muted)}
+.ts-card div{padding:10px 12px}.ts-card span{font-size:.75rem;color:var(--muted);text-transform:uppercase}.ts-card b{display:block;margin:2px 0}.ts-card p{margin:0;font-size:.88rem;color:var(--muted)}
+@media(max-width:900px){.ts-grid{grid-template-columns:1fr}#ts-psi{grid-row:auto}.ts-when{margin-left:0;flex-basis:100%}}
+@media(max-width:560px){.ts-bar{display:grid}.ts-pg{max-width:none}.ts-bar .btn{width:100%}.ts-list li{grid-template-columns:28px 1fr}.ts-list li>span{grid-column:2;text-align:left;margin-top:-6px}.ts-big .ts-grade{font-size:2rem}}@media(max-width:400px){.ts-rings{grid-template-columns:repeat(2,1fr);row-gap:12px}}
 .hl-tabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}.hl-tabs button{border:1px solid var(--line);background:var(--card,#fff);border-radius:99px;padding:.5rem .95rem;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;color:inherit}
 .hl-tabs button span{font-weight:500;color:var(--muted);margin-left:3px}.hl-tabs button[aria-selected=true]{background:#14172b;color:#fff;border-color:#14172b}.hl-tabs button[aria-selected=true] span{color:#c9cede}
 .hl-checks,.hl-pages{list-style:none;margin:0;padding:0}.hl-checks li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.hl-checks li:first-child,.hl-pages li:first-child{border-top:0}
@@ -2840,29 +2856,100 @@ function healthInit(){
     var h1='<div class="dash-head"><div><h2>Site health</h2><p class="help">Every live page checked for what Google and visitors need. Fix the red ones first.</p></div><button type="button" class="btn" id="hlRe">Check again</button></div>'+
       '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p class="help hl-when">Last checked '+healthWhen(j.checked)+' (New Zealand time)</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
     var checks=j.checks||[],pp=j.perPage||[];
-    h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button></div>';
+    h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button><button type="button" data-v="tests" aria-selected="false">Speed &amp; security</button></div>';
+    h1+='<div class="hl-v" data-v="tests" hidden><div id="tsBox"></div></div>';
     h1+='<div class="panel hl-v" data-v="checks" hidden><ul class="hl-checks">'+checks.map(function(c){var ok=!c.failed;return'<li class="'+(c.total?ok?"ok":"bad":"na")+'"><i aria-hidden="true">'+(c.total?ok?"✓":"✕":"–")+'</i><b>'+esc(c.name)+'</b><span>'+(!c.total?"Nothing to check":ok?"All "+c.total+" pass":c.failed+" of "+c.total+" to fix")+'</span></li>'}).join("")+'</ul></div>';
     h1+='<div class="panel hl-v" data-v="pages" hidden><ul class="hl-pages">'+pp.map(function(r,k){return'<li><div><b>'+esc(r.name)+'</b><span class="hl-url">'+esc(r.url)+'</span></div><span class="hl-res '+(r.issues?SEV[r.worst][1]:"ok")+'">'+(r.issues?r.issues+" to fix":"✓ All good")+'</span><button type="button" class="btn soft" data-p="'+k+'">'+(r.issues?"Fix":"Open")+'</button></li>'}).join("")+'</ul></div>';
     if(!j.issues.length)h1+='<div class="panel hl-v" data-v="fix"><p class="help">Everything looks great. 🎉 Every check passes on every page.</p></div>';
     else h1+='<div class="panel hl-v" data-v="fix"><ul class="hl-list">'+j.issues.map(function(i,k){return'<li class="'+SEV[i.sev][1]+'"><span class="hl-tag">'+SEV[i.sev][0]+'</span><div><b>'+esc(i.name)+'</b> <a href="'+esc(i.url)+'" target="_blank" rel="noopener" class="hl-url">'+esc(i.url)+'</a><p>'+esc(i.what)+'</p><p class="help">'+esc(i.fix)+'</p></div><button type="button" class="btn soft" data-k="'+k+'">Fix</button></li>'}).join("")+'</ul></div>';
-    var U=encodeURIComponent("https://ambs.co.nz/"),tools=[["Speed test","Google PageSpeed: speed, accessibility and SEO scores for phone and laptop","https://pagespeed.web.dev/analysis?url="+U],
-      ["Google rich results","Checks the business details Google reads from the page","https://search.google.com/test/rich-results?url="+U],
-      ["Search Console","Google’s own report: pages indexed, errors and searches","https://search.google.com/search-console?resource_id=sc-domain%3Aambs.co.nz"],
-      ["Security headers","Checks the website’s security settings","https://securityheaders.com/?q=ambs.co.nz&followRedirects=on"],
-      ["SSL certificate","Checks the padlock (https) certificate","https://www.ssllabs.com/ssltest/analyze.html?d=ambs.co.nz"],
-      ["Sharing preview","How links to the website look on Facebook and LinkedIn","https://www.opengraph.xyz/url/"+U]];
-    h1+='<h3 class="dash-h">More free checks</h3><div class="tiles">'+tools.map(function(t){return'<a class="tile" href="'+t[2]+'" target="_blank" rel="noopener"><span class="tile-i">'+ico("health")+'</span><b>'+t[0]+'</b><span>'+t[1]+'</span></a>'}).join("")+'</div>';
     m.innerHTML=h1;$("hlRe").addEventListener("click",healthInit);
-    m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x===b))});m.querySelectorAll(".hl-v").forEach(function(v){v.hidden=v.dataset.v!==b.dataset.v})})});
+    var tab=function(v){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x.dataset.v===v))});m.querySelectorAll(".hl-v").forEach(function(x){x.hidden=x.dataset.v!==v});HL_TAB=v;if(v==="tests")testsInit(pp)};
+    m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){tab(b.dataset.v)})});if(HL_TAB!=="fix")tab(HL_TAB);
     m.querySelectorAll(".hl-pages button").forEach(function(b){b.addEventListener("click",function(){var r=pp[+b.dataset.p];show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(r.section,r.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
     m.querySelectorAll(".hl-list button").forEach(function(b){b.addEventListener("click",function(){var i=j.issues[+b.dataset.k];
       if(i.section==="redirects")return show("redirects");show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(i.section,i.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
-    var k=$("hmHealth");if(k)k.innerHTML=healthTile(j);
+    var k=$("hmHealth");if(k){k.dataset.j=JSON.stringify({score:j.score,issues:j.issues,checked:j.checked});k.innerHTML=healthTile(j)}
   }).catch(fail);
 }
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
-function healthTile(j){return'<b>'+j.score+'<small>/100</small></b><span>site health'+(j.issues.length?" · "+j.issues.filter(function(i){return i.sev==="high"}).length+" to fix first":"")+'</span><span class="kpi-when">Checked '+healthWhen(j.checked)+'</span>'}
+function healthTile(j){var t=tsLoad()["https://ambs.co.nz/"],sp=t&&t.psi_mobile&&t.psi_mobile.scores?t.psi_mobile.scores[0].score:null;
+  return'<b>'+j.score+'<small>/100</small></b><span>site health'+(j.issues.length?" · "+j.issues.filter(function(i){return i.sev==="high"}).length+" to fix first":"")+(sp!=null?" · phone speed "+sp:"")+'</span><span class="kpi-when">Checked '+healthWhen(j.checked)+'</span>'}
+
+/* ---- Speed & security: real results from Google PageSpeed, Mozilla Observatory, the certificate, the server, Google's index and the sharing card.
+   Each test is its own api/settings "test" request (api/_tests.js), run side by side; results are kept in this browser (ambs-tests) with the time. */
+var HL_TAB="fix",TS_URL="https://ambs.co.nz/",TS_PSI="psi_mobile";
+function tsLoad(){try{return JSON.parse(localStorage.getItem("ambs-tests")||"{}")}catch(e){return{}}}
+function tsSave(u,k,v){try{var a=tsLoad();a[u]=a[u]||{};a[u][k]=v;a[u].at=Date.now();localStorage.setItem("ambs-tests",JSON.stringify(a))}catch(e){}}
+var TS=[["psi_mobile","Google speed test"],["security","Security settings"],["cert","Padlock (https)"],["response","Server speed"],["index","On Google"],["sharing","Sharing preview"]];
+function tsCol(n){return n==null?"na":n>=90?"ok":n>=50?"warn":"bad"}
+function testsInit(pp){
+  var box=$("tsBox");if(!box)return;
+  var pages=[["https://ambs.co.nz/","Homepage"]].concat((pp||[]).filter(function(r){return r.url&&r.url!=="/"}).map(function(r){return["https://ambs.co.nz"+r.url,r.name]}));
+  var have=tsLoad()[TS_URL]||{};
+  box.innerHTML='<div class="ts-bar panel"><label class="ts-pg"><span class="help">Page to test</span><select id="tsPage">'+pages.map(function(p){return'<option value="'+esc(p[0])+'"'+(p[0]===TS_URL?" selected":"")+'>'+esc(p[1])+'</option>'}).join("")+'</select></label>'+
+    '<button type="button" class="btn" id="tsRun">▶ Run all tests</button><span class="help ts-when" id="tsWhen">'+(have.at?"Last run "+healthWhen(have.at):"Not run yet on this page")+'</span></div>'+
+    '<div class="ts-grid">'+TS.map(function(t){return'<section class="panel ts-c" id="ts-'+t[0].split("_")[0]+'"><div class="ts-h"><h3>'+t[1]+'</h3><span class="ts-st"></span></div><div class="ts-b"><p class="help">'+(have[t[0]]||t[0]==="psi_mobile"&&have.psi_desktop?"":"Press Run all tests.")+'</p></div></section>'}).join("")+'</div>';
+  TS.forEach(function(t){var k=t[0]==="psi_mobile"?TS_PSI:t[0];if(have[k])tsDraw(k,have[k])});
+  $("tsPage").addEventListener("change",function(){TS_URL=this.value;testsInit(pp)});
+  $("tsRun").addEventListener("click",function(){tsRunAll()});
+  if(!have.at)tsRunAll();
+}
+function tsRunAll(){var b=$("tsRun");if(b){b.disabled=true;b.textContent="Testing…"}var left=TS.length;
+  var done=function(){if(--left)return;if(b){b.disabled=false;b.textContent="▶ Run all tests"}var w=$("tsWhen");if(w)w.textContent="Last run "+healthWhen(Date.now());var k=$("hmHealth");if(k&&k.dataset.j)try{k.innerHTML=healthTile(JSON.parse(k.dataset.j))}catch(e){}};
+  TS.forEach(function(t){var k=t[0]==="psi_mobile"?TS_PSI:t[0];tsRun(k).then(done,done)})}
+function tsRun(k){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return Promise.resolve();
+  c.querySelector(".ts-st").innerHTML='<span class="spin"></span>'+(id==="psi"?" about 30 seconds":"");
+  var body={action:"test",test:id,url:TS_URL};if(id==="psi")body.strategy=k==="psi_desktop"?"desktop":"mobile";
+  var u=TS_URL;return api("settings",body).then(function(j){if(!j.error&&!j.needsKey&&!j.needs&&!j.setup)tsSave(u,k,j);if(u===TS_URL)tsDraw(k,j)}).catch(function(e){if(u===TS_URL)tsDraw(k,{error:e.message||String(e)})})}
+function tsRow(ok,name,note){return'<li class="'+(ok===null?"na":ok?"ok":"bad")+'"><i aria-hidden="true">'+(ok===null?"–":ok?"✓":"✕")+'</i><b>'+esc(name)+'</b><span>'+esc(note||"")+'</span></li>'}
+function tsLink(u,t){return'<a class="ts-more" href="'+esc(u)+'" target="_blank" rel="noopener">'+(t||"Full report")+' ↗</a>'}
+function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.querySelector(".ts-st"),b=c.querySelector(".ts-b"),h="",badge="";
+  if(j.error){st.innerHTML='<span class="hl-res bad">Didn’t finish</span>';b.innerHTML='<p class="help">'+esc(j.error)+'</p><button type="button" class="btn soft" data-again>Try again</button>';b.querySelector("[data-again]").onclick=function(){tsRun(k)};return}
+  if(id==="psi"){
+    var sw='<div class="seg ts-sw" role="group" aria-label="Device"><button type="button" data-s="psi_mobile" aria-pressed="'+(k==="psi_mobile")+'">Phone</button><button type="button" data-s="psi_desktop" aria-pressed="'+(k==="psi_desktop")+'">Laptop</button></div>';
+    if(j.needsKey){badge='<span class="hl-res warn">Needs a free key</span>';
+      h=sw+'<p>Google’s free speed test needs the website’s own key'+(j.hasKey?" (the key in Vercel was refused or has used today’s allowance)":"")+'. It’s free and takes 2 minutes, once:</p><ol class="ts-steps"><li>Open <a href="https://console.cloud.google.com/apis/library/pagespeedonline.googleapis.com?project=ambs-website" target="_blank" rel="noopener">PageSpeed Insights API</a> in Google Cloud (project <b>ambs-website</b>) and press <b>Enable</b>.</li><li>Go to <a href="https://console.cloud.google.com/apis/credentials?project=ambs-website" target="_blank" rel="noopener">Credentials</a> → <b>Create credentials → API key</b>. Under <b>API restrictions</b> pick “PageSpeed Insights API”.</li><li>In Vercel → the website project → Settings → Environment Variables add <b>PAGESPEED_KEY</b> with that key, then redeploy.</li></ol>'+tsLink("https://pagespeed.web.dev/analysis?url="+encodeURIComponent(TS_URL),"Run it on Google’s website meanwhile")}
+    else{var sc=j.scores||[],p=sc[0]&&sc[0].score;badge='<span class="hl-res '+tsCol(p)+'">'+(p==null?"–":p>=90?"Fast":p>=50?"Could be faster":"Slow")+'</span>';
+      h=sw+'<div class="ts-rings">'+sc.map(function(x){return'<div class="ts-rg"><div class="ts-ring hl-score '+tsCol(x.score)+'" style="--p:'+(x.score||0)+'"><b>'+(x.score==null?"–":x.score)+'</b></div><span>'+esc(x.name)+'</span></div>'}).join("")+'</div>'+
+        '<h4>In the test</h4><ul class="hl-checks ts-list">'+(j.metrics||[]).map(function(x){return'<li class="'+(x.score>=0.9?"ok":x.score>=0.5?"warn":"bad")+'"><i aria-hidden="true">'+(x.score>=0.9?"✓":x.score>=0.5?"!":"✕")+'</i><b>'+esc(x.name)+'</b><span>'+esc(x.value)+'</span></li>'}).join("")+'</ul>';
+      if(j.field)h+='<h4>Real visitors <small class="help">last 28 days, Chrome'+(j.field.origin?", whole website":"")+'</small></h4><ul class="hl-checks ts-list">'+j.field.metrics.map(function(x){var o=x.cat==="FAST";return'<li class="'+(o?"ok":x.cat==="AVERAGE"?"warn":"bad")+'"><i aria-hidden="true">'+(o?"✓":x.cat==="AVERAGE"?"!":"✕")+'</i><b>'+esc(x.name)+'</b><span>'+esc(x.value)+'</span></li>'}).join("")+'</ul>';
+      else h+='<p class="help">Not enough real visitors yet for Google’s real-visitor figures.</p>';
+      if((j.fix||[]).length)h+='<details class="ts-fix"><summary>What to improve <span>'+j.fix.length+'</span></summary><ul>'+j.fix.map(function(f){return'<li><span class="ts-cat">'+esc(f.cat)+'</span>'+esc(f.title)+(f.value?' <span class="help">'+esc(f.value)+'</span>':"")+'</li>'}).join("")+'</ul></details>';
+      h+='<p class="help ts-at">Tested '+healthWhen(j.at)+'</p>'+tsLink(j.report)}
+    st.innerHTML=badge;b.innerHTML=h;
+    b.querySelectorAll(".ts-sw button").forEach(function(x){x.onclick=function(){TS_PSI=x.dataset.s;var have=tsLoad()[TS_URL]||{};if(have[TS_PSI])tsDraw(TS_PSI,have[TS_PSI]);else tsRun(TS_PSI)}});return}
+  if(id==="security"){var bad=(j.tests||[]).filter(function(t){return!t.pass});
+    badge='<span class="hl-res '+(j.score>=90?"ok":j.score>=60?"warn":"bad")+'">Grade '+esc(j.grade||"–")+'</span>';
+    h='<div class="ts-big"><b class="ts-grade '+(j.score>=90?"ok":j.score>=60?"warn":"bad")+'">'+esc(j.grade||"–")+'</b><p><b>'+j.passed+' of '+j.total+'</b> checks pass<br><span class="help">Score '+j.score+' (Mozilla Observatory)</span></p></div>'+
+      (bad.length?'<ul class="hl-checks ts-list">'+bad.map(function(t){return'<li class="bad"><i aria-hidden="true">✕</i><b>'+esc(t.name)+'</b><span>'+(t.mod?t.mod+" points":"")+'</span></li><li class="ts-note">'+esc(t.what)+(t.fix?" "+esc(t.fix):"")+'</li>'}).join("")+'</ul>':'<p class="help">Every security setting passes. 🎉</p>')+
+      '<details class="ts-fix"><summary>Every check <span>'+(j.tests||[]).length+'</span></summary><ul class="hl-checks ts-list">'+(j.tests||[]).map(function(t){return tsRow(t.pass,t.name,"")}).join("")+'</ul></details>'+tsLink(j.report)}
+  if(id==="cert"){var warn=j.days!=null&&j.days<14;
+    badge='<span class="hl-res '+(!j.valid?"bad":warn?"warn":"ok")+'">'+(!j.valid?"Problem":warn?"Runs out soon":"✓ Secure")+'</span>';
+    h='<ul class="hl-checks ts-list">'+tsRow(j.valid,"Certificate",j.valid?"valid"+(j.issuer?", from "+j.issuer:""):j.err||"not valid")+
+      tsRow(j.days==null?null:j.days>=14,"Runs out",j.expires?new Date(j.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"})+" ("+j.days+" days; renews by itself)":"")+
+      tsRow(/1\.[23]/.test(j.protocol||""),"Connection",j.protocol||"")+tsRow(j.wwwValid,"www address",j.wwwValid?"valid":"not valid")+tsRow(j.hsts,"Always https",j.hsts?"browsers are told to use https only":"not set")+
+      (j.redirects||[]).map(function(r){var sh=function(u){return String(u||"").replace(/^https:\/\//,"").replace(/\/$/,"")};return tsRow(r.ok,r.from.replace(/\/$/,""),r.ok?"goes to "+sh(r.to):"ends at "+(sh(r.to)||"nothing"))}).join("")+'</ul>'+tsLink(j.report,"Deeper check on SSL Labs")}
+  if(id==="response"){var f=j.first;
+    badge='<span class="hl-res '+(f<400?"ok":f<900?"warn":"bad")+'">'+(f<400?"Quick":f<900?"OK":"Slow")+'</span>';
+    h='<div class="ts-big"><b class="ts-grade '+(f<400?"ok":f<900?"warn":"bad")+'">'+f+'<small>ms</small></b><p>to answer<br><span class="help">middle of '+j.tries+' tries, from our server ('+esc(j.region||"Vercel")+')</span></p></div><ul class="hl-checks ts-list">'+
+      tsRow(j.status===200,"Page answers",String(j.status))+tsRow(j.size<400000,"Page size",Math.round(j.size/1024)+" KB")+tsRow(!!j.enc,"Compressed",j.enc||"no")+tsRow(j.cache==="HIT"||j.cache==="STALE"||j.cache==="PRERENDER",
+      "Served from the fast cache",j.cache||"no")+'</ul>'}
+  if(id==="index"){
+    if(j.setup||j.needs){badge='<span class="hl-res warn">Needs Google access</span>';
+      h=j.setup?'<p class="help">Connect Google first (Visitors now shows the steps).</p>':'<p>Let the editor read Search Console: in <a href="https://search.google.com/search-console/users?resource_id=sc-domain%3Aambs.co.nz" target="_blank" rel="noopener">Search Console → Settings → Users and permissions</a> add <b>'+esc(j.email||"")+'</b> as <b>Restricted</b>.</p>'+tsLink("https://search.google.com/test/rich-results?url="+encodeURIComponent(TS_URL),"Rich results test meanwhile")}
+    else{var on=j.verdict==="PASS";badge='<span class="hl-res '+(on?"ok":"warn")+'">'+(on?"✓ On Google":"Not on Google yet")+'</span>';
+      var rr=j.rich||{};h='<ul class="hl-checks ts-list">'+tsRow(on,"In Google’s results",j.coverage||j.verdict)+tsRow(j.crawled?true:null,"Google last visited",j.crawled?healthWhen(j.crawled):"not yet")+
+        tsRow(j.fetch?j.fetch==="SUCCESSFUL":null,"Google could read it",j.fetch?j.fetch.toLowerCase().replace(/_/g," "):"")+tsRow(j.robots?j.robots==="ALLOWED":null,"robots.txt",j.robots?j.robots.toLowerCase().replace(/_/g," "):"")+
+        tsRow(!j.canonical||!j.userCanonical||j.canonical===j.userCanonical,"Main address",j.canonical||"")+
+        tsRow(rr.verdict?rr.verdict==="PASS":null,"Rich results",(rr.items||[]).map(function(i){return i.type}).join(", ")||"none found")+'</ul>'+
+        ((rr.items||[]).some(function(i){return i.issues.length})?'<ul class="ts-issues">'+rr.items.map(function(i){return i.issues.map(function(x){return'<li>'+esc(i.type)+': '+esc(x.msg)+'</li>'}).join("")}).join("")+'</ul>':"")+
+        (j.link?tsLink(j.link,"Open in Search Console"):"")+tsLink("https://search.google.com/test/rich-results?url="+encodeURIComponent(TS_URL),"Rich results test")}}
+  if(id==="sharing"){var okN=(j.checks||[]).filter(function(x){return x.ok}).length,all=(j.checks||[]).length;
+    badge='<span class="hl-res '+(okN===all?"ok":"warn")+'">'+okN+' of '+all+' ✓</span>';
+    h='<div class="ts-card">'+(j.img?'<img src="'+esc(j.img)+'" alt="" loading="lazy">':'<div class="ts-noimg">No picture</div>')+'<div><span>'+esc(j.site||"")+'</span><b>'+esc(j.title||"(no title)")+'</b><p>'+esc(j.desc||"")+'</p></div></div>'+
+      '<ul class="hl-checks ts-list">'+(j.checks||[]).map(function(x){return tsRow(x.ok,x.name,x.note)}).join("")+'</ul><button type="button" class="btn soft" data-go="photos">Change the sharing picture</button> '+tsLink(j.report,"Preview on every app")}
+  st.innerHTML=badge;b.innerHTML=h}
 
 /* ======================= VISITORS NOW ======================= */
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).

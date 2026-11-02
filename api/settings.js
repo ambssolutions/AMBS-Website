@@ -8,8 +8,10 @@
    { action: "chatget" } / { action: "chatbot", data: {...} }   the "Ask us" chat helper (site-src/content/chatbot.json)
    { action: "chatlog", limit } / { action: "chatlogset", ids: [...], done: true|false, del: true } / { action: "chatlogset", ids, note } / { action: "chatlogset", ids, status: "skip"|"open", note }
        the questions visitors typed into the chat (Supabase table chat_questions, read through admin-only functions)
+   { action: "test", test: "psi"|"security"|"cert"|"response"|"sharing"|"index", url, strategy }   Site health → Speed & security (see _tests.js)
    { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
-import { visitorsNow, visitorsPeriod, searchQueries, seoReport } from "./_ga.js";
+import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl } from "./_ga.js";
+import { psi, security, cert, response, sharing, okUrl } from "./_tests.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
 import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion } from "./_lib.js";
 
@@ -35,6 +37,13 @@ export default async function handler(req, res) {
   try {
     const b = await readBody(req);
     if (b.action === "searches") return send(res, 200, await searchQueries(b.days));   // Google search words, from Search Console
+    if (b.action === "test") {   // one speed or security test on a public ambs.co.nz page; read-only
+      const u = okUrl(b.url || "https://ambs.co.nz/");
+      if (!u) return send(res, 400, { error: "Only pages on https://ambs.co.nz can be tested." });
+      const run = { psi: () => psi(u, b.strategy), security, cert, response: () => response(u), sharing: () => sharing(u), index: () => inspectUrl(u) }[b.test];
+      if (!run) return send(res, 400, { error: "Unknown test." });
+      return send(res, 200, await run());
+    }
     if (b.action === "seo") return send(res, 200, await seoReport(b.days));   // the SEO page: Search Console and the site's own basics
     if (b.action === "visitors") {   // live, from Google Analytics; nothing read from GitHub. filter: { f, v } narrows it to one page, source, town or device
       const f = b.filter && typeof b.filter === "object" ? { f: String(b.filter.f || ""), v: String(b.filter.v || "").slice(0, 300) } : null;
