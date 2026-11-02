@@ -535,6 +535,15 @@ header.top .who{margin-left:4px}
 .pl-menu button{all:unset;cursor:pointer;padding:.7rem .85rem;border-radius:10px;font-size:.95rem;white-space:pre}.pl-menu button:hover,.pl-menu button:focus-visible{background:rgba(24,119,224,.08)}.pl-menu .danger{color:#c62828}
 @media(max-width:760px){.pl-btns .pl-more{flex:0 0 auto}}
 .kpi .kpi-when{font-size:.74rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;display:block;margin-top:2px}.hl-when{margin:2px 0 6px!important}
+.ts-sumbox{margin:0 0 14px}.ts-sumh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}.ts-sumh h3{margin:0;font-size:1.05rem}.ts-sumh small{font-weight:500}.ts-sumh #tsSumWhen{font-size:.85rem}.ts-go{margin-left:auto;border:0;background:none;font:inherit;font-weight:700;color:var(--link,#1a56db);cursor:pointer;padding:6px 0}
+.ts-sum{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.ts-chip{display:grid;gap:3px;text-align:left;border:1px solid #e3e7ef;border-radius:14px;padding:11px 13px;background:linear-gradient(180deg,#ffffff 0%,#f3f5f9 100%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,23,43,.05),0 1px 1px rgba(20,23,43,.06),0 3px 8px rgba(20,23,43,.07);font:inherit;color:inherit;cursor:pointer;min-width:0;transition:transform .15s,box-shadow .15s}
+.ts-chip:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,23,43,.05),0 2px 3px rgba(20,23,43,.07),0 8px 16px rgba(20,23,43,.09)}
+.ts-chip:active{transform:translateY(0);box-shadow:inset 0 2px 4px rgba(20,23,43,.1),0 1px 1px rgba(20,23,43,.05)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .ts-chip{border-color:#2c3247;background:linear-gradient(180deg,#232a3d 0%,#1a2031 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 1px 1px rgba(0,0,0,.4),0 4px 10px rgba(0,0,0,.3)}}
+.ts-cn{font-size:.78rem;font-weight:700;color:var(--muted)}.ts-chip b{font-size:1.25rem;line-height:1.2;display:flex;align-items:center;min-height:1.5rem}.ts-chip.ok b{color:#17761a}.ts-chip.warn b{color:#9a5b00}.ts-chip.bad b{color:#b42318}.ts-cnote{font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1200px){.ts-sum{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){.ts-sum{grid-template-columns:repeat(2,minmax(0,1fr))}.ts-sumh{gap:4px 10px}.ts-sumh #tsSumWhen{order:3;flex-basis:100%}.hl-top{gap:16px;flex-wrap:nowrap}.hl-top .hl-score{width:96px;height:96px;flex:0 0 96px}.hl-top .hl-score b{font-size:1.8rem}.hl-sum p{font-size:.92rem;margin:2px 0}.hl-sum .hl-when{font-size:.8rem}.ts-chip b{font-size:1.1rem}}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .ts-chip.ok b{color:#5fd06a}:root:not([data-theme=light]) .ts-chip.warn b{color:#f2b544}:root:not([data-theme=light]) .ts-chip.bad b{color:#ff8a80}}
 .ts-bar{display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin-bottom:14px}.ts-pg{display:grid;gap:4px;flex:1 1 220px;max-width:420px}.ts-pg select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font:inherit;background:var(--card,#fff);color:inherit}.ts-bar .btn{min-height:44px}.ts-when{margin-left:auto}
 .ts-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}.ts-c{margin:0;min-width:0}#ts-psi{grid-row:span 2}
 .ts-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.ts-h h3{margin:0;font-size:1.05rem}.ts-st{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);white-space:nowrap}
@@ -637,6 +646,44 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
 .dash-top .quick .sm{display:none}
 .rte a:not(.btn){cursor:pointer}
 .cv-tog[aria-pressed=true]{background:#eefaef;border-color:#9fdca2;color:#17761a}@media(max-width:760px){.cv-tog{display:none}}
+
+/* ---- "Don't count my visits" switch ---- */
+.nt{margin:10px 0 14px;padding:12px 14px;border-radius:14px;background:linear-gradient(180deg,#ffffff,#f3f5f9);border:1px solid #e3e7ef;box-shadow:inset 0 1px 0 #fff,0 1px 1px rgba(20,23,43,.05),0 3px 8px rgba(20,23,43,.06)}
+.nt-bar{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--emb-line);background:var(--emb-bg);box-shadow:var(--emb-sh);border-radius:99px;padding:6px 12px;font:inherit;font-size:.85rem;font-weight:700;color:var(--ink);cursor:pointer;margin-right:6px;white-space:nowrap}
+.nt-bar:hover{box-shadow:var(--emb-sh-hi)}.nt-dot{width:9px;height:9px;border-radius:50%;background:#8a94a6;box-shadow:inset 0 1px 1px rgba(0,0,0,.2)}.nt-bar[aria-pressed=true] .nt-dot{background:var(--green)}.nt-bar .sm{display:none}
+header.top .who .nt-bar{justify-content:flex-start}
+.nt-links{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px}.nt-lh{font-size:.84rem;color:var(--muted)}.nt-t{display:grid;gap:2px}.nt-t small{color:var(--muted);font-size:.84rem;line-height:1.35}.nt-more{border:0;background:none;font:inherit;font-weight:700;font-size:.88rem;color:var(--blue);cursor:pointer;padding:4px 0}
+@media(prefers-color-scheme:dark){.nt{background:linear-gradient(180deg,#232a3d,#1a2031);border-color:#2c3247;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.3)}}
+/* ---- Embossed widgets (Nov 2026: the owner prefers raised, clean tiles over flat cards or coloured side strips) ---- */
+:root{--emb-bg:linear-gradient(180deg,#ffffff 0%,#f3f5f9 100%);--emb-line:#e3e7ef;--emb-sh:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,23,43,.05),0 1px 1px rgba(20,23,43,.06),0 3px 8px rgba(20,23,43,.07);
+ --emb-sh-hi:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,23,43,.05),0 2px 3px rgba(20,23,43,.07),0 10px 20px rgba(20,23,43,.10)}
+@media(prefers-color-scheme:dark){:root{--emb-bg:linear-gradient(180deg,#232a3d 0%,#1a2031 100%);--emb-line:#2c3247;--emb-sh:inset 0 1px 0 rgba(255,255,255,.07),0 1px 1px rgba(0,0,0,.4),0 4px 10px rgba(0,0,0,.3);--emb-sh-hi:inset 0 1px 0 rgba(255,255,255,.08),0 2px 3px rgba(0,0,0,.4),0 10px 22px rgba(0,0,0,.4)}}
+.tile,.kpi,.vs-stat,.dash .tile,.dash .kpi,.dash .vs-stat{background:var(--emb-bg)!important;border:1px solid var(--emb-line)!important;box-shadow:var(--emb-sh)!important;transition:transform .15s,box-shadow .15s!important}
+.tile:hover,.kpi:hover,button.vs-stat:hover{transform:translateY(-1px);box-shadow:var(--emb-sh-hi)!important;border-color:var(--emb-line)!important}
+.tile:active,.kpi:active,button.vs-stat:active{transform:translateY(0);box-shadow:inset 0 2px 4px rgba(20,23,43,.10),0 1px 1px rgba(20,23,43,.05)!important}
+.ts-chip{background:var(--emb-bg);border-color:var(--emb-line);box-shadow:var(--emb-sh)}
+/* selected menu items and notes: embossed, no coloured strip on the left */
+.side button[aria-current=true],nav.secs button[aria-current=true],nav.secs button.on{background:var(--emb-bg)!important;box-shadow:var(--emb-sh)!important;color:var(--ink)}
+.side button[aria-current=true] svg{stroke:var(--green)}
+.ch-fix{border-left:1px solid var(--emb-line)!important;border:1px solid var(--emb-line);background:var(--emb-bg)!important;box-shadow:var(--emb-sh)}
+
+/* Count / Don't count buttons (top bar, Visitors, Business details) */
+.nt-bar{display:inline-flex;align-items:center;gap:8px;margin-right:6px;padding:0;border:0;background:none;box-shadow:none}.nt-bl{font-size:.82rem;font-weight:700;color:var(--muted);white-space:nowrap}
+header.top .who .nt-bar{justify-content:space-between}
+.nt{display:block}.nt-row{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}.nt-row .nt-t{flex:1 1 260px}
+.nt-links{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--emb-line)}
+.nt-btn{border:1px solid var(--emb-line);background:var(--emb-bg);box-shadow:var(--emb-sh);border-radius:99px;padding:7px 14px;font:inherit;font-weight:700;font-size:.85rem;color:var(--ink);cursor:pointer}.nt-btn:hover{box-shadow:var(--emb-sh-hi)}
+@media(max-width:760px){header.top .who .nt-bar{margin:0;padding:.7rem .8rem}}
+@media(max-width:560px){.nt-links .nt-btn{flex:1 1 40%}}
+
+/* the switch for this device */
+.nt-sw{position:relative;display:flex;align-items:center;gap:10px;cursor:pointer;min-width:0}.nt-sw input{position:absolute;opacity:0;width:1px;height:1px}
+.nt-tg{flex:0 0 42px;height:24px;border-radius:99px;background:#cfd5e1;position:relative;box-shadow:inset 0 1px 3px rgba(20,23,43,.25);transition:background .2s}
+.nt-tg::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:linear-gradient(180deg,#fff,#eef1f6);box-shadow:0 1px 3px rgba(20,23,43,.35);transition:transform .2s}
+.nt-sw input:checked+.nt-tg{background:var(--green)}.nt-sw input:checked+.nt-tg::after{transform:translateX(18px)}.nt-sw input:focus-visible+.nt-tg{outline:3px solid var(--focus);outline-offset:2px}
+.nt-lbl{display:grid;gap:2px;font-weight:700;font-size:.86rem;color:var(--ink)}.nt-lbl small{font-weight:400;color:var(--muted);font-size:.84rem;line-height:1.35}.nt .nt-lbl{font-size:1rem}.nt .nt-tg{flex-basis:46px;height:26px}.nt .nt-tg::after{width:20px;height:20px}.nt .nt-sw input:checked+.nt-tg::after{transform:translateX(20px)}
+.nt-bar .nt-lbl{white-space:nowrap}
+@media(prefers-color-scheme:dark){.nt-tg{background:#3a4258}}
 </style>
 </head>
 <body>
@@ -680,7 +727,7 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
     <h1>Website editor</h1>
     <button class="find-btn" id="findBtn" type="button" aria-label="Search the whole website"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="dsk">Search the whole site</span></button>
     <button class="acct-btn" id="acctBtn" type="button" aria-label="Account and sign out" aria-expanded="false" aria-controls="whoBox"><span aria-hidden="true">☰</span></button>
-    <div class="who" id="whoBox"><span id="whoEmail"></span><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
+    <div class="who" id="whoBox"><div class="nt-bar" id="ntBar"></div><span id="whoEmail"></span><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
   </div>
   <div class="wrap"><nav class="tabs" role="tablist" aria-label="What to edit">
     <button type="button" role="tab" data-tab="home" aria-selected="true">Home</button>
@@ -1979,7 +2026,7 @@ function businessInit(){
     var spa=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="spSave">Save &amp; publish</button></div>');m.appendChild(sp);m.appendChild(spa);
     $("spSave").addEventListener("click",function(){var btn=this;busy(btn,true);api("settings",{action:"profiles",profiles:$("spList").value.split(/\n+/).map(function(x){return x.trim()}).filter(Boolean)}).then(function(){dirty=false;busy(btn,false);toast("Saved. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
     /* Google Analytics: the measurement ID goes on every page when the site is rebuilt */
-    var ga=h('<div class="panel"><h3>Google Analytics</h3><p class="help">Your measurement ID from analytics.google.com (Admin → Data streams). It is added to every page. Leave it empty to turn Analytics off.</p></div>');
+    var ga=h('<div class="panel"><h3>Google Analytics</h3><p class="help">Your measurement ID from analytics.google.com (Admin → Data streams). It is added to every page. Leave it empty to turn Analytics off.</p>'+ntStrip()+'</div>');
     ga.appendChild(fld("gaId","Measurement ID",b.analytics_id||"",{help:"Starts with G-, for example G-AB12CD34EF"}));
     var gaa=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="gaSave">Save &amp; publish</button></div>');m.appendChild(ga);m.appendChild(gaa);
     $("gaSave").addEventListener("click",function(){var btn=this;busy(btn,true);api("settings",{action:"analytics",id:$("gaId").value}).then(function(){dirty=false;busy(btn,false);toast("Saved. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
@@ -2856,6 +2903,7 @@ function healthInit(){
     var h1='<div class="dash-head"><div><h2>Site health</h2><p class="help">Every live page checked for what Google and visitors need. Fix the red ones first.</p></div><button type="button" class="btn" id="hlRe">Check again</button></div>'+
       '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p class="help hl-when">Last checked '+healthWhen(j.checked)+' (New Zealand time)</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
     var checks=j.checks||[],pp=j.perPage||[];
+    h1+='<section class="panel ts-sumbox"><div class="ts-sumh"><h3>Speed &amp; security</h3><span class="help" id="tsSumWhen"></span><button type="button" class="ts-go" id="tsSumGo">See details →</button></div><div class="ts-sum" id="tsSum"></div></section>';
     h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button><button type="button" data-v="tests" aria-selected="false">Speed &amp; security</button></div>';
     h1+='<div class="hl-v" data-v="tests" hidden><div id="tsBox"></div></div>';
     h1+='<div class="panel hl-v" data-v="checks" hidden><ul class="hl-checks">'+checks.map(function(c){var ok=!c.failed;return'<li class="'+(c.total?ok?"ok":"bad":"na")+'"><i aria-hidden="true">'+(c.total?ok?"✓":"✕":"–")+'</i><b>'+esc(c.name)+'</b><span>'+(!c.total?"Nothing to check":ok?"All "+c.total+" pass":c.failed+" of "+c.total+" to fix")+'</span></li>'}).join("")+'</ul></div>';
@@ -2865,6 +2913,9 @@ function healthInit(){
     m.innerHTML=h1;$("hlRe").addEventListener("click",healthInit);
     var tab=function(v){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x.dataset.v===v))});m.querySelectorAll(".hl-v").forEach(function(x){x.hidden=x.dataset.v!==v});HL_TAB=v;if(v==="tests")testsInit(pp)};
     m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){tab(b.dataset.v)})});if(HL_TAB!=="fix")tab(HL_TAB);
+    var toTests=function(){TS_URL=TS_HOME;tab("tests");var t=m.querySelector(".hl-tabs");if(t)t.scrollIntoView({behavior:"smooth",block:"start"})};
+    $("tsSumGo").addEventListener("click",toTests);$("tsSum").addEventListener("click",function(e){if(e.target.closest("[data-sum]"))toTests()});
+    tsSum();var hv=tsLoad()[TS_HOME]||{};if(!hv.at||Date.now()-hv.at>6*36e5)tsRunAll(TS_HOME);   /* results older than 6 hours refresh by themselves */
     m.querySelectorAll(".hl-pages button").forEach(function(b){b.addEventListener("click",function(){var r=pp[+b.dataset.p];show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(r.section,r.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
     m.querySelectorAll(".hl-list button").forEach(function(b){b.addEventListener("click",function(){var i=j.issues[+b.dataset.k];
       if(i.section==="redirects")return show("redirects");show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(i.section,i.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
@@ -2878,7 +2929,7 @@ function healthTile(j){var t=tsLoad()["https://ambs.co.nz/"],sp=t&&t.psi_mobile&
 
 /* ---- Speed & security: real results from Google PageSpeed, Mozilla Observatory, the certificate, the server, Google's index and the sharing card.
    Each test is its own api/settings "test" request (api/_tests.js), run side by side; results are kept in this browser (ambs-tests) with the time. */
-var HL_TAB="fix",TS_URL="https://ambs.co.nz/",TS_PSI="psi_mobile";
+var HL_TAB="fix",TS_HOME="https://ambs.co.nz/",TS_URL=TS_HOME,TS_PSI="psi_mobile",TS_LAST={},TS_BUSY={};
 function tsLoad(){try{return JSON.parse(localStorage.getItem("ambs-tests")||"{}")}catch(e){return{}}}
 function tsSave(u,k,v){try{var a=tsLoad();a[u]=a[u]||{};a[u][k]=v;a[u].at=Date.now();localStorage.setItem("ambs-tests",JSON.stringify(a))}catch(e){}}
 var TS=[["psi_mobile","Google speed test"],["security","Security settings"],["cert","Padlock (https)"],["response","Server speed"],["index","On Google"],["sharing","Sharing preview"]];
@@ -2895,13 +2946,29 @@ function testsInit(pp){
   $("tsRun").addEventListener("click",function(){tsRunAll()});
   if(!have.at)tsRunAll();
 }
-function tsRunAll(){var b=$("tsRun");if(b){b.disabled=true;b.textContent="Testing…"}var left=TS.length;
-  var done=function(){if(--left)return;if(b){b.disabled=false;b.textContent="▶ Run all tests"}var w=$("tsWhen");if(w)w.textContent="Last run "+healthWhen(Date.now());var k=$("hmHealth");if(k&&k.dataset.j)try{k.innerHTML=healthTile(JSON.parse(k.dataset.j))}catch(e){}};
-  TS.forEach(function(t){var k=t[0]==="psi_mobile"?TS_PSI:t[0];tsRun(k).then(done,done)})}
-function tsRun(k){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return Promise.resolve();
-  c.querySelector(".ts-st").innerHTML='<span class="spin"></span>'+(id==="psi"?" about 30 seconds":"");
-  var body={action:"test",test:id,url:TS_URL};if(id==="psi")body.strategy=k==="psi_desktop"?"desktop":"mobile";
-  var u=TS_URL;return api("settings",body).then(function(j){if(!j.error&&!j.needsKey&&!j.needs&&!j.setup)tsSave(u,k,j);if(u===TS_URL)tsDraw(k,j)}).catch(function(e){if(u===TS_URL)tsDraw(k,{error:e.message||String(e)})})}
+function tsRunAll(url){var u=url||TS_URL,mine=u===TS_URL,b=$("tsRun");if(mine&&b){b.disabled=true;b.textContent="Testing…"}var left=TS.length;
+  var done=function(){if(--left)return;var b=$("tsRun");if(b&&u===TS_URL){b.disabled=false;b.textContent="▶ Run all tests";var w=$("tsWhen");if(w)w.textContent="Last run "+healthWhen(Date.now())}
+    var k=$("hmHealth");if(k&&k.dataset.j)try{k.innerHTML=healthTile(JSON.parse(k.dataset.j))}catch(e){}tsSum()};
+  TS.forEach(function(t){var k=t[0]==="psi_mobile"&&u===TS_URL?TS_PSI:t[0];tsRun(k,u).then(done,done)})}
+/* one test for one page; draws its card when that page is showing and the summary when it is the homepage */
+function tsRun(k,url){var id=k.split("_")[0],u=url||TS_URL,key=u+"|"+k;if(TS_BUSY[key])return TS_BUSY[key];
+  var c=u===TS_URL&&$("ts-"+id);if(c)c.querySelector(".ts-st").innerHTML='<span class="spin"></span>'+(id==="psi"?" about 30 seconds":"");
+  var body={action:"test",test:id,url:u};if(id==="psi")body.strategy=k==="psi_desktop"?"desktop":"mobile";
+  var fin=function(j){delete TS_BUSY[key];TS_LAST[key]=j;var nd=j.needsKey?"key":j.needs||j.setup?"google":"";if(!j.error)tsSave(u,"need_"+k,nd);if(!j.error&&!nd)tsSave(u,k,j);if(u===TS_URL&&$("ts-"+id))tsDraw(k,j);if(u===TS_HOME)tsSum()};
+  TS_BUSY[key]=api("settings",body).then(fin).catch(function(e){fin({error:e.message||String(e)})});if(u===TS_HOME)tsSum();return TS_BUSY[key]}
+/* the row at the top of Site health: one result per test for the homepage, from the last run (kept in this browser) */
+function tsSum(){var box=$("tsSum");if(!box)return;var have=tsLoad()[TS_HOME]||{},w=$("tsSumWhen");
+  if(w)w.textContent="Homepage"+(have.at?" · last run "+healthWhen(have.at):"");
+  box.innerHTML=TS.map(function(t){var k=t[0],busy=TS_BUSY[TS_HOME+"|"+k],last=TS_LAST[TS_HOME+"|"+k],j=have[k],v="–",note="",c="na";
+    var nd=have["need_"+k];if(nd){v="Set up";note=nd==="key"?"needs a free key":"needs Google access";c="warn"}
+    else if(j){if(k==="psi_mobile"){var p=j.scores&&j.scores[0].score;v=p==null?"–":p+"";note="phone speed"+(j.scores&&j.scores[1]&&j.scores[1].score!=null?" · accessibility "+j.scores[1].score:"");c=tsCol(p)}
+      else if(k==="security"){v=j.grade||"–";note=j.passed+" of "+j.total+" checks";c=j.score>=90?"ok":j.score>=60?"warn":"bad"}
+      else if(k==="cert"){v=j.valid?"✓ Secure":"Problem";note=j.days!=null?j.days+" days left":"";c=!j.valid?"bad":j.days<14?"warn":"ok"}
+      else if(k==="response"){v=j.first+" ms";note="to answer · "+Math.round(j.size/1024)+" KB";c=j.first<400?"ok":j.first<900?"warn":"bad"}
+      else if(k==="index"){var on=j.verdict==="PASS";v=on?"✓ Listed":"Not yet";note=j.crawled?"visited "+healthWhen(j.crawled):"";c=on?"ok":"warn"}
+      else if(k==="sharing"){var n=(j.checks||[]).filter(function(x){return x.ok}).length,a=(j.checks||[]).length;v=n+" of "+a;note="sharing checks pass";c=n===a?"ok":"warn"}}
+    else if(last&&last.error){v="Didn’t finish";c="bad"}
+    return'<button type="button" class="ts-chip '+c+'" data-sum="'+k+'"><span class="ts-cn">'+t[1]+'</span><b>'+(busy&&!j?'<span class="spin"></span>':esc(v))+'</b><span class="ts-cnote">'+(busy?(j?"updating…":"testing…"):esc(note))+'</span></button>'}).join("")}
 function tsRow(ok,name,note){return'<li class="'+(ok===null?"na":ok?"ok":"bad")+'"><i aria-hidden="true">'+(ok===null?"–":ok?"✓":"✕")+'</i><b>'+esc(name)+'</b><span>'+esc(note||"")+'</span></li>'}
 function tsLink(u,t){return'<a class="ts-more" href="'+esc(u)+'" target="_blank" rel="noopener">'+(t||"Full report")+' ↗</a>'}
 function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.querySelector(".ts-st"),b=c.querySelector(".ts-b"),h="",badge="";
@@ -2951,6 +3018,26 @@ function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.
       '<ul class="hl-checks ts-list">'+(j.checks||[]).map(function(x){return tsRow(x.ok,x.name,x.note)}).join("")+'</ul><button type="button" class="btn soft" data-go="photos">Change the sharing picture</button> '+tsLink(j.report,"Preview on every app")}
   st.innerHTML=badge;b.innerHTML=h}
 
+/* ---- "Don't count my visits on this device": the website's Google Analytics tag never loads on a device with
+   localStorage "ambs:notrack" = "1" (same site, so the editor's switch sets it for the website too), and the chat doesn't log
+   its questions (build.py ga_snippet, chat.js logQ). Another phone or computer: open ambs.co.nz/?notrack=1 once (?notrack=0 undoes it).
+   A device that signs in to the editor is switched off by itself the first time; the switch turns it back on. */
+try{if(localStorage.getItem("ambs:notrack-set")===null){localStorage.setItem("ambs:notrack","1");localStorage.setItem("ambs:notrack-set","1")}}catch(e){}
+/* this device: a switch (on = not counted); other devices: Count / Don't count buttons that copy the link to open there */
+function ntTog(id,lbl){var on=ntOn();return'<label class="nt-sw"'+(id?' id="'+id+'"':'')+' title="Turn on so visits from this phone or computer aren’t counted in Google Analytics"><input type="checkbox" data-nt'+(on?" checked":"")+'><span class="nt-tg" aria-hidden="true"></span><span class="nt-lbl">'+lbl+'</span></label>'}
+function ntBarDraw(){var b=$("ntBar");if(!b)return;b.innerHTML=ntTog("","Don’t count this device")}
+function ntSet(on){try{if(on)localStorage.setItem("ambs:notrack","1");else localStorage.removeItem("ambs:notrack");localStorage.setItem("ambs:notrack-set","1")}catch(x){}
+  document.querySelectorAll(".nt").forEach(function(n){n.outerHTML=ntStrip()});ntBarDraw();toast(on?"This device won’t be counted in your visitor numbers.":"This device is counted again.")}
+function ntOn(){try{return localStorage.getItem("ambs:notrack")==="1"}catch(e){return false}}
+function ntStrip(){var on=ntOn();return'<div class="nt"><div class="nt-row">'+ntTog("","<b>Don’t count my visits on this device</b><small>"+
+  (on?"On: this phone or computer isn’t sent to Google Analytics, and questions you type into the chat aren’t saved.":"Off: visits from this device are counted like everyone else’s.")+"</small>")+'</div>'+
+  '<div class="nt-links"><span class="nt-lh">Another phone or computer? Copy a link and open it there once:</span><button type="button" class="nt-btn" data-ntlink="0">Count</button><button type="button" class="nt-btn" data-ntlink="1">Don’t count</button></div></div>'}
+document.addEventListener("change",function(e){if(e.target.matches&&e.target.matches("[data-nt]"))ntSet(e.target.checked)});
+ntBarDraw();
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-ntlink]");if(!b)return;var off=b.dataset.ntlink!=="0",u="https://ambs.co.nz/?notrack="+(off?"1":"0");
+  var ok=function(){toast("Link copied. Open it once on the other phone or computer, in each browser you use there, and its visits "+(off?"stop being counted.":"are counted again."))};
+  try{navigator.clipboard.writeText(u).then(ok,function(){prompt("Open this link once on the other device:",u)})}catch(x){prompt("Open this link once on the other device:",u)}});
+
 /* ======================= VISITORS NOW ======================= */
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).
    Refreshes every 30 seconds while this tab is open. Until the Google connection is set up it shows the steps. */
@@ -2979,7 +3066,7 @@ function visitorsInit(){
       tip.innerHTML=fmt(c);tip.hidden=false;var r=b.getBoundingClientRect(),R=ch.getBoundingClientRect();var x=r.left-R.left+r.width/2;tip.style.left=Math.min(Math.max(x,70),R.width-70)+"px"};
     ch.querySelectorAll(".vs-col").forEach(function(b){b.addEventListener("mouseenter",function(){showTip(b)});b.addEventListener("focus",function(){showTip(b)});b.addEventListener("click",function(){showTip(b)})});
     ch.addEventListener("mouseleave",function(){tip.hidden=true;ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")})})}
-  function head(){return '<div class="dash-head"><div><h2>Visitors</h2><p class="help">From Google Analytics. Nobody is identified. Tap anything to look closer.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["now","Right now"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'+
+  function head(){return '<div class="dash-head"><div><h2>Visitors</h2><p class="help">From Google Analytics. Nobody is identified. Tap anything to look closer.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["now","Right now"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'+ntStrip()+
     (vsFilter?'<div class="vs-chip">Showing only · <b>'+esc(FLBL[vsFilter.f]||"")+':</b> '+esc(nice(vsFilter.f,vsFilter.v))+' <button type="button" class="btn link" id="vsClear">✕ Show everything</button></div>':'')}
   function busy(){var h=m.querySelector(".dash-head");if(h&&!m.querySelector(".vs-loading"))h.insertAdjacentHTML("afterend",'<p class="empty vs-loading"><span class="spin"></span> Loading…</p>')}
   function wire(){

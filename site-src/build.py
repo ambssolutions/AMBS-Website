@@ -70,7 +70,15 @@ def ga_snippet():
     # the tag itself loads after the page has finished loading (it is 180 KB and held phones back for a third of a second);
     # page views and clicks before then wait in dataLayer and are sent when it arrives
     return ('<!--ga--><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());'
-      f'(function(){{var go=function(){{var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id={GA_ID}";document.head.appendChild(s)}};'
+      # "don't count this device": a device opted out (the editor's switch, or ambs.co.nz/?notrack=1 opened once) never loads the tag
+      # opening the link shows a short note on the page (so the owner can see it worked) and the address loses ?notrack, so it isn't shared on by accident
+      '(function(){var off=false,said="";try{var q=location.search,m=q.match(/[?&]notrack=([01])\\b/);if(m){if(m[1]==="1")localStorage.setItem("ambs:notrack","1");else localStorage.removeItem("ambs:notrack");said=m[1];'
+      'try{var u=new URL(location.href);u.searchParams.delete("notrack");history.replaceState(history.state,"",u.pathname+u.search+u.hash)}catch(e){}}off=localStorage.getItem("ambs:notrack")==="1"}catch(e){}'
+      'if(said){var show=function(){var d=document.createElement("div");d.setAttribute("role","status");d.textContent=said==="1"?"✓ This device won’t be counted in the visitor numbers.":"✓ This device is counted in the visitor numbers again.";'
+      'd.style.cssText="position:fixed;left:16px;right:16px;top:76px;margin:0 auto;width:fit-content;max-width:520px;text-align:center;z-index:2147483647;background:#14172b;color:#fff;font:600 15px/1.4 system-ui,sans-serif;padding:12px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3)";'
+      'document.body.appendChild(d);setTimeout(function(){d.remove()},6000)};if(document.body)show();else addEventListener("DOMContentLoaded",show)}'
+      f'window.ambsNoTrack=off;if(off){{window["ga-disable-{GA_ID}"]=true;return}}'
+      f'var go=function(){{var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id={GA_ID}";document.head.appendChild(s)}};'
       'if(document.readyState==="complete")setTimeout(go,1500);else addEventListener("load",function(){setTimeout(go,1500)})})();'
       f'gtag("config","{GA_ID}");'
       'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";'
