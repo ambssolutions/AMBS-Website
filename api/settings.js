@@ -3,6 +3,7 @@
    { action: "business", phone, email, location }   changes them everywhere on the site
    { action: "calculator", hours: { cafe: [3, 2.5, 1.5], ... } }
    { action: "analytics", id: "G-XXXXXXX" }   the Google Analytics measurement ID (empty turns it off)
+   { action: "theme", theme: { blue, green, purple, heading_font, body_font } }   Colours & fonts (empty = the AMBS originals)
    { action: "sitetext", text: { "cta.h": "...", ... } }   the wording on every page other than the homepage
    { action: "chatget" } / { action: "chatbot", data: {...} }   the "Ask us" chat helper (site-src/content/chatbot.json)
    { action: "chatlog", limit } / { action: "chatlogset", ids: [...], done: true|false, del: true } / { action: "chatlogset", ids, note } / { action: "chatlogset", ids, status: "skip"|"open", note }
@@ -96,6 +97,20 @@ export default async function handler(req, res) {
       if (id && !/^G-[A-Z0-9]{4,}$/.test(id)) return send(res, 400, { error: "The measurement ID starts with G-, like G-AB12CD34EF" });
       if (id === (details.analytics_id || "")) return send(res, 400, { error: "Nothing has changed" });
       await commitFiles(head, { [SITE_JSON]: JSON.stringify({ ...details, analytics_id: id }, null, 1) + "\n" }, "Editor source: Google Analytics" + by);
+      return send(res, 200, { ok: true });
+    }
+
+    if (b.action === "theme") {   // Colours & fonts: three brand colours and two fonts, applied to every page by build.py (theme_css / theme_head)
+      const hex = (v) => (/^#[0-9a-fA-F]{6}$/.test(String(v || "")) ? String(v).toUpperCase() : "");
+      const FONTS = ["Inter", "Poppins", "Montserrat", "DM Sans", "Plus Jakarta Sans", "Manrope", "Outfit", "Nunito", "Lato", "Open Sans", "Raleway", "Work Sans", "Space Grotesk", "Sora", "Playfair Display", "Merriweather", "Lora"];
+      const font = (v) => (FONTS.includes(String(v || "")) ? String(v) : "");
+      const t = b.theme || {};
+      const theme = { blue: hex(t.blue), green: hex(t.green), purple: hex(t.purple), heading_font: font(t.heading_font), body_font: font(t.body_font) };
+      Object.keys(theme).forEach((k) => { if (!theme[k]) delete theme[k]; });
+      const next = { ...details };
+      if (Object.keys(theme).length) next.theme = theme; else delete next.theme;
+      if (JSON.stringify(next.theme || {}) === JSON.stringify(details.theme || {})) return send(res, 400, { error: "Nothing has changed" });
+      await commitFiles(head, { [SITE_JSON]: JSON.stringify(next, null, 1) + "\n" }, "Editor source: colours and fonts" + by);
       return send(res, 200, { ok: true });
     }
 

@@ -208,6 +208,25 @@ dialog::backdrop{background:rgba(13,17,34,.45);backdrop-filter:blur(4px)}
 .op-stage{flex:1;min-height:0;display:flex;justify-content:center;overflow:auto}.op-stage.dev{padding:18px 0}
 .op-stage iframe{width:100%;height:100%;border:0;background:#fff;transition:width .25s}.op-stage.dev iframe{border-radius:24px;box-shadow:0 0 0 10px #14172b,0 30px 60px -20px rgba(0,0,0,.5)}
 @media (max-width:760px){.op-dev,.op-t span,#opPrev{display:none}.op-pick{max-width:42vw}.op-t b{font-size:.92rem}.op-bar{gap:6px;padding:8px 10px}.op-bar .btn{padding:.45rem .8rem;font-size:.88rem}.op-n{display:none}}
+/* editing mode switch */
+.mode-sw{display:flex;flex-direction:column;gap:6px}.mode-l{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.mode-b{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}.mode-b button{border:0;background:none;border-radius:999px;padding:.4rem .8rem;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;font-size:.88rem}.mode-b button[aria-pressed=true]{background:var(--ink);color:var(--card)}
+@media (min-width:1024px){.dash-head .mode-sw{display:none}}
+.side-mode{padding:4px 10px 10px}.side-mode .mode-b{width:100%}.side-mode .mode-b{display:flex}.side-mode .mode-b button{flex:1;padding:.4rem .5rem;font-size:.82rem}
+body.mode-visual #onPageBtn{display:none}
+/* colours & fonts */
+.ds-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;align-items:start}
+.ds-side .panel{margin-bottom:14px}.ds-c{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}.ds-c:first-of-type{border-top:0}
+.ds-c label{display:flex;flex-direction:column}.ds-c label span{color:var(--muted);font-size:.8rem}
+.ds-pick{display:flex;align-items:center;gap:6px}.ds-pick input[type=color]{width:40px;height:40px;border:1px solid var(--line);border-radius:12px;padding:2px;background:var(--card);cursor:pointer}.ds-pick .t{width:92px;font-family:ui-monospace,monospace;font-size:.88rem;padding:.45rem .5rem}
+.ds-c select{max-width:170px}
+.ds-pre{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ds-p{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 10px;cursor:pointer;font-weight:650;color:var(--ink);text-align:left;font-size:.86rem}.ds-p:hover{border-color:var(--green)}
+.ds-p .dots{display:inline-flex}.ds-p .dots i{width:14px;height:14px;border-radius:50%;margin-right:-4px;border:2px solid var(--card)}
+.ds-act{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.ds-prev{position:sticky;top:12px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);box-shadow:0 12px 28px -22px rgba(20,23,43,.32)}
+.ds-pbar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}.ds-pbar select{max-width:200px}
+.ds-frame{height:calc(100vh - 160px);min-height:520px;display:flex;justify-content:center;background:var(--bg)}.ds-frame iframe{width:100%;height:100%;border:0;background:#fff;transition:width .25s}
+@media (max-width:1100px){.ds-grid{grid-template-columns:1fr}.ds-prev{position:static}.ds-frame{height:70vh}}
 .side{display:none}
 @media (min-width:1024px){
   #app{padding-left:248px}
@@ -513,15 +532,16 @@ header.top .who{margin-left:4px}
     <h1>Website editor</h1>
     <button class="find-btn" id="findBtn" type="button" aria-label="Search the whole website"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="dsk">Search the whole site</span></button>
     <button class="acct-btn" id="acctBtn" type="button" aria-label="Account and sign out" aria-expanded="false" aria-controls="whoBox"><span aria-hidden="true">☰</span></button>
-    <div class="who" id="whoBox"><span id="whoEmail"></span><a href="/" target="_blank" rel="noopener">View site</a><button class="btn link" id="visitorsBtn" type="button">Visitors now</button><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
+    <div class="who" id="whoBox"><span id="whoEmail"></span><button class="btn link" id="changePw" type="button">Change password</button><button class="btn link" id="signOut" type="button">Sign out</button></div>
   </div>
   <div class="wrap"><nav class="tabs" role="tablist" aria-label="What to edit">
     <button type="button" role="tab" data-tab="home" aria-selected="true">Home</button>
-    <button type="button" role="tab" data-tab="wording" aria-selected="false">Homepage wording</button>
+    <button type="button" role="tab" data-tab="wording" aria-selected="false">Homepage</button>
     <button type="button" role="tab" data-tab="sections" aria-selected="false">Homepage sections</button>
     <button type="button" role="tab" data-tab="pages" aria-selected="false">Pages &amp; news</button>
     <button type="button" role="tab" data-tab="menus" aria-selected="false">Menus</button>
     <button type="button" role="tab" data-tab="photos" aria-selected="false">Photos &amp; logo</button>
+    <button type="button" role="tab" data-tab="design" aria-selected="false">Colours &amp; fonts</button>
     <button type="button" role="tab" data-tab="business" aria-selected="false">Business details</button>
     <button type="button" role="tab" data-tab="chat" aria-selected="false">Chat helper</button>
     <button type="button" role="tab" data-tab="calc" aria-selected="false">Hours calculator</button>
@@ -565,6 +585,7 @@ header.top .who{margin-left:4px}
   <section id="tab-sections" class="tab hidden"><div class="wrap narrow" id="hsMain"></div></section>
   <section id="tab-menus" class="tab hidden"><div class="wrap narrow" id="mnMain"></div></section>
   <section id="tab-history" class="tab hidden"><div class="wrap narrow" id="hiMain"></div></section>
+  <section id="tab-design" class="tab hidden"><div class="wrap dash" id="dsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-seo" class="tab hidden"><div class="wrap dash" id="seoMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-visitors" class="tab hidden"><div class="wrap dash" id="vsMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
   <section id="tab-calc" class="tab hidden"><div class="wrap narrow" id="ccMain"><p class="empty"><span class="spin"></span> Loading…</p></div></section>
@@ -1020,16 +1041,15 @@ function show(name){
   if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
-  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,home:homeInit,seo:seoInit})[name]()}
+  if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,home:homeInit,seo:seoInit,design:designInit})[name]()}
   sideSync();window.scrollTo(0,0)
 }
 document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.tab)})});
-$("visitorsBtn").addEventListener("click",function(){show("visitors");window.scrollTo(0,0)});
 /* ---------- phones ---------- */
 var isPhone=function(){return window.matchMedia("(max-width:760px)").matches};
 /* the tabs as one picker */
 (function(){var tp=$("tabPick");document.querySelectorAll(".tabs [data-tab]").forEach(function(b){var o=document.createElement("option");o.value=b.dataset.tab;o.textContent=b.textContent;tp.appendChild(o)});
-  tp.value=current||"wording";tp.addEventListener("change",function(){show(tp.value);window.scrollTo(0,0)})})();
+  tp.value=current||"wording";tp.addEventListener("change",function(){if(tp.value==="wording"&&window.edMode&&window.edMode()==="visual"){tp.value=current;openOnPage();return}show(tp.value);window.scrollTo(0,0)})})();
 /* email, view site, change password and sign out behind one button */
 (function(){var btn=$("acctBtn"),box=$("whoBox");
   var set=function(on){box.classList.toggle("open",on);btn.setAttribute("aria-expanded",String(on))};
@@ -1210,6 +1230,7 @@ function renderPage(sec,slug,d){
   var live=sec==="legal"||edLive(card),sch=sec==="legal"?"":edSched(card);
   var top=h('<div><h2 class="sec">'+esc(meta.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">'+(sec==="legal"?"Legal page":esc(SEC[sec]))+(live?' · <a href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p>'+(live?'<button type="button" class="btn soft" id="pgOnPage">✎ Edit on page</button>':'')+'</div>');m.appendChild(top);
   if(live)$("pgOnPage").addEventListener("click",function(){openPageOnPage(sec,slug)});
+  if(live&&edMode()==="visual"&&!document.querySelector(".op"))openPageOnPage(sec,slug);
   /* the build lists outside services the website uses that this policy doesn't name yet (build.py privacy_check) */
   var pm=(site&&site.privacy_missing)||[];
   if(sec==="legal"&&slug==="privacy"&&pm.length)m.appendChild(h('<div class="msg" style="background:var(--amber-bg);color:var(--amber);margin:0 0 14px"><b>This policy doesn\u2019t mention '+pm.map(function(x){return esc(x.name)}).join(", ")+' yet.</b> The website uses '+(pm.length>1?"them":"it")+', so add a line saying what visitors\u2019 details go there and why. Ask Claude to draft it if you like.</div>'));
@@ -2045,28 +2066,90 @@ function openPageOnPage(sec,slug){
 }
 window.edOpenPage=openPageOnPage;
 
+/* ======================= EDITING MODE ======================= */
+/* One switch (sidebar on laptops, Home on every screen): "On the page" opens the homepage and pages in Edit on page
+   straight away; "With forms" keeps the lists and forms, with Edit on page one button away. Remembered on this device. */
+function edMode(){try{return localStorage.getItem("ambs-ed-mode")||"visual"}catch(e){return"visual"}}
+function modeSwitch(short){return '<div class="mode-sw" role="group" aria-label="How you edit"><span class="mode-l">How you edit</span><div class="mode-b"><button type="button" data-mode="visual" title="Click text on your real pages and type">✎ '+(short?'On page':'On the page')+'</button><button type="button" data-mode="forms" title="Lists and forms, with every setting">☰ '+(short?'Forms':'With forms')+'</button></div></div>'}
+function modeSync(){var m=edMode();document.querySelectorAll("[data-mode]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===m))});document.body.classList.toggle("mode-visual",m==="visual")}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mode]");if(!b)return;try{localStorage.setItem("ambs-ed-mode",b.dataset.mode)}catch(x){}modeSync();toast(b.dataset.mode==="visual"?"On the page: the homepage and your pages open ready to click and type.":"With forms: you\u2019ll see the lists and forms. Edit on page is still one button away.")});
+window.edMode=edMode;
+/* the Website ROI calculator is a block page (site-src/content/custom/website-roi-calculator.json): open it straight from Home or the menu */
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-roi]");if(!b)return;e.preventDefault();if(!loaded.pages){open={section:"page",slug:"website-roi-calculator"};show("pages")}else{show("pages");openPage("page","website-roi-calculator")}});
+
+/* ======================= COLOURS & FONTS ======================= */
+/* site.json "theme" through api/settings "theme"; build.py recolours the site's style sheets (theme_css) and loads the
+   fonts (theme_head). The preview here runs the same recolouring (themeCss, kept in step with build.py) on the live
+   homepage or a page in a frame, so what you see is what publishing gives. */
+var TH_BASE={blue:"#1877E0",green:"#24B328",purple:"#7B2FBE"};
+var TH_FONTS=["Inter","Poppins","Montserrat","DM Sans","Plus Jakarta Sans","Manrope","Outfit","Nunito","Lato","Open Sans","Raleway","Work Sans","Space Grotesk","Sora","Playfair Display","Merriweather","Lora"];
+var TH_PRESETS=[["AMBS original",{blue:"#1877E0",green:"#24B328",purple:"#7B2FBE"}],["Ocean",{blue:"#0E7490",green:"#0D9488",purple:"#4F46E5"}],["Sunset",{blue:"#C2410C",green:"#EA580C",purple:"#BE185D"}],["Forest",{blue:"#166534",green:"#65A30D",purple:"#854D0E"}],["Berry",{blue:"#7E22CE",green:"#DB2777",purple:"#4338CA"}],["Navy & gold",{blue:"#1E3A8A",green:"#CA8A04",purple:"#0F766E"}],["Charcoal",{blue:"#334155",green:"#0F766E",purple:"#6D28D9"}]];
+function thHex(c){c=c.replace("#","");if(c.length===3)c=c.split("").map(function(x){return x+x}).join("");return[parseInt(c.slice(0,2),16),parseInt(c.slice(2,4),16),parseInt(c.slice(4,6),16)]}
+function thHsl(r,g,b){r/=255;g/=255;b/=255;var mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,h=0,s=0;if(mx!==mn){var d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}return[h,s,l]}
+function thRgb(h,s,l){h=((h%360)+360)%360/360;s=Math.max(0,Math.min(1,s));l=Math.max(0,Math.min(1,l));if(!s){var v=Math.round(l*255);return[v,v,v]}var q=l<.5?l*(1+s):l+s-l*s,p=2*l-q,f=function(t){t<0&&(t+=1);t>1&&(t-=1);return t<1/6?p+(q-p)*6*t:t<.5?q:t<2/3?p+(q-p)*(2/3-t)*6:p};return[Math.round(f(h+1/3)*255),Math.round(f(h)*255),Math.round(f(h-1/3)*255)]}
+function thMoves(t){var out=[];Object.keys(TH_BASE).forEach(function(k){var w=(t[k]||"").toUpperCase();if(!/^#[0-9A-F]{6}$/.test(w)||w===TH_BASE[k])return;var B=thHsl.apply(null,thHex(TH_BASE[k])),T=thHsl.apply(null,thHex(w));out.push([B[0],T[0]-B[0],B[1]?T[1]/B[1]:1,T[2]-B[2],B[2]])});return out}
+function thColour(r,g,b,mv){var c=thHsl(r,g,b),h=c[0],s=c[1],l=c[2];if(s<.22||l<.06||l>.97)return null;var best=null;mv.forEach(function(m){var d=Math.abs(((h-m[0]+180)%360+360)%360-180);if(d<=28&&(!best||d<best[0]))best=[d].concat(m)});if(!best)return null;
+  return thRgb(h+best[2],s*best[3],l+best[4]*Math.max(0,1-Math.abs(l-best[5])*1.6))}
+function themeCss(css,t){var mv=thMoves(t);if(!mv.length)return css;var hx=function(n){return("0"+n.toString(16).toUpperCase()).slice(-2)};
+  return css.replace(/#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9a-fA-F])/g,function(m){var c=thColour.apply(null,thHex(m).concat([mv]));return c?"#"+c.map(hx).join(""):m})
+    .replace(/(rgba?)\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(\s*[,)])/g,function(m,f,r,g,b,tail){var c=thColour(+r,+g,+b,mv);return c?f+"("+c.join(",")+tail:m})}
+function designInit(){
+  var m=$("dsMain"),cur={},saved={},cssCache={};
+  api("settings",{action:"get"}).then(function(j){saved=Object.assign({},j.business.theme||{});cur=Object.assign({},TH_BASE,saved);draw()}).catch(fail);
+  function same(){return["blue","green","purple","heading_font","body_font"].every(function(k){var a=(cur[k]||"").toUpperCase(),b=(saved[k]||(TH_BASE[k]||"")).toUpperCase();return a===b})}
+  function draw(){
+    var sw=function(k,name,hint){return'<div class="ds-c"><label for="ds-'+k+'"><b>'+name+'</b><span>'+hint+'</span></label><div class="ds-pick"><input type="color" id="ds-'+k+'" value="'+cur[k]+'"><input type="text" class="t" data-hex="'+k+'" value="'+cur[k]+'" maxlength="7" aria-label="'+name+' code"></div></div>'};
+    var fsel=function(k,name,hint){return'<div class="ds-c"><label for="ds-'+k+'"><b>'+name+'</b><span>'+hint+'</span></label><select id="ds-'+k+'" class="t"><option value="">AMBS original</option>'+TH_FONTS.map(function(f){return'<option'+(cur[k]===f?' selected':'')+'>'+f+'</option>'}).join("")+'</select></div>'};
+    m.innerHTML='<div class="dash-head"><div><h2>Colours &amp; fonts</h2><p class="help">Change your brand colours and fonts for the whole website. The preview shows your real site with the new look before you publish.</p></div></div>'+
+      '<div class="ds-grid"><div class="ds-side"><div class="panel"><h3>Ready-made looks</h3><div class="ds-pre">'+TH_PRESETS.map(function(p,i){return'<button type="button" class="ds-p" data-p="'+i+'"><span class="dots"><i style="background:'+p[1].blue+'"></i><i style="background:'+p[1].green+'"></i><i style="background:'+p[1].purple+'"></i></span>'+p[0]+'</button>'}).join("")+'</div></div>'+
+      '<div class="panel"><h3>Colours</h3>'+sw("blue","Main colour","Links, headings accents, highlights")+sw("green","Button colour","Buttons, ticks and calls to action")+sw("purple","Accent colour","Small touches and gradients")+'</div>'+
+      '<div class="panel"><h3>Fonts</h3>'+fsel("heading_font","Headings","Titles and big text")+fsel("body_font","Body text","Paragraphs, menus and buttons")+'<p class="help">Fonts other than the original load from Google Fonts.</p></div>'+
+      '<div class="ds-act"><button type="button" class="btn" id="dsReset">Back to AMBS original</button><button type="button" class="btn primary" id="dsSave">Save &amp; publish</button></div></div>'+
+      '<div class="ds-prev"><div class="ds-pbar"><select id="dsPage" class="t"><option value="/">Homepage</option><option value="/services/ai-automation">A service page</option><option value="/guides">Guides</option></select><div class="op-dev"><button type="button" data-w="390">Phone</button><button type="button" data-w="0" class="on">Laptop</button></div></div><div class="ds-frame"><iframe id="dsFrame" title="Preview with your colours and fonts" src="/?chat=nolog&amp;onpage=1"></iframe></div></div></div>';
+    var fr=$("dsFrame");fr.addEventListener("load",apply);
+    m.querySelectorAll("input[type=color]").forEach(function(c){var k=c.id.slice(3);c.addEventListener("input",function(){cur[k]=c.value.toUpperCase();m.querySelector('[data-hex="'+k+'"]').value=cur[k];later()})});
+    m.querySelectorAll("[data-hex]").forEach(function(t){t.addEventListener("input",function(){var v=t.value.trim();if(/^#?[0-9a-fA-F]{6}$/.test(v)){v=(v[0]==="#"?v:"#"+v).toUpperCase();cur[t.dataset.hex]=v;$("ds-"+t.dataset.hex).value=v;later()}})});
+    ["heading_font","body_font"].forEach(function(k){$("ds-"+k).addEventListener("change",function(){cur[k]=this.value;apply();btns()})});
+    m.querySelectorAll(".ds-p").forEach(function(b){b.addEventListener("click",function(){Object.assign(cur,TH_PRESETS[+b.dataset.p][1]);["blue","green","purple"].forEach(function(k){$("ds-"+k).value=cur[k];m.querySelector('[data-hex="'+k+'"]').value=cur[k]});apply();btns()})});
+    $("dsReset").addEventListener("click",function(){cur=Object.assign({},TH_BASE);draw()});
+    $("dsPage").addEventListener("change",function(){fr.src=this.value+"?chat=nolog&onpage=1"});
+    m.querySelectorAll(".ds-pbar .op-dev button").forEach(function(b){b.addEventListener("click",function(){m.querySelectorAll(".ds-pbar .op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%"})});
+    $("dsSave").addEventListener("click",function(){var b=this;busy(b,true,"Publishing…");var t={};["blue","green","purple"].forEach(function(k){if(cur[k].toUpperCase()!==TH_BASE[k])t[k]=cur[k]});["heading_font","body_font"].forEach(function(k){if(cur[k])t[k]=cur[k]});
+      api("settings",{action:"theme",theme:t}).then(function(){saved=t;busy(b,false);btns();toast("Saved. Every page updates with the new look in about 2 minutes.")}).catch(function(e){busy(b,false);fail(e)})});
+    btns()}
+  var tmr;function later(){clearTimeout(tmr);tmr=setTimeout(function(){apply();btns()},120)}
+  function btns(){var s1=$("dsSave");if(s1)s1.disabled=same()}
+  function apply(){var fr=$("dsFrame"),d=fr&&fr.contentDocument;if(!d||!d.head)return;
+    d.querySelectorAll("link[rel=stylesheet][href*='/assets/'],style[data-th]").forEach(function(l){var href=l.getAttribute("href")||l.dataset.th;
+      var put=function(css){var st=l.tagName==="STYLE"?l:d.createElement("style");st.dataset.th=href;st.textContent=themeCss(css,cur);if(l!==st){l.parentNode.insertBefore(st,l);l.remove()}};
+      if(cssCache[href])put(cssCache[href]);else fetch(href).then(function(r){return r.text()}).then(function(css){cssCache[href]=css;put(css)})});
+    var old=d.getElementById("ds-font");if(old)old.remove();var hf=cur.heading_font,bf=cur.body_font;
+    if(hf||bf){var fams=[hf,bf].filter(function(x,i,a){return x&&a.indexOf(x)===i}).map(function(f){return"family="+f.replace(/ /g,"+")+":wght@400;600;700;800"}).join("&");var tail=',Arial,sans-serif';
+      var wrap=d.createElement("div");wrap.id="ds-font";wrap.innerHTML='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'+fams+'&display=swap"><style>html:root{'+(hf?'--display:"'+hf+'"'+tail+';':'')+(bf?'--body:"'+bf+'"'+tail+';--mono:"'+bf+'"'+tail+';':'')+'}</style>';d.head.appendChild(wrap)}}
+}
+
 /* ======================= MENU AND HOME ======================= */
 /* Laptops (1024px+) get a menu down the left with every part of the editor; phones and laptops both open on Home,
    a dashboard with the key numbers and a tile for every part. EDMENU is the one list both are drawn from. */
-var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18'};
+var ICO={home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z',wording:'M4 6h16M4 12h16M4 18h10',sections:'M4 4h16v6H4zM4 14h16v6H4z',pages:'M6 3h9l5 5v13H6zM14 3v6h6',menus:'M4 6h16M4 12h16M4 18h16',photos:'M4 5h16v14H4zM8 13l3-3 5 6M15 9h.01',business:'M4 8h16v12H4zM9 8V5h6v3',chat:'M4 5h16v11H9l-5 4z',calc:'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01',visitors:'M4 20V10M10 20V4M16 20v-7M22 20H2',seo:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4M8 11l2 2 4-4',history:'M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',site:'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',onpage:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',design:'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM7.5 12h.01M9.5 8h.01M14.5 8h.01M16.5 12h.01',sig:'M3 17c3-1 4-6 6-6s1 6 3 6 3-3 5-3 2 2 4 2M3 21h18'};
 var EDMENU=[["",[["home","Home","Your dashboard"]]],
-  ["Website",[["onpage","Edit on page","Click any text on your homepage and type over it"],["wording","Homepage wording","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"]]],
+  ["Website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["sections","Homepage sections","Order, hide or add homepage sections"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["design","Colours & fonts","Brand colours and fonts for the whole website"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"]]],
   ["Insights",[["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 function ico(k){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
 function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side"))b.setAttribute("aria-current",String(b.dataset.go===current))})}
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
   EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
-  h+='<div class="side-h">Shortcuts</div><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
-  sd.innerHTML=h;sideSync()})();
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();if(b.dataset.go==="onpage")return openOnPage();show(b.dataset.go)});
+  h+='<div class="side-h">Shortcuts</div><button type="button" data-roi="1">'+ico("calc")+'<span>Website ROI calculator</span></button><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
+  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");b0.insertAdjacentHTML("afterend",'<div class="side-mode">'+modeSwitch(1)+'</div>');sideSync();modeSync()})();
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();if(b.dataset.go==="onpage"||(b.dataset.go==="wording"&&edMode()==="visual"&&!b.closest("#tab-wording")))return openOnPage();show(b.dataset.go)});
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
-  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div><a class="btn" href="/" target="_blank" rel="noopener">View website ↗</a></div>'+
+  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+modeSwitch()+'</div>'+
     '<div class="kpis" id="hmKpi" hidden></div>';
   EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
-  h+='<h3 class="dash-h">Tools</h3><div class="tiles"><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
-  m.innerHTML=h;
+  h+='<h3 class="dash-h">Tools</h3><div class="tiles"><button type="button" class="tile" data-roi="1"><span class="tile-i">'+ico("calc")+'</span><b>Website ROI calculator</b><span>The calculator page at ambs.co.nz/website-roi-calculator</span></button><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
+  m.innerHTML=h;modeSync();
   Promise.all([api("settings",{action:"visitors"}),api("settings",{action:"visitors",days:7})]).then(function(r){var a=r[0],b=r[1];if(a.setup||b.setup)return;
     var ev={};(b.events||[]).forEach(function(e){ev[e.name]=e.n});var k=$("hmKpi");if(!k)return;
     var tile=function(n,l,go){return'<button type="button" class="kpi" data-go="visitors"><b>'+n+'</b><span>'+l+'</span></button>'};
