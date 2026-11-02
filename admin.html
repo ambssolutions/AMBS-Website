@@ -646,6 +646,27 @@ button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,
 .dash-top .quick .sm{display:none}
 .rte a:not(.btn){cursor:pointer}
 .cv-tog[aria-pressed=true]{background:#eefaef;border-color:#9fdca2;color:#17761a}@media(max-width:760px){.cv-tog{display:none}}
+
+/* ---- "Don't count my visits" switch ---- */
+.nt{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;margin:10px 0 14px;padding:12px 14px;border-radius:14px;background:linear-gradient(180deg,#ffffff,#f3f5f9);border:1px solid #e3e7ef;box-shadow:inset 0 1px 0 #fff,0 1px 1px rgba(20,23,43,.05),0 3px 8px rgba(20,23,43,.06)}
+.nt-sw{display:flex;align-items:center;gap:12px;cursor:pointer;flex:1 1 320px;min-width:0}.nt-sw input{position:absolute;opacity:0;width:1px;height:1px}
+.nt-tg{flex:0 0 46px;height:26px;border-radius:99px;background:#cfd5e1;position:relative;box-shadow:inset 0 1px 3px rgba(20,23,43,.25);transition:background .2s}
+.nt-tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:linear-gradient(180deg,#fff,#eef1f6);box-shadow:0 1px 3px rgba(20,23,43,.35);transition:transform .2s}
+.nt-sw input:checked+.nt-tg{background:var(--green)}.nt-sw input:checked+.nt-tg::after{transform:translateX(20px)}.nt-sw input:focus-visible+.nt-tg{outline:3px solid var(--focus);outline-offset:2px}
+.nt-t{display:grid;gap:2px}.nt-t small{color:var(--muted);font-size:.84rem;line-height:1.35}.nt-more{border:0;background:none;font:inherit;font-weight:700;font-size:.88rem;color:var(--blue);cursor:pointer;padding:4px 0}
+@media(prefers-color-scheme:dark){.nt{background:linear-gradient(180deg,#232a3d,#1a2031);border-color:#2c3247;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.3)}.nt-tg{background:#3a4258}}
+/* ---- Embossed widgets (Nov 2026: the owner prefers raised, clean tiles over flat cards or coloured side strips) ---- */
+:root{--emb-bg:linear-gradient(180deg,#ffffff 0%,#f3f5f9 100%);--emb-line:#e3e7ef;--emb-sh:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,23,43,.05),0 1px 1px rgba(20,23,43,.06),0 3px 8px rgba(20,23,43,.07);
+ --emb-sh-hi:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,23,43,.05),0 2px 3px rgba(20,23,43,.07),0 10px 20px rgba(20,23,43,.10)}
+@media(prefers-color-scheme:dark){:root{--emb-bg:linear-gradient(180deg,#232a3d 0%,#1a2031 100%);--emb-line:#2c3247;--emb-sh:inset 0 1px 0 rgba(255,255,255,.07),0 1px 1px rgba(0,0,0,.4),0 4px 10px rgba(0,0,0,.3);--emb-sh-hi:inset 0 1px 0 rgba(255,255,255,.08),0 2px 3px rgba(0,0,0,.4),0 10px 22px rgba(0,0,0,.4)}}
+.tile,.kpi,.vs-stat,.dash .tile,.dash .kpi,.dash .vs-stat{background:var(--emb-bg)!important;border:1px solid var(--emb-line)!important;box-shadow:var(--emb-sh)!important;transition:transform .15s,box-shadow .15s!important}
+.tile:hover,.kpi:hover,button.vs-stat:hover{transform:translateY(-1px);box-shadow:var(--emb-sh-hi)!important;border-color:var(--emb-line)!important}
+.tile:active,.kpi:active,button.vs-stat:active{transform:translateY(0);box-shadow:inset 0 2px 4px rgba(20,23,43,.10),0 1px 1px rgba(20,23,43,.05)!important}
+.ts-chip{background:var(--emb-bg);border-color:var(--emb-line);box-shadow:var(--emb-sh)}
+/* selected menu items and notes: embossed, no coloured strip on the left */
+.side button[aria-current=true],nav.secs button[aria-current=true],nav.secs button.on{background:var(--emb-bg)!important;box-shadow:var(--emb-sh)!important;color:var(--ink)}
+.side button[aria-current=true] svg{stroke:var(--green)}
+.ch-fix{border-left:1px solid var(--emb-line)!important;border:1px solid var(--emb-line);background:var(--emb-bg)!important;box-shadow:var(--emb-sh)}
 </style>
 </head>
 <body>
@@ -1988,7 +2009,7 @@ function businessInit(){
     var spa=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="spSave">Save &amp; publish</button></div>');m.appendChild(sp);m.appendChild(spa);
     $("spSave").addEventListener("click",function(){var btn=this;busy(btn,true);api("settings",{action:"profiles",profiles:$("spList").value.split(/\n+/).map(function(x){return x.trim()}).filter(Boolean)}).then(function(){dirty=false;busy(btn,false);toast("Saved. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
     /* Google Analytics: the measurement ID goes on every page when the site is rebuilt */
-    var ga=h('<div class="panel"><h3>Google Analytics</h3><p class="help">Your measurement ID from analytics.google.com (Admin → Data streams). It is added to every page. Leave it empty to turn Analytics off.</p></div>');
+    var ga=h('<div class="panel"><h3>Google Analytics</h3><p class="help">Your measurement ID from analytics.google.com (Admin → Data streams). It is added to every page. Leave it empty to turn Analytics off.</p>'+ntStrip()+'</div>');
     ga.appendChild(fld("gaId","Measurement ID",b.analytics_id||"",{help:"Starts with G-, for example G-AB12CD34EF"}));
     var gaa=h('<div class="actions"><span class="sp"></span><button type="button" class="btn primary" id="gaSave">Save &amp; publish</button></div>');m.appendChild(ga);m.appendChild(gaa);
     $("gaSave").addEventListener("click",function(){var btn=this;busy(btn,true);api("settings",{action:"analytics",id:$("gaId").value}).then(function(){dirty=false;busy(btn,false);toast("Saved. "+LIVE_NOTE)}).catch(function(e){busy(btn,false);fail(e)})});
@@ -2980,6 +3001,22 @@ function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.
       '<ul class="hl-checks ts-list">'+(j.checks||[]).map(function(x){return tsRow(x.ok,x.name,x.note)}).join("")+'</ul><button type="button" class="btn soft" data-go="photos">Change the sharing picture</button> '+tsLink(j.report,"Preview on every app")}
   st.innerHTML=badge;b.innerHTML=h}
 
+/* ---- "Don't count my visits on this device": the website's Google Analytics tag never loads on a device with
+   localStorage "ambs:notrack" = "1" (same site, so the editor's switch sets it for the website too), and the chat doesn't log
+   its questions (build.py ga_snippet, chat.js logQ). Another phone or computer: open ambs.co.nz/?notrack=1 once (?notrack=0 undoes it).
+   A device that signs in to the editor is switched off by itself the first time; the switch turns it back on. */
+try{if(localStorage.getItem("ambs:notrack-set")===null){localStorage.setItem("ambs:notrack","1");localStorage.setItem("ambs:notrack-set","1")}}catch(e){}
+function ntOn(){try{return localStorage.getItem("ambs:notrack")==="1"}catch(e){return false}}
+function ntStrip(){var on=ntOn();return'<div class="nt"><label class="nt-sw"><input type="checkbox" data-nt'+(on?" checked":"")+'><span class="nt-tg" aria-hidden="true"></span><span class="nt-t"><b>Don’t count my visits on this device</b><small>'+
+  (on?"Visits from this phone or computer aren’t sent to Google Analytics, and questions you type into the chat aren’t saved.":"Visits from this device are counted like everyone else’s.")+'</small></span></label>'+
+  '<button type="button" class="nt-more" data-ntlink>Another phone or computer? Copy its link</button></div>'}
+document.addEventListener("change",function(e){if(!e.target.matches||!e.target.matches("[data-nt]"))return;var on=e.target.checked;
+  try{if(on)localStorage.setItem("ambs:notrack","1");else localStorage.removeItem("ambs:notrack");localStorage.setItem("ambs:notrack-set","1")}catch(x){}
+  document.querySelectorAll(".nt").forEach(function(n){n.outerHTML=ntStrip()});toast(on?"This device won’t be counted any more.":"This device is counted again.")});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-ntlink]");if(!b)return;var u="https://ambs.co.nz/?notrack=1";
+  var ok=function(){toast("Link copied. Open it once on the other phone or computer, in each browser you use there.")};
+  try{navigator.clipboard.writeText(u).then(ok,function(){prompt("Open this link once on the other device:",u)})}catch(x){prompt("Open this link once on the other device:",u)}});
+
 /* ======================= VISITORS NOW ======================= */
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).
    Refreshes every 30 seconds while this tab is open. Until the Google connection is set up it shows the steps. */
@@ -3008,7 +3045,7 @@ function visitorsInit(){
       tip.innerHTML=fmt(c);tip.hidden=false;var r=b.getBoundingClientRect(),R=ch.getBoundingClientRect();var x=r.left-R.left+r.width/2;tip.style.left=Math.min(Math.max(x,70),R.width-70)+"px"};
     ch.querySelectorAll(".vs-col").forEach(function(b){b.addEventListener("mouseenter",function(){showTip(b)});b.addEventListener("focus",function(){showTip(b)});b.addEventListener("click",function(){showTip(b)})});
     ch.addEventListener("mouseleave",function(){tip.hidden=true;ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")})})}
-  function head(){return '<div class="dash-head"><div><h2>Visitors</h2><p class="help">From Google Analytics. Nobody is identified. Tap anything to look closer.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["now","Right now"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'+
+  function head(){return '<div class="dash-head"><div><h2>Visitors</h2><p class="help">From Google Analytics. Nobody is identified. Tap anything to look closer.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["now","Right now"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'+ntStrip()+
     (vsFilter?'<div class="vs-chip">Showing only · <b>'+esc(FLBL[vsFilter.f]||"")+':</b> '+esc(nice(vsFilter.f,vsFilter.v))+' <button type="button" class="btn link" id="vsClear">✕ Show everything</button></div>':'')}
   function busy(){var h=m.querySelector(".dash-head");if(h&&!m.querySelector(".vs-loading"))h.insertAdjacentHTML("afterend",'<p class="empty vs-loading"><span class="spin"></span> Loading…</p>')}
   function wire(){

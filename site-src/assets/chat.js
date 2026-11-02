@@ -410,7 +410,8 @@
       .forEach(function(r){if(out.length>=3)return;var d=r.D.d;if(cl!=="en"&&d.i){for(var j=0;j<DOCS.length;j++){var o=DOCS[j].d;if(o.i===d.i&&o.g===cl){d=o;break}}}
         var k=qnorm(d.q);if(seen[k]||asked[k])return;seen[k]=1;out.push(d.q)});
     if(out.length)addBot({t:"related",items:out})}
-  function logQ(q,got){var lg=DATA&&DATA.bot&&DATA.bot.log;var lh=/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(location.hostname);if(!lg||!lg.u||/[?&]chat=nolog\b/.test(location.search)||(lh&&!/[?&]chat=log\b/.test(location.search)))return;
+  function logQ(q,got){var lg=DATA&&DATA.bot&&DATA.bot.log;var lh=/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(location.hostname);var nt=false;try{nt=localStorage.getItem("ambs:notrack")==="1"}catch(e){}/* a device set to "don't count my visits" (editor) doesn't log its questions either */
+    if(nt||!lg||!lg.u||/[?&]chat=nolog\b/.test(location.search)||(lh&&!/[?&]chat=log\b/.test(location.search)))return;
     var res="answered",ans="";got.forEach(function(m){if(!ans&&(m.t==="answer"||m.t==="text"))ans=m.x||""});
     var f=got[0]||{};if(f.t==="contact")res="contact";else if(f.t==="langs")res="language";else if(f.t==="text"&&f.x===L("not_found"))res="not found";else if(f.t==="text"&&f.x===talk("offtopic"))res="off topic";else if(f.t==="text")res="small talk";
     var clean=String(q).replace(/[^\s@]+@[^\s@]+\.[^\s@]+/g,"[email]").replace(/\+?\d[\d\s()-]{5,}\d/g,"[number]").slice(0,300);

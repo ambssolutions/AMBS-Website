@@ -70,7 +70,10 @@ def ga_snippet():
     # the tag itself loads after the page has finished loading (it is 180 KB and held phones back for a third of a second);
     # page views and clicks before then wait in dataLayer and are sent when it arrives
     return ('<!--ga--><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());'
-      f'(function(){{var go=function(){{var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id={GA_ID}";document.head.appendChild(s)}};'
+      # "don't count this device": a device opted out (the editor's switch, or ambs.co.nz/?notrack=1 opened once) never loads the tag
+      '(function(){var off=false;try{var q=location.search;if(/[?&]notrack=1\\b/.test(q))localStorage.setItem("ambs:notrack","1");if(/[?&]notrack=0\\b/.test(q))localStorage.removeItem("ambs:notrack");off=localStorage.getItem("ambs:notrack")==="1"}catch(e){}'
+      f'window.ambsNoTrack=off;if(off){{window["ga-disable-{GA_ID}"]=true;return}}'
+      f'var go=function(){{var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id={GA_ID}";document.head.appendChild(s)}};'
       'if(document.readyState==="complete")setTimeout(go,1500);else addEventListener("load",function(){setTimeout(go,1500)})})();'
       f'gtag("config","{GA_ID}");'
       'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a");if(!a)return;var h=a.getAttribute("href")||"";'
