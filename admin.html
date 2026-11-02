@@ -108,6 +108,9 @@ nav.tabs button:hover{color:var(--ink)}
 /* forms */
 .vs-big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.vs-big b{font-size:3rem;line-height:1;color:var(--green)}.vs-big span{font-weight:700;font-size:1.1rem}.vs-sub{color:var(--muted);margin:6px 0 14px}
 .vs-bars{display:flex;align-items:flex-end;gap:3px;height:70px}.vs-bars span{flex:1;background:var(--green);border-radius:3px 3px 0 0;min-width:2px}.vs-bars span.z{background:var(--line)}.vs-axis{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-top:4px}
+@media (max-width:640px){.vs-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.vs-range{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.vs-range .btn{padding:.45rem .95rem}
+.vs-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:6px 0 10px}.vs-stat{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}.vs-stat b{font-size:1.6rem;line-height:1.1}.vs-stat span{color:var(--muted);font-size:.88rem}.vs-ch{font-size:.8rem;font-weight:700;color:var(--muted)}.vs-ch.up{color:var(--green)}.vs-ch.down{color:var(--red)}
 .vs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 16px}.vs-list table{width:100%;border-collapse:collapse}.vs-list td{padding:7px 0;border-top:1px solid var(--line)}.vs-list td.vs-n{text-align:right;font-weight:700;width:3em}.vs-steps{padding-left:1.3em}.vs-steps li{margin:0 0 10px;line-height:1.5}
 .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:16px}
 /* Chat helper: one section at a time, picked from the buttons along the top */
@@ -1789,12 +1792,19 @@ function historyInit(){var m=$("hiMain");m.innerHTML='<p class="empty"><span cla
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).
    Refreshes every 30 seconds while this tab is open. Until the Google connection is set up it shows the steps. */
 var VS_EVENTS=[["page_view","Pages viewed"],["book_click","Book a call clicks"],["booking_confirmed","Calls booked"],["generate_lead","Messages sent"],["phone_click","Phone taps"],["email_click","Email taps"]];
-var vsTimer=null;
+var vsTimer=null,vsRange="now";
 function visitorsInit(){
   var m=$("vsMain");
+  var DEV={mobile:"Phone",desktop:"Computer",tablet:"Tablet"};
   function list(title,rows,empty){return '<div class="panel vs-list"><h3>'+title+'</h3>'+(rows.length?'<table><tbody>'+rows.map(function(r){return'<tr><td>'+esc(r.name)+'</td><td class="vs-n">'+r.n+'</td></tr>'}).join("")+'</tbody></table>':'<p class="help">'+empty+'</p>')+'</div>'}
-  function draw(j){
-    if(j.setup){m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="help">This shows who is on ambs.co.nz right now, straight from Google Analytics. It needs a one-time, read-only connection to Google first. Do these steps on a computer:</p><ol class="vs-steps">'+
+  function evRows(events){var ev={};events.forEach(function(e){ev[e.name]=e.n});return VS_EVENTS.filter(function(e){return ev[e[0]]}).map(function(e){return{name:e[1],n:ev[e[0]]}})}
+  function devs(rows){return rows.map(function(d){return{name:DEV[d.name]||d.name,n:d.n}})}
+  function bars(vals,tips){var max=Math.max.apply(null,vals.concat([1]));return vals.map(function(n,i){return'<span title="'+esc(tips[i])+': '+n+'" style="height:'+Math.max(4,Math.round(n/max*100))+'%"'+(n?'':' class="z"')+'></span>'}).join("")}
+  function pills(){return '<div class="vs-range" role="group" aria-label="Time period">'+[["now","Right now"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div>'}
+  function wire(){m.querySelectorAll(".vs-range [data-r]").forEach(function(b){b.addEventListener("click",function(){if(vsRange===b.dataset.r)return;vsRange=b.dataset.r;m.querySelector(".vs-range").insertAdjacentHTML("afterend",'<p class="empty"><span class="spin"></span> Loading…</p>');load()})})}
+  function change(now,was,pct){if(!was)return now?'<span class="vs-ch up">new</span>':'';var d=pct?Math.round((now-was)*100):Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';return'<span class="vs-ch '+(d>0?'up':'down')+'">'+(d>0?'▲ ':'▼ ')+Math.abs(d)+(pct?' pts':'%')+'</span>'}
+  function mins(sec){sec=Math.round(sec);return sec<60?sec+'s':Math.floor(sec/60)+'m '+(sec%60)+'s'}
+  function setup(j){m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="help">This shows who is on ambs.co.nz, straight from Google Analytics. It needs a one-time, read-only connection to Google first. Do these steps on a computer:</p><ol class="vs-steps">'+
       '<li>Go to <b>console.cloud.google.com</b> (signed in with the Google account that owns your Analytics). Create a project called <b>AMBS website</b>.</li>'+
       '<li>In that project, open <b>APIs &amp; Services → Library</b>, search for <b>Google Analytics Data API</b> and press <b>Enable</b>.</li>'+
       '<li>Open <b>IAM &amp; Admin → Service accounts → Create service account</b>. Name it <b>ambs-visitors</b>, then press <b>Done</b> (skip the optional steps).</li>'+
@@ -1802,19 +1812,27 @@ function visitorsInit(){
       '<li>Copy the account’s email (it ends in <b>.iam.gserviceaccount.com</b>). In <b>analytics.google.com → Admin → Property access management</b>, press <b>+</b>, add that email with the role <b>Viewer</b>.</li>'+
       '<li>In <b>Analytics → Admin → Property details</b>, copy the <b>Property ID</b> (a number like 512345678).</li>'+
       '<li>In <b>vercel.com</b> → your website project → <b>Settings → Environment Variables</b>, add <b>GA_PROPERTY_ID</b> = that number, and <b>GA_SERVICE_ACCOUNT</b> = everything inside the downloaded file. Save, then redeploy.</li></ol>'+
-      '<p class="help">Still to do: '+[!j.has.property?"GA_PROPERTY_ID":"",!j.has.key?"GA_SERVICE_ACCOUNT":""].filter(Boolean).join(" and ")+'. Never paste the key into an email or chat.</p></div>';return}
-    var max=Math.max.apply(null,j.perMin.concat([1]));
-    var bars=j.perMin.map(function(n,i){return'<span title="'+(29-i)+' min ago: '+n+'" style="height:'+Math.max(4,Math.round(n/max*100))+'%"'+(n?'':' class="z"')+'></span>'}).join("");
-    var ev={};j.events.forEach(function(e){ev[e.name]=e.n});
-    var evRows=VS_EVENTS.filter(function(e){return ev[e[0]]}).map(function(e){return{name:e[1],n:ev[e[0]]}});
+      '<p class="help">Still to do: '+[!j.has.property?"GA_PROPERTY_ID":"",!j.has.key?"GA_SERVICE_ACCOUNT":""].filter(Boolean).join(" and ")+'. Never paste the key into an email or chat.</p></div>'}
+  function drawNow(j){
     var t=new Date(j.at);
-    m.innerHTML='<div class="panel vs-top"><div class="vs-big"><b>'+j.now+'</b><span>'+(j.now===1?"person":"people")+' on the website right now</span></div>'+
-      '<div class="vs-sub">'+j.last30+' in the last 30 minutes</div><div class="vs-bars" aria-label="People each minute, last 30 minutes">'+bars+'</div><div class="vs-axis"><span>30 min ago</span><span>now</span></div>'+
-      '<p class="help">Updates every 30 seconds · last checked '+t.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+'. Google doesn’t say who people are, only where and what they look at. Your own visits count too.</p></div>'+
-      '<div class="vs-grid">'+list("Pages they’re on",j.pages,"Nobody in the last 30 minutes.")+list("Where they are",j.places,"Nobody in the last 30 minutes.")+list("Phone or computer",j.devices.map(function(d){return{name:({mobile:"Phone",desktop:"Computer",tablet:"Tablet"})[d.name]||d.name,n:d.n}}),"Nobody in the last 30 minutes.")+list("What they did (last 30 minutes)",evRows,"No clicks yet.")+'</div>';
-  }
-  function load(){api("settings",{action:"visitors"}).then(draw).catch(function(e){if(e.message==="signin")return;m.innerHTML='<div class="panel"><h3>Visitors now</h3><p class="msg err">'+esc(e.message)+'</p></div>'})}
-  load();clearInterval(vsTimer);vsTimer=setInterval(function(){if(current==="visitors"&&document.visibilityState==="visible")load()},30000);
+    m.innerHTML=pills()+'<div class="panel vs-top"><div class="vs-big"><b>'+j.now+'</b><span>'+(j.now===1?"person":"people")+' on the website right now</span></div>'+
+      '<div class="vs-sub">'+j.last30+' in the last 30 minutes</div><div class="vs-bars" aria-label="People each minute, last 30 minutes">'+bars(j.perMin,j.perMin.map(function(n,i){return(29-i)+' min ago'}))+'</div><div class="vs-axis"><span>30 min ago</span><span>now</span></div>'+
+      '<p class="help">Updates every 30 seconds · last checked '+t.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+'. Google doesn’t say who people are, only where and what they look at. Your own visits count too. Visitors with ad blockers aren’t counted.</p></div>'+
+      '<div class="vs-grid">'+list("Pages they’re on",j.pages,"Nobody in the last 30 minutes.")+list("Where they are",j.places,"Nobody in the last 30 minutes.")+list("Phone or computer",devs(j.devices),"Nobody in the last 30 minutes.")+list("What they did (last 30 minutes)",evRows(j.events),"No clicks yet.")+'</div>';
+    wire()}
+  function drawPeriod(j){
+    var T=j.totals,B=j.before,lbl=j.days===90?"3 months":j.days+" days";
+    var card=function(n,label,ch){return'<div class="vs-stat"><b>'+n+'</b><span>'+label+'</span>'+ch+'</div>'};
+    var fd=function(d){var x=new Date(+d.slice(0,4),+d.slice(4,6)-1,+d.slice(6,8));return x.toLocaleDateString([], {day:"numeric",month:"short"})};
+    m.innerHTML=pills()+'<div class="panel"><h3>Last '+lbl+'</h3><div class="vs-stats">'+
+      card(T.activeUsers,"Visitors",change(T.activeUsers,B.activeUsers))+card(T.newUsers,"New visitors",change(T.newUsers,B.newUsers))+card(T.sessions,"Visits",change(T.sessions,B.sessions))+card(T.screenPageViews,"Pages viewed",change(T.screenPageViews,B.screenPageViews))+
+      card(mins(T.averageSessionDuration),"Average visit",change(T.averageSessionDuration,B.averageSessionDuration))+card(Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
+      '<p class="help">Compared with the '+lbl+' before. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p>'+
+      (j.daily.length?'<div class="vs-bars" aria-label="Visitors each day">'+bars(j.daily.map(function(d){return d.n}),j.daily.map(function(d){return fd(d.d)}))+'</div><div class="vs-axis"><span>'+fd(j.daily[0].d)+'</span><span>today</span></div>':'')+'</div>'+
+      '<div class="vs-grid">'+list("Top pages (views)",j.pages,"No visits yet.")+list("How they found you",j.sources.map(function(r){return{name:({"Organic Search":"Google and other search","Direct":"Typed in or bookmarked","Organic Social":"Social media","Referral":"Links on other websites","Paid Search":"Search ads","Paid Social":"Social media ads","Email":"Email","Unassigned":"Other"})[r.name]||r.name,n:r.n}}),"No visits yet.")+list("Where they are",j.places,"No visits yet.")+list("Phone or computer",devs(j.devices),"No visits yet.")+list("What they did",evRows(j.events),"No clicks yet.")+'</div>';
+    wire()}
+  function load(){var r=vsRange;api("settings",r==="now"?{action:"visitors"}:{action:"visitors",days:+r}).then(function(j){if(r!==vsRange)return;if(j.setup)return setup(j);(r==="now"?drawNow:drawPeriod)(j)}).catch(function(e){if(e.message==="signin")return;m.innerHTML=pills()+'<div class="panel"><h3>Visitors</h3><p class="msg err">'+esc(e.message)+'</p></div>';wire()})}
+  load();clearInterval(vsTimer);vsTimer=setInterval(function(){if(current==="visitors"&&vsRange==="now"&&document.visibilityState==="visible")load()},30000);
 }
 
 /* ======================= CALCULATOR ======================= */
