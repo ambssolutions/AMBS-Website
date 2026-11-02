@@ -700,7 +700,7 @@ header.top .who .nt-bar{justify-content:space-between}
 /* Stats and Connections */
 .st-stats{grid-template-columns:repeat(5,minmax(0,1fr))!important}button.st-tile{font:inherit;text-align:left;cursor:pointer;color:var(--ink)}button.st-tile:hover{border-color:var(--green)}
 @media (max-width:1180px){.st-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
-@media (max-width:640px){.st-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.vs-range.st-range{grid-template-columns:repeat(3,1fr)!important}}
+@media (max-width:640px){.st-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.vs-range.st-range,.vs-range.vs-range5{grid-template-columns:repeat(3,1fr)!important}}
 .st-col{cursor:default}.st-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))!important}
 .st-latest{list-style:none;margin:0 0 12px;padding:0}.st-latest li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)}.st-latest li:last-child{border-bottom:0}
 .st-latest b{font-size:.95rem}.st-latest span{grid-column:1;font-size:.82rem;color:var(--muted)}.st-latest em{grid-column:2;grid-row:1;font-style:normal;font-size:.8rem;color:var(--muted)}
@@ -3258,7 +3258,7 @@ function visitorsInit(){
       tip.innerHTML=fmt(c);tip.hidden=false;var r=b.getBoundingClientRect(),R=ch.getBoundingClientRect();var x=r.left-R.left+r.width/2;tip.style.left=Math.min(Math.max(x,70),R.width-70)+"px"};
     ch.querySelectorAll(".vs-col").forEach(function(b){b.addEventListener("mouseenter",function(){showTip(b)});b.addEventListener("focus",function(){showTip(b)});b.addEventListener("click",function(){showTip(b)})});
     ch.addEventListener("mouseleave",function(){tip.hidden=true;ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")})})}
-  function head(){return '<div class="dash-head"><div><h2>Visitors</h2><p class="help">From Google Analytics. Nobody is identified. Tap anything to look closer.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["now","Right now"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'+ntStrip()+
+  function head(){return '<div class="dash-head"><div><h2>Visitors</h2><p class="help">From Google Analytics. Nobody is identified. Tap anything to look closer.</p></div><div class="vs-range vs-range5" role="group" aria-label="Time period">'+[["now","Last 30 min"],["1","24 hours"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(vsRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(vsRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'+ntStrip()+
     (vsFilter?'<div class="vs-chip">Showing only · <b>'+esc(FLBL[vsFilter.f]||"")+':</b> '+esc(nice(vsFilter.f,vsFilter.v))+' <button type="button" class="btn link" id="vsClear">✕ Show everything</button></div>':'')}
   function busy(){var h=m.querySelector(".dash-head");if(h&&!m.querySelector(".vs-loading"))h.insertAdjacentHTML("afterend",'<p class="empty vs-loading"><span class="spin"></span> Loading…</p>')}
   function wire(){
@@ -3286,20 +3286,20 @@ function visitorsInit(){
       '<div class="vs-grid">'+list("Pages they’re on",j.pages,"Nobody in the last 30 minutes.","page")+list("Where they are",j.places,"Nobody in the last 30 minutes.","place")+list("Phone or computer",j.devices,"Nobody in the last 30 minutes.","device")+list("What they did (last 30 minutes)",evRows(j.events),"No clicks yet.")+'</div>';
     wire();wireChart(cols,function(c){return'<b>'+c.n+'</b> '+(c.n===1?"person":"people")+'<span>'+c.label+'</span>'})}
   function drawPeriod(j){
-    vsLast=j;var T=j.totals,B=j.before,lbl=j.days===90?"3 months":j.days+" days";
-    var fd=function(d){var x=new Date(d+"T12:00:00");return x.toLocaleDateString([], {weekday:j.days<=7?"short":undefined,day:"numeric",month:"short"})};
+    vsLast=j;var T=j.totals,B=j.before,lbl=j.days===90?"3 months":j.days===1?"24 hours":j.days+" days";
+    var fd=function(d){if(j.days===1){var h=+d.slice(11,13);return (h%12||12)+(h<12?"am":"pm")}var x=new Date(d+"T12:00:00");return x.toLocaleDateString([], {weekday:j.days<=7?"short":undefined,day:"numeric",month:"short"})};
     var card=function(k,n,label,ch){return'<button type="button" class="vs-stat'+(k===vsMetric?' on':'')+'"'+(k!=null?' data-k="'+k+'" aria-pressed="'+(k===vsMetric)+'"':' disabled')+'><b>'+n+'</b><span>'+label+'</span>'+ch+'</button>'};
     var mm=MET[vsMetric],cols=j.daily.map(function(d){return{label:fd(d.d),n:d.now[mm[1]],was:d.before[mm[1]]}});
     m.innerHTML=head()+'<div class="vs-stats">'+
       card(0,T.activeUsers,"Visitors",change(T.activeUsers,B.activeUsers))+card(1,T.newUsers,"New visitors",change(T.newUsers,B.newUsers))+card(2,T.sessions,"Visits",change(T.sessions,B.sessions))+card(3,T.screenPageViews,"Pages viewed",change(T.screenPageViews,B.screenPageViews))+
       card(null,mins(T.averageSessionDuration),"Average visit",change(T.averageSessionDuration,B.averageSessionDuration))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
-      '<div class="panel"><div class="vs-ph"><h3>'+mm[0]+' each day · last '+lbl+'</h3><span class="vs-key"><i class="k-now"></i>This period <i class="k-was"></i>The '+lbl+' before</span></div>'+
-      (cols.length?chart(cols,mm[0]+" each day")+'<div class="vs-axis"><span>'+cols[0].label+'</span><span>today</span></div>':'')+
-      '<p class="help">Tap a number above to chart it. ▲▼ compare with the '+lbl+' before. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p></div>'+
-      '<div class="panel vs-search" id="vsSearch"><div class="vs-ph"><h3>What people searched on Google</h3><span class="vs-key">From Search Console · 2–3 days behind</span></div><p class="empty"><span class="spin"></span> Loading…</p></div>'+
+      '<div class="panel"><div class="vs-ph"><h3>'+mm[0]+(j.days===1?' each hour':' each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-now"></i>This period <i class="k-was"></i>The '+lbl+' before</span></div>'+
+      (cols.length?chart(cols,mm[0]+(j.days===1?" each hour":" each day"))+'<div class="vs-axis"><span>'+cols[0].label+'</span><span>'+(j.days===1?'now':'today')+'</span></div>':'')+
+      '<p class="help">Tap a number above to chart it. ▲▼ compare with the '+lbl+' before'+(j.days===1?' (hours are New Zealand time; the last hour is still filling in)':'')+'. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p></div>'+
+      (j.days===1?'':'<div class="panel vs-search" id="vsSearch"><div class="vs-ph"><h3>What people searched on Google</h3><span class="vs-key">From Search Console · 2–3 days behind</span></div><p class="empty"><span class="spin"></span> Loading…</p></div>')+
       '<div class="vs-grid">'+list("Top pages (views)",j.pages,"No visits yet.","page")+list("How they found you",j.sources,"No visits yet.","source")+list("Where they are",j.places,"No visits yet.","place")+list("Phone or computer",j.devices,"No visits yet.","device")+list("What they did",evRows(j.events),"No clicks yet.")+'</div>';
     searches(j.days);
-    wire();wireChart(cols,function(c){var d=c.n-(c.was||0);return'<b>'+c.n+'</b> '+mm[0].toLowerCase()+'<span>'+c.label+'</span><span class="was">Same day before: '+(c.was||0)+(d?' ('+(d>0?'+':'')+d+')':'')+'</span>'})}
+    wire();wireChart(cols,function(c){var d=c.n-(c.was||0);return'<b>'+c.n+'</b> '+mm[0].toLowerCase()+'<span>'+c.label+'</span><span class="was">'+(j.days===1?'Same hour the day before: ':'Same day before: ')+(c.was||0)+(d?' ('+(d>0?'+':'')+d+')':'')+'</span>'})}
   var vsSearchCache={};
   function searches(days){var box=$("vsSearch");if(!box)return;
     var draw=function(j){var b=$("vsSearch");if(!b)return;var body;
