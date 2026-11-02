@@ -565,6 +565,14 @@ header.top .who{margin-left:4px}
 .op-tools{display:none}
 @media(max-width:900px){.op.has-side .op-stage{margin-left:0}.op-side{display:none;top:auto;height:62vh;width:100%;border-right:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:0 -12px 30px rgba(14,18,40,.15)}.op.side-open .op-side{display:block}.op-tools{display:inline-flex}}
 @media(max-width:1500px){.op-t span{display:none}}
+.way2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;margin-bottom:4px}.way{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);background:var(--card,#fff);border-radius:16px;padding:14px 16px;font:inherit;color:inherit}
+button.way{cursor:pointer;border-color:#139918;box-shadow:0 0 0 3px rgba(19,153,24,.12)}button.way:hover{background:#eefaef}.way b{font-size:1.02rem}.way span{font-size:.86rem;color:var(--muted)}.way.on{opacity:.8}
+@media(max-width:640px){.way2{grid-template-columns:1fr}}
+.pl-head .sm,.pl-btns .sm{display:none}
+@media(max-width:760px){.pl-head .lg,.pl-btns .lg{display:none!important}.pl-head .sm,.pl-btns .sm{display:inline}.pl-btns.one{grid-template-columns:1fr 48px}.pl-head .help{font-size:.92rem}}
+.kpi span.kpi-when{font-size:.74rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;display:block;margin-top:2px}
+@media(max-width:640px){#hmKpi0 .kpi{width:100%;box-sizing:border-box}}
+@media(max-width:640px){.vs-range{box-sizing:border-box}.vs-range .btn{padding:.45rem .2rem;font-size:.82rem;min-width:0;text-align:center;justify-content:center}}
 </style>
 </head>
 <body>
@@ -639,10 +647,11 @@ header.top .who{margin-left:4px}
     <div class="bar-acts">
     <button class="btn" id="discard" type="button" disabled>Discard<span class="dsk"> changes</span></button>
     <button class="btn" id="preview" type="button" disabled>Preview</button>
-    <button class="btn primary" id="onPageBtn" type="button" data-go="onpage">✎ Edit on page</button>
+    <button class="btn" id="onPageBtn" type="button" data-go="onpage">✎ Edit on page</button>
     <button class="btn primary" id="review" type="button" disabled>Review &amp; publish</button>
     </div>
   </div></div>
+  <div class="wrap way2" role="group" aria-label="Two ways to edit the homepage"><button type="button" class="way" data-go="onpage"><b>✎ Edit on the page</b><span>Click any words on your real homepage and type. Add questions, steps and more from the panel on the left.</span></button><div class="way on" aria-current="true"><b>☰ Edit as a list</b><span>You’re here: every line of the homepage, in all 5 languages, with search.</span></div></div>
   <div class="wrap layout">
     <nav class="secs" id="secs" aria-label="Page sections"></nav>
     <main id="list"><p class="empty"><span class="spin"></span> Loading the website wording…</p></main>
@@ -1282,18 +1291,19 @@ function pagesHome(){
     site.legal.map(function(p){return{sec:"legal",slug:p.slug,title:p.title,url:"/"+p.slug}}));
   var count={all:rows.length};rows.forEach(function(r){count[r.sec]=(count[r.sec]||0)+1});
   var chips=[["all","All"],["page","Pages"],["services","Services"],["industries","Industries"],["guides","Guides"],["locations","Locations"],["news","News"],["legal","Legal"]].filter(function(c){return count[c[0]]});
-  m.innerHTML='<div class="pl-head"><div><h2>Pages &amp; news</h2><p class="help">Every page on your website. <b>✎ Edit on page</b> lets you click and type on the real page; <b>☰ Edit with form</b> shows every setting, including Google wording.</p></div><div class="pl-acts"><button type="button" class="btn" id="plHubs">Section pages &amp; service cards</button><button type="button" class="btn primary" id="plNew">＋ New page or post</button></div></div>'+
+  m.innerHTML='<div class="pl-head"><div><h2>Pages &amp; news</h2><p class="help">'+(edMode()==="visual"?'You edit <b>on the page</b>: click a page to open it and type on it, with the tools on the left. <b>☰ Edit with form</b> is still there for every setting.':'You edit <b>with forms</b>: click a page to see all its settings. <b>✎ Edit on page</b> is still there to click and type on the real page.')+'</p></div><div class="pl-acts"><button type="button" class="btn" id="plHubs"><span class="lg">Section pages &amp; service cards</span><span class="sm">Section pages</span></button><button type="button" class="btn primary" id="plNew"><span class="lg">＋ New page or post</span><span class="sm">＋ New</span></button></div></div>'+
     '<div class="pl-tools"><input class="t" type="search" id="plQ" placeholder="Find a page" aria-label="Find a page"><div class="pl-chips" role="group" aria-label="Show">'+chips.map(function(c){return'<button type="button" data-f="'+c[0]+'" aria-pressed="'+(pgFilter===c[0])+'">'+c[1]+' <span>'+count[c[0]]+'</span></button>'}).join("")+'</div></div><ul class="pl-list" id="plList"></ul>';
   var q=$("plQ");q.value=pgQ;
   function draw(){var t=pgQ.trim().toLowerCase(),list=$("plList");
     var vis=rows.filter(function(r){return(pgFilter==="all"||r.sec===pgFilter)&&(!t||(r.title+" "+r.url).toLowerCase().indexOf(t)>=0)});
     list.innerHTML=vis.length?"":'<li class="pl-empty">No pages match.</li>';
     vis.forEach(function(r){var live=!r.p||edLive(r.p),sch=r.p&&edSched(r.p),onp=live&&r.sec!=="page";
-      var li=h('<li><div class="pl-main"><span class="pl-kind k-'+r.sec+'">'+KIND[r.sec]+'</span><button type="button" class="pl-title"></button><span class="pl-url"></span></div><span class="pl-state '+(live?"on":sch?"sch":"draft")+'">'+(live?"Live":sch?"Scheduled":"Draft")+'</span><div class="pl-btns">'+(onp?'<button type="button" class="btn soft pl-op">✎ <span class="lg">Edit </span>on page</button>':'')+'<button type="button" class="btn pl-fm">'+(r.sec==="page"?"✎ Edit blocks":'☰ <span class="lg">Edit with </span>form')+'</button><button type="button" class="btn pl-more" aria-haspopup="menu" aria-label="More for this page" title="More">⋯</button></div></li>');
+      var vis=edMode()==="visual",opB=onp?'<button type="button" class="btn '+(vis?"primary":"")+' pl-op"><span class="lg">✎ Edit on page</span><span class="sm">✎ On page</span></button>':'',fmB='<button type="button" class="btn '+(!vis||!onp?"soft":"")+' pl-fm">'+(r.sec==="page"?"✎ Edit blocks":'<span class="lg">☰ Edit with form</span><span class="sm">☰ Form</span>')+'</button>';
+      var li=h('<li><div class="pl-main"><span class="pl-kind k-'+r.sec+'">'+KIND[r.sec]+'</span><button type="button" class="pl-title"></button><span class="pl-url"></span></div><span class="pl-state '+(live?"on":sch?"sch":"draft")+'">'+(live?"Live":sch?"Scheduled":"Draft")+'</span><div class="pl-btns'+(onp?'':' one')+'">'+(vis?opB+fmB:fmB+opB)+'<button type="button" class="btn pl-more" aria-haspopup="menu" aria-label="More for this page" title="More">⋯</button></div></li>');
       li.querySelector(".pl-more").addEventListener("click",function(e){e.stopPropagation();plMenu(this,r,live)});
       li.querySelector(".pl-title").textContent=r.title;li.querySelector(".pl-url").textContent="ambs.co.nz"+r.url;
-      var form=function(){openPage(r.sec,r.slug);window.scrollTo(0,0)};
-      li.querySelector(".pl-title").addEventListener("click",onp?function(){openPageOnPage(r.sec,r.slug)}:form);
+      var form=function(){forceForm=true;openPage(r.sec,r.slug);window.scrollTo(0,0)};
+      li.querySelector(".pl-title").addEventListener("click",onp&&edMode()==="visual"?function(){openPageOnPage(r.sec,r.slug)}:form);
       li.querySelector(".pl-fm").addEventListener("click",form);var o=li.querySelector(".pl-op");if(o)o.addEventListener("click",function(){openPageOnPage(r.sec,r.slug)});
       list.appendChild(li)})}
   q.addEventListener("input",function(){pgQ=q.value;draw()});
@@ -1393,7 +1403,7 @@ function renderPage(sec,slug,d){
   var live=sec==="legal"||edLive(card),sch=sec==="legal"?"":edSched(card);
   var top=h('<div><h2 class="sec">'+esc(meta.h1||slug)+' '+stateTag(live,sch)+'</h2><p class="sechelp">'+(sec==="legal"?"Legal page":esc(SEC[sec]))+(live?' · <a href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">View this page</a>':'')+'</p>'+(live?'<button type="button" class="btn soft" id="pgOnPage">✎ Edit on page</button>':'')+'</div>');m.appendChild(top);
   if(live)$("pgOnPage").addEventListener("click",function(){openPageOnPage(sec,slug)});
-  if(live&&edMode()==="visual"&&!document.querySelector(".op"))openPageOnPage(sec,slug);
+  if(live&&edMode()==="visual"&&!forceForm&&!document.querySelector(".op"))openPageOnPage(sec,slug);forceForm=false;
   /* the build lists outside services the website uses that this policy doesn't name yet (build.py privacy_check) */
   var pm=(site&&site.privacy_missing)||[];
   if(sec==="legal"&&slug==="privacy"&&pm.length)m.appendChild(h('<div class="msg" style="background:var(--amber-bg);color:var(--amber);margin:0 0 14px"><b>This policy doesn\u2019t mention '+pm.map(function(x){return esc(x.name)}).join(", ")+' yet.</b> The website uses '+(pm.length>1?"them":"it")+', so add a line saying what visitors\u2019 details go there and why. Ask Claude to draft it if you like.</div>'));
@@ -1585,26 +1595,40 @@ function bodyOut(rte){
 }
 /* a button in the article text: words, link, look and where it sits (left, centre, right) */
 function btnHtml(v){return'<p class="art-btns'+(v.align?" art-btns--"+v.align:"")+'"><a class="btn '+(v.look==="ghost"?"btn--ghost":"btn--go")+'" href="'+esc(v.href)+'"'+(/^https?:/.test(v.href)?' target="_blank" rel="noopener"':'')+'>'+esc(v.text)+'</a></p>'}
-function buttonDialog(cur){siteLinks();cur=cur||{text:"Book a free session",href:"/#book",look:"go",align:""};
+function buttonDialog(cur,opts){siteLinks();opts=opts||{};cur=cur||{text:"Book a free session",href:"/#book",look:"go",align:""};
   return new Promise(function(done){
-    var dlg=h('<dialog aria-label="Button"><div class="hd"><h2>'+(cur.el?"Change button":"Add a button")+'</h2></div><div class="bd">'+
+    var site=!!opts.site;
+    var dlg=h('<dialog aria-label="Button" class="bd-dlg"><div class="hd"><h2>'+(site?"Button":cur.el?"Change button":"Add a button")+'</h2></div><div class="bd">'+
+      (site?'<p class="help bd-site">'+esc(opts.siteNote||"This button is part of the page design. Click its words on the page to change them.")+'</p>':
       '<div class="fld"><label for="bdT">Words on the button</label><input class="t" id="bdT" maxlength="60"></div>'+
       '<div class="fld"><label for="bdH">Link</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem">A page on this site (pick from the list), /#book for booking, or a full web address.</p><input class="t" id="bdH" list="siteLinks" placeholder="/#book"></div>'+
       '<div class="ds-seg"><b>Look</b><div><button type="button" data-k="look" data-v="go">● Main colour</button><button type="button" data-k="look" data-v="ghost">○ Outline</button></div></div>'+
       '<div class="ds-seg"><b>Where it sits</b><div><button type="button" data-k="align" data-v="">⇤ Left</button><button type="button" data-k="align" data-v="center">↔ Centre</button><button type="button" data-k="align" data-v="right">⇥ Right</button></div></div>'+
-      '<div class="bd-prev"><span class="help">Preview</span><p class="art-btns"><a class="btn" href="#" tabindex="-1"></a></p></div></div>'+
-      '<div class="ft">'+(cur.el?'<button type="button" class="btn danger" id="bdDel">Remove button</button><span class="sp"></span>':'')+'<button type="button" class="btn" id="bdX">Cancel</button><button type="button" class="btn primary" id="bdOk">'+(cur.el?"Save":"Add button")+'</button></div></dialog>');
+      '<div class="bd-prev"><span class="help">Preview</span><p class="art-btns"><a class="btn" href="#" tabindex="-1"></a></p></div>')+
+      '<div class="bd-all"><h3>Every button on the website</h3><p class="help">Shape, size and style change all buttons together'+(opts.doc?' — watch the page behind this box':'')+'.</p>'+
+      [["button_shape","Shape",[["","● Pill"],["rounded","▢ Rounded"],["square","■ Square"]]],["button_size","Size",[["small","Small"],["","Normal"],["large","Large"]]],["button_style","Style",[["","Glossy"],["flat","Flat"],["raised","Raised"]]]].map(function(g){return'<div class="ds-seg"><b>'+g[1]+'</b><div>'+g[2].map(function(o){return'<button type="button" data-tk="'+g[0]+'" data-tv="'+o[0]+'">'+o[1]+'</button>'}).join("")+'</div></div>'}).join("")+'</div></div>'+
+      '<div class="ft">'+(cur.el&&!site?'<button type="button" class="btn danger" id="bdDel">Remove button</button><span class="sp"></span>':'')+'<button type="button" class="btn" id="bdX">Cancel</button><button type="button" class="btn primary" id="bdOk">'+(site?"Save":cur.el?"Save":"Add button")+'</button></div></dialog>');
     document.body.appendChild(dlg);dlg.showModal();var v={text:cur.text,href:cur.href,look:cur.look,align:cur.align};
-    var t=dlg.querySelector("#bdT"),u=dlg.querySelector("#bdH"),pv=dlg.querySelector(".bd-prev a"),pp=dlg.querySelector(".bd-prev p");t.value=v.text;u.value=v.href;
-    function draw(){pv.textContent=t.value||"Button";pv.className="btn "+(v.look==="ghost"?"btn--ghost":"btn--go");pp.className="art-btns"+(v.align?" art-btns--"+v.align:"");
-      dlg.querySelectorAll("[data-k]").forEach(function(b){b.setAttribute("aria-pressed",String(v[b.dataset.k]===b.dataset.v))})}
-    dlg.querySelectorAll("[data-k]").forEach(function(b){b.addEventListener("click",function(){v[b.dataset.k]=b.dataset.v;draw()})});t.addEventListener("input",draw);draw();
-    var fin=function(r){dlg.close();dlg.remove();done(r)};
+    /* the website's button look (shared with Colours & fonts and 🎨 Look); previewed live on the page in the frame */
+    var thSaved=null,th={},cache={};api("settings",{action:"get"}).then(function(j){thSaved=Object.assign({},j.business.theme||{});th=Object.assign({},TH_BASE,thSaved);drawT()}).catch(function(){});
+    function drawT(){dlg.querySelectorAll("[data-tk]").forEach(function(b){b.setAttribute("aria-pressed",String((th[b.dataset.tk]||"")===b.dataset.tv))});if(opts.doc)lookApply(opts.doc,th,cache);var pa=dlg.querySelector(".bd-prev a");if(pa){var sh={rounded:"12px",square:"4px"}[th.button_shape||""];pa.style.borderRadius=sh||"";pa.style.fontSize={small:".86rem",large:"1.08rem"}[th.button_size||""]||"";pa.style.padding={small:".7em 1.1em",large:"1.1em 1.9em"}[th.button_size||""]||"";pa.style.background=th.button_style==="flat"&&v.look!=="ghost"?(th.green||"#24B328"):"";pa.style.boxShadow=th.button_style==="raised"?"0 14px 28px -10px rgba(0,0,0,.45),inset 0 -3px 0 rgba(0,0,0,.18)":""}}
+    dlg.querySelectorAll("[data-tk]").forEach(function(b){b.addEventListener("click",function(){th[b.dataset.tk]=b.dataset.tv;drawT()})});
+    var thChanged=function(){return thSaved&&["button_shape","button_size","button_style"].some(function(k){return(th[k]||"")!==(thSaved[k]||"")})};
+    var saveTh=function(){if(!thChanged())return Promise.resolve();var t2={};["blue","green","purple"].forEach(function(k){if(String(th[k]).toUpperCase()!==TH_BASE[k])t2[k]=th[k]});["heading_font","body_font","button_shape","button_size","button_style"].forEach(function(k){if(th[k])t2[k]=th[k]});
+      return api("settings",{action:"theme",theme:t2}).then(function(){toast("Button look saved for the whole website. It updates in about 2 minutes.")})};
+    var t=dlg.querySelector("#bdT"),u=dlg.querySelector("#bdH"),pv=dlg.querySelector(".bd-prev a"),pp=dlg.querySelector(".bd-prev p");if(t){t.value=v.text;u.value=v.href}
+    function draw(){if(!t)return;pv.textContent=t.value||"Button";pv.className="btn "+(v.look==="ghost"?"btn--ghost":"btn--go");pp.className="art-btns"+(v.align?" art-btns--"+v.align:"");
+      dlg.querySelectorAll("[data-k]").forEach(function(b){b.setAttribute("aria-pressed",String(v[b.dataset.k]===b.dataset.v))});drawT()}
+    dlg.querySelectorAll("[data-k]").forEach(function(b){b.addEventListener("click",function(){v[b.dataset.k]=b.dataset.v;draw()})});if(t)t.addEventListener("input",draw);draw();
+    var fin=function(r){if(!r&&opts.doc&&thSaved)lookApply(opts.doc,Object.assign({},TH_BASE,thSaved),cache);dlg.close();dlg.remove();done(r)};
     dlg.querySelector("#bdX").addEventListener("click",function(){fin(null)});dlg.addEventListener("cancel",function(){fin(null)});
     var del=dlg.querySelector("#bdDel");if(del)del.addEventListener("click",function(){fin({remove:true})});
-    dlg.querySelector("#bdOk").addEventListener("click",function(){var tx=t.value.trim(),hr=u.value.trim();if(!tx){t.focus();return toast("Write the words on the button",true)}
-      if(!hr){u.focus();return toast("Add where the button goes",true)}if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(hr))hr="https://"+hr;fin({text:tx,href:hr,look:v.look,align:v.align})});
-    t.focus();t.select()})}
+    dlg.querySelector("#bdOk").addEventListener("click",function(){var ok=this;
+      if(site){busy(ok,true);saveTh().then(function(){fin({site:true})}).catch(function(e){busy(ok,false);fail(e)});return}
+      var tx=t.value.trim(),hr=u.value.trim();if(!tx){t.focus();return toast("Write the words on the button",true)}
+      if(!hr){u.focus();return toast("Add where the button goes",true)}if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(hr))hr="https://"+hr;
+      busy(ok,true);saveTh().then(function(){fin({text:tx,href:hr,look:v.look,align:v.align})}).catch(function(e){busy(ok,false);fail(e)})});
+    if(t){t.focus();t.select()}})}
 function wireRte(bar,rte){
   try{document.execCommand("defaultParagraphSeparator",false,"p")}catch(e){}
   /* click a button in the text to change or remove it */
@@ -2173,7 +2197,9 @@ function openOnPage(){
     var st=d.createElement("style");st.textContent='[data-ed]{cursor:text;border-radius:6px;transition:box-shadow .15s,background .15s}[data-ed]:hover{box-shadow:0 0 0 2px rgba(19,153,24,.55);background:rgba(220,242,198,.25)}[data-ed]:focus{outline:none;box-shadow:0 0 0 3px #139918,0 0 0 7px rgba(19,153,24,.18);background:rgba(255,255,255,.08)}[data-ed].ed-chg{box-shadow:0 0 0 2px rgba(19,153,24,.35)}'+
       '#ed-chip{position:absolute;z-index:2147483646;background:#14172b;color:#fff;font:600 12px/1.2 system-ui,sans-serif;border-radius:999px;padding:5px 6px 5px 12px;display:flex;gap:8px;align-items:center;box-shadow:0 8px 20px -8px rgba(0,0,0,.5);pointer-events:auto}#ed-chip button{all:unset;cursor:pointer;background:#2a2f4a;border-radius:999px;padding:3px 9px}#ed-chip button:hover{background:#139918}[hidden]{display:none!important}';
     d.head.appendChild(st);
-    var chip=d.createElement("div");chip.id="ed-chip";chip.hidden=true;chip.innerHTML='<span></span><button type="button" data-a="undo">↺ Undo</button>';d.body.appendChild(chip);var curEl=null;
+    var chip=d.createElement("div");chip.id="ed-chip";chip.hidden=true;chip.innerHTML='<span></span><button type="button" data-a="undo">↺ Undo</button><button type="button" data-a="btn" hidden>⚙ Button look</button>';d.body.appendChild(chip);var curEl=null;
+    chip.querySelector("[data-a=btn]").addEventListener("mousedown",function(e){e.preventDefault();if(!curEl)return;var a=curEl.closest(".btn")||curEl;
+      buttonDialog({text:a.textContent.trim(),href:a.getAttribute("href")||""},{doc:d,site:true,siteNote:"Type on the button to change its words. It opens "+(a.getAttribute("href")||"the form")+" (set by the homepage design). Here you can change how every button looks."})});
     function place(el){var r=el.getBoundingClientRect();chip.style.top=(r.top+w.scrollY-34)+"px";chip.style.left=Math.max(8,r.left+w.scrollX)+"px";chip.hidden=false}
     d.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n"),it=byKey[k];if(!it)return;
       el.setAttribute("data-ed",k);el.setAttribute("spellcheck","true");
@@ -2181,7 +2207,7 @@ function openOnPage(){
       if(el.contentEditable!=="plaintext-only")el.contentEditable="true";
       var v=cur(k,"en");if(el.textContent.trim()!==v.trim())el.textContent=v;
       el.classList.toggle("ed-chg",!!(W.draft()[k]&&typeof W.draft()[k].en==="string"));
-      el.addEventListener("focus",function(){curEl=el;chip.querySelector("span").textContent=label(k);place(el)});
+      el.addEventListener("focus",function(){curEl=el;chip.querySelector("span").textContent=label(k);chip.querySelector("[data-a=btn]").hidden=!el.closest(".btn,.blk-btn");place(el)});
       el.addEventListener("input",function(){var t=el.innerText.replace(/\u00a0/g," ").replace(/\n+$/,"");var draft=W.draft(),dd=draft[k]||(draft[k]={});if(t===it.en)delete dd.en;else dd.en=t;el.classList.toggle("ed-chg",t!==it.en);saveDraft();cnt();place(el)});
       el.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();el.blur()}if(e.key==="Escape"){el.blur()}});
       el.addEventListener("paste",function(e){e.preventDefault();var t=(e.clipboardData||w.clipboardData).getData("text/plain");d.execCommand("insertText",false,t)});
@@ -2256,7 +2282,7 @@ function openPageOnPage(sec,slug){
     sideEl.querySelectorAll("[data-mv]").forEach(function(b){b.addEventListener("click",function(){ov.opMove(+b.dataset.mv)})});
     var dl=sideEl.querySelector("[data-del]");if(dl)dl.addEventListener("click",function(){ov.opDel()});
     var eb=sideEl.querySelector("[data-ebtn]");if(eb)eb.addEventListener("click",function(){var a=sel&&sel.el.querySelector("a");if(a)a.click()});
-    sideEl.querySelector("[data-form]").addEventListener("click",function(){if(leave()!==false){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(sec,slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()}});
+    sideEl.querySelector("[data-form]").addEventListener("click",function(){if(leave()!==false){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain")){forceForm=true;openPage(sec,slug)}else if(Date.now()-t0<15000)setTimeout(go,120)};go()}});
     if(meta){var g=sideEl.querySelector(".os-goog"),ti=h('<label class="os-l">Title in Google<input class="t" maxlength="70"></label>'),de=h('<label class="os-l">Description in Google<textarea class="t" rows="3" maxlength="170"></textarea></label>');
       var tI=ti.querySelector("input"),dI=de.querySelector("textarea");tI.value=meta.title||"";dI.value=meta.description||"";var o1=tI.value,o2=dI.value,c1=false,c2=false;
       tI.addEventListener("input",function(){meta.title=tI.value;var now=tI.value!==o1;if(now!==c1){dirty+=now?1:-1;c1=now;n()}});dI.addEventListener("input",function(){meta.description=dI.value;var now=dI.value!==o2;if(now!==c2){dirty+=now?1:-1;c2=now;n()}});
@@ -2308,7 +2334,7 @@ function openPageOnPage(sec,slug){
     }
     /* the part last clicked: new parts go under it; it can move up or down or be deleted from the panel */
     function pick(el,se){if(sel&&sel.el!==el)sel.el.classList.remove("ed-sel");sel={el:el,se:se};el.classList.add("ed-sel");side()}
-    function editBtn(el,se){var a=se.querySelector("a");buttonDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",look:a.classList.contains("btn--ghost")?"ghost":"go",align:se.classList.contains("art-btns--center")?"center":se.classList.contains("art-btns--right")?"right":""}).then(function(v){if(!v)return;
+    function editBtn(el,se){var a=se.querySelector("a");buttonDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",look:a.classList.contains("btn--ghost")?"ghost":"go",align:se.classList.contains("art-btns--center")?"center":se.classList.contains("art-btns--right")?"right":""},{doc:d}).then(function(v){if(!v)return;
       if(v.remove){drop(el,se);return}var t2=document.createElement("div");t2.innerHTML=btnHtml(v);var ns=t2.firstChild;se.replaceWith(ns);var ne=d.importNode(ns,true);el.replaceWith(ne);pairs=pairs.filter(function(x){return x.el!==el});wirePart(ne,ns);pick(ne,ns);dirty++;n()})}
     function drop(el,se){se.remove();el.remove();pairs=pairs.filter(function(x){return x.el!==el});sel=null;dirty++;n();side()}
     var art=d.querySelector("article.prose");
@@ -2320,13 +2346,29 @@ function openPageOnPage(sec,slug){
       else if(kind==="h2")mk("<h2>New heading</h2>");else if(kind==="h3")mk("<h3>New subheading</h3>");
       else if(kind==="ul")mk("<ul><li>First point</li><li>Second point</li></ul>");
       else if(kind==="tip")mk('<div class="callout callout--tip"><p>Tip: write your tip here.</p></div>');
-      else if(kind==="button")buttonDialog(null).then(function(v){if(v&&!v.remove)mk(btnHtml(v))});
+      else if(kind==="button")buttonDialog(null,{doc:d}).then(function(v){if(v&&!v.remove)mk(btnHtml(v))});
       else if(kind==="photo")choosePhoto().then(function(ph){if(!ph)return;var alt=prompt("Describe the photo in a few words (read out to people who can't see it):",ph.alt||"")||"";
         mk('<figure><img src="'+esc(ph.url)+'" alt="'+esc(alt)+'" loading="lazy"'+(ph.w?' width="'+ph.w+'" height="'+ph.h+'"':'')+'></figure>')})};
     ov.opMove=function(dir){if(!sel)return;var se=sel.se,el=sel.el;if(dir<0){var ps=se.previousElementSibling;var pi=pairs.filter(function(x){return x.se===ps})[0];if(!ps||!pi)return toast("Already at the top of the article.");ps.before(se);pi.el.before(el)}
       else{var nx=se.nextElementSibling;var ni=pairs.filter(function(x){return x.se===nx})[0];if(!nx||!ni)return toast("Already at the bottom of the article.");nx.after(se);ni.el.after(el)}dirty++;n();el.scrollIntoView({block:"center",behavior:"smooth"})};
     ov.opDel=function(){if(!sel)return;if(!confirm("Delete this part of the page?"))return;drop(sel.el,sel.se)};
-    var stS=d.createElement("style");stS.textContent=".ed-sel{outline:2px solid #1877e0!important;outline-offset:6px;border-radius:4px}a[data-edimg]{cursor:pointer}";d.head.appendChild(stS);
+    var stS=d.createElement("style");stS.textContent=".ed-sel{outline:2px solid #1877e0!important;outline-offset:6px;border-radius:4px}a[data-edimg]{cursor:pointer}"+
+      "#ed-fmt{position:absolute;z-index:2147483646;display:flex;gap:2px;background:#14172b;border-radius:12px;padding:4px;box-shadow:0 10px 24px -10px rgba(0,0,0,.55)}#ed-fmt[hidden]{display:none}#ed-fmt button{all:unset;cursor:pointer;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:7px 9px;border-radius:8px;min-width:14px;text-align:center}#ed-fmt button:hover{background:#139918}#ed-fmt i{width:1px;background:rgba(255,255,255,.25);margin:4px 2px}"+
+      ".btn:not([data-edimg]),.blk-btn{cursor:pointer}";d.head.appendChild(stS);
+    /* a small toolbar over the article text being typed in: bold, italic, link, heading or text */
+    var fmt=d.createElement("div");fmt.id="ed-fmt";fmt.hidden=true;fmt.innerHTML='<button type="button" data-f="bold" title="Bold"><b>B</b></button><button type="button" data-f="italic" title="Italic"><em>I</em></button><button type="button" data-f="link" title="Add a link">🔗 Link</button><button type="button" data-f="unlink" title="Remove the link">Unlink</button><i></i><button type="button" data-f="h2" title="Make it a heading">H</button><button type="button" data-f="h3" title="Make it a subheading">h</button><button type="button" data-f="p" title="Make it normal text">¶</button>';d.body.appendChild(fmt);
+    fmt.addEventListener("mousedown",function(e){e.preventDefault()});
+    var fmtEl=null;function fmtAt(el){var r=el.getBoundingClientRect();fmt.style.top=Math.max(w.scrollY+4,r.top+w.scrollY-44)+"px";fmt.style.left=Math.max(8,r.left+w.scrollX)+"px";fmt.hidden=false;fmtEl=el}
+    d.addEventListener("focusin",function(e){var el=e.target.closest&&e.target.closest("article.prose [data-ed]");if(el&&pairs.some(function(x){return x.el===el})){fmtAt(el)}else fmt.hidden=true});
+    w.addEventListener("scroll",function(){if(fmtEl&&!fmt.hidden)fmtAt(fmtEl)},{passive:true});
+    fmt.addEventListener("click",function(e){var b=e.target.closest("button");if(!b||!fmtEl)return;var f=b.dataset.f,pr=pairs.filter(function(x){return x.el===fmtEl})[0];if(!pr)return;
+      if(f==="bold"||f==="italic"||f==="unlink"){d.execCommand(f);fmtEl.dispatchEvent(new Event("input"))}
+      else if(f==="link"){var u=prompt("Link to (a page on this site like /services/ai-automation, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;d.execCommand("createLink",false,u);fmtEl.dispatchEvent(new Event("input"))}}
+      else{var tag=f.toUpperCase();if(pr.se.tagName===tag||/^(UL|OL|DIV|FIGURE)$/.test(pr.se.tagName))return toast(/^(UL|OL|DIV|FIGURE)$/.test(pr.se.tagName)?"Lists, tip boxes and photos keep their own shape.":"It already is.");
+        var ns=document.createElement(f),ne=d.createElement(f);ns.innerHTML=pr.se.innerHTML;ne.innerHTML=pr.se.innerHTML;pr.se.replaceWith(ns);fmtEl.replaceWith(ne);pairs=pairs.filter(function(x){return x!==pr});wirePart(ne,ns);pick(ne,ns);dirty++;n();ne.focus()}});
+    /* buttons that are part of the page design: open the button box (shape, size and style for every button) */
+    d.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest(".btn,.blk-btn");if(!a||a.hasAttribute("data-edimg")||a.closest("#ed-fmt,#ed-chip"))return;e.preventDefault();e.stopPropagation();
+      buttonDialog({text:a.textContent.trim(),href:a.getAttribute("href")||""},{doc:d,site:true,siteNote:"“"+a.textContent.trim()+"” is part of the page design and opens "+(a.getAttribute("href")||"a form")+". Its words are set in Business details → Wording on every page. Here you can change how every button looks."})},true);
     side();
     var hero=q(".news-hero img");if(hero&&sec==="news")wireImg(hero,function(url){photo=url;hero.src=url;dirty++;n()});
     function wireImg(im,done){im.setAttribute("data-edimg","1");im.title="Click to change this photo";im.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();choosePhoto().then(function(pp){if(pp&&pp.url)done(pp.url)})})}
@@ -2343,11 +2385,13 @@ window.edOpenPage=openPageOnPage;
 /* ======================= EDITING MODE ======================= */
 /* One switch (sidebar on laptops, Home on every screen): "On the page" opens the homepage and pages in Edit on page
    straight away; "With forms" keeps the lists and forms, with Edit on page one button away. Remembered on this device. */
-/* One way to work everywhere: each page has its own two buttons, "✎ Edit on page" and "☰ Edit with form", so there is no mode to remember. */
-function edMode(){return"forms"}
+/* "How you edit" (sidebar on laptops, Home on phones), remembered in this browser: On page opens the homepage and pages
+   in Edit on page with the tools panel; With form opens the lists and forms. Each page still offers the other way too. */
+function edMode(){try{return localStorage.getItem("ambs-ed-mode")||"visual"}catch(e){return"visual"}}
+var forceForm=false;
 function modeSwitch(short){return '<div class="mode-sw" role="group" aria-label="How you edit"><span class="mode-l">How you edit</span><div class="mode-b"><button type="button" data-mode="visual" title="Click text on your real pages and type">✎ '+(short?'On page':'On the page')+'</button><button type="button" data-mode="forms" title="Lists and forms, with every setting">☰ '+(short?'Forms':'With forms')+'</button></div></div>'}
 function modeSync(){var m=edMode();document.querySelectorAll("[data-mode]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===m))});document.body.classList.toggle("mode-visual",m==="visual")}
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mode]");if(!b)return;try{localStorage.setItem("ambs-ed-mode",b.dataset.mode)}catch(x){}modeSync();toast(b.dataset.mode==="visual"?"On the page: the homepage and your pages open ready to click and type.":"With forms: you\u2019ll see the lists and forms. Edit on page is still one button away.")});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mode]");if(!b)return;try{localStorage.setItem("ambs-ed-mode",b.dataset.mode)}catch(x){}modeSync();if($("plList")&&!open)pagesHome();toast(b.dataset.mode==="visual"?"On the page: the homepage and your pages open ready to click and type.":"With forms: you\u2019ll see the lists and forms. Edit on page is still one button away.")});
 window.edMode=edMode;
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-new]");if(!b)return;e.preventDefault();edNew(b.dataset.new)});
 /* the Website ROI calculator is a block page (site-src/content/custom/website-roi-calculator.json): open it straight from Home or the menu */
@@ -2460,11 +2504,11 @@ function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){i
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
   EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
   h+='<div class="side-h">Shortcuts</div><button type="button" data-roi="1">'+ico("calc")+'<span>Website ROI calculator</span></button><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
-  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");sideSync();modeSync()})();
+  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");b0.insertAdjacentHTML("afterend",'<div class="side-mode">'+modeSwitch(1)+'</div>');sideSync();modeSync()})();
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();if(b.dataset.go==="onpage"||(b.dataset.go==="wording"&&edMode()==="visual"&&!b.closest("#tab-wording")))return openOnPage();show(b.dataset.go)});
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
-  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+''+'</div>'+
+  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+modeSwitch()+'</div>'+
     '<div class="kpis" id="hmKpi0"><button type="button" class="kpi" data-go="health" id="hmHealth"><b>…</b><span>site health</span></button></div><div class="kpis" id="hmKpi" hidden></div>'+
     '<div class="quick"><button type="button" class="btn primary" data-new="news">＋ Write a news post</button><button type="button" class="btn" data-new="page">＋ Add a page</button><button type="button" class="btn" data-new="guides">＋ Add a guide</button></div>';
   EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
