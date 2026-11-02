@@ -513,6 +513,57 @@ header.top .who{margin-left:4px}
 .hl-list .bad .hl-tag{background:#fde8e8;color:#b42318}.hl-list .warn .hl-tag{background:#fff2dc;color:#9a5b00}.hl-list .low .hl-tag{background:#eef1f5;color:#4a5265}
 @media(max-width:640px){.hl-list li{grid-template-columns:1fr auto}.hl-list .hl-tag{grid-column:1/3;justify-self:start}}
 .kpi small{font-size:.55em;color:var(--muted);font-weight:600}#hmKpi0{margin-bottom:12px}
+#pgNav{display:none!important}#tab-pages .layout{grid-template-columns:minmax(0,1fr)}#tab-pages .pg-col{display:block!important}
+#tab-pages:not(.pg-open) .pg-back{display:none!important}#tab-pages.pg-open .pg-back{display:inline-block!important;font-size:1rem;margin:2px 0 8px;padding:.4rem 0}
+.pl-head{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}.pl-head h2{margin:0 0 4px;font-size:1.6rem}.pl-head .help{margin:0;max-width:640px}
+.pl-acts{display:flex;gap:10px;flex-wrap:wrap}
+.pl-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.pl-tools .t{max-width:280px}
+.pl-chips{display:flex;gap:6px;flex-wrap:wrap}.pl-chips button{border:1px solid var(--line);background:var(--card,#fff);border-radius:99px;padding:.45rem .85rem;font:inherit;font-size:.88rem;font-weight:600;cursor:pointer;color:inherit}
+.pl-chips button span{color:var(--muted);font-weight:500;margin-left:2px}.pl-chips button[aria-pressed=true]{background:#14172b;color:#fff;border-color:#14172b}.pl-chips button[aria-pressed=true] span{color:#c9cede}
+.pl-list{list-style:none;margin:0;padding:0;background:var(--card,#fff);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pl-list li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}.pl-list li:first-child{border-top:0}
+.pl-main{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-items:center}.pl-kind{grid-row:1/3;font-size:.72rem;font-weight:700;padding:4px 9px;border-radius:8px;background:#eef1f5;color:#4a5265;min-width:72px;text-align:center}
+.pl-kind.k-news{background:#f1e8fb;color:#6a28a8}.pl-kind.k-guides{background:#e6f6e7;color:#17761a}.pl-kind.k-services{background:#e5f0fc;color:#145fb4}.pl-kind.k-industries{background:#fff2dc;color:#8a5200}.pl-kind.k-page{background:#e9fbf9;color:#0f6f68}
+.pl-title{all:unset;cursor:pointer;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pl-title:hover{text-decoration:underline}.pl-title:focus-visible{outline:2px solid #1877e0;border-radius:4px}
+.pl-url{font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-state{font-size:.78rem;font-weight:700;padding:3px 9px;border-radius:99px}.pl-state.on{background:#e6f6e7;color:#17761a}.pl-state.draft{background:#eef1f5;color:#4a5265}.pl-state.sch{background:#fff2dc;color:#8a5200}
+.pl-btns{display:flex;gap:8px}.pl-btns .btn{white-space:nowrap}.pl-empty{display:block!important;color:var(--muted)}
+@media(max-width:760px){.pl-list li{grid-template-columns:minmax(0,1fr) auto;padding:12px}.pl-btns{grid-column:1/3;display:grid;grid-template-columns:1fr 1fr 48px;gap:8px}.pl-btns .btn{padding:.6rem .5rem;font-size:.95rem;min-width:0}.pl-btns .lg{display:none}.pl-btns .pl-fm:only-of-type{grid-column:1/3}.pl-head h2{font-size:1.4rem}.pl-acts .btn{font-size:.92rem;padding:.65rem .8rem}.pl-tools .t{max-width:none}.pl-chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.pl-chips button{flex:0 0 auto}.pl-acts{width:100%}.pl-acts .btn{flex:1}}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .pl-chips button[aria-pressed=true]{background:#e8ebf5;color:#14172b;border-color:#e8ebf5}}
+.pl-more{padding-inline:.8rem!important;font-weight:800;letter-spacing:.05em}
+.pl-menu{position:absolute;z-index:90;min-width:240px;background:var(--card,#fff);border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 40px rgba(14,18,40,.18);padding:6px;display:flex;flex-direction:column}
+.pl-menu button{all:unset;cursor:pointer;padding:.7rem .85rem;border-radius:10px;font-size:.95rem;white-space:pre}.pl-menu button:hover,.pl-menu button:focus-visible{background:rgba(24,119,224,.08)}.pl-menu .danger{color:#c62828}
+@media(max-width:760px){.pl-btns .pl-more{flex:0 0 auto}}
+.kpi .kpi-when{font-size:.74rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;display:block;margin-top:2px}.hl-when{margin:2px 0 6px!important}
+.hl-tabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}.hl-tabs button{border:1px solid var(--line);background:var(--card,#fff);border-radius:99px;padding:.5rem .95rem;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;color:inherit}
+.hl-tabs button span{font-weight:500;color:var(--muted);margin-left:3px}.hl-tabs button[aria-selected=true]{background:#14172b;color:#fff;border-color:#14172b}.hl-tabs button[aria-selected=true] span{color:#c9cede}
+.hl-checks,.hl-pages{list-style:none;margin:0;padding:0}.hl-checks li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.hl-checks li:first-child,.hl-pages li:first-child{border-top:0}
+.hl-checks i{font-style:normal;font-weight:800;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.85rem}.hl-checks .ok i{background:#e6f6e7;color:#17761a}.hl-checks .bad i{background:#fde8e8;color:#b42318}.hl-checks .na i{background:#eef1f5;color:#8a94a6}
+.hl-checks span{font-size:.9rem;color:var(--muted)}.hl-checks .bad span{color:#b42318;font-weight:700}
+.hl-pages li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}.hl-pages li div{min-width:0;display:flex;flex-direction:column}.hl-pages b,.hl-pages .hl-url{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hl-res{font-size:.8rem;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}.hl-res.ok{background:#e6f6e7;color:#17761a}.hl-res.bad{background:#fde8e8;color:#b42318}.hl-res.warn{background:#fff2dc;color:#9a5b00}.hl-res.low{background:#eef1f5;color:#4a5265}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .hl-tabs button[aria-selected=true]{background:#e8ebf5;color:#14172b;border-color:#e8ebf5}}
+.ds-seg{margin:12px 0}.ds-seg b{display:block;font-size:.9rem;margin-bottom:6px}.ds-seg div{display:flex;border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;background:var(--bg,#f4f6fb)}
+.ds-seg button{flex:1;border:0;background:none;padding:.55rem .4rem;border-radius:9px;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;color:inherit}.ds-seg button[aria-pressed=true]{background:var(--card,#fff);box-shadow:0 1px 4px rgba(0,0,0,.12);color:#17761a}
+.rte .art-btns,.bd-prev .art-btns{margin:1em 0}.art-btns--center{text-align:center}.art-btns--right{text-align:right}
+.rte a.btn,.bd-prev a.btn{display:inline-flex;align-items:center;padding:.8em 1.3em;border-radius:999px;font-weight:700;text-decoration:none;cursor:pointer}
+.rte a.btn--go,.bd-prev a.btn--go{background:linear-gradient(180deg,#b7f4b9,#7ee282);color:#14301a}.rte a.btn--ghost,.bd-prev a.btn--ghost{border:2px solid currentColor;color:var(--ink,#14172b)}
+.bd-prev{margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:12px}
+.lk{position:absolute;top:var(--osb,64px);right:0;bottom:0;width:340px;max-width:100%;background:var(--card,#fff);border-left:1px solid var(--line);box-shadow:-12px 0 30px rgba(14,18,40,.12);z-index:5;display:flex;flex-direction:column}
+.lk-h{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}.lk-b{overflow:auto;padding:4px 16px 20px}.lk-b h4{margin:16px 0 8px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.lk-pre{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.lk-pre button{display:flex;align-items:center;gap:3px;border:1px solid var(--line);background:none;border-radius:10px;padding:.45rem .5rem;font:inherit;font-size:.82rem;cursor:pointer;color:inherit;text-align:left}
+.lk-pre i{width:12px;height:12px;border-radius:50%;flex:0 0 auto}.lk-pre span{margin-left:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lk-c{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-right:14px;font-size:.82rem}.lk-c input{width:48px;height:40px;border:1px solid var(--line);border-radius:10px;padding:2px;background:none;cursor:pointer}
+.lk-f{display:block;margin-bottom:8px;font-size:.85rem}.lk-f span{display:block;margin-bottom:4px;font-weight:600}.lk-act{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+@media(max-width:700px){.lk{top:auto;height:62vh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0}}
+.op.has-side .op-stage{margin-left:280px}.op-side{position:absolute;left:0;bottom:0;top:var(--osb,60px);width:280px;overflow:auto;background:var(--card,#fff);border-right:1px solid var(--line);padding:6px 14px 24px;z-index:4}
+.os-g{padding:12px 0;border-bottom:1px solid var(--line)}.os-g:last-child{border-bottom:0}.os-g h4{margin:0 0 6px;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.os-g .help{font-size:.8rem;margin:0 0 8px}
+.os-add{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.os-add button{display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid var(--line);background:var(--bg,#f4f6fb);border-radius:12px;padding:.6rem .3rem;font:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:inherit}
+.os-add button:hover{border-color:#139918;background:#eefaef}.os-add i{font-style:normal;font-size:1.05rem;font-weight:800;line-height:1}
+.os-sel{font-weight:700;margin:0 0 8px}.os-row{display:flex;gap:6px}.os-row .btn{flex:1;padding:.5rem .4rem;font-size:.85rem}.os-full{display:flex;width:100%;justify-content:center;margin-top:6px;box-sizing:border-box;text-decoration:none}
+.os-l{display:block;font-size:.8rem;font-weight:600;margin-bottom:8px}.os-l .t{margin-top:4px;font-size:.88rem}.op-side .serp{padding:10px}.op-side .serp-t{font-size:16px}.op-side .serp-d{font-size:12.5px}
+.op-tools{display:none}
+@media(max-width:900px){.op.has-side .op-stage{margin-left:0}.op-side{display:none;top:auto;height:62vh;width:100%;border-right:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:0 -12px 30px rgba(14,18,40,.15)}.op.side-open .op-side{display:block}.op-tools{display:inline-flex}}
 </style>
 </head>
 <body>
@@ -587,7 +638,7 @@ header.top .who{margin-left:4px}
     <div class="bar-acts">
     <button class="btn" id="discard" type="button" disabled>Discard<span class="dsk"> changes</span></button>
     <button class="btn" id="preview" type="button" disabled>Preview</button>
-    <button class="btn" id="onPageBtn" type="button" data-go="onpage">✎ Edit on page</button>
+    <button class="btn primary" id="onPageBtn" type="button" data-go="onpage">✎ Edit on page</button>
     <button class="btn primary" id="review" type="button" disabled>Review &amp; publish</button>
     </div>
   </div></div>
@@ -1181,7 +1232,7 @@ function photoSrc(url){return fresh[url]?fresh[url].src:url}
 var site=null,open=null;
 function pagesInit(){
   $("pgMain").innerHTML='<p class="empty"><span class="spin"></span> Loading the pages…</p>';
-  return api("pages",{action:"list"}).then(function(j){site=j;pagesNav();if(open)openPage(open.section,open.slug);else $("pgMain").innerHTML='<h2 class="sec">Pages</h2><p class="sechelp">Pick a page on the left to edit it, or add a new one. Saved changes go live in about 2 minutes.</p>'}).catch(fail);
+  return api("pages",{action:"list"}).then(function(j){site=j;pagesNav();if(open)openPage(open.section,open.slug);else pagesHome()}).catch(fail);
 }
 function pagesNav(){
   var n=$("pgNav");n.innerHTML="";
@@ -1199,7 +1250,56 @@ function pagesNav(){
 function navBtn(n,sec,slug,title,p){var b=document.createElement("button");b.type="button";b.dataset.k=sec+"/"+slug;b.innerHTML="<span>"+esc(title)+"</span>"+(p&&!edLive(p)?(edSched(p)?'<span class="tag sched" style="font-size:.65rem">Scheduled</span>':'<span class="tag auto" style="font-size:.65rem">Draft</span>'):"");b.addEventListener("click",function(){if(leaveOk())openPage(sec,slug)});n.appendChild(b)}
 function markNav(){var k=open?open.section+"/"+open.slug:(open===false?"hubs":"");document.querySelectorAll("#pgNav button[data-k]").forEach(function(b){b.classList.toggle("on",b.dataset.k===k)});
   var tp=$("tab-pages"),was=tp.classList.contains("pg-open");tp.classList.toggle("pg-open",open!==null);if(isPhone()&&was!==(open!==null))window.scrollTo(0,0)}
-$("pgBack").addEventListener("click",function(){if(!leaveOk())return;open=null;markNav();$("pgMain").innerHTML=""});
+$("pgBack").addEventListener("click",function(){if(!leaveOk())return;open=null;markNav();pagesHome();window.scrollTo(0,0)});
+/* the ⋯ menu on each page: view, copy link, Google wording, duplicate, delete */
+function plMenu(btn,r,live){
+  document.querySelectorAll(".pl-menu").forEach(function(x){x.remove()});
+  var items=[];if(live)items.push(["view","👁  View on the website"]);items.push(["link","🔗  Copy its link"]);
+  if(r.sec!=="page")items.push(["google","🔍  Google title & description"]);
+  if(r.sec!=="legal"){items.push(["dup","⧉  Duplicate"]);items.push(["del","🗑  Delete"])}
+  var mn=h('<div class="pl-menu" role="menu">'+items.map(function(x){return'<button type="button" role="menuitem" data-a="'+x[0]+'"'+(x[0]==="del"?' class="danger"':'')+'>'+x[1]+'</button>'}).join("")+'</div>');
+  document.body.appendChild(mn);var b=btn.getBoundingClientRect();mn.style.top=(window.scrollY+b.bottom+6)+"px";mn.style.left=Math.max(8,Math.min(window.scrollX+b.right-mn.offsetWidth,innerWidth-mn.offsetWidth-8))+"px";
+  var close=function(){mn.remove();document.removeEventListener("click",close)};setTimeout(function(){document.addEventListener("click",close)});
+  mn.addEventListener("click",function(e){var a=e.target.closest("button");if(!a)return;close();var full="https://ambs.co.nz"+r.url;
+    if(a.dataset.a==="view")window.open(r.url,"_blank","noopener");
+    else if(a.dataset.a==="link"){(navigator.clipboard?navigator.clipboard.writeText(full):Promise.reject()).then(function(){toast("Link copied: "+full)}).catch(function(){prompt("Copy this link:",full)})}
+    else if(a.dataset.a==="google"){openPage(r.sec,r.slug);var t0=Date.now(),go=function(){var g=$("seoTitle");if(g){g.scrollIntoView({block:"center"});g.focus()}else if(Date.now()-t0<10000)setTimeout(go,150)};go()}
+    else if(a.dataset.a==="dup"){var t=prompt("Name of the copy:","Copy of "+r.title);if(!t||!t.trim())return;toast("Making a copy…");
+      api("pages",{action:"get",section:r.sec,slug:r.slug}).then(function(d){var start=r.sec==="page"?{blocks:d.custom.blocks}:{eyebrow:d.meta.eyebrow,lead:d.meta.lead,description:d.meta.description,takeaways:d.meta.takeaways||[],faq:d.meta.faq||[],related:d.meta.related||[],category:d.card&&d.card.category,icon:d.card&&d.card.icon,body:d.body};
+        return api("pages",{action:"create",section:r.sec,title:t.trim(),start:start})}).then(function(j){return api("pages",{action:"list"}).then(function(l){site=l;pagesNav();openPage(j.section,j.slug);toast("Copy made as a draft. Change what you need, then Publish.")})}).catch(fail)}
+    else if(a.dataset.a==="del"){if(!confirm("Delete “"+r.title+"” from the website?\n\nAnyone using its old address is sent to the "+(r.sec==="page"?"homepage":SEC[r.sec]+" page")+" instead. You can bring it back from History."))return;
+      api("pages",{action:"delete",section:r.sec,slug:r.slug}).then(function(){toast("Page deleted. "+LIVE_NOTE);return api("pages",{action:"list"}).then(function(l){site=l;pagesNav();pagesHome()})}).catch(fail)}
+  });
+}
+/* All pages in one list: search, filter by kind, and two clear buttons on each page */
+var pgFilter="all",pgQ="";
+function pagesHome(){
+  var m=$("pgMain");if(!site)return;
+  var KIND={page:"Page",services:"Service",industries:"Industry",guides:"Guide",locations:"Location",news:"News",legal:"Legal"};
+  var rows=[].concat((site.custom||[]).map(function(p){return{sec:"page",slug:p.slug,title:p.title,p:p,url:"/"+p.slug}}),
+    ["services","industries","guides","locations","news"].reduce(function(a,sec){return a.concat(site.pages.filter(function(p){return p.section===sec}).map(function(p){return{sec:sec,slug:p.slug,title:p.title,p:p,url:"/"+sec+"/"+p.slug}}))},[]),
+    site.legal.map(function(p){return{sec:"legal",slug:p.slug,title:p.title,url:"/"+p.slug}}));
+  var count={all:rows.length};rows.forEach(function(r){count[r.sec]=(count[r.sec]||0)+1});
+  var chips=[["all","All"],["page","Pages"],["services","Services"],["industries","Industries"],["guides","Guides"],["locations","Locations"],["news","News"],["legal","Legal"]].filter(function(c){return count[c[0]]});
+  m.innerHTML='<div class="pl-head"><div><h2>Pages &amp; news</h2><p class="help">Every page on your website. <b>✎ Edit on page</b> lets you click and type on the real page; <b>☰ Edit with form</b> shows every setting, including Google wording.</p></div><div class="pl-acts"><button type="button" class="btn" id="plHubs">Section pages &amp; service cards</button><button type="button" class="btn primary" id="plNew">＋ New page or post</button></div></div>'+
+    '<div class="pl-tools"><input class="t" type="search" id="plQ" placeholder="Find a page" aria-label="Find a page"><div class="pl-chips" role="group" aria-label="Show">'+chips.map(function(c){return'<button type="button" data-f="'+c[0]+'" aria-pressed="'+(pgFilter===c[0])+'">'+c[1]+' <span>'+count[c[0]]+'</span></button>'}).join("")+'</div></div><ul class="pl-list" id="plList"></ul>';
+  var q=$("plQ");q.value=pgQ;
+  function draw(){var t=pgQ.trim().toLowerCase(),list=$("plList");
+    var vis=rows.filter(function(r){return(pgFilter==="all"||r.sec===pgFilter)&&(!t||(r.title+" "+r.url).toLowerCase().indexOf(t)>=0)});
+    list.innerHTML=vis.length?"":'<li class="pl-empty">No pages match.</li>';
+    vis.forEach(function(r){var live=!r.p||edLive(r.p),sch=r.p&&edSched(r.p),onp=live&&r.sec!=="page";
+      var li=h('<li><div class="pl-main"><span class="pl-kind k-'+r.sec+'">'+KIND[r.sec]+'</span><button type="button" class="pl-title"></button><span class="pl-url"></span></div><span class="pl-state '+(live?"on":sch?"sch":"draft")+'">'+(live?"Live":sch?"Scheduled":"Draft")+'</span><div class="pl-btns">'+(onp?'<button type="button" class="btn soft pl-op">✎ <span class="lg">Edit </span>on page</button>':'')+'<button type="button" class="btn pl-fm">'+(r.sec==="page"?"✎ Edit blocks":'☰ <span class="lg">Edit with </span>form')+'</button><button type="button" class="btn pl-more" aria-haspopup="menu" aria-label="More for this page" title="More">⋯</button></div></li>');
+      li.querySelector(".pl-more").addEventListener("click",function(e){e.stopPropagation();plMenu(this,r,live)});
+      li.querySelector(".pl-title").textContent=r.title;li.querySelector(".pl-url").textContent="ambs.co.nz"+r.url;
+      var form=function(){openPage(r.sec,r.slug);window.scrollTo(0,0)};
+      li.querySelector(".pl-title").addEventListener("click",onp?function(){openPageOnPage(r.sec,r.slug)}:form);
+      li.querySelector(".pl-fm").addEventListener("click",form);var o=li.querySelector(".pl-op");if(o)o.addEventListener("click",function(){openPageOnPage(r.sec,r.slug)});
+      list.appendChild(li)})}
+  q.addEventListener("input",function(){pgQ=q.value;draw()});
+  m.querySelectorAll(".pl-chips button").forEach(function(b){b.addEventListener("click",function(){pgFilter=b.dataset.f;m.querySelectorAll(".pl-chips button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});draw()})});
+  $("plNew").addEventListener("click",function(){newPage()});$("plHubs").addEventListener("click",function(){openHubs();window.scrollTo(0,0)});
+  draw();
+}
 /* scheduled publishing: times are New Zealand time, "2026-10-10T09:00" */
 function nowNZ(){return new Date().toLocaleString("sv-SE",{timeZone:"Pacific/Auckland"}).replace(" ","T").slice(0,16)}
 function edLive(d){return !d.draft||!!(d.publish_at&&d.publish_at<=nowNZ())}
@@ -1310,7 +1410,7 @@ function renderPage(sec,slug,d){
   /* article */
   var art=h('<div class="panel"><h3>Article</h3><p class="help">Type straight into the box. Use the buttons to add headings, lists, links, tip boxes and photos.</p></div>');
   var bar=h('<div class="rte-bar" role="toolbar" aria-label="Formatting"></div>');
-  [["p","Text"],["h2","Heading"],["h3","Subheading"],"|",["bold","B"],["italic","I"],["link","Link"],["unlink","Remove link"],"|",["ul","• List"],["ol","1. List"],["tip","Tip box"],["photo","Photo"],"|",["undo","Undo"],["redo","Redo"]].forEach(function(b){
+  [["p","Text"],["h2","Heading"],["h3","Subheading"],"|",["bold","B"],["italic","I"],["link","Link"],["unlink","Remove link"],"|",["ul","• List"],["ol","1. List"],["tip","Tip box"],["photo","Photo"],["button","Button"],"|",["undo","Undo"],["redo","Redo"]].forEach(function(b){
     if(b==="|"){bar.appendChild(h('<span class="sep"></span>'));return}
     var x=h('<button type="button" data-c="'+b[0]+'">'+esc(b[1])+'</button>');if(b[0]==="bold")x.style.fontWeight="900";if(b[0]==="italic")x.style.fontStyle="italic";bar.appendChild(x)});
   var rte=h('<div class="rte prose" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Article text"></div>');
@@ -1482,8 +1582,34 @@ function bodyOut(rte){
   Array.prototype.slice.call(c.childNodes).forEach(function(n){if(n.nodeType===3&&n.textContent.trim()){var p=document.createElement("p");p.textContent=n.textContent;n.replaceWith(p)}else if(n.nodeType===1&&n.tagName==="DIV"&&!n.className){var p2=document.createElement("p");p2.innerHTML=n.innerHTML;n.replaceWith(p2)}});
   return c.innerHTML.replace(/<\/(p|h2|h3|ul|ol|figure|div|table|blockquote)>(?!\n)/g,"</$1>\n");
 }
+/* a button in the article text: words, link, look and where it sits (left, centre, right) */
+function btnHtml(v){return'<p class="art-btns'+(v.align?" art-btns--"+v.align:"")+'"><a class="btn '+(v.look==="ghost"?"btn--ghost":"btn--go")+'" href="'+esc(v.href)+'"'+(/^https?:/.test(v.href)?' target="_blank" rel="noopener"':'')+'>'+esc(v.text)+'</a></p>'}
+function buttonDialog(cur){siteLinks();cur=cur||{text:"Book a free session",href:"/#book",look:"go",align:""};
+  return new Promise(function(done){
+    var dlg=h('<dialog aria-label="Button"><div class="hd"><h2>'+(cur.el?"Change button":"Add a button")+'</h2></div><div class="bd">'+
+      '<div class="fld"><label for="bdT">Words on the button</label><input class="t" id="bdT" maxlength="60"></div>'+
+      '<div class="fld"><label for="bdH">Link</label><p class="help" style="margin:-2px 0 6px;font-size:.82rem">A page on this site (pick from the list), /#book for booking, or a full web address.</p><input class="t" id="bdH" list="siteLinks" placeholder="/#book"></div>'+
+      '<div class="ds-seg"><b>Look</b><div><button type="button" data-k="look" data-v="go">● Main colour</button><button type="button" data-k="look" data-v="ghost">○ Outline</button></div></div>'+
+      '<div class="ds-seg"><b>Where it sits</b><div><button type="button" data-k="align" data-v="">⇤ Left</button><button type="button" data-k="align" data-v="center">↔ Centre</button><button type="button" data-k="align" data-v="right">⇥ Right</button></div></div>'+
+      '<div class="bd-prev"><span class="help">Preview</span><p class="art-btns"><a class="btn" href="#" tabindex="-1"></a></p></div></div>'+
+      '<div class="ft">'+(cur.el?'<button type="button" class="btn danger" id="bdDel">Remove button</button><span class="sp"></span>':'')+'<button type="button" class="btn" id="bdX">Cancel</button><button type="button" class="btn primary" id="bdOk">'+(cur.el?"Save":"Add button")+'</button></div></dialog>');
+    document.body.appendChild(dlg);dlg.showModal();var v={text:cur.text,href:cur.href,look:cur.look,align:cur.align};
+    var t=dlg.querySelector("#bdT"),u=dlg.querySelector("#bdH"),pv=dlg.querySelector(".bd-prev a"),pp=dlg.querySelector(".bd-prev p");t.value=v.text;u.value=v.href;
+    function draw(){pv.textContent=t.value||"Button";pv.className="btn "+(v.look==="ghost"?"btn--ghost":"btn--go");pp.className="art-btns"+(v.align?" art-btns--"+v.align:"");
+      dlg.querySelectorAll("[data-k]").forEach(function(b){b.setAttribute("aria-pressed",String(v[b.dataset.k]===b.dataset.v))})}
+    dlg.querySelectorAll("[data-k]").forEach(function(b){b.addEventListener("click",function(){v[b.dataset.k]=b.dataset.v;draw()})});t.addEventListener("input",draw);draw();
+    var fin=function(r){dlg.close();dlg.remove();done(r)};
+    dlg.querySelector("#bdX").addEventListener("click",function(){fin(null)});dlg.addEventListener("cancel",function(){fin(null)});
+    var del=dlg.querySelector("#bdDel");if(del)del.addEventListener("click",function(){fin({remove:true})});
+    dlg.querySelector("#bdOk").addEventListener("click",function(){var tx=t.value.trim(),hr=u.value.trim();if(!tx){t.focus();return toast("Write the words on the button",true)}
+      if(!hr){u.focus();return toast("Add where the button goes",true)}if(!/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(hr))hr="https://"+hr;fin({text:tx,href:hr,look:v.look,align:v.align})});
+    t.focus();t.select()})}
 function wireRte(bar,rte){
   try{document.execCommand("defaultParagraphSeparator",false,"p")}catch(e){}
+  /* click a button in the text to change or remove it */
+  rte.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a.btn");if(!a||!rte.contains(a))return;e.preventDefault();var p=a.closest("p.art-btns");
+    buttonDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",look:a.classList.contains("btn--ghost")?"ghost":"go",align:p&&p.classList.contains("art-btns--center")?"center":p&&p.classList.contains("art-btns--right")?"right":""}).then(function(v){if(!v)return;
+      var box=p||a;if(v.remove){box.remove()}else{var tmp=document.createElement("div");tmp.innerHTML=btnHtml(v);box.replaceWith(tmp.firstChild)}markDirty()})});
   rte.addEventListener("input",markDirty);
   rte.addEventListener("paste",function(e){smartPaste(e,{h2:true},rte)});
   bar.addEventListener("mousedown",function(e){if(e.target.closest("button"))e.preventDefault()});
@@ -1494,6 +1620,8 @@ function wireRte(bar,rte){
     else if(c==="ol")document.execCommand("insertOrderedList");
     else if(c==="link"){var u=prompt("Link to (a page on this site like /guides/automation-glossary, or a full web address):","/");if(u){u=u.trim();if(!/^(\/|https?:\/\/|mailto:|tel:)/i.test(u))u="https://"+u;document.execCommand("createLink",false,u)}}
     else if(c==="tip")document.execCommand("insertHTML",false,'<div class="callout callout--tip"><p>Tip: write your tip here.</p></div><p><br></p>');
+    else if(c==="button"){var sl=window.getSelection(),rg=sl.rangeCount?sl.getRangeAt(0).cloneRange():null;buttonDialog(null).then(function(v){if(!v||v.remove)return;rte.focus();if(rg){sl.removeAllRanges();sl.addRange(rg)}
+      document.execCommand("insertHTML",false,btnHtml(v)+'<p><br></p>');markDirty()})}
     else if(c==="photo"){var sel=window.getSelection(),range=sel.rangeCount?sel.getRangeAt(0).cloneRange():null;choosePhoto().then(function(ph){if(!ph)return;rte.focus();if(range){sel.removeAllRanges();sel.addRange(range)}
       var alt=prompt("Describe the photo in a few words (read out to people who can't see it):",ph.alt||"")||"";if(alt&&!ph.alt&&ph.path)api("media",{action:"describe",path:ph.path,alt:alt}).catch(function(){});var cap=prompt("Caption under the photo (optional):","")||"";
       var dims=fresh[ph.url]?' width="'+fresh[ph.url].w+'" height="'+fresh[ph.url].h+'"':(ph.w?' width="'+ph.w+'" height="'+ph.h+'"':"");
@@ -2021,9 +2149,16 @@ function openOnPage(){
   var ov=document.createElement("div");ov.className="op";
   ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click any text and type. Links are paused.</span></div><select class="op-pick" id="opPick" aria-label="Page to edit"><option value="">Homepage</option></select>'+
     '<div class="op-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="820">Tablet</button><button type="button" data-w="0" class="on">Laptop</button></div>'+
-    '<span class="op-n" id="opN"></span><button type="button" class="btn" id="opPrev">Preview</button><button type="button" class="btn primary" id="opRev">Review &amp; publish</button><button type="button" class="btn" id="opDone">Done</button></div>'+
+    '<span class="op-n" id="opN"></span><button type="button" class="btn" id="opPrev">Preview</button><button type="button" class="btn primary" id="opRev">Review &amp; publish</button><button type="button" class="btn op-tools" data-tools>＋ Tools</button><button type="button" class="btn" data-look title="Colours, fonts and buttons">🎨 Look</button><button type="button" class="btn" id="opDone">Done</button></div>'+
     '<div class="op-stage"><iframe id="opFrame" title="Your homepage, editable" src="/?chat=nolog&amp;onpage=1"></iframe></div>';
-  document.body.appendChild(ov);document.body.style.overflow="hidden";
+  document.body.appendChild(ov);
+  var hs=h('<aside class="op-side" aria-label="Homepage tools"><div class="os-g"><h4>Add to the homepage</h4><p class="help">New items go at the end of their list. Type straight into them.</p><div class="os-add">'+
+    [["faq","?","Question"],["how","1","Step"],["why.o","✓","Why us row"],["trust","★","Trust point"],["about","A","About letter"]].map(function(x){return'<button type="button" data-hp="'+x[0]+'"><i>'+x[1]+'</i>'+x[2]+'</button>'}).join("")+'</div><p class="help">Hover over any item on the page for <b>+ Add</b> and <b>✕ Remove</b> right there.</p></div>'+
+    '<div class="os-g"><h4>Look</h4><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button></div>'+
+    '<div class="os-g"><h4>Homepage</h4><button type="button" class="btn os-full" data-hgo="sections">Sections: order, hide, add</button><button type="button" class="btn os-full" data-hgo="wording">☰ All wording (list)</button><button type="button" class="btn os-full" data-hgo="photos">Photos &amp; logo</button></div></aside>');
+  ov.appendChild(hs);ov.classList.add("has-side");opSize(ov);
+  hs.querySelectorAll("[data-hp]").forEach(function(b){b.addEventListener("click",function(){ov.hpAdd&&ov.hpAdd(b.dataset.hp)})});
+  hs.querySelectorAll("[data-hgo]").forEach(function(b){b.addEventListener("click",function(){var dn=ov.querySelector("#opDone");if(dn)dn.click();if(!document.body.contains(ov))show(b.dataset.hgo)})});document.body.style.overflow="hidden";
   opPicker($("opPick"),"",function(){close()});
   var fr=$("opFrame"),cnt=function(){var n=nChanges();$("opN").textContent=n?n+" change"+(n===1?"":"s"):"No changes yet";$("opRev").disabled=!n;$("opPrev").disabled=!n};cnt();
   ov.querySelectorAll(".op-dev button").forEach(function(b){b.addEventListener("click",function(){ov.querySelectorAll(".op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%";ov.querySelector(".op-stage").classList.toggle("dev",!!+b.dataset.w)})});
@@ -2069,11 +2204,13 @@ function openOnPage(){
     tb.addEventListener("mousedown",function(e){e.preventDefault()});
     tb.querySelector("[data-a=rm]").addEventListener("click",function(){if(!hov)return;var o=W.ops(),it=hov;
       if(isRm(it)){o.remove=o.remove.filter(function(r){return!(r.list===it.id&&r.n===it.n)});it.box.classList.remove("ed-rm")}else{o.remove.push({list:it.id,n:it.n});it.box.classList.add("ed-rm")}saveDraft();cnt();placeTb(it)});
-    tb.querySelector("[data-a=add]").addEventListener("click",function(){if(!hov)return;var last=lastOf[hov.id];var keys=W.keysFor(hov.id,last.n),entry={list:hov.id,en:keys.map(function(){return""})};W.ops().add.push(entry);saveDraft();cnt();
+    tb.querySelector("[data-a=add]").addEventListener("click",function(){if(!hov)return;addItem(hov.id)});
+    ov.hpAdd=function(id){if(!lastOf[id])return toast("That part isn't on the homepage right now.",true);addItem(id)};
+    function addItem(id){var hov={id:id};var last=lastOf[hov.id];var keys=W.keysFor(hov.id,last.n),entry={list:hov.id,en:keys.map(function(){return""})};W.ops().add.push(entry);saveDraft();cnt();
       var c=last.box.cloneNode(true);c.classList.remove("ed-rm");c.classList.add("ed-new");c.querySelectorAll("[data-ed]").forEach(function(x){var k=x.getAttribute("data-ed"),i=keys.indexOf(k);x.removeAttribute("data-ed");x.textContent="";x.setAttribute("data-ph",i===0?"Type the new "+NAMES[hov.id.indexOf("pts:")===0?"pts":hov.id]+" here":"…and its text");
         x.contentEditable="true";x.addEventListener("input",function(){entry.en[i]=x.innerText.trim();saveDraft()});x.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();x.blur()}})});
       if(c.tagName==="DETAILS")c.open=true;last.box.parentNode.insertBefore(c,lastNew(hov.id,last.box).nextSibling);c.setAttribute("data-new",hov.id);
-      var f=c.querySelector("[contenteditable]");if(f){f.focus();f.scrollIntoView({block:"center"})}});
+      var f=c.querySelector("[contenteditable]");if(f){f.focus();f.scrollIntoView({block:"center"})}}
     function lastNew(id,box){var all=[].slice.call(d.querySelectorAll('[data-new="'+id+'"]'));return all.length?all[all.length-1]:box}
     var st3=d.createElement("style");st3.textContent='[data-ph]:empty::before{content:attr(data-ph);opacity:.45}';d.head.appendChild(st3);
     chip.querySelector("[data-a=undo]").addEventListener("mousedown",function(e){e.preventDefault();if(!curEl)return;var k=curEl.getAttribute("data-ed"),draft=W.draft();if(draft[k])delete draft[k].en;curEl.textContent=byKey[k].en;curEl.classList.remove("ed-chg");saveDraft();cnt()});
@@ -2101,10 +2238,29 @@ function openPageOnPage(sec,slug){
   var ov=document.createElement("div");ov.className="op";
   ov.innerHTML='<div class="op-bar"><div class="op-t"><b>Edit on page</b><span>Click text to type · click a photo to change it</span></div><select class="op-pick" id="opPick" aria-label="Page to edit"><option value="">Homepage</option></select>'+
     '<div class="op-dev" role="group" aria-label="Screen size"><button type="button" data-w="390">Phone</button><button type="button" data-w="820">Tablet</button><button type="button" data-w="0" class="on">Laptop</button></div>'+
-    '<span class="op-n" id="opN">Loading…</span><button type="button" class="btn primary" id="opSave" disabled>Save &amp; publish</button><button type="button" class="btn" id="opDone">Done</button></div>'+
+    '<span class="op-n" id="opN">Loading…</span><button type="button" class="btn primary" id="opSave" disabled>Save &amp; publish</button><button type="button" class="btn op-tools" data-tools>＋ Tools</button><button type="button" class="btn" data-look title="Colours, fonts and buttons">🎨 Look</button><button type="button" class="btn" id="opDone">Done</button></div>'+
     '<div class="op-stage"><p class="empty"><span class="spin"></span> Opening the page…</p></div>';
   document.querySelectorAll(".op").forEach(function(x){x.remove()});document.body.appendChild(ov);document.body.style.overflow="hidden";
-  var dirty=0,sha="",meta=null,card=null,src=null,parts=[],photo=undefined;
+  var dirty=0,sha="",meta=null,card=null,src=null,parts=[],photo=undefined,pairs=[],sel=null;
+  /* the panel down the left: add parts, move or delete the chosen part, Google wording, look and more */
+  var sideEl=h('<aside class="op-side" aria-label="Page tools"></aside>');ov.appendChild(sideEl);ov.classList.add("has-side");opSize(ov);
+  function side(){var s0=sel,K={P:"Paragraph",H2:"Heading",H3:"Subheading",UL:"List",OL:"List",FIGURE:"Photo",DIV:"Tip box"},nm=s0?(s0.se.matches("p.art-btns")?"Button":K[s0.se.tagName]||"Part"):"";
+    sideEl.innerHTML='<div class="os-g"><h4>Add to the page</h4><p class="help">Adds under the part you clicked, or at the end of the article.</p><div class="os-add">'+
+      [["p","¶","Text"],["h2","H","Heading"],["h3","h","Subheading"],["ul","•","List"],["tip","💡","Tip box"],["button","▭","Button"],["photo","🖼","Photo"]].map(function(x){return'<button type="button" data-add="'+x[0]+'"><i>'+x[1]+'</i>'+x[2]+'</button>'}).join("")+'</div></div>'+
+      '<div class="os-g"><h4>Chosen part</h4>'+(s0?'<p class="os-sel">'+nm+'</p><div class="os-row"><button type="button" class="btn" data-mv="-1">↑ Up</button><button type="button" class="btn" data-mv="1">↓ Down</button><button type="button" class="btn danger" data-del>Delete</button></div>'+(nm==="Button"?'<button type="button" class="btn soft os-full" data-ebtn>Change button &amp; link</button>':''):'<p class="help">Click any part of the article to move or delete it.</p>')+'</div>'+
+      '<div class="os-g"><h4>On Google</h4><div class="os-goog"></div></div>'+
+      '<div class="os-g"><h4>Look</h4><button type="button" class="btn os-full" data-look>🎨 Colours, fonts &amp; buttons</button></div>'+
+      '<div class="os-g"><h4>More</h4><button type="button" class="btn os-full" data-form>☰ All settings (form)</button><a class="btn os-full" href="'+pageUrl(sec,slug)+'" target="_blank" rel="noopener">👁 View on the website</a></div>';
+    sideEl.querySelectorAll("[data-add]").forEach(function(b){b.addEventListener("click",function(){ov.opAdd&&ov.opAdd(b.dataset.add)})});
+    sideEl.querySelectorAll("[data-mv]").forEach(function(b){b.addEventListener("click",function(){ov.opMove(+b.dataset.mv)})});
+    var dl=sideEl.querySelector("[data-del]");if(dl)dl.addEventListener("click",function(){ov.opDel()});
+    var eb=sideEl.querySelector("[data-ebtn]");if(eb)eb.addEventListener("click",function(){var a=sel&&sel.el.querySelector("a");if(a)a.click()});
+    sideEl.querySelector("[data-form]").addEventListener("click",function(){if(leave()!==false){show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(sec,slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()}});
+    if(meta){var g=sideEl.querySelector(".os-goog"),ti=h('<label class="os-l">Title in Google<input class="t" maxlength="70"></label>'),de=h('<label class="os-l">Description in Google<textarea class="t" rows="3" maxlength="170"></textarea></label>');
+      var tI=ti.querySelector("input"),dI=de.querySelector("textarea");tI.value=meta.title||"";dI.value=meta.description||"";var o1=tI.value,o2=dI.value,c1=false,c2=false;
+      tI.addEventListener("input",function(){meta.title=tI.value;var now=tI.value!==o1;if(now!==c1){dirty+=now?1:-1;c1=now;n()}});dI.addEventListener("input",function(){meta.description=dI.value;var now=dI.value!==o2;if(now!==c2){dirty+=now?1:-1;c2=now;n()}});
+      g.appendChild(ti);g.appendChild(de);g.appendChild(serpPreview(tI,dI,sec==="legal"?"/"+slug:"/"+sec+"/"+slug))}}
+  side();
   var n=function(){$("opN").textContent=dirty?dirty+" change"+(dirty===1?"":"s")+" not saved":"All saved";$("opSave").disabled=!dirty};
   var leave=function(){if(dirty&&!confirm("Leave without saving your changes on this page?"))return false;ov.remove();document.body.style.overflow=""};
   opPicker($("opPick"),sec+"/"+slug,leave);
@@ -2139,14 +2295,38 @@ function openPageOnPage(sec,slug){
     var norm=function(x){return(x.textContent||"").replace(/\s+/g," ").trim()};
     var cands=[].slice.call(d.querySelectorAll("article.prose > *")).filter(function(el){return!el.matches(".takeaways,.faq,#questions")});
     var ci=0;[].slice.call(src.children).forEach(function(se,si){var t=norm(se);if(!t&&!se.querySelector("img"))return;
-      for(var k=ci;k<cands.length;k++){if(cands[k].tagName===se.tagName&&norm(cands[k])===t){var el=cands[k];ci=k+1;
+      for(var k=ci;k<cands.length;k++){if(cands[k].tagName===se.tagName&&norm(cands[k])===t){var el=cands[k];ci=k+1;wirePart(el,se);return}}});
+    function wirePart(el,se){var t=norm(se);pairs.push({el:el,se:se});el.addEventListener("mousedown",function(){pick(el,se)},true);el.addEventListener("focusin",function(){pick(el,se)});
+        if(se.matches&&se.matches("p.art-btns")){var a=el.querySelector("a");if(a){a.setAttribute("data-edimg","1");a.title="Click to change this button";a.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();pick(el,se);editBtn(el,se)})}return}
         if(se.querySelector("img")||se.tagName==="FIGURE"){el.querySelectorAll("img").forEach(function(im,ii){wireImg(im,function(url){var sim=se.querySelectorAll("img")[ii];if(sim){sim.setAttribute("src",url);im.src=url;dirty++;n()}})});if(!t)return}
         el.setAttribute("data-ed","1");el.contentEditable="true";el.setAttribute("spellcheck","true");
         var orig=se.innerHTML,label=/^H[1-6]$/.test(se.tagName)?"Heading":se.tagName==="UL"||se.tagName==="OL"?"List":"Paragraph";
         el.addEventListener("focus",function(){show(el,label+" · Ctrl+B bold, Ctrl+I italic")});
         el.addEventListener("input",function(){var c=el.cloneNode(true);c.querySelectorAll("[contenteditable],[data-ed],[spellcheck]").forEach(function(x){x.removeAttribute("contenteditable");x.removeAttribute("data-ed");x.removeAttribute("spellcheck")});se.innerHTML=c.innerHTML.replace(/&nbsp;(?=[^\s<])/g," ").replace(/<br>$/,"");var was=el.classList.contains("ed-chg"),now=se.innerHTML!==orig;el.classList.toggle("ed-chg",now);if(now!==was)dirty+=now?1:-1;n()});
         el.addEventListener("paste",function(e){e.preventDefault();d.execCommand("insertText",false,(e.clipboardData||w.clipboardData).getData("text/plain"))});
-        return}}});
+    }
+    /* the part last clicked: new parts go under it; it can move up or down or be deleted from the panel */
+    function pick(el,se){if(sel&&sel.el!==el)sel.el.classList.remove("ed-sel");sel={el:el,se:se};el.classList.add("ed-sel");side()}
+    function editBtn(el,se){var a=se.querySelector("a");buttonDialog({el:a,text:a.textContent,href:a.getAttribute("href")||"",look:a.classList.contains("btn--ghost")?"ghost":"go",align:se.classList.contains("art-btns--center")?"center":se.classList.contains("art-btns--right")?"right":""}).then(function(v){if(!v)return;
+      if(v.remove){drop(el,se);return}var t2=document.createElement("div");t2.innerHTML=btnHtml(v);var ns=t2.firstChild;se.replaceWith(ns);var ne=d.importNode(ns,true);el.replaceWith(ne);pairs=pairs.filter(function(x){return x.el!==el});wirePart(ne,ns);pick(ne,ns);dirty++;n()})}
+    function drop(el,se){se.remove();el.remove();pairs=pairs.filter(function(x){return x.el!==el});sel=null;dirty++;n();side()}
+    var art=d.querySelector("article.prose");
+    ov.opAdd=function(kind){if(!art)return toast("This page has no article text to add to.",true);
+      var mk=function(html){var t2=document.createElement("div");t2.innerHTML=html;var ns=t2.firstElementChild,ne=d.importNode(ns,true);
+        if(sel&&sel.se.parentNode){sel.se.after(ns);sel.el.after(ne)}else{var last=pairs.length?pairs[pairs.length-1]:null;src.appendChild(ns);if(last)last.el.after(ne);else{var stop=art.querySelector(".takeaways,.faq,#questions");art.insertBefore(ne,stop&&stop.parentNode===art?stop:null)}}
+        wirePart(ne,ns);pick(ne,ns);dirty++;n();ne.scrollIntoView({block:"center",behavior:"smooth"});if(ne.contentEditable==="true"){ne.focus();var r=d.createRange();r.selectNodeContents(ne);var sl=w.getSelection();sl.removeAllRanges();sl.addRange(r)}};
+      if(kind==="p")mk("<p>New paragraph. Click here and type.</p>");
+      else if(kind==="h2")mk("<h2>New heading</h2>");else if(kind==="h3")mk("<h3>New subheading</h3>");
+      else if(kind==="ul")mk("<ul><li>First point</li><li>Second point</li></ul>");
+      else if(kind==="tip")mk('<div class="callout callout--tip"><p>Tip: write your tip here.</p></div>');
+      else if(kind==="button")buttonDialog(null).then(function(v){if(v&&!v.remove)mk(btnHtml(v))});
+      else if(kind==="photo")choosePhoto().then(function(ph){if(!ph)return;var alt=prompt("Describe the photo in a few words (read out to people who can't see it):",ph.alt||"")||"";
+        mk('<figure><img src="'+esc(ph.url)+'" alt="'+esc(alt)+'" loading="lazy"'+(ph.w?' width="'+ph.w+'" height="'+ph.h+'"':'')+'></figure>')})};
+    ov.opMove=function(dir){if(!sel)return;var se=sel.se,el=sel.el;if(dir<0){var ps=se.previousElementSibling;var pi=pairs.filter(function(x){return x.se===ps})[0];if(!ps||!pi)return toast("Already at the top of the article.");ps.before(se);pi.el.before(el)}
+      else{var nx=se.nextElementSibling;var ni=pairs.filter(function(x){return x.se===nx})[0];if(!nx||!ni)return toast("Already at the bottom of the article.");nx.after(se);ni.el.after(el)}dirty++;n();el.scrollIntoView({block:"center",behavior:"smooth"})};
+    ov.opDel=function(){if(!sel)return;if(!confirm("Delete this part of the page?"))return;drop(sel.el,sel.se)};
+    var stS=d.createElement("style");stS.textContent=".ed-sel{outline:2px solid #1877e0!important;outline-offset:6px;border-radius:4px}a[data-edimg]{cursor:pointer}";d.head.appendChild(stS);
+    side();
     var hero=q(".news-hero img");if(hero&&sec==="news")wireImg(hero,function(url){photo=url;hero.src=url;dirty++;n()});
     function wireImg(im,done){im.setAttribute("data-edimg","1");im.title="Click to change this photo";im.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();choosePhoto().then(function(pp){if(pp&&pp.url)done(pp.url)})})}
     d.addEventListener("focusout",function(){setTimeout(function(){var a=d.activeElement;if(!a||!a.hasAttribute||!a.hasAttribute("data-ed"))chip.hidden=true},150)});
@@ -2162,7 +2342,8 @@ window.edOpenPage=openPageOnPage;
 /* ======================= EDITING MODE ======================= */
 /* One switch (sidebar on laptops, Home on every screen): "On the page" opens the homepage and pages in Edit on page
    straight away; "With forms" keeps the lists and forms, with Edit on page one button away. Remembered on this device. */
-function edMode(){try{return localStorage.getItem("ambs-ed-mode")||"visual"}catch(e){return"visual"}}
+/* One way to work everywhere: each page has its own two buttons, "✎ Edit on page" and "☰ Edit with form", so there is no mode to remember. */
+function edMode(){return"forms"}
 function modeSwitch(short){return '<div class="mode-sw" role="group" aria-label="How you edit"><span class="mode-l">How you edit</span><div class="mode-b"><button type="button" data-mode="visual" title="Click text on your real pages and type">✎ '+(short?'On page':'On the page')+'</button><button type="button" data-mode="forms" title="Lists and forms, with every setting">☰ '+(short?'Forms':'With forms')+'</button></div></div>'}
 function modeSync(){var m=edMode();document.querySelectorAll("[data-mode]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===m))});document.body.classList.toggle("mode-visual",m==="visual")}
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mode]");if(!b)return;try{localStorage.setItem("ambs-ed-mode",b.dataset.mode)}catch(x){}modeSync();toast(b.dataset.mode==="visual"?"On the page: the homepage and your pages open ready to click and type.":"With forms: you\u2019ll see the lists and forms. Edit on page is still one button away.")});
@@ -2187,39 +2368,82 @@ function thColour(r,g,b,mv){var c=thHsl(r,g,b),h=c[0],s=c[1],l=c[2];if(s<.22||l<
 function themeCss(css,t){var mv=thMoves(t);if(!mv.length)return css;var hx=function(n){return("0"+n.toString(16).toUpperCase()).slice(-2)};
   return css.replace(/#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9a-fA-F])/g,function(m){var c=thColour.apply(null,thHex(m).concat([mv]));return c?"#"+c.map(hx).join(""):m})
     .replace(/(rgba?)\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(\s*[,)])/g,function(m,f,r,g,b,tail){var c=thColour(+r,+g,+b,mv);return c?f+"("+c.join(",")+tail:m})}
+/* the panels sit just under the Edit on page bar, which can wrap onto two lines */
+function opSize(ov){var f=function(){var b=ov.querySelector(".op-bar");if(b)ov.style.setProperty("--osb",b.offsetHeight+"px")};requestAnimationFrame(f);addEventListener("resize",f)}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-tools]");if(!b)return;var ov=b.closest(".op");if(ov)ov.classList.toggle("side-open")});
+/* 🎨 Look in Edit on page: change colours, fonts and buttons and watch the real page change; Save & publish uses the same theme as Colours & fonts */
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-look]");if(!b)return;var ov=b.closest(".op");if(!ov)return;
+  var old=ov.querySelector(".lk");if(old){old.remove();return}
+  var lk=h('<aside class="lk" aria-label="Look"><div class="lk-h"><b>🎨 Look</b><button type="button" class="btn link" data-x>Close</button></div><div class="lk-b"><p class="empty"><span class="spin"></span> Loading…</p></div></aside>');ov.appendChild(lk);
+  lk.querySelector("[data-x]").addEventListener("click",function(){lk.remove()});
+  var saved={},cur={},cache={},K=["blue","green","purple","heading_font","body_font","button_shape","button_size","button_style"];
+  var fr=function(){var f=ov.querySelector("iframe");return f&&f.contentDocument&&f.contentDocument.head?f.contentDocument:null};
+  var go=function(){var d=fr();if(d)lookApply(d,cur,cache)};
+  api("settings",{action:"get"}).then(function(j){saved=Object.assign({},j.business.theme||{});cur=Object.assign({},TH_BASE,saved);draw()}).catch(function(e){lk.remove();fail(e)});
+  function same(){return K.every(function(k){return String(cur[k]||"").toUpperCase()===String(saved[k]||TH_BASE[k]||"").toUpperCase()})}
+  function seg(k,name,opts){return'<div class="ds-seg"><b>'+name+'</b><div>'+opts.map(function(o){return'<button type="button" data-bk="'+k+'" data-bv="'+o[0]+'" aria-pressed="'+((cur[k]||"")===o[0])+'">'+o[1]+'</button>'}).join("")+'</div></div>'}
+  function draw(){var b=lk.querySelector(".lk-b");
+    b.innerHTML='<h4>Ready-made looks</h4><div class="lk-pre">'+TH_PRESETS.map(function(p,i){return'<button type="button" data-p="'+i+'" title="'+esc(p[0])+'"><i style="background:'+p[1].blue+'"></i><i style="background:'+p[1].green+'"></i><i style="background:'+p[1].purple+'"></i><span>'+esc(p[0])+'</span></button>'}).join("")+'</div>'+
+      '<h4>Colours</h4>'+[["blue","Main"],["green","Buttons"],["purple","Accent"]].map(function(c){return'<label class="lk-c"><input type="color" data-c="'+c[0]+'" value="'+cur[c[0]]+'"><span>'+c[1]+'</span></label>'}).join("")+
+      '<h4>Fonts</h4>'+[["heading_font","Headings"],["body_font","Body text"]].map(function(f){return'<label class="lk-f"><span>'+f[1]+'</span><select class="t" data-f="'+f[0]+'"><option value="">AMBS original</option>'+TH_FONTS.map(function(x){return'<option'+(cur[f[0]]===x?" selected":"")+'>'+x+'</option>'}).join("")+'</select></label>'}).join("")+
+      '<h4>Buttons</h4>'+seg("button_shape","Shape",[["","Pill"],["rounded","Rounded"],["square","Square"]])+seg("button_size","Size",[["small","Small"],["","Normal"],["large","Large"]])+seg("button_style","Style",[["","Glossy"],["flat","Flat"],["raised","Raised"]])+
+      '<div class="lk-act"><button type="button" class="btn" data-reset>Undo look changes</button><button type="button" class="btn primary" data-save>Save look &amp; publish</button></div><p class="help">Changes the whole website, not just this page.</p>';
+    b.querySelectorAll("[data-p]").forEach(function(x){x.addEventListener("click",function(){Object.assign(cur,TH_PRESETS[+x.dataset.p][1]);draw();go()})});
+    b.querySelectorAll("[data-c]").forEach(function(x){x.addEventListener("input",function(){cur[x.dataset.c]=x.value.toUpperCase();clearTimeout(x._t);x._t=setTimeout(function(){go();st()},120)})});
+    b.querySelectorAll("[data-f]").forEach(function(x){x.addEventListener("change",function(){cur[x.dataset.f]=x.value;go();st()})});
+    b.querySelectorAll("[data-bk]").forEach(function(x){x.addEventListener("click",function(){cur[x.dataset.bk]=x.dataset.bv;b.querySelectorAll('[data-bk="'+x.dataset.bk+'"]').forEach(function(y){y.setAttribute("aria-pressed",String(y===x))});go();st()})});
+    b.querySelector("[data-reset]").addEventListener("click",function(){cur=Object.assign({},TH_BASE,saved);draw();go()});
+    b.querySelector("[data-save]").addEventListener("click",function(){var sv=this,t={};["blue","green","purple"].forEach(function(k){if(cur[k].toUpperCase()!==TH_BASE[k])t[k]=cur[k]});K.slice(3).forEach(function(k){if(cur[k])t[k]=cur[k]});busy(sv,true,"Publishing…");
+      api("settings",{action:"theme",theme:t}).then(function(){saved=t;busy(sv,false);st();toast("Look saved. Every page updates in about 2 minutes.")}).catch(function(e){busy(sv,false);fail(e)})});
+    st()}
+  function st(){var sv=lk.querySelector("[data-save]");if(sv)sv.disabled=same()}
+});
+/* recolour, refont and reshape the buttons of a page in a frame, live (Colours & fonts preview and the 🎨 Look panel in Edit on page) */
+function lookApply(d,cur,cssCache){
+    d.querySelectorAll("link[rel=stylesheet][href*='/assets/'],style[data-th]").forEach(function(l){var href=l.getAttribute("href")||l.dataset.th;
+      var put=function(css){var st=l.tagName==="STYLE"?l:d.createElement("style");st.dataset.th=href;st.textContent=themeCss(css,cur);if(l!==st){l.parentNode.insertBefore(st,l);l.remove()}};
+      if(cssCache[href])put(cssCache[href]);else fetch(href).then(function(r){return r.text()}).then(function(css){cssCache[href]=css;put(css)})});
+    var ob=d.getElementById("ds-btn");if(ob)ob.remove();var bc=btnCss(cur);if(bc){var st=d.createElement("style");st.id="ds-btn";st.textContent=bc;d.head.appendChild(st)}
+    var old=d.getElementById("ds-font");if(old)old.remove();var hf=cur.heading_font,bf=cur.body_font;
+    if(hf||bf){var fams=[hf,bf].filter(function(x,i,a){return x&&a.indexOf(x)===i}).map(function(f){return"family="+f.replace(/ /g,"+")+":wght@400;600;700;800"}).join("&");var tail=',Arial,sans-serif';
+      var wrap=d.createElement("div");wrap.id="ds-font";wrap.innerHTML='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'+fams+'&display=swap"><style>html:root{'+(hf?'--display:"'+hf+'"'+tail+';':'')+(bf?'--body:"'+bf+'"'+tail+';--mono:"'+bf+'"'+tail+';':'')+'}</style>';d.head.appendChild(wrap)}}
+/* same as button_css() in build.py */
+function btnCss(t){var SEL=".btn,.blk-btn",BODY=".btn:not(.btn--sm):not(.nav-book):not(.nav-contact),.blk-btn",FILL=".btn--sun,.btn--go,.btn--fill,.blk-btn:not(.blk-btn--light):not(.blk-btn--soft)";
+  var shape={rounded:"12px",square:"4px"}[t.button_shape||""],size={small:[".86rem",".7em 1.1em"],large:["1.08rem","1.1em 1.9em"]}[t.button_size||""],st=t.button_style||"",css="";
+  if(shape)css+=SEL+"{border-radius:"+shape+"!important}";if(size)css+=BODY+"{font-size:"+size[0]+"!important;padding:"+size[1]+"!important}";
+  var G=/^#[0-9A-Fa-f]{6}$/.test(t.green||"")?t.green:"#24B328";
+  if(st==="flat")css+=".btn--sun,.btn--go,.blk-btn:not(.blk-btn--light):not(.blk-btn--soft){background:"+G+"!important;box-shadow:none!important;text-shadow:none!important}"+SEL+"{transform:none!important}";
+  if(st==="raised")css+=FILL+"{box-shadow:0 14px 28px -10px rgba(0,0,0,.45),inset 0 -3px 0 rgba(0,0,0,.18)!important}";return css}
 function designInit(){
   var m=$("dsMain"),cur={},saved={},cssCache={};
   api("settings",{action:"get"}).then(function(j){saved=Object.assign({},j.business.theme||{});cur=Object.assign({},TH_BASE,saved);draw()}).catch(fail);
-  function same(){return["blue","green","purple","heading_font","body_font"].every(function(k){var a=(cur[k]||"").toUpperCase(),b=(saved[k]||(TH_BASE[k]||"")).toUpperCase();return a===b})}
+  function same(){return["blue","green","purple","heading_font","body_font","button_shape","button_size","button_style"].every(function(k){var a=(cur[k]||"").toUpperCase(),b=(saved[k]||(TH_BASE[k]||"")).toUpperCase();return a===b})}
   function draw(){
     var sw=function(k,name,hint){return'<div class="ds-c"><label for="ds-'+k+'"><b>'+name+'</b><span>'+hint+'</span></label><div class="ds-pick"><input type="color" id="ds-'+k+'" value="'+cur[k]+'"><input type="text" class="t" data-hex="'+k+'" value="'+cur[k]+'" maxlength="7" aria-label="'+name+' code"></div></div>'};
+    var seg=function(k,name,opts){return'<div class="ds-seg"><b>'+name+'</b><div role="group" aria-label="'+name+'">'+opts.map(function(o){return'<button type="button" data-bk="'+k+'" data-bv="'+o[0]+'" aria-pressed="'+((cur[k]||"")===o[0])+'">'+o[1]+'</button>'}).join("")+'</div></div>'};
     var fsel=function(k,name,hint){return'<div class="ds-c"><label for="ds-'+k+'"><b>'+name+'</b><span>'+hint+'</span></label><select id="ds-'+k+'" class="t"><option value="">AMBS original</option>'+TH_FONTS.map(function(f){return'<option'+(cur[k]===f?' selected':'')+'>'+f+'</option>'}).join("")+'</select></div>'};
     m.innerHTML='<div class="dash-head"><div><h2>Colours &amp; fonts</h2><p class="help">Change your brand colours and fonts for the whole website. The preview shows your real site with the new look before you publish.</p></div></div>'+
       '<div class="ds-grid"><div class="ds-side"><div class="panel"><h3>Ready-made looks</h3><div class="ds-pre">'+TH_PRESETS.map(function(p,i){return'<button type="button" class="ds-p" data-p="'+i+'"><span class="dots"><i style="background:'+p[1].blue+'"></i><i style="background:'+p[1].green+'"></i><i style="background:'+p[1].purple+'"></i></span>'+p[0]+'</button>'}).join("")+'</div></div>'+
       '<div class="panel"><h3>Colours</h3>'+sw("blue","Main colour","Links, headings accents, highlights")+sw("green","Button colour","Buttons, ticks and calls to action")+sw("purple","Accent colour","Small touches and gradients")+'</div>'+
       '<div class="panel"><h3>Fonts</h3>'+fsel("heading_font","Headings","Titles and big text")+fsel("body_font","Body text","Paragraphs, menus and buttons")+'<p class="help">Fonts other than the original load from Google Fonts.</p></div>'+
+      '<div class="panel"><h3>Buttons</h3><p class="help">For every button on the website. The top bar’s buttons keep their size so the menu never moves.</p>'+seg("button_shape","Shape",[["","● Pill"],["rounded","▢ Rounded"],["square","■ Square"]])+seg("button_size","Size",[["small","Small"],["","Normal"],["large","Large"]])+seg("button_style","Style",[["","Glossy"],["flat","Flat"],["raised","Raised"]])+'</div>'+
       '<div class="ds-act"><button type="button" class="btn" id="dsReset">Back to AMBS original</button><button type="button" class="btn primary" id="dsSave">Save &amp; publish</button></div></div>'+
       '<div class="ds-prev"><div class="ds-pbar"><select id="dsPage" class="t"><option value="/">Homepage</option><option value="/services/ai-automation">A service page</option><option value="/guides">Guides</option></select><div class="op-dev"><button type="button" data-w="390">Phone</button><button type="button" data-w="0" class="on">Laptop</button></div></div><div class="ds-frame"><iframe id="dsFrame" title="Preview with your colours and fonts" src="/?chat=nolog&amp;onpage=1"></iframe></div></div></div>';
     var fr=$("dsFrame");fr.addEventListener("load",apply);
     m.querySelectorAll("input[type=color]").forEach(function(c){var k=c.id.slice(3);c.addEventListener("input",function(){cur[k]=c.value.toUpperCase();m.querySelector('[data-hex="'+k+'"]').value=cur[k];later()})});
     m.querySelectorAll("[data-hex]").forEach(function(t){t.addEventListener("input",function(){var v=t.value.trim();if(/^#?[0-9a-fA-F]{6}$/.test(v)){v=(v[0]==="#"?v:"#"+v).toUpperCase();cur[t.dataset.hex]=v;$("ds-"+t.dataset.hex).value=v;later()}})});
     ["heading_font","body_font"].forEach(function(k){$("ds-"+k).addEventListener("change",function(){cur[k]=this.value;apply();btns()})});
+    m.querySelectorAll("[data-bk]").forEach(function(b){b.addEventListener("click",function(){cur[b.dataset.bk]=b.dataset.bv;m.querySelectorAll('[data-bk="'+b.dataset.bk+'"]').forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});apply();btns()})});
     m.querySelectorAll(".ds-p").forEach(function(b){b.addEventListener("click",function(){Object.assign(cur,TH_PRESETS[+b.dataset.p][1]);["blue","green","purple"].forEach(function(k){$("ds-"+k).value=cur[k];m.querySelector('[data-hex="'+k+'"]').value=cur[k]});apply();btns()})});
     $("dsReset").addEventListener("click",function(){cur=Object.assign({},TH_BASE);draw()});
     $("dsPage").addEventListener("change",function(){fr.src=this.value+"?chat=nolog&onpage=1"});
     m.querySelectorAll(".ds-pbar .op-dev button").forEach(function(b){b.addEventListener("click",function(){m.querySelectorAll(".ds-pbar .op-dev button").forEach(function(x){x.classList.toggle("on",x===b)});fr.style.width=+b.dataset.w?b.dataset.w+"px":"100%"})});
-    $("dsSave").addEventListener("click",function(){var b=this;busy(b,true,"Publishing…");var t={};["blue","green","purple"].forEach(function(k){if(cur[k].toUpperCase()!==TH_BASE[k])t[k]=cur[k]});["heading_font","body_font"].forEach(function(k){if(cur[k])t[k]=cur[k]});
+    $("dsSave").addEventListener("click",function(){var b=this;busy(b,true,"Publishing…");var t={};["blue","green","purple"].forEach(function(k){if(cur[k].toUpperCase()!==TH_BASE[k])t[k]=cur[k]});["heading_font","body_font","button_shape","button_size","button_style"].forEach(function(k){if(cur[k])t[k]=cur[k]});
       api("settings",{action:"theme",theme:t}).then(function(){saved=t;busy(b,false);btns();toast("Saved. Every page updates with the new look in about 2 minutes.")}).catch(function(e){busy(b,false);fail(e)})});
     btns()}
   var tmr;function later(){clearTimeout(tmr);tmr=setTimeout(function(){apply();btns()},120)}
   function btns(){var s1=$("dsSave");if(s1)s1.disabled=same()}
-  function apply(){var fr=$("dsFrame"),d=fr&&fr.contentDocument;if(!d||!d.head)return;
-    d.querySelectorAll("link[rel=stylesheet][href*='/assets/'],style[data-th]").forEach(function(l){var href=l.getAttribute("href")||l.dataset.th;
-      var put=function(css){var st=l.tagName==="STYLE"?l:d.createElement("style");st.dataset.th=href;st.textContent=themeCss(css,cur);if(l!==st){l.parentNode.insertBefore(st,l);l.remove()}};
-      if(cssCache[href])put(cssCache[href]);else fetch(href).then(function(r){return r.text()}).then(function(css){cssCache[href]=css;put(css)})});
-    var old=d.getElementById("ds-font");if(old)old.remove();var hf=cur.heading_font,bf=cur.body_font;
-    if(hf||bf){var fams=[hf,bf].filter(function(x,i,a){return x&&a.indexOf(x)===i}).map(function(f){return"family="+f.replace(/ /g,"+")+":wght@400;600;700;800"}).join("&");var tail=',Arial,sans-serif';
-      var wrap=d.createElement("div");wrap.id="ds-font";wrap.innerHTML='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'+fams+'&display=swap"><style>html:root{'+(hf?'--display:"'+hf+'"'+tail+';':'')+(bf?'--body:"'+bf+'"'+tail+';--mono:"'+bf+'"'+tail+';':'')+'}</style>';d.head.appendChild(wrap)}}
+  function apply(){var fr=$("dsFrame"),d=fr&&fr.contentDocument;if(!d||!d.head)return;lookApply(d,cur,cssCache)}
 }
 
 /* ======================= MENU AND HOME ======================= */
@@ -2235,11 +2459,11 @@ function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){i
 (function(){var sd=$("side"),h='<a class="side-brand" href="#" data-go="home"><img src="/logo-400.webp" alt="AMBS"><span>Website editor</span></a>';
   EDMENU.forEach(function(g){h+=(g[0]?'<div class="side-h">'+g[0]+'</div>':'')+g[1].map(function(t){return'<button type="button" data-go="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join("")});
   h+='<div class="side-h">Shortcuts</div><button type="button" data-roi="1">'+ico("calc")+'<span>Website ROI calculator</span></button><a href="/" target="_blank" rel="noopener">'+ico("site")+'<span>View website</span></a><a href="/email-signature" target="_blank" rel="noopener">'+ico("sig")+'<span>Email signature</span></a>';
-  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");b0.insertAdjacentHTML("afterend",'<div class="side-mode">'+modeSwitch(1)+'</div>');sideSync();modeSync()})();
+  sd.innerHTML=h;var b0=sd.querySelector(".side-brand");sideSync();modeSync()})();
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b)return;e.preventDefault();if(b.dataset.go==="onpage"||(b.dataset.go==="wording"&&edMode()==="visual"&&!b.closest("#tab-wording")))return openOnPage();show(b.dataset.go)});
 function homeInit(){
   var m=$("hmMain"),hr=new Date().getHours(),hi=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening";
-  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+modeSwitch()+'</div>'+
+  var h='<div class="dash-head"><div><h2>'+hi+'</h2><p class="help">'+new Date().toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+' · everything you can change on ambs.co.nz</p></div>'+''+'</div>'+
     '<div class="kpis" id="hmKpi0"><button type="button" class="kpi" data-go="health" id="hmHealth"><b>…</b><span>site health</span></button></div><div class="kpis" id="hmKpi" hidden></div>'+
     '<div class="quick"><button type="button" class="btn primary" data-new="news">＋ Write a news post</button><button type="button" class="btn" data-new="page">＋ Add a page</button><button type="button" class="btn" data-new="guides">＋ Add a guide</button></div>';
   EDMENU.slice(1).forEach(function(g){h+='<h3 class="dash-h">'+g[0]+'</h3><div class="tiles">'+g[1].map(function(t){return'<button type="button" class="tile" data-go="'+t[0]+'"><span class="tile-i">'+ico(t[0])+'</span><b>'+t[1]+'</b><span>'+t[2]+'</span></button>'}).join("")+'</div>'});
@@ -2278,9 +2502,13 @@ function healthInit(){
   api("pages",{action:"health"}).then(function(j){
     var n={high:0,mid:0,low:0};j.issues.forEach(function(i){n[i.sev]++});var col=j.score>=90?"ok":j.score>=70?"warn":"bad";
     var h1='<div class="dash-head"><div><h2>Site health</h2><p class="help">Every live page checked for what Google and visitors need. Fix the red ones first.</p></div><button type="button" class="btn" id="hlRe">Check again</button></div>'+
-      '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
-    if(!j.issues.length)h1+='<div class="panel"><p class="help">Everything looks great. 🎉</p></div>';
-    else h1+='<div class="panel"><ul class="hl-list">'+j.issues.map(function(i,k){return'<li class="'+SEV[i.sev][1]+'"><span class="hl-tag">'+SEV[i.sev][0]+'</span><div><b>'+esc(i.name)+'</b> <a href="'+esc(i.url)+'" target="_blank" rel="noopener" class="hl-url">'+esc(i.url)+'</a><p>'+esc(i.what)+'</p><p class="help">'+esc(i.fix)+'</p></div><button type="button" class="btn soft" data-k="'+k+'">Fix</button></li>'}).join("")+'</ul></div>';
+      '<div class="hl-top panel"><div class="hl-score '+col+'" style="--p:'+j.score+'"><b>'+j.score+'</b><span>out of 100</span></div><div class="hl-sum"><p><b>'+j.pages+'</b> live pages checked</p><p class="help hl-when">Last checked '+healthWhen(j.checked)+' (New Zealand time)</p><p><i class="dot bad"></i>'+n.high+' to fix first</p><p><i class="dot warn"></i>'+n.mid+' worth fixing</p><p><i class="dot low"></i>'+n.low+' nice to have</p></div></div>';
+    var checks=j.checks||[],pp=j.perPage||[];
+    h1+='<div class="hl-tabs" role="tablist"><button type="button" data-v="fix" aria-selected="true">What to fix <span>'+j.issues.length+'</span></button><button type="button" data-v="checks" aria-selected="false">Every check <span>'+checks.length+'</span></button><button type="button" data-v="pages" aria-selected="false">Every page <span>'+pp.length+'</span></button></div>';
+    h1+='<div class="panel hl-v" data-v="checks" hidden><ul class="hl-checks">'+checks.map(function(c){var ok=!c.failed;return'<li class="'+(c.total?ok?"ok":"bad":"na")+'"><i aria-hidden="true">'+(c.total?ok?"✓":"✕":"–")+'</i><b>'+esc(c.name)+'</b><span>'+(!c.total?"Nothing to check":ok?"All "+c.total+" pass":c.failed+" of "+c.total+" to fix")+'</span></li>'}).join("")+'</ul></div>';
+    h1+='<div class="panel hl-v" data-v="pages" hidden><ul class="hl-pages">'+pp.map(function(r,k){return'<li><div><b>'+esc(r.name)+'</b><span class="hl-url">'+esc(r.url)+'</span></div><span class="hl-res '+(r.issues?SEV[r.worst][1]:"ok")+'">'+(r.issues?r.issues+" to fix":"✓ All good")+'</span><button type="button" class="btn soft" data-p="'+k+'">'+(r.issues?"Fix":"Open")+'</button></li>'}).join("")+'</ul></div>';
+    if(!j.issues.length)h1+='<div class="panel hl-v" data-v="fix"><p class="help">Everything looks great. 🎉 Every check passes on every page.</p></div>';
+    else h1+='<div class="panel hl-v" data-v="fix"><ul class="hl-list">'+j.issues.map(function(i,k){return'<li class="'+SEV[i.sev][1]+'"><span class="hl-tag">'+SEV[i.sev][0]+'</span><div><b>'+esc(i.name)+'</b> <a href="'+esc(i.url)+'" target="_blank" rel="noopener" class="hl-url">'+esc(i.url)+'</a><p>'+esc(i.what)+'</p><p class="help">'+esc(i.fix)+'</p></div><button type="button" class="btn soft" data-k="'+k+'">Fix</button></li>'}).join("")+'</ul></div>';
     var U=encodeURIComponent("https://ambs.co.nz/"),tools=[["Speed test","Google PageSpeed: speed, accessibility and SEO scores for phone and laptop","https://pagespeed.web.dev/analysis?url="+U],
       ["Google rich results","Checks the business details Google reads from the page","https://search.google.com/test/rich-results?url="+U],
       ["Search Console","Google’s own report: pages indexed, errors and searches","https://search.google.com/search-console?resource_id=sc-domain%3Aambs.co.nz"],
@@ -2289,12 +2517,16 @@ function healthInit(){
       ["Sharing preview","How links to the website look on Facebook and LinkedIn","https://www.opengraph.xyz/url/"+U]];
     h1+='<h3 class="dash-h">More free checks</h3><div class="tiles">'+tools.map(function(t){return'<a class="tile" href="'+t[2]+'" target="_blank" rel="noopener"><span class="tile-i">'+ico("health")+'</span><b>'+t[0]+'</b><span>'+t[1]+'</span></a>'}).join("")+'</div>';
     m.innerHTML=h1;$("hlRe").addEventListener("click",healthInit);
+    m.querySelectorAll(".hl-tabs button").forEach(function(b){b.addEventListener("click",function(){m.querySelectorAll(".hl-tabs button").forEach(function(x){x.setAttribute("aria-selected",String(x===b))});m.querySelectorAll(".hl-v").forEach(function(v){v.hidden=v.dataset.v!==b.dataset.v})})});
+    m.querySelectorAll(".hl-pages button").forEach(function(b){b.addEventListener("click",function(){var r=pp[+b.dataset.p];show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(r.section,r.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
     m.querySelectorAll(".hl-list button").forEach(function(b){b.addEventListener("click",function(){var i=j.issues[+b.dataset.k];
       if(i.section==="redirects")return show("redirects");show("pages");var t0=Date.now(),go=function(){if(site&&$("pgMain"))openPage(i.section,i.slug);else if(Date.now()-t0<15000)setTimeout(go,120)};go()})});
     var k=$("hmHealth");if(k)k.innerHTML=healthTile(j);
   }).catch(fail);
 }
-function healthTile(j){return'<b>'+j.score+'<small>/100</small></b><span>site health'+(j.issues.length?" · "+j.issues.filter(function(i){return i.sev==="high"}).length+" to fix first":"")+'</span>'}
+function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
+  return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
+function healthTile(j){return'<b>'+j.score+'<small>/100</small></b><span>site health'+(j.issues.length?" · "+j.issues.filter(function(i){return i.sev==="high"}).length+" to fix first":"")+'</span><span class="kpi-when">Checked '+healthWhen(j.checked)+'</span>'}
 
 /* ======================= VISITORS NOW ======================= */
 /* Who is on the website right now, from Google Analytics Realtime through api/settings "visitors" (api/_ga.js).

@@ -94,6 +94,7 @@ function vercelWith(v, list) {
   if (list.length) next.redirects = list.map((r) => ({ source: r.from, destination: r.to, permanent: r.permanent !== false })); else delete next.redirects;
   return JSON.stringify(next, null, 2) + "\n";
 }
+const words0 = (body) => body.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
 const pagePath = (section, slug) => (section === "page" ? "/" + slug : "/" + section + "/" + slug);
 
 export default async function handler(req, res) {
@@ -162,6 +163,11 @@ export default async function handler(req, res) {
 
     if (b.action === "health") {
       const issues = [];
+      /* every check, with how many pages it looked at and how many failed, and every page's own result */
+      const CHECKS = { title: "Title in Google", desc: "Description in Google", dup: "Every page has its own title", photos: "Photos have a description", words: "Enough helpful words (300+)", links: "Links go to pages that exist", redirects: "Redirects go to pages that exist" };
+      const tally = {}; Object.keys(CHECKS).forEach((k) => (tally[k] = { total: 0, failed: 0 }));
+      const seenFail = {}, perPage = [];
+      const tick = (k, ok, url) => { tally[k].total++; if (!ok && !seenFail[k + url]) { seenFail[k + url] = 1; tally[k].failed++; } };
       const add = (sev, page, what, fix) => issues.push({ sev, ...page, what, fix });
       const known = new Set(["/", "/services", "/industries", "/guides", "/news", "/locations", "/privacy", "/terms", "/booking-confirmed", "/email-signature"]);
       const all = [];
@@ -181,7 +187,9 @@ export default async function handler(req, res) {
         else ({ meta, body } = parse(f.text));
         if (pg.draft) return;
         const ref = { section: pg.section, slug: pg.slug, name: meta.h1 || pg.slug, url: pg.section === "legal" ? "/" + pg.slug : pagePath(pg.section, pg.slug) };
+        perPage.push(ref);
         const t = String(meta.title || "").trim(), d = String(meta.description || "").trim();
+        tick("title", t && t.length <= 65 && t.length >= 25, ref.url); tick("desc", d && d.length <= 165 && d.length >= 70, ref.url);
         if (!t) add("high", ref, "No title in Google", "Write a title of 30–60 characters with the main words people search for.");
         else if (t.length > 65) add("mid", ref, "Title in Google is " + t.length + " characters, so Google cuts it short", "Keep it under 60 characters.");
         else if (t.length < 25) add("low", ref, "Title in Google is short (" + t.length + " characters)", "Add the service and place, for example “… | Auckland NZ”.");
@@ -192,15 +200,20 @@ export default async function handler(req, res) {
         if (pg.section !== "page") {
           const imgs = body.match(/<img\b[^>]*>/gi) || [];
           const noAlt = imgs.filter((i) => !/\balt\s*=\s*"[^"]+"/i.test(i)).length;
+          if (imgs.length) tick("photos", !noAlt, ref.url);
+          if (pg.section !== "legal") tick("words", words0(body) >= 300, ref.url);
           if (noAlt) add("mid", ref, noAlt + (noAlt > 1 ? " photos have" : " photo has") + " no description", "Describe each photo in a few words. Google and screen readers use it.");
           const words = body.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
           if (pg.section !== "legal" && words < 300) add("low", ref, "Only " + words + " words of article text", "Pages with 500+ helpful words usually rank better.");
         }
         const links = [...(pg.section === "page" ? body.matchAll(/"(\/[a-z0-9\-\/]*)(?:[#?][^"]*)?"/gi) : body.matchAll(/href="(\/[^"#?]*)/gi))].map((m) => m[1].replace(/\/+$/, "") || "/");
         const broken = [...new Set(links.filter((l) => !known.has(l) && !/^\/(assets|api)\//.test(l) && !/\.[a-z0-9]+$/i.test(l)))];
+        tick("links", !broken.length, ref.url);
         if (broken.length) add("high", ref, "Link to a missing page: " + broken.slice(0, 3).join(", "), "Change the link, or add a redirect from that address in Redirects.");
       }));
+      for (const list of Object.values(titles)) list.forEach((ref) => tick("dup", list.length < 2, ref.url));
       for (const list of Object.values(titles)) if (list.length > 1) list.forEach((ref) => add("mid", ref, "Same title in Google as " + list.filter((x) => x !== ref).map((x) => x.name).join(", "), "Give every page its own title."));
+      for (const r of redirectList(v)) tick("redirects", !(r.to.startsWith("/") && !known.has(r.to.split(/[#?]/)[0].replace(/\/+$/, "") || "/")), r.from);
       for (const r of redirectList(v)) if (r.to.startsWith("/") && !known.has(r.to.split(/[#?]/)[0].replace(/\/+$/, "") || "/"))
         add("mid", { section: "redirects", slug: "", name: "Redirect " + r.from, url: r.from }, "Sends visitors to " + r.to + ", which doesn't exist", "Change where it goes in Redirects.");
       const order = { high: 0, mid: 1, low: 2 };
@@ -208,7 +221,10 @@ export default async function handler(req, res) {
       const pages = all.filter((p) => !p.draft).length;
       const pen = issues.reduce((n, i) => n + (i.sev === "high" ? 6 : i.sev === "mid" ? 3 : 1), 0);
       const score = Math.max(0, Math.min(100, Math.round(100 - pen * 20 / Math.max(pages, 1))));
-      return send(res, 200, { score, pages, issues });
+      const checks = Object.keys(CHECKS).map((k) => ({ key: k, name: CHECKS[k], total: tally[k].total, failed: tally[k].failed }));
+      perPage.forEach((r) => { const mine = issues.filter((i) => i.url === r.url); r.issues = mine.length; r.worst = mine.length ? mine[0].sev : ""; });
+      perPage.sort((a, b2) => b2.issues - a.issues || a.name.localeCompare(b2.name));
+      return send(res, 200, { score, pages, issues, checks, perPage, checked: new Date().toISOString() });
     }
 
     if (b.action === "search") {
@@ -361,8 +377,11 @@ export default async function handler(req, res) {
         h1: title, lead: "", takeaways: [], faq: [], related: [],
       };
       if (st) {
-        meta.takeaways = (Array.isArray(st.takeaways) ? st.takeaways : []).slice(0, 12).map((x) => str(x, 200)).filter((x) => x.trim());
-        meta.faq = (Array.isArray(st.faq) ? st.faq : []).slice(0, 20).map((x) => [str(x?.[0], 200), str(x?.[1], 400)]).filter((x) => x[0].trim() && x[1].trim());
+        meta.takeaways = (Array.isArray(st.takeaways) ? st.takeaways : []).slice(0, 12).map((x) => str(x, 600)).filter((x) => x.trim());
+        meta.faq = (Array.isArray(st.faq) ? st.faq : []).slice(0, 20).map((x) => [str(x?.[0], 400), str(x?.[1], 2000)]).filter((x) => x[0].trim() && x[1].trim());
+        /* "Duplicate" sends the whole page, so its introduction and Google wording come along too */
+        if (st.lead) meta.lead = str(st.lead, 1500);
+        if (st.description) meta.description = str(st.description, 400);
         meta.related = (Array.isArray(st.related) ? st.related : []).map((x) => str(x, 120)).filter((x) => /^(guides|industries|services|news)\/[a-z0-9-]+$/.test(x)).slice(0, 3);
       }
       if (sec === "guides" || sec === "news") meta.published = meta.updated = today();

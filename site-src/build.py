@@ -202,15 +202,38 @@ def theme_css(css):
         return m.group(0) if c is None else m.group(1)+'(%d,%d,%d'%c+m.group(5)
     css=re.sub(r'#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9a-fA-F])',hx,css)
     return re.sub(r'(rgba?)\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(\s*[,)])',rg,css)
+# Button look (Colours & fonts → Buttons): shape, size and style for the buttons on every page.
+# The editor's preview builds the same CSS in btnCss() in admin.html, so keep the two in step.
+# The top bar's Book a call / Contact us keep their fixed size (only their shape changes).
+BTN_SEL='.btn,.blk-btn'
+BTN_BODY='.btn:not(.btn--sm):not(.nav-book):not(.nav-contact),.blk-btn'
+BTN_FILL='.btn--sun,.btn--go,.btn--fill,.blk-btn:not(.blk-btn--light):not(.blk-btn--soft)'
+BTN_FLAT='.btn--sun,.btn--go,.blk-btn:not(.blk-btn--light):not(.blk-btn--soft)'
+def button_css(t):
+    shape={'rounded':'12px','square':'4px'}.get(t.get('button_shape') or '')
+    size={'small':('.86rem','.7em 1.1em'),'large':('1.08rem','1.1em 1.9em')}.get(t.get('button_size') or '')
+    style=t.get('button_style') or ''
+    css=''
+    if shape: css+=BTN_SEL+'{border-radius:'+shape+'!important}'
+    if size: css+=BTN_BODY+'{font-size:'+size[0]+'!important;padding:'+size[1]+'!important}'
+    green=t.get('green') if re.match(r'^#[0-9A-Fa-f]{6}$',t.get('green') or '') else '#24B328'
+    if style=='flat': css+=BTN_FLAT+'{background:'+green+'!important;box-shadow:none!important;text-shadow:none!important}'+BTN_SEL+'{transform:none!important}'
+    if style=='raised': css+=BTN_FILL+'{box-shadow:0 14px 28px -10px rgba(0,0,0,.45),inset 0 -3px 0 rgba(0,0,0,.18)!important}'
+    return css
 def theme_head():
     hf,bf=(LOOK.get('heading_font') or '').strip(),(LOOK.get('body_font') or '').strip()
     hf=hf if hf in THEME_FONTS else '';bf=bf if bf in THEME_FONTS else ''
-    if not hf and not bf: return ''
-    fams='&'.join('family='+f.replace(' ','+')+':wght@'+THEME_FONTS[f] for f in dict.fromkeys(x for x in (hf,bf) if x))
-    tail=',Arial,"Noto Sans SC","Noto Sans Devanagari","Noto Sans Gurmukhi",sans-serif'
-    css=('--display:"'+hf+'"'+tail+';' if hf else '')+('--body:"'+bf+'"'+tail+';--mono:"'+bf+'"'+tail+';' if bf else '')
-    return ('<!--theme--><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?'+fams+'&display=swap">'
-            '<style>html:root{'+css+'}</style><!--/theme-->')
+    bc=button_css(LOOK)
+    if not hf and not bf and not bc: return ''
+    out='<!--theme-->'
+    if hf or bf:
+        fams='&'.join('family='+f.replace(' ','+')+':wght@'+THEME_FONTS[f] for f in dict.fromkeys(x for x in (hf,bf) if x))
+        tail=',Arial,"Noto Sans SC","Noto Sans Devanagari","Noto Sans Gurmukhi",sans-serif'
+        css=('--display:"'+hf+'"'+tail+';' if hf else '')+('--body:"'+bf+'"'+tail+';--mono:"'+bf+'"'+tail+';' if bf else '')
+        out+=('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?'+fams+'&display=swap">'
+              '<style>html:root{'+css+'}</style>')
+    if bc: out+='<style>'+bc+'</style>'
+    return out+'<!--/theme-->'
 THEME_KEY=hashlib.md5(json.dumps([LOOK.get(k) for k in ('blue','green','purple')]).encode()).hexdigest()[:4] if theme_moves() else ''
 def _v(name):
     h=hashlib.md5(open(os.path.join(SRC,'assets',name),'rb').read()).hexdigest()[:8]
