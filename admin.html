@@ -3376,6 +3376,10 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
    source "website", the chat log); clicks come from the Google Analytics events the pages send. api/settings "stats". */
 var stRange=7,stCache={};
 var ST_RANGES=[[1,"24 hours"],[7,"7 days"],[30,"30 days"],[90,"3 months"],[180,"6 months"],[365,"12 months"]];
+/* the exact days a Google figure covers, so it can be compared with Google's own screen ("27 Oct – 2 Nov 2026") */
+function whenLine(from,to,src,days){if(!from||!to)return"";var f=function(d,y){return new Date(d+"T12:00:00").toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:y?"numeric":undefined})};
+  var sc=src==="Search Console",pre=sc?{7:"7 days",28:"28 days"}[days]:{7:"Last 7 days",28:"Last 28 days",30:"Last 30 days",90:"Last 90 days"}[days];
+  return '<p class="help vs-when">'+f(from)+' – '+f(to,1)+' · '+(pre?'the same days as “'+pre+'” in '+src:'pick these dates in '+src+' to compare')+'</p>'}
 function statsInit(){
   var m=$("stMain");
   function lbl(d){return (ST_RANGES.filter(function(r){return r[0]===d})[0]||[0,d+" days"])[1]}
@@ -3388,7 +3392,7 @@ function statsInit(){
     if(j.days===1){var hm={};(L.by_hour||[]).forEach(function(x){hm[x.h]=x.n});
       for(var i=23;i>=0;i--){var t=new Date(now-i*3600000),k=nzKey(t,true);cols.push({label:t.toLocaleTimeString([],{hour:"numeric"}),n:hm[k]||0})}}
     else{var dm={};(L.by_day||[]).forEach(function(x){dm[x.d]=x.n});var step=j.days>90?7:1,n=Math.ceil(j.days/step);
-      for(var w=n-1;w>=0;w--){var s=0,first=null;for(var k2=0;k2<step;k2++){var t2=new Date(now-(w*step+k2)*86400000),key=nzKey(t2);s+=dm[key]||0;first=t2}
+      for(var w=n-1;w>=0;w--){var s=0,first=null;for(var k2=0;k2<step;k2++){var t2=new Date(now-(1+w*step+k2)*86400000),key=nzKey(t2);s+=dm[key]||0;first=t2}
         cols.push({label:(step>1?"Week of ":"")+first.toLocaleDateString([],{day:"numeric",month:"short"}),n:s})}}
     var mx=Math.max.apply(null,cols.map(function(c){return c.n}).concat([1]));
     return '<div class="vs-chart" role="img" aria-label="Leads over time"><div class="vs-cols">'+cols.map(function(c){return'<div class="vs-col st-col" title="'+esc(c.label+": "+c.n)+'"><i class="now'+(c.n?'':' z')+'" style="height:'+(c.n?Math.max(4,Math.round(c.n/mx*100)):0)+'%"></i></div>'}).join("")+'</div></div><div class="vs-axis"><span>'+esc(cols[0]?cols[0].label:"")+'</span><span>'+(j.days===1?"now":"today")+'</span></div>'}
@@ -3398,7 +3402,8 @@ function statsInit(){
     var L=j.leads&&!j.leads.error?j.leads:null,P=j.leadsBefore&&!j.leadsBefore.error?j.leadsBefore:{},E=j.events||{},N=E.now||{},B=E.before||{};
     var ev=function(k){return E.error||E.setup?"–":(N[k]||0)},evc=function(k){return E.error||E.setup?"":change(N[k]||0,B[k]||0)};
     var portal="https://portal.ambs.co.nz/";
-    var html=head()+'<div class="vs-stats st-stats">'+
+    var nzD=function(iso,back){var d=new Date(new Date(iso).getTime()-(back||0));return d.toLocaleDateString("en-CA",{timeZone:"Pacific/Auckland"})};
+     var html=head()+(j.days!==1&&j.from?whenLine(nzD(j.from),nzD(j.to,1000),"Google Analytics",j.days):"")+'<div class="vs-stats st-stats">'+
       tile(L?L.leads:"–","Leads received",L?change(L.leads,P.leads||0):"","#leads","See every lead")+
       tile(L?L.sends:"–","Forms sent",L?change(L.sends,P.sends||0):"")+
       tile(ev("booking_confirmed"),"Calls booked",evc("booking_confirmed"))+
@@ -3721,9 +3726,9 @@ function visitorsInit(){
     var fd=function(d){if(j.days===1){var h=+d.slice(11,13);return (h%12||12)+(h<12?"am":"pm")}var x=new Date(d+"T12:00:00");return x.toLocaleDateString([], {weekday:j.days<=7?"short":undefined,day:"numeric",month:"short"})};
     var card=function(k,n,label,ch){return'<button type="button" class="vs-stat'+(k===vsMetric?' on':'')+'"'+(k!=null?' data-k="'+k+'" aria-pressed="'+(k===vsMetric)+'"':' disabled')+'><b>'+n+'</b><span>'+label+'</span>'+ch+'</button>'};
     var mm=MET[vsMetric],cols=j.daily.map(function(d){return{label:fd(d.d),n:d.now[mm[1]],was:d.before[mm[1]]}});
-    m.innerHTML=head()+'<div class="vs-stats">'+
+    m.innerHTML=head()+(j.days!==1?whenLine(j.from,j.to,"Google Analytics",j.days):"")+'<div class="vs-stats">'+
       card(0,T.activeUsers,"Visitors",change(T.activeUsers,B.activeUsers))+card(1,T.newUsers,"New visitors",change(T.newUsers,B.newUsers))+card(2,T.sessions,"Visits",change(T.sessions,B.sessions))+card(3,T.screenPageViews,"Pages viewed",change(T.screenPageViews,B.screenPageViews))+
-      card(null,mins(T.averageSessionDuration),"Average visit",change(T.averageSessionDuration,B.averageSessionDuration))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
+      card(null,mins(T.avgEngage),"Average engagement time",change(T.avgEngage,B.avgEngage))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
       '<div class="panel"><div class="vs-ph"><h3>'+mm[0]+(j.days===1?' each hour':' each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-now"></i>This period <i class="k-was"></i>The '+lbl+' before</span></div>'+
       (cols.length?chart(cols,mm[0]+(j.days===1?" each hour":" each day"))+'<div class="vs-axis"><span>'+cols[0].label+'</span><span>'+(j.days===1?'now':'today')+'</span></div>':'')+
       '<p class="help">Tap a number above to chart it. ▲▼ compare with the '+lbl+' before'+(j.days===1?' (hours are New Zealand time; the last hour is still filling in)':'')+'. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p></div>'+
@@ -3775,7 +3780,7 @@ function seoInit(){
     var mx=Math.max.apply(null,j.daily.map(function(d){return d.shown}).concat([1]));
     var fd=function(d){if(String(d).indexOf("T")>0){var x=new Date(d);return x.toLocaleTimeString([], {hour:"numeric"})+(x.toDateString()!==new Date().toDateString()?" "+x.toLocaleDateString([], {weekday:"short"}):"")}return new Date(d+"T12:00:00").toLocaleDateString([], {day:"numeric",month:"short"})};
     var good=j.basics.filter(function(b){return b.ok}).length;
-    m.innerHTML=head()+'<div class="vs-stats seo-k">'+kpi(T.clicks,"Clicks from Google",change(T.clicks,B.clicks))+kpi(T.shown,"Times shown in Google",change(T.shown,B.shown))+kpi(pct(T.ctr),"Click rate",change(T.ctr,B.ctr,false,true))+kpi(T.pos||"–","Average place",change(T.pos,B.pos,true))+'</div>'+
+    m.innerHTML=head()+(j.days!==1?whenLine(j.from,j.to,"Search Console",j.days):"")+'<div class="vs-stats seo-k">'+kpi(T.clicks,"Clicks from Google",change(T.clicks,B.clicks))+kpi(T.shown,"Times shown in Google",change(T.shown,B.shown))+kpi(pct(T.ctr),"Click rate",change(T.ctr,B.ctr,false,true))+kpi(T.pos||"–","Average place",change(T.pos,B.pos,true))+'</div>'+
       (j.days===1?'<p class="help seo-24">Last 24 hours uses Google’s newest figures, which can still change for a day or two'+(j.hourly?'':' (shown day by day; hour by hour wasn’t available)')+'. Searches, pages and places below cover today and yesterday.</p>':'')+
       '<div class="panel"><div class="vs-ph"><h3>'+(j.hourly?'Each hour':'Each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-was"></i>Shown <i class="k-now"></i>Clicked</span></div>'+
       '<div class="vs-chart"><div class="vs-tip" hidden></div><div class="vs-cols">'+j.daily.map(function(d,i){return'<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(fd(d.d)+": shown "+d.shown+", clicked "+d.clicks)+'"><i class="was" style="height:'+(d.shown?Math.max(3,Math.round(d.shown/mx*100)):0)+'%"></i><i class="now'+(d.clicks?'':' z')+'" style="height:'+Math.max(2,Math.round(d.clicks/mx*100))+'%"></i></button>'}).join("")+'</div></div>'+

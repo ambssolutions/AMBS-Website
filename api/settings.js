@@ -13,7 +13,7 @@
    { action: "leads", days }   Insights → Leads: every website enquiry with its details (database function website_leads)
    { action: "conns" } / { action: "conn-save", svc: "ga"|"gsc"|"psi", values } / { action: "conn-remove", svc }   Website settings → Connections: keys kept in Supabase Vault (see _keys.js)
    { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
-import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, statsEvents, gaCheck, submitSitemap } from "./_ga.js";
+import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, statsEvents, gaCheck, submitSitemap, nzMidnight } from "./_ga.js";
 import { loadKeys, keyFrom, KEY_NAMES, key } from "./_keys.js";
 import { psi, security, cert, response, sharing, okUrl } from "./_tests.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
@@ -60,8 +60,9 @@ export default async function handler(req, res) {
     await loadKeys(who, [].concat(AREA || [])[0]);
     if (b.action === "expiry") return send(res, 200, who.realRole === "owner" ? await keyExpiry(key("GA_SERVICE_ACCOUNT")) : {});   // Home's warning
     if (b.action === "stats") {
-      const days = [1, 7, 30, 90, 180, 365].includes(+b.days) ? +b.days : 7, to = new Date(), span = days * 86400000;
-      const from = new Date(to - span), pfrom = new Date(to - 2 * span);
+      /* 24 hours: the last 24 hours; longer: whole days ending yesterday (New Zealand time), the same days as Google Analytics' own "Last 7 days" */
+      const days = [1, 7, 30, 90, 180, 365].includes(+b.days) ? +b.days : 7, span = days * 86400000;
+      const to = days === 1 ? new Date() : nzMidnight(0), from = days === 1 ? new Date(to - span) : nzMidnight(days), pfrom = days === 1 ? new Date(to - 2 * span) : nzMidnight(2 * days);
       const [cur, prev, ev] = await Promise.all([
         sbRpc(who.token, "website_stats", { p_from: from.toISOString(), p_to: to.toISOString() }).catch((e) => ({ error: e.message })),
         sbRpc(who.token, "website_stats", { p_from: pfrom.toISOString(), p_to: from.toISOString() }).catch((e) => ({ error: e.message })),
