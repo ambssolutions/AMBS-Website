@@ -776,6 +776,7 @@ div.kx-warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(
 .seo-sw button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(15,23,42,.12)}@media (max-width:560px){.seo-sw{display:flex}.seo-sw button{flex:1;padding:8px 6px}}
 .gx-btns{display:flex;gap:8px;flex-wrap:wrap}.gx-filt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 4px}.gx-filt button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;font-weight:650;cursor:pointer;color:var(--ink)}
 .gx-filt button span{color:var(--muted);font-weight:700;margin-left:2px}.gx-filt button.on{background:var(--emb-bg);box-shadow:var(--emb-sh);border-color:transparent}.gx-filt button.warn span{color:#b45309}.gx-q{margin-left:auto;max-width:240px;height:38px}
+.gx-acct{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:10px 0 0;font-size:.88rem}.gx-acct .btn.link{padding:0 4px}
 .gx-open{padding:10px 12px;border-radius:10px;background:var(--emb-bg);box-shadow:var(--emb-sh);color:var(--ink)}.gx-open a{color:var(--blue,#1a63c9)}
 .gx-rq{font-size:.82rem;color:#7a4b00;margin-top:2px}.gx-rq .btn.link{font-size:.8rem;padding:0 4px}.gx-none{padding:14px 0}
 @media (max-width:760px){.gx-q{margin-left:0;max-width:none;width:100%}}
@@ -3097,7 +3098,11 @@ function gxPages(l){var out=[{name:"Homepage",url:"/"},{name:"Services",url:"/se
   (l.custom||[]).filter(function(p){return!p.draft}).forEach(function(p){var u="/"+p.slug;if(!seen[u]){seen[u]=1;out.push({name:p.title||p.h1||p.slug,url:u})}});return out}
 function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}},save=function(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
   var full=function(u){return"https://ambs.co.nz"+u},day=function(t){return t?new Date(t).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric",timeZone:"Pacific/Auckland"}):""};
-  var inspect=function(x,u){return"https://search.google.com/search-console/inspect?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+"&id="+encodeURIComponent(full(u))};
+  /* Google shows a 404 when the browser is signed in with a different Google account from the one that owns the
+     property; authuser=<email> makes Search Console open with the right account (or ask to sign in to it).
+     The account is kept in this browser (ambs-gsc-user), since each phone or computer may have different accounts. */
+  var gUser=function(){try{return localStorage.getItem("ambs-gsc-user")||""}catch(e){return""}};
+  var inspect=function(x,u){var a=gUser();return"https://search.google.com/search-console/inspect?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+"&id="+encodeURIComponent(full(u))+(a?"&authuser="+encodeURIComponent(a):"")};
   function kind(r,D){var x=(D.r||{})[r.url];return!x||x.err||x.net?"un":x.v==="PASS"?"on":"off"}
   function draw(){var D=load(),R=D.r||{},n={all:list.length,on:0,off:0,req:0,un:0};
     list.forEach(function(r){n[kind(r,D)]++;if(gxReq[full(r.url)]&&kind(r,D)!=="on")n.req++});
@@ -3110,11 +3115,15 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
         '<div class="gx-acts">'+(off?'<a class="btn '+(rq?'soft':'primary')+'" href="'+esc(inspect(x,r.url))+'" target="_blank" rel="noopener" data-req="'+k+'">'+(rq?'Request again ↗':'Request indexing ↗')+'</a>':x&&x.link?'<a class="btn soft" href="'+esc(x.link)+'" target="_blank" rel="noopener">Search Console ↗</a>':'')+'<button type="button" class="btn soft" data-one="'+k+'">Check</button></div></li>'}).join("");
     var F=[["all","All"],["on","On Google"],["off","Not on Google"],["req",'<span class="lg">Indexing requested</span><span class="sm">Requested</span>'],["un","Not checked"]];
     box.innerHTML='<div class="panel" id="gxPanel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><div class="gx-btns"><button type="button" class="btn" id="gxMap" title="Asks Google to read your sitemap again, so it looks at new and changed pages sooner"><span class="lg">Send sitemap to Google</span><span class="sm">Send sitemap</span></button>'+(n.un&&!gxRun?'<button type="button" class="btn" id="gxRest">Check the '+n.un+' not checked</button>':'')+'<button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check <span class="lg">every page</span><span class="sm">all</span>')+'</button></div></div>'+
-      (D.setup?'<p class="msg err">'+D.setup+'</p>':'')+'<p class="help" id="gxMsg"></p>'+
+      (D.setup?'<p class="msg err">'+D.setup+'</p>':'')+
+      '<div class="gx-acct"><span class="help">Google account for Search Console:</span> '+(gUser()?'<b>'+esc(gUser())+'</b>':'<span class="help">not set (the browser’s first account is used)</span>')+' <button type="button" class="btn link" id="gxAcct">'+(gUser()?'Change':'Set it')+'</button></div>'+
+      '<p class="help" id="gxMsg"></p>'+
       '<div class="gx-filt" role="group" aria-label="Show">'+F.map(function(f){return'<button type="button" class="'+(gxFilter===f[0]?'on':'')+(f[0]==="off"&&n.off?' warn':'')+'" data-f="'+f[0]+'" aria-pressed="'+(gxFilter===f[0])+'">'+f[1]+' <span>'+n[f[0]]+'</span></button>'}).join("")+'<input type="search" class="t gx-q" id="gxQ" placeholder="Find a page…" aria-label="Find a page" value="'+esc(gxQ)+'"></div>'+
       (rows?'<ul class="gx-list">'+rows+'</ul>':'<p class="help gx-none">'+(gxFilter==="off"?'Every checked page is on Google. 🎉':gxFilter==="req"?'No requests waiting.':'No pages match.')+'</p>')+
       '<p class="help">To ask Google to list a page, press <b>Request indexing ↗</b>: Search Console opens on that page; press <b>Request indexing</b> there (Google only lets a person do this). It’s marked here so you can see what’s been asked. New pages usually take from a few days to a few weeks.</p></div>';
-    $("gxAll").addEventListener("click",function(){runAll()});var gr=$("gxRest");if(gr)gr.addEventListener("click",function(){runAll(true)});
+    $("gxAll").addEventListener("click",function(){runAll()});
+    $("gxAcct").addEventListener("click",function(){var v=prompt("The Google account that owns ambs.co.nz in Search Console (the email you sign in to Search Console with). Leave empty to use the browser’s first account.",gUser());if(v===null)return;v=v.trim();
+      if(v&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){toast("That email doesn’t look right");return}try{if(v)localStorage.setItem("ambs-gsc-user",v);else localStorage.removeItem("ambs-gsc-user")}catch(e){}toast(v?"Search Console will open as "+v:"Using the browser’s first Google account");draw()});var gr=$("gxRest");if(gr)gr.addEventListener("click",function(){runAll(true)});
     box.querySelectorAll("[data-f]").forEach(function(b){b.addEventListener("click",function(){gxFilter=b.dataset.f;draw()})});
     var q=$("gxQ");q.addEventListener("input",function(){gxQ=q.value.trim().toLowerCase();var pos=q.selectionStart;draw();var q2=$("gxQ");q2.focus();try{q2.setSelectionRange(pos,pos)}catch(e){}});
     box.querySelectorAll("[data-one]").forEach(function(b){b.addEventListener("click",function(){var r=list[+b.dataset.one];busy(b,true,"…");one(r).then(function(){draw()})})});
@@ -3122,7 +3131,7 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
        redrawing straight away removed the link mid-tap and some browsers then didn't open it */
     box.querySelectorAll("[data-req]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();var href=a.getAttribute("href"),u=full(list[+a.dataset.req].url);
       try{window.open(href,"_blank","noopener")}catch(x){}
-      var msg=$("gxMsg");if(msg){msg.className="help gx-open";msg.innerHTML='Search Console is opening in a new tab (if it didn’t, <a href="'+esc(href)+'" target="_blank" rel="noopener"><b>open it here</b></a>). Press <b>Request indexing</b> there, signed in with the Google account that owns ambs.co.nz.'}
+      var msg=$("gxMsg");if(msg){msg.className="help gx-open";msg.innerHTML='Search Console is opening in a new tab (if it didn’t, <a href="'+esc(href)+'" target="_blank" rel="noopener"><b>open it here</b></a>). Press <b>Request indexing</b> there.<br><b>Google shows “404”?</b> This browser is signed in with a different Google account. Set the account that owns ambs.co.nz under “Google account” above, or in Search Console tap your photo → switch account, then paste the address into the search bar at the top: <button type="button" class="btn link" data-copyurl="'+esc(u)+'">Copy address</button>'}
       gxReq[u]={requested_at:new Date().toISOString(),requested_by:(window.ED_ME&&window.ED_ME.email)||""};
       api("settings",{action:"index-mark",url:u}).then(function(){toast("Marked as requested")}).catch(fail);
       setTimeout(function(){var keep=$("gxMsg")&&$("gxMsg").innerHTML;draw();var m2=$("gxMsg");if(m2&&keep){m2.className="help gx-open";m2.innerHTML=keep}},400)})});
@@ -3148,6 +3157,7 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
   gxResume=function(){if(document.visibilityState==="visible"&&document.body.contains(box)&&!gxRun)setTimeout(function(){runAll(true)},800)};
 }
 var gxResume=null;document.addEventListener("visibilitychange",function(){if(gxResume)gxResume()});
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-copyurl]");if(!b)return;var t=b.dataset.copyurl;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast("Address copied: "+t)}).catch(function(){prompt("Copy this address:",t)})});
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
 function healthTile(j){var t=tsLoad()["https://ambs.co.nz/"],sp=t&&t.psi_mobile&&t.psi_mobile.scores?t.psi_mobile.scores[0].score:null;
