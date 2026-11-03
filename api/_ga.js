@@ -222,7 +222,7 @@ export async function searchQueries(days) {
     const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/searchAnalytics/query", {
       method: "POST",
       headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" },
-      body: JSON.stringify({ startDate: day(n + 2), endDate: day(0), dimensions: ["query"], rowLimit: 25, dataState: "all" }),
+      body: JSON.stringify({ startDate: gday(n), endDate: gday(1), dimensions: ["query"], rowLimit: 25, dataState: "all" }),
     });
     const j = await r.json().catch(() => ({}));
     if (r.ok) return { site, days: n, rows: (j.rows || []).map((x) => ({ q: x.keys[0], clicks: x.clicks, shown: x.impressions, pos: Math.round(x.position * 10) / 10 })) };
@@ -235,6 +235,8 @@ export async function searchQueries(days) {
 /* Everything for the SEO page, from Search Console plus a quick look at the live site:
    totals now and the period before, clicks and times shown each day, searches, pages, countries, devices,
    chances (searches close to page 1, or shown a lot but rarely clicked), sitemaps and the site's own basics. */
+/* a date k days before today in Search Console's time zone (US Pacific), as YYYY-MM-DD */
+function gday(k) { const d = new Date(new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() - k); return d.toISOString().slice(0, 10); }
 async function gsc(t, site, body) {
   const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/searchAnalytics/query", {
     method: "POST", headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ dataState: "all" }, body)),
@@ -267,8 +269,10 @@ export async function seoReport(days) {
   const t = await accessToken(c.sa);
   const day = (k) => new Date(Date.now() - k * 86400000).toISOString().slice(0, 10);
   /* 24 hours: Google's fresh (not yet final) figures; searches, pages and places cover today and yesterday */
-  const cur = n === 1 ? { startDate: day(1), endDate: day(0) } : { startDate: day(n + 2), endDate: day(0) },
-    prev = n === 1 ? { startDate: day(3), endDate: day(2) } : { startDate: day(2 * n + 2), endDate: day(n + 3) };
+  /* 7/28/90 days: the same days as Search Console's own "7 days" etc., i.e. that many whole days ending yesterday in
+     Google's time zone (US Pacific); the period before is the same length just before it */
+  const cur = n === 1 ? { startDate: day(1), endDate: day(0) } : { startDate: gday(n), endDate: gday(1) },
+    prev = n === 1 ? { startDate: day(3), endDate: day(2) } : { startDate: gday(2 * n), endDate: gday(n + 1) };
   const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
   let site = "", last = "";
   for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
