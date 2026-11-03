@@ -768,6 +768,8 @@ svg.sel .cm-n:not(.near){opacity:.35}svg.sel .cm-e:not(.on) path{opacity:.35}svg
 .kx-how{margin-top:auto}.kx-how summary{cursor:pointer;font-size:.8rem;font-weight:700;color:var(--muted);list-style:none}.kx-how summary::-webkit-details-marker{display:none}.kx-how summary::after{content:" ›"}.kx-how[open] summary::after{content:" ‹"}.kx-how p{margin:6px 0 0;font-size:.8rem}
 .kx-chips{display:flex;flex-wrap:wrap;gap:6px}.kx-chips span{font-size:.78rem;font-weight:650;padding:4px 9px;border-radius:999px;background:var(--card);box-shadow:var(--emb-sh)}
 @media (max-width:1180px){.kx-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:560px){.kx-list{grid-template-columns:1fr}}
+.kx-next{font-size:.85rem;font-weight:600;padding:5px 12px;border-radius:999px;background:var(--ok-bg);color:var(--green)}.kx-next.kx-warn{background:#fff4e0;color:#9a5b00}.kx-next.kx-bad{background:#fde8e8;color:#b42318}
+.kx-home{margin:0 0 14px;padding:10px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);font-size:.9rem;color:var(--muted)}.kx-home b{color:var(--ink)}.kx-home.kx-warn{color:#7a4b00}.kx-home.kx-bad{color:#b42318}.kx-home .btn.link{font-size:.85rem}
 div.kx-warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);color:#7a4b00}
 .gx-filt button span.sm,.gx-filt button span.lg{color:inherit;font-weight:inherit;margin:0}.gx-btns .sm,.gx-filt .sm{display:none}@media (max-width:560px){.gx-btns .sm,.gx-filt .sm{display:inline}}
 .seo-sw{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--emb-bg);box-shadow:var(--emb-sh);margin:0 0 14px}.seo-sw button{border:0;background:none;font:inherit;font-weight:700;font-size:.9rem;padding:8px 16px;border-radius:999px;cursor:pointer;color:var(--muted)}
@@ -3020,8 +3022,8 @@ function homeInit(){
   h+='<h3 class="dash-h">Tools</h3><div class="tiles"><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
   m.innerHTML=h;modeSync();
   api("pages",{action:"health"}).then(function(j){var k=$("hmHealth");if(k)k.innerHTML=healthTile(j)}).catch(function(){var k=$("hmHealth");if(k)k.remove()});
-  if(!window.ED_ME||window.ED_ME.role==="owner")api("settings",{action:"expiry"}).then(function(E){var warn=[["Publishing key (GitHub)",E.github,30],["Google service account key",E.google,30],["Padlock certificate",E.padlock,7]].filter(function(x){var d=x[1]&&x[1].ok?kxDays(x[1].expires):null;return d!==null&&d<x[2]});
-    if(!warn.length)return;var hd=m.querySelector(".dash-top");if(!hd)return;hd.insertAdjacentHTML("beforebegin",'<div class="kx-warn" role="alert">⚠ '+warn.map(function(x){var d=kxDays(x[1].expires);return'<b>'+x[0]+'</b> '+(d<0?'has run out':'runs out in '+d+' day'+(d===1?'':'s'))}).join(" · ")+'. <button type="button" class="btn link" data-go="conns">See Connections →</button></div>')}).catch(function(){});
+  if(!window.ED_ME||window.ED_ME.role==="owner")api("settings",{action:"expiry"}).then(function(E){var n=kxNext(E),hd=m.querySelector(".dash-top");if(!n||!hd)return;
+    hd.insertAdjacentHTML("beforebegin",'<div class="kx-home kx-'+n.cls+'" role="'+(n.cls==="ok"?"status":"alert")+'">'+(n.cls==="ok"?'🔑 Next key to run out: ':'⚠ ')+'<b>'+n.k[2]+'</b> '+(n.cls==="ok"?'· '+n.txt:(n.d<0?'has run out':'runs out in '+n.d+' day'+(n.d===1?'':'s'))+' ('+n.txt.split(" · ")[0]+')')+' <button type="button" class="btn link" data-go="conns">See all keys →</button></div>')}).catch(function(){});
   Promise.all([api("settings",{action:"visitors"}),api("settings",{action:"visitors",days:7})]).then(function(r){var a=r[0],b=r[1];if(a.setup||b.setup)return;
     var ev={};(b.events||[]).forEach(function(e){ev[e.name]=e.n});var k=$("hmKpi");if(!k)return;
     var tile=function(n,l,go){return'<button type="button" class="kpi" data-go="visitors"><b>'+n+'</b><span>'+l+'</span></button>'};
@@ -3365,11 +3367,16 @@ function kxRow(ic,name,x,never,note,amber){var d=x&&x.ok?kxDays(x.expires):null,
   var bar=x&&x.ok&&x.expires?'<span class="kx-bar" aria-hidden="true"><i style="width:'+Math.max(2,Math.min(100,Math.round(d/365*100)))+'%"></i></span>':"";
   return'<li class="kx-'+cls+'"><div class="kx-h"><span class="kx-ic" aria-hidden="true">'+ic+'</span><b>'+name+'</b></div><span class="kx-date">'+date+'</span>'+tag+bar+
     (x&&!x.ok?'<small class="help">'+esc(x.error||"")+'</small>':'')+(note?'<details class="kx-how"><summary>How to renew</summary><p class="help">'+note+'</p></details>':'')+'</li>'}
-function keyDates(E,ps){var never=["PageSpeed key"+(ps&&ps.from?"":" (not set)"),"Web3Forms","Supabase","Zoho Bookings"];
-  return'<div class="panel kx"><div class="vs-ph"><h3>When keys run out</h3><span class="help">Checked just now</span></div><ul class="kx-list">'+
-  kxRow("🔐","Publishing key (GitHub)",E.github,"","github.com → Settings → Developer settings → Fine-grained tokens → make a new one for this website (Contents: read and write), then put it in Vercel as GITHUB_TOKEN.")+
-  kxRow("📊","Google key",E.google,"Not connected","Google Cloud → IAM → Service accounts → Keys → Add key (JSON), then paste it in Google Analytics reports below.")+
-  kxRow("🔒","Padlock (https)",E.padlock,"","Nothing to do: Vercel renews it by itself about a month before it runs out.",7)+
+/* the keys that can run out, soonest first (keys with no date after them) */
+var KX_KEYS=[["github","🔐","Publishing key (GitHub)","","github.com → Settings → Developer settings → Fine-grained tokens → make a new one for this website (Contents: read and write), then put it in Vercel as GITHUB_TOKEN.",30],
+  ["google","📊","Google key","Not connected","Google Cloud → IAM → Service accounts → Keys → Add key (JSON), then paste it in Google Analytics reports below.",30],
+  ["padlock","🔒","Padlock (https)","","Nothing to do: Vercel renews it by itself about a month before it runs out.",7]];
+function kxSorted(E){return KX_KEYS.slice().sort(function(a,b){var x=E[a[0]],y=E[b[0]],tx=x&&x.ok&&x.expires?+new Date(x.expires):Infinity,ty=y&&y.ok&&y.expires?+new Date(y.expires):Infinity;return tx-ty})}
+function kxNext(E){var k=kxSorted(E)[0],x=k&&E[k[0]];if(!x||!x.ok||!x.expires)return null;var d=kxDays(x.expires);return{k:k,x:x,d:d,cls:d<7?"bad":d<k[5]?"warn":"ok",
+  txt:new Date(x.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"})+" · "+(d<0?"expired "+(-d)+" days ago":d===0?"today":d+" days")}}
+function keyDates(E,ps){var never=["PageSpeed key"+(ps&&ps.from?"":" (not set)"),"Web3Forms","Supabase","Zoho Bookings"],n=kxNext(E);
+  return'<div class="panel kx"><div class="vs-ph"><h3>When keys run out</h3>'+(n?'<span class="kx-next kx-'+n.cls+'">Next: <b>'+n.k[2]+'</b> · '+n.txt+'</span>':'<span class="help">Checked just now</span>')+'</div><ul class="kx-list">'+
+  kxSorted(E).map(function(k){return kxRow(k[1],k[2],E[k[0]],k[3],k[4],k[5])}).join("")+
   '<li class="kx-ok kx-never"><div class="kx-h"><span class="kx-ic" aria-hidden="true">♾️</span><b>Never run out</b></div><div class="kx-chips">'+never.map(function(n){return'<span>'+esc(n)+'</span>'}).join("")+'</div></li></ul></div>'}
 function connsInit(){
   var m=$("cnMain");
