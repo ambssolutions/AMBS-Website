@@ -3193,7 +3193,7 @@ function healthInit(){
 /* Site health → On Google: whether Google has each live page in its index, from Search Console URL Inspection
    (api/settings "test" with test "index" → inspectUrl() in api/_ga.js), three pages at a time so each fills in as it
    arrives. Kept in this browser (ambs-gidx) and checked again by itself when the last full check is over a day old. */
-var GX_PLAIN={"Submitted and indexed":"On Google","Indexed, not submitted in sitemap":"On Google (not in the sitemap)",
+var GX_PLAIN={"Submitted and indexed":"Indexed","Indexed, not submitted in sitemap":"Indexed (not in the sitemap yet)",
   "Discovered - currently not indexed":"Google knows the page but hasn’t visited it yet. This usually sorts itself out within a few weeks; links to it from your other pages help.",
   "Crawled - currently not indexed":"Google visited but hasn’t listed it yet. Pages with more useful, original text and links from other pages are listed sooner.",
   "URL is unknown to Google":"Google hasn’t found this page yet. It’s in your sitemap, so it should come; to hurry it, open it in Search Console and press “Request indexing”.",
@@ -3202,11 +3202,27 @@ var GX_PLAIN={"Submitted and indexed":"On Google","Indexed, not submitted in sit
   "Alternate page with proper canonical tag":"Google lists the main version of this page instead. Nothing to do.",
   "Duplicate without user-selected canonical":"Google thinks this page is a copy of another one. Make its title and text more distinct.",
   "Duplicate, Google chose different canonical than user":"Google picked another page as the main version. Make this page’s text more distinct."};
+Object.assign(GX_PLAIN,{"Indexed, though blocked by robots.txt":"Indexed, but robots.txt stops Google reading it. Remove the block in robots.txt.",
+  "Page indexed without content":"Indexed, but Google couldn’t read any text on it. Check the page shows its words without needing a click.",
+  "Blocked by robots.txt":"robots.txt stops Google visiting this page.","Soft 404":"Google thinks this page is empty or ‘not found’. Add useful content or remove it.",
+  "Server error (5xx)":"The website gave Google an error when it visited. Check again; if it repeats, the server needs a look.","Redirect error":"The page sends Google round in circles or too many hops.",
+  "Blocked due to unauthorized request (401)":"The page asks for a sign-in, so Google can’t see it.","Blocked due to access forbidden (403)":"The website refused Google’s visit.",
+  "Blocked due to other 4xx issue":"Google got an error from the website when it visited."});
+/* Google writes some states with an en dash or curly quotes, sometimes not: compare without them */
+function gxNorm(t){return String(t||"").replace(/[\u2013\u2014]/g,"-").replace(/[\u2018\u2019]/g,"'").trim()}
+function gxWhy(cov){var k=gxNorm(cov),hit="";Object.keys(GX_PLAIN).forEach(function(x){if(gxNorm(x)===k)hit=GX_PLAIN[x]});return hit}
+/* indexed = Google's verdict PASS for this exact address (PARTIAL = the old "valid with warnings", still indexed);
+   no verdict at all is "no answer", not "not indexed" */
+function gxState(x){if(!x||x.err||x.net)return"un";if(x.v==="PASS"||x.v==="PARTIAL")return"on";if(!x.v||x.v==="VERDICT_UNSPECIFIED")return"un";return"off"}
 var gxRun=false,gxFilter="all",gxQ="",gxReq={};
 /* pages to check: homepage, the section pages and every live page from the page list (api/pages "list") */
-function gxPages(l){var out=[{name:"Homepage",url:"/"},{name:"Services",url:"/services"},{name:"Industries",url:"/industries"},{name:"Guides",url:"/guides"}],seen={"/":1,"/services":1,"/industries":1,"/guides":1};
-  (l.pages||[]).filter(function(p){return!p.draft}).forEach(function(p){var u=p.section==="legal"||p.section==="page"?"/"+p.slug:"/"+p.section+"/"+p.slug;if(!seen[u]){seen[u]=1;out.push({name:p.h1||p.title||p.name||p.slug,url:u})}});
-  (l.custom||[]).filter(function(p){return!p.draft}).forEach(function(p){var u="/"+p.slug;if(!seen[u]){seen[u]=1;out.push({name:p.title||p.h1||p.slug,url:u})}});return out}
+function gxPages(l){var live=function(p){return typeof edLive==="function"?edLive(p):!p.draft},out=[],seen={},add=function(n,u){if(!seen[u]){seen[u]=1;out.push({name:n,url:u})}};
+  var cap=function(x){return x.charAt(0).toUpperCase()+x.slice(1)},pages=(l.pages||[]).filter(live);
+  add("Homepage","/");["services","industries","guides"].forEach(function(x){add(cap(x),"/"+x)});
+  pages.forEach(function(p){if(p.section&&p.section!=="legal"&&p.section!=="page")add(cap(p.section),"/"+p.section)});   /* /news, /locations… once they have a live page (as build.py makes them) */
+  pages.forEach(function(p){add(p.h1||p.title||p.name||p.slug,p.section==="legal"||p.section==="page"?"/"+p.slug:"/"+p.section+"/"+p.slug)});
+  (l.custom||[]).filter(live).forEach(function(p){add(p.title||p.h1||p.slug,"/"+p.slug)});
+  (l.legal||[]).forEach(function(p){add(p.title||cap(p.slug),"/"+p.slug)});return out}
 function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}},save=function(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
   var full=function(u){return"https://ambs.co.nz"+u},day=function(t){return t?new Date(t).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric",timeZone:"Pacific/Auckland"}):""};
   /* Google shows a 404 when the browser is signed in with a different Google account from the one that owns the
@@ -3217,23 +3233,24 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
     if(x&&x.link&&/^https:\/\/search\.google\.com\//.test(x.link))return x.link+(au?(x.link.indexOf("?")>0?"&":"?")+au:"");   /* the link Google itself gives with each check */
     return"https://search.google.com/search-console/inspect?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+"&id="+encodeURIComponent(full(u))+(au?"&"+au:"")};
   var scHome=function(x){var a=gUser();return"https://search.google.com/search-console?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+(a?"&authuser="+encodeURIComponent(a):"")};
-  function kind(r,D){var x=(D.r||{})[r.url];return!x||x.err||x.net?"un":x.v==="PASS"?"on":"off"}
+  function kind(r,D){return gxState((D.r||{})[r.url])}
   function draw(){var D=load(),R=D.r||{},n={all:list.length,on:0,off:0,req:0,un:0};
     list.forEach(function(r){n[kind(r,D)]++;if(gxReq[full(r.url)]&&kind(r,D)!=="on")n.req++});
     var shown=list.filter(function(r){var k=kind(r,D);if(gxFilter==="req"?!(gxReq[full(r.url)]&&k!=="on"):gxFilter!=="all"&&k!==gxFilter)return false;return!gxQ||(r.name+" "+r.url).toLowerCase().indexOf(gxQ)>=0});
-    var rows=shown.map(function(r){var k=list.indexOf(r),x=R[r.url],rq=gxReq[full(r.url)],st=!x?(gxRun?'<span class="gx-st wait"><span class="spin"></span> Checking</span>':'<span class="gx-st na">Not checked</span>'):x.net?'<span class="gx-st na">Connection dropped</span>':x.err?'<span class="gx-st na">Couldn’t check</span>':x.v==="PASS"?'<span class="gx-st ok">✓ On Google</span>':'<span class="gx-st bad">✕ Not on Google</span>';
-      var why=x&&!x.err?(x.v==="PASS"?(x.cov&&x.cov!=="Submitted and indexed"?GX_PLAIN[x.cov]||x.cov:""):(GX_PLAIN[x.cov]||x.cov||"Not listed yet")):x&&x.net?"The editor lost its connection while checking (it happens when the phone pauses the tab). It checks again when you come back, or press Check.":x&&x.err?x.err:"";
-      var off=x&&!x.err&&x.v!=="PASS";
+    var rows=shown.map(function(r){var k=list.indexOf(r),x=R[r.url],rq=gxReq[full(r.url)],st=!x?(gxRun?'<span class="gx-st wait"><span class="spin"></span> Checking</span>':'<span class="gx-st na">Not checked</span>'):x.net?'<span class="gx-st na">Connection dropped</span>':x.err?'<span class="gx-st na">Couldn’t check</span>':gxState(x)==="on"?'<span class="gx-st ok">✓ Indexed</span>':gxState(x)==="un"?'<span class="gx-st na">No answer</span>':'<span class="gx-st bad">✕ Not indexed</span>';
+      var gs=gxState(x),gw=x?gxWhy(x.cov):"",other=x&&x.gc&&x.gc.replace(/\/$/,"")!==full(r.url).replace(/\/$/,"")?x.gc:"";
+      var why=x&&!x.err&&!x.net?(gs==="on"?(x.cov&&gxNorm(x.cov)!=="Submitted and indexed"?(gw||x.cov):"")+(x.v==="PARTIAL"?" Google noted some issues; open it in Search Console to see them.":""):gs==="un"?"Google didn’t say either way. Press Check to ask again.":((x.cov?"Google: “"+x.cov+"”. ":"")+(gw||"Not listed yet")))+(other?" Google treats "+other.replace(/^https?:\/\/(www\.)?/,"")+" as the main version of this page.":""):x&&x.net?"The editor lost its connection while checking (it happens when the phone pauses the tab). It checks again when you come back, or press Check.":x&&x.err?x.err:"";
+      var off=x&&!x.err&&!x.net&&gs==="off";
       return'<li class="gx-row"><div class="gx-who"><b>'+esc(r.name)+'</b><a class="hl-url" href="'+esc(full(r.url))+'" target="_blank" rel="noopener">'+esc(r.url)+'</a>'+(why?'<span class="help">'+esc(why)+'</span>':'')+(x&&x.crawled?'<span class="help">Google last visited '+day(x.crawled)+'</span>':'')+
-        (rq?'<span class="gx-rq">⏳ Indexing requested '+day(rq.requested_at)+(rq.requested_by?' by '+esc(rq.requested_by):'')+(x&&x.v==="PASS"?' · now on Google ✓':'')+' <button type="button" class="btn link" data-unreq="'+k+'">Clear</button></span>':'')+'</div>'+st+
+        (rq?'<span class="gx-rq">⏳ Indexing requested '+day(rq.requested_at)+(rq.requested_by?' by '+esc(rq.requested_by):'')+(gs==="on"?' · now indexed ✓':'')+' <button type="button" class="btn link" data-unreq="'+k+'">Clear</button></span>':'')+'</div>'+st+
         '<div class="gx-acts">'+(off?'<a class="btn '+(rq?'soft':'primary')+'" href="'+esc(inspect(x,r.url))+'" target="_blank" rel="noopener" data-req="'+k+'">'+(rq?'Request again ↗':'Request indexing ↗')+'</a>':x&&x.link?'<a class="btn soft" href="'+esc(x.link)+'" target="_blank" rel="noopener">Search Console ↗</a>':'')+'<button type="button" class="btn link gx-ck" data-one="'+k+'" title="Check this page again">↻ Check</button></div></li>'}).join("");
-    var F=[["all","All"],["on","On Google"],["off","Not on Google"],["req",'<span class="lg">Indexing requested</span><span class="sm">Requested</span>'],["un","Not checked"]];
+    var F=[["all","All"],["on","Indexed"],["off","Not indexed"],["req",'<span class="lg">Indexing requested</span><span class="sm">Requested</span>'],["un","Not checked"]];
     box.innerHTML='<div class="panel" id="gxPanel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><div class="gx-btns"><button type="button" class="btn" id="gxMap" title="Asks Google to read your sitemap again, so it looks at new and changed pages sooner"><span class="lg">Send sitemap to Google</span><span class="sm">Send sitemap</span></button>'+(n.un&&!gxRun?'<button type="button" class="btn" id="gxRest">Check the '+n.un+' not checked</button>':'')+'<button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check <span class="lg">every page</span><span class="sm">all</span>')+'</button></div></div>'+
       (D.setup?'<p class="msg err">'+D.setup+'</p>':'')+
       '<div class="gx-acct"><span class="help">Google account for Search Console:</span> '+(gUser()?'<b>'+esc(gUser())+'</b>':'<span class="help">not set (the browser’s first account is used)</span>')+' <button type="button" class="btn link" id="gxAcct">'+(gUser()?'Change':'Set it')+'</button></div>'+
       '<p class="help" id="gxMsg"></p>'+
       '<div class="gx-filt" role="group" aria-label="Show">'+F.map(function(f){return'<button type="button" class="'+(gxFilter===f[0]?'on':'')+(f[0]==="off"&&n.off?' warn':'')+'" data-f="'+f[0]+'" aria-pressed="'+(gxFilter===f[0])+'">'+f[1]+' <span>'+n[f[0]]+'</span></button>'}).join("")+'<input type="search" class="t gx-q" id="gxQ" placeholder="Find a page…" aria-label="Find a page" value="'+esc(gxQ)+'"></div>'+
-      (rows?'<ul class="gx-list">'+rows+'</ul>':'<p class="help gx-none">'+(gxFilter==="off"?'Every checked page is on Google. 🎉':gxFilter==="req"?'No requests waiting.':'No pages match.')+'</p>')+
+      (rows?'<ul class="gx-list">'+rows+'</ul>':'<p class="help gx-none">'+(gxFilter==="off"?'Every checked page is indexed. 🎉':gxFilter==="req"?'No requests waiting.':'No pages match.')+'</p>')+
       '<p class="help">To ask Google to list a page, press <b>Request indexing ↗</b>: Search Console opens on that page; press <b>Request indexing</b> there (Google only lets a person do this). It’s marked here so you can see what’s been asked. New pages usually take from a few days to a few weeks.</p></div>';
     $("gxAll").addEventListener("click",function(){runAll()});
     $("gxAcct").addEventListener("click",function(){var v=prompt("The Google account that owns ambs.co.nz in Search Console (the email you sign in to Search Console with). Leave empty to use the browser’s first account.",gUser());if(v===null)return;v=v.trim();
@@ -3260,7 +3277,7 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
      as "not checked" and checked again when the editor is back on screen */
   function one(r,tries){return api("settings",{action:"test",test:"index",url:full(r.url)}).then(function(x){var D=load();D.r=D.r||{};
       if(x.setup||x.needs){D.setup=x.setup?"Connect Google first (Website settings → Connections → Google Analytics reports), then add the same account in Search Console.":"Add "+esc(x.email||"the service account")+" in Search Console → Settings → Users and permissions (Restricted), then check again.";save(D);return}
-      delete D.setup;D.r[r.url]={v:x.verdict,cov:x.coverage,crawled:x.crawled,link:x.link,site:x.site,at:Date.now()};save(D)})
+      delete D.setup;D.r[r.url]={v:x.verdict,cov:x.coverage,crawled:x.crawled,link:x.link,site:x.site,gc:x.canonical||"",uc:x.userCanonical||"",fetch:x.fetch||"",robots:x.robots||"",at:Date.now()};save(D)})
     .catch(function(e){var net=/fetch|load failed|network|aborted|timed? ?out/i.test(e.message||"");
       if(net&&(tries||0)<2)return new Promise(function(res){setTimeout(res,(tries?4000:1500))}).then(function(){return one(r,(tries||0)+1)});
       var D=load();D.r=D.r||{};D.r[r.url]=net?{net:1,at:Date.now()}:{err:e.message,at:Date.now()};save(D)})}
@@ -3774,8 +3791,8 @@ function seoInit(){
   var CTRY={nzl:"New Zealand",aus:"Australia",usa:"United States",gbr:"United Kingdom",ind:"India",can:"Canada",sgp:"Singapore",phl:"Philippines",pak:"Pakistan",chn:"China"};
   var pct=function(x){return(Math.round(x*1000)/10)+"%"};
   /* one line under the summary: how many pages are on Google (from the last check, kept in this browser) with a button to the list */
-  function gxLine(){var D={};try{D=JSON.parse(localStorage.getItem("ambs-gidx")||"{}")||{}}catch(e){}var R=D.r||{},ks=Object.keys(R).filter(function(k){return R[k]&&!R[k].err&&!R[k].net}),on=ks.filter(function(k){return R[k].v==="PASS"}).length;
-    return'<button type="button" class="seo-gx" data-sv="index"><span>📇</span><span class="seo-gx-t">'+(ks.length?'<b>'+on+' of '+ks.length+' pages are on Google</b>'+(ks.length-on?' · <em>'+(ks.length-on)+' not yet</em>':' ✓'):'<b>Which pages are on Google?</b>')+'</span><span class="seo-gx-go">See which →</span></button>'}
+  function gxLine(){var D={};try{D=JSON.parse(localStorage.getItem("ambs-gidx")||"{}")||{}}catch(e){}var R=D.r||{},ks=Object.keys(R).filter(function(k){return gxState(R[k])!=="un"}),on=ks.filter(function(k){return gxState(R[k])==="on"}).length;
+    return'<button type="button" class="seo-gx" data-sv="index"><span>📇</span><span class="seo-gx-t">'+(ks.length?'<b>'+on+' of '+ks.length+' pages are indexed on Google</b>'+(ks.length-on?' · <em>'+(ks.length-on)+' not yet</em>':' ✓'):'<b>Which pages are on Google?</b>')+'</span><span class="seo-gx-go">See which →</span></button>'}
   function sw(){return'<div class="seo-sw" role="tablist" aria-label="Google search"><button type="button" role="tab" data-sv="search" aria-selected="'+(seoView==="search")+'">🔎 Search results</button><button type="button" role="tab" data-sv="index" aria-selected="'+(seoView==="index")+'">📇 Pages on Google</button></div>'}
   function head(){if(seoView==="index")return sw()+'<div class="dash-head"><div><h2>Pages on Google</h2><p class="help">Whether each page of your website is on Google, straight from Search Console. Ask Google to list the ones that aren’t.</p></div></div>';
     return sw()+'<div class="dash-head"><div><h2>Google search</h2><p class="help">From Google Search Console, about 2–3 days behind. What people searched, where you showed up, and what to improve.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["1","24 hours"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(seoRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(seoRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
