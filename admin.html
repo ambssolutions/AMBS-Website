@@ -3770,8 +3770,8 @@ function visitorsInit(){
   var DEV={mobile:"Phone",desktop:"Computer",tablet:"Tablet"};
   var SRC={"Organic Search":"Google and other search","Direct":"Typed in or bookmarked","Organic Social":"Social media","Referral":"Links on other websites","Paid Search":"Search ads","Paid Social":"Social media ads","Email":"Email","Unassigned":"Other"};
   var MET=[["Visitors",0],["New visitors",1],["Visits",2],["Pages viewed",3]];
-  var FLBL={page:"Page",source:"Found you through",place:"Town",device:"Device"};
-  function nice(f,v){return f==="device"?(DEV[v]||v):f==="source"?(SRC[v]||v):v}
+  var FLBL={page:"Page",source:"Found you through",place:"Town",device:"Device",landing:"First page",site:"Sent by",who:"Visitor"};
+  function nice(f,v){return f==="device"?(DEV[v]||v):f==="source"?(SRC[v]||v):f==="landing"?(v==="/"?"Homepage":v):f==="site"?(v==="(direct)"?"Typed in or bookmarked":v.indexOf(".")<0?v.charAt(0).toUpperCase()+v.slice(1):v):f==="who"?(v==="new"?"First visit":v==="returning"?"Came back":v):v}
   function list(title,rows,empty,f){var mx=Math.max.apply(null,rows.map(function(r){return r.n}).concat([1]));
     return '<div class="panel vs-list"><h3>'+title+'</h3>'+(rows.length?'<ul class="vs-rows">'+rows.map(function(r){var on=vsFilter&&vsFilter.f===f&&vsFilter.v===r.name;
       var inner='<span class="vs-l">'+esc(nice(f,r.name))+'</span><b>'+r.n+'</b><i style="width:'+Math.max(3,Math.round(r.n/mx*100))+'%"></i>';
@@ -3820,12 +3820,12 @@ function visitorsInit(){
     var mm=MET[vsMetric],cols=j.daily.map(function(d){return{label:fd(d.d),n:d.now[mm[1]],was:d.before[mm[1]]}});
     m.innerHTML=head()+(j.days!==1?whenLine(j.from,j.to,"Google Analytics",j.days):"")+'<div class="vs-stats">'+
       card(0,T.activeUsers,"Visitors",change(T.activeUsers,B.activeUsers))+card(1,T.newUsers,"New visitors",change(T.newUsers,B.newUsers))+card(2,T.sessions,"Visits",change(T.sessions,B.sessions))+card(3,T.screenPageViews,"Pages viewed",change(T.screenPageViews,B.screenPageViews))+
-      card(null,mins(T.avgEngage),"Average engagement time",change(T.avgEngage,B.avgEngage))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
+      card(null,mins(T.avgEngage),"Average engagement time",change(T.avgEngage,B.avgEngage))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+(function(){var ev={};(j.events||[]).forEach(function(e){ev[e.name]=e.n});var n=["generate_lead","phone_click","email_click","booking_confirmed"].reduce(function(a,k){return a+(ev[k]||0)},0);return card(null,n,"Got in touch",'<span class="vs-ch">'+(T.sessions?(Math.round(n/T.sessions*1000)/10):0)+'% of visits</span>')})()+'</div>'+
       '<div class="panel"><div class="vs-ph"><h3>'+mm[0]+(j.days===1?' each hour':' each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-now"></i>This period <i class="k-was"></i>The '+lbl+' before</span></div>'+
       (cols.length?chart(cols,mm[0]+(j.days===1?" each hour":" each day"))+xAxis(cols.map(function(c){return c.label}).slice(0,-1).concat([j.days===1?'now':cols[cols.length-1].label])):'')+
       '<p class="help">Tap a number above to chart it. ▲▼ compare with the '+lbl+' before'+(j.days===1?' (hours are New Zealand time; the last hour is still filling in)':'')+'. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p></div>'+
       (j.days===1?'':'<div class="panel vs-search" id="vsSearch"><div class="vs-ph"><h3>What people searched on Google</h3><span class="vs-key">From Search Console · 2–3 days behind</span></div><p class="empty"><span class="spin"></span> Loading…</p></div>')+
-      '<div class="vs-grid">'+list("Top pages (views)",j.pages,"No visits yet.","page")+list("How they found you",j.sources,"No visits yet.","source")+list("Where they are",j.places,"No visits yet.","place")+list("Phone or computer",j.devices,"No visits yet.","device")+list("What they did",evRows(j.events),"No clicks yet.")+'</div>';
+      '<div class="vs-grid">'+list("Top pages (views)",j.pages,"No visits yet.","page")+list("How they found you",j.sources,"No visits yet.","source")+(j.landing?list("First page they landed on",j.landing,"No visits yet.","landing"):"")+(j.sites?list("Sites that sent them",j.sites,"No visits yet.","site"):"")+(j.who?list("New or returning",j.who,"No visits yet.","who"):"")+list("Where they are",j.places,"No visits yet.","place")+list("Phone or computer",j.devices,"No visits yet.","device")+list("What they did",evRows(j.events),"No clicks yet.")+'</div>';
     searches(j.days);
     wire();wireChart(cols,function(c){var d=c.n-(c.was||0);return'<b>'+c.n+'</b> '+mm[0].toLowerCase()+'<span>'+c.label+'</span><span class="was">'+(j.days===1?'Same hour the day before: ':'Same day before: ')+(c.was||0)+(d?' ('+(d>0?'+':'')+d+')':'')+'</span>'})}
   var vsSearchCache={};

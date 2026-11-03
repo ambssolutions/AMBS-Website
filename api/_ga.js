@@ -80,7 +80,7 @@ async function runReport(id, t, body) {
 
 /* A filter picked on the dashboard (a page, a source, a town or a device): { f: "page"|"source"|"place"|"device", v: "..." }.
    Realtime has no "source", so it is ignored there. Towns arrive as "Auckland, New Zealand" and filter on the town. */
-const FDIM = { page: "pageTitle", source: "sessionDefaultChannelGroup", place: "city", device: "deviceCategory" };
+const FDIM = { page: "pageTitle", source: "sessionDefaultChannelGroup", place: "city", device: "deviceCategory", landing: "landingPage", site: "sessionSource", who: "newVsReturning" };
 const FDIM_RT = { page: "unifiedScreenName", place: "city", device: "deviceCategory" };
 function dimFilter(f, rt) {
   if (!f || !f.f || !f.v) return undefined;
@@ -102,7 +102,7 @@ export async function visitorsPeriod(days, f) {
   const one = (dims, metrics, limit, order) => runReport(c.id, t, { dateRanges: [cur], dimensions: dims.map((name) => ({ name })), metrics: metrics.map((name) => ({ name })), limit: limit || 10, orderBys: order ? [{ metric: { metricName: order }, desc: true }] : undefined, dimensionFilter: df });
   const DM = ["activeUsers", "newUsers", "sessions", "screenPageViews"];
   const M = ["activeUsers", "newUsers", "sessions", "screenPageViews", "userEngagementDuration", "engagementRate"];
-  const [tot, totPrev, daily, pages, sources, places, devices, events] = await Promise.all([
+  const [tot, totPrev, daily, pages, sources, places, devices, events, landing, sites, who] = await Promise.all([
     runReport(c.id, t, { dateRanges: [cur], metrics: M.map((name) => ({ name })), dimensionFilter: df }),
     runReport(c.id, t, { dateRanges: [prev], metrics: M.map((name) => ({ name })), dimensionFilter: df }),
     runReport(c.id, t, { dateRanges: [cur, prev], dimensions: [{ name: "nthDay" }], metrics: DM.map((name) => ({ name })), orderBys: [{ dimension: { dimensionName: "nthDay" } }], limit: 400, dimensionFilter: df }),
@@ -111,6 +111,9 @@ export async function visitorsPeriod(days, f) {
     one(["city", "country"], ["activeUsers"], 10, "activeUsers"),
     one(["deviceCategory"], ["activeUsers"], 5, "activeUsers"),
     one(["eventName"], ["eventCount"], 50, "eventCount"),
+    one(["landingPage"], ["sessions"], 10, "sessions"),       // the first page of each visit
+    one(["sessionSource"], ["sessions"], 10, "sessions"),     // the site or app that sent them (google, facebook.com, (direct)…)
+    one(["newVsReturning"], ["activeUsers"], 3, "activeUsers"),
   ]);
   const pick = (rows) => { const o = {}; M.forEach((m, i) => { o[m] = rows.length ? rows[0].v[i] : 0; }); o.avgEngage = o.activeUsers ? o.userEngagementDuration / o.activeUsers : 0; return o; };   // avgEngage = GA's "Average engagement time per active user"
   const named = (rows) => rows.map((x) => ({ name: x.k.filter((s) => s && s !== "(not set)").join(", "), n: x.v[0] })).filter((x) => x.name);
@@ -120,6 +123,7 @@ export async function visitorsPeriod(days, f) {
     daily: dailyRows(daily, n),
     filter: f && f.f ? f : null,
     pages: named(pages), sources: named(sources), places: named(places), devices: named(devices),
+    landing: named(landing), sites: named(sites), who: named(who),
     events: events.map((x) => ({ name: x.k[0], n: x.v[0] })),
   };
 }
