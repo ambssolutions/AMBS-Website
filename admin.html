@@ -925,6 +925,16 @@ body.va-on .side{bottom:64px}
  .vs-range{border-radius:20px}.vs-range .btn{min-height:42px}.vs-range.vs-range5{grid-template-columns:repeat(6,1fr)!important}.vs-range.vs-range5 .btn{grid-column:span 2}.vs-range.vs-range5 .btn:nth-child(n+4){grid-column:span 3}.hl-tabs{display:grid;grid-template-columns:1fr 1fr}.hl-tabs button{min-height:44px}
  .ts-sw button,.seo-sw button,.gx-filt button,.kw-f button,.nt-btn{min-height:44px}.ts-fix summary{padding:12px 0}.ts-more{display:inline-flex;align-items:center;min-height:44px}.gx-ck,.gx-acct .btn.link,.ts-go{min-height:44px;padding:0 8px!important;display:inline-flex;align-items:center}
 }
+
+/* Google reviews (Google search → Reviews) */
+.rv-top{display:grid;gap:10px}.rv-big{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.rv-big>b{font-size:2.6rem;line-height:1;font-weight:800}.rv-big>span:last-child{color:var(--muted)}
+.rv-stars{display:inline-flex;gap:1px;font-size:1.15rem;line-height:1}.rv-stars i{font-style:normal;color:var(--line)}.rv-stars i.on{color:#f5a623}.rv-stars i.half{background:linear-gradient(90deg,#f5a623 50%,var(--line) 50%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rv-acts{display:flex;gap:8px;flex-wrap:wrap}.rv-list{list-style:none;margin:0;padding:0}.rv-r{padding:12px 0;border-top:1px solid var(--line)}.rv-r:first-child{border-top:0}
+.rv-h{display:flex;gap:10px;align-items:center}.rv-h img,.rv-av{width:36px;height:36px;border-radius:50%;flex:none}.rv-av{display:grid;place-items:center;background:var(--emb-bg,#eef2f7);font-weight:800}
+.rv-h>div{display:flex;flex-direction:column;gap:2px;min-width:0}.rv-h>div>span{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:4px}.rv-h .rv-stars{font-size:.9rem}
+.rv-r p{margin:8px 0 6px;line-height:1.5;white-space:pre-line}.rv-reply{font-size:.88rem;font-weight:700}
+.cn-pick{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}.cn-pick .btn{width:100%;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:2px;height:auto;padding:8px 12px}.cn-pick .btn span{font-size:.82rem;color:var(--muted);font-weight:500}
+@media (max-width:640px){.seo-sw button{font-size:.85rem;padding-left:6px;padding-right:6px}.rv-acts .btn{flex:1 1 100%}}
 </style>
 </head>
 <body>
@@ -3594,7 +3604,7 @@ function connsInit(){
   /* the line under each card's name: where the key is kept and which account it is, so it shows without opening the card */
   function sub(k,by){return k&&k.from?'<b class="cn-where'+(k.from==="vercel"?' v':'')+'">'+(k.from==="editor"?'In the editor':'In Vercel')+'</b>'+(k.hint?' · '+esc(k.hint):''):by}
   function card(o){return '<details class="panel cn-card"'+(o.open?' open':'')+' data-svc="'+(o.svc||"")+'"><summary><span class="cn-ic" aria-hidden="true">'+o.icon+'</span><span class="cn-t"><b>'+o.name+'</b><span>'+(o.sub||o.by)+'</span></span>'+o.status+'</summary><div class="cn-body">'+o.body+'</div></details>'}
-  function draw(j){var K=j.keys||{},ga=K.GA_PROPERTY_ID||{},sa=K.GA_SERVICE_ACCOUNT||{},gs=K.GSC_SITE||{},ps=K.PAGESPEED_KEY||{},sb=j.supabase||{project:"onunconxcvkwowtgalxn"};
+  function draw(j){var K=j.keys||{},ga=K.GA_PROPERTY_ID||{},sa=K.GA_SERVICE_ACCOUNT||{},gs=K.GSC_SITE||{},ps=K.PAGESPEED_KEY||{},pk=K.PLACES_KEY||{},pid=K.PLACE_ID||{},sb=j.supabase||{project:"onunconxcvkwowtgalxn"};
     var gaOn=ga.from&&sa.from,acts=function(svc,on,ed,vc){return'<div class="cn-acts"><button type="button" class="btn primary" data-save="'+svc+'">'+(on?'Save &amp; check':'Connect')+'</button>'+(vc?'<button type="button" class="btn" data-move="'+svc+'" title="Copies the keys Vercel has into the editor, checks them and saves them encrypted">⇣ Move from Vercel</button>':'')+(ed?'<button type="button" class="btn danger" data-remove="'+svc+'">Remove</button>':'')+'</div><p class="help cn-msg" id="cnm-'+svc+'"></p>'};
     var built=function(t){return'<span class="cn-built">'+t+'</span>'};
     m.innerHTML='<div class="dash-head"><div><h2>Connections</h2><p class="help">Every service the website uses. Keys pasted here are checked, then kept encrypted in the database. Only the last characters are ever shown, and nothing needs adding in Vercel.</p></div></div>'+
@@ -3613,6 +3623,12 @@ function connsInit(){
         '<p class="help">'+(ps.from?where(ps)+(ps.hint?' · '+esc(ps.hint):''):'Google’s shared allowance for speed tests is usually used up; a free key of your own fixes that.')+'</p>'+
         '<label class="f"><span>API key</span><input id="cn_PAGESPEED_KEY" type="password" autocomplete="off" placeholder="'+(ps.from?"Leave empty to keep the saved key":"AIza…")+'"></label>'+
         '<details class="cn-how"><summary>How to get it</summary><ol class="vs-steps"><li><b>console.cloud.google.com → APIs &amp; Services → Library</b> → enable <b>PageSpeed Insights API</b>.</li><li><b>Credentials → Create credentials → API key</b>, then copy it.</li></ol></details>'+acts("psi",!!ps.from,ps.from==="editor")})+
+      card({svc:"places",icon:"⭐",name:"Google reviews",by:"Google search → Reviews",sub:pid.from?'<b class="cn-where">'+(pid.from==="editor"?'In the editor':'In Vercel')+'</b>'+(pk.hint?' · key '+esc(pk.hint):ps.from?' · uses the PageSpeed key':''):"",status:pid.from&&(pk.from||ps.from)?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Not set up</span>',body:
+        '<p class="help">Your star rating and the latest reviews Google shares (up to 5), from Google Maps. '+(pid.from?'Business saved'+(pid.at?' '+new Date(pid.at).toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"}):'')+'.':'Find your business once and it’s remembered.')+'</p>'+
+        '<label class="f"><span>Google API key with Places API (New)</span><input id="cn_PLACES_KEY" type="password" autocomplete="off" placeholder="'+(pk.from?"Leave empty to keep the saved key":ps.from?"Leave empty to use the PageSpeed key":"AIza…")+'"></label>'+
+        '<label class="f"><span>Your business on Google Maps</span><input id="cn_PLACE_ID" placeholder="'+(pid.from?"Leave empty to keep it, or type a new name":"AMBS Solutions, or paste its Google Maps link")+'"></label>'+
+        '<div id="cnPlaces"></div>'+
+        '<details class="cn-how"><summary>How to get the key</summary><ol class="vs-steps"><li><b>console.cloud.google.com → APIs &amp; Services → Library</b> → search <b>Places API (New)</b> → <b>Enable</b> (the same project as the PageSpeed key is fine; then that key works for both).</li><li>No PageSpeed key yet? <b>Credentials → Create credentials → API key</b>, then copy it here.</li><li>Google gives a free monthly allowance; the editor only asks at most every 30 minutes.</li></ol></details>'+acts("places",!!pid.from,pid.from==="editor")})+
       card({icon:"🏷️",name:"Google Analytics tag",by:"Counts visits on every page",status:built("In Details"),body:'<p class="help">The measurement ID (G-…) that every page loads. Change or turn it off in Business details.</p><button type="button" class="btn" data-go="business">Open Business details →</button>'})+
       card({icon:"✉️",name:"Website forms",by:"Web3Forms",status:built("✓ Built in"),body:'<p class="help">Every form and chat message is emailed to you through Web3Forms and also saved in your portal’s Leads. No key to manage: the form key is public by design.</p><a class="btn" href="https://app.web3forms.com/" target="_blank" rel="noopener">Web3Forms dashboard ↗</a>'})+
       card({icon:"🗂️",name:"AMBS portal",by:"Leads and sign-in",status:built("✓ Built in"),body:'<p class="help">Website enquiries arrive in the portal’s Leads, and Stats counts them from there. Editor sign-in uses the portal’s admin logins.</p><a class="btn" href="https://portal.ambs.co.nz/" target="_blank" rel="noopener">Open the portal ↗</a>'})+
@@ -3626,9 +3642,13 @@ function connsInit(){
     wire();cmap(j,gaOn,ps,sb)}
   function wire(){
     m.querySelectorAll("[data-save]").forEach(function(b){b.addEventListener("click",function(){var svc=b.dataset.save,msg=$("cnm-"+svc),vals={};
-      ({ga:["GA_PROPERTY_ID","GA_SERVICE_ACCOUNT"],gsc:["GSC_SITE"],psi:["PAGESPEED_KEY"]})[svc].forEach(function(n){var i=$("cn_"+n);if(i)vals[n]=i.value});
-      b.disabled=true;msg.className="help cn-msg";msg.textContent="Checking…";
-      api("settings",{action:"conn-save",svc:svc,values:vals}).then(function(j){b.disabled=false;if(j.error){msg.className="msg err cn-msg";msg.textContent=j.error;return}
+      ({ga:["GA_PROPERTY_ID","GA_SERVICE_ACCOUNT"],gsc:["GSC_SITE"],psi:["PAGESPEED_KEY"],places:["PLACES_KEY","PLACE_ID"]})[svc].forEach(function(n){var i=$("cn_"+n);if(i)vals[n]=i.value});
+      b.disabled=true;msg.className="help cn-msg";msg.textContent=svc==="places"?"Looking for your business on Google Maps…":"Checking…";
+      var save=function(pick){return api("settings",{action:"conn-save",svc:svc,values:vals,pick:pick})};
+      save().then(function done(j){b.disabled=false;if(j.error){msg.className="msg err cn-msg";msg.textContent=j.error;return}
+        if(j.choose){var box=$("cnPlaces");msg.textContent="Google Maps found more than one. Which is yours?";
+          box.innerHTML='<ul class="cn-pick">'+j.choose.map(function(p){return'<li><button type="button" class="btn" data-pick="'+esc(p.id)+'"><b>'+esc(p.name)+'</b><span>'+esc(p.address)+(p.rating?' · '+p.rating+'★ ('+p.count+')':'')+'</span></button></li>'}).join("")+'</ul>';
+          box.querySelectorAll("[data-pick]").forEach(function(x){x.addEventListener("click",function(){msg.textContent="Saving…";box.innerHTML="";save(x.dataset.pick).then(done).catch(function(e){msg.className="msg err cn-msg";msg.textContent=e.message})})});return}
         toast("Connected");stCache={};load(svc,"✓ "+(j.note||"Saved"))}).catch(function(e){b.disabled=false;msg.className="msg err cn-msg";msg.textContent=e.message})})});
     m.querySelectorAll("[data-move]").forEach(function(b){b.addEventListener("click",function(){var svc=b.dataset.move,msg=$("cnm-"+svc);b.disabled=true;msg.className="help cn-msg";msg.textContent="Copying the keys from Vercel and checking them…";
       api("settings",{action:"conn-save",svc:svc,fromVercel:true}).then(function(j){b.disabled=false;if(j.error){msg.className="msg err cn-msg";msg.textContent=j.error;return}
@@ -3847,7 +3867,20 @@ function visitorsInit(){
 /* Search Console through api/settings "seo" (seoReport in api/_ga.js): totals against the period before, clicks each day,
    chances to improve, every search (sortable, searchable), pages, countries, devices, sitemaps and the site's own basics. */
 var seoRange="28",seoSort="shown",seoCache={},seoMet="cs",seoKw="all";
-var gxList=null,seoView=(function(){try{return localStorage.getItem("ambs-seo-view")==="index"?"index":"search"}catch(e){return"search"}})();
+var gxList=null,seoView=(function(){try{var v=localStorage.getItem("ambs-seo-view");return v==="index"||v==="reviews"?v:"search"}catch(e){return"search"}})();
+/* Google search → Reviews: rating and latest reviews from Google Maps (api/settings "reviews" → api/_places.js) */
+function rvStars(n){var r=Math.round(n*2)/2,o="";for(var i=1;i<=5;i++)o+='<i class="'+(r>=i?'on':r>=i-.5?'half':'')+'">★</i>';return'<span class="rv-stars" aria-label="'+n+' out of 5">'+o+'</span>'}
+function rvFill(){var b=$("rvBox");if(!b)return;
+  api("settings",{action:"reviews"}).then(function(j){var b2=$("rvBox");if(!b2)return;
+    if(j.setup){b2.innerHTML='<div class="panel"><h3>Connect Google reviews</h3><p class="help">'+(j.hasKey?'Your Google key is saved; now find your business on Google Maps once.':'It needs a free Google API key with Places API (New) turned on (the PageSpeed key works if you turn it on there), and your business found on Google Maps.')+'</p><button type="button" class="btn primary" data-go="conns">Open Connections → Google reviews</button></div>';return}
+    var write="https://search.google.com/local/writereview?placeid="+encodeURIComponent(j.id||"");
+    b2.innerHTML='<div class="panel rv-top"><div class="rv-big"><b>'+(j.rating?j.rating.toFixed(1):"–")+'</b>'+rvStars(j.rating||0)+'<span>'+j.count+' review'+(j.count===1?'':'s')+' on Google</span></div>'+
+      '<div class="rv-acts">'+(j.maps?'<a class="btn" href="'+esc(j.maps)+'" target="_blank" rel="noopener">Open on Google Maps ↗</a>':'')+'<button type="button" class="btn primary" id="rvAsk">Copy “leave a review” link</button></div>'+
+      '<p class="help">'+esc(j.name)+(j.address?' · '+esc(j.address):'')+'. Send the link to happy customers: it opens Google’s review box for your business.</p></div>'+
+      '<div class="panel"><div class="vs-ph"><h3>Latest reviews</h3><span class="vs-key">Reviews from Google</span></div>'+(j.reviews.length?'<ul class="rv-list">'+j.reviews.map(function(r){return'<li class="rv-r"><div class="rv-h">'+(r.photo?'<img src="'+esc(r.photo)+'" alt="" width="36" height="36" loading="lazy" referrerpolicy="no-referrer">':'<span class="rv-av">'+esc((r.author||"?").charAt(0))+'</span>')+'<div><b>'+(r.authorUrl?'<a href="'+esc(r.authorUrl)+'" target="_blank" rel="noopener">'+esc(r.author)+'</a>':esc(r.author))+'</b><span>'+rvStars(r.rating)+' · '+esc(r.when)+'</span></div></div>'+(r.text?'<p>'+esc(r.text)+'</p>':'')+(r.link?'<a class="rv-reply" href="'+esc(r.link)+'" target="_blank" rel="noopener">See it on Google ↗</a>':'')+'</li>'}).join("")+'</ul>':'<p class="help">No reviews yet. Send the “leave a review” link to a few happy customers.</p>')+
+      '<p class="help">Google shares up to 5 reviews this way, the most relevant ones first. Every review, replying from here, and your profile’s calls and directions need the Business Profile connection (Google’s approval, about 2 weeks).</p></div>';
+    var a=$("rvAsk");if(a)a.addEventListener("click",function(){(navigator.clipboard?navigator.clipboard.writeText(write):Promise.reject()).then(function(){toast("Review link copied")}).catch(function(){prompt("Copy this link:",write)})});
+  }).catch(function(e){var b2=$("rvBox");if(b2)b2.innerHTML='<div class="panel"><p class="msg err">'+esc(e.message)+'</p><button type="button" class="btn" id="rvAgain">Try again</button></div>';var t=$("rvAgain");if(t)t.addEventListener("click",function(){b2.innerHTML='<div class="panel"><p class="empty"><span class="spin"></span> Asking Google…</p></div>';rvFill()})})}
 function gxFill(){var b=$("gxBox");if(!b)return;if(gxList)return gIndex(gxList,b);b.innerHTML='<div class="panel"><p class="empty"><span class="spin"></span> Loading your pages…</p></div>';
   api("pages",{action:"list"}).then(function(l){gxList=gxPages(l);var b2=$("gxBox");if(b2)gIndex(gxList,b2)}).catch(function(e){var b2=$("gxBox");if(b2)b2.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
 function seoInit(){
@@ -3857,8 +3890,9 @@ function seoInit(){
   /* one line under the summary: how many pages are on Google (from the last check, kept in this browser) with a button to the list */
   function gxLine(){var D={};try{D=JSON.parse(localStorage.getItem("ambs-gidx")||"{}")||{}}catch(e){}var R=D.r||{},ks=Object.keys(R).filter(function(k){return gxState(R[k])!=="un"}),on=ks.filter(function(k){return gxState(R[k])==="on"}).length;
     return'<button type="button" class="seo-gx" data-sv="index"><span>📇</span><span class="seo-gx-t">'+(ks.length?'<b>'+on+' of '+ks.length+' pages are indexed on Google</b>'+(ks.length-on?' · <em>'+(ks.length-on)+' not yet</em>':' ✓'):'<b>Which pages are on Google?</b>')+'</span><span class="seo-gx-go">See which →</span></button>'}
-  function sw(){return'<div class="seo-sw" role="tablist" aria-label="Google search"><button type="button" role="tab" data-sv="search" aria-selected="'+(seoView==="search")+'">🔎 Search results</button><button type="button" role="tab" data-sv="index" aria-selected="'+(seoView==="index")+'">📇 Pages on Google</button></div>'}
-  function head(){if(seoView==="index")return sw()+'<div class="dash-head"><div><h2>Pages on Google</h2><p class="help">Whether each page of your website is on Google, straight from Search Console. Ask Google to list the ones that aren’t.</p></div></div>';
+  function sw(){return'<div class="seo-sw" role="tablist" aria-label="Google search"><button type="button" role="tab" data-sv="search" aria-selected="'+(seoView==="search")+'">🔎 Search results</button><button type="button" role="tab" data-sv="index" aria-selected="'+(seoView==="index")+'">📇 Pages on Google</button><button type="button" role="tab" data-sv="reviews" aria-selected="'+(seoView==="reviews")+'">⭐ Reviews</button></div>'}
+  function head(){if(seoView==="reviews")return sw()+'<div class="dash-head"><div><h2>Google reviews</h2><p class="help">Your rating on Google Maps and the latest reviews Google shares.</p></div></div>';
+    if(seoView==="index")return sw()+'<div class="dash-head"><div><h2>Pages on Google</h2><p class="help">Whether each page of your website is on Google, straight from Search Console. Ask Google to list the ones that aren’t.</p></div></div>';
     return sw()+'<div class="dash-head"><div><h2>Google search</h2><p class="help">From Google Search Console, about 2–3 days behind. What people searched, where you showed up, and what to improve.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["1","24 hours"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(seoRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(seoRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
   function change(now,was,lowerBetter,isPct){if(!was)return now?'<span class="vs-ch up">new</span>':'';var d=isPct?Math.round((now-was)*1000)/10:lowerBetter?Math.round((now-was)*10)/10:Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';var good=lowerBetter?d<0:d>0;return'<span class="vs-ch '+(good?'up':'down')+'"'+(lowerBetter?' title="'+(good?'Higher on Google (a smaller place number)':'Lower on Google (a bigger place number)')+'"':'')+'>'+((lowerBetter?good:d>0)?'▲ ':'▼ ')+Math.abs(d)+(isPct?' pts':lowerBetter?'':'%')+'</span>'}
   /* how far a keyword or page moved since the period before: smaller place is better, so was − now > 0 means it went up */
@@ -3950,7 +3984,8 @@ function seoInit(){
   }
   function wire(){m.querySelectorAll(".seo-sw [data-sv], .seo-gx[data-sv]").forEach(function(b){b.addEventListener("click",function(){if(seoView===b.dataset.sv)return;seoView=b.dataset.sv;try{localStorage.setItem("ambs-seo-view",seoView)}catch(e){}load()})});
     m.querySelectorAll(".vs-range [data-r]").forEach(function(b){b.addEventListener("click",function(){if(seoRange===b.dataset.r)return;seoRange=b.dataset.r;load()})})}
-  function load(){if(seoView==="index"){m.innerHTML=head()+'<div id="gxBox"></div>';wire();gxFill();return}
+  function load(){if(seoView==="reviews"){m.innerHTML=head()+'<div id="rvBox"><div class="panel"><p class="empty"><span class="spin"></span> Asking Google…</p></div></div>';wire();rvFill();return}
+    if(seoView==="index"){m.innerHTML=head()+'<div id="gxBox"></div>';wire();gxFill();return}
     var r=seoRange;if(seoCache[r])return draw(seoCache[r]);var h=m.querySelector(".dash-head");if(h)h.insertAdjacentHTML("afterend",'<p class="empty"><span class="spin"></span> Loading…</p>');else m.innerHTML='<p class="empty"><span class="spin"></span> Loading…</p>';
     api("settings",{action:"seo",days:+r}).then(function(j){seoCache[r]=j;if(r===seoRange)draw(j)}).catch(function(e){if(e.message==="signin")return;m.innerHTML=head()+'<div class="panel"><p class="msg err">'+esc(e.message)+'</p></div>';wire()})}
   load();
