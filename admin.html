@@ -3098,23 +3098,23 @@ function gxPages(l){var out=[{name:"Homepage",url:"/"},{name:"Services",url:"/se
 function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}},save=function(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
   var full=function(u){return"https://ambs.co.nz"+u},day=function(t){return t?new Date(t).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric",timeZone:"Pacific/Auckland"}):""};
   var inspect=function(x,u){return"https://search.google.com/search-console/inspect?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+"&id="+encodeURIComponent(full(u))};
-  function kind(r,D){var x=(D.r||{})[r.url];return!x||x.err?"un":x.v==="PASS"?"on":"off"}
+  function kind(r,D){var x=(D.r||{})[r.url];return!x||x.err||x.net?"un":x.v==="PASS"?"on":"off"}
   function draw(){var D=load(),R=D.r||{},n={all:list.length,on:0,off:0,req:0,un:0};
     list.forEach(function(r){n[kind(r,D)]++;if(gxReq[full(r.url)]&&kind(r,D)!=="on")n.req++});
     var shown=list.filter(function(r){var k=kind(r,D);if(gxFilter==="req"?!(gxReq[full(r.url)]&&k!=="on"):gxFilter!=="all"&&k!==gxFilter)return false;return!gxQ||(r.name+" "+r.url).toLowerCase().indexOf(gxQ)>=0});
-    var rows=shown.map(function(r){var k=list.indexOf(r),x=R[r.url],rq=gxReq[full(r.url)],st=!x?(gxRun?'<span class="gx-st wait"><span class="spin"></span> Checking</span>':'<span class="gx-st na">Not checked</span>'):x.err?'<span class="gx-st na">Couldn’t check</span>':x.v==="PASS"?'<span class="gx-st ok">✓ On Google</span>':'<span class="gx-st bad">✕ Not on Google</span>';
-      var why=x&&!x.err?(x.v==="PASS"?(x.cov&&x.cov!=="Submitted and indexed"?GX_PLAIN[x.cov]||x.cov:""):(GX_PLAIN[x.cov]||x.cov||"Not listed yet")):x&&x.err?x.err:"";
+    var rows=shown.map(function(r){var k=list.indexOf(r),x=R[r.url],rq=gxReq[full(r.url)],st=!x?(gxRun?'<span class="gx-st wait"><span class="spin"></span> Checking</span>':'<span class="gx-st na">Not checked</span>'):x.net?'<span class="gx-st na">Connection dropped</span>':x.err?'<span class="gx-st na">Couldn’t check</span>':x.v==="PASS"?'<span class="gx-st ok">✓ On Google</span>':'<span class="gx-st bad">✕ Not on Google</span>';
+      var why=x&&!x.err?(x.v==="PASS"?(x.cov&&x.cov!=="Submitted and indexed"?GX_PLAIN[x.cov]||x.cov:""):(GX_PLAIN[x.cov]||x.cov||"Not listed yet")):x&&x.net?"The editor lost its connection while checking (it happens when the phone pauses the tab). It checks again when you come back, or press Check.":x&&x.err?x.err:"";
       var off=x&&!x.err&&x.v!=="PASS";
       return'<li class="gx-row"><div class="gx-who"><b>'+esc(r.name)+'</b><a class="hl-url" href="'+esc(full(r.url))+'" target="_blank" rel="noopener">'+esc(r.url)+'</a>'+(why?'<span class="help">'+esc(why)+'</span>':'')+(x&&x.crawled?'<span class="help">Google last visited '+day(x.crawled)+'</span>':'')+
         (rq?'<span class="gx-rq">⏳ Indexing requested '+day(rq.requested_at)+(rq.requested_by?' by '+esc(rq.requested_by):'')+(x&&x.v==="PASS"?' · now on Google ✓':'')+' <button type="button" class="btn link" data-unreq="'+k+'">Clear</button></span>':'')+'</div>'+st+
         '<div class="gx-acts">'+(off?'<a class="btn '+(rq?'soft':'primary')+'" href="'+esc(inspect(x,r.url))+'" target="_blank" rel="noopener" data-req="'+k+'">'+(rq?'Request again ↗':'Request indexing ↗')+'</a>':x&&x.link?'<a class="btn soft" href="'+esc(x.link)+'" target="_blank" rel="noopener">Search Console ↗</a>':'')+'<button type="button" class="btn soft" data-one="'+k+'">Check</button></div></li>'}).join("");
     var F=[["all","All"],["on","On Google"],["off","Not on Google"],["req",'<span class="lg">Indexing requested</span><span class="sm">Requested</span>'],["un","Not checked"]];
-    box.innerHTML='<div class="panel" id="gxPanel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><div class="gx-btns"><button type="button" class="btn" id="gxMap" title="Asks Google to read your sitemap again, so it looks at new and changed pages sooner"><span class="lg">Send sitemap to Google</span><span class="sm">Send sitemap</span></button><button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check <span class="lg">every page</span><span class="sm">all</span>')+'</button></div></div>'+
+    box.innerHTML='<div class="panel" id="gxPanel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><div class="gx-btns"><button type="button" class="btn" id="gxMap" title="Asks Google to read your sitemap again, so it looks at new and changed pages sooner"><span class="lg">Send sitemap to Google</span><span class="sm">Send sitemap</span></button>'+(n.un&&!gxRun?'<button type="button" class="btn" id="gxRest">Check the '+n.un+' not checked</button>':'')+'<button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check <span class="lg">every page</span><span class="sm">all</span>')+'</button></div></div>'+
       (D.setup?'<p class="msg err">'+D.setup+'</p>':'')+'<p class="help" id="gxMsg"></p>'+
       '<div class="gx-filt" role="group" aria-label="Show">'+F.map(function(f){return'<button type="button" class="'+(gxFilter===f[0]?'on':'')+(f[0]==="off"&&n.off?' warn':'')+'" data-f="'+f[0]+'" aria-pressed="'+(gxFilter===f[0])+'">'+f[1]+' <span>'+n[f[0]]+'</span></button>'}).join("")+'<input type="search" class="t gx-q" id="gxQ" placeholder="Find a page…" aria-label="Find a page" value="'+esc(gxQ)+'"></div>'+
       (rows?'<ul class="gx-list">'+rows+'</ul>':'<p class="help gx-none">'+(gxFilter==="off"?'Every checked page is on Google. 🎉':gxFilter==="req"?'No requests waiting.':'No pages match.')+'</p>')+
       '<p class="help">To ask Google to list a page, press <b>Request indexing ↗</b>: Search Console opens on that page; press <b>Request indexing</b> there (Google only lets a person do this). It’s marked here so you can see what’s been asked. New pages usually take from a few days to a few weeks.</p></div>';
-    $("gxAll").addEventListener("click",function(){runAll()});
+    $("gxAll").addEventListener("click",function(){runAll()});var gr=$("gxRest");if(gr)gr.addEventListener("click",function(){runAll(true)});
     box.querySelectorAll("[data-f]").forEach(function(b){b.addEventListener("click",function(){gxFilter=b.dataset.f;draw()})});
     var q=$("gxQ");q.addEventListener("input",function(){gxQ=q.value.trim().toLowerCase();var pos=q.selectionStart;draw();var q2=$("gxQ");q2.focus();try{q2.setSelectionRange(pos,pos)}catch(e){}});
     box.querySelectorAll("[data-one]").forEach(function(b){b.addEventListener("click",function(){var r=list[+b.dataset.one];busy(b,true,"…");one(r).then(function(){draw()})})});
@@ -3132,16 +3132,22 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
       else if(x.needsFull){msg.className="msg err";msg.innerHTML="Google needs one more permission for this: in <b>search.google.com/search-console → Settings → Users and permissions</b>, change "+esc(x.email||"the service account")+" from <b>Restricted</b> to <b>Full</b>, then press this again."}
       else{msg.className="msg err";msg.textContent=x.setup?"Connect Google first (Website settings → Connections).":x.error||"Google didn’t take it."}}).catch(function(e){busy(b,false);fail(e)})});
   }
-  function one(r){return api("settings",{action:"test",test:"index",url:full(r.url)}).then(function(x){var D=load();D.r=D.r||{};
+  /* a network drop (the phone paused the tab, e.g. while Search Console was open) is tried again twice, then left
+     as "not checked" and checked again when the editor is back on screen */
+  function one(r,tries){return api("settings",{action:"test",test:"index",url:full(r.url)}).then(function(x){var D=load();D.r=D.r||{};
       if(x.setup||x.needs){D.setup=x.setup?"Connect Google first (Website settings → Connections → Google Analytics reports), then add the same account in Search Console.":"Add "+esc(x.email||"the service account")+" in Search Console → Settings → Users and permissions (Restricted), then check again.";save(D);return}
       delete D.setup;D.r[r.url]={v:x.verdict,cov:x.coverage,crawled:x.crawled,link:x.link,site:x.site,at:Date.now()};save(D)})
-    .catch(function(e){var D=load();D.r=D.r||{};D.r[r.url]={err:e.message,at:Date.now()};save(D)})}
-  function runAll(){if(gxRun)return;gxRun=true;var D=load();D.r={};save(D);draw();var i=0,live=0;
-    function next(){if(load().setup){gxRun=false;draw();return}if(i>=list.length){if(!live){gxRun=false;var D2=load();D2.at=Date.now();save(D2);if(document.body.contains(box))draw()}return}
-      var r=list[i++];live++;one(r).then(function(){live--;if(document.body.contains(box))draw();next()})}for(var k=0;k<3;k++)next()}
+    .catch(function(e){var net=/fetch|load failed|network|aborted|timed? ?out/i.test(e.message||"");
+      if(net&&(tries||0)<2)return new Promise(function(res){setTimeout(res,(tries?4000:1500))}).then(function(){return one(r,(tries||0)+1)});
+      var D=load();D.r=D.r||{};D.r[r.url]=net?{net:1,at:Date.now()}:{err:e.message,at:Date.now()};save(D)})}
+  function runAll(only){if(gxRun)return;gxRun=true;var D=load();if(!only)D.r={};save(D);var todo=only?list.filter(function(r){var x=(D.r||{})[r.url];return!x||x.net||x.err}):list;if(!todo.length){gxRun=false;return}draw();var i=0,live=0;
+    function next(){if(load().setup){gxRun=false;draw();return}if(i>=todo.length){if(!live){gxRun=false;var D2=load();D2.at=D2.at&&only?D2.at:Date.now();save(D2);if(document.body.contains(box))draw()}return}
+      var r=todo[i++];live++;one(r).then(function(){live--;if(document.body.contains(box))draw();next()})}for(var k=0;k<3;k++)next()}
   draw();api("settings",{action:"index-requests"}).then(function(j){gxReq={};(j.requests||[]).forEach(function(r){gxReq[r.url]=r});if(document.body.contains(box))draw()}).catch(function(){});
-  var D=load();if(!gxRun&&(!D.at||Date.now()-D.at>24*36e5))runAll();
+  var D=load();if(!gxRun&&(!D.at||Date.now()-D.at>24*36e5))runAll();else if(!gxRun)runAll(true);
+  gxResume=function(){if(document.visibilityState==="visible"&&document.body.contains(box)&&!gxRun)setTimeout(function(){runAll(true)},800)};
 }
+var gxResume=null;document.addEventListener("visibilitychange",function(){if(gxResume)gxResume()});
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
 function healthTile(j){var t=tsLoad()["https://ambs.co.nz/"],sp=t&&t.psi_mobile&&t.psi_mobile.scores?t.psi_mobile.scores[0].score:null;
