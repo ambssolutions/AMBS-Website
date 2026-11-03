@@ -3102,7 +3102,10 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
      property; authuser=<email> makes Search Console open with the right account (or ask to sign in to it).
      The account is kept in this browser (ambs-gsc-user), since each phone or computer may have different accounts. */
   var gUser=function(){try{return localStorage.getItem("ambs-gsc-user")||""}catch(e){return""}};
-  var inspect=function(x,u){var a=gUser();return"https://search.google.com/search-console/inspect?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+"&id="+encodeURIComponent(full(u))+(a?"&authuser="+encodeURIComponent(a):"")};
+  var inspect=function(x,u){var a=gUser(),au=a?"authuser="+encodeURIComponent(a):"";
+    if(x&&x.link&&/^https:\/\/search\.google\.com\//.test(x.link))return x.link+(au?(x.link.indexOf("?")>0?"&":"?")+au:"");   /* the link Google itself gives with each check */
+    return"https://search.google.com/search-console/inspect?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+"&id="+encodeURIComponent(full(u))+(au?"&"+au:"")};
+  var scHome=function(x){var a=gUser();return"https://search.google.com/search-console?resource_id="+encodeURIComponent((x&&x.site)||"sc-domain:ambs.co.nz")+(a?"&authuser="+encodeURIComponent(a):"")};
   function kind(r,D){var x=(D.r||{})[r.url];return!x||x.err||x.net?"un":x.v==="PASS"?"on":"off"}
   function draw(){var D=load(),R=D.r||{},n={all:list.length,on:0,off:0,req:0,un:0};
     list.forEach(function(r){n[kind(r,D)]++;if(gxReq[full(r.url)]&&kind(r,D)!=="on")n.req++});
@@ -3131,7 +3134,8 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
        redrawing straight away removed the link mid-tap and some browsers then didn't open it */
     box.querySelectorAll("[data-req]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();var href=a.getAttribute("href"),u=full(list[+a.dataset.req].url);
       try{window.open(href,"_blank","noopener")}catch(x){}
-      var msg=$("gxMsg");if(msg){msg.className="help gx-open";msg.innerHTML='Search Console is opening in a new tab (if it didn’t, <a href="'+esc(href)+'" target="_blank" rel="noopener"><b>open it here</b></a>). Press <b>Request indexing</b> there.<br><b>Google shows “404”?</b> This browser is signed in with a different Google account. Set the account that owns ambs.co.nz under “Google account” above, or in Search Console tap your photo → switch account, then paste the address into the search bar at the top: <button type="button" class="btn link" data-copyurl="'+esc(u)+'">Copy address</button>'}
+      try{if(navigator.clipboard)navigator.clipboard.writeText(u).catch(function(){})}catch(x){}   /* ready to paste into Search Console's search bar */
+      var msg=$("gxMsg");if(msg){msg.className="help gx-open";msg.innerHTML='Search Console is opening in a new tab (if it didn’t, <a href="'+esc(href)+'" target="_blank" rel="noopener"><b>open it here</b></a>). Press <b>Request indexing</b> there. The page address is also copied, ready to paste.<br><b>Google shows “404”?</b> This browser is signed in with a different Google account. Set the account that owns ambs.co.nz under “Google account” above, or in Search Console tap your photo → switch account, then paste the address into the search bar at the top: <button type="button" class="btn link" data-copyurl="'+esc(u)+'">Copy address</button> · <a href="'+esc(scHome((load().r||{})[list[+a.dataset.req].url]))+'" target="_blank" rel="noopener">Open Search Console</a>'}
       gxReq[u]={requested_at:new Date().toISOString(),requested_by:(window.ED_ME&&window.ED_ME.email)||""};
       api("settings",{action:"index-mark",url:u}).then(function(){toast("Marked as requested")}).catch(fail);
       setTimeout(function(){var keep=$("gxMsg")&&$("gxMsg").innerHTML;draw();var m2=$("gxMsg");if(m2&&keep){m2.className="help gx-open";m2.innerHTML=keep}},400)})});
