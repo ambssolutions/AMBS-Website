@@ -759,13 +759,28 @@ svg.sel .cm-n:not(.near){opacity:.35}svg.sel .cm-e:not(.on) path{opacity:.35}svg
 .cmap-info{margin-top:12px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.cmap-info:empty{display:none}
 .cmap-i-h{display:flex;gap:12px;align-items:flex-start;flex:1;min-width:240px}.cmap-i-ic{font-size:26px;line-height:1}.cmap-info p{margin:4px 0 0}
 @media (max-width:640px){.cm-n .t{font-size:12.5px}.cm-n .s{font-size:10.5px}.cmap-info .btn{width:100%}}
-.gx-n{color:var(--muted);font-size:.8rem;margin-top:4px}.kx-list{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.kx-list li{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh)}
-.kx-list li>span{font-weight:700}.kx-ok>span{color:var(--green)}.kx-warn>span,li.kx-warn>span{color:#b45309}.kx-bad>span{color:#c0262d}.kx-na>span{color:var(--muted)}
+.gx-n{color:var(--muted);font-size:.8rem;margin-top:4px}.kx-list{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kx-list li{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;background:var(--emb-bg);box-shadow:var(--emb-sh);min-width:0}
+.kx-h{display:flex;align-items:center;gap:8px}.kx-h b{font-size:.92rem;line-height:1.25}.kx-ic{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:9px;background:var(--card);box-shadow:var(--emb-sh);font-size:15px}
+.kx-date{font-size:1.15rem;font-weight:800;letter-spacing:-.01em;color:var(--ink)}.kx-tag{align-self:flex-start;font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--ok-bg);color:var(--green)}
+.kx-warn .kx-tag{background:#fff4e0;color:#9a5b00}.kx-bad .kx-tag{background:#fde8e8;color:#b42318}.kx-bad .kx-date{color:#b42318}.kx-na .kx-date{color:var(--muted);font-size:1rem}
+.kx-bar{height:5px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:2px}.kx-bar i{display:block;height:100%;border-radius:9px;background:var(--green)}.kx-warn .kx-bar i{background:#d08a16}.kx-bad .kx-bar i{background:#d33}
+.kx-how{margin-top:auto}.kx-how summary{cursor:pointer;font-size:.8rem;font-weight:700;color:var(--muted);list-style:none}.kx-how summary::-webkit-details-marker{display:none}.kx-how summary::after{content:" ›"}.kx-how[open] summary::after{content:" ‹"}.kx-how p{margin:6px 0 0;font-size:.8rem}
+.kx-chips{display:flex;flex-wrap:wrap;gap:6px}.kx-chips span{font-size:.78rem;font-weight:650;padding:4px 9px;border-radius:999px;background:var(--card);box-shadow:var(--emb-sh)}
+@media (max-width:1180px){.kx-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:560px){.kx-list{grid-template-columns:1fr}}
+.kx-next{font-size:.85rem;font-weight:600;padding:5px 12px;border-radius:999px;background:var(--ok-bg);color:var(--green)}.kx-next.kx-warn{background:#fff4e0;color:#9a5b00}.kx-next.kx-bad{background:#fde8e8;color:#b42318}
+.kx-home{margin:0 0 14px;padding:10px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);font-size:.9rem;color:var(--muted)}.kx-home b{color:var(--ink)}.kx-home.kx-warn{color:#7a4b00}.kx-home.kx-bad{color:#b42318}.kx-home .btn.link{font-size:.85rem}
 div.kx-warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);color:#7a4b00}
+.gx-filt button span.sm,.gx-filt button span.lg{color:inherit;font-weight:inherit;margin:0}.gx-btns .sm,.gx-filt .sm{display:none}@media (max-width:560px){.gx-btns .sm,.gx-filt .sm{display:inline}}
+.seo-sw{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--emb-bg);box-shadow:var(--emb-sh);margin:0 0 14px}.seo-sw button{border:0;background:none;font:inherit;font-weight:700;font-size:.9rem;padding:8px 16px;border-radius:999px;cursor:pointer;color:var(--muted)}
+.seo-sw button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(15,23,42,.12)}@media (max-width:560px){.seo-sw{display:flex}.seo-sw button{flex:1;padding:8px 6px}}
 .gx-btns{display:flex;gap:8px;flex-wrap:wrap}.gx-filt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 4px}.gx-filt button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;font-weight:650;cursor:pointer;color:var(--ink)}
 .gx-filt button span{color:var(--muted);font-weight:700;margin-left:2px}.gx-filt button.on{background:var(--emb-bg);box-shadow:var(--emb-sh);border-color:transparent}.gx-filt button.warn span{color:#b45309}.gx-q{margin-left:auto;max-width:240px;height:38px}
+.gx-open{padding:10px 12px;border-radius:10px;background:var(--emb-bg);box-shadow:var(--emb-sh);color:var(--ink)}.gx-open a{color:var(--blue,#1a63c9)}
 .gx-rq{font-size:.82rem;color:#7a4b00;margin-top:2px}.gx-rq .btn.link{font-size:.8rem;padding:0 4px}.gx-none{padding:14px 0}
 @media (max-width:760px){.gx-q{margin-left:0;max-width:none;width:100%}}
+@media (max-width:560px){.gx-btns{display:grid;grid-template-columns:1fr 1fr;width:100%}.gx-btns .btn{font-size:.85rem;padding:.6rem .5rem;white-space:normal;line-height:1.2}
+  .gx-filt{display:grid;grid-template-columns:1fr 1fr;gap:6px}.gx-btns .lg,.gx-filt .lg{display:none}.gx-filt button{padding:7px 8px;font-size:.8rem;display:flex;justify-content:space-between;align-items:center}.gx-filt .gx-q{grid-column:1/-1}}
 .gx-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.gx-head h3{margin:0 0 4px}.gx-kpis{margin:14px 0}
 .gx-list{list-style:none;margin:0;padding:0}.gx-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.gx-who{display:flex;flex-direction:column;gap:2px;min-width:0}.gx-who .hl-url{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .gx-st{font-size:.82rem;font-weight:700;white-space:nowrap}.gx-st.ok{color:var(--green)}.gx-st.bad{color:#b45309}.gx-st.na,.gx-st.wait{color:var(--muted)}.gx-acts{display:flex;gap:6px}
@@ -3008,8 +3023,8 @@ function homeInit(){
   h+='<h3 class="dash-h">Tools</h3><div class="tiles"><a class="tile" href="/email-signature" target="_blank" rel="noopener"><span class="tile-i">'+ico("sig")+'</span><b>Email signature</b><span>Design and copy your email signature</span></a><a class="tile" href="/" target="_blank" rel="noopener"><span class="tile-i">'+ico("site")+'</span><b>View website</b><span>Open ambs.co.nz in a new tab</span></a></div>';
   m.innerHTML=h;modeSync();
   api("pages",{action:"health"}).then(function(j){var k=$("hmHealth");if(k)k.innerHTML=healthTile(j)}).catch(function(){var k=$("hmHealth");if(k)k.remove()});
-  if(!window.ED_ME||window.ED_ME.role==="owner")api("settings",{action:"expiry"}).then(function(E){var warn=[["Publishing key (GitHub)",E.github,30],["Google service account key",E.google,30],["Padlock certificate",E.padlock,7]].filter(function(x){var d=x[1]&&x[1].ok?kxDays(x[1].expires):null;return d!==null&&d<x[2]});
-    if(!warn.length)return;var hd=m.querySelector(".dash-top");if(!hd)return;hd.insertAdjacentHTML("beforebegin",'<div class="kx-warn" role="alert">⚠ '+warn.map(function(x){var d=kxDays(x[1].expires);return'<b>'+x[0]+'</b> '+(d<0?'has run out':'runs out in '+d+' day'+(d===1?'':'s'))}).join(" · ")+'. <button type="button" class="btn link" data-go="conns">See Connections →</button></div>')}).catch(function(){});
+  if(!window.ED_ME||window.ED_ME.role==="owner")api("settings",{action:"expiry"}).then(function(E){var n=kxNext(E),hd=m.querySelector(".dash-top");if(!n||!hd)return;
+    hd.insertAdjacentHTML("beforebegin",'<div class="kx-home kx-'+n.cls+'" role="'+(n.cls==="ok"?"status":"alert")+'">'+(n.cls==="ok"?'🔑 Next key to run out: ':'⚠ ')+'<b>'+n.k[2]+'</b> '+(n.cls==="ok"?'· '+n.txt:(n.d<0?'has run out':'runs out in '+n.d+' day'+(n.d===1?'':'s'))+' ('+n.txt.split(" · ")[0]+')')+' <button type="button" class="btn link" data-go="conns">See all keys →</button></div>')}).catch(function(){});
   Promise.all([api("settings",{action:"visitors"}),api("settings",{action:"visitors",days:7})]).then(function(r){var a=r[0],b=r[1];if(a.setup||b.setup)return;
     var ev={};(b.events||[]).forEach(function(e){ev[e.name]=e.n});var k=$("hmKpi");if(!k)return;
     var tile=function(n,l,go){return'<button type="button" class="kpi" data-go="visitors"><b>'+n+'</b><span>'+l+'</span></button>'};
@@ -3093,8 +3108,8 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
       return'<li class="gx-row"><div class="gx-who"><b>'+esc(r.name)+'</b><a class="hl-url" href="'+esc(full(r.url))+'" target="_blank" rel="noopener">'+esc(r.url)+'</a>'+(why?'<span class="help">'+esc(why)+'</span>':'')+(x&&x.crawled?'<span class="help">Google last visited '+day(x.crawled)+'</span>':'')+
         (rq?'<span class="gx-rq">⏳ Indexing requested '+day(rq.requested_at)+(rq.requested_by?' by '+esc(rq.requested_by):'')+(x&&x.v==="PASS"?' · now on Google ✓':'')+' <button type="button" class="btn link" data-unreq="'+k+'">Clear</button></span>':'')+'</div>'+st+
         '<div class="gx-acts">'+(off?'<a class="btn '+(rq?'soft':'primary')+'" href="'+esc(inspect(x,r.url))+'" target="_blank" rel="noopener" data-req="'+k+'">'+(rq?'Request again ↗':'Request indexing ↗')+'</a>':x&&x.link?'<a class="btn soft" href="'+esc(x.link)+'" target="_blank" rel="noopener">Search Console ↗</a>':'')+'<button type="button" class="btn soft" data-one="'+k+'">Check</button></div></li>'}).join("");
-    var F=[["all","All"],["on","On Google"],["off","Not on Google"],["req","Indexing requested"],["un","Not checked"]];
-    box.innerHTML='<div class="panel" id="gxPanel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><div class="gx-btns"><button type="button" class="btn" id="gxMap" title="Asks Google to read your sitemap again, so it looks at new and changed pages sooner">Send sitemap to Google</button><button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check every page')+'</button></div></div>'+
+    var F=[["all","All"],["on","On Google"],["off","Not on Google"],["req",'<span class="lg">Indexing requested</span><span class="sm">Requested</span>'],["un","Not checked"]];
+    box.innerHTML='<div class="panel" id="gxPanel"><div class="gx-head"><div><h3>Is each page on Google?</h3><p class="help">Straight from Google Search Console for every live page. '+(D.at?'Checked '+healthWhen(D.at)+'.':'Not checked yet.')+'</p></div><div class="gx-btns"><button type="button" class="btn" id="gxMap" title="Asks Google to read your sitemap again, so it looks at new and changed pages sooner"><span class="lg">Send sitemap to Google</span><span class="sm">Send sitemap</span></button><button type="button" class="btn primary" id="gxAll"'+(gxRun?' disabled':'')+'>'+(gxRun?'<span class="spin"></span> Checking…':'↻ Check <span class="lg">every page</span><span class="sm">all</span>')+'</button></div></div>'+
       (D.setup?'<p class="msg err">'+D.setup+'</p>':'')+'<p class="help" id="gxMsg"></p>'+
       '<div class="gx-filt" role="group" aria-label="Show">'+F.map(function(f){return'<button type="button" class="'+(gxFilter===f[0]?'on':'')+(f[0]==="off"&&n.off?' warn':'')+'" data-f="'+f[0]+'" aria-pressed="'+(gxFilter===f[0])+'">'+f[1]+' <span>'+n[f[0]]+'</span></button>'}).join("")+'<input type="search" class="t gx-q" id="gxQ" placeholder="Find a page…" aria-label="Find a page" value="'+esc(gxQ)+'"></div>'+
       (rows?'<ul class="gx-list">'+rows+'</ul>':'<p class="help gx-none">'+(gxFilter==="off"?'Every checked page is on Google. 🎉':gxFilter==="req"?'No requests waiting.':'No pages match.')+'</p>')+
@@ -3103,8 +3118,14 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
     box.querySelectorAll("[data-f]").forEach(function(b){b.addEventListener("click",function(){gxFilter=b.dataset.f;draw()})});
     var q=$("gxQ");q.addEventListener("input",function(){gxQ=q.value.trim().toLowerCase();var pos=q.selectionStart;draw();var q2=$("gxQ");q2.focus();try{q2.setSelectionRange(pos,pos)}catch(e){}});
     box.querySelectorAll("[data-one]").forEach(function(b){b.addEventListener("click",function(){var r=list[+b.dataset.one];busy(b,true,"…");one(r).then(function(){draw()})})});
-    box.querySelectorAll("[data-req]").forEach(function(a){a.addEventListener("click",function(){var u=full(list[+a.dataset.req].url);gxReq[u]={requested_at:new Date().toISOString(),requested_by:(window.ED_ME&&window.ED_ME.email)||""};draw();
-      api("settings",{action:"index-mark",url:u}).then(function(){toast("Marked as requested. Press “Request indexing” in Search Console.")}).catch(fail)})});
+    /* open Search Console first (inside the tap, so no browser blocks it), then mark and redraw a moment later;
+       redrawing straight away removed the link mid-tap and some browsers then didn't open it */
+    box.querySelectorAll("[data-req]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();var href=a.getAttribute("href"),u=full(list[+a.dataset.req].url);
+      try{window.open(href,"_blank","noopener")}catch(x){}
+      var msg=$("gxMsg");if(msg){msg.className="help gx-open";msg.innerHTML='Search Console is opening in a new tab (if it didn’t, <a href="'+esc(href)+'" target="_blank" rel="noopener"><b>open it here</b></a>). Press <b>Request indexing</b> there, signed in with the Google account that owns ambs.co.nz.'}
+      gxReq[u]={requested_at:new Date().toISOString(),requested_by:(window.ED_ME&&window.ED_ME.email)||""};
+      api("settings",{action:"index-mark",url:u}).then(function(){toast("Marked as requested")}).catch(fail);
+      setTimeout(function(){var keep=$("gxMsg")&&$("gxMsg").innerHTML;draw();var m2=$("gxMsg");if(m2&&keep){m2.className="help gx-open";m2.innerHTML=keep}},400)})});
     box.querySelectorAll("[data-unreq]").forEach(function(b){b.addEventListener("click",function(){var u=full(list[+b.dataset.unreq].url);delete gxReq[u];draw();api("settings",{action:"index-mark",url:u,clear:true}).catch(fail)})});
     $("gxMap").addEventListener("click",function(){var b=this,msg=$("gxMsg");busy(b,true,"Sending…");api("settings",{action:"sitemap"}).then(function(x){busy(b,false);
       if(x.ok){msg.className="help ok";msg.textContent="✓ Sitemap sent to Google. It reads it again soon and picks up new and changed pages."}
@@ -3347,15 +3368,23 @@ var cmapSel=null,cmapRO=null;
 /* When keys run out (api/_lib.js keyExpiry): the publishing key (GitHub), the Google service account key and the
    padlock certificate, with days left; amber under 30 days, red under 7. The rest never expire. */
 function kxDays(t){return t?Math.floor((new Date(t)-Date.now())/864e5):null}
-function kxRow(name,x,never,note,amber){var d=x&&x.ok?kxDays(x.expires):null,cls=!x?"na":!x.ok?"bad":d===null?"ok":d<7?"bad":d<(amber||30)?"warn":"ok";
-  var when=!x?never:!x.ok?"Couldn’t check: "+esc(x.error||""):x.expires?new Date(x.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"})+" · "+(d<0?"expired "+(-d)+" days ago":d===0?"today":d+" days left"):"No expiry date";
-  return'<li class="kx-'+cls+'"><b>'+name+'</b><span>'+when+'</span>'+(note?'<small class="help">'+note+'</small>':'')+'</li>'}
-function keyDates(E,ps){return'<div class="panel kx"><div class="vs-ph"><h3>When keys run out</h3><span class="help">Checked just now</span></div><ul class="kx-list">'+
-  kxRow("Publishing key (GitHub)",E.github,"","Saves every change. When it runs out, make a new one at github.com → Settings → Developer settings → Fine-grained tokens, and put it in Vercel as GITHUB_TOKEN.")+
-  kxRow("Google service account key",E.google,"Not connected","Visitors, Stats and Google search. Make a new JSON key in Google Cloud → IAM → Service accounts → Keys, and paste it in Google Analytics reports below.")+
-  kxRow("Padlock certificate (https)",E.padlock,"","Vercel renews it by itself about a month before it runs out.",7)+
-  kxRow("PageSpeed key",ps&&ps.from?{ok:true,expires:null}:null,"Not connected","")+
-  '<li class="kx-ok"><b>Web3Forms, Supabase, Zoho Bookings</b><span>No expiry date</span></li></ul></div>'}
+function kxRow(ic,name,x,never,note,amber){var d=x&&x.ok?kxDays(x.expires):null,cls=!x?"na":!x.ok?"bad":d===null?"ok":d<7?"bad":d<(amber||30)?"warn":"ok";
+  var date=!x?never:!x.ok?"Couldn’t check":x.expires?new Date(x.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"}):"No expiry date";
+  var tag=x&&x.ok&&x.expires?'<span class="kx-tag">'+(d<0?"Expired "+(-d)+" days ago":d===0?"Runs out today":d+" days left")+'</span>':"";
+  var bar=x&&x.ok&&x.expires?'<span class="kx-bar" aria-hidden="true"><i style="width:'+Math.max(2,Math.min(100,Math.round(d/365*100)))+'%"></i></span>':"";
+  return'<li class="kx-'+cls+'"><div class="kx-h"><span class="kx-ic" aria-hidden="true">'+ic+'</span><b>'+name+'</b></div><span class="kx-date">'+date+'</span>'+tag+bar+
+    (x&&!x.ok?'<small class="help">'+esc(x.error||"")+'</small>':'')+(note?'<details class="kx-how"><summary>How to renew</summary><p class="help">'+note+'</p></details>':'')+'</li>'}
+/* the keys that can run out, soonest first (keys with no date after them) */
+var KX_KEYS=[["github","🔐","Publishing key (GitHub)","","github.com → Settings → Developer settings → Fine-grained tokens → make a new one for this website (Contents: read and write), then put it in Vercel as GITHUB_TOKEN.",30],
+  ["google","📊","Google key","Not connected","Google Cloud → IAM → Service accounts → Keys → Add key (JSON), then paste it in Google Analytics reports below.",30],
+  ["padlock","🔒","Padlock (https)","","Nothing to do: Vercel renews it by itself about a month before it runs out.",7]];
+function kxSorted(E){return KX_KEYS.slice().sort(function(a,b){var x=E[a[0]],y=E[b[0]],tx=x&&x.ok&&x.expires?+new Date(x.expires):Infinity,ty=y&&y.ok&&y.expires?+new Date(y.expires):Infinity;return tx-ty})}
+function kxNext(E){var k=kxSorted(E)[0],x=k&&E[k[0]];if(!x||!x.ok||!x.expires)return null;var d=kxDays(x.expires);return{k:k,x:x,d:d,cls:d<7?"bad":d<k[5]?"warn":"ok",
+  txt:new Date(x.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"})+" · "+(d<0?"expired "+(-d)+" days ago":d===0?"today":d+" days")}}
+function keyDates(E,ps){var never=["PageSpeed key"+(ps&&ps.from?"":" (not set)"),"Web3Forms","Supabase","Zoho Bookings"],n=kxNext(E);
+  return'<div class="panel kx"><div class="vs-ph"><h3>When keys run out</h3>'+(n?'<span class="kx-next kx-'+n.cls+'">Next: <b>'+n.k[2]+'</b> · '+n.txt+'</span>':'<span class="help">Checked just now</span>')+'</div><ul class="kx-list">'+
+  kxSorted(E).map(function(k){return kxRow(k[1],k[2],E[k[0]],k[3],k[4],k[5])}).join("")+
+  '<li class="kx-ok kx-never"><div class="kx-h"><span class="kx-ic" aria-hidden="true">♾️</span><b>Never run out</b></div><div class="kx-chips">'+never.map(function(n){return'<span>'+esc(n)+'</span>'}).join("")+'</div></li></ul></div>'}
 function connsInit(){
   var m=$("cnMain");
   function src(k){return k.from==="editor"?'<span class="cn-on">✓ Connected</span>':k.from==="vercel"?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Not set up</span>'}
@@ -3611,14 +3640,16 @@ function visitorsInit(){
 /* Search Console through api/settings "seo" (seoReport in api/_ga.js): totals against the period before, clicks each day,
    chances to improve, every search (sortable, searchable), pages, countries, devices, sitemaps and the site's own basics. */
 var seoRange="28",seoSort="shown",seoCache={};
-var gxList=null;
+var gxList=null,seoView=(function(){try{return localStorage.getItem("ambs-seo-view")==="index"?"index":"search"}catch(e){return"search"}})();
 function gxFill(){var b=$("gxBox");if(!b)return;if(gxList)return gIndex(gxList,b);b.innerHTML='<div class="panel"><p class="empty"><span class="spin"></span> Loading your pages…</p></div>';
   api("pages",{action:"list"}).then(function(l){gxList=gxPages(l);var b2=$("gxBox");if(b2)gIndex(gxList,b2)}).catch(function(e){var b2=$("gxBox");if(b2)b2.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
 function seoInit(){
   var m=$("seoMain");
   var CTRY={nzl:"New Zealand",aus:"Australia",usa:"United States",gbr:"United Kingdom",ind:"India",can:"Canada",sgp:"Singapore",phl:"Philippines",pak:"Pakistan",chn:"China"};
   var pct=function(x){return(Math.round(x*1000)/10)+"%"};
-  function head(){return '<div class="dash-head"><div><h2>Google search</h2><p class="help">From Google Search Console, about 2–3 days behind. What people searched, where you showed up, and what to improve.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["1","24 hours"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(seoRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(seoRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
+  function sw(){return'<div class="seo-sw" role="tablist" aria-label="Google search"><button type="button" role="tab" data-sv="search" aria-selected="'+(seoView==="search")+'">🔎 Search results</button><button type="button" role="tab" data-sv="index" aria-selected="'+(seoView==="index")+'">📇 Google index</button></div>'}
+  function head(){if(seoView==="index")return sw()+'<div class="dash-head"><div><h2>Google index</h2><p class="help">Whether each page of your website is on Google, straight from Search Console. Ask Google to list the ones that aren’t.</p></div></div>';
+    return sw()+'<div class="dash-head"><div><h2>Google search</h2><p class="help">From Google Search Console, about 2–3 days behind. What people searched, where you showed up, and what to improve.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["1","24 hours"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(seoRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(seoRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
   function change(now,was,lowerBetter,isPct){if(!was)return now?'<span class="vs-ch up">new</span>':'';var d=isPct?Math.round((now-was)*1000)/10:lowerBetter?Math.round((now-was)*10)/10:Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';var good=lowerBetter?d<0:d>0;return'<span class="vs-ch '+(good?'up':'down')+'">'+(d>0?'▲ ':'▼ ')+Math.abs(d)+(isPct?' pts':lowerBetter?'':'%')+'</span>'}
   function tbl(rows,cols,empty){if(!rows.length)return'<p class="help">'+empty+'</p>';var mx=Math.max.apply(null,rows.map(function(r){return r.shown}).concat([1]));
     return '<div class="vs-sq seo-t"><div class="vs-sq-h"><span>'+cols+'</span><button type="button" data-s="shown"'+(seoSort==="shown"?' class="on"':'')+'>Shown</button><button type="button" data-s="clicks"'+(seoSort==="clicks"?' class="on"':'')+'>Clicks</button><button type="button" data-s="pos"'+(seoSort==="pos"?' class="on"':'')+'>Place</button></div>'+
@@ -3640,7 +3671,6 @@ function seoInit(){
       '<div class="vs-chart"><div class="vs-tip" hidden></div><div class="vs-cols">'+j.daily.map(function(d,i){return'<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(fd(d.d)+": shown "+d.shown+", clicked "+d.clicks)+'"><i class="was" style="height:'+(d.shown?Math.max(3,Math.round(d.shown/mx*100)):0)+'%"></i><i class="now'+(d.clicks?'':' z')+'" style="height:'+Math.max(2,Math.round(d.clicks/mx*100))+'%"></i></button>'}).join("")+'</div></div>'+
       (j.daily.length?'<div class="vs-axis"><span>'+fd(j.daily[0].d)+'</span><span>'+fd(j.daily[j.daily.length-1].d)+'</span></div>':'')+
       '<p class="help">▲▼ compare with the '+lbl+' before. For “Average place”, smaller is better: 1 is the top of Google, 1–10 is the first page.</p></div>'+
-      '<div id="gxBox"></div>'+
       '<div class="seo-two"><div class="panel seo-op"><h3>Nearly on Google’s first page</h3><p class="help">Searches where you’re just below the first page. A guide or a few words on the matching page can lift them.</p>'+tbl(j.nearly,"Search","None right now.")+'</div>'+
       '<div class="panel seo-op"><h3>Shown a lot, few clicks</h3><p class="help">People see you but don’t click. A clearer page title or description usually helps.</p>'+tbl(j.lowclick,"Search","None right now.")+'</div></div>'+
       '<div class="panel"><div class="vs-ph"><h3>Every search that showed your site</h3><input class="seo-find" id="seoFind" type="search" placeholder="Filter searches…" aria-label="Filter searches"></div><div id="seoQ">'+tbl(sorted(j.queries),"Search","No searches yet.")+'</div><p class="help">Tap Shown, Clicks or Place to sort. Hover or tap a row to see its click rate. Google hides very rare searches.</p></div>'+
@@ -3651,7 +3681,7 @@ function seoInit(){
         '<div class="panel vs-list"><h3>Sitemaps</h3>'+(j.sitemaps.length?'<ul class="seo-ck">'+j.sitemaps.map(function(sm){var ok=!sm.errors;return'<li class="'+(ok?'ok':'no')+'"><span>'+(ok?'✓':'!')+'</span><div><b>'+esc(sm.path.replace(/^https?:\/\/[^/]+/,""))+'</b><small>'+(sm.pending?'Waiting for Google · ':'')+(sm.last?'Read by Google '+new Date(sm.last).toLocaleDateString():'Not read yet')+(sm.errors?' · '+sm.errors+' errors':'')+(sm.warnings?' · '+sm.warnings+' warnings':'')+'</small></div></li>'}).join("")+'</ul>':'<p class="help">No sitemap sent to Google yet. In Search Console → Sitemaps, add <b>sitemap.xml</b>.</p>')+'</div>'+
       '</div>'+
       '<div class="panel"><div class="vs-ph"><h3>Website basics</h3><span class="vs-key">'+good+' of '+j.basics.length+' good</span></div>'+basics(j.basics)+'</div>';
-    wire();gxFill();
+    wire();
     var ch=m.querySelector(".vs-chart"),tip=ch&&ch.querySelector(".vs-tip");
     if(ch)ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var d=j.daily[+b.dataset.i];ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")});b.classList.add("on");tip.innerHTML='<b>'+d.clicks+' clicks</b><span>shown '+d.shown+' times</span><span>'+fd(d.d)+'</span>';tip.hidden=false;var r=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(r.left-R.left+r.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("focus",f);b.addEventListener("click",f)});
     if(ch)ch.addEventListener("mouseleave",function(){tip.hidden=true});
@@ -3659,8 +3689,10 @@ function seoInit(){
     wireSort();
     function wireSort(){m.querySelectorAll(".seo-t [data-s]").forEach(function(b){b.onclick=function(){seoSort=b.dataset.s;var y=window.scrollY;draw(j);window.scrollTo(0,y)}})}
   }
-  function wire(){m.querySelectorAll(".vs-range [data-r]").forEach(function(b){b.addEventListener("click",function(){if(seoRange===b.dataset.r)return;seoRange=b.dataset.r;load()})})}
-  function load(){var r=seoRange;if(seoCache[r])return draw(seoCache[r]);var h=m.querySelector(".dash-head");if(h)h.insertAdjacentHTML("afterend",'<p class="empty"><span class="spin"></span> Loading…</p>');else m.innerHTML='<p class="empty"><span class="spin"></span> Loading…</p>';
+  function wire(){m.querySelectorAll(".seo-sw [data-sv]").forEach(function(b){b.addEventListener("click",function(){if(seoView===b.dataset.sv)return;seoView=b.dataset.sv;try{localStorage.setItem("ambs-seo-view",seoView)}catch(e){}load()})});
+    m.querySelectorAll(".vs-range [data-r]").forEach(function(b){b.addEventListener("click",function(){if(seoRange===b.dataset.r)return;seoRange=b.dataset.r;load()})})}
+  function load(){if(seoView==="index"){m.innerHTML=head()+'<div id="gxBox"></div>';wire();gxFill();return}
+    var r=seoRange;if(seoCache[r])return draw(seoCache[r]);var h=m.querySelector(".dash-head");if(h)h.insertAdjacentHTML("afterend",'<p class="empty"><span class="spin"></span> Loading…</p>');else m.innerHTML='<p class="empty"><span class="spin"></span> Loading…</p>';
     api("settings",{action:"seo",days:+r}).then(function(j){seoCache[r]=j;if(r===seoRange)draw(j)}).catch(function(e){if(e.message==="signin")return;m.innerHTML=head()+'<div class="panel"><p class="msg err">'+esc(e.message)+'</p></div>';wire()})}
   load();
 }
