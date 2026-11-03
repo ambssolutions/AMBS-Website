@@ -759,8 +759,15 @@ svg.sel .cm-n:not(.near){opacity:.35}svg.sel .cm-e:not(.on) path{opacity:.35}svg
 .cmap-info{margin-top:12px;padding:14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.cmap-info:empty{display:none}
 .cmap-i-h{display:flex;gap:12px;align-items:flex-start;flex:1;min-width:240px}.cmap-i-ic{font-size:26px;line-height:1}.cmap-info p{margin:4px 0 0}
 @media (max-width:640px){.cm-n .t{font-size:12.5px}.cm-n .s{font-size:10.5px}.cmap-info .btn{width:100%}}
-.gx-n{color:var(--muted);font-size:.8rem;margin-top:4px}.kx-list{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.kx-list li{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh)}
-.kx-list li>span{font-weight:700}.kx-ok>span{color:var(--green)}.kx-warn>span,li.kx-warn>span{color:#b45309}.kx-bad>span{color:#c0262d}.kx-na>span{color:var(--muted)}
+.gx-n{color:var(--muted);font-size:.8rem;margin-top:4px}.kx-list{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kx-list li{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;background:var(--emb-bg);box-shadow:var(--emb-sh);min-width:0}
+.kx-h{display:flex;align-items:center;gap:8px}.kx-h b{font-size:.92rem;line-height:1.25}.kx-ic{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:9px;background:var(--card);box-shadow:var(--emb-sh);font-size:15px}
+.kx-date{font-size:1.15rem;font-weight:800;letter-spacing:-.01em;color:var(--ink)}.kx-tag{align-self:flex-start;font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--ok-bg);color:var(--green)}
+.kx-warn .kx-tag{background:#fff4e0;color:#9a5b00}.kx-bad .kx-tag{background:#fde8e8;color:#b42318}.kx-bad .kx-date{color:#b42318}.kx-na .kx-date{color:var(--muted);font-size:1rem}
+.kx-bar{height:5px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:2px}.kx-bar i{display:block;height:100%;border-radius:9px;background:var(--green)}.kx-warn .kx-bar i{background:#d08a16}.kx-bad .kx-bar i{background:#d33}
+.kx-how{margin-top:auto}.kx-how summary{cursor:pointer;font-size:.8rem;font-weight:700;color:var(--muted);list-style:none}.kx-how summary::-webkit-details-marker{display:none}.kx-how summary::after{content:" ›"}.kx-how[open] summary::after{content:" ‹"}.kx-how p{margin:6px 0 0;font-size:.8rem}
+.kx-chips{display:flex;flex-wrap:wrap;gap:6px}.kx-chips span{font-size:.78rem;font-weight:650;padding:4px 9px;border-radius:999px;background:var(--card);box-shadow:var(--emb-sh)}
+@media (max-width:1180px){.kx-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:560px){.kx-list{grid-template-columns:1fr}}
 div.kx-warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(--emb-bg);box-shadow:var(--emb-sh);color:#7a4b00}
 .gx-btns{display:flex;gap:8px;flex-wrap:wrap}.gx-filt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 4px}.gx-filt button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;font-weight:650;cursor:pointer;color:var(--ink)}
 .gx-filt button span{color:var(--muted);font-weight:700;margin-left:2px}.gx-filt button.on{background:var(--emb-bg);box-shadow:var(--emb-sh);border-color:transparent}.gx-filt button.warn span{color:#b45309}.gx-q{margin-left:auto;max-width:240px;height:38px}
@@ -3347,15 +3354,18 @@ var cmapSel=null,cmapRO=null;
 /* When keys run out (api/_lib.js keyExpiry): the publishing key (GitHub), the Google service account key and the
    padlock certificate, with days left; amber under 30 days, red under 7. The rest never expire. */
 function kxDays(t){return t?Math.floor((new Date(t)-Date.now())/864e5):null}
-function kxRow(name,x,never,note,amber){var d=x&&x.ok?kxDays(x.expires):null,cls=!x?"na":!x.ok?"bad":d===null?"ok":d<7?"bad":d<(amber||30)?"warn":"ok";
-  var when=!x?never:!x.ok?"Couldn’t check: "+esc(x.error||""):x.expires?new Date(x.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"})+" · "+(d<0?"expired "+(-d)+" days ago":d===0?"today":d+" days left"):"No expiry date";
-  return'<li class="kx-'+cls+'"><b>'+name+'</b><span>'+when+'</span>'+(note?'<small class="help">'+note+'</small>':'')+'</li>'}
-function keyDates(E,ps){return'<div class="panel kx"><div class="vs-ph"><h3>When keys run out</h3><span class="help">Checked just now</span></div><ul class="kx-list">'+
-  kxRow("Publishing key (GitHub)",E.github,"","Saves every change. When it runs out, make a new one at github.com → Settings → Developer settings → Fine-grained tokens, and put it in Vercel as GITHUB_TOKEN.")+
-  kxRow("Google service account key",E.google,"Not connected","Visitors, Stats and Google search. Make a new JSON key in Google Cloud → IAM → Service accounts → Keys, and paste it in Google Analytics reports below.")+
-  kxRow("Padlock certificate (https)",E.padlock,"","Vercel renews it by itself about a month before it runs out.",7)+
-  kxRow("PageSpeed key",ps&&ps.from?{ok:true,expires:null}:null,"Not connected","")+
-  '<li class="kx-ok"><b>Web3Forms, Supabase, Zoho Bookings</b><span>No expiry date</span></li></ul></div>'}
+function kxRow(ic,name,x,never,note,amber){var d=x&&x.ok?kxDays(x.expires):null,cls=!x?"na":!x.ok?"bad":d===null?"ok":d<7?"bad":d<(amber||30)?"warn":"ok";
+  var date=!x?never:!x.ok?"Couldn’t check":x.expires?new Date(x.expires).toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:"numeric"}):"No expiry date";
+  var tag=x&&x.ok&&x.expires?'<span class="kx-tag">'+(d<0?"Expired "+(-d)+" days ago":d===0?"Runs out today":d+" days left")+'</span>':"";
+  var bar=x&&x.ok&&x.expires?'<span class="kx-bar" aria-hidden="true"><i style="width:'+Math.max(2,Math.min(100,Math.round(d/365*100)))+'%"></i></span>':"";
+  return'<li class="kx-'+cls+'"><div class="kx-h"><span class="kx-ic" aria-hidden="true">'+ic+'</span><b>'+name+'</b></div><span class="kx-date">'+date+'</span>'+tag+bar+
+    (x&&!x.ok?'<small class="help">'+esc(x.error||"")+'</small>':'')+(note?'<details class="kx-how"><summary>How to renew</summary><p class="help">'+note+'</p></details>':'')+'</li>'}
+function keyDates(E,ps){var never=["PageSpeed key"+(ps&&ps.from?"":" (not set)"),"Web3Forms","Supabase","Zoho Bookings"];
+  return'<div class="panel kx"><div class="vs-ph"><h3>When keys run out</h3><span class="help">Checked just now</span></div><ul class="kx-list">'+
+  kxRow("🔐","Publishing key (GitHub)",E.github,"","github.com → Settings → Developer settings → Fine-grained tokens → make a new one for this website (Contents: read and write), then put it in Vercel as GITHUB_TOKEN.")+
+  kxRow("📊","Google key",E.google,"Not connected","Google Cloud → IAM → Service accounts → Keys → Add key (JSON), then paste it in Google Analytics reports below.")+
+  kxRow("🔒","Padlock (https)",E.padlock,"","Nothing to do: Vercel renews it by itself about a month before it runs out.",7)+
+  '<li class="kx-ok kx-never"><div class="kx-h"><span class="kx-ic" aria-hidden="true">♾️</span><b>Never run out</b></div><div class="kx-chips">'+never.map(function(n){return'<span>'+esc(n)+'</span>'}).join("")+'</div></li></ul></div>'}
 function connsInit(){
   var m=$("cnMain");
   function src(k){return k.from==="editor"?'<span class="cn-on">✓ Connected</span>':k.from==="vercel"?'<span class="cn-on">✓ Connected</span>':'<span class="cn-off">Not set up</span>'}
