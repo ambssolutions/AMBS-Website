@@ -776,6 +776,7 @@ div.kx-warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(
 .seo-sw button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(15,23,42,.12)}@media (max-width:560px){.seo-sw{display:flex}.seo-sw button{flex:1;padding:8px 6px}}
 .gx-btns{display:flex;gap:8px;flex-wrap:wrap}.gx-filt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 4px}.gx-filt button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;font-weight:650;cursor:pointer;color:var(--ink)}
 .gx-filt button span{color:var(--muted);font-weight:700;margin-left:2px}.gx-filt button.on{background:var(--emb-bg);box-shadow:var(--emb-sh);border-color:transparent}.gx-filt button.warn span{color:#b45309}.gx-q{margin-left:auto;max-width:240px;height:38px}
+.gx-open{padding:10px 12px;border-radius:10px;background:var(--emb-bg);box-shadow:var(--emb-sh);color:var(--ink)}.gx-open a{color:var(--blue,#1a63c9)}
 .gx-rq{font-size:.82rem;color:#7a4b00;margin-top:2px}.gx-rq .btn.link{font-size:.8rem;padding:0 4px}.gx-none{padding:14px 0}
 @media (max-width:760px){.gx-q{margin-left:0;max-width:none;width:100%}}
 @media (max-width:560px){.gx-btns{display:grid;grid-template-columns:1fr 1fr;width:100%}.gx-btns .btn{font-size:.85rem;padding:.6rem .5rem;white-space:normal;line-height:1.2}
@@ -3117,8 +3118,14 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
     box.querySelectorAll("[data-f]").forEach(function(b){b.addEventListener("click",function(){gxFilter=b.dataset.f;draw()})});
     var q=$("gxQ");q.addEventListener("input",function(){gxQ=q.value.trim().toLowerCase();var pos=q.selectionStart;draw();var q2=$("gxQ");q2.focus();try{q2.setSelectionRange(pos,pos)}catch(e){}});
     box.querySelectorAll("[data-one]").forEach(function(b){b.addEventListener("click",function(){var r=list[+b.dataset.one];busy(b,true,"…");one(r).then(function(){draw()})})});
-    box.querySelectorAll("[data-req]").forEach(function(a){a.addEventListener("click",function(){var u=full(list[+a.dataset.req].url);gxReq[u]={requested_at:new Date().toISOString(),requested_by:(window.ED_ME&&window.ED_ME.email)||""};draw();
-      api("settings",{action:"index-mark",url:u}).then(function(){toast("Marked as requested. Press “Request indexing” in Search Console.")}).catch(fail)})});
+    /* open Search Console first (inside the tap, so no browser blocks it), then mark and redraw a moment later;
+       redrawing straight away removed the link mid-tap and some browsers then didn't open it */
+    box.querySelectorAll("[data-req]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();var href=a.getAttribute("href"),u=full(list[+a.dataset.req].url);
+      try{window.open(href,"_blank","noopener")}catch(x){}
+      var msg=$("gxMsg");if(msg){msg.className="help gx-open";msg.innerHTML='Search Console is opening in a new tab (if it didn’t, <a href="'+esc(href)+'" target="_blank" rel="noopener"><b>open it here</b></a>). Press <b>Request indexing</b> there, signed in with the Google account that owns ambs.co.nz.'}
+      gxReq[u]={requested_at:new Date().toISOString(),requested_by:(window.ED_ME&&window.ED_ME.email)||""};
+      api("settings",{action:"index-mark",url:u}).then(function(){toast("Marked as requested")}).catch(fail);
+      setTimeout(function(){var keep=$("gxMsg")&&$("gxMsg").innerHTML;draw();var m2=$("gxMsg");if(m2&&keep){m2.className="help gx-open";m2.innerHTML=keep}},400)})});
     box.querySelectorAll("[data-unreq]").forEach(function(b){b.addEventListener("click",function(){var u=full(list[+b.dataset.unreq].url);delete gxReq[u];draw();api("settings",{action:"index-mark",url:u,clear:true}).catch(fail)})});
     $("gxMap").addEventListener("click",function(){var b=this,msg=$("gxMsg");busy(b,true,"Sending…");api("settings",{action:"sitemap"}).then(function(x){busy(b,false);
       if(x.ok){msg.className="help ok";msg.textContent="✓ Sitemap sent to Google. It reads it again soon and picks up new and changed pages."}
