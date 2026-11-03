@@ -824,6 +824,24 @@ div.kx-warn{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(
 #side .side-brand{flex-direction:column;align-items:flex-start;gap:6px;padding:8px 12px 16px}
 #side .side-brand img{height:30px}
 #side .side-brand span{white-space:nowrap;font-size:.95rem;font-weight:800;letter-spacing:-.01em;line-height:1.1}
+
+/* Buttons in the website's own greens (owner, Nov 2026; measured from ambs.co.nz): main = "Book a free session",
+   others = "Book a call", soft = "Contact us"; the main button turns bright green with white words on hover, like the site */
+html body .btn{background:linear-gradient(180deg,#fff,#eef5e4);color:#145116;border:1px solid rgba(25,185,30,.45);box-shadow:0 5px 12px -8px rgba(20,81,22,.35);transition:background .15s,color .15s,box-shadow .15s,transform .15s,filter .15s}
+html body .btn:hover:not(:disabled){background:linear-gradient(180deg,#fbfff7,#e2f1d2)}
+html body .btn.primary{background:linear-gradient(180deg,#b7f1b9,#89dc8c);color:#145116;border:1px solid transparent;box-shadow:0 7px 16px -9px rgba(20,81,22,.4)}
+html body .btn.primary:hover:not(:disabled){background:linear-gradient(180deg,#34d139,#139918);color:#fff;box-shadow:0 12px 24px -10px rgba(20,81,22,.55);filter:brightness(1.06)}
+html body .btn.soft{background:linear-gradient(180deg,#dcf2c6,#97e29a);color:#165618;border:1px solid transparent;box-shadow:0 5px 12px -7px rgba(22,86,24,.35)}
+html body .btn.danger{color:#b42318;border-color:rgba(180,35,24,.35);background:linear-gradient(180deg,#fff,#fdf1ef)}
+html body .btn.danger:hover:not(:disabled){background:linear-gradient(180deg,#fff6f5,#fbe3e0)}
+html body .btn.link,html body .btn.link:hover{background:none!important;border:0;box-shadow:none;color:var(--blue)}
+html body .btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+@media (prefers-color-scheme:dark){
+html body .btn{background:linear-gradient(180deg,#232a45,#1a2039);color:#acebae;border-color:rgba(68,232,73,.35)}
+html body .btn:hover:not(:disabled){background:linear-gradient(180deg,#2a3354,#202847)}
+html body .btn.danger{color:#ff9b91;border-color:rgba(255,120,110,.35);background:linear-gradient(180deg,#2a2236,#211b2e)}
+html body .btn.primary{background:linear-gradient(180deg,#b7f1b9,#89dc8c);color:#145116;border-color:transparent}
+html body .btn.soft{background:linear-gradient(180deg,#dcf2c6,#97e29a);color:#165618;border-color:transparent}}
 </style>
 </head>
 <body>
