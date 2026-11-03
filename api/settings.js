@@ -41,7 +41,7 @@ export default async function handler(req, res) {
   try {
     const b = await readBody(req);
     /* which part of the editor each action belongs to (see PARTS in _lib.js); "get" and "me" are for everyone signed in */
-    const AREA = { stats: "stats", leads: "leads", visitors: "visitors", searches: ["visitors", "seo"], seo: "seo", "seo-detail": "seo", index: "seo", "index-requests": "seo", "index-mark": "seo", sitemap: "seo",
+    const AREA = { stats: ["stats", "leads"], leads: "leads", visitors: "visitors", searches: ["visitors", "seo"], seo: "seo", "seo-detail": "seo", index: "seo", "index-requests": "seo", "index-mark": "seo", sitemap: "seo",
       conns: "owner", "conn-save": "owner", "conn-remove": "owner", editors: "owner", "editor-invite": "owner", "editor-role": "owner", "editor-remove": "owner", "level-set": "owner",
       test: ["health", "seo"], theme: "design", business: "business", profiles: "business", sitetext: "business", analytics: "business",
       chatlog: "chat", chatlogset: "chat", chatget: "chat", chatbot: "chat", calculator: "calc" }[b.action];
