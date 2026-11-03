@@ -3,7 +3,7 @@
    variable with the same name still works as a fallback. Keys never reach the browser. */
 import { sbRpc, serverProof } from "./_lib.js";
 
-export const KEY_NAMES = ["GA_PROPERTY_ID", "GA_SERVICE_ACCOUNT", "GSC_SITE", "PAGESPEED_KEY"];
+export const KEY_NAMES = ["GA_PROPERTY_ID", "GA_SERVICE_ACCOUNT", "GSC_SITE", "PAGESPEED_KEY", "PLACES_KEY", "PLACE_ID"];
 let K = {};
 export const key = (n) => K[n] || process.env[n] || "";
 export const keyFrom = (n) => (K[n] ? "editor" : process.env[n] ? "vercel" : "");

@@ -15,6 +15,7 @@
    { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
 import { visitorsNow, visitorsPeriod, searchQueries, seoReport, seoDetail, inspectUrl, statsEvents, gaCheck, submitSitemap, nzMidnight } from "./_ga.js";
 import { loadKeys, keyFrom, KEY_NAMES, key } from "./_keys.js";
+import { findPlace, placeReviews } from "./_places.js";
 import { psi, security, cert, response, sharing, okUrl } from "./_tests.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
 import { requireEditor, sbRpc, send, readBody, headSha, readFile, commitFiles, listPaths, readBlob, readEnglish, stampHash, nextVersion, can, NO_ACCESS, PARTS, keyExpiry } from "./_lib.js";
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
   try {
     const b = await readBody(req);
     /* which part of the editor each action belongs to (see PARTS in _lib.js); "get" and "me" are for everyone signed in */
-    const AREA = { stats: ["stats", "leads"], leads: "leads", visitors: "visitors", searches: ["visitors", "seo"], seo: "seo", "seo-detail": "seo", index: "seo", "index-requests": "seo", "index-mark": "seo", sitemap: "seo",
+    const AREA = { stats: ["stats", "leads"], leads: "leads", visitors: "visitors", searches: ["visitors", "seo"], seo: "seo", "seo-detail": "seo", reviews: "seo", index: "seo", "index-requests": "seo", "index-mark": "seo", sitemap: "seo",
       conns: "owner", "conn-save": "owner", "conn-remove": "owner", editors: "owner", "editor-invite": "owner", "editor-role": "owner", "editor-remove": "owner", "level-set": "owner",
       test: ["health", "seo"], theme: "design", business: "business", profiles: "business", sitetext: "business", analytics: "business",
       chatlog: "chat", chatlogset: "chat", chatget: "chat", chatbot: "chat", calculator: "calc" }[b.action];
@@ -83,7 +84,7 @@ export default async function handler(req, res) {
       /* a key kept in Vercel shows which account it is too: the property number, the service account's email, the Search Console site, a key's last 4 */
       const vHint = (n) => { const v = String(process.env[n] || ""); if (!v) return "";
         if (n === "GA_SERVICE_ACCOUNT") { try { return JSON.parse(v).client_email || ""; } catch (e) { return ""; } }
-        return n === "PAGESPEED_KEY" ? "••••" + v.slice(-4) : v.slice(0, 80); };
+        return n === "PAGESPEED_KEY" || n === "PLACES_KEY" ? "••••" + v.slice(-4) : v.slice(0, 80); };
       const keys = Object.fromEntries(KEY_NAMES.map((n) => [n, { from: keyFrom(n), hint: keyFrom(n) === "vercel" ? vHint(n) : by[n] ? by[n].hint : "", at: by[n] ? by[n].updated_at : "", note: by[n] ? String(by[n].note || "").replace(/^by\s*/, "") : "" }]));
       const sb = { project: (process.env.SUPABASE_URL || "https://onunconxcvkwowtgalxn.supabase.co").replace(/^https:\/\/|\.supabase\.co.*$/g, ""), ok: false, ms: 0 };
       try { const t0 = Date.now(); await sbRpc(who.token, "website_editor_ok", {}); sb.ok = true; sb.ms = Date.now() - t0; } catch (e) { sb.error = e.message.slice(0, 120); }
@@ -91,7 +92,7 @@ export default async function handler(req, res) {
       return send(res, 200, { vault, keys, github: !!process.env.GITHUB_TOKEN, supabase: sb, expiry });
     }
     if (b.action === "conn-save" || b.action === "conn-remove") {
-      const SVC = { ga: ["GA_PROPERTY_ID", "GA_SERVICE_ACCOUNT"], gsc: ["GSC_SITE"], psi: ["PAGESPEED_KEY"] }[b.svc];
+      const SVC = { ga: ["GA_PROPERTY_ID", "GA_SERVICE_ACCOUNT"], gsc: ["GSC_SITE"], psi: ["PAGESPEED_KEY"], places: ["PLACES_KEY", "PLACE_ID"] }[b.svc];
       if (!SVC) return send(res, 400, { error: "Unknown connection." });
       const put = (n, v) => sbRpc(who.token, "site_secret_set", { p_name: n, p_value: v });
       try {
@@ -119,10 +120,23 @@ export default async function handler(req, res) {
           if (!/^AIza[0-9A-Za-z_-]{35}$/.test(k)) return send(res, 200, { error: "A Google API key starts with AIza and is 39 characters long." });
           await put("PAGESPEED_KEY", k);
           note = "Saved. The next speed test in Site health → Speed & security uses it.";
+        } else if (b.svc === "places") {
+          /* Google reviews: a key with Places API (New) turned on (or the PageSpeed key, if it has it too), and the business found on Google Maps */
+          const k = val("PLACES_KEY") || key("PLACES_KEY") || key("PAGESPEED_KEY");
+          if (val("PLACES_KEY") && !/^AIza[0-9A-Za-z_-]{35}$/.test(val("PLACES_KEY"))) return send(res, 200, { error: "A Google API key starts with AIza and is 39 characters long." });
+          if (!k) return send(res, 200, { error: "Paste a Google API key with Places API (New) turned on." });
+          const found = await findPlace(k, val("PLACE_ID") || "AMBS Solutions");
+          if (!found.length) return send(res, 200, { error: "Google Maps found no business by that name. Try the name as it shows on Google Maps, or paste its Google Maps link." });
+          if (found.length > 1 && !b.pick && !/ChIJ/.test(val("PLACE_ID"))) return send(res, 200, { choose: found.map((p) => ({ id: p.id, name: (p.displayName && p.displayName.text) || "", address: p.formattedAddress || "", rating: p.rating || 0, count: p.userRatingCount || 0 })) });
+          const p = b.pick ? found.find((x) => x.id === b.pick) || found[0] : found[0];
+          if (val("PLACES_KEY")) await put("PLACES_KEY", val("PLACES_KEY"));
+          await put("PLACE_ID", p.id);
+          note = "Found " + ((p.displayName && p.displayName.text) || "your business") + (p.rating ? " · " + p.rating + "★ from " + (p.userRatingCount || 0) + " reviews" : "") + ". See them in Google search → Reviews.";
         }
         return send(res, 200, { ok: true, note });
       } catch (e) { return send(res, 200, { error: e.soft ? e.message : /site_secret|PGRST202|404/.test(e.message) ? "Connections need the database update first." : e.message }); }
     }
+    if (b.action === "reviews") return send(res, 200, await placeReviews());   // Google reviews (Places API): rating and the latest reviews
     if (b.action === "seo-detail") return send(res, 200, await seoDetail(b.days, b.query, b.page));   // Google search: one keyword or page in detail
     if (b.action === "searches") return send(res, 200, await searchQueries(b.days));   // Google search words, from Search Console
     if (b.action === "test") {   // one speed or security test on a public ambs.co.nz page; read-only
