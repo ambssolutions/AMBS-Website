@@ -96,11 +96,12 @@ export async function visitorsPeriod(days, f) {
   if (+days === 1) return visitors24(c, f);
   const n = [7, 28, 90].includes(+days) ? +days : 7;
   const t = await accessToken(c.sa);
-  const cur = { startDate: n + "daysAgo", endDate: "today" }, prev = { startDate: 2 * n + "daysAgo", endDate: (n + 1) + "daysAgo" };
+  /* the same days as Google Analytics' own "Last 7 days" etc.: whole days ending yesterday in the property's time zone (New Zealand) */
+  const cur = { startDate: n + "daysAgo", endDate: "yesterday" }, prev = { startDate: 2 * n + "daysAgo", endDate: (n + 1) + "daysAgo" };
   const df = dimFilter(f, false);
   const one = (dims, metrics, limit, order) => runReport(c.id, t, { dateRanges: [cur], dimensions: dims.map((name) => ({ name })), metrics: metrics.map((name) => ({ name })), limit: limit || 10, orderBys: order ? [{ metric: { metricName: order }, desc: true }] : undefined, dimensionFilter: df });
   const DM = ["activeUsers", "newUsers", "sessions", "screenPageViews"];
-  const M = ["activeUsers", "newUsers", "sessions", "screenPageViews", "averageSessionDuration", "engagementRate"];
+  const M = ["activeUsers", "newUsers", "sessions", "screenPageViews", "userEngagementDuration", "engagementRate"];
   const [tot, totPrev, daily, pages, sources, places, devices, events] = await Promise.all([
     runReport(c.id, t, { dateRanges: [cur], metrics: M.map((name) => ({ name })), dimensionFilter: df }),
     runReport(c.id, t, { dateRanges: [prev], metrics: M.map((name) => ({ name })), dimensionFilter: df }),
@@ -111,10 +112,10 @@ export async function visitorsPeriod(days, f) {
     one(["deviceCategory"], ["activeUsers"], 5, "activeUsers"),
     one(["eventName"], ["eventCount"], 50, "eventCount"),
   ]);
-  const pick = (rows) => { const o = {}; M.forEach((m, i) => { o[m] = rows.length ? rows[0].v[i] : 0; }); return o; };
+  const pick = (rows) => { const o = {}; M.forEach((m, i) => { o[m] = rows.length ? rows[0].v[i] : 0; }); o.avgEngage = o.activeUsers ? o.userEngagementDuration / o.activeUsers : 0; return o; };   // avgEngage = GA's "Average engagement time per active user"
   const named = (rows) => rows.map((x) => ({ name: x.k.filter((s) => s && s !== "(not set)").join(", "), n: x.v[0] })).filter((x) => x.name);
   return {
-    days: n,
+    days: n, from: nzDay(n), to: nzDay(1),
     totals: pick(tot), before: pick(totPrev),
     daily: dailyRows(daily, n),
     filter: f && f.f ? f : null,
@@ -140,7 +141,7 @@ async function visitors24(c, f) {
   const hf = (hours) => { const h = { filter: { fieldName: "dateHour", inListFilter: { values: hours } } }; return df ? { andGroup: { expressions: [df, h] } } : h; };
   const range = [{ startDate: "2daysAgo", endDate: "today" }];
   const DM = ["activeUsers", "newUsers", "sessions", "screenPageViews"];
-  const M = ["activeUsers", "newUsers", "sessions", "screenPageViews", "averageSessionDuration", "engagementRate"];
+  const M = ["activeUsers", "newUsers", "sessions", "screenPageViews", "userEngagementDuration", "engagementRate"];
   const one = (dims, metrics, limit, order) => runReport(c.id, t, { dateRanges: range, dimensions: dims.map((name) => ({ name })), metrics: metrics.map((name) => ({ name })), limit: limit || 10, orderBys: order ? [{ metric: { metricName: order }, desc: true }] : undefined, dimensionFilter: hf(curH) });
   const [tot, totPrev, hourly, pages, sources, places, devices, events] = await Promise.all([
     runReport(c.id, t, { dateRanges: range, metrics: M.map((name) => ({ name })), dimensionFilter: hf(curH) }),
@@ -152,7 +153,7 @@ async function visitors24(c, f) {
     one(["deviceCategory"], ["activeUsers"], 5, "activeUsers"),
     one(["eventName"], ["eventCount"], 50, "eventCount"),
   ]);
-  const pick = (rows) => { const o = {}; M.forEach((m, i) => { o[m] = rows.length ? rows[0].v[i] : 0; }); return o; };
+  const pick = (rows) => { const o = {}; M.forEach((m, i) => { o[m] = rows.length ? rows[0].v[i] : 0; }); o.avgEngage = o.activeUsers ? o.userEngagementDuration / o.activeUsers : 0; return o; };   // avgEngage = GA's "Average engagement time per active user"
   const named = (rows) => rows.map((x) => ({ name: x.k.filter((s) => s && s !== "(not set)").join(", "), n: x.v[0] })).filter((x) => x.name);
   const byH = Object.fromEntries(hourly.map((x) => [x.k[0], x.v.slice(0, 4)]));
   const zero = [0, 0, 0, 0];
@@ -163,11 +164,18 @@ async function visitors24(c, f) {
 
 /* nthDay counts days from each range's own start, so day i of this period sits next to day i of the period before.
    With two date ranges Google adds a "dateRange" dimension (date_range_0 = this period, date_range_1 = before). */
+/* a New Zealand date k days before today, as YYYY-MM-DD */
+export function nzDay(k) { const d = new Date(new Date().toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" }) + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() - k); return d.toISOString().slice(0, 10); }
+/* the moment New Zealand's day k days before today began (midnight NZ time), as a Date */
+export function nzMidnight(k) {
+  const day = nzDay(k), guess = Date.parse(day + "T00:00:00Z");
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-NZ", { timeZone: "Pacific/Auckland", hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).formatToParts(new Date(guess)).map((x) => [x.type, x.value]));
+  return new Date(guess - (Date.parse(p.year + "-" + p.month + "-" + p.day + "T" + p.hour + ":" + p.minute + ":00Z") - guess));
+}
 function dailyRows(rows, n) {
   const out = [];
   for (let i = 0; i < n; i++) {
-    const d = new Date(Date.now() - (n - 1 - i) * 86400000);
-    out.push({ d: d.toISOString().slice(0, 10), now: [0, 0, 0, 0], before: [0, 0, 0, 0] });
+    out.push({ d: nzDay(n - i), now: [0, 0, 0, 0], before: [0, 0, 0, 0] });
   }
   rows.forEach((x) => {
     const i = parseInt(x.k[0], 10), which = x.k[1] === "date_range_1" ? "before" : "now";
@@ -222,7 +230,7 @@ export async function searchQueries(days) {
     const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/searchAnalytics/query", {
       method: "POST",
       headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" },
-      body: JSON.stringify({ startDate: day(n + 2), endDate: day(0), dimensions: ["query"], rowLimit: 25, dataState: "all" }),
+      body: JSON.stringify({ startDate: gday(n), endDate: gday(1), dimensions: ["query"], rowLimit: 25, dataState: "all" }),
     });
     const j = await r.json().catch(() => ({}));
     if (r.ok) return { site, days: n, rows: (j.rows || []).map((x) => ({ q: x.keys[0], clicks: x.clicks, shown: x.impressions, pos: Math.round(x.position * 10) / 10 })) };
@@ -235,6 +243,30 @@ export async function searchQueries(days) {
 /* Everything for the SEO page, from Search Console plus a quick look at the live site:
    totals now and the period before, clicks and times shown each day, searches, pages, countries, devices,
    chances (searches close to page 1, or shown a lot but rarely clicked), sitemaps and the site's own basics. */
+/* Google search (SEO) → tap a keyword or a page: its own day-by-day clicks, times shown and place, and the pages that
+   showed for that keyword (or the keywords that showed that page), for the same period and the one before. */
+export async function seoDetail(days, query, page) {
+  const c = conn();
+  if (c.setup) return c;
+  const n = [7, 28, 90].includes(+days) ? +days : 28;
+  const t = await accessToken(c.sa);
+  const cur = { startDate: gday(n), endDate: gday(1) }, prev = { startDate: gday(2 * n), endDate: gday(n + 1) };
+  const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
+  let site = "", last = "";
+  for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
+  if (!site) return { error: last || "Search Console isn't connected" };
+  const dim = query ? "query" : "page", val = String(query || page || "").slice(0, 500);
+  const full = dim === "page" && val.startsWith("/") ? (site.startsWith("sc-domain:") ? "https://ambs.co.nz" : site.replace(/\/$/, "")) + val : val;
+  const fg = [{ filters: [{ dimension: dim, operator: "equals", expression: full }] }];
+  const q = (dims, limit, range) => gsc(t, site, Object.assign({ dimensions: dims, rowLimit: limit, dimensionFilterGroups: fg }, range));
+  const [tot, totPrev, daily, other] = await Promise.all([q([], 1, cur), q([], 1, prev), q(["date"], 500, cur), q([query ? "page" : "query"], 100, cur)]);
+  const sum = (r) => r[0] ? { clicks: r[0].clicks, shown: r[0].shown, ctr: r[0].ctr, pos: r[0].pos } : { clicks: 0, shown: 0, ctr: 0, pos: 0 };
+  return { days: n, from: cur.startDate, to: cur.endDate, dim, name: val, totals: sum(tot), before: sum(totPrev),
+    daily: daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })),
+    other: other.map((r) => ({ name: query ? (String(r.k[0]).replace(/^https?:\/\/(www\.)?ambs\.co\.nz/, "") || "/") : r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })) };
+}
+/* a date k days before today in Search Console's time zone (US Pacific), as YYYY-MM-DD */
+function gday(k) { const d = new Date(new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() - k); return d.toISOString().slice(0, 10); }
 async function gsc(t, site, body) {
   const r = await fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/searchAnalytics/query", {
     method: "POST", headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ dataState: "all" }, body)),
@@ -267,16 +299,23 @@ export async function seoReport(days) {
   const t = await accessToken(c.sa);
   const day = (k) => new Date(Date.now() - k * 86400000).toISOString().slice(0, 10);
   /* 24 hours: Google's fresh (not yet final) figures; searches, pages and places cover today and yesterday */
-  const cur = n === 1 ? { startDate: day(1), endDate: day(0) } : { startDate: day(n + 2), endDate: day(0) },
-    prev = n === 1 ? { startDate: day(3), endDate: day(2) } : { startDate: day(2 * n + 2), endDate: day(n + 3) };
+  /* 7/28/90 days: the same days as Search Console's own "7 days" etc., i.e. that many whole days ending yesterday in
+     Google's time zone (US Pacific); the period before is the same length just before it */
+  const cur = n === 1 ? { startDate: day(1), endDate: day(0) } : { startDate: gday(n), endDate: gday(1) },
+    prev = n === 1 ? { startDate: day(3), endDate: day(2) } : { startDate: gday(2 * n), endDate: gday(n + 1) };
   const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
   let site = "", last = "";
   for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
   if (!site) return { needs: true, email: c.sa.client_email, why: last, basics: await siteBasics() };
   const q = (dims, limit, range) => gsc(t, site, Object.assign({ dimensions: dims, rowLimit: limit || 25 }, range || cur));
-  const [tot, totPrev, daily, queries, pages, countries, devices, basics, maps] = await Promise.all([
-    q([], 1), q([], 1, prev), q(["date"], 500), q(["query"], 250), q(["page"], 50), q(["country"], 10), q(["device"], 5), siteBasics(),
+  /* the other kinds of Google search (Search Console's "Search type") and how the results looked ("Search appearance") */
+  const TYPES = [["web", "Web"], ["image", "Images"], ["video", "Videos"], ["news", "News tab"], ["discover", "Discover"], ["googleNews", "Google News"]];
+  const typeTot = (ty) => gsc(t, site, Object.assign({ rowLimit: 1, type: ty }, cur)).then((r) => r[0] || null).catch(() => null);
+  const [tot, totPrev, daily, queries, queriesPrev, pages, pagesPrev, countries, devices, basics, maps, appear, ...types] = await Promise.all([
+    q([], 1), q([], 1, prev), q(["date"], 500), q(["query"], 1000), q(["query"], 1000, prev), q(["page"], 200), q(["page"], 200, prev), q(["country"], 10), q(["device"], 5), siteBasics(),
     fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/sitemaps", { headers: { Authorization: "Bearer " + t } }).then((r) => r.ok ? r.json() : {}).catch(() => ({})),
+    q(["searchAppearance"], 20).catch(() => []),
+    ...TYPES.map((x) => typeTot(x[0])),
   ]);
   let sum = (rows) => rows[0] ? { clicks: rows[0].clicks, shown: rows[0].shown, ctr: rows[0].ctr, pos: rows[0].pos } : { clicks: 0, shown: 0, ctr: 0, pos: 0 };
   let hourly = null;
@@ -288,20 +327,28 @@ export async function seoReport(days) {
         const add = (rs) => { const cl = rs.reduce((a, r) => a + r.clicks, 0), sh = rs.reduce((a, r) => a + r.shown, 0), ps = rs.reduce((a, r) => a + r.pos * r.shown, 0);
           return { clicks: cl, shown: sh, ctr: sh ? cl / sh : 0, pos: sh ? Math.round(ps / sh * 10) / 10 : 0 }; };
         const last = hrs.slice(-24), before = hrs.slice(-48, -24);
-        hourly = { cur: add(last), prev: add(before), rows: last.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })) };
+        hourly = { cur: add(last), prev: add(before), rows: last.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })) };
       }
     } catch (e) { hourly = null; }
   }
   const row = (r) => ({ name: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos });
-  const qs = queries.map(row);
+  const short = (u) => String(u).replace(/^https?:\/\/(www\.)?ambs\.co\.nz/, "") || "/";
+  /* each keyword (and page) with where it was in the period before: was = {pos, clicks, shown} or null (new) */
+  const withWas = (rows, prevRows, key) => { const pm = new Map(prevRows.map((r) => [key(r.k[0]), r])); return rows.map((r) => { const o = row(r), w = pm.get(key(r.k[0])); o.name = key(o.name); o.was = w ? { pos: w.pos, clicks: w.clicks, shown: w.shown } : null; return o; }); };
+  const qs = withWas(queries, queriesPrev, (x) => x);
+  const curQ = new Set(queries.map((r) => r.k[0]));
+  const lost = queriesPrev.filter((r) => !curQ.has(r.k[0])).map((r) => ({ name: r.k[0], clicks: 0, shown: 0, ctr: 0, pos: 0, was: { pos: r.pos, clicks: r.clicks, shown: r.shown } })).sort((a, b) => b.was.shown - a.was.shown).slice(0, 100);
+  const spread = { top3: 0, p1: 0, p2: 0, more: 0 }; qs.forEach((r) => { spread[r.pos <= 3 ? "top3" : r.pos <= 10 ? "p1" : r.pos <= 20 ? "p2" : "more"]++; });
   return {
     site, days: n, from: cur.startDate, to: cur.endDate,
     totals: hourly ? hourly.cur : sum(tot), before: hourly ? hourly.prev : sum(totPrev), hourly: !!hourly,
-    daily: hourly ? hourly.rows : daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })),
-    queries: qs.slice(0, 50),
+    daily: hourly ? hourly.rows : daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })),
+    queries: qs.slice(0, 500), queryCount: qs.length, lost, spread,
+    types: TYPES.map((x, i) => types[i] ? { id: x[0], name: x[1], clicks: types[i].clicks, shown: types[i].shown, ctr: types[i].ctr, pos: types[i].pos } : null).filter((x) => x && (x.shown || x.id === "web")),
+    appearance: appear.map(row),
     nearly: qs.filter((r) => r.pos > 7 && r.pos <= 20 && r.shown >= 2).sort((a, b) => b.shown - a.shown).slice(0, 8),
     lowclick: qs.filter((r) => r.shown >= 15 && r.ctr < 0.02 && r.pos <= 10).sort((a, b) => b.shown - a.shown).slice(0, 8),
-    pages: pages.map(row).map((r) => Object.assign(r, { name: r.name.replace(/^https?:\/\/(www\.)?ambs\.co\.nz/, "") || "/" })),
+    pages: withWas(pages, pagesPrev, short),
     countries: countries.map(row), devices: devices.map(row),
     sitemaps: (maps.sitemap || []).map((m) => ({ path: m.path, last: m.lastDownloaded, errors: +m.errors || 0, warnings: +m.warnings || 0, pending: !!m.isPending })),
     basics,
@@ -357,7 +404,7 @@ export async function statsEvents(days) {
     return { days: 1, now, before };
   }
   const n = Math.max(2, Math.min(400, Math.round(+days) || 7));
-  const rows = await runReport(c.id, t, { dateRanges: [{ startDate: (n - 1) + "daysAgo", endDate: "today" }, { startDate: (2 * n - 1) + "daysAgo", endDate: n + "daysAgo" }], dimensions: [{ name: "eventName" }], metrics: [{ name: "eventCount" }], dimensionFilter: filter, limit: 100 });
+  const rows = await runReport(c.id, t, { dateRanges: [{ startDate: n + "daysAgo", endDate: "yesterday" }, { startDate: 2 * n + "daysAgo", endDate: (n + 1) + "daysAgo" }], dimensions: [{ name: "eventName" }], metrics: [{ name: "eventCount" }], dimensionFilter: filter, limit: 100 });
   rows.forEach((r) => add(r.k[1] === "date_range_1" ? before : now, r.k[0], r.v[0]));
   return { days: n, now, before };
 }

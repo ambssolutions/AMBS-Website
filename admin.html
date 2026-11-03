@@ -124,7 +124,7 @@ nav.tabs button:hover{color:var(--ink)}
 @media (max-width:1180px){.vs-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 .vs-range{margin:0!important}.vs-range .btn{padding:.4rem .85rem;font-size:.9rem}
 .vs-grid{gap:16px!important}.vs-list{margin-bottom:0}.vs-bars{height:110px!important}
-.vs-chart{position:relative;padding-top:6px}.vs-cols{display:flex;align-items:flex-end;gap:3px;height:140px}
+.vs-chart{position:relative;padding-top:10px;padding-left:30px}.vs-y{position:absolute;left:0;top:10px;bottom:0;width:28px;pointer-events:none}.vs-y span{position:absolute;left:0;transform:translateY(50%);font-size:.68rem;line-height:1;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}.vs-cols.busy{gap:2px}.vs-cols.dense{gap:1px}.vs-cols.dense .vs-col i,.vs-cols.dense .vs-col i.now{left:0;right:0;border-radius:2px 2px 0 0}.vs-cols.busy .vs-col i.now{left:8%;right:8%}.vs-axis{padding-left:30px}.vs-axis+.help,.vs-chart+.help,.vs-foot{margin-top:12px!important}.vs-axis span:nth-child(2):not(:last-child){text-align:center}.vs-cols{display:flex;align-items:flex-end;gap:3px;height:140px}
 .vs-col{flex:1;min-width:0;height:100%;position:relative;background:none;border:0;padding:0;cursor:pointer;border-radius:4px}
 .vs-col i{position:absolute;bottom:0;border-radius:4px 4px 0 0}.vs-col i.was{left:0;right:0;background:var(--line)}.vs-col i.now{left:18%;right:18%;background:var(--green)}.vs-col i.now.z{background:var(--line)}
 .vs-cols .vs-col:only-child i.now,.vs-cols:not(:has(.was)) .vs-col i.now{left:0;right:0}
@@ -138,7 +138,7 @@ button.vs-stat{font:inherit;text-align:left;cursor:pointer;color:var(--ink)}butt
 button.vs-pick{cursor:pointer}button.vs-pick:hover{outline:1.5px solid var(--green)}button.vs-pick.on{outline:2px solid var(--green)}
 .vs-rows li{padding:0!important}.vs-pick i{position:absolute;left:0;top:0;bottom:0;background:var(--ok-bg);z-index:0;border-radius:10px}.vs-pick .vs-l,.vs-pick b{position:relative;z-index:1}.vs-pick .vs-l{flex:1;min-width:0}
 .vs-chip{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--ok-bg);border:1.5px solid var(--green);border-radius:14px;padding:8px 14px;margin:0 0 14px;font-size:.92rem}.vs-chip .btn.link{margin-left:auto}
-@media (max-width:640px){.vs-cols{height:110px;gap:2px}.vs-key{display:none}}
+@media (max-width:640px){.vs-cols{height:150px;gap:2px}.vs-ph{align-items:center}.vs-ph h3{margin-bottom:4px!important}.vs-key{font-size:.75rem;gap:4px;margin-bottom:8px}.vs-key .k-was{margin-left:4px}}
 /* modern, clean dashboard finish (Home and Visitors) */
 .dash .panel,.dash .kpi,.dash .vs-stat,.dash .tile{border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgba(20,23,43,.04),0 12px 28px -22px rgba(20,23,43,.35)}
 .dash .panel{padding:20px 22px}
@@ -161,6 +161,7 @@ button.vs-pick{cursor:pointer}button.vs-pick:hover{outline:1.5px solid var(--gre
 .vs-sq{display:flex;flex-direction:column;gap:4px}.vs-sq-h,.vs-sq-r{display:grid;grid-template-columns:minmax(0,1fr) 70px 60px 60px;gap:10px;align-items:center}
 .vs-sq-h{font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--muted);padding:0 12px 4px}.vs-sq-h span:not(:first-child),.vs-sq-r span:not(.q){text-align:right;font-variant-numeric:tabular-nums}
 .vs-sq-r{padding:8px 12px;border-radius:10px}.vs-sq-r .q{position:relative;min-width:0}.vs-sq-r .q i{position:absolute;left:-12px;top:-8px;bottom:-8px;background:var(--ok-bg);border-radius:10px;z-index:0}.vs-sq-r .q em{position:relative;z-index:1;font-style:normal;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vs-sq-r.tap{cursor:pointer}.vs-sq-r.tap:hover,.vs-sq-r.tap:focus-visible{background:var(--emb-bg,rgba(20,23,43,.04));outline:none}.vs-sq-r .pos small.mv{display:block;font-size:.72rem;font-weight:700;line-height:1.1}.mv.up{color:var(--green)}.mv.down{color:#c2410c}.mv.new{color:#6a28a8}.vs-sq-r s{color:var(--muted)}.kw-spread{display:flex;height:14px;border-radius:99px;overflow:hidden;margin:4px 0 8px;background:var(--line)}.kw-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.85rem;color:var(--muted);margin-bottom:10px}.kw-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}.kw-legend b{color:var(--ink)}.kw-top3{background:#139918}.kw-p1{background:#7bd47e}.kw-p2{background:#f0b44c}.kw-more{background:#b9c0d4}.kw-f{margin-bottom:10px;flex-wrap:wrap!important;overflow:visible!important}.seo-k .vs-stat.on{border-color:var(--green)!important;box-shadow:inset 0 0 0 1.5px var(--green)!important}.seo-k .vs-stat[data-met]{cursor:pointer;font:inherit;color:inherit;text-align:left}.seo-dlg{width:min(860px,calc(100vw - 16px))}@media(min-width:700px){.dash .vs-stats.seo-k{grid-template-columns:repeat(4,minmax(0,1fr))!important}}.seo-say{font-size:1.02rem;line-height:1.5;margin:4px 0 14px;padding:14px 16px;border-radius:14px;background:var(--emb-bg);border:1px solid var(--emb-line);box-shadow:var(--emb-sh)}.seo-more-h{margin:22px 4px 8px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.seo-fold{padding:0!important;margin-bottom:8px!important}.seo-fold>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer}.seo-fold>summary::-webkit-details-marker{display:none}.seo-fold>summary b{flex:0 0 auto}.seo-fold>summary span{flex:1;min-width:0;text-align:right;color:var(--muted);font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.seo-fold>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translateY(-2px);transition:transform .2s;flex:0 0 auto}.seo-fold[open]>summary::after{transform:rotate(-135deg) translateY(-2px)}.seo-fold-b{padding:0 16px 14px}.seo-tip+.seo-tip{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.seo-tip h4{margin:0 0 4px;font-size:.95rem}.seo-dlg .panel{margin-top:12px}
 .vs-sq-r .pos{font-weight:750}.vs-sq-r .pos.top{color:var(--green)}.vs-sq-r .pos.p1{color:var(--ink)}.vs-sq-r .pos:not(.top):not(.p1){color:var(--muted)}
 .vs-search{margin-bottom:16px}
 @media (max-width:640px){.vs-sq-h,.vs-sq-r{grid-template-columns:minmax(0,1fr) 48px 42px 40px;gap:6px}.vs-sq-r{padding:8px 10px;font-size:.9rem}}
@@ -529,7 +530,9 @@ header.top .who{margin-left:4px}
 .pl-state{font-size:.78rem;font-weight:700;padding:3px 9px;border-radius:99px}.pl-state.on{background:#e6f6e7;color:#17761a}.pl-state.draft{background:#eef1f5;color:#4a5265}.pl-state.sch{background:#fff2dc;color:#8a5200}
 .pl-btns{display:flex;gap:8px}.pl-btns .btn{white-space:nowrap}.pl-empty{display:block!important;color:var(--muted)}
 @media(max-width:760px){.pl-list li{grid-template-columns:minmax(0,1fr) auto;padding:12px}.pl-btns{grid-column:1/3;display:grid;grid-template-columns:1fr 1fr 48px;gap:8px}.pl-btns .btn{padding:.6rem .5rem;font-size:.95rem;min-width:0}.pl-btns .lg{display:none}.pl-btns .pl-fm:only-of-type{grid-column:1/3}.pl-head h2{font-size:1.4rem}.pl-acts .btn{font-size:.92rem;padding:.65rem .8rem}.pl-tools .t{max-width:none}.pl-chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.pl-chips button{flex:0 0 auto}.pl-acts{width:100%}.pl-acts .btn{flex:1}}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .pl-chips button[aria-pressed=true]{background:#e8ebf5;color:#14172b;border-color:#e8ebf5}}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .pl-chips button[aria-pressed=true]{background:#e8ebf5;color:#14172b;border-color:#e8ebf5}:root:not([data-theme=light]) .pl-chips button[aria-pressed=true] span{color:#4b5367}
+  :root:not([data-theme=light]) .ds-seg button[aria-pressed=true]{color:#7ee081}:root:not([data-theme=light]) .ts-go{color:#8ab4f8}:root:not([data-theme=light]) .toast.err{background:#ff9d94;color:#3c1714}:root:not([data-theme=light]) .mv.new{color:#c9a8ff}:root:not([data-theme=light]) .mv.down{color:#ffa577}}
+.rd-row .x{flex:0 0 auto;border:0;background:var(--red-bg);color:var(--red);border-radius:10px;width:34px;height:34px;cursor:pointer;font-weight:700}
 .pl-more{padding-inline:.8rem!important;font-weight:800;letter-spacing:.05em}
 .pl-menu{position:absolute;z-index:90;min-width:240px;background:var(--card,#fff);border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 40px rgba(14,18,40,.18);padding:6px;display:flex;flex-direction:column}
 .pl-menu button{all:unset;cursor:pointer;padding:.7rem .85rem;border-radius:10px;font-size:.95rem;white-space:pre}.pl-menu button:hover,.pl-menu button:focus-visible{background:rgba(24,119,224,.08)}.pl-menu .danger{color:#c62828}
@@ -567,7 +570,8 @@ header.top .who{margin-left:4px}
 .hl-checks span{font-size:.9rem;color:var(--muted)}.hl-checks .bad span{color:#b42318;font-weight:700}
 .hl-pages li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}.hl-pages li div{min-width:0;display:flex;flex-direction:column}.hl-pages b,.hl-pages .hl-url{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hl-res{font-size:.8rem;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}.hl-res.ok{background:#e6f6e7;color:#17761a}.hl-res.bad{background:#fde8e8;color:#b42318}.hl-res.warn{background:#fff2dc;color:#9a5b00}.hl-res.low{background:#eef1f5;color:#4a5265}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .hl-tabs button[aria-selected=true]{background:#e8ebf5;color:#14172b;border-color:#e8ebf5}}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .hl-tabs button[aria-selected=true]{background:#e8ebf5;color:#14172b;border-color:#e8ebf5}:root:not([data-theme=light]) .hl-tabs button[aria-selected=true] span{color:#4b5367}}
+:root[data-theme=dark] .hl-tabs button[aria-selected=true]{background:#e8ebf5;color:#14172b;border-color:#e8ebf5}:root[data-theme=dark] .hl-tabs button[aria-selected=true] span{color:#4b5367}
 .ds-seg{margin:12px 0}.ds-seg b{display:block;font-size:.9rem;margin-bottom:6px}.ds-seg div{display:flex;border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;background:var(--bg,#f4f6fb)}
 .ds-seg button{flex:1;border:0;background:none;padding:.55rem .4rem;border-radius:9px;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;color:inherit}.ds-seg button[aria-pressed=true]{background:var(--card,#fff);box-shadow:0 1px 4px rgba(0,0,0,.12);color:#17761a}
 .rte .art-btns,.bd-prev .art-btns{margin:1em 0}.art-btns--center{text-align:center}.art-btns--right{text-align:right}
@@ -692,6 +696,18 @@ header.top .who .nt-bar{justify-content:space-between}
 .dash .kpis:not(#hmKpi0)>.kpi>span:not(.kpi-when),.dash .vs-stats>.vs-stat>span:not(.vs-ch){align-self:end;line-height:1.3}
 .dash .kpis:not(#hmKpi0)>.kpi>b,.dash .vs-stats>.vs-stat>b{align-self:start}}
 
+/* the phone "Go to" button and its sheet */
+#goBtn{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:.55rem .8rem;border-radius:12px;border:1px solid var(--emb-line);background:var(--emb-bg);box-shadow:var(--emb-sh);font:inherit;color:var(--ink);cursor:pointer;text-align:left}
+#goBtn{width:100%}#goIco svg{stroke:var(--green)!important}.tabpick{display:flex;align-items:center;gap:10px}
+#goBtn b{flex:1;min-width:0;font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#goBtn>svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--muted);flex:0 0 auto}
+.go-i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--ok-bg);color:var(--green);flex:0 0 auto}.go-i svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+dialog.go-sheet{width:min(560px,100vw);max-width:100vw;max-height:88vh;margin:auto auto 0;border-radius:22px 22px 0 0!important;padding:0}
+dialog.go-sheet .hd{padding:14px 18px}dialog.go-sheet .hd h2{flex:1;margin:0;font-size:1.15rem}dialog.go-sheet .bd{padding:6px 12px 22px;max-height:calc(88vh - 70px)}
+.go-g h4{margin:14px 8px 6px;font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.go-it{width:100%;display:flex;align-items:center;gap:12px;padding:10px;border:1px solid transparent;border-radius:14px;background:none;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:56px}
+.go-it:hover{background:var(--emb-bg)}.go-it.on{background:var(--emb-bg);border-color:var(--emb-line);box-shadow:var(--emb-sh)}
+.go-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.go-t b{font-weight:750}.go-t small{color:var(--muted);font-size:.82rem;line-height:1.3}.go-ok{color:var(--green);font-weight:800;font-size:1.1rem}
+@media(min-width:561px){dialog.go-sheet{margin:auto;border-radius:22px!important}}
 /* the phone "Go to" picker: one clean embossed edge, no green outline and glow after picking */
 .tabpick select{border:1px solid var(--emb-line)!important;background:var(--emb-bg)!important;box-shadow:var(--emb-sh)!important;color:var(--ink);padding:.65rem .9rem}
 .tabpick select:focus:not(:focus-visible){border-color:var(--emb-line)!important;box-shadow:var(--emb-sh)!important}
@@ -924,7 +940,7 @@ html body .btn.soft{background:linear-gradient(180deg,#dcf2c6,#97e29a);color:#16
     <button type="button" role="tab" data-tab="editors" aria-selected="false">Editors</button>
     <button type="button" role="tab" data-tab="seo" aria-selected="false">Google search (SEO)</button>
   </nav>
-  <label class="tabpick"><span>Go to</span><select id="tabPick" aria-label="What to edit"></select></label></div>
+  <div class="tabpick"><span>Go to</span><button type="button" id="goBtn" aria-haspopup="dialog"><span class="go-i" id="goIco" aria-hidden="true"></span><b id="goName">Home</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><select id="tabPick" aria-label="What to edit" hidden></select></div></div>
   </header>
   <aside class="side" id="side" aria-label="Editor menu"></aside>
   <section id="tab-home" class="tab"><div class="wrap dash" id="hmMain"></div></section>
@@ -1513,7 +1529,7 @@ window.edPhotoSrc=function(u){return photoSrc(u)};
 
 /* tabs */
 function show(name){
-  if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
+  if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;if(window.goSync)goSync();
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
   if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,stats:statsInit,leads:leadsInit,conns:connsInit,editors:editorsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
@@ -3066,6 +3082,20 @@ var CHOOSE={wording:["Homepage","Click any words on your real homepage and type.
   design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
 function ways(t){return CHOOSE[t]?'<span class="ways"><button type="button" data-way="'+t+'" data-m="visual" title="'+esc(CHOOSE[t][0])+' on the page" aria-label="'+esc(CHOOSE[t][0])+' on the page">✎</button><button type="button" data-way="'+t+'" data-m="forms" title="'+esc(CHOOSE[t][0])+' with the form" aria-label="'+esc(CHOOSE[t][0])+' with the form">☰</button></span>':''}
 function ico(k){if(k==="roi")k="calc";return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
+/* phones: "Go to" opens the editor's own menu in a sheet, grouped like the laptop menu, with icons, a short line on each
+   part and the part you're on ticked; parts a level can't use are hidden by #roleCss like everywhere else ([data-go]) */
+function goSync(){var k=current||"home",it=null;EDMENU.forEach(function(g){g[1].forEach(function(t){if(t[0]===k)it=t})});
+  var n=$("goName"),i=$("goIco");if(n)n.textContent=it?it[1]:(document.querySelector('.tabs [data-tab="'+k+'"]')||{}).textContent||"Home";if(i)i.innerHTML=ico(ICO[k]?k:"home")}
+window.goSync=goSync;
+function goSheet(){var h='<dialog class="go-sheet" aria-label="Go to"><div class="hd"><h2>Go to</h2><button type="button" class="btn" data-x>Close</button></div><div class="bd">';
+  EDMENU.forEach(function(g){h+='<div class="go-g">'+(g[0]?'<h4>'+g[0]+'</h4>':'')+g[1].map(function(t){var on=t[0]===current;return'<button type="button" class="go-it'+(on?' on':'')+'" '+(t[0]==="roi"?'data-roi="1"':'data-go="'+t[0]+'"')+(on?' aria-current="page"':'')+'><span class="go-i">'+ico(t[0])+'</span><span class="go-t"><b>'+t[1]+'</b><small>'+t[2]+'</small></span>'+(on?'<span class="go-ok" aria-hidden="true">✓</span>':'')+'</button>'}).join("")+'</div>'});
+  var dlg=document.createElement("template");dlg.innerHTML=h+'</div></dialog>';dlg=dlg.content.firstElementChild;document.body.appendChild(dlg);
+  var close=function(){try{dlg.close()}catch(e){}dlg.remove()};
+  dlg.addEventListener("click",function(e){if(e.target===dlg||e.target.closest("[data-x]")||e.target.closest("[data-go],[data-roi]"))setTimeout(close,0)});
+  dlg.addEventListener("cancel",function(e){e.preventDefault();close()});
+  dlg.showModal();dlg.querySelectorAll(".go-g").forEach(function(g){var any=[].some.call(g.querySelectorAll(".go-it"),function(b){return getComputedStyle(b).display!=="none"});if(!any)g.style.display="none"});
+  var on=dlg.querySelector(".go-it.on");if(on)on.scrollIntoView({block:"center"});(on||dlg.querySelector(".go-it")).focus({preventScroll:true})}
+(function(){var b=$("goBtn");if(b)b.addEventListener("click",goSheet);goSync()})();
 /* the menu's groups open and close (tap the group name); closed ones are remembered in this browser, and the group of the part you open always opens */
 function sideShut(){try{return JSON.parse(localStorage.getItem("ambs-side-shut")||"{}")||{}}catch(e){return{}}}
 function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side")){var on=b.dataset.go===current;b.setAttribute("aria-current",String(on));var g=on&&b.closest(".side-g.shut");if(g){g.classList.remove("shut");g.querySelector(".side-h").setAttribute("aria-expanded","true")}}})}
@@ -3373,6 +3403,16 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
    source "website", the chat log); clicks come from the Google Analytics events the pages send. api/settings "stats". */
 var stRange=7,stCache={};
 var ST_RANGES=[[1,"24 hours"],[7,"7 days"],[30,"30 days"],[90,"3 months"],[180,"6 months"],[365,"12 months"]];
+/* charts: a round top value for the scale (1, 2, 2.5, 5 × 10ⁿ), the scale on the left (top and half way, matching the
+   gridlines at every quarter) and the dates under it (first, middle, last) */
+function niceMax(v){if(!(v>0))return 1;var p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p,st=[1,1.2,1.5,2,2.5,3,4,5,6,8,10];for(var i=0;i<st.length;i++)if(f<=st[i]+1e-9)return Math.round(st[i]*p*1e6)/1e6;return 10*p}
+function yAxis(max,fmt){fmt=fmt||function(v){return v>=1000?(Math.round(v/100)/10)+"k":String(Math.round(v*10)/10)};return'<div class="vs-y" aria-hidden="true"><span style="bottom:100%">'+fmt(max)+'</span><span style="bottom:50%">'+fmt(max/2)+'</span></div>'}
+function xAxis(labels){if(!labels.length)return"";var n=labels.length;return'<div class="vs-axis"><span>'+esc(labels[0])+'</span>'+(n>4?'<span>'+esc(labels[Math.floor((n-1)/2)])+'</span>':'')+'<span>'+esc(labels[n-1])+'</span></div>'}
+function colsCls(n){return'vs-cols'+(n>40?' dense':n>20?' busy':'')}
+/* the exact days a Google figure covers, so it can be compared with Google's own screen ("27 Oct – 2 Nov 2026") */
+function whenLine(from,to,src,days){if(!from||!to)return"";var f=function(d,y){return new Date(d+"T12:00:00").toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:y?"numeric":undefined})};
+  var sc=src==="Search Console",pre=sc?{7:"7 days",28:"28 days"}[days]:{7:"Last 7 days",28:"Last 28 days",30:"Last 30 days",90:"Last 90 days"}[days];
+  return '<p class="help vs-when">'+f(from)+' – '+f(to,1)+' · '+(pre?'the same days as “'+pre+'” in '+src:'pick these dates in '+src+' to compare')+'</p>'}
 function statsInit(){
   var m=$("stMain");
   function lbl(d){return (ST_RANGES.filter(function(r){return r[0]===d})[0]||[0,d+" days"])[1]}
@@ -3385,17 +3425,18 @@ function statsInit(){
     if(j.days===1){var hm={};(L.by_hour||[]).forEach(function(x){hm[x.h]=x.n});
       for(var i=23;i>=0;i--){var t=new Date(now-i*3600000),k=nzKey(t,true);cols.push({label:t.toLocaleTimeString([],{hour:"numeric"}),n:hm[k]||0})}}
     else{var dm={};(L.by_day||[]).forEach(function(x){dm[x.d]=x.n});var step=j.days>90?7:1,n=Math.ceil(j.days/step);
-      for(var w=n-1;w>=0;w--){var s=0,first=null;for(var k2=0;k2<step;k2++){var t2=new Date(now-(w*step+k2)*86400000),key=nzKey(t2);s+=dm[key]||0;first=t2}
+      for(var w=n-1;w>=0;w--){var s=0,first=null;for(var k2=0;k2<step;k2++){var t2=new Date(now-(1+w*step+k2)*86400000),key=nzKey(t2);s+=dm[key]||0;first=t2}
         cols.push({label:(step>1?"Week of ":"")+first.toLocaleDateString([],{day:"numeric",month:"short"}),n:s})}}
-    var mx=Math.max.apply(null,cols.map(function(c){return c.n}).concat([1]));
-    return '<div class="vs-chart" role="img" aria-label="Leads over time"><div class="vs-cols">'+cols.map(function(c){return'<div class="vs-col st-col" title="'+esc(c.label+": "+c.n)+'"><i class="now'+(c.n?'':' z')+'" style="height:'+(c.n?Math.max(4,Math.round(c.n/mx*100)):0)+'%"></i></div>'}).join("")+'</div></div><div class="vs-axis"><span>'+esc(cols[0]?cols[0].label:"")+'</span><span>'+(j.days===1?"now":"today")+'</span></div>'}
+    var mx=niceMax(Math.max.apply(null,cols.map(function(c){return c.n}).concat([1])));
+    return '<div class="vs-chart" role="img" aria-label="Leads over time">'+yAxis(mx)+'<div class="'+colsCls(cols.length)+'">'+cols.map(function(c){return'<div class="vs-col st-col" title="'+esc(c.label+": "+c.n)+'"><i class="now'+(c.n?'':' z')+'" style="height:'+(c.n?Math.max(4,Math.round(c.n/mx*100)):0)+'%"></i></div>'}).join("")+'</div></div>'+xAxis(cols.map(function(c){return c.label}).slice(0,-1).concat([j.days===1?"now":(cols.length?cols[cols.length-1].label:"")]))}
   function nzKey(t,hour){var p={};new Intl.DateTimeFormat("en-NZ",{timeZone:"Pacific/Auckland",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",hourCycle:"h23"}).formatToParts(t).forEach(function(x){p[x.type]=x.value});return p.year+"-"+p.month+"-"+p.day+(hour?"T"+p.hour:"")}
   function ago(iso){var s=(Date.now()-new Date(iso))/1000;return s<3600?Math.max(1,Math.round(s/60))+" min ago":s<86400?Math.round(s/3600)+" h ago":new Date(iso).toLocaleDateString([],{day:"numeric",month:"short"})}
   function draw(j){
     var L=j.leads&&!j.leads.error?j.leads:null,P=j.leadsBefore&&!j.leadsBefore.error?j.leadsBefore:{},E=j.events||{},N=E.now||{},B=E.before||{};
     var ev=function(k){return E.error||E.setup?"–":(N[k]||0)},evc=function(k){return E.error||E.setup?"":change(N[k]||0,B[k]||0)};
     var portal="https://portal.ambs.co.nz/";
-    var html=head()+'<div class="vs-stats st-stats">'+
+    var nzD=function(iso,back){var d=new Date(new Date(iso).getTime()-(back||0));return d.toLocaleDateString("en-CA",{timeZone:"Pacific/Auckland"})};
+     var html=head()+(j.days!==1&&j.from?whenLine(nzD(j.from),nzD(j.to,1000),"Google Analytics",j.days):"")+'<div class="vs-stats st-stats">'+
       tile(L?L.leads:"–","Leads received",L?change(L.leads,P.leads||0):"","#leads","See every lead")+
       tile(L?L.sends:"–","Forms sent",L?change(L.sends,P.sends||0):"")+
       tile(ev("booking_confirmed"),"Calls booked",evc("booking_confirmed"))+
@@ -3678,8 +3719,8 @@ function visitorsInit(){
       return '<li>'+(f?'<button type="button" class="vs-pick'+(on?' on':'')+'" data-f="'+f+'" data-v="'+esc(r.name)+'" title="Show only '+esc(nice(f,r.name))+'">'+inner+'</button>':'<div class="vs-pick static">'+inner+'</div>')+'</li>'}).join("")+'</ul>':'<p class="help">'+empty+'</p>')+'</div>'}
   function evRows(events){var ev={};events.forEach(function(e){ev[e.name]=e.n});return VS_EVENTS.filter(function(e){return ev[e[0]]}).map(function(e){return{name:e[1],n:ev[e[0]]}})}
   /* bars: [{label, n, was?}] → columns with a tooltip; the period before shows as a grey ghost behind each bar */
-  function chart(cols,aria){var max=Math.max.apply(null,cols.map(function(c){return Math.max(c.n,c.was||0)}).concat([1]));
-    return '<div class="vs-chart" role="img" aria-label="'+esc(aria)+'"><div class="vs-tip" hidden></div><div class="vs-cols">'+cols.map(function(c,i){
+  function chart(cols,aria){var max=niceMax(Math.max.apply(null,cols.map(function(c){return Math.max(c.n,c.was||0)}).concat([1])));
+    return '<div class="vs-chart" role="img" aria-label="'+esc(aria)+'"><div class="vs-tip" hidden></div>'+yAxis(max)+'<div class="'+colsCls(cols.length)+'">'+cols.map(function(c,i){
       return '<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(c.label+": "+c.n+(c.was!=null?", before "+c.was:""))+'">'+(c.was!=null?'<i class="was" style="height:'+(c.was?Math.max(3,Math.round(c.was/max*100)):0)+'%"></i>':'')+'<i class="now'+(c.n?'':' z')+'" style="height:'+Math.max(3,Math.round(c.n/max*100))+'%"></i></button>'}).join("")+'</div></div>'}
   function wireChart(cols,fmt){var ch=m.querySelector(".vs-chart");if(!ch)return;var tip=ch.querySelector(".vs-tip");
     var showTip=function(b){var c=cols[+b.dataset.i];ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")});b.classList.add("on");
@@ -3718,11 +3759,11 @@ function visitorsInit(){
     var fd=function(d){if(j.days===1){var h=+d.slice(11,13);return (h%12||12)+(h<12?"am":"pm")}var x=new Date(d+"T12:00:00");return x.toLocaleDateString([], {weekday:j.days<=7?"short":undefined,day:"numeric",month:"short"})};
     var card=function(k,n,label,ch){return'<button type="button" class="vs-stat'+(k===vsMetric?' on':'')+'"'+(k!=null?' data-k="'+k+'" aria-pressed="'+(k===vsMetric)+'"':' disabled')+'><b>'+n+'</b><span>'+label+'</span>'+ch+'</button>'};
     var mm=MET[vsMetric],cols=j.daily.map(function(d){return{label:fd(d.d),n:d.now[mm[1]],was:d.before[mm[1]]}});
-    m.innerHTML=head()+'<div class="vs-stats">'+
+    m.innerHTML=head()+(j.days!==1?whenLine(j.from,j.to,"Google Analytics",j.days):"")+'<div class="vs-stats">'+
       card(0,T.activeUsers,"Visitors",change(T.activeUsers,B.activeUsers))+card(1,T.newUsers,"New visitors",change(T.newUsers,B.newUsers))+card(2,T.sessions,"Visits",change(T.sessions,B.sessions))+card(3,T.screenPageViews,"Pages viewed",change(T.screenPageViews,B.screenPageViews))+
-      card(null,mins(T.averageSessionDuration),"Average visit",change(T.averageSessionDuration,B.averageSessionDuration))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
+      card(null,mins(T.avgEngage),"Average engagement time",change(T.avgEngage,B.avgEngage))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
       '<div class="panel"><div class="vs-ph"><h3>'+mm[0]+(j.days===1?' each hour':' each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-now"></i>This period <i class="k-was"></i>The '+lbl+' before</span></div>'+
-      (cols.length?chart(cols,mm[0]+(j.days===1?" each hour":" each day"))+'<div class="vs-axis"><span>'+cols[0].label+'</span><span>'+(j.days===1?'now':'today')+'</span></div>':'')+
+      (cols.length?chart(cols,mm[0]+(j.days===1?" each hour":" each day"))+xAxis(cols.map(function(c){return c.label}).slice(0,-1).concat([j.days===1?'now':cols[cols.length-1].label])):'')+
       '<p class="help">Tap a number above to chart it. ▲▼ compare with the '+lbl+' before'+(j.days===1?' (hours are New Zealand time; the last hour is still filling in)':'')+'. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p></div>'+
       (j.days===1?'':'<div class="panel vs-search" id="vsSearch"><div class="vs-ph"><h3>What people searched on Google</h3><span class="vs-key">From Search Console · 2–3 days behind</span></div><p class="empty"><span class="spin"></span> Loading…</p></div>')+
       '<div class="vs-grid">'+list("Top pages (views)",j.pages,"No visits yet.","page")+list("How they found you",j.sources,"No visits yet.","source")+list("Where they are",j.places,"No visits yet.","place")+list("Phone or computer",j.devices,"No visits yet.","device")+list("What they did",evRows(j.events),"No clicks yet.")+'</div>';
@@ -3746,7 +3787,7 @@ function visitorsInit(){
 /* ======================= GOOGLE SEARCH (SEO) ======================= */
 /* Search Console through api/settings "seo" (seoReport in api/_ga.js): totals against the period before, clicks each day,
    chances to improve, every search (sortable, searchable), pages, countries, devices, sitemaps and the site's own basics. */
-var seoRange="28",seoSort="shown",seoCache={};
+var seoRange="28",seoSort="shown",seoCache={},seoMet="cs",seoKw="all";
 var gxList=null,seoView=(function(){try{return localStorage.getItem("ambs-seo-view")==="index"?"index":"search"}catch(e){return"search"}})();
 function gxFill(){var b=$("gxBox");if(!b)return;if(gxList)return gIndex(gxList,b);b.innerHTML='<div class="panel"><p class="empty"><span class="spin"></span> Loading your pages…</p></div>';
   api("pages",{action:"list"}).then(function(l){gxList=gxPages(l);var b2=$("gxBox");if(b2)gIndex(gxList,b2)}).catch(function(e){var b2=$("gxBox");if(b2)b2.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
@@ -3757,10 +3798,50 @@ function seoInit(){
   function sw(){return'<div class="seo-sw" role="tablist" aria-label="Google search"><button type="button" role="tab" data-sv="search" aria-selected="'+(seoView==="search")+'">🔎 Search results</button><button type="button" role="tab" data-sv="index" aria-selected="'+(seoView==="index")+'">📇 Google index</button></div>'}
   function head(){if(seoView==="index")return sw()+'<div class="dash-head"><div><h2>Google index</h2><p class="help">Whether each page of your website is on Google, straight from Search Console. Ask Google to list the ones that aren’t.</p></div></div>';
     return sw()+'<div class="dash-head"><div><h2>Google search</h2><p class="help">From Google Search Console, about 2–3 days behind. What people searched, where you showed up, and what to improve.</p></div><div class="vs-range" role="group" aria-label="Time period">'+[["1","24 hours"],["7","7 days"],["28","28 days"],["90","3 months"]].map(function(r){return'<button type="button" class="btn'+(seoRange===r[0]?' primary':'')+'" data-r="'+r[0]+'" aria-pressed="'+(seoRange===r[0])+'">'+r[1]+'</button>'}).join("")+'</div></div>'}
-  function change(now,was,lowerBetter,isPct){if(!was)return now?'<span class="vs-ch up">new</span>':'';var d=isPct?Math.round((now-was)*1000)/10:lowerBetter?Math.round((now-was)*10)/10:Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';var good=lowerBetter?d<0:d>0;return'<span class="vs-ch '+(good?'up':'down')+'">'+(d>0?'▲ ':'▼ ')+Math.abs(d)+(isPct?' pts':lowerBetter?'':'%')+'</span>'}
-  function tbl(rows,cols,empty){if(!rows.length)return'<p class="help">'+empty+'</p>';var mx=Math.max.apply(null,rows.map(function(r){return r.shown}).concat([1]));
-    return '<div class="vs-sq seo-t"><div class="vs-sq-h"><span>'+cols+'</span><button type="button" data-s="shown"'+(seoSort==="shown"?' class="on"':'')+'>Shown</button><button type="button" data-s="clicks"'+(seoSort==="clicks"?' class="on"':'')+'>Clicks</button><button type="button" data-s="pos"'+(seoSort==="pos"?' class="on"':'')+'>Place</button></div>'+
-      rows.map(function(r){return'<div class="vs-sq-r" title="Click rate '+pct(r.ctr)+'"><span class="q"><i style="width:'+Math.max(3,Math.round(r.shown/mx*100))+'%"></i><em>'+esc(r.name)+'</em></span><span>'+r.shown+'</span><span>'+r.clicks+'</span><span class="pos'+(r.pos<=3?' top':r.pos<=10?' p1':'')+'">'+r.pos+'</span></div>'}).join("")+'</div>'}
+  function change(now,was,lowerBetter,isPct){if(!was)return now?'<span class="vs-ch up">new</span>':'';var d=isPct?Math.round((now-was)*1000)/10:lowerBetter?Math.round((now-was)*10)/10:Math.round((now-was)/was*100);if(!d)return'<span class="vs-ch">same</span>';var good=lowerBetter?d<0:d>0;return'<span class="vs-ch '+(good?'up':'down')+'"'+(lowerBetter?' title="'+(good?'Higher on Google (a smaller place number)':'Lower on Google (a bigger place number)')+'"':'')+'>'+((lowerBetter?good:d>0)?'▲ ':'▼ ')+Math.abs(d)+(isPct?' pts':lowerBetter?'':'%')+'</span>'}
+  /* how far a keyword or page moved since the period before: smaller place is better, so was − now > 0 means it went up */
+  function mv(r){if(r.was===undefined)return"";if(r.was===null)return'<small class="mv new">new</small>';if(!r.shown)return'<small class="mv">was '+r.was.pos+'</small>';var d=Math.round((r.was.pos-r.pos)*10)/10;return d?'<small class="mv '+(d>0?'up':'down')+'">'+(d>0?'▲':'▼')+Math.abs(d)+'</small>':'<small class="mv">same</small>'}
+  function tbl(rows,cols,empty,tap){if(!rows.length)return'<p class="help">'+empty+'</p>';var mx=Math.max.apply(null,rows.map(function(r){return r.shown||(r.was?r.was.shown:0)}).concat([1]));
+    return '<div class="vs-sq seo-t"><div class="vs-sq-h"><span>'+cols+'</span><button type="button" data-s="shown"'+(seoSort==="shown"?' class="on"':'')+'>Seen</button><button type="button" data-s="clicks"'+(seoSort==="clicks"?' class="on"':'')+'>Clicks</button><button type="button" data-s="pos"'+(seoSort==="pos"?' class="on"':'')+'>Rank</button></div>'+
+      rows.map(function(r){var lostR=r.was&&!r.shown;return'<div class="vs-sq-r'+(tap?' tap':'')+'"'+(tap?' role="button" tabindex="0" data-d'+tap+'="'+esc(r.name)+'" aria-label="'+esc(r.name)+': see it in detail"':'')+' title="Click rate '+pct(r.ctr)+'"><span class="q"><i style="width:'+Math.max(3,Math.round((r.shown||(r.was?r.was.shown:0))/mx*100))+'%"></i><em title="'+esc(r.name)+'">'+esc(r.name)+'</em></span><span>'+(lostR?'<s>'+r.was.shown+'</s>':r.shown)+'</span><span>'+(lostR?'<s>'+r.was.clicks+'</s>':r.clicks)+'</span><span class="pos'+(lostR?'':r.pos<=3?' top':r.pos<=10?' p1':'')+'">'+(lostR?'–':r.pos)+mv(r)+'</span></div>'}).join("")+'</div>'}
+  var APPEAR={AMP_BLUE_LINK:"AMP",AMP_TOP_STORIES:"AMP top stories",BREADCRUMB:"Breadcrumbs",EVENT:"Events",FAQ_RICH_RESULT:"FAQ rich results",HOW_TO_RICH_RESULT:"How-to rich results",JOB_LISTING:"Job listings",MERCHANT_LISTINGS:"Merchant listings",ORGANIZATION:"Organisation",PRODUCT_SNIPPETS:"Product snippets",RECIPE_FEATURE:"Recipes",REVIEW_SNIPPET:"Review snippets",SITELINKS:"Sitelinks",TRANSLATED_RESULT:"Translated results",VIDEO:"Videos",WEBLITE:"Web Light",LOCAL_BUSINESS:"Local business"};
+  /* the daily chart: clicks and times shown, the click rate, or the average place (taller = higher on Google) */
+  function seoChart(daily,fd){if(!daily.length)return'<p class="help">No days yet.</p>';
+    var mx=niceMax(Math.max.apply(null,daily.map(function(d){return d.shown}).concat([1]))),mc=niceMax(Math.max.apply(null,daily.map(function(d){return d.ctr||0}).concat([.01]))),mp=Math.max(10,Math.ceil(Math.max.apply(null,daily.map(function(d){return d.pos||0}).concat([10]))/10)*10);
+    var ya=seoMet==="pos"?'<div class="vs-y" aria-hidden="true"><span style="bottom:100%">#1</span><span style="bottom:50%">#'+Math.round(mp/2+.5)+'</span></div>':seoMet==="ctr"?yAxis(mc,function(v){return Math.round(v*1000)/10+"%"}):yAxis(mx);
+    return'<div class="vs-chart"><div class="vs-tip" hidden></div>'+ya+'<div class="'+colsCls(daily.length)+'">'+daily.map(function(d,i){var lab=fd(d.d)+": shown "+d.shown+", clicked "+d.clicks+(d.pos?", place "+d.pos:"")+(d.shown?", click rate "+pct(d.ctr||0):"");
+      var bars=seoMet==="pos"?'<i class="now'+(d.pos?'':' z')+'" style="height:'+(d.pos?Math.max(4,Math.round((mp-d.pos+1)/mp*100)):2)+'%"></i>':seoMet==="ctr"?'<i class="now'+(d.ctr?'':' z')+'" style="height:'+Math.max(2,Math.round((d.ctr||0)/mc*100))+'%"></i>':'<i class="was" style="height:'+(d.shown?Math.max(3,Math.round(d.shown/mx*100)):0)+'%"></i><i class="now'+(d.clicks?'':' z')+'" style="height:'+Math.max(2,Math.round(d.clicks/mx*100))+'%"></i>';
+      return'<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(lab)+'">'+bars+'</button>'}).join("")+'</div></div>'}
+  /* keyword rankings: how many sit in the top 3, on page 1 and 2, with filters for moved up/down, new and lost */
+  var KWF=[["all","All"],["top3","Top 3"],["p1","Page 1"],["p2","Page 2"],["up","Up ▲"],["down","Down ▼"],["new","New"],["lost","Gone"]];
+  function kwRows(j,f){var q=j.queries;return f==="lost"?j.lost||[]:q.filter(function(r){return f==="all"||(f==="top3"?r.pos<=3:f==="p1"?r.pos<=10:f==="p2"?r.pos>10&&r.pos<=20:f==="new"?r.was===null:f==="up"?r.was&&r.was.pos-r.pos>=0.5:f==="down"?r.was&&r.pos-r.was.pos>=0.5:true)})}
+  function kwFill(j){var box=$("seoQ");if(!box)return;var v=($("seoFind")||{}).value||"";v=v.trim().toLowerCase();var rows=kwRows(j,seoKw).filter(function(r){return!v||r.name.toLowerCase().indexOf(v)>=0});
+    box.innerHTML=tbl(seoKw==="lost"?rows:sorted(rows),"Search",v?"No searches match.":"None here right now.","q");box.querySelectorAll(".seo-t [data-s]").forEach(function(b){b.onclick=function(){seoSort=b.dataset.s;kwFill(j)}});wireTap(box)}
+  function rankPanel(j){var sp=j.spread||{top3:0,p1:0,p2:0,more:0},tot=(sp.top3+sp.p1+sp.p2+sp.more)||1,cnt={};KWF.forEach(function(x){cnt[x[0]]=kwRows(j,x[0]).length});
+    var seg=function(k,l,n){return n?'<span class="kw-'+k+'" style="flex:'+n+'" title="'+esc(l+": "+n)+'"></span>':''};
+    var rows=kwRows(j,seoKw);
+    return'<div class="panel"><div class="vs-ph"><h3>What people searched</h3><input class="seo-find" id="seoFind" type="search" placeholder="Find a search…" aria-label="Find a search"></div>'+
+      '<div class="kw-spread" role="img" aria-label="'+esc(sp.top3+" in the top 3, "+sp.p1+" on the rest of page 1, "+sp.p2+" on page 2, "+sp.more+" further down")+'">'+seg("top3","Top 3",sp.top3)+seg("p1","Page 1",sp.p1)+seg("p2","Page 2",sp.p2)+seg("more","Further down",sp.more)+'</div>'+
+      '<div class="kw-legend"><span><i class="kw-top3"></i>Top 3 <b>'+sp.top3+'</b></span><span><i class="kw-p1"></i>Page 1 <b>'+sp.p1+'</b></span><span><i class="kw-p2"></i>Page 2 <b>'+sp.p2+'</b></span><span><i class="kw-more"></i>Lower <b>'+sp.more+'</b></span></div>'+
+      '<div class="pl-chips kw-f" role="group" aria-label="Show">'+KWF.map(function(x){return'<button type="button" data-kw="'+x[0]+'" aria-pressed="'+(seoKw===x[0])+'">'+x[1]+' <span>'+cnt[x[0]]+'</span></button>'}).join("")+'</div>'+
+      '<div id="seoQ">'+tbl(seoKw==="lost"?rows:sorted(rows),"Search","None here right now.","q")+'</div>'+
+      '<p class="help">'+(j.queryCount||j.queries.length)+' searches showed your website'+(j.queryCount>j.queries.length?' (top '+j.queries.length+' listed)':'')+'. Rank 1 is the top of Google; ▲▼ shows how far it moved. Tap a search for more.</p></div>'}
+  function wireTap(root){root.querySelectorAll(".vs-sq-r.tap").forEach(function(r){var go=function(){seoOpen(r.dataset.dq!=null?"q":"p",r.dataset.dq!=null?r.dataset.dq:r.dataset.dp)};r.onclick=go;r.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}})}
+  /* one keyword or page in detail, in a box over the page */
+  function seoOpen(kind,name){var r=+seoRange===1?7:+seoRange;var d=h('<dialog class="seo-dlg" aria-label="'+esc(name)+'"><div class="hd"><div style="min-width:0;flex:1"><small class="help" style="margin:0">'+(kind==="q"?"Search":"Page")+' · last '+(r===90?"3 months":r+" days")+'</small><h2 style="margin:2px 0 0;overflow-wrap:anywhere">'+esc(name)+'</h2></div><button type="button" class="btn" data-x>Close</button></div><div class="bd"><p class="empty"><span class="spin"></span> Loading…</p></div></dialog>');
+    document.body.appendChild(d);d.showModal();var close=function(){d.close();d.remove()};d.querySelector("[data-x]").addEventListener("click",close);d.addEventListener("cancel",function(e){e.preventDefault();close()});d.addEventListener("click",function(e){if(e.target===d)close()});
+    var body={action:"seo-detail",days:r};body[kind==="q"?"query":"page"]=name;
+    api("settings",body).then(function(x){var bd=d.querySelector(".bd");if(x.error){bd.innerHTML='<p class="msg err">'+esc(x.error)+'</p>';return}
+      var T=x.totals,B=x.before,fd=function(v){return new Date(v+"T12:00:00").toLocaleDateString([], {day:"numeric",month:"short"})},keep=seoMet;
+      var k=function(n,l,ch){return'<div class="vs-stat"><b>'+n+'</b><span>'+l+'</span>'+ch+'</div>'};
+      var html=whenLine(x.from,x.to,"Search Console",x.days)+'<div class="vs-stats seo-k">'+k(T.clicks,"Clicks",change(T.clicks,B.clicks))+k(T.shown,"Times shown",change(T.shown,B.shown))+k(pct(T.ctr),"Click rate",change(T.ctr,B.ctr,false,true))+k(T.pos||"–","Average place",change(T.pos,B.pos,true))+'</div>';
+      seoMet="cs";html+='<div class="panel"><div class="vs-ph"><h3>Each day</h3><span class="vs-key"><i class="k-was"></i>Seen <i class="k-now"></i>Clicked</span></div>'+seoChart(x.daily,fd)+(x.daily.length?xAxis(x.daily.map(function(v){return fd(v.d)})):'')+'</div>';
+      seoMet="pos";html+=x.daily.some(function(v){return v.pos})?'<div class="panel"><div class="vs-ph"><h3>Place each day</h3><span class="vs-key">taller is higher on Google</span></div>'+seoChart(x.daily,fd)+xAxis(x.daily.map(function(v){return fd(v.d)}))+'</div>':'';seoMet=keep;
+      html+='<div class="panel"><h3>'+(kind==="q"?"Pages that showed for this search":"Searches that showed this page")+'</h3>'+tbl(x.other,kind==="q"?"Page":"Search","None yet.",kind==="q"?"p":"q")+'</div>';
+      bd.innerHTML=html;
+      bd.querySelectorAll(".vs-chart").forEach(function(ch){var tip=ch.querySelector(".vs-tip");ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var v=x.daily[+b.dataset.i];tip.innerHTML='<b>'+v.clicks+' clicks</b><span>shown '+v.shown+' times'+(v.pos?' · place '+v.pos:'')+'</span><span>'+fd(v.d)+'</span>';tip.hidden=false;var a=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(a.left-R.left+a.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("click",f)});ch.addEventListener("mouseleave",function(){tip.hidden=true})});
+      bd.querySelectorAll(".vs-sq-r.tap").forEach(function(rw){rw.onclick=function(){close();seoOpen(rw.dataset.dq!=null?"q":"p",rw.dataset.dq!=null?rw.dataset.dq:rw.dataset.dp)}});
+    }).catch(function(e){d.querySelector(".bd").innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
   function sorted(rows){var k=seoSort;return rows.slice().sort(function(a,b){return k==="pos"?a.pos-b.pos:b[k]-a[k]})}
   function basics(list){return '<ul class="seo-ck">'+list.map(function(b){return'<li class="'+(b.ok?'ok':'no')+'"><span>'+(b.ok?'✓':'!')+'</span><div><b>'+esc(b.name)+'</b><small>'+esc(b.note)+'</small></div></li>'}).join("")+'</ul>'}
   function draw(j){
@@ -3768,33 +3849,42 @@ function seoInit(){
     if(j.needs){m.innerHTML=head()+'<div class="panel"><h3>Connect Search Console (one time, about 2 minutes)</h3><ol class="vs-steps"><li>Open <b>search.google.com/search-console</b> and pick <b>ambs.co.nz</b>.</li><li><b>Settings → Users and permissions → Add user</b>. Paste <b>'+esc(j.email)+'</b>, choose <b>Restricted</b>, press <b>Add</b>.</li><li>In Google Cloud Shell, run <code>gcloud services enable searchconsole.googleapis.com --project=ambs-website</code>.</li><li>Come back here and press <b>Check again</b>.</li></ol><button type="button" class="btn primary" id="seoRetry">Check again</button></div><div class="panel"><h3>Website basics</h3>'+basics(j.basics||[])+'</div>';
       wire();$("seoRetry").addEventListener("click",function(){seoCache={};load()});return}
     var T=j.totals,B=j.before,lbl=j.days===90?"3 months":j.days===1?"24 hours":j.days+" days";
-    var kpi=function(n,l,ch){return'<div class="vs-stat"><b>'+n+'</b><span>'+l+'</span>'+ch+'</div>'};
+    var kpi=function(n,l,ch,met){var on=met&&(met===seoMet||(seoMet==="cs"&&met==="cs"));return'<button type="button" class="vs-stat'+(on?' on':'')+'" data-met="'+met+'" aria-pressed="'+!!on+'"><b>'+n+'</b><span>'+l+'</span>'+ch+'</button>'};
     var mx=Math.max.apply(null,j.daily.map(function(d){return d.shown}).concat([1]));
     var fd=function(d){if(String(d).indexOf("T")>0){var x=new Date(d);return x.toLocaleTimeString([], {hour:"numeric"})+(x.toDateString()!==new Date().toDateString()?" "+x.toLocaleDateString([], {weekday:"short"}):"")}return new Date(d+"T12:00:00").toLocaleDateString([], {day:"numeric",month:"short"})};
     var good=j.basics.filter(function(b){return b.ok}).length;
-    m.innerHTML=head()+'<div class="vs-stats seo-k">'+kpi(T.clicks,"Clicks from Google",change(T.clicks,B.clicks))+kpi(T.shown,"Times shown in Google",change(T.shown,B.shown))+kpi(pct(T.ctr),"Click rate",change(T.ctr,B.ctr,false,true))+kpi(T.pos||"–","Average place",change(T.pos,B.pos,true))+'</div>'+
+    var nm=function(v){return v===1?"1 time":v+" times"},rank=T.pos?(T.pos<=3?"in the top 3":T.pos<=10?"on Google’s first page":T.pos<=20?"on Google’s second page":"past Google’s second page"):"";
+    var say=T.shown?'People saw your website on Google <b>'+nm(T.shown)+'</b> and clicked it <b>'+nm(T.clicks)+'</b>'+(rank?'. On average you were at <b>place '+T.pos+'</b>, '+rank:'')+'.':'Google hasn’t shown your website in this period yet.';
+    var fold=function(title,sum,inner,open){return'<details class="panel seo-fold"'+(open?' open':'')+'><summary><b>'+title+'</b><span>'+sum+'</span></summary><div class="seo-fold-b">'+inner+'</div></details>'};
+    var tips=(j.nearly.length?'<div class="seo-tip"><h4>Nearly on page 1</h4><p class="help">You’re just below Google’s first page for these. A few more words about them on the matching page can lift them.</p>'+tbl(j.nearly,"Search","")+'</div>':'')+(j.lowclick.length?'<div class="seo-tip"><h4>Seen a lot, few clicks</h4><p class="help">People see these but don’t click. A clearer page title or description usually helps.</p>'+tbl(j.lowclick,"Search","")+'</div>':'');
+    var top=function(rows,f){return rows.length?esc(f?f(rows[0].name):rows[0].name)+' most':'none yet'};
+    var cName=function(n){return CTRY[n]||String(n).toUpperCase()},dName=function(n){return({MOBILE:"Phone",DESKTOP:"Computer",TABLET:"Tablet"})[n]||n};
+    m.innerHTML=head()+(j.days!==1?whenLine(j.from,j.to,"Search Console",j.days):"")+'<p class="seo-say">'+say+'</p>'+'<div class="vs-stats seo-k">'+kpi(T.shown,"Seen on Google",change(T.shown,B.shown),"cs")+kpi(T.clicks,"Clicks to your website",change(T.clicks,B.clicks),"cs")+kpi(pct(T.ctr),"Click rate",change(T.ctr,B.ctr,false,true),"ctr")+kpi(T.pos||"–","Average ranking",change(T.pos,B.pos,true),"pos")+'</div>'+
       (j.days===1?'<p class="help seo-24">Last 24 hours uses Google’s newest figures, which can still change for a day or two'+(j.hourly?'':' (shown day by day; hour by hour wasn’t available)')+'. Searches, pages and places below cover today and yesterday.</p>':'')+
-      '<div class="panel"><div class="vs-ph"><h3>'+(j.hourly?'Each hour':'Each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-was"></i>Shown <i class="k-now"></i>Clicked</span></div>'+
-      '<div class="vs-chart"><div class="vs-tip" hidden></div><div class="vs-cols">'+j.daily.map(function(d,i){return'<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(fd(d.d)+": shown "+d.shown+", clicked "+d.clicks)+'"><i class="was" style="height:'+(d.shown?Math.max(3,Math.round(d.shown/mx*100)):0)+'%"></i><i class="now'+(d.clicks?'':' z')+'" style="height:'+Math.max(2,Math.round(d.clicks/mx*100))+'%"></i></button>'}).join("")+'</div></div>'+
-      (j.daily.length?'<div class="vs-axis"><span>'+fd(j.daily[0].d)+'</span><span>'+fd(j.daily[j.daily.length-1].d)+'</span></div>':'')+
-      '<p class="help">▲▼ compare with the '+lbl+' before. For “Average place”, smaller is better: 1 is the top of Google, 1–10 is the first page.</p></div>'+
-      '<div class="seo-two"><div class="panel seo-op"><h3>Nearly on Google’s first page</h3><p class="help">Searches where you’re just below the first page. A guide or a few words on the matching page can lift them.</p>'+tbl(j.nearly,"Search","None right now.")+'</div>'+
-      '<div class="panel seo-op"><h3>Shown a lot, few clicks</h3><p class="help">People see you but don’t click. A clearer page title or description usually helps.</p>'+tbl(j.lowclick,"Search","None right now.")+'</div></div>'+
-      '<div class="panel"><div class="vs-ph"><h3>Every search that showed your site</h3><input class="seo-find" id="seoFind" type="search" placeholder="Filter searches…" aria-label="Filter searches"></div><div id="seoQ">'+tbl(sorted(j.queries),"Search","No searches yet.")+'</div><p class="help">Tap Shown, Clicks or Place to sort. Hover or tap a row to see its click rate. Google hides very rare searches.</p></div>'+
-      '<div class="panel"><h3>Your pages in Google</h3>'+tbl(sorted(j.pages),"Page","No pages yet.")+'</div>'+
-      '<div class="vs-grid">'+
-        '<div class="panel vs-list"><h3>Countries</h3>'+tbl(j.countries.map(function(r){return Object.assign({},r,{name:CTRY[r.name]||r.name.toUpperCase()})}),"Country","None yet.")+'</div>'+
-        '<div class="panel vs-list"><h3>Phone or computer</h3>'+tbl(j.devices.map(function(r){return Object.assign({},r,{name:({MOBILE:"Phone",DESKTOP:"Computer",TABLET:"Tablet"})[r.name]||r.name})}),"Device","None yet.")+'</div>'+
-        '<div class="panel vs-list"><h3>Sitemaps</h3>'+(j.sitemaps.length?'<ul class="seo-ck">'+j.sitemaps.map(function(sm){var ok=!sm.errors;return'<li class="'+(ok?'ok':'no')+'"><span>'+(ok?'✓':'!')+'</span><div><b>'+esc(sm.path.replace(/^https?:\/\/[^/]+/,""))+'</b><small>'+(sm.pending?'Waiting for Google · ':'')+(sm.last?'Read by Google '+new Date(sm.last).toLocaleDateString():'Not read yet')+(sm.errors?' · '+sm.errors+' errors':'')+(sm.warnings?' · '+sm.warnings+' warnings':'')+'</small></div></li>'}).join("")+'</ul>':'<p class="help">No sitemap sent to Google yet. In Search Console → Sitemaps, add <b>sitemap.xml</b>.</p>')+'</div>'+
-      '</div>'+
-      '<div class="panel"><div class="vs-ph"><h3>Website basics</h3><span class="vs-key">'+good+' of '+j.basics.length+' good</span></div>'+basics(j.basics)+'</div>';
+      '<div class="panel"><div class="vs-ph"><h3>'+(j.hourly?'Each hour':'Each day')+' · last '+lbl+'</h3>'+(seoMet==="cs"?'<span class="vs-key"><i class="k-was"></i>Seen <i class="k-now"></i>Clicked</span>':'<span class="vs-key">'+(seoMet==="pos"?'Average place · taller is higher on Google':'Click rate')+'</span>')+'</div>'+
+      seoChart(j.daily,fd)+
+      (j.daily.length?xAxis(j.daily.map(function(d){return fd(d.d)})):'')+
+      '<p class="help vs-foot">Tap a number above to chart it. ▲▼ = change from the '+lbl+' before. Ranking: 1 is the top of Google, 1–10 is page 1, and ▲ means you moved up.</p></div>'+
+      rankPanel(j)+
+      (tips?'<div class="panel seo-tips"><h3>💡 Ideas to get more visits</h3>'+tips+'</div>':'')+
+      '<h3 class="seo-more-h">More details</h3>'+
+      fold("Your pages on Google",j.pages.length+" page"+(j.pages.length===1?"":"s")+" · "+top(sorted(j.pages),function(n){return n==="/"?"Homepage":n}),'<p class="help">Tap a page to see its own chart and the searches it showed for.</p>'+tbl(sorted(j.pages),"Page","No pages yet.","p"))+
+      fold("Countries",top(j.countries,cName),tbl(j.countries.map(function(r){return Object.assign({},r,{name:cName(r.name)})}),"Country","None yet."))+
+      fold("Phone or computer",top(j.devices,dName),tbl(j.devices.map(function(r){return Object.assign({},r,{name:dName(r.name)})}),"Device","None yet."))+
+      (j.types&&j.types.length>1?fold("Search type",j.types.map(function(t){return t.name}).join(", "),'<p class="help">Where on Google people saw you.</p>'+tbl(j.types,"Type","None yet.")):'')+
+      (j.appearance&&j.appearance.length?fold("Special results",j.appearance.length+" kind"+(j.appearance.length===1?"":"s"),'<p class="help">Extras Google showed with your pages, like review stars or questions.</p>'+tbl(j.appearance.map(function(r){return Object.assign({},r,{name:APPEAR[r.name]||String(r.name).toLowerCase().replace(/_/g," ").replace(/^./,function(c){return c.toUpperCase()})})}),"Kind","None yet.")):'')+
+      fold("Sitemaps",j.sitemaps.length?(j.sitemaps.some(function(sm){return sm.errors})?"needs a look":"✓ read by Google"):"not sent yet",''+(j.sitemaps.length?'<ul class="seo-ck">'+j.sitemaps.map(function(sm){var ok=!sm.errors;return'<li class="'+(ok?'ok':'no')+'"><span>'+(ok?'✓':'!')+'</span><div><b>'+esc(sm.path.replace(/^https?:\/\/[^/]+/,""))+'</b><small>'+(sm.pending?'Waiting for Google · ':'')+(sm.last?'Read by Google '+new Date(sm.last).toLocaleDateString():'Not read yet')+(sm.errors?' · '+sm.errors+' errors':'')+(sm.warnings?' · '+sm.warnings+' warnings':'')+'</small></div></li>'}).join("")+'</ul>':'<p class="help">No sitemap sent to Google yet. In Search Console → Sitemaps, add <b>sitemap.xml</b>.</p>')+'')+
+      fold("Website basics",good+" of "+j.basics.length+" good",basics(j.basics),good<j.basics.length);
     wire();
     var ch=m.querySelector(".vs-chart"),tip=ch&&ch.querySelector(".vs-tip");
-    if(ch)ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var d=j.daily[+b.dataset.i];ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")});b.classList.add("on");tip.innerHTML='<b>'+d.clicks+' clicks</b><span>shown '+d.shown+' times</span><span>'+fd(d.d)+'</span>';tip.hidden=false;var r=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(r.left-R.left+r.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("focus",f);b.addEventListener("click",f)});
+    if(ch)ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var d=j.daily[+b.dataset.i];ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")});b.classList.add("on");tip.innerHTML='<b>'+(seoMet==="pos"?(d.pos?'Place '+d.pos:'Not shown'):seoMet==="ctr"?pct(d.ctr||0)+' click rate':d.clicks+' clicks')+'</b><span>'+(seoMet==="cs"?'shown '+d.shown+' times':d.clicks+' clicks · shown '+d.shown)+'</span><span>'+fd(d.d)+'</span>';tip.hidden=false;var r=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(r.left-R.left+r.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("focus",f);b.addEventListener("click",f)});
     if(ch)ch.addEventListener("mouseleave",function(){tip.hidden=true});
-    var fi=$("seoFind");if(fi)fi.addEventListener("input",function(){var v=fi.value.trim().toLowerCase();$("seoQ").innerHTML=tbl(sorted(j.queries.filter(function(r){return!v||r.name.toLowerCase().indexOf(v)>=0})),"Search","No searches match.");wireSort()});
+    var redraw=function(){var y=window.scrollY,v=$("seoFind")?$("seoFind").value:"";draw(j);if(v&&$("seoFind")){$("seoFind").value=v;kwFill(j)}window.scrollTo(0,y)};
+    m.querySelectorAll(".vs-stat[data-met]").forEach(function(b){b.addEventListener("click",function(){seoMet=b.dataset.met;redraw()})});
+    m.querySelectorAll("[data-kw]").forEach(function(b){b.addEventListener("click",function(){seoKw=b.dataset.kw;redraw()})});
+    var fi=$("seoFind");if(fi)fi.addEventListener("input",function(){kwFill(j)});
     wireSort();
-    function wireSort(){m.querySelectorAll(".seo-t [data-s]").forEach(function(b){b.onclick=function(){seoSort=b.dataset.s;var y=window.scrollY;draw(j);window.scrollTo(0,y)}})}
+    function wireSort(){m.querySelectorAll(".seo-t [data-s]").forEach(function(b){b.onclick=function(){seoSort=b.dataset.s;redraw()}});wireTap(m)}
   }
   function wire(){m.querySelectorAll(".seo-sw [data-sv]").forEach(function(b){b.addEventListener("click",function(){if(seoView===b.dataset.sv)return;seoView=b.dataset.sv;try{localStorage.setItem("ambs-seo-view",seoView)}catch(e){}load()})});
     m.querySelectorAll(".vs-range [data-r]").forEach(function(b){b.addEventListener("click",function(){if(seoRange===b.dataset.r)return;seoRange=b.dataset.r;load()})})}
