@@ -124,7 +124,7 @@ nav.tabs button:hover{color:var(--ink)}
 @media (max-width:1180px){.vs-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 .vs-range{margin:0!important}.vs-range .btn{padding:.4rem .85rem;font-size:.9rem}
 .vs-grid{gap:16px!important}.vs-list{margin-bottom:0}.vs-bars{height:110px!important}
-.vs-chart{position:relative;padding-top:6px}.vs-cols{display:flex;align-items:flex-end;gap:3px;height:140px}
+.vs-chart{position:relative;padding-top:10px;padding-left:30px}.vs-y{position:absolute;left:0;top:10px;bottom:0;width:28px;pointer-events:none}.vs-y span{position:absolute;left:0;transform:translateY(50%);font-size:.68rem;line-height:1;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}.vs-cols.busy{gap:2px}.vs-cols.dense{gap:1px}.vs-cols.dense .vs-col i,.vs-cols.dense .vs-col i.now{left:0;right:0;border-radius:2px 2px 0 0}.vs-cols.busy .vs-col i.now{left:8%;right:8%}.vs-axis{padding-left:30px}.vs-axis+.help,.vs-chart+.help,.vs-foot{margin-top:12px!important}.vs-axis span:nth-child(2):not(:last-child){text-align:center}.vs-cols{display:flex;align-items:flex-end;gap:3px;height:140px}
 .vs-col{flex:1;min-width:0;height:100%;position:relative;background:none;border:0;padding:0;cursor:pointer;border-radius:4px}
 .vs-col i{position:absolute;bottom:0;border-radius:4px 4px 0 0}.vs-col i.was{left:0;right:0;background:var(--line)}.vs-col i.now{left:18%;right:18%;background:var(--green)}.vs-col i.now.z{background:var(--line)}
 .vs-cols .vs-col:only-child i.now,.vs-cols:not(:has(.was)) .vs-col i.now{left:0;right:0}
@@ -138,7 +138,7 @@ button.vs-stat{font:inherit;text-align:left;cursor:pointer;color:var(--ink)}butt
 button.vs-pick{cursor:pointer}button.vs-pick:hover{outline:1.5px solid var(--green)}button.vs-pick.on{outline:2px solid var(--green)}
 .vs-rows li{padding:0!important}.vs-pick i{position:absolute;left:0;top:0;bottom:0;background:var(--ok-bg);z-index:0;border-radius:10px}.vs-pick .vs-l,.vs-pick b{position:relative;z-index:1}.vs-pick .vs-l{flex:1;min-width:0}
 .vs-chip{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--ok-bg);border:1.5px solid var(--green);border-radius:14px;padding:8px 14px;margin:0 0 14px;font-size:.92rem}.vs-chip .btn.link{margin-left:auto}
-@media (max-width:640px){.vs-cols{height:110px;gap:2px}.vs-key{display:none}}
+@media (max-width:640px){.vs-cols{height:150px;gap:2px}.vs-ph{align-items:center}.vs-ph h3{margin-bottom:4px!important}.vs-key{font-size:.75rem;gap:4px;margin-bottom:8px}.vs-key .k-was{margin-left:4px}}
 /* modern, clean dashboard finish (Home and Visitors) */
 .dash .panel,.dash .kpi,.dash .vs-stat,.dash .tile{border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgba(20,23,43,.04),0 12px 28px -22px rgba(20,23,43,.35)}
 .dash .panel{padding:20px 22px}
@@ -696,6 +696,18 @@ header.top .who .nt-bar{justify-content:space-between}
 .dash .kpis:not(#hmKpi0)>.kpi>span:not(.kpi-when),.dash .vs-stats>.vs-stat>span:not(.vs-ch){align-self:end;line-height:1.3}
 .dash .kpis:not(#hmKpi0)>.kpi>b,.dash .vs-stats>.vs-stat>b{align-self:start}}
 
+/* the phone "Go to" button and its sheet */
+#goBtn{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:.55rem .8rem;border-radius:12px;border:1px solid var(--emb-line);background:var(--emb-bg);box-shadow:var(--emb-sh);font:inherit;color:var(--ink);cursor:pointer;text-align:left}
+#goBtn{width:100%}#goIco svg{stroke:var(--green)!important}.tabpick{display:flex;align-items:center;gap:10px}
+#goBtn b{flex:1;min-width:0;font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#goBtn>svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--muted);flex:0 0 auto}
+.go-i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--ok-bg);color:var(--green);flex:0 0 auto}.go-i svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+dialog.go-sheet{width:min(560px,100vw);max-width:100vw;max-height:88vh;margin:auto auto 0;border-radius:22px 22px 0 0!important;padding:0}
+dialog.go-sheet .hd{padding:14px 18px}dialog.go-sheet .hd h2{flex:1;margin:0;font-size:1.15rem}dialog.go-sheet .bd{padding:6px 12px 22px;max-height:calc(88vh - 70px)}
+.go-g h4{margin:14px 8px 6px;font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.go-it{width:100%;display:flex;align-items:center;gap:12px;padding:10px;border:1px solid transparent;border-radius:14px;background:none;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:56px}
+.go-it:hover{background:var(--emb-bg)}.go-it.on{background:var(--emb-bg);border-color:var(--emb-line);box-shadow:var(--emb-sh)}
+.go-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.go-t b{font-weight:750}.go-t small{color:var(--muted);font-size:.82rem;line-height:1.3}.go-ok{color:var(--green);font-weight:800;font-size:1.1rem}
+@media(min-width:561px){dialog.go-sheet{margin:auto;border-radius:22px!important}}
 /* the phone "Go to" picker: one clean embossed edge, no green outline and glow after picking */
 .tabpick select{border:1px solid var(--emb-line)!important;background:var(--emb-bg)!important;box-shadow:var(--emb-sh)!important;color:var(--ink);padding:.65rem .9rem}
 .tabpick select:focus:not(:focus-visible){border-color:var(--emb-line)!important;box-shadow:var(--emb-sh)!important}
@@ -928,7 +940,7 @@ html body .btn.soft{background:linear-gradient(180deg,#dcf2c6,#97e29a);color:#16
     <button type="button" role="tab" data-tab="editors" aria-selected="false">Editors</button>
     <button type="button" role="tab" data-tab="seo" aria-selected="false">Google search (SEO)</button>
   </nav>
-  <label class="tabpick"><span>Go to</span><select id="tabPick" aria-label="What to edit"></select></label></div>
+  <div class="tabpick"><span>Go to</span><button type="button" id="goBtn" aria-haspopup="dialog"><span class="go-i" id="goIco" aria-hidden="true"></span><b id="goName">Home</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><select id="tabPick" aria-label="What to edit" hidden></select></div></div>
   </header>
   <aside class="side" id="side" aria-label="Editor menu"></aside>
   <section id="tab-home" class="tab"><div class="wrap dash" id="hmMain"></div></section>
@@ -1517,7 +1529,7 @@ window.edPhotoSrc=function(u){return photoSrc(u)};
 
 /* tabs */
 function show(name){
-  if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;
+  if(name===current)return;if(!leaveOk()){$("tabPick").value=current;return}current=name;$("tabPick").value=name;if(window.goSync)goSync();
   document.querySelectorAll(".tabs [data-tab]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.tab===name))});
   document.querySelectorAll("section.tab").forEach(function(s){s.classList.toggle("hidden",s.id!=="tab-"+name)});
   if(!loaded[name]){loaded[name]=true;({pages:pagesInit,photos:photosInit,business:businessInit,chat:chatInit,calc:calcInit,sections:sectionsInit,menus:menusInit,history:historyInit,visitors:visitorsInit,stats:statsInit,leads:leadsInit,conns:connsInit,editors:editorsInit,home:homeInit,seo:seoInit,design:designInit,redirects:redirectsInit,health:healthInit})[name]()}
@@ -3070,6 +3082,20 @@ var CHOOSE={wording:["Homepage","Click any words on your real homepage and type.
   design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
 function ways(t){return CHOOSE[t]?'<span class="ways"><button type="button" data-way="'+t+'" data-m="visual" title="'+esc(CHOOSE[t][0])+' on the page" aria-label="'+esc(CHOOSE[t][0])+' on the page">✎</button><button type="button" data-way="'+t+'" data-m="forms" title="'+esc(CHOOSE[t][0])+' with the form" aria-label="'+esc(CHOOSE[t][0])+' with the form">☰</button></span>':''}
 function ico(k){if(k==="roi")k="calc";return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
+/* phones: "Go to" opens the editor's own menu in a sheet, grouped like the laptop menu, with icons, a short line on each
+   part and the part you're on ticked; parts a level can't use are hidden by #roleCss like everywhere else ([data-go]) */
+function goSync(){var k=current||"home",it=null;EDMENU.forEach(function(g){g[1].forEach(function(t){if(t[0]===k)it=t})});
+  var n=$("goName"),i=$("goIco");if(n)n.textContent=it?it[1]:(document.querySelector('.tabs [data-tab="'+k+'"]')||{}).textContent||"Home";if(i)i.innerHTML=ico(ICO[k]?k:"home")}
+window.goSync=goSync;
+function goSheet(){var h='<dialog class="go-sheet" aria-label="Go to"><div class="hd"><h2>Go to</h2><button type="button" class="btn" data-x>Close</button></div><div class="bd">';
+  EDMENU.forEach(function(g){h+='<div class="go-g">'+(g[0]?'<h4>'+g[0]+'</h4>':'')+g[1].map(function(t){var on=t[0]===current;return'<button type="button" class="go-it'+(on?' on':'')+'" '+(t[0]==="roi"?'data-roi="1"':'data-go="'+t[0]+'"')+(on?' aria-current="page"':'')+'><span class="go-i">'+ico(t[0])+'</span><span class="go-t"><b>'+t[1]+'</b><small>'+t[2]+'</small></span>'+(on?'<span class="go-ok" aria-hidden="true">✓</span>':'')+'</button>'}).join("")+'</div>'});
+  var dlg=document.createElement("template");dlg.innerHTML=h+'</div></dialog>';dlg=dlg.content.firstElementChild;document.body.appendChild(dlg);
+  var close=function(){try{dlg.close()}catch(e){}dlg.remove()};
+  dlg.addEventListener("click",function(e){if(e.target===dlg||e.target.closest("[data-x]")||e.target.closest("[data-go],[data-roi]"))setTimeout(close,0)});
+  dlg.addEventListener("cancel",function(e){e.preventDefault();close()});
+  dlg.showModal();dlg.querySelectorAll(".go-g").forEach(function(g){var any=[].some.call(g.querySelectorAll(".go-it"),function(b){return getComputedStyle(b).display!=="none"});if(!any)g.style.display="none"});
+  var on=dlg.querySelector(".go-it.on");if(on)on.scrollIntoView({block:"center"});(on||dlg.querySelector(".go-it")).focus({preventScroll:true})}
+(function(){var b=$("goBtn");if(b)b.addEventListener("click",goSheet);goSync()})();
 /* the menu's groups open and close (tap the group name); closed ones are remembered in this browser, and the group of the part you open always opens */
 function sideShut(){try{return JSON.parse(localStorage.getItem("ambs-side-shut")||"{}")||{}}catch(e){return{}}}
 function sideSync(){document.querySelectorAll("[data-go]").forEach(function(b){if(b.closest("#side")){var on=b.dataset.go===current;b.setAttribute("aria-current",String(on));var g=on&&b.closest(".side-g.shut");if(g){g.classList.remove("shut");g.querySelector(".side-h").setAttribute("aria-expanded","true")}}})}
@@ -3377,6 +3403,12 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
    source "website", the chat log); clicks come from the Google Analytics events the pages send. api/settings "stats". */
 var stRange=7,stCache={};
 var ST_RANGES=[[1,"24 hours"],[7,"7 days"],[30,"30 days"],[90,"3 months"],[180,"6 months"],[365,"12 months"]];
+/* charts: a round top value for the scale (1, 2, 2.5, 5 × 10ⁿ), the scale on the left (top and half way, matching the
+   gridlines at every quarter) and the dates under it (first, middle, last) */
+function niceMax(v){if(!(v>0))return 1;var p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p,st=[1,1.2,1.5,2,2.5,3,4,5,6,8,10];for(var i=0;i<st.length;i++)if(f<=st[i]+1e-9)return Math.round(st[i]*p*1e6)/1e6;return 10*p}
+function yAxis(max,fmt){fmt=fmt||function(v){return v>=1000?(Math.round(v/100)/10)+"k":String(Math.round(v*10)/10)};return'<div class="vs-y" aria-hidden="true"><span style="bottom:100%">'+fmt(max)+'</span><span style="bottom:50%">'+fmt(max/2)+'</span></div>'}
+function xAxis(labels){if(!labels.length)return"";var n=labels.length;return'<div class="vs-axis"><span>'+esc(labels[0])+'</span>'+(n>4?'<span>'+esc(labels[Math.floor((n-1)/2)])+'</span>':'')+'<span>'+esc(labels[n-1])+'</span></div>'}
+function colsCls(n){return'vs-cols'+(n>40?' dense':n>20?' busy':'')}
 /* the exact days a Google figure covers, so it can be compared with Google's own screen ("27 Oct – 2 Nov 2026") */
 function whenLine(from,to,src,days){if(!from||!to)return"";var f=function(d,y){return new Date(d+"T12:00:00").toLocaleDateString("en-NZ",{day:"numeric",month:"short",year:y?"numeric":undefined})};
   var sc=src==="Search Console",pre=sc?{7:"7 days",28:"28 days"}[days]:{7:"Last 7 days",28:"Last 28 days",30:"Last 30 days",90:"Last 90 days"}[days];
@@ -3395,8 +3427,8 @@ function statsInit(){
     else{var dm={};(L.by_day||[]).forEach(function(x){dm[x.d]=x.n});var step=j.days>90?7:1,n=Math.ceil(j.days/step);
       for(var w=n-1;w>=0;w--){var s=0,first=null;for(var k2=0;k2<step;k2++){var t2=new Date(now-(1+w*step+k2)*86400000),key=nzKey(t2);s+=dm[key]||0;first=t2}
         cols.push({label:(step>1?"Week of ":"")+first.toLocaleDateString([],{day:"numeric",month:"short"}),n:s})}}
-    var mx=Math.max.apply(null,cols.map(function(c){return c.n}).concat([1]));
-    return '<div class="vs-chart" role="img" aria-label="Leads over time"><div class="vs-cols">'+cols.map(function(c){return'<div class="vs-col st-col" title="'+esc(c.label+": "+c.n)+'"><i class="now'+(c.n?'':' z')+'" style="height:'+(c.n?Math.max(4,Math.round(c.n/mx*100)):0)+'%"></i></div>'}).join("")+'</div></div><div class="vs-axis"><span>'+esc(cols[0]?cols[0].label:"")+'</span><span>'+(j.days===1?"now":"today")+'</span></div>'}
+    var mx=niceMax(Math.max.apply(null,cols.map(function(c){return c.n}).concat([1])));
+    return '<div class="vs-chart" role="img" aria-label="Leads over time">'+yAxis(mx)+'<div class="'+colsCls(cols.length)+'">'+cols.map(function(c){return'<div class="vs-col st-col" title="'+esc(c.label+": "+c.n)+'"><i class="now'+(c.n?'':' z')+'" style="height:'+(c.n?Math.max(4,Math.round(c.n/mx*100)):0)+'%"></i></div>'}).join("")+'</div></div>'+xAxis(cols.map(function(c){return c.label}).slice(0,-1).concat([j.days===1?"now":(cols.length?cols[cols.length-1].label:"")]))}
   function nzKey(t,hour){var p={};new Intl.DateTimeFormat("en-NZ",{timeZone:"Pacific/Auckland",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",hourCycle:"h23"}).formatToParts(t).forEach(function(x){p[x.type]=x.value});return p.year+"-"+p.month+"-"+p.day+(hour?"T"+p.hour:"")}
   function ago(iso){var s=(Date.now()-new Date(iso))/1000;return s<3600?Math.max(1,Math.round(s/60))+" min ago":s<86400?Math.round(s/3600)+" h ago":new Date(iso).toLocaleDateString([],{day:"numeric",month:"short"})}
   function draw(j){
@@ -3687,8 +3719,8 @@ function visitorsInit(){
       return '<li>'+(f?'<button type="button" class="vs-pick'+(on?' on':'')+'" data-f="'+f+'" data-v="'+esc(r.name)+'" title="Show only '+esc(nice(f,r.name))+'">'+inner+'</button>':'<div class="vs-pick static">'+inner+'</div>')+'</li>'}).join("")+'</ul>':'<p class="help">'+empty+'</p>')+'</div>'}
   function evRows(events){var ev={};events.forEach(function(e){ev[e.name]=e.n});return VS_EVENTS.filter(function(e){return ev[e[0]]}).map(function(e){return{name:e[1],n:ev[e[0]]}})}
   /* bars: [{label, n, was?}] → columns with a tooltip; the period before shows as a grey ghost behind each bar */
-  function chart(cols,aria){var max=Math.max.apply(null,cols.map(function(c){return Math.max(c.n,c.was||0)}).concat([1]));
-    return '<div class="vs-chart" role="img" aria-label="'+esc(aria)+'"><div class="vs-tip" hidden></div><div class="vs-cols">'+cols.map(function(c,i){
+  function chart(cols,aria){var max=niceMax(Math.max.apply(null,cols.map(function(c){return Math.max(c.n,c.was||0)}).concat([1])));
+    return '<div class="vs-chart" role="img" aria-label="'+esc(aria)+'"><div class="vs-tip" hidden></div>'+yAxis(max)+'<div class="'+colsCls(cols.length)+'">'+cols.map(function(c,i){
       return '<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(c.label+": "+c.n+(c.was!=null?", before "+c.was:""))+'">'+(c.was!=null?'<i class="was" style="height:'+(c.was?Math.max(3,Math.round(c.was/max*100)):0)+'%"></i>':'')+'<i class="now'+(c.n?'':' z')+'" style="height:'+Math.max(3,Math.round(c.n/max*100))+'%"></i></button>'}).join("")+'</div></div>'}
   function wireChart(cols,fmt){var ch=m.querySelector(".vs-chart");if(!ch)return;var tip=ch.querySelector(".vs-tip");
     var showTip=function(b){var c=cols[+b.dataset.i];ch.querySelectorAll(".vs-col.on").forEach(function(x){x.classList.remove("on")});b.classList.add("on");
@@ -3731,7 +3763,7 @@ function visitorsInit(){
       card(0,T.activeUsers,"Visitors",change(T.activeUsers,B.activeUsers))+card(1,T.newUsers,"New visitors",change(T.newUsers,B.newUsers))+card(2,T.sessions,"Visits",change(T.sessions,B.sessions))+card(3,T.screenPageViews,"Pages viewed",change(T.screenPageViews,B.screenPageViews))+
       card(null,mins(T.avgEngage),"Average engagement time",change(T.avgEngage,B.avgEngage))+card(null,Math.round(T.engagementRate*100)+"%","Visits that engaged",change(T.engagementRate,B.engagementRate,true))+'</div>'+
       '<div class="panel"><div class="vs-ph"><h3>'+mm[0]+(j.days===1?' each hour':' each day')+' · last '+lbl+'</h3><span class="vs-key"><i class="k-now"></i>This period <i class="k-was"></i>The '+lbl+' before</span></div>'+
-      (cols.length?chart(cols,mm[0]+(j.days===1?" each hour":" each day"))+'<div class="vs-axis"><span>'+cols[0].label+'</span><span>'+(j.days===1?'now':'today')+'</span></div>':'')+
+      (cols.length?chart(cols,mm[0]+(j.days===1?" each hour":" each day"))+xAxis(cols.map(function(c){return c.label}).slice(0,-1).concat([j.days===1?'now':cols[cols.length-1].label])):'')+
       '<p class="help">Tap a number above to chart it. ▲▼ compare with the '+lbl+' before'+(j.days===1?' (hours are New Zealand time; the last hour is still filling in)':'')+'. “Engaged” means they stayed 10+ seconds, viewed 2+ pages or clicked something.</p></div>'+
       (j.days===1?'':'<div class="panel vs-search" id="vsSearch"><div class="vs-ph"><h3>What people searched on Google</h3><span class="vs-key">From Search Console · 2–3 days behind</span></div><p class="empty"><span class="spin"></span> Loading…</p></div>')+
       '<div class="vs-grid">'+list("Top pages (views)",j.pages,"No visits yet.","page")+list("How they found you",j.sources,"No visits yet.","source")+list("Where they are",j.places,"No visits yet.","place")+list("Phone or computer",j.devices,"No visits yet.","device")+list("What they did",evRows(j.events),"No clicks yet.")+'</div>';
@@ -3775,8 +3807,9 @@ function seoInit(){
   var APPEAR={AMP_BLUE_LINK:"AMP",AMP_TOP_STORIES:"AMP top stories",BREADCRUMB:"Breadcrumbs",EVENT:"Events",FAQ_RICH_RESULT:"FAQ rich results",HOW_TO_RICH_RESULT:"How-to rich results",JOB_LISTING:"Job listings",MERCHANT_LISTINGS:"Merchant listings",ORGANIZATION:"Organisation",PRODUCT_SNIPPETS:"Product snippets",RECIPE_FEATURE:"Recipes",REVIEW_SNIPPET:"Review snippets",SITELINKS:"Sitelinks",TRANSLATED_RESULT:"Translated results",VIDEO:"Videos",WEBLITE:"Web Light",LOCAL_BUSINESS:"Local business"};
   /* the daily chart: clicks and times shown, the click rate, or the average place (taller = higher on Google) */
   function seoChart(daily,fd){if(!daily.length)return'<p class="help">No days yet.</p>';
-    var mx=Math.max.apply(null,daily.map(function(d){return d.shown}).concat([1])),mc=Math.max.apply(null,daily.map(function(d){return d.ctr||0}).concat([.01])),mp=Math.max.apply(null,daily.map(function(d){return d.pos||0}).concat([10]));
-    return'<div class="vs-chart"><div class="vs-tip" hidden></div><div class="vs-cols">'+daily.map(function(d,i){var lab=fd(d.d)+": shown "+d.shown+", clicked "+d.clicks+(d.pos?", place "+d.pos:"")+(d.shown?", click rate "+pct(d.ctr||0):"");
+    var mx=niceMax(Math.max.apply(null,daily.map(function(d){return d.shown}).concat([1]))),mc=niceMax(Math.max.apply(null,daily.map(function(d){return d.ctr||0}).concat([.01]))),mp=Math.max(10,Math.ceil(Math.max.apply(null,daily.map(function(d){return d.pos||0}).concat([10]))/10)*10);
+    var ya=seoMet==="pos"?'<div class="vs-y" aria-hidden="true"><span style="bottom:100%">#1</span><span style="bottom:50%">#'+Math.round(mp/2+.5)+'</span></div>':seoMet==="ctr"?yAxis(mc,function(v){return Math.round(v*1000)/10+"%"}):yAxis(mx);
+    return'<div class="vs-chart"><div class="vs-tip" hidden></div>'+ya+'<div class="'+colsCls(daily.length)+'">'+daily.map(function(d,i){var lab=fd(d.d)+": shown "+d.shown+", clicked "+d.clicks+(d.pos?", place "+d.pos:"")+(d.shown?", click rate "+pct(d.ctr||0):"");
       var bars=seoMet==="pos"?'<i class="now'+(d.pos?'':' z')+'" style="height:'+(d.pos?Math.max(4,Math.round((mp-d.pos+1)/mp*100)):2)+'%"></i>':seoMet==="ctr"?'<i class="now'+(d.ctr?'':' z')+'" style="height:'+Math.max(2,Math.round((d.ctr||0)/mc*100))+'%"></i>':'<i class="was" style="height:'+(d.shown?Math.max(3,Math.round(d.shown/mx*100)):0)+'%"></i><i class="now'+(d.clicks?'':' z')+'" style="height:'+Math.max(2,Math.round(d.clicks/mx*100))+'%"></i>';
       return'<button type="button" class="vs-col" data-i="'+i+'" aria-label="'+esc(lab)+'">'+bars+'</button>'}).join("")+'</div></div>'}
   /* keyword rankings: how many sit in the top 3, on page 1 and 2, with filters for moved up/down, new and lost */
@@ -3802,8 +3835,8 @@ function seoInit(){
       var T=x.totals,B=x.before,fd=function(v){return new Date(v+"T12:00:00").toLocaleDateString([], {day:"numeric",month:"short"})},keep=seoMet;
       var k=function(n,l,ch){return'<div class="vs-stat"><b>'+n+'</b><span>'+l+'</span>'+ch+'</div>'};
       var html=whenLine(x.from,x.to,"Search Console",x.days)+'<div class="vs-stats seo-k">'+k(T.clicks,"Clicks",change(T.clicks,B.clicks))+k(T.shown,"Times shown",change(T.shown,B.shown))+k(pct(T.ctr),"Click rate",change(T.ctr,B.ctr,false,true))+k(T.pos||"–","Average place",change(T.pos,B.pos,true))+'</div>';
-      seoMet="cs";html+='<div class="panel"><div class="vs-ph"><h3>Each day</h3><span class="vs-key"><i class="k-was"></i>Shown <i class="k-now"></i>Clicked</span></div>'+seoChart(x.daily,fd)+(x.daily.length?'<div class="vs-axis"><span>'+fd(x.daily[0].d)+'</span><span>'+fd(x.daily[x.daily.length-1].d)+'</span></div>':'')+'</div>';
-      seoMet="pos";html+=x.daily.some(function(v){return v.pos})?'<div class="panel"><div class="vs-ph"><h3>Place each day</h3><span class="vs-key">taller is higher on Google</span></div>'+seoChart(x.daily,fd)+'</div>':'';seoMet=keep;
+      seoMet="cs";html+='<div class="panel"><div class="vs-ph"><h3>Each day</h3><span class="vs-key"><i class="k-was"></i>Shown <i class="k-now"></i>Clicked</span></div>'+seoChart(x.daily,fd)+(x.daily.length?xAxis(x.daily.map(function(v){return fd(v.d)})):'')+'</div>';
+      seoMet="pos";html+=x.daily.some(function(v){return v.pos})?'<div class="panel"><div class="vs-ph"><h3>Place each day</h3><span class="vs-key">taller is higher on Google</span></div>'+seoChart(x.daily,fd)+xAxis(x.daily.map(function(v){return fd(v.d)}))+'</div>':'';seoMet=keep;
       html+='<div class="panel"><h3>'+(kind==="q"?"Pages that showed for this search":"Searches that showed this page")+'</h3>'+tbl(x.other,kind==="q"?"Page":"Search","None yet.",kind==="q"?"p":"q")+'</div>';
       bd.innerHTML=html;
       bd.querySelectorAll(".vs-chart").forEach(function(ch){var tip=ch.querySelector(".vs-tip");ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var v=x.daily[+b.dataset.i];tip.innerHTML='<b>'+v.clicks+' clicks</b><span>shown '+v.shown+' times'+(v.pos?' · place '+v.pos:'')+'</span><span>'+fd(v.d)+'</span>';tip.hidden=false;var a=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(a.left-R.left+a.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("click",f)});ch.addEventListener("mouseleave",function(){tip.hidden=true})});
@@ -3824,9 +3857,9 @@ function seoInit(){
       (j.days===1?'<p class="help seo-24">Last 24 hours uses Google’s newest figures, which can still change for a day or two'+(j.hourly?'':' (shown day by day; hour by hour wasn’t available)')+'. Searches, pages and places below cover today and yesterday.</p>':'')+
       '<div class="panel"><div class="vs-ph"><h3>'+(j.hourly?'Each hour':'Each day')+' · last '+lbl+'</h3>'+(seoMet==="cs"?'<span class="vs-key"><i class="k-was"></i>Shown <i class="k-now"></i>Clicked</span>':'<span class="vs-key">'+(seoMet==="pos"?'Average place · taller is higher on Google':'Click rate')+'</span>')+'</div>'+
       seoChart(j.daily,fd)+
-      (j.daily.length?'<div class="vs-axis"><span>'+fd(j.daily[0].d)+'</span><span>'+fd(j.daily[j.daily.length-1].d)+'</span></div>':'')+
-      '<p class="help" style="margin:6px 0 0">Tap Clicks, Times shown, Click rate or Average place above to chart it.</p>'+
-      '<p class="help">▲▼ compare with the '+lbl+' before; for Average place ▲ means higher on Google (a smaller number: 1 is the top, 1–10 is the first page).</p></div>'+
+      (j.daily.length?xAxis(j.daily.map(function(d){return fd(d.d)})):'')+
+
+      '<p class="help vs-foot">Tap a tile above to chart it. ▲▼ = change from the '+lbl+' before; for place, ▲ = higher on Google (1 is the top, 1–10 is page 1).</p></div>'+
       '<div class="seo-two"><div class="panel seo-op"><h3>Nearly on Google’s first page</h3><p class="help">Searches where you’re just below the first page. A guide or a few words on the matching page can lift them.</p>'+tbl(j.nearly,"Search","None right now.")+'</div>'+
       '<div class="panel seo-op"><h3>Shown a lot, few clicks</h3><p class="help">People see you but don’t click. A clearer page title or description usually helps.</p>'+tbl(j.lowclick,"Search","None right now.")+'</div></div>'+
       rankPanel(j)+
