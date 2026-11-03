@@ -13,7 +13,7 @@
    { action: "leads", days }   Insights → Leads: every website enquiry with its details (database function website_leads)
    { action: "conns" } / { action: "conn-save", svc: "ga"|"gsc"|"psi", values } / { action: "conn-remove", svc }   Website settings → Connections: keys kept in Supabase Vault (see _keys.js)
    { action: "visitors", days?, filter? } / { action: "searches", days } / { action: "seo", days }   who is on the website right now, or with days 7/28/90 the totals for that period, from Google Analytics Realtime (see _ga.js) */
-import { visitorsNow, visitorsPeriod, searchQueries, seoReport, inspectUrl, statsEvents, gaCheck, submitSitemap, nzMidnight } from "./_ga.js";
+import { visitorsNow, visitorsPeriod, searchQueries, seoReport, seoDetail, inspectUrl, statsEvents, gaCheck, submitSitemap, nzMidnight } from "./_ga.js";
 import { loadKeys, keyFrom, KEY_NAMES, key } from "./_keys.js";
 import { psi, security, cert, response, sharing, okUrl } from "./_tests.js";
 import { SITE_TEXT_JSON, SITE_TEXT_GROUPS, SITE_TEXT_KEYS } from "./_sitetext.js";
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
   try {
     const b = await readBody(req);
     /* which part of the editor each action belongs to (see PARTS in _lib.js); "get" and "me" are for everyone signed in */
-    const AREA = { stats: "stats", leads: "leads", visitors: "visitors", searches: ["visitors", "seo"], seo: "seo", index: "seo", "index-requests": "seo", "index-mark": "seo", sitemap: "seo",
+    const AREA = { stats: "stats", leads: "leads", visitors: "visitors", searches: ["visitors", "seo"], seo: "seo", "seo-detail": "seo", index: "seo", "index-requests": "seo", "index-mark": "seo", sitemap: "seo",
       conns: "owner", "conn-save": "owner", "conn-remove": "owner", editors: "owner", "editor-invite": "owner", "editor-role": "owner", "editor-remove": "owner", "level-set": "owner",
       test: ["health", "seo"], theme: "design", business: "business", profiles: "business", sitetext: "business", analytics: "business",
       chatlog: "chat", chatlogset: "chat", chatget: "chat", chatbot: "chat", calculator: "calc" }[b.action];
@@ -123,6 +123,7 @@ export default async function handler(req, res) {
         return send(res, 200, { ok: true, note });
       } catch (e) { return send(res, 200, { error: e.soft ? e.message : /site_secret|PGRST202|404/.test(e.message) ? "Connections need the database update first." : e.message }); }
     }
+    if (b.action === "seo-detail") return send(res, 200, await seoDetail(b.days, b.query, b.page));   // Google search: one keyword or page in detail
     if (b.action === "searches") return send(res, 200, await searchQueries(b.days));   // Google search words, from Search Console
     if (b.action === "test") {   // one speed or security test on a public ambs.co.nz page; read-only
       const u = okUrl(b.url || "https://ambs.co.nz/");

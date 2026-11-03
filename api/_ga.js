@@ -243,6 +243,28 @@ export async function searchQueries(days) {
 /* Everything for the SEO page, from Search Console plus a quick look at the live site:
    totals now and the period before, clicks and times shown each day, searches, pages, countries, devices,
    chances (searches close to page 1, or shown a lot but rarely clicked), sitemaps and the site's own basics. */
+/* Google search (SEO) → tap a keyword or a page: its own day-by-day clicks, times shown and place, and the pages that
+   showed for that keyword (or the keywords that showed that page), for the same period and the one before. */
+export async function seoDetail(days, query, page) {
+  const c = conn();
+  if (c.setup) return c;
+  const n = [7, 28, 90].includes(+days) ? +days : 28;
+  const t = await accessToken(c.sa);
+  const cur = { startDate: gday(n), endDate: gday(1) }, prev = { startDate: gday(2 * n), endDate: gday(n + 1) };
+  const sites = key("GSC_SITE") ? [key("GSC_SITE")] : SITES;
+  let site = "", last = "";
+  for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
+  if (!site) return { error: last || "Search Console isn't connected" };
+  const dim = query ? "query" : "page", val = String(query || page || "").slice(0, 500);
+  const full = dim === "page" && val.startsWith("/") ? (site.startsWith("sc-domain:") ? "https://ambs.co.nz" : site.replace(/\/$/, "")) + val : val;
+  const fg = [{ filters: [{ dimension: dim, operator: "equals", expression: full }] }];
+  const q = (dims, limit, range) => gsc(t, site, Object.assign({ dimensions: dims, rowLimit: limit, dimensionFilterGroups: fg }, range));
+  const [tot, totPrev, daily, other] = await Promise.all([q([], 1, cur), q([], 1, prev), q(["date"], 500, cur), q([query ? "page" : "query"], 100, cur)]);
+  const sum = (r) => r[0] ? { clicks: r[0].clicks, shown: r[0].shown, ctr: r[0].ctr, pos: r[0].pos } : { clicks: 0, shown: 0, ctr: 0, pos: 0 };
+  return { days: n, from: cur.startDate, to: cur.endDate, dim, name: val, totals: sum(tot), before: sum(totPrev),
+    daily: daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })),
+    other: other.map((r) => ({ name: query ? (String(r.k[0]).replace(/^https?:\/\/(www\.)?ambs\.co\.nz/, "") || "/") : r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })) };
+}
 /* a date k days before today in Search Console's time zone (US Pacific), as YYYY-MM-DD */
 function gday(k) { const d = new Date(new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() - k); return d.toISOString().slice(0, 10); }
 async function gsc(t, site, body) {
@@ -286,9 +308,14 @@ export async function seoReport(days) {
   for (const s of sites) { try { await gsc(t, s, Object.assign({ rowLimit: 1 }, cur)); site = s; break; } catch (e) { last = e.message; if (e.status !== 403 && e.status !== 404) break; } }
   if (!site) return { needs: true, email: c.sa.client_email, why: last, basics: await siteBasics() };
   const q = (dims, limit, range) => gsc(t, site, Object.assign({ dimensions: dims, rowLimit: limit || 25 }, range || cur));
-  const [tot, totPrev, daily, queries, pages, countries, devices, basics, maps] = await Promise.all([
-    q([], 1), q([], 1, prev), q(["date"], 500), q(["query"], 250), q(["page"], 50), q(["country"], 10), q(["device"], 5), siteBasics(),
+  /* the other kinds of Google search (Search Console's "Search type") and how the results looked ("Search appearance") */
+  const TYPES = [["web", "Web"], ["image", "Images"], ["video", "Videos"], ["news", "News tab"], ["discover", "Discover"], ["googleNews", "Google News"]];
+  const typeTot = (ty) => gsc(t, site, Object.assign({ rowLimit: 1, type: ty }, cur)).then((r) => r[0] || null).catch(() => null);
+  const [tot, totPrev, daily, queries, queriesPrev, pages, pagesPrev, countries, devices, basics, maps, appear, ...types] = await Promise.all([
+    q([], 1), q([], 1, prev), q(["date"], 500), q(["query"], 1000), q(["query"], 1000, prev), q(["page"], 200), q(["page"], 200, prev), q(["country"], 10), q(["device"], 5), siteBasics(),
     fetch("https://www.googleapis.com/webmasters/v3/sites/" + encodeURIComponent(site) + "/sitemaps", { headers: { Authorization: "Bearer " + t } }).then((r) => r.ok ? r.json() : {}).catch(() => ({})),
+    q(["searchAppearance"], 20).catch(() => []),
+    ...TYPES.map((x) => typeTot(x[0])),
   ]);
   let sum = (rows) => rows[0] ? { clicks: rows[0].clicks, shown: rows[0].shown, ctr: rows[0].ctr, pos: rows[0].pos } : { clicks: 0, shown: 0, ctr: 0, pos: 0 };
   let hourly = null;
@@ -300,20 +327,28 @@ export async function seoReport(days) {
         const add = (rs) => { const cl = rs.reduce((a, r) => a + r.clicks, 0), sh = rs.reduce((a, r) => a + r.shown, 0), ps = rs.reduce((a, r) => a + r.pos * r.shown, 0);
           return { clicks: cl, shown: sh, ctr: sh ? cl / sh : 0, pos: sh ? Math.round(ps / sh * 10) / 10 : 0 }; };
         const last = hrs.slice(-24), before = hrs.slice(-48, -24);
-        hourly = { cur: add(last), prev: add(before), rows: last.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })) };
+        hourly = { cur: add(last), prev: add(before), rows: last.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })) };
       }
     } catch (e) { hourly = null; }
   }
   const row = (r) => ({ name: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos });
-  const qs = queries.map(row);
+  const short = (u) => String(u).replace(/^https?:\/\/(www\.)?ambs\.co\.nz/, "") || "/";
+  /* each keyword (and page) with where it was in the period before: was = {pos, clicks, shown} or null (new) */
+  const withWas = (rows, prevRows, key) => { const pm = new Map(prevRows.map((r) => [key(r.k[0]), r])); return rows.map((r) => { const o = row(r), w = pm.get(key(r.k[0])); o.name = key(o.name); o.was = w ? { pos: w.pos, clicks: w.clicks, shown: w.shown } : null; return o; }); };
+  const qs = withWas(queries, queriesPrev, (x) => x);
+  const curQ = new Set(queries.map((r) => r.k[0]));
+  const lost = queriesPrev.filter((r) => !curQ.has(r.k[0])).map((r) => ({ name: r.k[0], clicks: 0, shown: 0, ctr: 0, pos: 0, was: { pos: r.pos, clicks: r.clicks, shown: r.shown } })).sort((a, b) => b.was.shown - a.was.shown).slice(0, 100);
+  const spread = { top3: 0, p1: 0, p2: 0, more: 0 }; qs.forEach((r) => { spread[r.pos <= 3 ? "top3" : r.pos <= 10 ? "p1" : r.pos <= 20 ? "p2" : "more"]++; });
   return {
     site, days: n, from: cur.startDate, to: cur.endDate,
     totals: hourly ? hourly.cur : sum(tot), before: hourly ? hourly.prev : sum(totPrev), hourly: !!hourly,
-    daily: hourly ? hourly.rows : daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown })),
-    queries: qs.slice(0, 50),
+    daily: hourly ? hourly.rows : daily.map((r) => ({ d: r.k[0], clicks: r.clicks, shown: r.shown, ctr: r.ctr, pos: r.pos })),
+    queries: qs.slice(0, 500), queryCount: qs.length, lost, spread,
+    types: TYPES.map((x, i) => types[i] ? { id: x[0], name: x[1], clicks: types[i].clicks, shown: types[i].shown, ctr: types[i].ctr, pos: types[i].pos } : null).filter((x) => x && (x.shown || x.id === "web")),
+    appearance: appear.map(row),
     nearly: qs.filter((r) => r.pos > 7 && r.pos <= 20 && r.shown >= 2).sort((a, b) => b.shown - a.shown).slice(0, 8),
     lowclick: qs.filter((r) => r.shown >= 15 && r.ctr < 0.02 && r.pos <= 10).sort((a, b) => b.shown - a.shown).slice(0, 8),
-    pages: pages.map(row).map((r) => Object.assign(r, { name: r.name.replace(/^https?:\/\/(www\.)?ambs\.co\.nz/, "") || "/" })),
+    pages: withWas(pages, pagesPrev, short),
     countries: countries.map(row), devices: devices.map(row),
     sitemaps: (maps.sitemap || []).map((m) => ({ path: m.path, last: m.lastDownloaded, errors: +m.errors || 0, warnings: +m.warnings || 0, pending: !!m.isPending })),
     basics,
