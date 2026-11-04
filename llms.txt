@@ -12,6 +12,10 @@ Auckland, NZ · Phone +64 22 099 9578 · Email hello@ambs.co.nz.
 - [Services](https://ambs.co.nz/services): AI and business automation, website design, staff and customer portals and live dashboards for New Zealand small businesses. Built around the tools you already use.
 - [AI automation](https://ambs.co.nz/services/ai-automation): Quotes, replies, bookings, data and reporting that run themselves, built around the tools you already use.
 - [Websites, portals and dashboards](https://ambs.co.nz/services/websites-and-portals): Fast multilingual websites, staff and customer portals, and live dashboards you own.
+- [AI chatbot and customer replies](https://ambs.co.nz/services/ai-chatbot-and-customer-replies): A website chat helper and AI-drafted replies that answer from your own wording, in your customers' languages.
+- [Xero and app integration](https://ambs.co.nz/services/xero-and-app-integration): Connect Xero, Microsoft 365, Google Workspace, forms and booking tools so nothing is typed twice.
+- [Online bookings and reminders](https://ambs.co.nz/services/online-bookings-and-reminders): Online booking from your website with text and email reminders that cut no-shows.
+- [Business dashboards and reports](https://ambs.co.nz/services/business-dashboards-and-reports): A live dashboard and a Monday-morning numbers email, built from Xero and your sheets.
 
 ## Industries
 

@@ -137,7 +137,7 @@ SITE_TEXT_DEFAULTS={
  'calc.now':'hours a week on this task now','calc.year':'hours a year back',
  'calc.note':'An estimate from your own numbers, not a promise. In a free session we work out a proper estimate together.','calc.link':'Book a free session →',
  'pg.inshort':'In short','pg.questions':'Common questions','pg.onpage':'On this page','pg.keep':'Keep reading',
- 'pg.allguides':'All guides →','pg.allind':'All industries →','pg.popular':'Popular guides','pg.byind':'Guides by industry','pg.svchow':'How every project runs',
+ 'pg.allguides':'All guides →','pg.allind':'All industries →','pg.popular':'Popular guides','pg.byind':'Guides by industry','pg.svchow':'How every project runs','pg.svcmore':'More ways we help',
  'pg.minread':'min read','pg.updated':'Updated','pg.nz':'New Zealand-wide','pg.free':'Free first session',
  'pg.readguide':'Read the guide','pg.learn':'Learn more','pg.readmore':'Read more','pg.post':'post','pg.posts':'posts',
  'pg.legalwhere':'Auckland, New Zealand','pg.lastupdated':'Last updated',
@@ -440,6 +440,9 @@ def services_feature():
               f'<span class="svc-k">{e(s["k"])}</span><h2 class="svc-t">{e(s["t"])}</h2><p class="svc-d">{e(s["d"])}</p>'
               f'<ul class="svc-inc">{lis}</ul><span class="svc-go">{e(s["go"])} <span aria-hidden="true">&#8594;</span></span></a>')
     out+='</div></section>'
+    # every other live service page (the editor's Pages & news), as cards under the two big ones
+    more=[p for p in PAGES if p[0]=='services' and not any(p[1]==x['slug'] for x in SVC)]
+    if more: out+='<section class="section"><div class="section-h"><h2>'+TE("pg.svcmore")+'</h2></div><div class="cards">'+''.join(card(p) for p in more)+'</div></section>'
     steps=[(str(i+1),x['title'],x['text']) for i,x in enumerate(SITE['service_steps'])]
     out+='<section class="section svc-how"><div class="section-h"><h2>'+TE("pg.svchow")+'</h2></div><ol class="svc-steps">'+''.join(
         f'<li><span class="svc-n">{n}</span><b>{e(t)}</b><p>{e(d)}</p></li>' for k,(n,t,d) in enumerate(steps))+'</ol></section>'

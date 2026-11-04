@@ -18,6 +18,38 @@
    "icon": "web"
   },
   {
+   "section": "services",
+   "slug": "ai-chatbot-and-customer-replies",
+   "title": "AI chatbot and customer replies",
+   "blurb": "A website chat helper and AI-drafted replies that answer from your own wording, in your customers' languages.",
+   "category": "Services",
+   "icon": "chat"
+  },
+  {
+   "section": "services",
+   "slug": "xero-and-app-integration",
+   "title": "Xero and app integration",
+   "blurb": "Connect Xero, Microsoft 365, Google Workspace, forms and booking tools so nothing is typed twice.",
+   "category": "Services",
+   "icon": "link"
+  },
+  {
+   "section": "services",
+   "slug": "online-bookings-and-reminders",
+   "title": "Online bookings and reminders",
+   "blurb": "Online booking from your website with text and email reminders that cut no-shows.",
+   "category": "Services",
+   "icon": "cal"
+  },
+  {
+   "section": "services",
+   "slug": "business-dashboards-and-reports",
+   "title": "Business dashboards and reports",
+   "blurb": "A live dashboard and a Monday-morning numbers email, built from Xero and your sheets.",
+   "category": "Services",
+   "icon": "chart"
+  },
+  {
    "section": "industries",
    "slug": "cafes-and-takeaways",
    "title": "Cafés and takeaways",

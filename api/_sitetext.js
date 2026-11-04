@@ -18,7 +18,7 @@ export const SITE_TEXT_GROUPS = [
     ["pg.nz", "Service area label"], ["pg.free", "Free session label"], ["pg.readguide", "Guide card link"],
     ["pg.learn", "Industry and service card link"], ["pg.readmore", "News card link"],
     ["pg.allguides", "All guides link"], ["pg.allind", "All industries link"], ["pg.popular", "Popular guides heading"],
-    ["pg.byind", "Guides by industry heading"], ["pg.svchow", "Services: steps heading"],
+    ["pg.byind", "Guides by industry heading"], ["pg.svchow", "Services: steps heading"], ["pg.svcmore", "Services: heading over the other service pages"],
     ["pg.post", "News count: one (1 …)"], ["pg.posts", "News count: many (3 …)"],
     ["pg.legalwhere", "Privacy and terms: place"], ["pg.lastupdated", "Privacy and terms: before the date"]] },
   { name: "Hours calculator on guide pages", items: [
