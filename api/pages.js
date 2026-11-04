@@ -278,7 +278,7 @@ export default async function handler(req, res) {
         look(base, "On Google", [d.title, d.description].join(" · "));
       }
       const hubBase = { kind: "hubs", title: "Section pages & service cards", key: "hubs" };
-      for (const [sec, h] of Object.entries(site.hubs || {})) look(hubBase, sec.charAt(0).toUpperCase() + sec.slice(1) + " page intro", [h.h1, h.lead, h.desc].join(" · "));
+      for (const [sec, h] of Object.entries(site.hubs || {})) look(hubBase, sec.charAt(0).toUpperCase() + sec.slice(1) + " page intro", [h.h1, h.lead, h.desc, (h.body || "").replace(/<[^>]+>/g, " "), ...(h.faq || []).map((x) => x.join(" "))].join(" · "));
       look(hubBase, "Service cards", strings(site.service_cards).join(" · "));
       look(hubBase, "How every project runs", strings(site.service_steps).join(" · "));
       const mf = await readFile("site-src/content/menus.json", head);
@@ -423,7 +423,10 @@ export default async function handler(req, res) {
     if (b.action === "hubs") {
       for (const sec of ["services", "industries", "guides", "news", "locations"]) {
         const h = (b.hubs || {})[sec];
-        if (h) site.hubs[sec] = { title: str(h.title, 300), h1: str(h.h1, 300), lead: str(h.lead, 1500), desc: str(h.desc, 400) };
+        if (h) {
+          const faq = Array.isArray(h.faq) ? h.faq.map((x) => [str(x[0], 300), str(x[1], 2000)]).filter((x) => x[0].trim() && x[1].trim()) : (site.hubs[sec] || {}).faq || [];
+          site.hubs[sec] = { title: str(h.title, 300), h1: str(h.h1, 300), lead: str(h.lead, 1500), desc: str(h.desc, 400), body: typeof h.body === "string" ? cleanBody(str(h.body, 60000)) : (site.hubs[sec] || {}).body || "", faq };
+        }
       }
       if (Array.isArray(b.service_cards)) {
         site.service_cards = site.service_cards.map((c, i) => {

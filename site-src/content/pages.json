@@ -215,13 +215,55 @@
    "title": "AI Automation & Digital Services NZ | Ambs Solutions",
    "h1": "Automation and digital tools, built around your business",
    "lead": "Two ways we help New Zealand businesses: automations that clear the repetitive work, and digital tools that make the business easier to run and easier to find.",
-   "desc": "AI and business automation, website design, staff and customer portals and live dashboards for New Zealand small businesses. Built around the tools you already use."
+   "desc": "AI and business automation, website design, staff and customer portals and live dashboards for New Zealand small businesses. Built around the tools you already use.",
+   "body": "<h2>What we actually do</h2>\n<p>Ambs Solutions is a small Auckland team that takes repetitive admin off New Zealand small businesses and builds the digital tools around it. Every job starts with the same question: what does your team do the same way every week? Quotes typed up from site notes, booking reminders sent by hand, the same customer questions answered ten times a day, invoices copied into Xero, the weekly numbers added up on a Sunday night. Those are the tasks we automate.</p>\n<p>The digital side covers the tools a small business needs to run and to be found: a fast website that turns visitors into calls, a staff or customer portal, and a dashboard that shows the numbers without anyone building a spreadsheet.</p>\n<h2>Built on the tools you already pay for</h2>\n<p>We do not sell software. We connect and build on what you have: Xero, Microsoft 365, Google Workspace, your booking tool and your website. Everything is set up in your own accounts, so you own the logins and it keeps working whether or not we are around. Where a tool really is the wrong one, we say so in the free session, and we tell you what we would use instead and why.</p>\n<h2>How we work with Auckland businesses</h2>\n<p>We work with businesses across Auckland, from the North Shore to Manukau and out to the West, and with businesses across New Zealand. The free first session can happen at your premises or online. Most of the build happens remotely, in New Zealand hours, and we come out when seeing the job in person makes a real difference, for example walking through a workshop, a clinic front desk or a café counter at opening time.</p>\n<p>Auckland customers speak many languages. Websites, booking pages and customer replies can work in Chinese, Hindi, Punjabi and te reo Māori alongside English, and we train your team in English, Hindi or Punjabi.</p>\n<h2>What a project costs</h2>\n<p>We do not publish a price list, because the same task can be an afternoon in one business and a fortnight in another. After the free session you get a written plan with an hours estimate, yours to keep even if you go elsewhere. The scope and price are agreed in writing before any work starts, fixes and tweaks are free for the first 30 days, and support after that is a monthly plan or pay as you go.</p>\n<h2>Your data</h2>\n<p>Automations touch customer names, phone numbers and sometimes financial details. We handle them under the Privacy Act 2020, keep data we store for you in New Zealand or Australia, and never use it to train anyone's AI model. Our guide to <a href=\"/guides/privacy-act-2020-and-automation\">the Privacy Act 2020 and automation</a> sets out what to check before you start.</p>",
+   "faq": [
+    [
+     "Which service should I start with?",
+     "Start with the task that eats the most hours each week. For most businesses that is quotes and invoices, booking reminders or customer replies. The free session is where we work that out together, and you leave with a written plan whichever way you go."
+    ],
+    [
+     "Do you only work with Auckland businesses?",
+     "No. We are based in Auckland and work right across New Zealand. The free session and most of the build happen online, so a business in Hamilton, Wellington or Christchurch gets the same service as one in Albany."
+    ],
+    [
+     "Do I need to buy new software?",
+     "Usually not. We build on Xero, Microsoft 365, Google Workspace and the booking or job tools you already use. If something genuinely needs a new tool, we say so and explain why."
+    ],
+    [
+     "How long does a project take?",
+     "Most first automations and websites take one to two weeks from the written plan to going live. Bigger builds like portals and dashboards are planned in stages, so something useful is working early."
+    ],
+    [
+     "What happens after the work is done?",
+     "Fixes and tweaks are free for the first 30 days. After that you can choose a monthly support plan or pay as you go. Because everything is built in your own accounts, you are never locked in."
+    ]
+   ]
   },
   "industries": {
    "title": "Industries We Automate for in NZ | Ambs Solutions",
    "h1": "Automation for the way your industry actually works",
    "lead": "Every industry has its own repetitive work. Pick yours to see the tasks we usually take off first, the tools we connect, and typical estimates of the time involved.",
-   "desc": "Automation for New Zealand cafés, trades, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery businesses."
+   "desc": "Automation for New Zealand cafés, trades, clinics and salons, shops and dairies, advisers and accountants, and transport and delivery businesses.",
+   "body": "<h2>Why we work by industry</h2>\n<p>A café and a law firm both waste hours on admin, but not on the same admin. The café owner is redoing the roster and ringing suppliers; the lawyer is chasing documents and typing up file notes after every call. So instead of a generic list, each industry page shows the two or three tasks businesses like yours usually hand off first, the tools they already use, and roughly what the time involved looks like.</p>\n<h2>Who we help in Auckland and across New Zealand</h2>\n<p>Most of our clients are owner-run businesses with somewhere between one and forty staff: trades and building firms, cafés and takeaways, clinics and salons, shops and dairies, cleaning and home services, transport and delivery operators, advisers, accountants and law firms. Many are in Auckland, from Albany and the North Shore through the central suburbs to Manukau, Botany and the West, and plenty are elsewhere in New Zealand. The free session happens on site or online, whichever suits.</p>\n<h2>If your industry is not listed</h2>\n<p>The list covers the businesses we see most, not the only ones we help. A gym, a childcare centre, a real estate office or a small manufacturer has the same shape of problem: a few repeated tasks on a few familiar tools. Book the free session and describe a normal week. If we are not the right fit, we will say so and point you somewhere useful.</p>\n<h2>What every industry has in common</h2>\n<ul>\n<li>One task first, usually finished in one to two weeks, so you see the result before committing to more.</li>\n<li>Built in your own accounts, on Xero, Microsoft 365, Google Workspace and the tools you already use.</li>\n<li>Customers served in their own language where it matters, including Chinese, Hindi, Punjabi and te reo Māori.</li>\n<li>Data handled under the Privacy Act 2020, stored in New Zealand or Australia, never used to train anyone's AI model.</li>\n</ul>",
+   "faq": [
+    [
+     "My business does not fit one industry. Which page should I read?",
+     "Read the closest one, or skip the pages and book the free session. A mobile mechanic has more in common with a tradesperson than with a transport company, and we sort that out in the first conversation."
+    ],
+    [
+     "Do you understand how my industry works?",
+     "We learn your business by watching a normal week, not by assuming. The free session is a walkthrough of how work actually moves through your tools, and the written plan comes from that, not from a template."
+    ],
+    [
+     "Can you help a business with only one or two staff?",
+     "Yes. If a task takes more than about three hours a week, it is usually worth automating, whether that is one van or a team of forty."
+    ],
+    [
+     "Are the time estimates on the industry pages a promise?",
+     "No. They are typical figures from similar businesses, there to help you judge whether a task is worth a look. Your own estimate comes in the written plan after the free session."
+    ]
+   ]
   },
   "guides": {
    "title": "Automation Guides for NZ Businesses | Ambs Solutions",
@@ -233,7 +275,26 @@
    "title": "Where We Work in New Zealand | Ambs Solutions",
    "h1": "Where we work",
    "lead": "AI automation, websites and portals for businesses across New Zealand. Based in Auckland, working nationwide. Pick your area.",
-   "desc": "Ambs Solutions helps businesses across New Zealand with AI automation, websites, portals and dashboards. See what we do in your area."
+   "desc": "Ambs Solutions helps businesses across New Zealand with AI automation, websites, portals and dashboards. See what we do in your area.",
+   "body": "<h2>Based in Auckland, working across New Zealand</h2>\n<p>Ambs Solutions is a small team based in Auckland. We help businesses across the city, from the North Shore and Albany through the central suburbs to Manukau, Botany, Papakura and West Auckland, and we work with businesses throughout New Zealand online. The free first session happens at your premises or over a video call, and most of the build happens remotely in New Zealand hours.</p>\n<h2>Why a local team matters for automation</h2>\n<p>Automation is mostly about understanding how a job really moves through a business, and that is easier when we can stand in your workshop, your clinic or your café for an hour. We also know the tools New Zealand small businesses actually use, such as Xero, Microsoft 365 and Google Workspace, and the rules that apply here, including the Privacy Act 2020 and GST on invoices.</p>\n<h2>Serving customers in many languages</h2>\n<p>Auckland is one of the most multilingual cities in the world, and the businesses we work with serve customers in Chinese, Hindi, Punjabi, te reo Māori and more. Websites, booking pages and AI customer replies can answer in the language a customer writes in, from answers you approved in English. We train your team in English, Hindi or Punjabi.</p>\n<h2>Outside Auckland</h2>\n<p>Hamilton, Tauranga, Wellington, Christchurch, Dunedin or a small town: the work is the same. The free session, the written plan and the build all happen online, and we travel when being on site makes a real difference to the result. Everything is built in your own accounts, so where we are sitting does not change what you own.</p>",
+   "faq": [
+    [
+     "Do you come to my business?",
+     "In Auckland, yes, when it helps: the free session can happen on site, and we visit for the first walkthrough of a job. Elsewhere in New Zealand the session and the build happen online, and we travel when it makes a real difference."
+    ],
+    [
+     "Is there a travel charge?",
+     "Not for the free session in Auckland. If a project needs on-site days elsewhere, that is written into the plan before you agree to anything."
+    ],
+    [
+     "Which Auckland areas do you cover?",
+     "All of them: the North Shore, Albany, the central suburbs, the eastern suburbs, Manukau, Botany, Papakura and West Auckland. Most of the work happens remotely anyway, so the address matters less than the task."
+    ],
+    [
+     "Do you work with businesses outside New Zealand?",
+     "Our focus is New Zealand businesses. We can help an Australian business whose tools and customers look the same, but we say so honestly if we are not the best fit."
+    ]
+   ]
   }
  },
  "service_cards": [
