@@ -935,6 +935,26 @@ body.va-on .side{bottom:64px}
 .rv-r p{margin:8px 0 6px;line-height:1.5;white-space:pre-line}.rv-reply{font-size:.88rem;font-weight:700}
 .cn-pick{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}.cn-pick .btn{width:100%;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:2px;height:auto;padding:8px 12px}.cn-pick .btn span{font-size:.82rem;color:var(--muted);font-weight:500}
 @media (max-width:640px){.seo-sw button{font-size:.85rem;padding-left:6px;padding-right:6px}.rv-acts .btn{flex:1 1 100%}}
+
+/* Editor polish (Nov 2026, low items from the layout check) */
+a.btn{text-decoration:none}
+.ts-cnote{white-space:normal!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+.ld-row>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);flex:none;margin-left:4px;transition:transform .2s}.ld-row[open]>summary::after{transform:rotate(-135deg)}
+.ch-dlg{width:min(600px,calc(100vw - 24px))}.ch-dlg .hd{flex-direction:column;align-items:flex-start;gap:2px}.ch-dlg .hd .help{margin:0}
+dialog[aria-labelledby="cpH"]{width:min(440px,calc(100vw - 24px))}
+.kpi.hh .hh-s{font-size:.95rem!important}.hh-go{font-size:1.6rem}
+@media (min-width:900px){.lvx-wrap{max-width:760px}}
+.tiles{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+#side .side-items>div{visibility:visible;transition:visibility 0s}#side .side-g.shut .side-items>div{visibility:hidden;transition:visibility 0s .45s}
+@media (hover:none){#side .ways{opacity:1;pointer-events:auto}#side .side-row>button[data-go]{padding-right:70px!important}}
+@media (pointer:coarse){.tile-ways button,.cbtns .btn,.dash-top .quick .btn{min-height:44px}.lvx-as,.kx-home .btn.link{min-height:40px;display:inline-flex;align-items:center}.kx-how summary,.cn-how summary{padding:10px 0;min-height:40px;display:flex;align-items:center}}
+@media (max-width:760px){.eds-mail,.eds-who b{white-space:normal!important;overflow-wrap:anywhere}}
+@media (max-width:560px){.kx-list{grid-template-columns:1fr 1fr!important;gap:8px}.kx-list li{padding:12px}.kx-bar{display:none}.kx-never{grid-column:1/-1}
+ .cn-t span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}}
+@media (max-width:640px){.kw-f{display:grid!important;grid-template-columns:repeat(4,1fr);gap:6px}.kw-f button{padding:.4rem .2rem;justify-content:center}}
+@media (min-width:1100px){.seo-t .vs-sq-h,.seo-t .vs-sq-r{grid-template-columns:minmax(0,560px) 80px 70px 70px;justify-content:space-between}}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .tile-i svg,:root:not([data-theme=light]) .go-i{stroke:#5fd864;color:#5fd864}}
+:root[data-theme=dark] .tile-i svg,:root[data-theme=dark] .go-i{stroke:#5fd864;color:#5fd864}
 </style>
 </head>
 <body>
@@ -1007,7 +1027,7 @@ body.va-on .side{bottom:64px}
     <button type="button" role="tab" data-tab="history" aria-selected="false">History</button>
     <button type="button" role="tab" data-tab="health" aria-selected="false">Site health</button>
     <button type="button" role="tab" data-tab="leads" aria-selected="false">Leads</button>
-    <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors now</button>
+    <button type="button" role="tab" data-tab="visitors" aria-selected="false">Visitors</button>
     <button type="button" role="tab" data-tab="conns" aria-selected="false">Connections</button>
     <button type="button" role="tab" data-tab="editors" aria-selected="false">Editors</button>
     <button type="button" role="tab" data-tab="seo" aria-selected="false">Google search (SEO)</button>
@@ -3149,7 +3169,7 @@ var EDMENU=[["",[["home","Home","Your dashboard"]]],
   ["Edit your website",[["wording","Homepage","Every word on the homepage, in all 5 languages"],["pages","Pages & news","Guides, services, industries, legal pages and news"],["design","Colours & fonts","Brand colours, fonts and buttons for the whole website"]]],
   ["Website settings",[["sections","Homepage sections","Order, hide or add homepage sections"],["menus","Menus","Top menu and footer links"],["photos","Photos & logo","Photos, logo, sharing picture and icons"],["redirects","Redirects","Send old addresses to the right page"],["conns","Connections","Analytics, Search Console, forms, bookings and keys"],["editors","Editors","Invite people to edit the website, and see it as them"]]],
   ["Business",[["business","Business details","Phone, email, social profiles, wording on every page"],["chat","Chat helper","Ambs Bot answers and visitor questions"],["calc","Hours calculator","Hours saved in the homepage calculator"],["roi","Website ROI calculator","The calculator page at ambs.co.nz/website-roi-calculator"]]],
-  ["Insights",[["leads","Leads","How many enquiries came in, and every one of them"],["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors now","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
+  ["Insights",[["leads","Leads","How many enquiries came in, and every one of them"],["health","Site health","A score for the whole website and what to fix"],["visitors","Visitors","Who's on the website and how they found you"],["seo","Google search (SEO)","Searches, places in Google and what to improve"],["history","History","Every change, with undo"]]]];
 var CHOOSE={wording:["Homepage","Click any words on your real homepage and type. Add questions, steps and more from the panel.","Every line of the homepage in all 5 languages, with search."],
   pages:["Pages & news","Open a page and type straight on it, with tools to add text, buttons and photos.","All of a page’s settings in one form: Google wording, questions, related pages and more."],
   design:["Colours & fonts","Change colours, fonts and buttons while looking at your real page.","Every colour, font and button setting with a preview beside it."]};
@@ -3367,12 +3387,12 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
 function healthTile(j){var t=tsLoad()["https://ambs.co.nz/"],sp=t&&t.psi_mobile&&t.psi_mobile.scores?t.psi_mobile.scores[0].score:null;
-  var sc=+j.score||0,hi=j.issues.filter(function(i){return i.sev==="high"}).length,n=j.issues.length,col=sc>=90?"var(--green)":sc>=70?"#c98a00":"#d33";
+  var sc=+j.score||0,hi=j.issues.filter(function(i){return i.sev==="high"}).length,n=j.issues.length,col=sc>=90?"var(--green)":sc>=70?"#c98a00":"var(--red)";
   var C=2*Math.PI*26,dash=(C*sc/100).toFixed(1);
   var state=!n?"All clear":hi?hi+" to fix first":n+" small thing"+(n===1?"":"s")+" to improve";
   var spc=sp==null?"":sp>=90?"g":sp>=50?"a":"r";
   return '<span class="hh-ring" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" class="hh-track"/><circle cx="32" cy="32" r="26" class="hh-arc" style="stroke:'+col+';stroke-dasharray:'+dash+' '+C.toFixed(1)+'"/></svg><b>'+sc+'</b></span>'+
-    '<span class="hh-txt"><span class="hh-t">Site health</span><span class="hh-s" style="color:'+(n&&hi?"#d33":col)+'">'+(n?"":"✓ ")+esc(state)+'</span>'+
+    '<span class="hh-txt"><span class="hh-t">Site health</span><span class="hh-s" style="color:'+(n&&hi?"var(--red)":col)+'">'+(n?"":"✓ ")+esc(state)+'</span>'+
     (sp!=null?'<span class="hh-m">Phone speed <i class="hh-sp '+spc+'">'+sp+'</i></span>':'')+'<span class="hh-w">Checked '+healthWhen(j.checked)+'</span></span><span class="hh-go" aria-hidden="true">›</span>'}
 
 /* ---- Speed & security: real results from Google PageSpeed, Mozilla Observatory, the certificate, the server, Google's index and the sharing card.
@@ -3496,7 +3516,7 @@ var ST_RANGES=[[1,"24 hours"],[7,"7 days"],[30,"30 days"],[90,"3 months"],[180,"
 /* charts: a round top value for the scale (1, 2, 2.5, 5 × 10ⁿ), the scale on the left (top and half way, matching the
    gridlines at every quarter) and the dates under it (first, middle, last) */
 function niceMax(v){if(!(v>0))return 1;var p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p,st=[1,1.2,1.5,2,2.5,3,4,5,6,8,10];for(var i=0;i<st.length;i++)if(f<=st[i]+1e-9)return Math.round(st[i]*p*1e6)/1e6;return 10*p}
-function yAxis(max,fmt){fmt=fmt||function(v){return v>=1000?(Math.round(v/100)/10)+"k":String(Math.round(v*10)/10)};return'<div class="vs-y" aria-hidden="true"><span style="bottom:100%">'+fmt(max)+'</span><span style="bottom:50%">'+fmt(max/2)+'</span></div>'}
+function yAxis(max,fmt){fmt=fmt||function(v){return v>=1000?(Math.round(v/100)/10)+"k":String(Math.round(v*10)/10)};return'<div class="vs-y" aria-hidden="true"><span style="bottom:100%">'+fmt(max)+'</span><span style="bottom:50%">'+(Number.isInteger(max/2)||max/2>=10?fmt(max/2):'')+'</span></div>'}
 function xAxis(labels){if(!labels.length)return"";var n=labels.length;return'<div class="vs-axis"><span>'+esc(labels[0])+'</span>'+(n>4?'<span>'+esc(labels[Math.floor((n-1)/2)])+'</span>':'')+'<span>'+esc(labels[n-1])+'</span></div>'}
 function colsCls(n){return'vs-cols'+(n>40?' dense':n>20?' busy':'')}
 /* the exact days a Google figure covers, so it can be compared with Google's own screen ("27 Oct – 2 Nov 2026") */
@@ -3935,7 +3955,7 @@ function seoInit(){
       seoMet="pos";html+=x.daily.some(function(v){return v.pos})?'<div class="panel"><div class="vs-ph"><h3>Place each day</h3><span class="vs-key">taller is higher on Google</span></div>'+seoChart(x.daily,fd)+xAxis(x.daily.map(function(v){return fd(v.d)}))+'</div>':'';seoMet=keep;
       html+='<div class="panel"><h3>'+(kind==="q"?"Pages that showed for this search":"Searches that showed this page")+'</h3>'+tbl(x.other,kind==="q"?"Page":"Search","None yet.",kind==="q"?"p":"q")+'</div>';
       bd.innerHTML=html;
-      bd.querySelectorAll(".vs-chart").forEach(function(ch){var tip=ch.querySelector(".vs-tip");ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var v=x.daily[+b.dataset.i];tip.innerHTML='<b>'+v.clicks+' clicks</b><span>shown '+v.shown+' times'+(v.pos?' · place '+v.pos:'')+'</span><span>'+fd(v.d)+'</span>';tip.hidden=false;var a=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(a.left-R.left+a.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("click",f)});ch.addEventListener("mouseleave",function(){tip.hidden=true})});
+      bd.querySelectorAll(".vs-chart").forEach(function(ch){var tip=ch.querySelector(".vs-tip");ch.querySelectorAll(".vs-col").forEach(function(b){var f=function(){var v=x.daily[+b.dataset.i];tip.innerHTML='<b>'+v.clicks+' click'+(v.clicks===1?'':'s')+'</b><span>shown '+(v.shown===1?'once':v.shown+' times')+(v.pos?' · place '+v.pos:'')+'</span><span>'+fd(v.d)+'</span>';tip.hidden=false;var a=b.getBoundingClientRect(),R=ch.getBoundingClientRect();tip.style.left=Math.min(Math.max(a.left-R.left+a.width/2,70),R.width-70)+"px"};b.addEventListener("mouseenter",f);b.addEventListener("click",f)});ch.addEventListener("mouseleave",function(){tip.hidden=true})});
       bd.querySelectorAll(".vs-sq-r.tap").forEach(function(rw){rw.onclick=function(){close();seoOpen(rw.dataset.dq!=null?"q":"p",rw.dataset.dq!=null?rw.dataset.dq:rw.dataset.dp)}});
     }).catch(function(e){d.querySelector(".bd").innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}
   function sorted(rows){var k=seoSort;return rows.slice().sort(function(a,b){return k==="pos"?a.pos-b.pos:b[k]-a[k]})}
