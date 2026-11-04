@@ -3300,7 +3300,8 @@ function healthInit(){
 }
 /* Site health → On Google: whether Google has each live page in its index, from Search Console URL Inspection
    (api/settings "test" with test "index" → inspectUrl() in api/_ga.js), three pages at a time so each fills in as it
-   arrives. Kept in this browser (ambs-gidx) and checked again by itself when the last full check is over a day old. */
+   arrives. Kept in this browser (ambs-gidx) and shown as last checked; it only checks by itself the first time (nothing
+   saved yet), or to finish a check the connection cut off. Otherwise it checks when you press a Check button. */
 var GX_PLAIN={"Submitted and indexed":"Indexed","Indexed, not submitted in sitemap":"Indexed (not in the sitemap yet)",
   "Discovered - currently not indexed":"Google knows the page but hasn’t visited it yet. This usually sorts itself out within a few weeks; links to it from your other pages help.",
   "Crawled - currently not indexed":"Google visited but hasn’t listed it yet. Pages with more useful, original text and links from other pages are listed sooner.",
@@ -3388,15 +3389,15 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
       delete D.setup;D.r[r.url]={v:x.verdict,cov:x.coverage,crawled:x.crawled,link:x.link,site:x.site,gc:x.canonical||"",uc:x.userCanonical||"",fetch:x.fetch||"",robots:x.robots||"",at:Date.now()};save(D)})
     .catch(function(e){var net=/fetch|load failed|network|aborted|timed? ?out/i.test(e.message||"");
       if(net&&(tries||0)<2)return new Promise(function(res){setTimeout(res,(tries?4000:1500))}).then(function(){return one(r,(tries||0)+1)});
-      var D=load();D.r=D.r||{};D.r[r.url]=net?{net:1,at:Date.now()}:{err:e.message,at:Date.now()};save(D)})}
-  function runAll(only){if(gxRun)return;gxRun=true;var D=load();if(!only)D.r={};save(D);var todo=only?list.filter(function(r){var x=(D.r||{})[r.url];return!x||x.net||x.err}):list;if(!todo.length){gxRun=false;return}draw();var i=0,live=0;
+      if(net)gxCut=true;var D=load();D.r=D.r||{};D.r[r.url]=net?{net:1,at:Date.now()}:{err:e.message,at:Date.now()};save(D)})}
+  function runAll(only){if(gxRun)return;gxRun=true;var D=load();save(D);var todo=only?list.filter(function(r){var x=(D.r||{})[r.url];return!x||x.net||x.err}):list;if(!todo.length){gxRun=false;return}draw();var i=0,live=0;
     function next(){if(load().setup){gxRun=false;draw();return}if(i>=todo.length){if(!live){gxRun=false;var D2=load();D2.at=D2.at&&only?D2.at:Date.now();save(D2);if(document.body.contains(box))draw()}return}
       var r=todo[i++];live++;one(r).then(function(){live--;if(document.body.contains(box))draw();next()})}for(var k=0;k<3;k++)next()}
   draw();api("settings",{action:"index-requests"}).then(function(j){gxReq={};(j.requests||[]).forEach(function(r){gxReq[r.url]=r});if(document.body.contains(box))draw()}).catch(function(){});
-  var D=load();if(!gxRun&&(!D.at||Date.now()-D.at>24*36e5))runAll();else if(!gxRun)runAll(true);
-  gxResume=function(){if(document.visibilityState==="visible"&&document.body.contains(box)&&!gxRun)setTimeout(function(){runAll(true)},800)};
+  var D=load();if(!gxRun&&!D.at&&!Object.keys(D.r||{}).length)runAll();
+  gxResume=function(){if(gxCut&&document.visibilityState==="visible"&&document.body.contains(box)&&!gxRun){gxCut=false;setTimeout(function(){runAll(true)},800)}};
 }
-var gxResume=null;document.addEventListener("visibilitychange",function(){if(gxResume)gxResume()});
+var gxResume=null,gxCut=false;document.addEventListener("visibilitychange",function(){if(gxResume)gxResume()});
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-copyurl]");if(!b)return;var t=b.dataset.copyurl;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast("Address copied: "+t)}).catch(function(){prompt("Copy this address:",t)})});
 function healthWhen(t){var d=t?new Date(t):new Date(),z={timeZone:"Pacific/Auckland"},day=d.toLocaleDateString("en-NZ",z)===new Date().toLocaleDateString("en-NZ",z)?"today":d.toLocaleDateString("en-NZ",Object.assign({weekday:"short",day:"numeric",month:"short"},z));
   return day+" at "+d.toLocaleTimeString("en-NZ",Object.assign({hour:"numeric",minute:"2-digit"},z))}
