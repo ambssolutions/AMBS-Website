@@ -1481,7 +1481,7 @@ function toast(msg,err){var t=document.createElement("div");t.className="toast"+
 function h(html){var t=document.createElement("template");t.innerHTML=html.trim();return t.content.firstElementChild}
 function fail(err){if(err&&err.message!=="signin")toast(err.message||String(err),true)}
 window.edToast=function(m,e){toast(m,e)};window.edBusy=function(b,on,l){busy(b,on,l)};
-function busy(btn,on,label){if(!btn)return;if(on){btn.dataset.l=btn.textContent;btn.disabled=true;btn.innerHTML='<span class="spin"></span> '+esc(label||"Saving…")}else{btn.disabled=false;btn.textContent=btn.dataset.l||btn.textContent}}
+function busy(btn,on,label){if(!btn)return;if(on){if(!btn.dataset.busy){btn.dataset.busy="1";btn._html=btn.innerHTML}btn.disabled=true;btn.innerHTML='<span class="spin"></span> '+esc(label||"Saving…")}else{btn.disabled=false;if(btn._html!=null)btn.innerHTML=btn._html;delete btn.dataset.busy}}   // keeps the button's own markup (e.g. long and short labels), so it comes back exactly as it was
 function counter(input,max){var f=input.closest(".fld"),c=f&&f.querySelector(".cnt");if(!c)return;var u=function(){c.textContent=input.value.length+" / "+max;c.classList.toggle("over",input.value.length>max)};input.addEventListener("input",u);u()}
 function markDirty(){dirty=true}
 /* drag to reorder: hold the ⠿ handle and move it up or down; works with a mouse and on touch screens.
@@ -3363,7 +3363,7 @@ function gIndex(list,box){if(!box)return;var KEY="ambs-gidx",load=function(){try
       setTimeout(function(){var keep=$("gxMsg")&&$("gxMsg").innerHTML;draw();var m2=$("gxMsg");if(m2&&keep){m2.className="help gx-open";m2.innerHTML=keep}},400)})});
     box.querySelectorAll("[data-unreq]").forEach(function(b){b.addEventListener("click",function(){var u=full(list[+b.dataset.unreq].url);delete gxReq[u];draw();api("settings",{action:"index-mark",url:u,clear:true}).catch(fail)})});
     $("gxMap").addEventListener("click",function(){var b=this,msg=$("gxMsg");busy(b,true,"Sending…");api("settings",{action:"sitemap"}).then(function(x){busy(b,false);
-      if(x.ok){msg.className="help ok";msg.textContent="✓ Sitemap sent to Google. It reads it again soon and picks up new and changed pages."}
+      if(x.ok){msg.className="help ok";msg.textContent="✓ Sitemap sent to Google. It reads it again soon and picks up new and changed pages.";toast("✓ Sitemap sent to Google")}
       else if(x.needsFull){msg.className="msg err";msg.innerHTML="Google needs one more permission for this: in <b>search.google.com/search-console → Settings → Users and permissions</b>, change "+esc(x.email||"the service account")+" from <b>Restricted</b> to <b>Full</b>, then press this again."}
       else{msg.className="msg err";msg.textContent=x.setup?"Connect Google first (Website settings → Connections).":x.error||"Google didn’t take it."}}).catch(function(e){busy(b,false);fail(e)})});
   }
