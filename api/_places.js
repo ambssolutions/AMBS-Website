@@ -22,16 +22,37 @@ async function call(path, k, fields, body) {
   return j;
 }
 
-/* find the business on Google Maps: a place ID (ChIJ…), a Google Maps link with one, or the name and town */
+/* a Google Maps link (maps.app.goo.gl/…, g.page, share.google or a full google.com/maps/place/… address): opened on the
+   server to read the business name and its pin, so the search can look right there */
+async function fromLink(q) {
+  let u = q;
+  if (!/google\.[a-z.]+\/maps\/place\//.test(u)) {
+    const r = await fetch(q, { redirect: "follow", headers: { "User-Agent": "Mozilla/5.0" } }).catch(() => null);
+    if (r) u = r.url || u;
+  }
+  let name = "";
+  try { name = decodeURIComponent(((u.match(/\/maps\/place\/([^/@?]+)/) || [])[1] || "").replace(/\+/g, " ")); } catch (e) {}
+  const lat = (u.match(/!3d(-?\d+(?:\.\d+)?)/) || [])[1], lng = (u.match(/!4d(-?\d+(?:\.\d+)?)/) || [])[1];
+  return { name, lat: lat ? +lat : null, lng: lng ? +lng : null, id: (u.match(/(ChIJ[0-9A-Za-z_-]{10,})/) || [])[1] || "" };
+}
+
+/* find the business on Google Maps: a place ID (ChIJ…), a Google Maps link, or the name and town */
+const F = "places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount";
 export async function findPlace(k, q) {
   q = String(q || "").trim();
-  const id = (q.match(/(ChIJ[0-9A-Za-z_-]{10,})/) || [])[1];
-  if (id) {
-    const p = await call("places/" + id, k, "id,displayName,formattedAddress,rating,userRatingCount");
-    return [p];
-  }
-  const j = await call("places:searchText", k, "places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount", { textQuery: q || "AMBS Solutions", regionCode: "NZ", pageSize: 5 });
-  return j.places || [];
+  let id = (q.match(/(ChIJ[0-9A-Za-z_-]{10,})/) || [])[1], link = null;
+  if (!id && /^https?:\/\//i.test(q)) { link = await fromLink(q); id = link.id; }
+  if (id) return [await call("places/" + id, k, "id,displayName,formattedAddress,rating,userRatingCount")];
+  const text = link ? link.name : q;
+  if (!text) throw Object.assign(new Error("That link didn’t open a business on Google Maps. In Google Maps, open your business, tap Share → Copy link, and paste that."), { soft: true });
+  const body = { textQuery: text, regionCode: "NZ", pageSize: 5 };
+  if (link && link.lat != null) body.locationBias = { circle: { center: { latitude: link.lat, longitude: link.lng }, radius: 50000 } };
+  let list = (await call("places:searchText", k, F, body)).places || [];
+  if (!list.length && link) list = (await call("places:searchText", k, F, { textQuery: text + " New Zealand", pageSize: 5 })).places || [];
+  if (!list.length && link) throw Object.assign(new Error("Google Maps has “" + text + "”, but Google’s places service doesn’t list it yet. New Business Profiles usually appear there within a few weeks; try again later, nothing else to change."), { soft: true });
+  /* with a link, keep the matches that carry the business's own name */
+  if (link && list.length > 1) { const n = text.toLowerCase(), same = list.filter((p) => ((p.displayName && p.displayName.text) || "").toLowerCase() === n); if (same.length) list = same; }
+  return list;
 }
 
 let cache = { at: 0, id: "", data: null };
