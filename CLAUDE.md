@@ -119,6 +119,7 @@ These notes apply to this site and to any other AMBS Solutions website.
   - Page and business-detail commits start with "Editor source:". Vercel skips those (`ignoreCommand` in `vercel.json`), and `.github/workflows/editor-rebuild.yml` then runs `build.py`, bumps `version.json` and commits, which deploys once.
 - **Where the content lives:**
   - The page list, hub intros and service cards are in `site-src/content/pages.json`.
+  - The Services page shows the two big service cards from `pages.json`, then a "More ways we help" row (`services_feature()` in `build.py`, heading label `pg.svcmore` in Wording on every page) with a card for every other live service page, so a new service page added in the editor appears there by itself. Nov 2026 SEO work added four service pages (AI chatbot and customer replies, Xero and app integration, online bookings and reminders, business dashboards and reports), each linked from the guides and industry pages on the same topic through `related`.
   - Business details are in `site-src/content/site.json`.
   - Uploaded photos are in `assets/uploads/`.
 - **Before any change:** run `git fetch origin main` and merge it normally. Never use `-X ours`, or the owner's edits get overwritten. If wording conflicts, keep main's version.
