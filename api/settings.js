@@ -125,9 +125,9 @@ export default async function handler(req, res) {
           const k = val("PLACES_KEY") || key("PLACES_KEY") || key("PAGESPEED_KEY");
           if (val("PLACES_KEY") && !/^AIza[0-9A-Za-z_-]{35}$/.test(val("PLACES_KEY"))) return send(res, 200, { error: "A Google API key starts with AIza and is 39 characters long." });
           if (!k) return send(res, 200, { error: "Paste a Google API key with Places API (New) turned on." });
-          const found = await findPlace(k, val("PLACE_ID") || "AMBS Solutions");
+          const found = await findPlace(k, val("PLACE_ID") || "AMBS Solutions").catch((e) => { throw Object.assign(e, { soft: true }); });
           if (!found.length) return send(res, 200, { error: "Google Maps found no business by that name. Try the name as it shows on Google Maps, or paste its Google Maps link." });
-          if (found.length > 1 && !b.pick && !/ChIJ/.test(val("PLACE_ID"))) return send(res, 200, { choose: found.map((p) => ({ id: p.id, name: (p.displayName && p.displayName.text) || "", address: p.formattedAddress || "", rating: p.rating || 0, count: p.userRatingCount || 0 })) });
+          if (found.length > 1 && !b.pick) return send(res, 200, { choose: found.map((p) => ({ id: p.id, name: (p.displayName && p.displayName.text) || "", address: p.formattedAddress || "", rating: p.rating || 0, count: p.userRatingCount || 0 })) });
           const p = b.pick ? found.find((x) => x.id === b.pick) || found[0] : found[0];
           if (val("PLACES_KEY")) await put("PLACES_KEY", val("PLACES_KEY"));
           await put("PLACE_ID", p.id);
