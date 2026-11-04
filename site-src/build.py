@@ -458,6 +458,11 @@ def build_hub(sec):
     if sec=='news': items.sort(key=lambda p:page_meta(p).get('published',''),reverse=True)
     ld={'@context':'https://schema.org','@graph':[cr_ld,ORG,{'@type':'CollectionPage','name':h['h1'],'description':h['desc'],'url':BASE+canon,
         'mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+url(p[0],p[1]),'name':p[2]} for i,p in enumerate(items)]}}]}
+    if h.get('faq'): ld['@graph'].append({'@type':'FAQPage','mainEntity':[{'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':a}} for q,a in h['faq']]})
+    # the section page's own article and questions (Section pages in the editor), under the cards
+    hub_text=(h.get('body') or '').strip()
+    if h.get('faq'): hub_text+='<h2 id="questions">'+TE("pg.questions")+'</h2><div class="faq">'+''.join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q,a in h['faq'])+'</div>'
+    if hub_text: hub_text='<section class="section hub-text"><article class="prose">'+hub_text+'</article></section>'
     cats=[]; [cats.append(p[4]) for p in items if p[4] not in cats]
     filt=''
     if sec in ('guides','news'):
@@ -487,6 +492,7 @@ def build_hub(sec):
 </div></section>
 <div class="wrap">
   {main_grid}
+  {hub_text}
   {extra}
   {cta()}
 </div>

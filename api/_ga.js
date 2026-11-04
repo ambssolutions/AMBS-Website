@@ -237,7 +237,8 @@ export async function searchQueries(days) {
       body: JSON.stringify({ startDate: gday(n), endDate: gday(1), dimensions: ["query"], rowLimit: 25, dataState: "all" }),
     });
     const j = await r.json().catch(() => ({}));
-    if (r.ok) return { site, days: n, rows: (j.rows || []).map((x) => ({ q: x.keys[0], clicks: x.clicks, shown: x.impressions, pos: Math.round(x.position * 10) / 10 })) };
+    /* Google orders by clicks then alphabetically, so the 0-click searches came out A to Z; show the most-seen first */
+    if (r.ok) return { site, days: n, rows: (j.rows || []).map((x) => ({ q: x.keys[0], clicks: x.clicks, shown: x.impressions, pos: Math.round(x.position * 10) / 10 })).sort((a, b) => b.shown - a.shown || b.clicks - a.clicks || a.pos - b.pos) };
     last = (j.error && j.error.message) || String(r.status);
     if (r.status !== 403 && r.status !== 404) break;
   }
