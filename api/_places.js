@@ -30,8 +30,11 @@ async function fromLink(q) {
     const r = await fetch(q, { redirect: "follow", headers: { "User-Agent": "Mozilla/5.0" } }).catch(() => null);
     if (r) u = r.url || u;
   }
+  /* Google may send the server through its cookie page (consent.google.com/?continue=<the Maps address, encoded>):
+     undo the extra encoding (up to 3 layers) so the name and pin can be read */
+  for (let i = 0; i < 3 && /%2[1FB]|%40/i.test(u); i++) { try { u = decodeURIComponent(u); } catch (e) { break; } }
   let name = "";
-  try { name = decodeURIComponent(((u.match(/\/maps\/place\/([^/@?]+)/) || [])[1] || "").replace(/\+/g, " ")); } catch (e) {}
+  try { name = decodeURIComponent(((u.match(/\/maps\/place\/([^/@?&]+)/) || [])[1] || "").replace(/\+/g, " ")).replace(/\+/g, " ").trim(); } catch (e) {}
   const lat = (u.match(/!3d(-?\d+(?:\.\d+)?)/) || [])[1], lng = (u.match(/!4d(-?\d+(?:\.\d+)?)/) || [])[1];
   return { name, lat: lat ? +lat : null, lng: lng ? +lng : null, id: (u.match(/(ChIJ[0-9A-Za-z_-]{10,})/) || [])[1] || "" };
 }
@@ -45,10 +48,10 @@ export async function findPlace(k, q) {
   if (id) return [await call("places/" + id, k, "id,displayName,formattedAddress,rating,userRatingCount")];
   const text = link ? link.name : q;
   if (!text) throw Object.assign(new Error("That link didn’t open a business on Google Maps. In Google Maps, open your business, tap Share → Copy link, and paste that."), { soft: true });
-  const body = { textQuery: text, regionCode: "NZ", pageSize: 5 };
+  const body = { textQuery: text, regionCode: "NZ", pageSize: 5, includePureServiceAreaBusinesses: true };   // businesses with no public address (like AMBS) are left out unless asked for
   if (link && link.lat != null) body.locationBias = { circle: { center: { latitude: link.lat, longitude: link.lng }, radius: 50000 } };
   let list = (await call("places:searchText", k, F, body)).places || [];
-  if (!list.length && link) list = (await call("places:searchText", k, F, { textQuery: text + " New Zealand", pageSize: 5 })).places || [];
+  if (!list.length && link) list = (await call("places:searchText", k, F, { textQuery: text + " New Zealand", pageSize: 5, includePureServiceAreaBusinesses: true })).places || [];
   if (!list.length && link) throw Object.assign(new Error("Google Maps has “" + text + "”, but Google’s places service doesn’t list it yet. New Business Profiles usually appear there within a few weeks; try again later, nothing else to change."), { soft: true });
   /* with a link, keep the matches that carry the business's own name */
   if (link && list.length > 1) { const n = text.toLowerCase(), same = list.filter((p) => ((p.displayName && p.displayName.text) || "").toLowerCase() === n); if (same.length) list = same; }
