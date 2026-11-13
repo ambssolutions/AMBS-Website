@@ -2066,3 +2066,4 @@ html:not([data-theme=dark]):not(.sky-night) footer.f2 .f2-fine{color:#4b5367}
 @media (min-width:1119px){html body .hero #docket:has(#tickets:empty){min-height:612px!important}}
 @media (min-width:1800px){html body .hero #docket:has(#tickets:empty){min-height:686px!important}}
 @media (min-width:2300px){html body .hero #docket:has(#tickets:empty){min-height:855px!important}}
+:root:not(#_) .hero.wx-cloud,:root:not(#_) .hero.wx-rain,:root:not(#_) .hero.wx-storm{filter:none!important}
