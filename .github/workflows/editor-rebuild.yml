@@ -58,3 +58,10 @@ jobs:
             git pull --rebase origin main
           done
           exit 1
+      - name: Tell Bing about the changed pages
+        if: steps.due.outputs.go == 'yes'
+        # a push made by this workflow doesn't start other workflows, so the IndexNow list is sent from here,
+        # once the new version has had time to go live
+        run: |
+          sleep 150
+          python3 site-src/indexnow.py HEAD~1 HEAD || true
