@@ -2,6 +2,8 @@
 /* speed: size readings that only matter once the visitor scrolls wait until the first screen has been drawn,
    so the phone draws the page before working out the layout of everything below it */
 function afterPaint(f){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(f,0)});else setTimeout(f,0)}
+/* styles for parts further down (homepage block sections) wait in media="print" so they don't hold up the first screen */
+afterPaint(function(){[].forEach.call(document.querySelectorAll("link[data-later]"),function(l){l.media="all"})});
 /* ================= translations ================= */
 const I18N = {
 en:{

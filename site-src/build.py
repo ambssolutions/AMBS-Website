@@ -718,8 +718,10 @@ def stamp_home(custom_html=None,strings=None):
     h=home_menus(h)
     if HOMESEC.get('order') or HOMESEC.get('hidden') or custom_html or '<!--ed:sec:' in h: h=home_sections(h,custom_html)
     # the block styles are only loaded when the homepage has a section made of blocks
-    h=re.sub(r'\n<link rel="stylesheet" href="/assets/blocks\.css\?v=[A-Za-z0-9]+">','',h)
-    if custom_html: h=re.sub(r'(<link rel="stylesheet" href="/assets/home\.css\?v=[A-Za-z0-9]+">)',lambda m:m.group(1)+'\n<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'">',h)
+    # block sections always sit below the hero, so their styles load after the first screen is drawn (media="print" until
+    # home.js switches it on with afterPaint) instead of holding up the page; <noscript> keeps them without JavaScript
+    h=re.sub(r'\n<link rel="stylesheet" href="/assets/blocks\.css\?v=[A-Za-z0-9]+"[^>]*>(<noscript>.*?</noscript>)?','',h)
+    if custom_html: h=re.sub(r'(<link rel="stylesheet" href="/assets/home\.css\?v=[A-Za-z0-9]+">)',lambda m:m.group(1)+'\n<link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'" media="print" data-later><noscript><link rel="stylesheet" href="/assets/blocks.css?v='+BLV+'"></noscript>',h)
     # contact forms in homepage sections need their script
     h=re.sub(r'<script src="/assets/forms\.js\?v=[A-Za-z0-9]+" defer></script>\n','',h)
     if any('data-blk-form' in x for x in custom_html.values()): h=h.replace('</body>',FORMS_JS+'\n</body>',1)
