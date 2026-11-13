@@ -1,0 +1,40 @@
+# After something is published to the live website, tell Bing (IndexNow) which pages changed, so Bing (and through it
+# ChatGPT and Copilot) reads them again within minutes. Page and business-detail saves ("Editor source:") are built by
+# editor-rebuild.yml, which sends its own list once the built pages are live; drafts ("Editor draft:") are not published.
+# Run it by hand ("Run workflow") with "all" to send every page in the sitemap.
+name: Tell Bing about changed pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Send every page in the sitemap"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  indexnow:
+    if: github.event_name == 'workflow_dispatch' || (!startsWith(github.event.head_commit.message, 'Editor source:') && !startsWith(github.event.head_commit.message, 'Editor draft:'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Wait for the new version to be live
+        run: sleep 150
+      - name: Send the changed pages
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.all }}" = "true" ]; then
+            python3 site-src/indexnow.py --all
+          else
+            python3 site-src/indexnow.py "${{ github.event.before }}" "${{ github.sha }}"
+          fi
