@@ -137,6 +137,8 @@ export default async function handler(req, res) {
       await commitFiles(head, {
         "logo.png": { base64: b.png }, "logo.webp": { base64: b.webp },
         "logo-400.png": { base64: b.png400 }, "logo-400.webp": { base64: b.webp400 },
+        // the lighter copy for phones (an editor page opened before this was added sends none: the 400px copy stands in)
+        "logo-220.webp": { base64: isWebp(b.webp220) && bytes(b.webp220) <= 800 * 1024 ? b.webp220 : b.webp400 },
         "version.json": await nextVersion(head),
       }, "Website editor: new logo" + by);
       return send(res, 200, { ok: true });
