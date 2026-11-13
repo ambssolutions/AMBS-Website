@@ -2320,9 +2320,9 @@ function photosInit(){
     fs.reduce(function(p,f){return p.then(function(){return uploadPhoto(f)})},Promise.resolve()).then(function(){busy(b,false);toast(fs.length+" photo"+(fs.length>1?"s":"")+" uploaded. "+LIVE_NOTE);grid()}).catch(function(e){busy(b,false);fail(e);grid()})})});
   var newLogo=null;
   $("lgPick").addEventListener("click",function(){pickFile(false).then(function(fs){if(!fs.length)return;loadImg(fs[0]).then(function(img){
-    var big=fitInside(img,613,224),small=fitInside(img,400,146);
-    return Promise.all([toB64(big,"image/png"),toB64(big,"image/webp",.9),toB64(small,"image/png"),toB64(small,"image/webp",.9)]).then(function(r){
-      newLogo={png:r[0].b64,webp:r[1].b64,png400:r[2].b64,webp400:r[3].b64};var u=URL.createObjectURL(r[3].blob);lg.querySelectorAll(".logo-prev img").forEach(function(i){i.src=u});$("lgSave").classList.remove("hidden")})}).catch(fail)})});
+    var big=fitInside(img,613,224),small=fitInside(img,400,146),tiny=fitInside(img,220,80);   /* tiny: the lighter copy phones and smaller screens use */
+    return Promise.all([toB64(big,"image/png"),toB64(big,"image/webp",.9),toB64(small,"image/png"),toB64(small,"image/webp",.9),toB64(tiny,"image/webp",.9)]).then(function(r){
+      newLogo={png:r[0].b64,webp:r[1].b64,png400:r[2].b64,webp400:r[3].b64,webp220:r[4].b64};var u=URL.createObjectURL(r[3].blob);lg.querySelectorAll(".logo-prev img").forEach(function(i){i.src=u});$("lgSave").classList.remove("hidden")})}).catch(fail)})});
   $("lgSave").addEventListener("click",function(){var b=this;if(!newLogo)return;busy(b,true);api("media",Object.assign({action:"logo"},newLogo)).then(function(){busy(b,false);b.classList.add("hidden");toast("New logo saved. "+LIVE_NOTE)}).catch(function(e){busy(b,false);fail(e)})});
   var newOg=null;
   $("ogPick").addEventListener("click",function(){pickFile(false).then(function(fs){if(!fs.length)return;loadImg(fs[0]).then(function(img){var c=cover(img,1200,630);return toB64(c,"image/png").then(function(r){newOg=r.b64;og.querySelector("img").src=URL.createObjectURL(r.blob);$("ogSave").classList.remove("hidden")})}).catch(fail)})});

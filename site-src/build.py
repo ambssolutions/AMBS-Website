@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds the AMBS sub-pages from content fragments.
    content/<section>/<slug>.html = <!--META {json} --> + article body.  Output goes to ../site/."""
-import json, os, re, html, sys, datetime, urllib.parse
+import json, os, re, html, sys, datetime, urllib.parse, subprocess
 SRC=os.path.dirname(os.path.abspath(__file__))
 # Output goes to the website root: the folder above site-src when it holds the site (this repository), otherwise ../site
 _up=os.path.dirname(SRC)
@@ -312,7 +312,7 @@ def header(active):
     main=[(sub_href(it['href']),e(menu_label(it)),akey(sub_href(it['href']))) for it in MENUS.get('main',[])]
     drawer=[(sub_href(it['href']),e(menu_label(it)),akey(sub_href(it['href']))) for it in MENUS.get('drawer',[])]
     return f'''<header class="hdr"><div class="sh-bar">
-  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
+  <a class="sh-mark" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-220.webp 220w, /logo-400.webp 400w" sizes="(max-width: 1120px) 110px, 176px" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions"></picture></a>
   <div class="sh-right">
     <button class="sh-ico sh-theme" id="themeBtn" type="button" aria-label="Switch light or dark mode"></button>
     <span class="langwrap"><select class="langselect" id="langselect" aria-label="Language"><option value="en" selected>English</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="mi">Te Reo Māori</option><option value="pa">ਪੰਜਾਬੀ</option></select><span class="langcaret" aria-hidden="true"><svg viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
@@ -335,7 +335,7 @@ def footer():
     return f'''<nav class="qbar" aria-label="Quick actions"><a class="qb-call" href="tel:+64220999578"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>{TE("qb.call")}</span></a><a class="qb-book" href="/#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4"/></svg><span>{TE("qb.book")}</span></a></nav>
 <footer class="ftr f2"><div class="wrap">
   <div class="f2-grid">
-    <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-400.webp" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
+    <div class="f2-brand"><a class="f2-logo" href="/" aria-label="Ambs Solutions home"><picture><source srcset="/logo-220.webp 220w, /logo-400.webp 400w" sizes="150px" type="image/webp"><img src="/logo-400.png" width="613" height="224" alt="Ambs Solutions" loading="lazy"></picture></a>
       <p>{TE("foot.tag")}</p>{social_html()}</div>
     <nav class="f2-col" aria-label="Company"><p class="f2-h">{TE("foot.company")}</p>{fcol('company')}</nav>
     <nav class="f2-col" aria-label="Explore"><p class="f2-h">{TE("foot.explore")}</p>{fcol('explore')}</nav>
@@ -1011,6 +1011,20 @@ def csp_value():
     d={k:list(v) for k,v in CSP_BASE.items()}
     d['script-src']+=csp_hashes()
     return '; '.join((k+' '+' '.join(v)).strip() for k,v in d.items())
+def minify_js():
+    """The published copies of the page scripts lose their spaces and comments (the sources in site-src keep them),
+       so phones download less. Needs node (npx terser); if that isn't there the copies simply stay as they are.
+       The homepage wording editor publishes an unshrunk home.js between builds, which works the same."""
+    files=[os.path.join(OUT,'assets',f) for f in ('home.js','chat.js','pages.js')]
+    for f in files:
+        try:
+            r=subprocess.run(['npx','--yes','terser@5.36.0',f,'-c','-m','--comments','false','-o',f+'.min'],capture_output=True,text=True,timeout=180)
+            if r.returncode==0 and os.path.getsize(f+'.min')>1000: os.replace(f+'.min',f)
+            else: print('scripts: could not shrink',os.path.basename(f),(r.stderr or '')[:200])
+        except Exception as e: print('scripts: could not shrink',os.path.basename(f),e)
+        finally:
+            if os.path.exists(f+'.min'): os.remove(f+'.min')
+
 def csp_update():
     vp=os.path.join(OUT,'vercel.json')
     v=json.load(open(vp,encoding='utf8'));val=csp_value()
@@ -1060,5 +1074,6 @@ if __name__=='__main__':
             if f.endswith('.html') and f not in ('admin.html','email-signature.html'): stamp_chat(os.path.join(root,f),tag)
     print('chat helper:',nd,'answers indexed')
     privacy_check()
+    minify_js()
     csp_update()
     print('done, total words',total)
