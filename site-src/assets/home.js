@@ -1383,13 +1383,19 @@ try{
     flipping=f;
   }
   /* tapping a heading folds the card open or shut with a plain CSS fold (no page-wide shuffling) */
-  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;settle(k);setOpen();if(isOpen[k]){panels[k].classList.add("seen");show(k);copyIn(k,200);}}
+  /* while a card folds open or shut, every other animation in the section holds still for that moment,
+     so the phone only has the fold to draw (icons and drawings carry on from the same frame afterwards) */
+  var foldT=0;
+  function folding(k){if(calm||mode!=="list")return;
+    panels.forEach(function(p,j){if(j!==k&&p.classList.contains("vis"))p.classList.add("wd-hold");});
+    clearTimeout(foldT);foldT=setTimeout(function(){panels.forEach(function(p){p.classList.remove("wd-hold");});},1500);}
+  function toggle(k){isOpen[k]=!isOpen[k];if(!isOpen[k])closedByHand[k]=true;folding(k);settle(k);setOpen();if(isOpen[k]){panels[k].classList.add("seen");show(k);copyIn(k,200);}}
   if("IntersectionObserver" in window){
     /* phones and tablets: each service unfolds slowly by itself as its heading reaches the upper 75% of the screen
        (a native CSS fold, no scripted page shuffling); one you close by hand stays closed */
     /* only one card unfolds at a time: while one is opening the rest wait, then the next opens if its heading is still in the upper 75% of the screen */
     var autoBusy=false;
-    function autoOpen(k){autoBusy=true;isOpen[k]=true;settle(k);setOpen();panels[k].classList.add("seen");show(k);copyIn(k,300);
+    function autoOpen(k){autoBusy=true;isOpen[k]=true;folding(k);settle(k);setOpen();panels[k].classList.add("seen");show(k);copyIn(k,300);
       setTimeout(function(){autoBusy=false;if(mode!=="list")return;
         for(var j=0;j<accs.length;j++){if(isOpen[j]||closedByHand[j])continue;var t=accs[j].getBoundingClientRect().top;
           if(t>=0&&t<=innerHeight*.75){autoOpen(j);return;}}},1500);}
@@ -1409,7 +1415,9 @@ try{
   function settle(k){clearTimeout(settleT[k]);settled[k]=false;if(isOpen[k])settleT[k]=setTimeout(function(){settled[k]=true;run();},calm?0:1200);}
   var glider=document.createElement("span");glider.className="wd-glider";glider.setAttribute("aria-hidden","true");tabRow.insertBefore(glider,tabRow.firstChild);tabRow.classList.add("has-glider");
   function glide(i){var t=tabs[i];if(!t)return;glider.style.setProperty("--gy",t.offsetTop+"px");glider.style.setProperty("--gh",t.offsetHeight+"px");}
-  function copyIn(k,delay){var c=panels[k]&&panels[k].querySelector(".wd-copy");if(!c||!window.textOpen)return;
+  /* phones: the card's text already fades in with the card, so its words don't rise in one by one as well
+     (that split the paragraph and re-measured the page in the middle of the unfold) */
+  function copyIn(k,delay){if(mode==="list")return;var c=panels[k]&&panels[k].querySelector(".wd-copy");if(!c||!window.textOpen)return;
     if(mode!=="list")window.textOpen(c.querySelector("h3"),delay||0);
     window.textOpen(c.querySelector("p"),(delay||0)+(mode==="list"?0:120));}
   function show(i,fromSwipe){
@@ -1553,8 +1561,12 @@ try{
           el.innerHTML=html;
         }
         el.classList.remove("ow-go");void el.offsetWidth;el.classList.add("ow-go");
+        /* once the words have risen in, the animation comes off, so no finished or paused word animations linger */
+        var nw=Math.min(40,el.querySelectorAll(".ow").length);
+        clearTimeout(el._owT);el._owT=setTimeout(function(){el.classList.remove("ow-go");},600+nw*16+250);
       }else{
         el.classList.remove("ow-fade");void el.offsetWidth;el.classList.add("ow-fade");
+        clearTimeout(el._owT);el._owT=setTimeout(function(){el.classList.remove("ow-fade");},850);
       }
       busy=false;
     };
