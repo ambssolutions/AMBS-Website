@@ -585,6 +585,7 @@ header.top .who{margin-left:4px}
 .ts-cat{display:inline-block;font-size:.72rem;font-weight:700;background:#eef1f5;color:#4a5265;border-radius:99px;padding:2px 8px;margin-right:6px}
 .ts-big{display:flex;gap:16px;align-items:center;margin:4px 0 6px}.ts-big p{margin:0}.ts-grade{font-size:2.4rem;line-height:1;min-width:74px;height:74px;border-radius:18px;display:grid;place-items:center;padding:0 8px}.ts-grade small{font-size:.9rem;margin-left:2px}
 .ts-grade.ok{background:#e6f6e7;color:#17761a}.ts-grade.warn{background:#fff2dc;color:#9a5b00}.ts-grade.bad{background:#fde8e8;color:#b42318}
+.ts-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.ts-foot .ts-tw{margin:0}.ts-foot .btn{min-height:40px;padding:0 14px;font-size:.9rem}
 .ts-more{display:inline-block;margin-top:10px;font-weight:700;font-size:.9rem;margin-right:14px}.ts-at{margin:10px 0 0}.ts-steps{padding-left:20px}.ts-steps li{margin:6px 0}.ts-issues{font-size:.88rem;color:#9a5b00}
 .ts-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:4px 0 8px;background:var(--bg,#f6f7fb)}.ts-card img,.ts-noimg{display:block;width:100%;max-height:220px;aspect-ratio:1.91/1;object-fit:cover;background:#eef1f5}.ts-noimg{display:grid;place-items:center;color:var(--muted)}
 .ts-card div{padding:10px 12px}.ts-card span{font-size:.75rem;color:var(--muted);text-transform:uppercase}.ts-card b{display:block;margin:2px 0}.ts-card p{margin:0;font-size:.88rem;color:var(--muted)}
@@ -3423,8 +3424,9 @@ function testsInit(pp){
   var have=tsLoad()[TS_URL]||{};
   box.innerHTML='<div class="ts-bar panel"><label class="ts-pg"><span class="help">Page to test</span><select id="tsPage">'+pages.map(function(p){return'<option value="'+esc(p[0])+'"'+(p[0]===TS_URL?" selected":"")+'>'+esc(p[1])+'</option>'}).join("")+'</select></label>'+
     '<button type="button" class="btn" id="tsRun">▶ Run all tests</button><span class="help ts-when" id="tsWhen">'+(have.at?"Last run "+healthWhen(have.at):"Not run yet on this page")+'</span></div>'+
-    '<div class="ts-grid">'+TS.map(function(t){return'<section class="panel ts-c" id="ts-'+t[0].split("_")[0]+'"><div class="ts-h"><h3>'+t[1]+'</h3><span class="ts-st"></span></div><div class="ts-b"><p class="help">'+(have[t[0]]||t[0]==="psi_mobile"&&have.psi_desktop?"":"Press Run all tests.")+'</p></div></section>'}).join("")+'</div>';
-  TS.forEach(function(t){var k=t[0]==="psi_mobile"?TS_PSI:t[0];if(have[k])tsDraw(k,have[k])});
+    '<div class="ts-grid">'+TS.map(function(t){return'<section class="panel ts-c" id="ts-'+t[0].split("_")[0]+'"><div class="ts-h"><h3>'+t[1]+'</h3><span class="ts-st"></span></div><div class="ts-b"><p class="help">'+(have[t[0]]||t[0]==="psi_mobile"&&have.psi_desktop?"":"Not tested yet. Run this test on its own, or all of them at the top.")+'</p></div><div class="ts-foot"><span class="help ts-tw"></span><button type="button" class="btn soft ts-one" data-one="'+t[0].split("_")[0]+'">↻ Run this test</button></div></section>'}).join("")+'</div>';
+  TS.forEach(function(t){var k=t[0]==="psi_mobile"?TS_PSI:t[0];if(have[k])tsDraw(k,have[k]);else tsFoot(k)});
+  box.querySelectorAll("[data-one]").forEach(function(x){x.addEventListener("click",function(){var id=x.dataset.one;tsRun(id==="psi"?TS_PSI:TS.filter(function(t){return t[0].split("_")[0]===id})[0][0])})});
   $("tsPage").addEventListener("change",function(){TS_URL=this.value;testsInit(pp)});
   $("tsRun").addEventListener("click",function(){tsRunAll()});
   if(!have.at)tsRunAll();
@@ -3437,8 +3439,15 @@ function tsRunAll(url){var u=url||TS_URL,mine=u===TS_URL,b=$("tsRun");if(mine&&b
 function tsRun(k,url){var id=k.split("_")[0],u=url||TS_URL,key=u+"|"+k;if(TS_BUSY[key])return TS_BUSY[key];
   var c=u===TS_URL&&$("ts-"+id);if(c)c.querySelector(".ts-st").innerHTML='<span class="spin"></span>'+(id==="psi"?" about 30 seconds":"");
   var body={action:"test",test:id,url:u};if(id==="psi")body.strategy=k==="psi_desktop"?"desktop":"mobile";
-  var fin=function(j){delete TS_BUSY[key];TS_LAST[key]=j;var nd=j.needsKey?"key":j.needs||j.setup?"google":"";if(!j.error)tsSave(u,"need_"+k,nd);if(!j.error&&!nd)tsSave(u,k,j);if(u===TS_URL&&$("ts-"+id))tsDraw(k,j);if(u===TS_HOME)tsSum()};
-  TS_BUSY[key]=api("settings",body).then(fin).catch(function(e){fin({error:e.message||String(e)})});if(u===TS_HOME)tsSum();return TS_BUSY[key]}
+  var fin=function(j){delete TS_BUSY[key];if(!j.error&&!j.at)j.at=new Date().toISOString();TS_LAST[key]=j;if(u===TS_URL)setTimeout(function(){tsFoot(k)},0);
+    if(u===TS_HOME&&k==="psi_mobile"){var hm=$("hmHealth");if(hm&&hm.dataset.j)try{hm.innerHTML=healthTile(JSON.parse(hm.dataset.j))}catch(e){}}var nd=j.needsKey?"key":j.needs||j.setup?"google":"";if(!j.error)tsSave(u,"need_"+k,nd);if(!j.error&&!nd)tsSave(u,k,j);if(u===TS_URL&&$("ts-"+id))tsDraw(k,j);if(u===TS_HOME)tsSum()};
+  TS_BUSY[key]=api("settings",body).then(fin).catch(function(e){fin({error:e.message||String(e)})});if(u===TS_HOME)tsSum();if(c)tsFoot(k);return TS_BUSY[key]}
+/* the bottom of each card: when that test last ran on this page, and a button to run just that test (the speed test: phone or laptop, whichever is showing) */
+function tsFoot(k){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var f=c.querySelector(".ts-foot");if(!f)return;
+  if(id==="psi"&&k!==TS_PSI)return;
+  var busy=TS_BUSY[TS_URL+"|"+k],j=(tsLoad()[TS_URL]||{})[k],b=f.querySelector(".ts-one"),w=f.querySelector(".ts-tw");
+  w.textContent=busy?"Testing…":j&&j.at?"Tested "+healthWhen(j.at):"Not tested yet";
+  b.disabled=!!busy;b.textContent=busy?"Testing…":j?"↻ Run again"+(id==="psi"?(k==="psi_desktop"?" (laptop)":" (phone)"):""):"▶ Run this test"}
 /* the row at the top of Site health: one result per test for the homepage, from the last run (kept in this browser) */
 function tsSum(){var box=$("tsSum");if(!box)return;var have=tsLoad()[TS_HOME]||{},w=$("tsSumWhen");
   if(w)w.textContent="Homepage"+(have.at?" · last run "+healthWhen(have.at):"");
@@ -3454,7 +3463,8 @@ function tsSum(){var box=$("tsSum");if(!box)return;var have=tsLoad()[TS_HOME]||{
     return'<button type="button" class="ts-chip '+c+'" data-sum="'+k+'"><span class="ts-cn">'+t[1]+'</span><b>'+(busy&&!j?'<span class="spin"></span>':esc(v))+'</b><span class="ts-cnote">'+(busy?(j?"updating…":"testing…"):esc(note))+'</span></button>'}).join("")}
 function tsRow(ok,name,note){return'<li class="'+(ok===null?"na":ok?"ok":"bad")+'"><i aria-hidden="true">'+(ok===null?"–":ok?"✓":"✕")+'</i><b>'+esc(name)+'</b><span>'+esc(note||"")+'</span></li>'}
 function tsLink(u,t){return'<a class="ts-more" href="'+esc(u)+'" target="_blank" rel="noopener">'+(t||"Full report")+' ↗</a>'}
-function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.querySelector(".ts-st"),b=c.querySelector(".ts-b"),h="",badge="";
+function tsDraw(k,j){tsDraw0(k,j);tsFoot(k)}
+function tsDraw0(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.querySelector(".ts-st"),b=c.querySelector(".ts-b"),h="",badge="";
   if(j.error){st.innerHTML='<span class="hl-res bad">Didn’t finish</span>';b.innerHTML='<p class="help">'+esc(j.error)+'</p><button type="button" class="btn soft" data-again>Try again</button>';b.querySelector("[data-again]").onclick=function(){tsRun(k)};return}
   if(id==="psi"){
     var sw='<div class="seg ts-sw" role="group" aria-label="Device"><button type="button" data-s="psi_mobile" aria-pressed="'+(k==="psi_mobile")+'">Phone</button><button type="button" data-s="psi_desktop" aria-pressed="'+(k==="psi_desktop")+'">Laptop</button></div>';
@@ -3466,7 +3476,7 @@ function tsDraw(k,j){var id=k.split("_")[0],c=$("ts-"+id);if(!c)return;var st=c.
       if(j.field)h+='<h4>Real visitors <small class="help">last 28 days, Chrome'+(j.field.origin?", whole website":"")+'</small></h4><ul class="hl-checks ts-list">'+j.field.metrics.map(function(x){var o=x.cat==="FAST";return'<li class="'+(o?"ok":x.cat==="AVERAGE"?"warn":"bad")+'"><i aria-hidden="true">'+(o?"✓":x.cat==="AVERAGE"?"!":"✕")+'</i><b>'+esc(x.name)+'</b><span>'+esc(x.value)+'</span></li>'}).join("")+'</ul>';
       else h+='<p class="help">Not enough real visitors yet for Google’s real-visitor figures.</p>';
       if((j.fix||[]).length)h+='<details class="ts-fix"><summary>What to improve <span>'+j.fix.length+'</span></summary><ul>'+j.fix.map(function(f){return'<li><span class="ts-cat">'+esc(f.cat)+'</span>'+esc(f.title)+(f.value?' <span class="help">'+esc(f.value)+'</span>':"")+'</li>'}).join("")+'</ul></details>';
-      h+='<p class="help ts-at">Tested '+healthWhen(j.at)+'</p>'+tsLink(j.report)}
+      h+=tsLink(j.report)}
     st.innerHTML=badge;b.innerHTML=h;
     b.querySelectorAll(".ts-sw button").forEach(function(x){x.onclick=function(){TS_PSI=x.dataset.s;var have=tsLoad()[TS_URL]||{};if(have[TS_PSI])tsDraw(TS_PSI,have[TS_PSI]);else tsRun(TS_PSI)}});return}
   if(id==="security"){var bad=(j.tests||[]).filter(function(t){return!t.pass});
